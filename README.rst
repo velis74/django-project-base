@@ -22,3 +22,44 @@ Functionalities provided:
 * Project users editor. Invite users to project. Assign them into roles.
 * Roles management & rights assignment.
 * Tags editor & manager + support API for marking tagged items with their colours or icons
+
+
+Quick start
+===========
+
+Install the package:
+
+.. code-block:: bash
+
+   pip install django-project-settings
+
+
+Extend the BaseProject & BaseProfile model:
+
+.. code-block:: python
+
+   # myapp/models.py
+   from django_project_settings import BaseProject
+
+   class MyProject(BaseProject):
+       # add any fields & methods you like here
+
+   class MyProfile(BaseProfile):
+       # add any fields & methods you like here
+
+Then also make sure your models are loaded instead of django-project-settings models:
+
+.. code-block:: python
+
+   # myproject/settings.py
+
+   DJANGO_PROJECT_SETTINGS_PROJECT_MODEL = 'myapp.MyProject'
+   DJANGO_PROJECT_SETTINGS_PROFILE_MODEL = 'myapp.MyProfile'
+
+
+.. warning::
+
+   This is important!!! You need to do the overriding before you create migrations. Migrating after default models had
+   been created and used is a really hard and painful process. So make triple sure you don't deploy your application
+   without first making sure the model you want to use is either your own or you are satisfied with our default
+   implementation.
