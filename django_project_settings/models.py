@@ -12,7 +12,8 @@ class BaseProject(models.Model):
     slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
     description = models.TextField(null=True, blank=True)
     logo = models.FileField()
-
+    owner = parent = models.ForeignKey(swapper.get_model_name('django_project_settings', 'Profile'))
+    
     class Meta:
         abstract = True
 
