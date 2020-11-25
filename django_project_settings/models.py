@@ -1,8 +1,9 @@
-from django.db import models
+import swapper
 from django.contrib.auth.models import User
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import swapper
+
 
 # Create your models here.
 
@@ -12,8 +13,9 @@ class BaseProject(models.Model):
     slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
     description = models.TextField(null=True, blank=True)
     logo = models.FileField()
-    owner = parent = models.ForeignKey(swapper.get_model_name('django_project_settings', 'Profile'), on_delete=models.CASCADE)
-    
+    owner = parent = models.ForeignKey(swapper.get_model_name('django_project_settings', 'Profile'),
+                                       on_delete=models.CASCADE)
+
     class Meta:
         abstract = True
 
@@ -28,7 +30,7 @@ class BaseProfile(User):
     User profile. We start with some easy common settings
     """
     bio = models.TextField(max_length=500, null=True, blank=True)
-    phone_number = models.CharField(max_length=20,null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
     language = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported languages
     theme = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported themes
     avatar = models.FileField()
