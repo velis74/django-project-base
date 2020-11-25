@@ -48,5 +48,5 @@ class Profile(BaseProfile):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        swapper.load_model('django_project_base', 'Profile').objects.create(user=instance)
+        swapper.load_model('django_project_base', 'Profile').objects.create(user_ptr=instance)
 
