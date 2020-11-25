@@ -1,4 +1,4 @@
-__title__ = 'django project settings'
+__title__ = 'django project base'
 __version__ = '0.0.1'
 __author__ = 'Jure Erznožnik'
 __email__ = 'jure.erznoznik@gmail.com'

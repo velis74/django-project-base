@@ -4,12 +4,12 @@ import os
 import sys
 
 import setuptools
-from django_project_settings import __version__
+from django_project_base import __version__
 
 
 def write_ver_to_init(version="''"):
     replacement = "__version__ = '%s'\n" % (version)
-    filename = 'django_project_settings/__init__.py'
+    filename = 'django_project_base/__init__.py'
     for line in fileinput.input([filename], inplace=True):
         if line.strip().startswith('__version__'):
             line = replacement
@@ -51,26 +51,22 @@ if sys.argv[1] == 'publish':
     os.system('python setup.py sdist bdist_wheel')
     os.system('twine upload dist/*')
     os.system('rm -rf build && rm -rf dist && rm -rf DynamicForms.egg-info')
-    os.system('git checkout django_project_settings/__init__.py')
+    os.system('git checkout django_project_base/__init__.py')
     os.system('git tag -a %s -m \'version %s\'' % (version, version))
     os.system('git push --tags')
     sys.exit()
 
 
 setuptools.setup(
-    name="django-project-settings",
+    name="django-project-base",
     version=version,
     author="Jure Erznožnik",
     author_email="jure@velis.si",
-    description="DynamicForms performs all the visualisation & data entry of your DRF Serializers & ViewSets and adds "
-                "some candy of its own: It is a django library that gives you the power of dynamically-shown form "
-                "fields, auto-filled default values, dynamic record loading and similar candy with little effort. "
-                "To put it differently: once defined, a particular ViewSet / Serializer can be rendered in multiple "
-                "ways allowing you to perform viewing and authoring operations on the data in question.",
+    description="Everything revolves around it: users, roles, permissions, tags, etc.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    url="https://github.com/velis74/DynamicForms",
-    packages=setuptools.find_packages(include=('dynamicforms',)),
+    url="https://github.com/velis74/django-project-base",
+    packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=requirements,
     python_requires='>=3.4',

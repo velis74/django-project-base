@@ -13,7 +13,7 @@ class BaseProject(models.Model):
     slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
     description = models.TextField(null=True, blank=True)
     logo = models.FileField()
-    owner = parent = models.ForeignKey(swapper.get_model_name('django_project_settings', 'Profile'),
+    owner = parent = models.ForeignKey(swapper.get_model_name('django_project_base', 'Profile'),
                                        on_delete=models.CASCADE)
 
     class Meta:
@@ -22,7 +22,7 @@ class BaseProject(models.Model):
 
 class Project(BaseProject):
     class Meta:
-        swappable = swapper.swappable_setting('django_project_settings', 'Project')
+        swappable = swapper.swappable_setting('django_project_base', 'Project')
 
 
 class BaseProfile(User):
@@ -41,14 +41,14 @@ class BaseProfile(User):
 
 class Profile(BaseProfile):
     class Meta:
-        swappable = swapper.swappable_setting('django_project_settings', 'Profile')
+        swappable = swapper.swappable_setting('django_project_base', 'Profile')
 
 
 # noinspection PyUnusedLocal
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        swapper.load_model('django_project_settings', 'Profile').objects.create(user=instance)
+        swapper.load_model('django_project_base', 'Profile').objects.create(user=instance)
 
 
 # noinspection PyUnusedLocal

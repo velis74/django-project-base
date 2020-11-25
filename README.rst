@@ -1,4 +1,4 @@
-What is django-project-settings?
+What is django-project-base?
 ================================
 
 We start with a project. Everything revolves around it: users, roles, permissions, tags, etc. Everything belongs to a
@@ -10,7 +10,7 @@ This is a `django <https://www.djangoproject.com/>`_ library, based on
 `django-allauth <https://github.com/pennersr/django-allauth>`_ integration.
 
 
-Why django-project-settings?
+Why django-project-base?
 ============================
 
 Functionalities provided:
@@ -31,7 +31,7 @@ Install the package:
 
 .. code-block:: bash
 
-   pip install django-project-settings
+   pip install django-project-base
 
 
 Extend the BaseProject & BaseProfile model:
@@ -39,7 +39,7 @@ Extend the BaseProject & BaseProfile model:
 .. code-block:: python
 
    # myapp/models.py
-   from django_project_settings import BaseProject
+   from django_project_base import BaseProject
 
    class MyProject(BaseProject):
        # add any fields & methods you like here
@@ -47,14 +47,14 @@ Extend the BaseProject & BaseProfile model:
    class MyProfile(BaseProfile):
        # add any fields & methods you like here
 
-Then also make sure your models are loaded instead of django-project-settings models:
+Then also make sure your models are loaded instead of django-project-base models:
 
 .. code-block:: python
 
    # myproject/settings.py
 
-   DJANGO_PROJECT_SETTINGS_PROJECT_MODEL = 'myapp.MyProject'
-   DJANGO_PROJECT_SETTINGS_PROFILE_MODEL = 'myapp.MyProfile'
+   DJANGO_PROJECT_BASE_PROJECT_MODEL = 'myapp.MyProject'
+   DJANGO_PROJECT_BASE_PROFILE_MODEL = 'myapp.MyProfile'
 
 
 .. warning::
