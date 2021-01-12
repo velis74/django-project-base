@@ -1,12 +1,26 @@
 {
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "autoprefixer": "^10.2.1",
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0"
+    "babel-loader": "^8.2.2",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^5.0.1",
+    "cssnano": "^4.1.10",
+    "html-webpack-plugin": "^4.5.1",
+    "node-sass": "^5.0.0",
+    "postcss-loader": "^4.1.0",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1"
   },
   "scripts": {
-    "build": "babel django_project_base/static/src -d django_project_base/static/build --copy-files && babel node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js --out-dir django_project_base/static/build --copy-files && babel node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js --out-dir django_project_base/static/build --copy-files && babel node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js --out-dir django_project_base/static/build --copy-files"
-  },
-  "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.5.0"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "dev": "webpack serve --open"
   }
 }

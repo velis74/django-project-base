@@ -1,17 +1,19 @@
-'use strict';
-
 (function () {
   'use strict';
 
   var Ajax = {
     loading: false,
-    request: function request(url, options) {
+    request: function (url, options) {
       var o = {
         data: null,
-        success: function success() {},
-        failure: function failure() {},
-        always: function always() {},
-        beforeSend: function beforeSend() {},
+        success: function () {
+        },
+        failure: function () {
+        },
+        always: function () {
+        },
+        beforeSend: function () {
+        },
         headers: {},
         type: 'POST',
         loading: true,
@@ -33,7 +35,7 @@
         url: url,
         type: o.type,
         data: o.data,
-        beforeSend: function beforeSend(xhr) {
+        beforeSend: function (xhr) {
           o.beforeSend(xhr);
         },
         cache: false,
@@ -55,7 +57,7 @@
         Ajax.loading = false;
         o.always(xhr);
       });
-    }
+    },
   };
 
   window.Ajax = Ajax;
@@ -68,4 +70,4 @@
       return xhr.setRequestHeader('X-CSRF-TOKEN', token);
     }
   });
-})();
+}());

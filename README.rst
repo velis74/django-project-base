@@ -66,3 +66,5 @@ Then also make sure your models are loaded instead of django-project-base models
 
 JavaScript code style:
     Use settings in .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
+    npm install --save-dev webpack@4 webpack-dev-server webpack-cli sass-loader node-sass css-loader style-loader postcss-loader uglifyjs-webpack-plugin html-webpack-plugin cssnano autoprefixer
+    npm install babel-loader @babel/core @babel/preset-env --save-dev
