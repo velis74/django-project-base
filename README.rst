@@ -63,3 +63,6 @@ Then also make sure your models are loaded instead of django-project-base models
    been created and used is a really hard and painful process. So make triple sure you don't deploy your application
    without first making sure the model you want to use is either your own or you are satisfied with our default
    implementation.
+
+JavaScript code style:
+    Use settings in .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
