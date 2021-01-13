@@ -1,5 +1,6 @@
 package-lock.json
 node_modules
 .idea
+.idea/*
 *.pyc
 .idea/django-project-base.iml

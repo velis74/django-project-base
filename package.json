@@ -21,6 +21,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "dev": "webpack serve --open"
+    "dev": "webpack serve --open --mode=development"
+  },
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.5.0"
   }
 }

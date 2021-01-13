@@ -60,4 +60,13 @@ module.exports = {
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
+  devServer: {
+    host: '0.0.0.0',
+    allowedHosts: [
+      '192.168.237.100',
+      'localhost',
+      '127.0.0.1',
+    ],
+    open: 'chrome'
+  },
 };
