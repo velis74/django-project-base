@@ -69,16 +69,25 @@ class HtmlElementBase extends HTMLElement {
 <!--            this ul serves as placeholder-->
         </ul>
         <div class="nav-item">
-            <div>
-                <div class="display-inline">
-                    <i class="fas fa-th-list fa-2x"></i>
-                </div>
-                <div class="display-inline">
-                    <h6 class="card-title"> Projects</h6>
-                </div>
+<!--            <div>-->
+<!--                <div class="display-inline">-->
+<!--                    <i class="fas fa-th-list fa-2x"></i>-->
+<!--                </div>-->
+            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+              <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-th-list fa-2x"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Demo project 1</a>
+                        <a class="dropdown-item" href="#">Demo project 2</a>
+                    </div>
+                </li>
+              </ul>
+            </div>
             </div>
         </div>
-
         <div class="nav-item">
             <div class="card">
                 <div class="card-body">

@@ -1,6 +1,7 @@
 import {BOOTSTRAP_TEMPLATE_TYPE} from './config';
 import {HtmlElementBase} from './htmlElementBase';
 import {TitlebarData} from "./titlebarData";
+import {apiClient as ApiClient} from "../ajax/apiClient";
 
 class TitleBar extends HtmlElementBase {
   constructor() {
@@ -31,6 +32,10 @@ class TitleBar extends HtmlElementBase {
       if (this.templateType === BOOTSTRAP_TEMPLATE_TYPE) {
         this.innerHTML = this.getBootstrapTemplate();
       }
+    });
+
+    ApiClient.get('rest/project').then(response => {
+      console.log(response.data);
     });
   }
 
