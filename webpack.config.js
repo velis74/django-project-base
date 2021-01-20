@@ -17,7 +17,10 @@ module.exports = {
     filename: outputFile,
   },
   resolve: {
-    modules: [path.resolve(__dirname, 'node_modules'), 'node_modules']
+    modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'],
+    alias: {
+      vue: 'vue/dist/vue.js'
+    },
   },
   module: {
     rules: [
@@ -66,10 +69,6 @@ module.exports = {
             }
           }
         ]
-      },
-      {
-        test: /\.html$/i,
-        loader: 'html-loader',
       },
     ],
   },

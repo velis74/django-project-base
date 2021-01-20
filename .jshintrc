@@ -33,7 +33,7 @@
   // Enforce use of single quotation marks for strings.
   "quotmark": "single",
   // Enforce placing 'use strict' at the top function scope
-  "strict": true,
+  "strict": false,
   // Prohibit use of explicitly undeclared variables.
   "undef": true,
   // Warn when variables are defined but never used.

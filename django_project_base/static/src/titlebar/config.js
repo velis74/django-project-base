@@ -1,3 +1,0 @@
-const BOOTSTRAP_TEMPLATE_TYPE = 'bootstrap';
-
-export {BOOTSTRAP_TEMPLATE_TYPE};

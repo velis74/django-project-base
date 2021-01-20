@@ -1,4 +1,5 @@
-import TitleBar from './titlebar/titlebar';
+import Titlebar from './components/titlebar/titlebar';
+import TitleBarExtended from './components/titlebar/titlebarExtended';
 
-window.customElements.define('title-bar', TitleBar);
-export {TitleBar};
+export {Titlebar, TitleBarExtended};
+
