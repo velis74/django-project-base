@@ -18,12 +18,12 @@ class TitleBarData {
     const projectPk = Store.get('current-project');
     const userPk = Store.get('current-user');
     if (!projectPk || !userPk) {
-      alert('Title bar missing configuration'); // jshint ignore:line
+      console.log('No params for data retrieval');
       return;
     }
 
-    const projectRequest = ApiClient.get('rest/project/' + projectPk);
-    const profileRequest = ApiClient.get('rest/profile/' + userPk);
+    const projectRequest = ApiClient.get('dpb-rest/project/' + projectPk);
+    const profileRequest = ApiClient.get('dpb-rest/profile/' + userPk);
 
     return axios.all([projectRequest, profileRequest]).then((responses) => {
       const projectResponse = responses[0];
@@ -45,7 +45,7 @@ class TitleBarData {
   }
 
   getProjects(callback) {
-    ApiClient.get('rest/project').then(response => {
+    ApiClient.get('dpb-rest/project').then(response => {
       callback(response.data);
     }).catch(error => {
       callback([]);

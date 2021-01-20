@@ -64,6 +64,11 @@
         max-height: 80px;
         max-width: 80px;
     }
+
+    .login-container {
+        position: absolute;
+        right: 1em;
+    }
 </style>
 <div id="django-project-base-titlebar" v-cloak>
     <titlebar inline-template>
@@ -121,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            <div class="login-container" v-else>
+            <div class="nav-item login-container" v-else>
                 <form @submit.prevent>
                     <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
                     <input type="text" v-model="loginModel['password']" placeholder="Password" name="psw">

@@ -57,7 +57,12 @@ Then also make sure your models are loaded instead of django-project-base models
    DJANGO_PROJECT_BASE_PROFILE_MODEL = 'myapp.MyProfile'
 
    # urls.py add
-   url(r'rest/', include(django_project_base_router.urls)),
+   from django_project_base.router import django_project_base_urlpatterns
+   urlpatterns = [ ... ] + + django_project_base_urlpatterns
+
+   Add to INSTALLED_APPS
+    'rest_registration',
+    'django_project_base',
 
 
 .. warning::

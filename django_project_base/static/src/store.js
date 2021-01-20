@@ -14,6 +14,10 @@ class Store {
       }));
     }
   }
+
+  static delete(key) {
+    localStorage.removeItem(key);
+  }
 }
 
 export {Store};

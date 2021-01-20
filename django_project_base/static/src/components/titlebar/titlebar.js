@@ -12,12 +12,15 @@ Vue.component('titlebar', {
       loginModel: {
         username: null,
         password: null,
-      }
+      },
+      loggedIn: null,
     };
   },
   created() {
-    this.loadData();
-    this.dataStore.getProjects(this.setProjects);
+    if (Store.get('current-user')) {
+      this.loadData();
+      this.dataStore.getProjects(this.setProjects);
+    }
   },
   mounted() {
 
@@ -25,10 +28,6 @@ Vue.component('titlebar', {
   computed: {
     currentBreadcrumbsLocation() {
       return window.location.pathname.split('/');
-    },
-    loggedIn() {
-      return false;
-      return Store.get('current-user');
     },
   },
   methods: {
@@ -49,10 +48,17 @@ Vue.component('titlebar', {
       this.loadData();
     },
     makeLogin() {
-      console.log(this.loginModel);
+      this.loggedIn = 3;
+      Store.set('current-user', 3);
     },
   },
-  watch: {}
+  watch: {
+    loggedIn(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.loadData();
+      }
+    },
+  }
 });
 
 let TitleBar = null;
