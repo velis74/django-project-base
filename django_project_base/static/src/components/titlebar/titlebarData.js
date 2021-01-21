@@ -15,7 +15,7 @@ class TitleBarData {
   }
 
   getData(callback) {
-    const projectPk = Store.get('current-project');
+    const projectPk = Store.get('current-project').id;
     const userPk = Store.get('current-user').id;
     if (!projectPk || !userPk) {
       console.log('No params for data retrieval');

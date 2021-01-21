@@ -70,14 +70,16 @@
             <a class="navbar-brand" href="javascript:void(0);" style="cursor: default;">{{
                     titleBarProps.companyTitle
                 }}</a>
-            <div class="nav-item" v-if="loggedIn">
+            <div class="nav-item" v-if="loggedIn && currentBreadcrumbsLocation.length > 0">
                 <div class="card">
                     <div class="card-body">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">First Page</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Library</li>
+                                <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
+
+<!--                                <li class="breadcrumb-item"><a href="#">Home</a></li>-->
+<!--                                <li class="breadcrumb-item"><a href="#">First Page</a></li>-->
+<!--                                <li class="breadcrumb-item active" aria-current="page">Library</li>-->
                             </ol>
                         </nav>
                     </div>
@@ -92,8 +94,8 @@
                             <li class="nav-item dropdown">
                                 <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a v-for="project in projectList" v-on:click="projectSelected(project.id)"
-                                       v-bind:key="project.id" class="dropdown-item" href="#">{{ project.name }}</a>
+                                    <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project.id)"
+                                       v-bind:key="project.slug" class="dropdown-item" href="#">{{ project.name }}</a>
                                 </div>
                             </li>
                         </ul>

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import {TitleBarData} from './titlebarData';
 import {Store} from '../../store';
 import {Session} from '../../session';
+import _ from 'lodash';
 
 Vue.component('titlebar', {
   mixins: [titleBarMixin], // jshint ignore:line
@@ -40,7 +41,24 @@ Vue.component('titlebar', {
   },
   computed: {
     currentBreadcrumbsLocation() {
-      return window.location.pathname.split('/');
+      let data = window.location.pathname;
+      let parts = _.filter(_.trim(data, '/').split('/'), l => l);
+      let brd = _.map(parts,
+        v => {
+          let _idx = _.indexOf(parts, v);
+          let _url = _.take(parts, _idx + 1);
+          return {
+            'url': '/' + _.join(_url, '/'),
+            'breadcrumb': _.startCase(
+              _.replace(_.replace(v, '.html', ''), ' ', ''))
+          };
+        }
+      );
+      return brd
+      // return _.concat({
+      //   'url': '/',
+      //   'breadcrumb': 'Home'
+      // }, brd);
     },
   },
   methods: {
@@ -54,10 +72,10 @@ Vue.component('titlebar', {
       this.projectList = projectList;
     },
     projectSelected(pk) {
-      if (pk === Store.get('current-project')) {
+      if (pk === Store.get('current-project').id) {
         return;
       }
-      Store.set('current-project', pk);
+      Store.set('current-project', _.first(_.filter(this.projectList, p => p.id = pk)));
       this.loadData();
     },
     makeLogin() {

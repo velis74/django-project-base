@@ -51,16 +51,18 @@
                 </div>
             </div>
             <a class="navbar-brand" href="javascript:void(0);" style="cursor: default;">{{
-                titleBarProps.companyTitle
-                }}</a>
+                titleBarProps.companyTitle}}</a>
             <div class="nav-item" v-if="loggedIn">
                 <div class="card">
                     <div class="card-body">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">First Page</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Library</li>
+                                <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a href="#">{{
+                                    b }}</a></li>
+
+                                <!--                                <li class="breadcrumb-item"><a href="#">Home</a></li>-->
+                                <!--                                <li class="breadcrumb-item"><a href="#">First Page</a></li>-->
+                                <!--                                <li class="breadcrumb-item active" aria-current="page">Library</li>-->
                             </ol>
                         </nav>
                     </div>
@@ -75,14 +77,15 @@
                             <li class="nav-item dropdown">
                                 <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a v-for="project in projectList" v-on:click="projectSelected(project.id)"
-                                       v-bind:key="project.id" class="dropdown-item" href="#">{{ project.name }}</a>
+                                    <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project.id)"
+                                       v-bind:key="project.slug" class="dropdown-item" href="#">{{ project.name }}</a>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
+
             <div class="nav-item" v-if="loggedIn">
                 <div class="card">
                     <div class="card-body">
@@ -95,13 +98,20 @@
                 </div>
             </div>
             <div class="nav-item login-container" v-else>
-                <form @submit.prevent>
-                    <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
-                    <input type="text" v-model="loginModel['password']" placeholder="Password" name="psw">
-                    <button class="btn" type="submit" @click="makeLogin">Login</button>
-                </form>
+                <div>
+                    <form @submit.prevent>
+                        <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
+                        <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
+                        <button class="btn" type="submit" @click="makeLogin">Login</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="nav-item" v-if="loggedIn">
+                <button class="btn" type="submit" @click="makeLogout">Logout</button>
             </div>
         </nav>
+
     </titlebar>
 </div>
 {% endverbatim %}

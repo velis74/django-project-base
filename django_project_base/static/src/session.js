@@ -9,11 +9,12 @@ class Session {
         login: username,
         password: password,
       }).then(() => {
-      ApiClient.get('dpb-rest/profile/current').then(response => {
+      ApiClient.get('dpb-rest/profile/current?decorate=default-project').then(response => {
         Store.set('current-user', response.data);
-        Store.set('current-project', 1);
+        Store.set('current-project', response.data['default-project']);
         console.log('event trigegr');
         document.dispatchEvent(LoginEvent);
+        window.location.href = 'dpb-rest/project/slug/' + response.data['default-project'].slug;
       }).catch(error => {
         console.error(error);
       });
@@ -27,6 +28,7 @@ class Session {
       .then(() => {
         Store.clear();
         document.dispatchEvent(LogoutEvent);
+        window.location.href = '/';
       }).catch(() => {
       console.log('Logout error');
     });

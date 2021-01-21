@@ -1,13 +1,14 @@
 from django.db.models import Model
 from rest_framework import exceptions
 from rest_framework.decorators import action
-from rest_framework.exceptions import APIException
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django_project_base.base.rest.project_base_serializer import ProjectBaseSerializer
 from django_project_base.base.rest.project_base_viewset import ProjectBaseViewSet
 from django.apps import apps
+
+from django_project_base.rest.project import ProjectSerializer
 
 
 class ProfileSerializer(ProjectBaseSerializer):
@@ -35,4 +36,14 @@ class ProfileViewSet(ProjectBaseViewSet):
         if not user:
             raise exceptions.AuthenticationFailed
         serializer = self.get_serializer(user.userprofile)
-        return Response(serializer.data)
+        response_data: dict = serializer.data
+        if getattr(request, 'GET', None) and request.GET.get('decorate', '') == 'default-project':
+            project_model: Model = apps.get_model(
+                self._get_application_name('DJANGO_PROJECT_BASE_PROFILE_MODEL'),
+                self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL'))
+            response_data['default-project'] = None
+            if project_model:
+                ProjectSerializer.Meta.model = project_model
+                response_data['default-project'] = ProjectSerializer(
+                    project_model.objects.filter(owner=user).first()).data
+        return Response(response_data)

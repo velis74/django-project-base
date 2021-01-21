@@ -1,6 +1,11 @@
 class Store {
+
+  static store() {
+    return localStorage;
+  }
+
   static get(key) {
-    let _storeData = localStorage.getItem(key);
+    let _storeData = Store.store().getItem(key);
     if (_storeData) {
       return JSON.parse(_storeData).__val;
     }
@@ -9,18 +14,18 @@ class Store {
 
   static set(key, data) {
     if (data !== null) {
-      localStorage.setItem(key, JSON.stringify({
+      Store.store().setItem(key, JSON.stringify({
         '__val': data
       }));
     }
   }
 
   static delete(key) {
-    localStorage.removeItem(key);
+    Store.store().removeItem(key);
   }
 
   static clear() {
-    localStorage.clear();
+    Store.store().clear();
   }
 }
 
