@@ -29,23 +29,20 @@
         clear: both;
     }
 
-    .card .card-body .actions {
-        margin-top: 5px;
+    .card .card-body {
         background-color: transparent;
         border: none;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     .card {
         background-color: transparent;
         border: none;
-    }
-
-    .display-inline {
-        display: inline-block;
+        cursor: pointer;
     }
 
     .logo-image {
-        cursor: default;
         max-height: 80px;
         max-width: 80px;
     }
@@ -53,6 +50,18 @@
     .login-container {
         position: absolute;
         right: 1em;
+    }
+
+    .rounded-circle {
+        margin-top: 0.25em;
+    }
+
+    i {
+        cursor: pointer;
+    }
+
+    .navbar {
+        min-height: 4em;
     }
 </style>
 <div id="django-project-base-titlebar" v-cloak>
@@ -62,8 +71,7 @@
                 <div class="card">
                     <div class="card-body">
                         <img v-bind:src="titleBarProps.companyImageLogoUrl"
-                             class="float-left rounded-circle logo-image" onclick="window.location.href='/'"
-                             style="cursor: pointer;">
+                             class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
                     </div>
                 </div>
             </div>
@@ -75,21 +83,18 @@
                     <div class="card-body">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
-
-<!--                                <li class="breadcrumb-item"><a href="#">Home</a></li>-->
-<!--                                <li class="breadcrumb-item"><a href="#">First Page</a></li>-->
-<!--                                <li class="breadcrumb-item active" aria-current="page">Library</li>-->
+                                <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a
+                                        v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
                             </ol>
                         </nav>
                     </div>
                 </div>
             </div>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent" v-if="loggedIn">
+            <div class="collapse navbar-collapse" v-if="loggedIn">
                 <ul class="navbar-nav mr-auto">
                 </ul>
                 <div class="nav-item">
-                    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                    <div class="collapse navbar-collapse">
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
@@ -102,15 +107,25 @@
                     </div>
                 </div>
             </div>
-
             <div class="nav-item" v-if="loggedIn">
-                <div class="card">
+                <div class="card" data-toggle="dropdown">
                     <div class="card-body">
-                        <img v-bind:src="titleBarProps.avatarImageUrl" class="float-left rounded-circle">
+                        <img style="margin-right: 1em;" v-bind:src="titleBarProps.avatarImageUrl"
+                             class="float-left rounded-circle">
                         <div class="message">
                             <h5 class="card-title">{{ titleBarProps.firstName }} {{ titleBarProps.lastName }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ titleBarProps.userTitle }}</h6>
                         </div>
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">User profile</a>
+                                    <a class="dropdown-item" href="#">User settings</a>
+                                    <a class="dropdown-item" href="#">Change password</a>
+                                    <a class="dropdown-item" href="#" @click="makeLogout">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+
                     </div>
                 </div>
             </div>
@@ -124,11 +139,7 @@
                 </div>
 
             </div>
-            <div class="nav-item" v-if="loggedIn">
-                <button class="btn" type="submit" @click="makeLogout">Logout</button>
-            </div>
         </nav>
-
     </titlebar>
 </div>
 <!--END COMPONENT TEMPLATE-->
