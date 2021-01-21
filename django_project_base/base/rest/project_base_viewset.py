@@ -1,9 +1,12 @@
 from django.db.models import Model
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from django.conf import settings
 
 
 class ProjectBaseViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
     def _get_setting(self, key: str) -> list:
         _setting: list = getattr(settings, key, '').split('.')
         if len(_setting) != 2:

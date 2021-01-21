@@ -18,6 +18,10 @@ class Store {
   static delete(key) {
     localStorage.removeItem(key);
   }
+
+  static clear() {
+    localStorage.clear();
+  }
 }
 
 export {Store};

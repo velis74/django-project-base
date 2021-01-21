@@ -12,22 +12,7 @@
 <body>
 
 <script>
-  var titleBarMixin = {
-    // created() {
-    //   console.log(Math.random() + 'created')
-    // },
-    // methods: {
-    //   checkOverride() {
-    //     console.log('Init Timer Mixin')
-    //   }
-    // }
-  }
-  localStorage.setItem('current-project', JSON.stringify({
-    '__val': 1
-  }));
-  localStorage.setItem('current-user', JSON.stringify({
-    '__val': 3
-  }));
+  var titleBarMixin = {}
 </script>
 
 <!--START COMPONENT TEMPLATE-->
@@ -115,6 +100,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="nav-item" v-if="loggedIn">
                 <div class="card">
                     <div class="card-body">
@@ -127,29 +113,26 @@
                 </div>
             </div>
             <div class="nav-item login-container" v-else>
-                <form @submit.prevent>
-                    <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
-                    <input type="text" v-model="loginModel['password']" placeholder="Password" name="psw">
-                    <button class="btn" type="submit" @click="makeLogin">Login</button>
-                </form>
+                <div>
+                    <form @submit.prevent>
+                        <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
+                        <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
+                        <button class="btn" type="submit" @click="makeLogin">Login</button>
+                    </form>
+                </div>
+
+            </div>
+            <div class="nav-item" v-if="loggedIn">
+                <button class="btn" type="submit" @click="makeLogout">Logout</button>
             </div>
         </nav>
+
     </titlebar>
 </div>
 <!--END COMPONENT TEMPLATE-->
 
 <br/>
 <br/>
-
-<!--<div id="django-project-base-titlebar-extended">-->
-<!--    <titlebar-extended inline-template>-->
-<!--        <div class="checkbox-wrapper" @click="check">-->
-<!--            <div :class="{ checkbox: true, checked: checked }"></div>-->
-<!--            <div class="title">{{ title }}</div>-->
-<!--        </div>-->
-<!--    </titlebar-extended>-->
-<!--</div>-->
-
 <br/>
 <br/>
 

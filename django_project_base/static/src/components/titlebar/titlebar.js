@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import {TitleBarData} from './titlebarData';
-import {Store} from './../../store';
+import {Store} from '../../store';
+import {Session} from '../../session';
 
 Vue.component('titlebar', {
   mixins: [titleBarMixin], // jshint ignore:line
@@ -18,9 +19,21 @@ Vue.component('titlebar', {
   },
   created() {
     if (Store.get('current-user')) {
+      this.loggedIn = true;
       this.loadData();
       this.dataStore.getProjects(this.setProjects);
     }
+    document.addEventListener('login', () => {
+      this.loadData();
+      this.dataStore.getProjects(this.setProjects);
+      this.loggedIn = true;
+    });
+    document.addEventListener('logout', () => {
+      this.loggedIn = null;
+      this.titleBarProps = {};
+      this.projectList = [];
+      this.loginModel.password = null;
+    });
   },
   mounted() {
 
@@ -48,17 +61,12 @@ Vue.component('titlebar', {
       this.loadData();
     },
     makeLogin() {
-      this.loggedIn = 3;
-      Store.set('current-user', 3);
+      Session.login(this.loginModel.username, this.loginModel.password);
+    },
+    makeLogout() {
+      Session.logout();
     },
   },
-  watch: {
-    loggedIn(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.loadData();
-      }
-    },
-  }
 });
 
 let TitleBar = null;

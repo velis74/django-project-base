@@ -1,6 +1,6 @@
-import {apiClient as ApiClient} from '../../ajax/apiClient';
+import {apiClient as ApiClient} from '../../apiClient';
 import axios from 'axios';
-import {Store} from "../../store";
+import {Store} from '../../store';
 
 class TitleBarData {
   constructor() {
@@ -16,7 +16,7 @@ class TitleBarData {
 
   getData(callback) {
     const projectPk = Store.get('current-project');
-    const userPk = Store.get('current-user');
+    const userPk = Store.get('current-user').id;
     if (!projectPk || !userPk) {
       console.log('No params for data retrieval');
       return;
@@ -25,7 +25,7 @@ class TitleBarData {
     const projectRequest = ApiClient.get('dpb-rest/project/' + projectPk);
     const profileRequest = ApiClient.get('dpb-rest/profile/' + userPk);
 
-    return axios.all([projectRequest, profileRequest]).then((responses) => {
+    axios.all([projectRequest, profileRequest]).then((responses) => {
       const projectResponse = responses[0];
       const profileResponse = responses[1];
       this.data.companyImageLogoUrl = projectResponse.data.logo;
@@ -45,6 +45,10 @@ class TitleBarData {
   }
 
   getProjects(callback) {
+    if (!Store.get('current-user')) {
+      console.log('No logged in user');
+      return;
+    }
     ApiClient.get('dpb-rest/project').then(response => {
       callback(response.data);
     }).catch(error => {
