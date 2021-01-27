@@ -1,8 +1,13 @@
 import Vue from 'vue';
+import Notifications from 'vue-notification';
 import {TitleBarData} from './titlebarData';
 import {Store} from '../../store';
 import {Session} from '../../session';
 import _ from 'lodash';
+import {translationData} from '../../translations';
+import {showNotification} from '../../notifications';
+
+Vue.use(Notifications);
 
 Vue.component('titlebar', {
   mixins: [titleBarMixin], // jshint ignore:line
@@ -16,9 +21,12 @@ Vue.component('titlebar', {
         password: null,
       },
       loggedIn: null,
+      translations: {},
+      permissions: {},
     };
   },
   created() {
+    this.translations = translationData;
     if (Store.get('current-user')) {
       this.loggedIn = true;
       this.loadData();
@@ -43,7 +51,7 @@ Vue.component('titlebar', {
     currentBreadcrumbsLocation() {
       let data = window.location.pathname;
       let parts = _.filter(_.trim(data, '/').split('/'), l => l);
-      let brd = _.map(parts,
+      return _.map(parts,
         v => {
           let _idx = _.indexOf(parts, v);
           let _url = _.take(parts, _idx + 1);
@@ -54,7 +62,7 @@ Vue.component('titlebar', {
           };
         }
       );
-      return brd
+      //return brd;
       // return _.concat({
       //   'url': '/',
       //   'breadcrumb': 'Home'
@@ -64,6 +72,7 @@ Vue.component('titlebar', {
   methods: {
     loadData() {
       this.dataStore.getData(this.setData);
+      this.getPermissions();
     },
     setData(configData) {
       this.titleBarProps = configData;
@@ -84,6 +93,21 @@ Vue.component('titlebar', {
     makeLogout() {
       Session.logout();
     },
+    addNewProject() {
+      showNotification('Make project', 'TODO');
+    },
+    getPermissions() {
+      const permissionPromise = new Promise((resolveCallback) => {
+        setTimeout(() => {
+          this.permissions = {'add-project': true};
+          resolveCallback();
+        }, 2000);
+      });
+      permissionPromise.then(() => {
+        console.log('pemrissions loaded');
+        console.log(this.permissions);
+      });
+    },
   },
 });
 
@@ -91,7 +115,7 @@ let TitleBar = null;
 
 if (document.getElementById('django-project-base-titlebar')) {
   TitleBar = new Vue({
-    el: '#django-project-base-titlebar'
+    el: '#django-project-base-titlebar',
   });
 }
 

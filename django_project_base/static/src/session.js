@@ -1,6 +1,8 @@
 import {Store} from './store';
 import {apiClient as ApiClient} from './apiClient';
 import {loginEvent as LoginEvent, logoutEvent as LogoutEvent} from './events';
+import {showGeneralErrorNotification, showNotification} from './notifications';
+import {translationData} from './translations';
 
 class Session {
   static login(username, password) {
@@ -12,14 +14,16 @@ class Session {
       ApiClient.get('dpb-rest/profile/current?decorate=default-project').then(response => {
         Store.set('current-user', response.data);
         Store.set('current-project', response.data['default-project']);
-        console.log('event trigegr');
         document.dispatchEvent(LoginEvent);
         window.location.href = 'dpb-rest/project/slug/' + response.data['default-project'].slug;
       }).catch(error => {
-        console.error(error);
+        console.log(error);
+        showGeneralErrorNotification();
       });
     }).catch(error => {
-      console.log(error);
+      if (error.response && error.response.data && (error.response.data.login || error.response.data.password)) {
+        showNotification(null, translationData['invalid-login-credentials']);
+      }
     });
   }
 
@@ -30,7 +34,7 @@ class Session {
         document.dispatchEvent(LogoutEvent);
         window.location.href = '/';
       }).catch(() => {
-      console.log('Logout error');
+      showGeneralErrorNotification();
     });
 
   }

@@ -8,7 +8,6 @@ Vue.component('titlebar-extended', {
   },
   methods: {
     check() {
-      console.log(Math.random() + 'extended');
       this.checked = !this.checked;
     }
   }

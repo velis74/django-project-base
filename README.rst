@@ -63,6 +63,13 @@ Then also make sure your models are loaded instead of django-project-base models
    Add to INSTALLED_APPS
     'rest_registration',
     'django_project_base',
+    'drf_spectacular',
+
+   Add:
+     REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    }
 
 
 .. warning::
