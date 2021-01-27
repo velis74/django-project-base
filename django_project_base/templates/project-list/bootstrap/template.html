@@ -1,0 +1,28 @@
+{% verbatim %}
+<div id="django-project-base-project-list" v-cloak>
+    <project-list inline-template>
+        <div class="nav-item">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a v-for="(project, idx) in projectList"
+                               v-on:click="projectSelected(project.id)"
+                               v-bind:key="project.slug" class="dropdown-item project-item"
+                               href="#">
+                                <img v-bind:src="project.logo" class="project-link-image">
+                                {{ project.name }}</a>
+                            <a v-if="permissions['add-project']" v-on:click="addNewProject"
+                               class="dropdown-item project-item"
+                               href="#">
+                                <i class="fas fa-plus-circle"></i>
+                                {{ translations['add-new-project'] }}</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </project-list>
+</div>
+{% endverbatim %}

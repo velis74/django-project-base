@@ -14,7 +14,7 @@ class TitleBarData {
     };
   }
 
-  getData(callback) {
+  getTitleBarData(callback) {
     const projectPk = Store.get('current-project').id;
     const userPk = Store.get('current-user').id;
     if (!projectPk || !userPk) {
@@ -56,6 +56,21 @@ class TitleBarData {
       console.error(error);
     });
   }
+
+  getPermissions(callback) {
+    let _permissions = {};
+      const permissionPromise = new Promise((resolveCallback) => {
+        setTimeout(() => {
+          _permissions = {'add-project': true};
+          resolveCallback();
+        }, 2000);
+      });
+      permissionPromise.then(() => {
+        console.log('pemrissions loaded');
+        console.log(_permissions);
+        callback(_permissions);
+      });
+    }
 }
 
 export {TitleBarData};

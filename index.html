@@ -9,14 +9,15 @@
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </head>
-<body>
 <script>
   var titleBarMixin = {};
   var projectListMixin = {};
   var userProfileMixin = {};
+  var breadcrumbsMixin = {};
 </script>
+<body>
 
-<!--START COMPONENT TEMPLATE-->
+
 <style>
     [v-cloak] {
         display: none;
@@ -34,13 +35,16 @@
         background-color: transparent;
         border: none;
         padding-top: 0;
-        padding-bottom: 0;
     }
 
     .card {
         background-color: transparent;
         border: none;
         cursor: pointer;
+    }
+
+    .card-body {
+        padding: 0;
     }
 
     .logo-image {
@@ -73,6 +77,14 @@
     .project-item {
 
     }
+
+    .breadcrumb {
+        margin-bottom: 0;
+    }
+
+    .left-spacing {
+        margin-left: 1em;
+    }
 </style>
 <div id="django-project-base-titlebar" v-cloak>
     <titlebar inline-template>
@@ -86,45 +98,72 @@
                         </div>
                     </div>
                 </div>
-                <a class="navbar-brand" href="javascript:void(0);" style="cursor: default;">{{
+                <div class="navbar-brand left-spacing" href="javascript:void(0);" style="cursor: default;">{{
                         titleBarProps.companyTitle
-                    }}</a>
-                <div class="nav-item" v-if="loggedIn && currentBreadcrumbsLocation.length > 0">
-                    <div class="card">
-                        <div class="card-body">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a
-                                            v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
+                    }}
                 </div>
+
+                <div v-if="loggedIn" class="left-spacing">
+
+
+                    <div id="django-project-base-breadcrumbs" v-cloak>
+                        <breadcrumbs inline-template>
+                            <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <nav aria-label="breadcrumb">
+                                            <ol class="breadcrumb">
+                                                <li v-for="(b, bx) in currentBreadcrumbsLocation"
+                                                    class="breadcrumb-item"><a
+                                                        v-bind:href="b.url">{{
+                                                        b.breadcrumb
+                                                    }}</a></li>
+                                            </ol>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </breadcrumbs>
+                    </div>
+
+
+                </div>
+
                 <div class="collapse navbar-collapse" v-if="loggedIn">
                     <ul class="navbar-nav mr-auto">
                     </ul>
-                    <div class="nav-item">
-                        <div class="collapse navbar-collapse">
-                            <ul class="navbar-nav">
-                                <li class="nav-item dropdown">
-                                    <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a v-for="(project, idx) in projectList"
-                                           v-on:click="projectSelected(project.id)"
-                                           v-bind:key="project.slug" class="dropdown-item project-item" href="#">
-                                            <img v-bind:src="project.logo" class="project-link-image">
-                                            {{ project.name }}</a>
-                                        <a v-if="permissions['add-project']" v-on:click="addNewProject" class="dropdown-item project-item"
-                                           href="#">
-                                            <i class="fas fa-plus-circle"></i> {{ translations['add-new-project'] }}</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+
+
+                    <div id="django-project-base-project-list" v-cloak>
+                        <project-list inline-template>
+                            <div class="nav-item">
+                                <div class="collapse navbar-collapse">
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item dropdown">
+                                            <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
+                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <a v-for="(project, idx) in projectList"
+                                                   v-on:click="projectSelected(project.id)"
+                                                   v-bind:key="project.slug" class="dropdown-item project-item"
+                                                   href="#">
+                                                    <img v-bind:src="project.logo" class="project-link-image">
+                                                    {{ project.name }}</a>
+                                                <a v-if="permissions['add-project']" v-on:click="addNewProject"
+                                                   class="dropdown-item project-item"
+                                                   href="#">
+                                                    <i class="fas fa-plus-circle"></i>
+                                                    {{ translations['add-new-project'] }}</a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </project-list>
                     </div>
+
+
                 </div>
-                <div class="nav-item" v-if="loggedIn">
+                <div class="nav-item left-spacing" style="margin-right: 1em;" v-if="loggedIn">
                     <div class="card" data-toggle="dropdown">
                         <div class="card-body">
                             <img style="margin-right: 1em;" v-bind:src="titleBarProps.avatarImageUrl"
@@ -163,14 +202,19 @@
         </div>
     </titlebar>
 </div>
-<!--END COMPONENT TEMPLATE-->
 
 <br/>
 <br/>
+<div>CONTENT</div>
 <br/>
 <br/>
 
-Project base constent
+<h6>FIRST PAGE - NO AUTH NEEDEED</h6>
+
+
+<br/>
+<br/>
+
 
 </body>
 </html>

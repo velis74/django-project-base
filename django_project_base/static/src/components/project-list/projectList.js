@@ -1,26 +1,56 @@
 import Vue from 'vue';
+import {Store} from '../../store';
+import _ from 'lodash';
+import {translationData} from "../../translations";
+import {TitleBarData} from "../titlebar/titlebarData";
+import {showNotification} from "../../notifications";
+import {projectSelected as ProjectSelected} from "../../events";
 
-Vue.component('project-list', {
+const ProjectList = Vue.component('project-list', {
   mixins: [projectListMixin], // jshint ignore:line
   data() {
-    return {};
+    return {
+      projectList: [],
+      translations: {},
+      permissions: {},
+      dataStore: new TitleBarData(),
+    };
   },
   created() {
-
+    this.translations = translationData;
+    if (Store.get('current-user')) {
+      this.loadData();
+    }
+    document.addEventListener('login', () => {
+      this.loadData();
+    });
   },
   mounted() {
 
   },
   computed: {},
-  methods: {},
+  methods: {
+    projectSelected(pk) {
+      if (pk === Store.get('current-project').id) {
+        return;
+      }
+      Store.set('current-project', _.first(_.filter(this.projectList, p => p.id = pk)));
+      document.dispatchEvent(ProjectSelected);
+    },
+    loadData() {
+      this.dataStore.getProjects(this.setProjects);
+      this.dataStore.getPermissions(this.setPermissions);
+    },
+    setProjects(projectList) {
+      this.projectList = projectList;
+    },
+    setPermissions(permissions) {
+      this.permissions = permissions;
+    },
+    addNewProject() {
+      showNotification('Make project', 'TODO');
+    },
+  },
 });
-
-let ProjectList = null;
-
-if (document.getElementById('django-project-base-project-list')) {
-  ProjectList = new Vue({
-    el: '#django-project-base-project-list',
-  });
-}
 
 export default {ProjectList};
