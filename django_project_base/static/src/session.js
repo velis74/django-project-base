@@ -6,7 +6,7 @@ import {translationData} from './translations';
 
 class Session {
   static login(username, password) {
-    ApiClient.post('dpb-rest-accounts/login/',
+    ApiClient.post('dpb-rest-account/login/',
       {
         login: username,
         password: password,
@@ -28,7 +28,7 @@ class Session {
   }
 
   static logout() {
-    ApiClient.post('dpb-rest-accounts/logout/')
+    ApiClient.post('dpb-rest-account/logout/')
       .then(() => {
         Store.clear();
         document.dispatchEvent(LogoutEvent);
