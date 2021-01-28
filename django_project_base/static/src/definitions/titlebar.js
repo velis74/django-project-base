@@ -6,7 +6,7 @@ import {Store} from '../store';
 const titlebarComponentDefinition = {
   defaultId: 'titlebar',
   definition: {
-    mixins: [titleBarMixin], // jshint ignore:line
+    mixins: [typeof titleBarMixin === 'undefined' ? {} : titleBarMixin], // jshint ignore:line
     data() {
       return {
         titleBarProps: {},

@@ -3,7 +3,7 @@ import _ from 'lodash';
 const breadcrumbsComponentDefinition = {
   defaultId: 'breadcrumbs',
   definition: {
-    mixins: [breadcrumbsMixin], // jshint ignore:line
+    mixins: [typeof breadcrumbsMixin === 'undefined' ? {} : breadcrumbsMixin], // jshint ignore:line
     data() {
       return {};
     },

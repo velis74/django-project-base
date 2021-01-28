@@ -87,18 +87,10 @@ module.exports = {
       '127.0.0.1',
     ],
     proxy: {
-      '/dpb-rest-account': {
+      '*': {
         target: 'http://127.0.0.1:9000',
         secure: false
       },
-      '/dpb-rest': {
-        target: 'http://127.0.0.1:9000',
-        secure: false
-      },
-      '/static': {
-        target: 'http://127.0.0.1:9000',
-        secure: false
-      }
     },
     open: 'chrome'
   },

@@ -4,7 +4,7 @@ import {translationData} from '../translations';
 const loginComponentDefinition = {
   defaultId: 'login',
   definition: {
-    mixins: [],
+    mixins: [typeof loginMixin === 'undefined' ? {} : loginMixin], // jshint ignore:line
     data() {
       return {
         loginModel: {

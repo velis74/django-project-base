@@ -6,16 +6,16 @@ import {translationData} from './translations';
 
 class Session {
   static login(username, password) {
-    ApiClient.post('dpb-rest-account/login/',
+    ApiClient.post('login/',
       {
         login: username,
         password: password,
       }).then(() => {
-      ApiClient.get('dpb-rest/profile/current?decorate=default-project').then(response => {
+      ApiClient.get('profile/current?decorate=default-project').then(response => {
         Store.set('current-user', response.data);
         Store.set('current-project', response.data['default-project']);
         document.dispatchEvent(LoginEvent);
-        window.location.href = 'dpb-rest/project/slug/' + response.data['default-project'].slug;
+        window.location.href = 'project/slug/' + response.data['default-project'].slug;
       }).catch(error => {
         console.log(error);
         showGeneralErrorNotification();
@@ -28,7 +28,7 @@ class Session {
   }
 
   static logout() {
-    ApiClient.post('dpb-rest-account/logout/')
+    ApiClient.post('logout/')
       .then(() => {
         Store.clear();
         document.dispatchEvent(LogoutEvent);

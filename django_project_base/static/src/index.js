@@ -4,6 +4,11 @@ import Breadcrumbs from './apps/breadcrumbs';
 import Login from './apps/login';
 import UserProfile from './apps/userProfile';
 
-
-export {Titlebar, ProjectList, Breadcrumbs, Login, UserProfile};
+export {
+  Titlebar,
+  ProjectList,
+  Breadcrumbs,
+  Login,
+  UserProfile,
+};
 

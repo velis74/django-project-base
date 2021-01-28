@@ -5,7 +5,7 @@ import {TitleBarData} from '../apps/titlebar/titlebarData';
 const userProfileComponentDefinition = {
   defaultId: 'user-profile',
   definition: {
-    mixins: [userProfileMixin], // jshint ignore:line
+    mixins: [typeof userProfileMixin === 'undefined' ? {} : userProfileMixin], // jshint ignore:line
     data() {
       return {
         translations: {},

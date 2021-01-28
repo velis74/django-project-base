@@ -9,7 +9,7 @@ import {projectSelected as ProjectSelected} from '../events';
 const projectListComponentDefinition = {
   defaultId: 'project-list',
   definition: {
-    mixins: [projectListMixin], // jshint ignore:line
+    mixins: [typeof projectListMixin === 'undefined' ? {} : projectListMixin], // jshint ignore:line
     data() {
       return {
         projectList: [],

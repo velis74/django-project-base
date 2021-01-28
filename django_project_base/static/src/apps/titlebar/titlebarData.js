@@ -21,7 +21,7 @@ class TitleBarData {
       console.log('No params for titlebar data retrieval');
       return;
     }
-    ApiClient.get('dpb-rest/project/' + projectPk).then(projectResponse => {
+    ApiClient.get('project/' + projectPk).then(projectResponse => {
       this.projectData.companyImageLogoUrl = projectResponse.data.logo;
       this.projectData.companyTitle = projectResponse.data.name;
       callback(this.projectData);
@@ -35,7 +35,7 @@ class TitleBarData {
       console.log('No logged in user');
       return;
     }
-    ApiClient.get('dpb-rest/project').then(response => {
+    ApiClient.get('project').then(response => {
       callback(response.data);
     }).catch(error => {
       callback([]);
@@ -64,7 +64,7 @@ class TitleBarData {
       console.log('No params for user profile data retrieval');
       return;
     }
-    ApiClient.get('dpb-rest/profile/' + userPk).then(profileResponse => {
+    ApiClient.get('profile/' + userPk).then(profileResponse => {
       this.userProfileData.avatarImageUrl = profileResponse.data.avatar;
       // todo: replace avata with real image
       this.userProfileData.avatarImageUrl = 'https://via.placeholder.com/45';

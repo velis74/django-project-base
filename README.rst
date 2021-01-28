@@ -58,7 +58,7 @@ Then also make sure your models are loaded instead of django-project-base models
 
    # urls.py add
    from django_project_base.router import django_project_base_urlpatterns
-   urlpatterns = [ ... ] + + django_project_base_urlpatterns
+   urlpatterns = [ ... ] + django_project_base_urlpatterns
 
    Add to INSTALLED_APPS
     'rest_registration',
@@ -80,6 +80,12 @@ Then also make sure your models are loaded instead of django-project-base models
    implementation.
 
 JavaScript code style:
-    Use settings in .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
-    Install latest stable nodejs and npm
-    npm install
+    For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
+
+    For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
+    In project base directory run npm install. To run a development server run npm run dev. To generate a build run npm run build.
+
+    JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
+    Components are built as Vue global components with inline templates. Templates are present in temmplates directory.
+
+    For example of project list component usage look at login-example.html in examples folder.
