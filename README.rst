@@ -90,4 +90,7 @@ JavaScript code style:
     Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
     with inline templates. Templates are present in templates directory.
 
+    When developing webpack development server expects that service which provides data runs on host
+    http://127.0.0.1:9000. This can be changed in webpack.config.js file.
+
     For example of project list component usage look at login-example.html in examples folder.
