@@ -3,6 +3,7 @@ import Notifications from 'vue-notification';
 import {loginComponentDefinition} from '../definitions/login';
 
 Vue.use(Notifications);
+Vue.config.productionTip = false;
 
 let Login = null;
 

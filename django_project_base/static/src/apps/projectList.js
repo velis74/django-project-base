@@ -3,6 +3,7 @@ import Notifications from 'vue-notification';
 import {projectListComponentDefinition} from '../definitions/projectList';
 
 Vue.use(Notifications);
+Vue.config.productionTip = false;
 
 let ProjectList = null;
 

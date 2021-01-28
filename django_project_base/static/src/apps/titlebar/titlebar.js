@@ -7,6 +7,7 @@ import {loginComponentDefinition} from '../../definitions/login';
 import {userProfileComponentDefinition} from '../../definitions/userProfile';
 
 Vue.use(Notifications);
+Vue.config.productionTip = false;
 
 let TitleBar = null;
 
