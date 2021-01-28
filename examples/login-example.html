@@ -9,30 +9,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script>
+        // we can ovveride definition for login component by defining a loginMixin(https://vuejs.org/v2/guide/mixins.html)
+        var loginMixin = {};
+    </script>
 </head>
 <body>
-<!--In django project import view-->
-<!--{% include "titlebar/bootstrap/template.html" with titlebar_app=True %}-->
-
-
-<!--For example templates/login/bootstrap/template.html is copied -->
-
-
-<div id="django-project-base-login-app" v-cloak>
-    <login inline-template>
-        <div class="nav-item login-container">
-            <div>
-                <form @submit.prevent>
-                    <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
-                    <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
-                    <button class="btn" type="submit" @click="makeLogin">{{ translations['login'] }}</button>
-                </form>
-            </div>
-            <notifications position="top center"/>
-        </div>
-    </login>
-</div>
-
+<!-- if titlebar_app is set to True then included html is used as a inline template for an Vue application instance, else its just a inline -->
+<!-- template which can be included into other template which can be instantiated to Vue app -->
+{% include "titlebar/bootstrap/template.html" with titlebar_app=True %}
 </body>
-<script src="https://raw.githubusercontent.com/velis74/django-project-base/title-bar/django_project_base/static/dist/django-project-base.min.js"></script>
+<script src="{% static 'dist/django-project-base.min.js' %}"></script>
 </html>
