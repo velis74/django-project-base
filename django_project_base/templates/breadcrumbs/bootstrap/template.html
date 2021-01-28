@@ -1,5 +1,9 @@
-{% verbatim %}
+{% if breadcrumbs_app %}
+<div id="django-project-base-breadcrumbs-app" v-cloak>
+{%else%}
 <div id="django-project-base-breadcrumbs" v-cloak>
+{% endif %}
+{% verbatim %}
     <breadcrumbs inline-template>
         <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0">
             <div class="card">

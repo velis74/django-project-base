@@ -1,8 +1,9 @@
-import Titlebar from './components/titlebar/titlebar';
-import TitleBarExtended from './components/titlebar/titlebarExtended';
-import UserProfile from './components/user-profile/userProfile';
-import ProjectList from './components/project-list/projectList';
-import Breadcrumbs from './components/breadcrumbs/breadcrumbs';
+import Titlebar from './apps/titlebar/titlebar';
+import ProjectList from './apps/projectList';
+import Breadcrumbs from './apps/breadcrumbs';
+import Login from './apps/login';
+import UserProfile from './apps/userProfile';
 
-export {Titlebar, TitleBarExtended, ProjectList, UserProfile, Breadcrumbs};
+
+export {Titlebar, ProjectList, Breadcrumbs, Login, UserProfile};
 

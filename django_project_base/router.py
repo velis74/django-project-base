@@ -21,7 +21,7 @@ SPECTACULAR_DEFAULTS['DESCRIPTION'] = 'Api documentation'
 SPECTACULAR_DEFAULTS['VERSION'] = '0.0.1'
 
 django_project_base_urlpatterns = [
-    path('dpb-rest-accounts/', include('rest_registration.api.urls')),
+    path('dpb-rest-account/', include('rest_registration.api.urls')),
     url(r'dpb-rest/', include(django_project_base_router.urls)),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
