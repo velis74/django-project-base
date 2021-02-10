@@ -15,13 +15,15 @@ class Session {
         Store.set('current-user', response.data);
         Store.set('current-project', response.data['default-project']);
         document.dispatchEvent(LoginEvent);
-        window.location.href = 'project/slug/' + response.data['default-project'].slug;
+        showNotification(null,
+          'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'].slug);
+        // window.location.href = 'project/slug/' + response.data['default-project'].slug;
       }).catch(error => {
         console.log(error);
         showGeneralErrorNotification();
       });
     }).catch(error => {
-      if (error.response && error.response.data && (error.response.data.login || error.response.data.password)) {
+      if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {
         showNotification(null, translationData['invalid-login-credentials']);
       }
     });

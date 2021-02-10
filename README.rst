@@ -91,6 +91,11 @@ JavaScript code style:
     with inline templates. Templates are present in templates directory.
 
     When developing webpack development server expects that service which provides data runs on host
-    http://127.0.0.1:9000. This can be changed in webpack.config.js file.
+    http://127.0.0.1:8000. This can be changed in webpack.config.js file.
+    For running example django project prepare python environment and run:
+
+    - pip install -r requirements.txt (run in content root)
+    - cd examples/django/demo_app
+    - python manage.py runserver
 
     For example of project list component usage look at login-example.html in examples folder.

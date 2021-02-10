@@ -37,6 +37,7 @@ const projectListComponentDefinition = {
           return;
         }
         Store.set('current-project', _.first(_.filter(this.projectList, p => p.id = pk)));
+        showNotification(null, 'project ' + pk + ' selected');
         document.dispatchEvent(ProjectSelected);
       },
       loadData() {
