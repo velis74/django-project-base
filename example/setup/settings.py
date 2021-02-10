@@ -10,9 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
-import sys
-
-sys.path.append('../../..')
 
 from pathlib import Path
 
@@ -41,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_registration',
     'django_project_base',
-    'demo_django_base',
+    'example.demo_django_base',
     'drf_spectacular',
 ]
 
@@ -55,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'demo_app.urls'
+ROOT_URLCONF = 'example.setup.urls'
 
 TEMPLATES = [
     {
@@ -73,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'demo_app.wsgi.application'
+WSGI_APPLICATION = 'example.setup.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

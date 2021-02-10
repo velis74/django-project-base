@@ -99,3 +99,5 @@ JavaScript code style:
     - python manage.py runserver
 
     For example of project list component usage look at login-example.html in examples folder.
+
+    Try logging in with user "miha", pass "mihamiha".
