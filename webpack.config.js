@@ -8,12 +8,12 @@ const outputFile = `${libraryName}.min.js`;
 
 
 module.exports = {
-  entry: './django_project_base/static/src/index.js',
+  entry: ['./django_project_base/js_app/src/index.js'],
   output: {
     library: libraryName,
     libraryTarget: 'umd',
     libraryExport: 'default',
-    path: path.resolve(__dirname, './django_project_base/static/dist'),
+    path: path.resolve(__dirname, './django_project_base/static/'),
     filename: outputFile,
   },
   resolve: {
@@ -76,6 +76,7 @@ module.exports = {
     new uglifyJsPlugin(),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'index.html'),
+      inject: 'head',
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],

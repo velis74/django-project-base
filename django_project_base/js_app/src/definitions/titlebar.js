@@ -1,10 +1,14 @@
 import {TitleBarData} from '../apps/titlebar/titlebarData';
 import {translationData} from '../translations';
 import {Store} from '../store';
+import {breadcrumbs,} from './breadcrumbs';
+import {projectList} from './projectList';
+import {login} from './login';
+import {userProfile} from './userProfile';
 
 
-const titlebarComponentDefinition = {
-  defaultId: 'titlebar',
+const titlebar = {
+  id: 'titlebar',
   definition: {
     mixins: [typeof titleBarMixin === 'undefined' ? {} : titleBarMixin], // jshint ignore:line
     data() {
@@ -45,7 +49,11 @@ const titlebarComponentDefinition = {
       },
     },
   },
+  childComponentsDefinition: [
+    breadcrumbs, projectList, login, userProfile
+  ],
 };
 
-export {titlebarComponentDefinition};
+export {titlebar};
+
 

@@ -2,8 +2,8 @@ import {translationData} from '../translations';
 import {Session} from '../session';
 import {TitleBarData} from '../apps/titlebar/titlebarData';
 
-const userProfileComponentDefinition = {
-  defaultId: 'user-profile',
+const userProfile= {
+  id: 'user-profile',
   definition: {
     mixins: [typeof userProfileMixin === 'undefined' ? {} : userProfileMixin], // jshint ignore:line
     data() {
@@ -35,4 +35,4 @@ const userProfileComponentDefinition = {
   }
 };
 
-export {userProfileComponentDefinition};
+export {userProfile};

@@ -6,8 +6,8 @@ import {showNotification} from '../notifications';
 import {projectSelected as ProjectSelected} from '../events';
 
 
-const projectListComponentDefinition = {
-  defaultId: 'project-list',
+const projectList = {
+  id: 'project-list',
   definition: {
     mixins: [typeof projectListMixin === 'undefined' ? {} : projectListMixin], // jshint ignore:line
     data() {
@@ -57,4 +57,4 @@ const projectListComponentDefinition = {
   }
 };
 
-export {projectListComponentDefinition};
+export {projectList};

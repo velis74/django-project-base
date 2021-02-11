@@ -1,8 +1,8 @@
 import {Session} from '../session';
 import {translationData} from '../translations';
 
-const loginComponentDefinition = {
-  defaultId: 'login',
+const login = {
+  id: 'login',
   definition: {
     mixins: [typeof loginMixin === 'undefined' ? {} : loginMixin], // jshint ignore:line
     data() {
@@ -28,4 +28,4 @@ const loginComponentDefinition = {
   }
 };
 
-export {loginComponentDefinition};
+export {login};
