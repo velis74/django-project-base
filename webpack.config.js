@@ -8,7 +8,10 @@ const outputFile = `${libraryName}.min.js`;
 
 
 module.exports = {
-  entry: ['./django_project_base/js_app/src/index.js'],
+  entry: [
+    './django_project_base/js_app/src/index.js',
+    './node_modules/es6-promise/dist/es6-promise.auto.js',
+  ],
   output: {
     library: libraryName,
     libraryTarget: 'umd',

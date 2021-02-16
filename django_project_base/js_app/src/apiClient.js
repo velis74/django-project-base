@@ -27,7 +27,7 @@ apiClient.interceptors.response.use((response) => {
     const errMsg = error && error.response && error.response.data && error.response.data.detail ? error.response.data.detail : '';
     const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
     if ((status === HTTP_401_UNAUTHORIZED || errMsg === HTTP_401_MSG) && !Store.get('redirect-to-auth')) {
-      Store.clear();
+      Store.delete('current-user');
       Store.set('redirect-to-auth', true);
       window.location.href = '/';
     }

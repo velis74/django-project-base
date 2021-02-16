@@ -1,7 +1,6 @@
 import {Store} from '../store';
 import _ from 'lodash';
-import {translationData} from '../translations';
-import {TitleBarData} from '../apps/titlebar/titlebarData';
+import {ProjectBaseData} from '../projectBaseData';
 import {showNotification} from '../notifications';
 import {projectSelected as ProjectSelected} from '../events';
 
@@ -9,17 +8,14 @@ import {projectSelected as ProjectSelected} from '../events';
 const projectList = {
   id: 'project-list',
   definition: {
-    mixins: [typeof projectListMixin === 'undefined' ? {} : projectListMixin], // jshint ignore:line
     data() {
       return {
         projectList: [],
-        translations: {},
         permissions: {},
-        dataStore: new TitleBarData(),
+        dataStore: new ProjectBaseData(),
       };
     },
     created() {
-      this.translations = translationData;
       if (Store.get('current-user')) {
         this.loadData();
       }
@@ -33,10 +29,10 @@ const projectList = {
     computed: {},
     methods: {
       projectSelected(pk) {
-        if (pk === Store.get('current-project').id) {
+        if (pk === Store.get('current-project')) {
           return;
         }
-        Store.set('current-project', _.first(_.filter(this.projectList, p => p.id = pk)));
+        Store.set('current-project', _.first(_.filter(this.projectList, p => p.id === pk)).id);
         showNotification(null, 'project ' + pk + ' selected');
         document.dispatchEvent(ProjectSelected);
       },

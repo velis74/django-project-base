@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import {translationData} from './translations';
 
 const showNotification = (title, text, type = 'info') => {
   Vue.notify({
@@ -11,7 +10,7 @@ const showNotification = (title, text, type = 'info') => {
 
 const showGeneralErrorNotification = () => {
   Vue.notify({
-    title: translationData['general-error'],
+    title: gettext('Error'), // jshint ignore:line
     type: 'error'
   });
 };

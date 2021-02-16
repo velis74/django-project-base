@@ -1,9 +1,8 @@
-const translationData = {
-  'add-new-project': 'Add new project',
-  'login': 'Login',
-  'logout': 'Logout',
-  'invalid-login-credentials': 'Invalid login credentials',
-  'general-error': 'Error',
+const translate = (name) => {
+  if (typeof gettext === 'undefined') {
+    return name;
+  }
+  return gettext(name); // jshint ignore:line
 };
 
-export {translationData};
+export {translate};

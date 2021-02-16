@@ -113,12 +113,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    str(BASE_DIR).replace('example', '') + 'django_project_base/locale/'
+]
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
+    str(BASE_DIR).replace('example', '') + 'django_project_base/static/'
 )
 
 DJANGO_PROJECT_BASE_PROJECT_MODEL = 'demo_django_base.Project'

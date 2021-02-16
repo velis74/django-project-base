@@ -1,23 +1,15 @@
-{% if login_app %}
-<div id="django-project-base-login-app" v-cloak>
-{%else%}
-<div id="django-project-base-login" v-cloak>
-{% endif %}
 {% verbatim %}
+<div id="django-project-base-login" v-cloak>
     <login inline-template>
         <div class="nav-item login-container">
             <div>
                 <form @submit.prevent>
                     <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
                     <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
-                    <button class="btn" type="submit" @click="makeLogin">{{ translations['login'] }}</button>
+                    <button class="btn btn-sm" type="submit" @click="makeLogin">{{ translations('Login') }}</button>
                 </form>
             </div>
-            {% endverbatim %}
-            {% if app %}
             <notifications position="top center"/>
-            {% endif %}
-            {% verbatim %}
         </div>
     </login>
 </div>

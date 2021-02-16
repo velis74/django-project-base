@@ -92,12 +92,15 @@ JavaScript code style:
 
     When developing webpack development server expects that service which provides data runs on host
     http://127.0.0.1:8000. This can be changed in webpack.config.js file.
-    For running example django project prepare python environment and run:
+    For running example django project prepare python environment and run (run in repository root):
 
     - pip install -r requirements.txt (run in content root)
-    - cd examples/django/demo_app
     - python manage.py runserver
 
-    For example of project list component usage look at login-example.html in examples folder.
+    When opening app url in browser you the django_project_base/templates/index.html view is served. Take a look
+    at this file for examples. UI components are built with Vuejs (https://vuejs.org/) version 2.
 
     Try logging in with user "miha", pass "mihamiha".
+
+    If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
+    your html document header.

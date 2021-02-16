@@ -23,16 +23,13 @@ class Migration(migrations.Migration):
                                                                 password=make_password('janezjanez'))
         ProjectModel.objects.using(db_alias).bulk_create([
             ProjectModel(name='Project One', slug='project-one', description='project one description',
-                         owner=user1,
-                         logo='static/logo.jpg'),
+                         owner=user1),
             ProjectModel(name='Project Two', slug='project-two', description='project two description',
-                         owner=user2,
-                         logo='static/logo.jpg'),
+                         owner=user2),
             ProjectModel(name='Project Three', slug='project-three', description='project three description',
-                         owner=user2, logo='static/logo.jpg'),
+                         owner=user2),
             ProjectModel(name='Project Four', slug='project-four', description='project four description',
-                         owner=user1,
-                         logo='static/logo.jpg'),
+                         owner=user1),
         ])
 
     def reverse_func(apps, schema_editor):

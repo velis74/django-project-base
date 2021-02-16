@@ -1,9 +1,5 @@
-{% if breadcrumbs_app %}
-<div id="django-project-base-breadcrumbs-app" v-cloak>
-{%else%}
-<div id="django-project-base-breadcrumbs" v-cloak>
-{% endif %}
 {% verbatim %}
+<div id="django-project-base-breadcrumbs" v-cloak>
     <breadcrumbs inline-template>
         <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0">
             <div class="card">
@@ -11,9 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a
-                                    v-bind:href="b.url">{{
-                                b.breadcrumb
-                                }}</a></li>
+                                    v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
                         </ol>
                     </nav>
                 </div>

@@ -1,38 +1,38 @@
 import {Store} from './store';
 import {apiClient as ApiClient} from './apiClient';
-import {loginEvent as LoginEvent, logoutEvent as LogoutEvent} from './events';
+import {logoutEvent as LogoutEvent, createEvent} from './events';
 import {showGeneralErrorNotification, showNotification} from './notifications';
-import {translationData} from './translations';
 
 class Session {
   static login(username, password) {
-    ApiClient.post('login/',
+    Store.set('redirect-to-auth', false);
+    ApiClient.post('account/login/',
       {
         login: username,
         password: password,
       }).then(() => {
-      ApiClient.get('profile/current?decorate=default-project').then(response => {
+      ApiClient.get('account/profile/current?decorate=default-project').then(response => {
         Store.set('current-user', response.data);
-        Store.set('current-project', response.data['default-project']);
-        document.dispatchEvent(LoginEvent);
+        Store.set('current-project', response.data['default-project'].id);
+        document.dispatchEvent(createEvent('login', response.data));
         showNotification(null,
           'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'].slug);
         // window.location.href = 'project/slug/' + response.data['default-project'].slug;
-      }).catch(error => {
-        console.log(error);
+      }).catch(() => {
         showGeneralErrorNotification();
       });
     }).catch(error => {
       if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {
-        showNotification(null, translationData['invalid-login-credentials']);
+        showNotification(null, gettext('Invalid login credentials')); // jshint ignore:line
       }
     });
   }
 
   static logout() {
-    ApiClient.post('logout/')
+    ApiClient.post('account/logout/')
       .then(() => {
         Store.clear();
+        Store.set('redirect-to-auth', true);
         document.dispatchEvent(LogoutEvent);
         window.location.href = '/';
       }).catch(() => {

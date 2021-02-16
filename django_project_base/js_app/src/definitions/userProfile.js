@@ -1,20 +1,17 @@
-import {translationData} from '../translations';
 import {Session} from '../session';
-import {TitleBarData} from '../apps/titlebar/titlebarData';
+import {apiClient as ApiClient} from '../apiClient';
+import {showGeneralErrorNotification} from '../notifications';
+import {Store} from '../store';
 
-const userProfile= {
+const userProfile = {
   id: 'user-profile',
   definition: {
-    mixins: [typeof userProfileMixin === 'undefined' ? {} : userProfileMixin], // jshint ignore:line
     data() {
       return {
-        translations: {},
         componentData: {},
-        dataStore: new TitleBarData(),
       };
     },
     created() {
-      this.translations = translationData;
       this.loadData();
     },
     mounted() {
@@ -22,11 +19,25 @@ const userProfile= {
     },
     computed: {},
     methods: {
-      loadData() {
-        this.dataStore.getUserProfileData(this.setData);
+      setAvatarImg(profileData) {
+        let avatar = profileData.avatar;
+        if (!avatar) {
+          profileData.avatar = 'https://via.placeholder.com/45';
+        }
+        return profileData;
       },
-      setData(configData) {
-        this.componentData = configData;
+      loadData() {
+        let cachedProfile = Store.get('current-user');
+        if (cachedProfile) {
+          this.componentData = this.setAvatarImg(cachedProfile);
+          return;
+        }
+        ApiClient.get('account/profile/current').then(profileResponse => {
+          this.componentData = this.setAvatarImg(profileResponse.data);
+          Store.set('current-user', this.componentData);
+        }).catch(() => {
+          showGeneralErrorNotification();
+        });
       },
       makeLogout() {
         Session.logout();

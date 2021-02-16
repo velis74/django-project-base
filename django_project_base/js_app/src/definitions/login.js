@@ -1,21 +1,17 @@
 import {Session} from '../session';
-import {translationData} from '../translations';
 
 const login = {
   id: 'login',
   definition: {
-    mixins: [typeof loginMixin === 'undefined' ? {} : loginMixin], // jshint ignore:line
     data() {
       return {
         loginModel: {
           username: null,
           password: null,
         },
-        translations: {},
       };
     },
     created() {
-      this.translations = translationData;
     },
     mounted() {
     },
