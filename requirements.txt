@@ -3,3 +3,5 @@ django-allauth
 djangorestframework
 dynamicforms
 swapper
+django-rest-registration
+drf-spectacular

@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titlebar component example</title>
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet"
+          crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
+          crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="{% static 'django-project-base.min.js' %}"></script>
+</head>
+<body>
+{# include vue inline template for titlebar component #}
+{% include "titlebar/bootstrap/template.html" %}
+<br/>
+<br/>
+<script>
+  // add title bar to page
+  createApp('django-project-base-titlebar', titlebar);
+</script>
+
+{#define custom component and create Vue app with custom component#}
+{% verbatim %}
+<div id="list-projects-new">
+    <custom-project-list inline-template>
+        <div>
+            <a v-for="(project, idx) in projectList" v-on:click="projectSelectedNew"
+               v-bind:key="project.slug + 'idx'" class="dropdown-item project-item" href="#">
+                <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
+            <a v-on:click="addNewProject" href="#"></i>{{ translations['add-new-project'] }}</a>
+            <br/>
+            <a v-if="projectList.length > 0" v-on:click="newMethod" href="#"></i>Call method from global mixin</a>
+        </div>
+    </custom-project-list>
+</div>
+{% endverbatim %}
+<script>
+  // register new custom component with inline template and exisiting component definition
+  var newComponentDefinition = _.clone(projectList.definition); // lodash library can be used https://lodash.com/
+
+  // new methods can be assigned to components definition or existing methods can be overriden
+  newComponentDefinition['methods']['projectSelectedNew'] = function () {
+    showNotification('DEMO', 'NEW PROJECT SELECTED')
+  };
+  newComponentDefinition['methods']['addNewProject'] = function () {
+    showNotification('DEMO', 'CREATE NEW PROJECT')
+  };
+
+
+  // custom methods are registered in Vue.mixin which is global and its methods are accessible in any Vue component
+  Vue.mixin({
+    methods: {
+      newMethod: function () {
+        showNotification('DEMO', 'NEW METHOD CALLED')
+      },
+    }
+  });
+
+  registerComponent('custom-project-list', newComponentDefinition);
+  var customComponentApp = new Vue({
+    el: '#list-projects-new',
+  });
+</script>
+</body>
+</html>

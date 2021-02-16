@@ -1,0 +1,16 @@
+{% verbatim %}
+<div id="django-project-base-login" v-cloak>
+    <login inline-template>
+        <div class="nav-item login-container">
+            <div>
+                <form @submit.prevent>
+                    <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
+                    <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
+                    <button class="btn btn-sm" type="submit" @click="makeLogin">{{ translations('Login') }}</button>
+                </form>
+            </div>
+            <notifications position="top center"/>
+        </div>
+    </login>
+</div>
+{% endverbatim %}

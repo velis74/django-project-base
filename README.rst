@@ -56,6 +56,21 @@ Then also make sure your models are loaded instead of django-project-base models
    DJANGO_PROJECT_BASE_PROJECT_MODEL = 'myapp.MyProject'
    DJANGO_PROJECT_BASE_PROFILE_MODEL = 'myapp.MyProfile'
 
+   # urls.py add
+   from django_project_base.router import django_project_base_urlpatterns
+   urlpatterns = [ ... ] + django_project_base_urlpatterns
+
+   Add to INSTALLED_APPS
+    'rest_registration',
+    'django_project_base',
+    'drf_spectacular',
+
+   Add:
+     REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    }
+
 
 .. warning::
 
@@ -63,3 +78,29 @@ Then also make sure your models are loaded instead of django-project-base models
    been created and used is a really hard and painful process. So make triple sure you don't deploy your application
    without first making sure the model you want to use is either your own or you are satisfied with our default
    implementation.
+
+JavaScript code style:
+    For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
+
+    For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
+    In project base directory run npm install. To run a development server run npm run dev (go to http://0.0.0.0:8080/).
+    To generate a build run npm run build.
+
+    JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
+    Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
+    with inline templates. Templates are present in templates directory.
+
+    When developing webpack development server expects that service which provides data runs on host
+    http://127.0.0.1:8000. This can be changed in webpack.config.js file.
+    For running example django project prepare python environment and run (run in repository root):
+
+    - pip install -r requirements.txt (run in content root)
+    - python manage.py runserver
+
+    When opening app url in browser you the django_project_base/templates/index.html view is served. Take a look
+    at this file for examples. UI components are built with Vuejs (https://vuejs.org/) version 2.
+
+    Try logging in with user "miha", pass "mihamiha".
+
+    If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
+    your html document header.
