@@ -5,3 +5,5 @@ dynamicforms
 swapper
 django-rest-registration
 drf-spectacular
+django-taggit
+svgwrite
