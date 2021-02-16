@@ -81,42 +81,42 @@ Then also make sure your models are loaded instead of django-project-base models
 
 Javascript note:
 ################
-   For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
+For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
 
-   For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
-   In project base directory run npm install. To run a development server run npm run dev (go to http://0.0.0.0:8080/).
-   To generate a build run npm run build.
+For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
+In project base directory run npm install. To run a development server run npm run dev (go to http://0.0.0.0:8080/).
+To generate a build run npm run build.
 
-   JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
-   Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
-   with inline templates. Templates are present in templates directory.
+JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
+Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
+with inline templates. Templates are present in templates directory.
 
-   When developing webpack development server expects that service which provides data runs on host
-   http://127.0.0.1:8000. This can be changed in webpack.config.js file.
-   For running example django project prepare python environment and run (run in repository root):
+When developing webpack development server expects that service which provides data runs on host
+http://127.0.0.1:8000. This can be changed in webpack.config.js file.
+For running example django project prepare python environment and run (run in repository root):
 
-   - pip install -r requirements.txt (run in content root)
-   - python manage.py runserver
+- pip install -r requirements.txt (run in content root)
+- python manage.py runserver
 
-   Try logging in with user "miha", pass "mihamiha".
+Try logging in with user "miha", pass "mihamiha".
 
 Usage:
 ######
 
-   Look at django_project_base/templates/index.html for examples.
+Look at django_project_base/templates/index.html for examples.
 
-   Translations:
+**Translations**:
 
-   If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
-   your html document header.
+If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
+your html document header.
 
-   Authentication:
+**Authentication**:
 
-   To increase AUTH performance you can set backend which caches users:
-       - django_project_base.base.auth_backends.UsersCachingBackend
-       - django_project_base.base.auth_backends.CachedTokenAuthentication
+To increase AUTH performance you can set backend which caches users:
+   - django_project_base.base.auth_backends.UsersCachingBackend
+   - django_project_base.base.auth_backends.CachedTokenAuthentication
 
-   Example (add in settings.py):
+Example (add in settings.py):
 
 .. code-block:: python
 
@@ -126,3 +126,36 @@ Usage:
        'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
        'django.contrib.auth.backends.ModelBackend',
    )
+
+
+**Tags**
+
+Django project base supports tags usage. See example implementation bellow.
+
+.. code-block:: python
+
+   class DemoProjectTag(BaseTag):
+       content = models.CharField(max_length=20, null=True, blank=True)
+       class Meta:
+           verbose_name = "Tag"
+           verbose_name_plural = "Tags"
+   class TaggedItemThrough(GenericTaggedItemBase):
+       tag = models.ForeignKey(
+           DemoProjectTag,
+           on_delete=models.CASCADE,
+           related_name="%(app_label)s_%(class)s_items",
+       )
+   class Apartment(models.Model):
+       number = fields.IntegerField()
+       tags = TaggableManager(blank=True, through=TaggedItemThrough, related_name="apartment_tags")
+   # Example code
+   from example.demo_django_base.models import DemoProjectTag
+   dt = DemoProjectTag.objects.create(name='color tag 20', color='#ff0000')
+   from example.demo_django_base.models import Apartment
+   a = Apartment.objects.create(number=1)
+   a.tags.add(dt)
+   a.tags.all()
+   <QuerySet [<DemoProjectTag: color tag 20>]>
+   # Get background svg for tags
+   DemoProjectTag.get_background_svg_for_tags(Apartment.objects.all().first().tags.all())
+
