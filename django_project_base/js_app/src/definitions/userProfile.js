@@ -2,6 +2,7 @@ import {Session} from '../session';
 import {apiClient as ApiClient} from '../apiClient';
 import {showGeneralErrorNotification} from '../notifications';
 import {Store} from '../store';
+import {ProjectBaseData} from '../projectBaseData';
 
 const userProfile = {
   id: 'user-profile',
@@ -9,6 +10,7 @@ const userProfile = {
     data() {
       return {
         componentData: {},
+        permissions: {},
       };
     },
     created() {
@@ -27,6 +29,9 @@ const userProfile = {
         return profileData;
       },
       loadData() {
+        new ProjectBaseData().getPermissions(p => {
+          this.permissions = p;
+        });
         let cachedProfile = Store.get('current-user');
         if (cachedProfile) {
           this.componentData = this.setAvatarImg(cachedProfile);
@@ -41,7 +46,10 @@ const userProfile = {
       },
       makeLogout() {
         Session.logout();
-      }
+      },
+      showImpersonateLogin() {
+        console.log('modal');
+      },
     },
   }
 };

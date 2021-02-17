@@ -16,10 +16,15 @@ class ProjectBaseData {
   }
 
   getPermissions(callback) {
+    let cachedPermissions = Store.get('user-permission');
+    if (cachedPermissions) {
+      callback(cachedPermissions);
+    }
     let _permissions = {};
     const permissionPromise = new Promise((resolveCallback) => {
       setTimeout(() => {
-        _permissions = {'add-project': true};
+        _permissions = {'add-project': true, 'impersonate-user': true};
+        Store.set('user-permission', _permissions);
         resolveCallback();
       }, 2000);
     });

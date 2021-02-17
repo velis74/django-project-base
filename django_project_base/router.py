@@ -8,6 +8,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from django_project_base.base.rest.project_base_router import ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
+from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
 
@@ -29,6 +30,8 @@ class RestRouter(ProjectBaseRouter):
 django_project_base_router = RestRouter(trailing_slash=False)
 django_project_base_router.register(r'project', ProjectViewSet, basename='project-base-project')
 django_project_base_router.register(r'%s/profile' % ACCOUNT_URL_PREFIX, ProfileViewSet, basename='profile-base-project')
+django_project_base_router.register(r'%s/impersonate' % ACCOUNT_URL_PREFIX, ImpersonateUserViewset,
+                                    basename='profile-base-impersonate-user')
 
 SPECTACULAR_DEFAULTS['TITLE'] = 'Rest documentation'
 SPECTACULAR_DEFAULTS['DESCRIPTION'] = 'Api documentation'
