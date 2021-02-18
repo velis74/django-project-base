@@ -7,7 +7,9 @@ import {projectSelected as ProjectSelected} from '../events';
 
 const projectList = {
   id: 'project-list',
+  type: 'x-template',
   definition: {
+    template: `#project-list`,
     data() {
       return {
         projectList: [],

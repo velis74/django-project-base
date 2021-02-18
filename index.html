@@ -1,193 +1,202 @@
-<!doctype html>
-<html>
+
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Title Bar Component</title>
-    <script src="http://localhost:8000/jsi18n/"></script>
+    <meta charset="UTF-8">
+    <title>Titlebar component example</title>
+    <script src="/jsi18n/"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet"
           crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <link href="/static/bootstrap.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/static/django-project-base.min.js"></script>
 </head>
 <body>
-<style>
-    [v-cloak] {
-        display: none;
-    }
 
-    #django-project-base-titlebar .card, .card-body {
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        background-color: transparent;
-    }
+<div id="titlebar-app">
 
-    .user-names {
-        padding-left: 55px;
-    }
 
-    .logo-image {
-        max-height: 60px;
-        max-width: 60px;
-    }
-
-    .project-link-image {
-        max-height: 30px;
-        max-width: 30px;
-    }
-
-    .login-container {
-        position: absolute;
-        right: 1em;
-    }
-
-    .rounded-circle {
-        margin-top: 0.25em;
-    }
-
-    .breadcrumb {
-        margin-bottom: 0;
-    }
-
-    .left-spacing {
-        margin-left: 1em;
-    }
-</style>
-
-<div id="django-project-base-titlebar" v-cloak>
-    <titlebar inline-template>
-        <div>
-            <nav class="navbar navbar-expand-lg navbar-light" v-bind:class="{ 'bg-light': loggedIn }">
-                <div class="nav-item">
-                    <div class="card">
-                        <div class="card-body">
-                            <img v-bind:src="titleBarProps.logo"
-                                 class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
-                        </div>
-                    </div>
-                </div>
-                <div class="navbar-brand left-spacing" href="javascript:void(0);" style="cursor: default;">{{
-                        titleBarProps.name
-                    }}
-                </div>
-                <div v-if="loggedIn" class="left-spacing">
-                    <div id="django-project-base-breadcrumbs" v-cloak>
-                        <breadcrumbs inline-template>
-                            <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb">
-                                                <li v-for="(b, bx) in currentBreadcrumbsLocation"
-                                                    class="breadcrumb-item"><a
-                                                        v-bind:href="b.url">{{
-                                                        b.breadcrumb
-                                                    }}</a></li>
-                                            </ol>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </breadcrumbs>
-                    </div>
-                </div>
-                <div class="collapse navbar-collapse" v-if="loggedIn">
-                    <ul class="navbar-nav mr-auto">
-                    </ul>
-                    <div id="django-project-base-project-list">
-                        <project-list inline-template>
-                            <div class="nav-item">
-                                <div class="collapse navbar-collapse">
-                                    <ul class="navbar-nav">
-                                        <li class="nav-item dropdown">
-                                            <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
-                                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <a v-for="(project, idx) in projectList"
-                                                   v-on:click="projectSelected(project.id)"
-                                                   v-bind:key="project.slug" class="dropdown-item project-item" href="#">
-                                                    <img v-bind:src="project.logo"
-                                                         class="project-link-image">{{ project.name }}</a>
-                                                <a v-if="permissions['add-project']" v-on:click="addNewProject"
-                                                   class="dropdown-item project-item" href="#">
-                                                    <i class="fas fa-plus-circle"></i>{{
-                                                        translations('Add new project')
-                                                    }}
-                                                </a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </project-list>
-                    </div>
-                </div>
-                <div v-if="loggedIn">
-                    <div id="django-project-user-profile-list">
-                        <user-profile inline-template>
-                            <div class="nav-item left-spacing">
-                                <div class="card" data-toggle="dropdown">
-                                    <div class="card-body">
-                                        <img v-bind:src="componentData.avatar"
-                                             class="float-left rounded-circle">
-                                        <div class="user-names">
-                                            <h5 class="card-title">{{ componentData.first_name }} <br/>
-                                                {{ componentData.last_name }}</h5>
-                                        </div>
-                                        <ul class="navbar-nav">
-                                            <li class="nav-item dropdown">
-                                                <div class="dropdown-menu" aria-labelledby="navbarDropdown"
-                                                     style="left: -4em;">
-                                                    <a class="dropdown-item" href="#">User profile</a>
-                                                    <a class="dropdown-item" href="#">User settings</a>
-                                                    <a class="dropdown-item" href="#">Change password</a>
-                                                    <a class="dropdown-item" href="#" @click="makeLogout">{{
-                                                            translations('Logout')
-                                                        }}</a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </user-profile>
-                    </div>
-                </div>
-                <div v-else>
-                    <div id="django-project-base-login" v-cloak>
-                        <login inline-template>
-                            <div class="nav-item login-container">
-                                <div>
-                                    <form @submit.prevent>
-                                        <input type="text" v-model="loginModel['username']" placeholder="Username"
-                                               name="username">
-                                        <input type="password" v-model="loginModel['password']" placeholder="Password"
-                                               name="psw">
-                                        <button class="btn btn-sm" type="submit" @click="makeLogin">{{
-                                                translations('Login')
-                                            }}
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </login>
-                    </div>
-                </div>
-            </nav>
-            <notifications position="top center"/>
+<script type="text/x-template" id="breadcrumbs">
+    <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
+        <div class="card">
+            <div class="card-body">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a
+                                v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
+                    </ol>
+                </nav>
+            </div>
         </div>
-    </titlebar>
-</div>
-
-
-<script>
-  createApp('django-project-base-titlebar', titlebar);
+    </div>
 </script>
 
+
+
+
+
+<script type="text/x-template" id="project-list">
+    <div class="nav-item" v-cloak>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project.id)"
+                           v-bind:key="project.slug" class="dropdown-item project-item" href="#">
+                            <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
+                        <a v-if="permissions['add-project']" v-on:click="addNewProject"
+                           class="dropdown-item project-item" href="#">
+                            <i class="fas fa-plus-circle"></i>{{ translations('Add new project') }}</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+
+
+
+
+<script type="text/x-template" id="modal-window">
+    <transition name="modal" v-cloak>
+        <div class="modal-mask">
+            <div class="modal-wrapper">
+                <div class="modal-container">
+
+                    <div class="modal-header">
+                        <slot name="header">
+                            default header
+                        </slot>
+                    </div>
+
+                    <div class="modal-body">
+                        <slot name="body">
+                            default body
+                        </slot>
+                    </div>
+
+                    <div class="modal-footer">
+                        <slot name="footer">
+                            default footer
+                            <button class="modal-default-button">
+                                OK
+                            </button>
+                        </slot>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
+</script>
+
+
+<modal-window>
+    <!--
+  you can use custom content here to overwrite
+  default content
+-->
+    <h3 slot="header">custom header</h3>
+</modal-window>
+<script type="text/x-template" id="user-profile">
+    <div class="nav-item left-spacing">
+        <div class="card" data-toggle="dropdown">
+            <div class="card-body">
+                <img v-bind:src="componentData.avatar"
+                     class="float-left rounded-circle">
+                <div class="user-names">
+                    <h5 class="card-title">{{ componentData.first_name }} <br/>
+                        {{ componentData.last_name }}</h5>
+                </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
+                            <a class="dropdown-item" href="#">{{ translations('User profile') }}</a>
+                            <a class="dropdown-item" href="#">{{ translations('User settings') }}</a>
+                            <a class="dropdown-item" href="#">{{ translations('Change password') }}</a>
+                            <a class="dropdown-item" href="#" @click="makeLogout">{{
+                                translations('Logout')
+                                }}</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+
+
+<script type="text/x-template" id="login">
+    <div class="nav-item login-container" v-cloak>
+        <div>
+            <form @submit.prevent>
+                <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
+                <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
+                <button class="btn btn-sm" type="submit" @click="makeLogin">{{ translations('Login') }}</button>
+            </form>
+        </div>
+        <notifications position="top center"/>
+    </div>
+</script>
+
+
+
+<script type="text/x-template" id="titlebar">
+    <div v-cloak>
+        <nav class="navbar navbar-expand-lg navbar-light" v-bind:class="{ 'bg-light': loggedIn }">
+            <div class="nav-item">
+                <div class="card">
+                    <div class="card-body">
+                        <img v-bind:src="titleBarProps.logo"
+                             class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-brand left-spacing" href="javascript:void(0);" style="cursor: default;">
+                {{ titleBarProps.name }}
+            </div>
+
+            <div v-if="loggedIn" class="left-spacing">
+                <breadcrumbs></breadcrumbs>
+            </div>
+
+            <div class="collapse navbar-collapse" v-if="loggedIn">
+                <ul class="navbar-nav mr-auto">
+                </ul>
+                <project-list></project-list>
+            </div>
+
+            <div v-if="loggedIn">
+                <user-profile></user-profile>
+
+            </div>
+
+            <div v-else>
+                <login></login>
+            </div>
+
+        </nav>
+        <notifications position="top center"/>
+    </div>
+</script>
+
+    <titlebar>
+    </titlebar>
+</div>
 <br/>
 <br/>
-<div>CONTENT</div>
-<br/>
-<br/>
+<script>
+  // add title bar to page
+  createApp('titlebar-app', titlebar);
+</script>
+
 </body>
 </html>

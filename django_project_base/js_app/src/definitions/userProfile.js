@@ -3,14 +3,19 @@ import {apiClient as ApiClient} from '../apiClient';
 import {showGeneralErrorNotification} from '../notifications';
 import {Store} from '../store';
 import {ProjectBaseData} from '../projectBaseData';
+import {modalWindow} from './modalWindow';
+
 
 const userProfile = {
   id: 'user-profile',
+  type: 'x-template',
   definition: {
+    template: `#user-profile`,
     data() {
       return {
         componentData: {},
         permissions: {},
+        impersonateModalVisible: false,
       };
     },
     created() {
@@ -19,7 +24,8 @@ const userProfile = {
     mounted() {
 
     },
-    computed: {},
+    computed: {
+    },
     methods: {
       setAvatarImg(profileData) {
         let avatar = profileData.avatar;
@@ -51,7 +57,10 @@ const userProfile = {
         console.log('modal');
       },
     },
-  }
+  },
+  childComponentsDefinition: [
+    modalWindow,
+  ],
 };
 
 export {userProfile};

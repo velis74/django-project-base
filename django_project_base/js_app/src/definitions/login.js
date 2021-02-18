@@ -2,7 +2,9 @@ import {Session} from '../session';
 
 const login = {
   id: 'login',
+  type: 'x-template',
   definition: {
+    template: `#login`,
     data() {
       return {
         loginModel: {

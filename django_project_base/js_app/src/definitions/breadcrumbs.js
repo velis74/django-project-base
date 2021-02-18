@@ -2,7 +2,9 @@ import _ from 'lodash';
 
 const breadcrumbs = {
   id: 'breadcrumbs',
+  type: 'x-template',
   definition: {
+    template: `#breadcrumbs`,
     data() {
       return {};
     },

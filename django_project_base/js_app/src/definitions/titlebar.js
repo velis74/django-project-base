@@ -1,5 +1,5 @@
 import {Store} from '../store';
-import {breadcrumbs,} from './breadcrumbs';
+import {breadcrumbs} from './breadcrumbs';
 import {projectList} from './projectList';
 import {login} from './login';
 import {userProfile} from './userProfile';
@@ -9,7 +9,9 @@ import {showGeneralErrorNotification} from '../notifications';
 
 const titlebar = {
   id: 'titlebar',
+  type: 'x-template',
   definition: {
+    template: `#titlebar`,
     data() {
       return {
         titleBarProps: {},

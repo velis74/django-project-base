@@ -7,10 +7,13 @@ const registerComponent = (componentId, componentDefinition) => {
 };
 
 const createApp = (elementId, mainComponentDefnition) => {
-  registerComponent(mainComponentDefnition.id, mainComponentDefnition.definition);
   _.each(mainComponentDefnition.childComponentsDefinition, c => {
+    _.each(c.childComponentsDefinition, _c => {
+      registerComponent(_c.id, _c.definition);
+    });
     registerComponent(c.id, c.definition);
   });
+  registerComponent(mainComponentDefnition.id, mainComponentDefnition.definition);
   Vue.use(Notifications);
   Vue.config.productionTip = false;
 
