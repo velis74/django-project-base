@@ -1,16 +1,19 @@
 from typing import Any
 
 from django.contrib.auth import get_user_model
+from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from hijack.helpers import release_hijack, login_user
 from rest_framework import status
 from rest_framework import viewsets, fields
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from django.utils.translation import ugettext_lazy as _
 
 
 class ImpersonateRequestSerializer(Serializer):
@@ -50,7 +53,10 @@ class ImpersonateUserViewset(viewsets.ViewSet):
             permission_classes=[IsAuthenticated, IsAdminUser])
     def start(self, request: Request) -> Response:
         validated_data: dict = self.__validate(request.data)
-        login_user(request, get_object_or_404(get_user_model(), email=validated_data['email']))
+        hijacked_user: Model = get_object_or_404(get_user_model(), email=validated_data['email'])
+        if request.user == hijacked_user:
+            raise PermissionDenied(_('Impersonating self is not allowed'))
+        login_user(request, hijacked_user)
         return Response()
 
     @extend_schema(

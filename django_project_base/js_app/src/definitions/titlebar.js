@@ -4,7 +4,6 @@ import {projectList} from './projectList';
 import {login} from './login';
 import {userProfile} from './userProfile';
 import {apiClient as ApiClient} from '../apiClient';
-import {showGeneralErrorNotification} from '../notifications';
 
 
 const titlebar = {
@@ -60,8 +59,6 @@ const titlebar = {
       loadProjectData() {
         ApiClient.get('project/' + Store.get('current-project')).then(projectResponse => {
           this.titleBarProps = projectResponse.data;
-        }).catch(() => {
-          showGeneralErrorNotification();
         });
       }
     },

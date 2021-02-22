@@ -8,11 +8,15 @@ const showNotification = (title, text, type = 'info') => {
   });
 };
 
-const showGeneralErrorNotification = () => {
-  Vue.notify({
+const showGeneralErrorNotification = (text) => {
+  let options = {
     title: gettext('Error'), // jshint ignore:line
     type: 'error'
-  });
+  };
+  if (!!text) {
+    options.text = text;
+  }
+  Vue.notify(options);
 };
 
 export {showNotification, showGeneralErrorNotification};

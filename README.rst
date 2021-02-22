@@ -89,7 +89,7 @@ To generate a build run npm run build.
 
 JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
 Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
-with inline templates. Templates are present in templates directory.
+with x-templates. Templates are present in templates directory.
 
 When developing webpack development server expects that service which provides data runs on host
 http://127.0.0.1:8000. This can be changed in webpack.config.js file.

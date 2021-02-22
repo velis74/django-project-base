@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {Store} from './store';
+import {showGeneralErrorNotification} from './notifications';
 
 const apiClient = axios.create({
   xsrfCookieName: 'csrftoken',
@@ -31,6 +32,7 @@ apiClient.interceptors.response.use((response) => {
       Store.set('redirect-to-auth', true);
       window.location.href = '/';
     }
+    showGeneralErrorNotification(errMsg);
     return Promise.reject(error);
   });
 
