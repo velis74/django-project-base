@@ -71,7 +71,7 @@ const userProfile = {
       changeUser() {
         ApiClient.post('/account/impersonate/start', {email: this.selectedUser.email}).then(() => {
           this.impersonateModalVisible = false;
-          Store.set('impersonated-user', this.selectedUser);
+          Store.set('impersonated-user', true);
           this.reloadAfterImpersonationChange();
         });
       },
