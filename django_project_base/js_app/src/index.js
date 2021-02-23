@@ -27,9 +27,9 @@ Vue.mixin({
 window.Vue = Vue;
 window.createApp = createApp;
 window.registerComponent = registerComponent;
-window.breadcrumbs = _.clone(breadcrumbsDef);
+window.breadcrumbs = breadcrumbsDef;
 window.login = loginDef;
-window.projectList = _.clone(projectListDef);
+window.projectList = projectListDef;
 window.titlebar = titlebarDef;
 window.userProfile = userProfileDef;
 window.modalWindow = modalWindowDef;

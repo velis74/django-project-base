@@ -36,6 +36,3 @@ class ProjectViewSet(ProjectBaseViewSet):
             raise NotFound(detail='Project with project slug %s not found' % slug)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
-
-
-
