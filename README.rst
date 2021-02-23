@@ -105,6 +105,10 @@ Usage:
 
 Look at django_project_base/templates/index.html for examples.
 
+**API Documentation**
+
+Swagger UI is accessible on /schema/swagger-ui/ url by running example project.
+
 **Translations**:
 
 If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
