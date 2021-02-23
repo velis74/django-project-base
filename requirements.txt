@@ -7,3 +7,4 @@ django-rest-registration
 drf-spectacular
 django-taggit
 svgwrite
+django-hijack

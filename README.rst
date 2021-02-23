@@ -89,7 +89,7 @@ To generate a build run npm run build.
 
 JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
 Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
-with inline templates. Templates are present in templates directory.
+with x-templates. Templates are present in templates directory.
 
 When developing webpack development server expects that service which provides data runs on host
 http://127.0.0.1:8000. This can be changed in webpack.config.js file.
@@ -104,6 +104,10 @@ Usage:
 ######
 
 Look at django_project_base/templates/index.html for examples.
+
+**API Documentation**
+
+Swagger UI is accessible on /schema/swagger-ui/ url by running example project.
 
 **Translations**:
 
@@ -158,4 +162,30 @@ Django project base supports tags usage. See example implementation bellow.
    <QuerySet [<DemoProjectTag: color tag 20>]>
    # Get background svg for tags
    DemoProjectTag.get_background_svg_for_tags(Apartment.objects.all().first().tags.all())
+
+
+***Impersonate user***
+
+Sometimes is useful if we can login into app as another user for debugging or help purposes.
+User change is supported via REST api calls or you can use userProfile component (django_project_base/templates/user-profile/bootstrap/template.html)
+which already integrates api functionality. Functionality is based on django-hijack package.
+
+For determining which user can impersonate which user you can set your own logic. Example below:
+
+.. code-block:: python
+
+   # settings.py
+    HIJACK_AUTHORIZATION_CHECK = 'app.utils.authorization_check'
+
+   # app.utils.py
+    def authorization_check(hijacker, hijacked):
+        """
+        Checks if a user is authorized to hijack another user
+        """
+        if my_condition:
+            return True
+        else:
+            return False
+
+
 

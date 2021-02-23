@@ -1,0 +1,16 @@
+{% verbatim %}
+<script type="text/x-template" id="breadcrumbs">
+    <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
+        <div class="card">
+            <div class="card-body">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a
+                                v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</script>
+{% endverbatim %}

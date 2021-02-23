@@ -3,14 +3,16 @@ import Notifications from 'vue-notification';
 import _ from 'lodash';
 
 const registerComponent = (componentId, componentDefinition) => {
-  return Vue.component(componentId, componentDefinition);
+  if (componentDefinition.childComponentsDefinition && componentDefinition.childComponentsDefinition.length > 0) {
+    _.each(componentDefinition.childComponentsDefinition, ch => {
+      return registerComponent(ch.id, ch);
+    });
+  }
+  Vue.component(componentId, componentDefinition.definition);
 };
 
 const createApp = (elementId, mainComponentDefnition) => {
-  registerComponent(mainComponentDefnition.id, mainComponentDefnition.definition);
-  _.each(mainComponentDefnition.childComponentsDefinition, c => {
-    registerComponent(c.id, c.definition);
-  });
+  registerComponent(mainComponentDefnition.id, mainComponentDefnition);
   Vue.use(Notifications);
   Vue.config.productionTip = false;
 

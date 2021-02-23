@@ -11,45 +11,74 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    {# include js lib and appropriate css #}
+    <link href="{% static 'bootstrap_template.css' %}" rel="stylesheet" crossorigin="anonymous">
     <script src="{% static 'django-project-base.min.js' %}"></script>
 </head>
 <body>
-{# include vue inline template for titlebar component #}
-{% include "titlebar/bootstrap/template.html" %}
-<br/>
-<br/>
+<div id="titlebar-app" class="titlebar-app">
+    <titlebar>
+    </titlebar>
+</div>
+{# include vue inline template for titlebar component from folder coresponding to included css file #}
+{% include "bootstrap/titlebar.html" %}
 <script>
   // add title bar to page
-  createApp('django-project-base-titlebar', titlebar);
+  createApp('titlebar-app', titlebar);
 </script>
+<br/>
+<br/>
 
-{#define custom component and create Vue app with custom component#}
+{# define html app container #}
 {% verbatim %}
-<div id="list-projects-new">
-    <custom-project-list inline-template>
-        <div>
-            <a v-for="(project, idx) in projectList" v-on:click="projectSelectedNew"
-               v-bind:key="project.slug + 'idx'" class="dropdown-item project-item" href="#">
-                <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
-            <a v-on:click="addNewProject" href="#"></i>{{ translations['add-new-project'] }}</a>
-            <br/>
-            <a v-if="projectList.length > 0" v-on:click="newMethod" href="#"></i>Call method from global mixin</a>
-        </div>
-    </custom-project-list>
+<div id="new-list-projects-app">
+    <custom-projects-list></custom-projects-list>
 </div>
+<script type="text/x-template" id="custom-projects-list">
+    <div>
+        <a v-for="(project, idx) in projectList" v-on:click="projectSelectedNew" v-bind:key="project.slug + 'new_idx'"
+           href="#">
+            <img v-bind:src="project.logo">{{ project.name }}</a>
+        <a v-on:click="addNewProject" href="#">Add project</a>
+        <a v-on:click="newMethod" href="#">Call method from global mixin</a>
+    </div>
+</script>
 {% endverbatim %}
+
 <script>
   // register new custom component with inline template and exisiting component definition
-  var newComponentDefinition = _.clone(projectList.definition); // lodash library can be used https://lodash.com/
 
-  // new methods can be assigned to components definition or existing methods can be overriden
-  newComponentDefinition['methods']['projectSelectedNew'] = function () {
-    showNotification('DEMO', 'NEW PROJECT SELECTED')
+  var newComponentDefinition = {
+    id: 'custom-projects-list',
+    type: 'x-template',
+    definition: {
+      mixins: [{
+        methods: projectList.definition.methods,
+      }],
+      template: `#custom-projects-list`,
+      data() {
+        return {
+          projectList: [],
+        };
+      },
+      created() {
+        this.loadData();
+      },
+      computed: {
+        dataStore() {
+          return new ProjectBaseData();
+        },
+      },
+      methods: {
+        projectSelectedNew(pk) {
+          showNotification('DEMO', 'NEW PROJECT SELECTED')
+        },
+        addNewProject() {
+          showNotification('DEMO', 'CREATE NEW PROJECT')
+        },
+      },
+    }
   };
-  newComponentDefinition['methods']['addNewProject'] = function () {
-    showNotification('DEMO', 'CREATE NEW PROJECT')
-  };
-
 
   // custom methods are registered in Vue.mixin which is global and its methods are accessible in any Vue component
   Vue.mixin({
@@ -60,10 +89,7 @@
     }
   });
 
-  registerComponent('custom-project-list', newComponentDefinition);
-  var customComponentApp = new Vue({
-    el: '#list-projects-new',
-  });
+  createApp('new-list-projects-app', newComponentDefinition);
 </script>
 </body>
 </html>

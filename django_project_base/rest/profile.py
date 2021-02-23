@@ -1,4 +1,5 @@
-from django.db.models import Model
+from django.db.models import Model, CharField, Q
+from django.db.models.functions import Cast
 from rest_framework import exceptions
 from rest_framework.decorators import action
 from rest_framework.request import Request
@@ -47,3 +48,22 @@ class ProfileViewSet(ProjectBaseViewSet):
                 response_data['default-project'] = ProjectSerializer(
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
+
+    @action(methods=['GET'], detail=False, url_path='search/(?P<query>\w+)', url_name='users-search')
+    def users_search(self, request: Request, query: str, **kwargs) -> Response:
+        user: Model = getattr(request, 'user', None)
+        if not user:
+            raise exceptions.AuthenticationFailed
+        profile_model: Model = apps.get_model(
+            # TODO: get model code -> make generic, its repeated
+            self._get_application_name('DJANGO_PROJECT_BASE_PROFILE_MODEL'),
+            self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL')
+        )
+        fields: list = [f for f in profile_model._meta.fields if not f.is_relation]
+        annotations: dict = {"as_str_%s" % v.name: Cast(v.name, CharField()) for v in fields}
+        queries: list = [Q(**{"as_str_%s__icontains" % f.name: query}) for f in fields]
+        qs = Q()
+        for _query in queries:
+            qs = qs | _query
+        res = profile_model.objects.annotate(**annotations).filter(qs)
+        return Response(self.get_serializer(res, many=True).data)

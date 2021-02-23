@@ -1,7 +1,7 @@
 import {Store} from './store';
 import {apiClient as ApiClient} from './apiClient';
 import {logoutEvent as LogoutEvent, createEvent} from './events';
-import {showGeneralErrorNotification, showNotification} from './notifications';
+import {showNotification} from './notifications';
 
 class Session {
   static login(username, password) {
@@ -18,8 +18,6 @@ class Session {
         showNotification(null,
           'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'].slug);
         // window.location.href = 'project/slug/' + response.data['default-project'].slug;
-      }).catch(() => {
-        showGeneralErrorNotification();
       });
     }).catch(error => {
       if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {
@@ -36,7 +34,6 @@ class Session {
         document.dispatchEvent(LogoutEvent);
         window.location.href = '/';
       }).catch(() => {
-      showGeneralErrorNotification();
     });
 
   }
