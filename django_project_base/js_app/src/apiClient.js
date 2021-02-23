@@ -14,6 +14,7 @@ const HTTP_401_MSG = 'Authentication credentials were not provided.';
 // Add a request interceptor
 apiClient.interceptors.request.use(function (config) {
   config.headers['Content-Type'] = 'application/json';
+  config.headers['Current-Project'] = Store.get('current-project');
   return config;
 }, function (error) {
   return Promise.reject(error);

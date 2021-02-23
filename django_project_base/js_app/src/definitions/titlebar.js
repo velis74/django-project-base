@@ -44,10 +44,10 @@ const titlebar = {
         if (Store.get('redirect-to-auth')) {
           return;
         }
-        let projectPk = Store.get('current-project');
-        if (projectPk === null || projectPk === undefined) {
+        let projectSlug = Store.get('current-project');
+        if (projectSlug === null || projectSlug === undefined) {
           ApiClient.get('account/profile/current?decorate=default-project').then(response => {
-            Store.set('current-project', response.data['default-project'].id);
+            Store.set('current-project', response.data['default-project'].slug);
             Store.set('current-user', response.data);
             this.titleBarProps = response.data['default-project'];
             this.loggedIn = true;
@@ -57,7 +57,7 @@ const titlebar = {
         this.loadProjectData();
       },
       loadProjectData() {
-        ApiClient.get('project/' + Store.get('current-project')).then(projectResponse => {
+        ApiClient.get('project/slug/' + Store.get('current-project')).then(projectResponse => {
           this.titleBarProps = projectResponse.data;
         });
       }

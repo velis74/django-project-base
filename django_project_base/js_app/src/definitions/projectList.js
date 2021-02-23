@@ -30,12 +30,12 @@ const projectList = {
     },
     computed: {},
     methods: {
-      projectSelected(pk) {
-        if (pk === Store.get('current-project')) {
+      projectSelected(slug) {
+        if (slug === Store.get('current-project')) {
           return;
         }
-        Store.set('current-project', _.first(_.filter(this.projectList, p => p.id === pk)).id);
-        showNotification(null, 'project ' + pk + ' selected');
+        Store.set('current-project', _.first(_.filter(this.projectList, p => p.slug === slug)).slug);
+        showNotification(null, 'project ' + slug + ' selected');
         document.dispatchEvent(ProjectSelected);
       },
       loadData() {

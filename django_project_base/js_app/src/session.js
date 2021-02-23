@@ -13,7 +13,7 @@ class Session {
       }).then(() => {
       ApiClient.get('account/profile/current?decorate=default-project').then(response => {
         Store.set('current-user', response.data);
-        Store.set('current-project', response.data['default-project'].id);
+        Store.set('current-project', response.data['default-project'].slug);
         document.dispatchEvent(createEvent('login', response.data));
         showNotification(null,
           'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'].slug);
