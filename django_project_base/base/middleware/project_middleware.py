@@ -32,5 +32,4 @@ class ProjectMiddleware:
         language: Optional[object] = get_language(request)
         setattr(request, request_variables['project'], project)
         setattr(request, request_variables['language'], language)
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)

@@ -5,7 +5,7 @@ from django_project_base.settings import SETTINGS
 
 class DjangoProjectBaseConfig(AppConfig):
     name = 'django_project_base'
-    verbose_name = "Django REST framework"
+    verbose_name = "Django Project Base"
 
     def ready(self):
         from django.conf import settings
