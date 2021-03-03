@@ -6,10 +6,11 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# Create your models here.
 from taggit.models import TagBase
 from typing import List
 
+
+# Create your models here.
 from django_project_base.base.fields import HexColorField
 
 
@@ -17,7 +18,7 @@ class BaseProject(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True)
     slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
     description = models.TextField(null=True, blank=True)
-    logo = models.FileField()
+    logo = models.CharField(null=False, blank=False, default='https://via.placeholder.com/500', max_length=256)
     owner = parent = models.ForeignKey(swapper.get_model_name('django_project_base', 'Profile'),
                                        on_delete=models.CASCADE)
 

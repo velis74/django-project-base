@@ -2,6 +2,7 @@ import {Store} from './store';
 import {apiClient as ApiClient} from './apiClient';
 import {logoutEvent as LogoutEvent, createEvent} from './events';
 import {showNotification} from './notifications';
+import {PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME} from './constants';
 
 class Session {
   static login(username, password) {
@@ -13,11 +14,10 @@ class Session {
       }).then(() => {
       ApiClient.get('account/profile/current?decorate=default-project').then(response => {
         Store.set('current-user', response.data);
-        Store.set('current-project', response.data['default-project'].slug);
+        Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
         document.dispatchEvent(createEvent('login', response.data));
         showNotification(null,
-          'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'].slug);
-        // window.location.href = 'project/slug/' + response.data['default-project'].slug;
+          'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
       });
     }).catch(error => {
       if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {ProjectBaseData} from '../projectBaseData';
 import {showNotification} from '../notifications';
 import {projectSelected as ProjectSelected} from '../events';
+import {PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME} from '../constants';
 
 
 const projectList = {
@@ -28,13 +29,19 @@ const projectList = {
     mounted() {
 
     },
-    computed: {},
+    computed: {
+      projectTablePkName() {
+        return PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME;
+      },
+    },
     methods: {
       projectSelected(slug) {
         if (slug === Store.get('current-project')) {
           return;
         }
-        Store.set('current-project', _.first(_.filter(this.projectList, p => p.slug === slug)).slug);
+        Store.set('current-project', _.first(_.filter(this.projectList,
+          p => p[this.projectTablePkName] === slug)
+        )[this.projectTablePkName]);
         showNotification(null, 'project ' + slug + ' selected');
         document.dispatchEvent(ProjectSelected);
       },
@@ -44,6 +51,10 @@ const projectList = {
       },
       setProjects(projectList) {
         this.projectList = projectList;
+        if (!Store.get('current-project')) {
+          Store.set('current-project', _.first(this.projectList)[this.projectTablePkName]);
+          document.dispatchEvent(ProjectSelected);
+        }
       },
       setPermissions(permissions) {
         this.permissions = permissions;

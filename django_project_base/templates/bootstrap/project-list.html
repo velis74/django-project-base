@@ -6,7 +6,7 @@
                 <li class="nav-item dropdown">
                     <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project.slug)"
+                        <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project[projectTablePkName])"
                            v-bind:key="project.slug" class="dropdown-item project-item" href="#">
                             <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
                         <a v-if="permissions['add-project']" v-on:click="addNewProject"

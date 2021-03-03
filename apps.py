@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-from django_project_base.settings import SETTINGS
+from django_project_base.settings import set_django_project_base_settings
 
 
 class DjangoProjectBaseConfig(AppConfig):
@@ -8,6 +8,4 @@ class DjangoProjectBaseConfig(AppConfig):
     verbose_name = "Django Project Base"
 
     def ready(self):
-        from django.conf import settings
-        for _setting in SETTINGS:
-            setattr(settings, _setting["name"], getattr(_setting, _setting["name"], _setting["default"]))
+        set_django_project_base_settings()
