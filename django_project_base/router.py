@@ -1,13 +1,15 @@
-from django import get_version
+from django.conf import settings
+from django.conf import settings
 from django.conf.urls import url
 from django.urls import path, include
-from django.views.decorators.cache import cache_page
-from django.views.i18n import JSONCatalog, JavaScriptCatalog
+from django.views.i18n import JavaScriptCatalog
+from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from drf_spectacular.settings import SPECTACULAR_DEFAULTS
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from django_project_base.base.rest.project_base_router import ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
+from django_project_base.notifications import NOTIFICATIONS_APP_ID
+from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
@@ -47,3 +49,6 @@ django_project_base_urlpatterns = [
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ]
+
+if NOTIFICATIONS_APP_ID in settings.INSTALLED_APPS:
+    django_project_base_urlpatterns.append(url(r'', include(notifications_router.urls)))

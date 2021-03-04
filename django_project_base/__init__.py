@@ -4,6 +4,5 @@ __author__ = 'Jure Erznožnik'
 __email__ = 'jure.erznoznik@gmail.com'
 __license__ = 'BSD 3-Clause'
 __copyright__ = 'Copyright 2020-present Jure Erznožnik'
-default_app_config = 'apps.DjangoProjectBaseConfig'
 
 VERSION = __version__
