@@ -17,7 +17,7 @@ class Session {
         Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
         document.dispatchEvent(createEvent('login', response.data));
         showNotification(null,
-          'Now redirect should be made to ' + 'project/slug/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
+          'Now redirect should be made to ' + 'project/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
       });
     }).catch(error => {
       if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {

@@ -48,7 +48,7 @@ const titlebar = {
       },
       loadProjectData() {
         if (Store.get('current-project')) {
-          ApiClient.get('project/slug/' + Store.get('current-project')).then(projectResponse => {
+          ApiClient.get('project/' + Store.get('current-project')).then(projectResponse => {
             this.titleBarProps = projectResponse.data;
           });
         }
