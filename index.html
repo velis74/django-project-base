@@ -1,0 +1,272 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Titlebar component example</title>
+    <script src="/jsi18n/"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet"
+          crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
+          crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <link href="/static/bootstrap_template.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="/static/django-project-base.min.js"></script>
+</head>
+<body>
+<div id="titlebar-app" class="titlebar-app">
+    <titlebar>
+    </titlebar>
+</div>
+
+
+<script type="text/x-template" id="breadcrumbs">
+    <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
+        <div class="card">
+            <div class="card-body">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li v-for="(b, bx) in currentBreadcrumbsLocation" class="breadcrumb-item"><a
+                                v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="project-list">
+    <div class="nav-item" v-cloak>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project[projectTablePkName])"
+                           v-bind:key="project[projectTablePkName]" class="dropdown-item project-item" href="#">
+                            <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
+                        <a v-if="permissions['add-project']" v-on:click="addNewProject"
+                           class="dropdown-item project-item" href="#">
+                            <i class="fas fa-plus-circle"></i>{{ translations('Add new project') }}</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="modal-window">
+    <transition name="modal" v-cloak>
+        <div class="modal-mask">
+            <div class="modal-wrapper">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <slot name="modal-title">
+                                <h5 class="modal-title">Modal title</h5>
+                            </slot>
+                            <slot name="header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </slot>
+                        </div>
+                        <div class="modal-body">
+                            <slot name="body">
+                                default body
+                            </slot>
+                        </div>
+                        <div class="modal-footer">
+                            <slot name="footer">
+                                <button type="button" class="btn btn-secondary">Close
+                                </button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </slot>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
+</script>
+
+
+<script type="text/x-template" id="user-profile">
+    <div class="nav-item left-spacing">
+        <div class="card" data-toggle="dropdown">
+            <div class="card-body">
+                <img v-bind:src="componentData.avatar"
+                     class="float-left rounded-circle">
+                <div class="user-names">
+                    <h5 class="card-title">{{ componentData.first_name }} <br/>
+                        {{ componentData.last_name }} <span v-if="isImpersonated">({{
+                                translations('Impersonated')
+                            }})</span></h5>
+                </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
+                            <a class="dropdown-item" href="#">{{ translations('User profile') }}</a>
+                            <a class="dropdown-item" href="#">{{ translations('User settings') }}</a>
+                            <a class="dropdown-item" href="#">{{ translations('Change password') }}</a>
+                            <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
+                               @click="showImpersonateLogin" href="#">{{ translations('Impersonate user') }}</a>
+                            <a v-else-if="isImpersonated" class="dropdown-item"
+                               @click="stopImpersonation" href="#">{{ translations('Stop impersonation') }}</a>
+                            <a class="dropdown-item" href="#" @click="makeLogout">{{
+                                    translations('Logout')
+                                }}</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <modal-window v-if="impersonateModalVisible">
+            <h5 slot="modal-title">{{ translations('Search for user') }}</h5>
+            <h3 slot="header">
+                <button @click="showImpersonateLogin" type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </h3>
+            <div slot="body" v-if="permissions['add-project']" class="col-sm-9">
+                <div class="row">
+                    <input type="text" @keyup="searchUsers" v-model="userSearchInputQueryString"
+                           class="autocomplete form-control"
+                           id="userAutocomplete"
+                           data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
+                    <ul class="dropdown-menu" style="width: 100%;" role="menu">
+                        <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
+                            v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
+                                user.email
+                            }}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div slot="footer">
+                <button class="btn-sm btn-primary" @click="changeUser">OK</button>
+            </div>
+        </modal-window>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="login">
+    <div class="nav-item login-container" v-cloak>
+        <div>
+            <form @submit.prevent>
+                <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
+                <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
+                <button class="btn btn-sm" type="submit" @click="makeLogin">{{ translations('Login') }}</button>
+            </form>
+        </div>
+        <notifications position="top center"/>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="titlebar">
+    <div v-cloak>
+        <nav class="navbar navbar-expand-lg navbar-light" v-bind:class="{ 'bg-light': loggedIn }">
+            <div class="nav-item">
+                <div class="card">
+                    <div class="card-body">
+                        <img v-bind:src="titleBarProps.logo"
+                             class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-brand left-spacing" href="javascript:void(0);" style="cursor: default;">
+                {{ titleBarProps.name }}
+            </div>
+            <div v-if="loggedIn" class="left-spacing">
+                <breadcrumbs></breadcrumbs>
+            </div>
+            <div class="collapse navbar-collapse" v-if="loggedIn">
+                <ul class="navbar-nav mr-auto">
+                </ul>
+                <project-list></project-list>
+            </div>
+            <div v-if="loggedIn">
+                <user-profile></user-profile>
+            </div>
+            <div v-else>
+                <login></login>
+            </div>
+        </nav>
+        <notifications position="top center"/>
+    </div>
+</script>
+
+<script>
+  // add title bar to page
+  createApp('titlebar-app', titlebar);
+</script>
+<br/>
+<br/>
+
+
+<div id="new-list-projects-app">
+    <custom-projects-list></custom-projects-list>
+</div>
+<script type="text/x-template" id="custom-projects-list">
+    <div>
+        <a v-for="(project, idx) in projectList" v-on:click="projectSelectedNew" v-bind:key="project.slug + 'new_idx'"
+           href="#">
+            <img v-bind:src="project.logo">{{ project.name }}</a>
+        <a v-on:click="addNewProject" href="#">Add project</a>
+        <a v-on:click="newMethod" href="#">Call method from global mixin</a>
+    </div>
+</script>
+
+
+<script>
+  // register new custom component with inline template and exisiting component definition
+
+  var newComponentDefinition = {
+    id: 'custom-projects-list',
+    type: 'x-template',
+    definition: {
+      mixins: [{
+        methods: projectList.definition.methods,
+      }],
+      template: `#custom-projects-list`,
+      data() {
+        return {
+          projectList: [],
+        };
+      },
+      created() {
+        this.loadData();
+      },
+      computed: {
+        dataStore() {
+          return new ProjectBaseData();
+        },
+      },
+      methods: {
+        projectSelectedNew(pk) {
+          showNotification('DEMO', 'NEW PROJECT SELECTED')
+        },
+        addNewProject() {
+          showNotification('DEMO', 'CREATE NEW PROJECT')
+        },
+      },
+    }
+  };
+
+  // custom methods are registered in Vue.mixin which is global and its methods are accessible in any Vue component
+  Vue.mixin({
+    methods: {
+      newMethod: function () {
+        showNotification('DEMO', 'NEW METHOD CALLED')
+      },
+    }
+  });
+
+  createApp('new-list-projects-app', newComponentDefinition);
+</script>
+</body>
+</html>
