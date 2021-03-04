@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django_project_base.notifications import NOTIFICATIONS_APP_ID
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django_project_base',
     'example.demo_django_base',
     'drf_spectacular',
+    NOTIFICATIONS_APP_ID,
 ]
 
 MIDDLEWARE = [
@@ -100,6 +103,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/Users/klemenspruk/Downloads/cache/',
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
