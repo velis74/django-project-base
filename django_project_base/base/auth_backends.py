@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.cache import cache
 from django.db.models.signals import post_delete, post_save
-from rest_framework.authentication import TokenAuthentication
 
 DJANGO_USER_CACHE = 'django-user-%d'
 
@@ -29,13 +28,3 @@ class UsersCachingBackend(ModelBackend):
                 cache.set(DJANGO_USER_CACHE % (user_id if user_id else 0), user)
         return user
 
-
-class CachedTokenAuthentication(TokenAuthentication):
-
-    def authenticate_credentials(self, key):
-        cache_key = 'token_user_%s' % key
-        res = cache.get(cache_key)
-        if not res:
-            res = super().authenticate_credentials(key)
-            cache.set(cache_key, res)
-        return res
