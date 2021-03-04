@@ -114,12 +114,6 @@ Swagger UI is accessible on /schema/swagger-ui/ url by running example project.
 If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
 your html document header.
 
-**Authentication**:
-
-To increase AUTH performance you can set backend which caches users:
-   - django_project_base.base.auth_backends.UsersCachingBackend
-   - django_project_base.base.auth_backends.CachedTokenAuthentication
-
 **Settings**:
 
 DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES: {'project': {'value_name': 'current_project_slug', 'url_part': 'project-'},
@@ -129,6 +123,18 @@ This setting defines dictionary of attribute names on request object. For e.g. p
 propery current_project_slug. Language information is set on request objects under property current language. Is language
 or project is given in request path like: language-EN, then url_part settings is found and EN string is taken as language value.
 
+
+DJANGO_PROJECT_BASE_SLUG_FIELD_NAME: 'slug'
+
+When creating models with slug field they should be named with this setting value. This enables that we can use object slug instead of
+object pk when making api requests.
+
+
+**Authentication**:
+
+To increase AUTH performance you can set backend which caches users:
+   - django_project_base.base.auth_backends.UsersCachingBackend
+   - django_project_base.base.auth_backends.CachedTokenAuthentication
 
 Example (add in settings.py):
 
