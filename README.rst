@@ -114,6 +114,22 @@ Swagger UI is accessible on /schema/swagger-ui/ url by running example project.
 If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
 your html document header.
 
+**Settings**:
+
+DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES: {'project': {'value_name': 'current_project_slug', 'url_part': 'project-'},
+        'language': {'value_name': 'current_language', 'url_part': 'language-'}}
+
+This setting defines dictionary of attribute names on request object. For e.g. project info is set on request object under
+propery current_project_slug. Language information is set on request objects under property current language. Is language
+or project is given in request path like: language-EN, then url_part settings is found and EN string is taken as language value.
+
+
+DJANGO_PROJECT_BASE_SLUG_FIELD_NAME: 'slug'
+
+When creating models with slug field they should be named with this setting value. This enables that we can use object slug instead of
+object pk when making api requests.
+
+
 **Authentication**:
 
 To increase AUTH performance you can set backend which caches users:
@@ -186,6 +202,28 @@ For determining which user can impersonate which user you can set your own logic
             return True
         else:
             return False
+
+***Middlewares***
+
+ProjectMiddleware: If you wan't to set current project which is selected to request object you can use ProjectMiddleware
+which should be placed to start of MIDDLEWARE list in settings.py. Middleware sets DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting dict values
+to request object. Default value for DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting is {'project': 'current_project_slug', 'language': 'current_language'}.
+This means request will have current_project_slug attribute which will have value set to current project slug and request
+will have current_language attribute which will have value set to current language set. If project or language cannnot be
+determined its value is set to None.
+
+To set current project to ajax requests 'Current-Project' header should be used: 'Current-Project': 'current project slug'. Current slug can also
+be determined from request path. See DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PART setting description in setting section.
+
+.. code-block:: python
+
+   # myproject/settings.py
+
+   MIDDLEWARE = [
+    'django_project_base.base.middleware.UrlsVarsMiddleware',
+    ...
+]
+
 
 
 

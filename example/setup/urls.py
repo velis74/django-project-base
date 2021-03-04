@@ -22,6 +22,6 @@ from django_project_base.router import django_project_base_urlpatterns
 from example.demo_django_base.views import index_view
 
 urlpatterns = [
-    path('', index_view, name='index'),
-    path('admin/', admin.site.urls),
-] + django_project_base_urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+                  path('', index_view, name='index'),
+                  path('admin/', admin.site.urls),
+              ] + django_project_base_urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

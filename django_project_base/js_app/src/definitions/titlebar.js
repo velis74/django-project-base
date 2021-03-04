@@ -44,22 +44,14 @@ const titlebar = {
         if (Store.get('redirect-to-auth')) {
           return;
         }
-        let projectPk = Store.get('current-project');
-        if (projectPk === null || projectPk === undefined) {
-          ApiClient.get('account/profile/current?decorate=default-project').then(response => {
-            Store.set('current-project', response.data['default-project'].id);
-            Store.set('current-user', response.data);
-            this.titleBarProps = response.data['default-project'];
-            this.loggedIn = true;
-          });
-          return;
-        }
         this.loadProjectData();
       },
       loadProjectData() {
-        ApiClient.get('project/' + Store.get('current-project')).then(projectResponse => {
-          this.titleBarProps = projectResponse.data;
-        });
+        if (Store.get('current-project')) {
+          ApiClient.get('project/' + Store.get('current-project')).then(projectResponse => {
+            this.titleBarProps = projectResponse.data;
+          });
+        }
       }
     },
   },

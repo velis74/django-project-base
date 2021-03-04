@@ -3,7 +3,7 @@ from django.db.models import fields
 from taggit.managers import TaggableManager
 from taggit.models import GenericTaggedItemBase
 
-from django_project_base.models import BaseProfile, BaseProject, BaseTag
+from django_project_base.base.models import BaseProfile, BaseProject, BaseTag
 
 
 class UserProfile(BaseProfile):
