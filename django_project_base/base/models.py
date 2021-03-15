@@ -18,7 +18,7 @@ class BaseProject(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True)
     slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
     description = models.TextField(null=True, blank=True)
-    logo = models.FileField()
+    logo = models.FileField(null=True, blank=True)
     owner = parent = models.ForeignKey(swapper.get_model_name('django_project_base', 'Profile'),
                                        on_delete=models.CASCADE)
 
