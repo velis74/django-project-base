@@ -39,7 +39,7 @@ class BaseProfile(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     language = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported languages
     theme = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported themes
-    avatar = models.FileField()
+    avatar = models.FileField(null=True, blank=True)
 
     class Meta:
         abstract = True
