@@ -173,7 +173,7 @@
             <div class="nav-item">
                 <div class="card">
                     <div class="card-body">
-                        <img v-bind:src="titleBarProps.logo"
+                        <img v-if="titleBarProps.logo" v-bind:src="titleBarProps.logo"
                              class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
                     </div>
                 </div>
