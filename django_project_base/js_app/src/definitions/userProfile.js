@@ -4,6 +4,7 @@ import {Store} from '../store';
 import {ProjectBaseData} from '../projectBaseData';
 import _ from 'lodash';
 import {modalWindow} from './modalWindow';
+import {notificationList} from './notificationList';
 
 
 const userProfile = {
@@ -102,7 +103,7 @@ const userProfile = {
     },
   },
   childComponentsDefinition: [
-    modalWindow,
+    modalWindow, notificationList,
   ],
 };
 

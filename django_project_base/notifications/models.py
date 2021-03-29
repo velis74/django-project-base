@@ -1,12 +1,26 @@
-import datetime
 import uuid
 
 from django.conf import settings
 from django.db import models
+from django.db.models import SET_NULL, CASCADE
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
 from django_project_base.notifications.utils import _utc_now
+
+
+class AbstractDjangoProjectBaseMessage(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    subject = models.TextField(null=True, blank=True)
+    body = models.TextField(null=False, blank=False)
+    footer = models.TextField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class DjangoProjectBaseMessage(AbstractDjangoProjectBaseMessage):
+    pass
 
 
 class AbstractDjangoProjectBaseNotification(models.Model):
@@ -27,6 +41,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
         blank=True,
         related_name='notifications',
     )
+    message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True)
 
     class Meta:
         abstract = True

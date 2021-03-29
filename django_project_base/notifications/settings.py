@@ -1,7 +1,11 @@
 NOTIFICATIONS_SETTINGS = (
     {
-        "name": "DEMO_SETTING",
-        "default": 8888,
+        "name": "MAINTENENACE_NOTIFICATIONS_CACHE_TIMEOUT",
+        "default": 600,
+    },
+    {
+        "name": "MAINTENENACE_NOTIFICATIONS_CACHE_KEY",
+        "default": "current_maintenance_notifications",
     },
 
 )

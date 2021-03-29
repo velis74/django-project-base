@@ -6,8 +6,6 @@ from django.db import models
 from django.core.cache import cache
 from django.db.models import Model
 
-DEFAULT_CACHE_TIMEOUT = 900
-
 
 class QuerySetWithCache(models.query.QuerySet):
 
@@ -16,6 +14,10 @@ class QuerySetWithCache(models.query.QuerySet):
             cache.delete_pattern(pattern)
         else:
             cache.clear()
+
+    @property
+    def cache_timeout(self) -> int:
+        return 300
 
     @property
     def base_cache_key(self) -> str:
@@ -38,7 +40,7 @@ class QuerySetWithCache(models.query.QuerySet):
         if cached_item:
             return cached_item
         item: Model = super().get(*args, **kwargs)
-        cache.set(ck, item, timeout=DEFAULT_CACHE_TIMEOUT)
+        cache.set(ck, item, timeout=self.cache_timeout)
         return item
 
     def create(self, **kwargs):
@@ -52,5 +54,5 @@ class QuerySetWithCache(models.query.QuerySet):
         if cached_data:
             return cached_data
         _data: list = list(super().filter(*args, **kwargs))
-        cache.set(ck, _data, timeout=DEFAULT_CACHE_TIMEOUT)
+        cache.set(ck, _data, timeout=self.cache_timeout)
         return _data
