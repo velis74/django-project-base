@@ -18,7 +18,7 @@ class BaseProject(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True)
     slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
     description = models.TextField(null=True, blank=True)
-    logo = models.CharField(null=False, blank=False, default='https://via.placeholder.com/500', max_length=256)
+    logo = models.FileField(null=True, blank=True)
     owner = parent = models.ForeignKey(swapper.get_model_name('django_project_base', 'Profile'),
                                        on_delete=models.CASCADE)
 
@@ -39,7 +39,7 @@ class BaseProfile(User):
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     language = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported languages
     theme = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported themes
-    avatar = models.FileField()
+    avatar = models.FileField(null=True, blank=True)
 
     class Meta:
         abstract = True
