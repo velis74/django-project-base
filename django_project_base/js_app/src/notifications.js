@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import {apiClient as ApiClient} from "./apiClient";
+import {maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged} from './events';
 
 const showNotification = (title, text, type = 'info') => {
   Vue.notify({
@@ -40,6 +41,7 @@ const showMaintenanceNotification = (noticeItem) => {
           minutes_till_maintenance: Math.round((delayed.getTime() - new Date().getTime()) / 60000), // jshint ignore:line
         }).then(() => {
           closeFunction();
+          document.dispatchEvent(MaintenanceNotificationAcknowledged);
         });
       },
       id: noticeItem.id,

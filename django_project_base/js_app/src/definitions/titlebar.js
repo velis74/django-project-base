@@ -18,6 +18,7 @@ const titlebar = {
         titleBarProps: {},
         loggedIn: null,
         maintenanceNoticesPeriodicApiCall: null,
+        maintenanceNotificationItem: null,
       };
     },
     beforeDestroy() {
@@ -41,6 +42,9 @@ const titlebar = {
       });
       document.addEventListener('project-selected', () => {
         this.loadData();
+      });
+      document.addEventListener('maintenance-notification-acknowledged', () => {
+        this.maintenanceNotificationItem = null;
       });
       this.monitorMaintenanceNotifications();
     },
@@ -71,7 +75,7 @@ const titlebar = {
             let hours1 = _.inRange(now, delayed - 2 * 3600, delayed - 0.5 * 3600);
             let minutes5 = _.inRange(now, delayed - 10 * 60, delayed);
             if ((!this.item || this.item.id !== _notification.id) && (hours8 || hours1 || minutes5)) {
-              this.item = _notification;
+              this.maintenanceNotificationItem = _notification;
               showMaintenanceNotification(this.item);
             }
           }).catch();
