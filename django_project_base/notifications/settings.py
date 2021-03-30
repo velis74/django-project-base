@@ -1,7 +1,7 @@
 NOTIFICATIONS_SETTINGS = (
     {
         "name": "MAINTENENACE_NOTIFICATIONS_CACHE_TIMEOUT",
-        "default": 600,
+        "default": 30,
     },
     {
         "name": "MAINTENENACE_NOTIFICATIONS_CACHE_KEY",

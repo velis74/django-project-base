@@ -4,6 +4,8 @@ import {projectList} from './projectList';
 import {login} from './login';
 import {userProfile} from './userProfile';
 import {apiClient as ApiClient} from '../apiClient';
+import {showMaintenanceNotification} from '../notifications';
+import _ from 'lodash';
 
 
 const titlebar = {
@@ -15,7 +17,12 @@ const titlebar = {
       return {
         titleBarProps: {},
         loggedIn: null,
+        maintenanceNoticesPeriodicApiCall: null,
       };
+    },
+    beforeDestroy() {
+      clearInterval(this.maintenanceNoticesPeriodicApiCall);
+      this.maintenanceNoticesPeriodicApiCall = null;
     },
     created() {
       this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
@@ -35,6 +42,7 @@ const titlebar = {
       document.addEventListener('project-selected', () => {
         this.loadData();
       });
+      this.monitorMaintenanceNotifications();
     },
     mounted() {
     },
@@ -52,7 +60,23 @@ const titlebar = {
             this.titleBarProps = projectResponse.data;
           });
         }
-      }
+      },
+      monitorMaintenanceNotifications() {
+        this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
+          ApiClient.get('maintenance-notification/').then(notificationResponse => {
+            let _notification = _.first(notificationResponse.data);
+            let delayed = _notification.delayed_to_timestamp;
+            let now = Math.floor(Date.now() / 1000);
+            let hours8 = _.inRange(now, delayed - 10 * 3600, delayed - 6 * 3600);
+            let hours1 = _.inRange(now, delayed - 2 * 3600, delayed - 0.5 * 3600);
+            let minutes5 = _.inRange(now, delayed - 10 * 60, delayed);
+            if ((!this.item || this.item.id !== _notification.id) && (hours8 || hours1 || minutes5)) {
+              this.item = _notification;
+              showMaintenanceNotification(this.item);
+            }
+          }).catch();
+        }, 45000);
+      },
     },
   },
   childComponentsDefinition: [

@@ -21,7 +21,6 @@
 </div>
 
 
-
 <script type="text/x-template" id="breadcrumbs">
     <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
         <div class="card">
@@ -38,9 +37,6 @@
 </script>
 
 
-
-
-
 <script type="text/x-template" id="project-list">
     <div class="nav-item" v-cloak>
         <div class="collapse navbar-collapse">
@@ -48,7 +44,8 @@
                 <li class="nav-item dropdown">
                     <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project[projectTablePkName])"
+                        <a v-for="(project, idx) in projectList"
+                           v-on:click="projectSelected(project[projectTablePkName])"
                            v-bind:key="project[projectTablePkName]" class="dropdown-item project-item" href="#">
                             <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
                         <a v-if="permissions['add-project']" v-on:click="addNewProject"
@@ -60,8 +57,6 @@
         </div>
     </div>
 </script>
-
-
 
 
 <script type="text/x-template" id="modal-window">
@@ -100,22 +95,6 @@
 </script>
 
 
-<script type="text/x-template" id="notification-list">
-    <div class="nav-item" v-cloak>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="dropdown-item" @click="toggleNotifications" href="#">{{ translations('Notifications') }}</a>
-                    <div v-if="visible" class="dropdown-submenu" aria-labelledby="navbarDropdown" style="left: -8em;">
-                        <a v-for="(notification, idx) in notifications" href="#" class="dropdown-item">{{notification}}</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</script>
-
-
 <script type="text/x-template" id="user-profile">
     <div class="nav-item left-spacing">
         <div class="card" data-toggle="dropdown">
@@ -134,17 +113,12 @@
                             <a class="dropdown-item" href="#">{{ translations('User profile') }}</a>
                             <a class="dropdown-item" href="#">{{ translations('User settings') }}</a>
                             <a class="dropdown-item" href="#">{{ translations('Change password') }}</a>
-
-
-                            <notification-list></notification-list>
-
-
                             <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
                                @click="showImpersonateLogin" href="#">{{ translations('Impersonate user') }}</a>
                             <a v-else-if="isImpersonated" class="dropdown-item"
                                @click="stopImpersonation" href="#">{{ translations('Stop impersonation') }}</a>
                             <a class="dropdown-item" href="#" @click="makeLogout">{{
-                                translations('Logout')
+                                    translations('Logout')
                                 }}</a>
                         </div>
                     </li>
@@ -168,7 +142,7 @@
                     <ul class="dropdown-menu" style="width: 100%;" role="menu">
                         <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
                             v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
-                            user.email
+                                user.email
                             }}</a></li>
                     </ul>
                 </div>
@@ -179,8 +153,6 @@
         </modal-window>
     </div>
 </script>
-
-
 
 
 <script type="text/x-template" id="login">
@@ -195,7 +167,6 @@
         <notifications position="top center"/>
     </div>
 </script>
-
 
 
 <script type="text/x-template" id="titlebar">
@@ -227,7 +198,27 @@
                 <login></login>
             </div>
         </nav>
-        <notifications position="top center"/>
+        <notifications width="350" position="top center">
+            <template slot="body" slot-scope="{ item, close }">
+                <div @click="item.data.onNotificationClose(item, close, true)" class="vue-notification"
+                     :class="item.type">
+                    <div>
+                        <div style="display: inline-block; max-width: 95%;" class="notification-title">
+                            <div v-html="item.title"></div>
+                        </div>
+                        <div style="display: inline-block; max-width: 95%;" class="notification-content">
+                            <div v-html="item.text"/>
+                        </div>
+                        <div style="display: inline-block; float: right; vertical-align: middle;"
+                             v-if="item.data.duration === -1">
+                            <button class="close" @click="item.data.onNotificationClose(item, close)">
+                                <i class="fas fa-times fa-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </notifications>
     </div>
 </script>
 
@@ -237,7 +228,6 @@
 </script>
 <br/>
 <br/>
-
 
 
 <div id="new-list-projects-app">

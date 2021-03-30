@@ -2,7 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.db import models
-from django.db.models import SET_NULL, CASCADE
+from django.db.models import SET_NULL
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet

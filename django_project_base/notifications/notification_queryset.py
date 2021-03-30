@@ -35,5 +35,6 @@ class NotificationQuerySet(QuerySetWithCache):
             delayed_to__gt=now,
             delayed_to__lt=now + datetime.timedelta(hours=8)
         )
+        _data.sort(reverse=False, key=lambda c: c.delayed_to)
         cache.set(self.base_cache_key, _data, timeout=self.cache_timeout)
         return _data
