@@ -69,14 +69,27 @@ const titlebar = {
         this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
           ApiClient.get('maintenance-notification/').then(notificationResponse => {
             let _notification = _.first(notificationResponse.data);
-            let delayed = _notification.delayed_to_timestamp;
-            let now = Math.floor(Date.now() / 1000);
-            let hours8 = _.inRange(now, delayed - 10 * 3600, delayed - 6 * 3600);
-            let hours1 = _.inRange(now, delayed - 2 * 3600, delayed - 0.5 * 3600);
-            let minutes5 = _.inRange(now, delayed - 10 * 60, delayed);
-            if ((!this.item || this.item.id !== _notification.id) && (hours8 || hours1 || minutes5)) {
-              this.maintenanceNotificationItem = _notification;
-              showMaintenanceNotification(this.item);
+            if (_notification) {
+              let acknowledgeData = _notification.notification_acknowledged_data;
+              let delayed = _notification.delayed_to_timestamp;
+              let hours8Range = [delayed - 10 * 3600, (delayed - 2 * 3600) - 1];
+              let hours1Range = [delayed - 2 * 3600, (delayed - 10 * 60) - 1];
+              let minutes5Range = [delayed - 10 * 60, delayed];
+              let now = Math.floor(Date.now() / 1000);
+              let rangeIdentifier = 8;
+              let hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 8));
+              let hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 1));
+              let minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 5));
+              if (hours1) {
+                rangeIdentifier = 1;
+              }
+              if (minutes5) {
+                rangeIdentifier = 5;
+              }
+              if (!this.maintenanceNotificationItem && (hours8 || hours1 || minutes5)) {
+                this.maintenanceNotificationItem = _notification;
+                showMaintenanceNotification(this.maintenanceNotificationItem, rangeIdentifier);
+              }
             }
           }).catch();
         }, 45000);

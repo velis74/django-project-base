@@ -1,7 +1,7 @@
 from typing import Optional
 
 from django.db import transaction
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import fields, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError, APIException
@@ -14,13 +14,15 @@ from django_project_base.notifications.base.rest.serializer import Serializer
 from django_project_base.notifications.base.rest.viewset import ViewSet
 from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
 
+READ_MESSAGES_STORAGE_CACHE_KEY: str = 'read_maintenance_msgs'
+
 
 class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
 
     def __new__(cls, *args, **kwargs):
         new: 'NotificationAcknowledgedRequestSerializer' = super().__new__(cls, *args, **kwargs)
         new.fields[DjangoProjectBaseMessage._meta.pk.name] = fields.UUIDField(required=True, allow_null=False)
-        new.fields['minutes_till_maintenance'] = fields.IntegerField(required=True, allow_null=False)
+        new.fields['acknowledged_identifier'] = fields.IntegerField(required=True, allow_null=False)
         return new
 
     def create(self, validated_data):
@@ -38,11 +40,16 @@ class MessageSerializer(Serializer):
 
 class MaintenanceNotificationSerializer(Serializer):
     delayed_to_timestamp = fields.SerializerMethodField()
+    notification_acknowledged_data = fields.SerializerMethodField()
     message = MessageSerializer()
     type = fields.CharField(required=False, allow_null=True, default=NotificationType.MAINTENANCE.value)
 
     def get_delayed_to_timestamp(self, notification: DjangoProjectBaseNotification) -> Optional[int]:
         return int(notification.delayed_to.timestamp()) if notification and notification.delayed_to else None
+
+    def get_notification_acknowledged_data(self, notification: DjangoProjectBaseNotification) -> list:
+        request: Optional[Request] = self.context.get('request')
+        return request.session.get(READ_MESSAGES_STORAGE_CACHE_KEY, {}).get(str(notification.pk), [])
 
     def create(self, validated_data) -> DjangoProjectBaseNotification:
         message: DjangoProjectBaseMessage = DjangoProjectBaseMessage.objects.create(**validated_data['message'])
@@ -64,8 +71,12 @@ class MaintenanceNotificationSerializer(Serializer):
         exclude = ('required_channels', 'sent_channels', 'failed_channels', 'recipients', 'level',)
 
 
+@extend_schema_view(
+    destroy=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+)
 class UsersMaintenanceNotificationViewset(ViewSet):
-    read_messages_storage_key: str = 'read_maintenance_msgs'
 
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer
@@ -82,9 +93,9 @@ class UsersMaintenanceNotificationViewset(ViewSet):
         return super().create(request, *args, **kwargs)
 
     def list(self, request: Request, *args, **kwargs) -> Response:
-        read_notifications: dict = request.session.get(self.read_messages_storage_key, {})
+        read_notifications: dict = request.session.get(READ_MESSAGES_STORAGE_CACHE_KEY, {})
         pk_name: str = DjangoProjectBaseMessage._meta.pk.name
-        return Response(MaintenanceNotificationSerializer(
+        return Response(self.get_serializer(
             filter(lambda n: len(read_notifications.get(str(getattr(n, pk_name)), [])) < 3, self.get_queryset()),
             many=True).data)
 
@@ -114,16 +125,16 @@ class UsersMaintenanceNotificationViewset(ViewSet):
     def acknowledged(self, request: Request, **kwargs) -> Response:
         ser: NotificationAcknowledgedRequestSerializer = NotificationAcknowledgedRequestSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        if self.read_messages_storage_key not in request.session:
-            request.session[self.read_messages_storage_key] = {}
-        read_messages: dict = request.session[self.read_messages_storage_key]
+        if READ_MESSAGES_STORAGE_CACHE_KEY not in request.session:
+            request.session[READ_MESSAGES_STORAGE_CACHE_KEY] = {}
+        read_messages: dict = request.session[READ_MESSAGES_STORAGE_CACHE_KEY]
         notice_pk: str = ser.data[DjangoProjectBaseMessage._meta.pk.name]
-        notice_diff: int = ser.data['minutes_till_maintenance']
+        notice_diff: int = ser.data['acknowledged_identifier']
         if notice_pk not in read_messages:
             read_messages[notice_pk] = []
         diffs: list = read_messages[notice_pk]
         diffs.append(notice_diff)
         diffs = list(set(diffs))
         read_messages[notice_pk] = diffs
-        request.session[self.read_messages_storage_key] = read_messages
+        request.session[READ_MESSAGES_STORAGE_CACHE_KEY] = read_messages
         return Response()

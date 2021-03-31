@@ -7,7 +7,6 @@ from rest_framework.response import Response
 
 from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
 from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
-from django.apps import apps
 
 from django_project_base.rest.project import ProjectSerializer
 

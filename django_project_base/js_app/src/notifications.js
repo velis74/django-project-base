@@ -15,8 +15,7 @@ const showNotification = (title, text, type = 'info') => {
   });
 };
 
-const showMaintenanceNotification = (noticeItem) => {
-  console.log(noticeItem);
+const showMaintenanceNotification = (noticeItem, rangeId) => {
   const duration = -1;
   let delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
   Vue.notify({
@@ -38,7 +37,7 @@ const showMaintenanceNotification = (noticeItem) => {
         }
         ApiClient.post('maintenance-notification/acknowledged/', {
           id: item.data.id,
-          minutes_till_maintenance: Math.round((delayed.getTime() - new Date().getTime()) / 60000), // jshint ignore:line
+          acknowledged_identifier: rangeId, // jshint ignore:line
         }).then(() => {
           closeFunction();
           document.dispatchEvent(MaintenanceNotificationAcknowledged);
