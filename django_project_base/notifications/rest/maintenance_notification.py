@@ -3,8 +3,10 @@ from typing import Optional
 from django.db import transaction
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import fields, status
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError, APIException
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer as RestFrameworkSerializer
@@ -77,6 +79,8 @@ class MaintenanceNotificationSerializer(Serializer):
     partial_update=extend_schema(exclude=True),
 )
 class UsersMaintenanceNotificationViewset(ViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer
