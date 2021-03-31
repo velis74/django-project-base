@@ -108,7 +108,7 @@ class UsersMaintenanceNotificationViewset(ViewSet):
         return super().create(request, *args, **kwargs)
 
     def list(self, request: Request, *args, **kwargs) -> Response:
-        if bool(strtobool(request.query_params.get('current', False))):
+        if bool(strtobool(request.query_params.get('current', 'False'))):
             now: datetime.datetime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
             time_delta: datetime.timedelta = datetime.timedelta(
                 seconds=settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY)
