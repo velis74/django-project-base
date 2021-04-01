@@ -20,6 +20,10 @@ from django_project_base.notifications.base.rest.viewset import ViewSet
 from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
 
 
+def _is_model_field_null(model: 'Model', field_name: str) -> bool:
+    return next(filter(lambda c: c.name == field_name, model._meta.fields)).null
+
+
 class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
 
     def __new__(cls, *args, **kwargs):
@@ -35,6 +39,12 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
         pass
 
 
+class UTCDateTimeField(fields.DateTimeField):
+
+    def enforce_timezone(self, value):
+        return value
+
+
 class MessageSerializer(Serializer):
     class Meta:
         model = DjangoProjectBaseMessage
@@ -46,6 +56,14 @@ class MaintenanceNotificationSerializer(Serializer):
     notification_acknowledged_data = fields.SerializerMethodField()
     message = MessageSerializer()
     type = fields.CharField(required=False, allow_null=True, default=NotificationType.MAINTENANCE.value)
+
+    created_at = UTCDateTimeField(read_only=True)
+    sent_at = UTCDateTimeField(
+        required=not _is_model_field_null(DjangoProjectBaseNotification, 'sent_at'),
+        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'sent_at'))
+    delayed_to = UTCDateTimeField(
+        required=not _is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'),
+        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'))
 
     def get_delayed_to_timestamp(self, notification: DjangoProjectBaseNotification) -> Optional[int]:
         return int(notification.delayed_to.timestamp()) if notification and notification.delayed_to else None
