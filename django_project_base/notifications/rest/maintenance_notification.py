@@ -4,7 +4,7 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import transaction
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from pytz import UTC
 from rest_framework import fields, status
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -30,8 +30,11 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
 
     def __new__(cls, *args, **kwargs):
         new: 'NotificationAcknowledgedRequestSerializer' = super().__new__(cls, *args, **kwargs)
-        new.fields[DjangoProjectBaseMessage._meta.pk.name] = fields.UUIDField(required=True, allow_null=False)
-        new.fields['acknowledged_identifier'] = fields.IntegerField(required=True, allow_null=False)
+        new.fields[DjangoProjectBaseMessage._meta.pk.name] = fields.UUIDField(required=True, allow_null=False,
+                                                                              help_text='Notification identifier')
+        new.fields['acknowledged_identifier'] = fields.IntegerField(
+            required=True, allow_null=False,
+            help_text='Time interval identifying at what time notification was acknnowledged by user')
         return new
 
     def create(self, validated_data):
@@ -59,13 +62,13 @@ class MaintenanceNotificationSerializer(Serializer):
     message = MessageSerializer()
     type = fields.CharField(required=False, allow_null=True, default=NotificationType.MAINTENANCE.value)
 
-    created_at = UTCDateTimeField(read_only=True)
+    created_at = UTCDateTimeField(read_only=True, help_text='Time in UTC.')
     sent_at = UTCDateTimeField(
         required=not _is_model_field_null(DjangoProjectBaseNotification, 'sent_at'),
-        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'sent_at'))
+        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'sent_at'), help_text='Time in UTC.')
     delayed_to = UTCDateTimeField(
         required=not _is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'),
-        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'))
+        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'), help_text='Time in UTC.')
 
     def get_delayed_to_timestamp(self, notification: DjangoProjectBaseNotification) -> Optional[int]:
         return int(notification.delayed_to.timestamp()) if notification and notification.delayed_to else None
@@ -124,12 +127,25 @@ class UsersMaintenanceNotificationViewset(ViewSet):
 
     @extend_schema(
         request=MaintenanceNotificationSerializer(),
-        description='Create maintenance notification'
+        description='Create maintenance notification.'
     )
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
         return super().create(request, *args, **kwargs)
 
+    @extend_schema(
+        request=MaintenanceNotificationSerializer(many=True),
+        description="List's maintenance notifications that are planned in future.",
+        parameters=[
+            OpenApiParameter(
+                name='current',
+                description='If present in request and if true, then this api '
+                            'returns only maintenance notification that is planned in range '
+                            'of now +/- TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY settings value.',
+                required=False,
+                type=bool),
+        ],
+    )
     def list(self, request: Request, *args, **kwargs) -> Response:
         if bool(strtobool(request.query_params.get('current', 'False'))):
             now: datetime.datetime = utc_now()
@@ -145,6 +161,9 @@ class UsersMaintenanceNotificationViewset(ViewSet):
             filter(lambda n: len(read_notifications.get(str(getattr(n, pk_name)), [])) < 3, self.get_queryset()),
             many=True).data)
 
+    @extend_schema(
+        description="Get single maintenance notification's data"
+    )
     def retrieve(self, request: Request, *args, **kwargs) -> Response:
         return super().retrieve(request, *args, **kwargs)
 
@@ -165,7 +184,10 @@ class UsersMaintenanceNotificationViewset(ViewSet):
 
     @extend_schema(
         request=NotificationAcknowledgedRequestSerializer(),
-        description='Mark message as acknowledged by user'
+        description='Mark message as acknowledged by user making request.',
+        responses={
+            status.HTTP_201_CREATED: None
+        }
     )
     @action(methods=['POST'], detail=False, url_path='acknowledged', url_name='acknowledged')
     def acknowledged(self, request: Request, **kwargs) -> Response:
@@ -184,4 +206,4 @@ class UsersMaintenanceNotificationViewset(ViewSet):
         diffs = list(set(diffs))
         read_messages[notice_pk] = diffs
         request.session[settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY] = read_messages
-        return Response()
+        return Response(status=status.HTTP_201_CREATED)

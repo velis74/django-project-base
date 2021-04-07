@@ -225,5 +225,31 @@ be determined from request path. See DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PAR
 ]
 
 
+***Notifications module***
+
+Django project base offers simple notification module. Currently only maintenance notifications are exposed in rest api.
+For installation alter your settings.py settings bellow and run migrations:
 
 
+.. code-block:: python
+
+   # myproject/settings.py
+
+   INSTALLED_APPS = [
+    ...
+    'django_project_base',
+    'django_project_base.notifications',
+]
+
+Make sure you have django project base urls included:
+
+.. code-block:: python
+
+   # url.py
+
+   urlpatterns += django_project_base_urlpatterns
+
+
+If you integrate titlebar web UI component to your project it will automatically
+display maintenance noifications 8h, 1h, 5 min before planned maintenances. Maintenance is
+inserted into system by using rest api (schema/swagger-ui/).
