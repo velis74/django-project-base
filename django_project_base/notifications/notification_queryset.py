@@ -22,11 +22,6 @@ class NotificationQuerySet(QuerySetWithCache):
     def maintenance_notifications(self):
         cached_data: Optional[list] = cache.get(self.base_cache_key)
 
-        # read which messages were read from session already and filter them out from response data
-
-        # on frontend filter messages if any close to defined intervals 5min, 4h, 8h and show that one
-        # when message is closed send info to backend so its put to user session and marked as read
-
         if cached_data is not None:
             return cached_data
 
