@@ -5,6 +5,7 @@ from typing import Optional
 from django.conf import settings
 from django.db import transaction
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from pytz import UTC
 from rest_framework import fields, status
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import action
@@ -95,6 +96,9 @@ class MaintenanceNotificationSerializer(Serializer):
             raise ValidationError(
                 {'delayed_to': 'Another maintenance is planned at this time. Plan maintenance after %s UTC' % str(
                     proposed_maintenance_time_utc)})
+        if attrs['delayed_to'].tzinfo != UTC:
+            raise ValidationError(dict(delayed_to='Delayed to must be in UTC timezone'))
+
         return super().validate(attrs)
 
     class Meta:
