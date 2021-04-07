@@ -7,7 +7,7 @@ from django.db.models import SET_NULL
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
-from django_project_base.notifications.utils import _utc_now
+from django_project_base.notifications.utils import utc_now
 
 
 class AbstractDjangoProjectBaseMessage(models.Model):
@@ -32,7 +32,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     required_channels = models.CharField(null=True, blank=True, max_length=32)
     sent_channels = models.CharField(null=True, blank=True, max_length=32)
     failed_channels = models.CharField(null=True, blank=True, max_length=32)
-    created_at = models.DateTimeField(default=_utc_now, editable=False, blank=False, null=False)
+    created_at = models.DateTimeField(default=utc_now, editable=False, blank=False, null=False)
     sent_at = models.DateTimeField(null=True, blank=True)
     delayed_to = models.DateTimeField(null=True, blank=True)
     type = models.CharField(null=False, blank=False, max_length=16, choices=[

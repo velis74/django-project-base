@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('required_channels', models.CharField(blank=True, max_length=32, null=True)),
                 ('sent_channels', models.CharField(blank=True, max_length=32, null=True)),
                 ('failed_channels', models.CharField(blank=True, max_length=32, null=True)),
-                ('created_at', models.DateTimeField(default=django_project_base.notifications.utils._utc_now, editable=False)),
+                ('created_at', models.DateTimeField(default=django_project_base.notifications.utils.utc_now, editable=False)),
                 ('sent_at', models.DateTimeField(blank=True, null=True)),
                 ('delayed_to', models.DateTimeField(blank=True, null=True)),
                 ('type', models.CharField(choices=[('maintenance', 'Maintenance'), ('standard', 'Standard')], default='standard', max_length=16)),

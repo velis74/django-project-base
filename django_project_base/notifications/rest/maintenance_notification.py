@@ -19,6 +19,7 @@ from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.base.rest.serializer import Serializer
 from django_project_base.notifications.base.rest.viewset import ViewSet
 from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
+from django_project_base.notifications.utils import utc_now
 
 
 def _is_model_field_null(model: 'Model', field_name: str) -> bool:
@@ -131,7 +132,7 @@ class UsersMaintenanceNotificationViewset(ViewSet):
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         if bool(strtobool(request.query_params.get('current', 'False'))):
-            now: datetime.datetime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+            now: datetime.datetime = utc_now()
             time_delta: datetime.timedelta = datetime.timedelta(
                 seconds=settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY)
             current_maintenance: Optional[DjangoProjectBaseNotification] = next(

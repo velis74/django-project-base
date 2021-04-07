@@ -9,7 +9,7 @@ from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseNotification
-from django_project_base.notifications.utils import _utc_now
+from django_project_base.notifications.utils import utc_now
 
 
 class Notification(ABC, QueableNotificationMixin):
@@ -34,7 +34,7 @@ class Notification(ABC, QueableNotificationMixin):
             self.level = level
         self.locale = locale
         if delay is not None:
-            assert isinstance(delay, datetime) and delay > _utc_now(), "Invalid delay value"
+            assert isinstance(delay, datetime) and delay > utc_now(), "Invalid delay value"
             self._delay = delay
         if type is not None:
             assert isinstance(type, str) and type in [
@@ -98,6 +98,6 @@ class Notification(ABC, QueableNotificationMixin):
             notification.failed_channels = ",".join(list(
                 map(lambda f: str(f), filter(lambda d: d is not None,
                                              map(lambda c: c.id, failed_channels))))) if failed_channels else None
-            notification.sent_at = _utc_now()
+            notification.sent_at = utc_now()
             notification.save()
             notification.recipients.add(*self._recipients)

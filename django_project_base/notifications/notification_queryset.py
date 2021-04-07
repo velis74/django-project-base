@@ -6,6 +6,7 @@ from django.core.cache import cache
 
 from django_project_base.base.queryset_with_cache import QuerySetWithCache
 from django_project_base.notifications.base.enums import NotificationType
+from django_project_base.notifications.utils import utc_now
 
 
 class NotificationQuerySet(QuerySetWithCache):
@@ -29,7 +30,7 @@ class NotificationQuerySet(QuerySetWithCache):
         if cached_data is not None:
             return cached_data
 
-        now: datetime.datetime = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+        now: datetime.datetime = utc_now()
         _data: list = super().filter(
             type=NotificationType.MAINTENANCE.value,
             delayed_to__gt=now,
