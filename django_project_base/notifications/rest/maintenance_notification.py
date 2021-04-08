@@ -82,6 +82,7 @@ class MaintenanceNotificationSerializer(Serializer):
         validated_data['message'] = message
         if not validated_data['type']:
             validated_data['type'] = NotificationType.MAINTENANCE.value
+        # todo: create should be done with API: django_project_base/notifications/base/maintenance_notification.py
         return super().create(validated_data)
 
     # todo: update and partial update, destroy
