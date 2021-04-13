@@ -1,8 +1,10 @@
-from django import get_version
+from pathlib import Path
+
 from django.conf.urls import url
+
 from django.urls import path, include
-from django.views.decorators.cache import cache_page
-from django.views.i18n import JSONCatalog, JavaScriptCatalog
+from django.views import static
+from django.views.i18n import JavaScriptCatalog
 from drf_spectacular.settings import SPECTACULAR_DEFAULTS
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -39,6 +41,14 @@ SPECTACULAR_DEFAULTS['VERSION'] = '0.0.1'
 SPECTACULAR_DEFAULTS['PREPROCESSING_HOOKS'] = [
     'django_project_base.router.filter_rest_documentation_endpoints'
 ]
+documentation_directory: str = str(Path().resolve()) + '/docs/build/'
+
+
+def documentation_view(request: object, path='', document_root=None) -> object:
+    if not path:
+        path = 'index.html'
+    return static.serve(request=request, path=path, document_root=document_root)
+
 
 django_project_base_urlpatterns = [
     path('%s/' % ACCOUNT_URL_PREFIX, include('rest_registration.api.urls')),
@@ -46,4 +56,8 @@ django_project_base_urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    url(
+        r'^docs/(?P<path>.*)$',
+        documentation_view, {'document_root': documentation_directory}, name='docs-files'
+    ),  # url for sphinx
 ]
