@@ -1,3 +1,3 @@
-Documentation `relative link`_.
+Documentation `link`_.
 
-.. _relative link: docs/djangoprojectbase.pdf
+.. _link: docs/djangoprojectbase.pdf
