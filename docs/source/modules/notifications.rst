@@ -16,13 +16,13 @@ Maintenance notifications
 When we have a planned server downtime to upgrade or some such, we need to somehow notifiy the users.
 But before maintenance occurs, the app itself must also notify the users that server will soon
 be down for maintenance.
-This notifications needs to be presented to users 8 hours before planned downtime, 1 hour before planned
+This notifications is presented to users 8 hours before planned downtime, 1 hour before planned
 downtime, 5 minutes before server is going offline.
 
 In order to achieve that we can create a maintenance notification via REST api
-described in `Swagger UI </schema/swagger-ui/#/maintenance-notification/maintenance_notification_create>`_. If we have django project base titlebar UI
-component integrated into our web UI this component will display notifications for planned maintenance in above
-described intervals.
+described in `Swagger UI </schema/swagger-ui/#/maintenance-notification/maintenance_notification_create>`_. If we have
+django project base titlebar UI component integrated into our web UI this component will display
+notifications for planned maintenance in above described intervals.
 
 **Installation**
 
