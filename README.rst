@@ -1,7 +1,3 @@
+Documentation `relative link`_.
 
-`Link to documentation <blob/dpb_96/docs/djangoprojectbase.pdf>`_
-
-
-
-
-
+.. _relative link: docs/djangoprojectbase.pdf
