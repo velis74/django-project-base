@@ -41,3 +41,5 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+/docs/build/
+/docs/.doctrees/

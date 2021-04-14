@@ -1,18 +1,20 @@
-from django.conf import settings
+from pathlib import Path
+
 from django.conf import settings
 from django.conf.urls import url
 from django.urls import path, include
 from django.views.i18n import JavaScriptCatalog
-from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from drf_spectacular.settings import SPECTACULAR_DEFAULTS
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
+from django_project_base.views import documentation_view
 
 
 def filter_rest_documentation_endpoints(endpoints: list) -> list:
@@ -41,6 +43,7 @@ SPECTACULAR_DEFAULTS['VERSION'] = '0.0.1'
 SPECTACULAR_DEFAULTS['PREPROCESSING_HOOKS'] = [
     'django_project_base.router.filter_rest_documentation_endpoints'
 ]
+documentation_directory: str = str(Path().resolve()) + '/docs/build/'
 
 django_project_base_urlpatterns = [
     path('%s/' % ACCOUNT_URL_PREFIX, include('rest_registration.api.urls')),
@@ -48,6 +51,10 @@ django_project_base_urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    url(
+        r'^docs/(?P<path>.*)$',
+        documentation_view, {'document_root': documentation_directory}, name='docs-files'
+    ),  # url for sphinx
 ]
 
 if NOTIFICATIONS_APP_ID in settings.INSTALLED_APPS:
