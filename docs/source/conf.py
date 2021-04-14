@@ -12,9 +12,9 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('../..'))
 from django_project_base import VERSION
-
 
 # -- Project information -----------------------------------------------------
 
@@ -31,7 +31,12 @@ version = VERSION
 extensions = [
     'rst2pdf.pdfbuilder',
 ]
-pdf_documents = [('index', u'djangoprojectbase', u'Django Project Base', u''),]
+pdf_documents = [('index', u'djangoprojectbase', u'Django Project Base', u''), ]
+df_fit_mode = "shrink"
+pdf_use_toc = False
+pdf_use_numbered_links = False
+pdf_fit_background_mode = "scale"
+pdf_use_coverpage = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

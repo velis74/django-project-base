@@ -2,7 +2,7 @@
 %“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
 1 0 obj
 <<
-/F1 2 0 R /F2 3 0 R /F3 35 0 R /F4 36 0 R /F5 37 0 R /F6 38 0 R
+/F1 2 0 R /F2 3 0 R /F3 9 0 R /F4 10 0 R /F5 11 0 R /F6 12 0 R
 >>
 endobj
 2 0 obj
@@ -17,7 +17,7 @@ endobj
 endobj
 4 0 obj
 <<
-/Contents 64 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
+/Contents 38 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 37 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -27,7 +27,7 @@ endobj
 endobj
 5 0 obj
 <<
-/Contents 65 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
+/Contents 39 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 37 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -37,347 +37,205 @@ endobj
 endobj
 6 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 787.0394 0 ] /Rect [ 40.01575 754.0394 282.2857 766.0394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://www.djangoproject.com/)
+>> /Border [ 0 0 0 ] /Rect [ 80.02575 679.8394 110.0457 691.8394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 7 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 787.0394 0 ] /Rect [ 549.6998 754.7894 555.2598 766.7894 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://www.django-rest-framework.org/)
+>> /Border [ 0 0 0 ] /Rect [ 189.5257 679.8394 289.5457 691.8394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 8 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 747.0394 0 ] /Rect [ 60.01575 736.0394 190.0657 748.0394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://github.com/pennersr/django-allauth)
+>> /Border [ 0 0 0 ] /Rect [ 312.8857 679.8394 375.6957 691.8394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 9 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 747.0394 0 ] /Rect [ 549.6998 736.7894 555.2598 748.7894 ] /Subtype /Link /Type /Annot
+/BaseFont /Helvetica-BoldOblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
 >>
 endobj
 10 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 651.8394 0 ] /Rect [ 60.01575 718.0394 176.7257 730.0394 ] /Subtype /Link /Type /Annot
+/BaseFont /Courier /Encoding /WinAnsiEncoding /Name /F4 /Subtype /Type1 /Type /Font
 >>
 endobj
 11 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 651.8394 0 ] /Rect [ 549.6998 718.7894 555.2598 730.7894 ] /Subtype /Link /Type /Annot
+/BaseFont /Courier-Oblique /Encoding /WinAnsiEncoding /Name /F5 /Subtype /Type1 /Type /Font
 >>
 endobj
 12 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 472.6394 0 ] /Rect [ 80.01575 700.0394 127.8157 712.0394 ] /Subtype /Link /Type /Annot
+/BaseFont /Courier-Bold /Encoding /WinAnsiEncoding /Name /F6 /Subtype /Type1 /Type /Font
 >>
 endobj
 13 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 472.6394 0 ] /Rect [ 549.6998 700.7894 555.2598 712.7894 ] /Subtype /Link /Type /Annot
+/Annots [ 6 0 R 7 0 R 8 0 R ] /Contents 40 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 37 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
 >>
 endobj
 14 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 621.4394 0 ] /Rect [ 80.01575 682.0394 116.1457 694.0394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://nodejs.org/en/)
+>> /Border [ 0 0 0 ] /Rect [ 157.2957 256.2394 253.4575 268.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 15 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 621.4394 0 ] /Rect [ 549.6998 682.7894 555.2598 694.7894 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (http://0.0.0.0:8080/)
+>> /Border [ 0 0 0 ] /Rect [ 386.2657 244.2394 481.7025 256.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 16 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 445.0394 0 ] /Rect [ 80.01575 664.0394 153.3657 676.0394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://vuejs.org/)
+>> /Border [ 0 0 0 ] /Rect [ 361.2257 214.2394 437.1413 226.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 17 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 445.0394 0 ] /Rect [ 549.6998 664.7894 555.2598 676.7894 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://vuejs.org/v2/guide/components.html)
+>> /Border [ 0 0 0 ] /Rect [ 182.3057 202.2394 371.9131 214.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 18 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 412.2394 0 ] /Rect [ 100.0157 646.0394 128.9157 658.0394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (http://127.0.0.1:8000)
+>> /Border [ 0 0 0 ] /Rect [ 40.01575 160.2394 131.7557 172.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 19 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 412.2394 0 ] /Rect [ 549.6998 646.7894 555.2598 658.7894 ] /Subtype /Link /Type /Annot
+/Annots [ 14 0 R 15 0 R 16 0 R 17 0 R 18 0 R ] /Contents 41 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 37 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
 >>
 endobj
 20 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 279.8394 0 ] /Rect [ 100.0157 628.0394 166.7057 640.0394 ] /Subtype /Link /Type /Annot
+/Contents 42 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 37 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 21 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 279.8394 0 ] /Rect [ 549.6998 628.7894 555.2598 640.7894 ] /Subtype /Link /Type /Annot
+/Contents 43 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 37 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 22 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 787.0394 0 ] /Rect [ 80.01575 610.0394 102.2457 622.0394 ] /Subtype /Link /Type /Annot
+/Outlines 24 0 R /PageLabels 44 0 R /PageMode /UseNone /Pages 37 0 R /Type /Catalog
 >>
 endobj
 23 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 787.0394 0 ] /Rect [ 549.6998 610.7894 555.2598 622.7894 ] /Subtype /Link /Type /Annot
+/Author () /CreationDate (D:20210414123621-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210414123621-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+  /Subject (\(unspecified\)) /Title () /Trapped /False
 >>
 endobj
 24 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 441.4394 0 ] /Rect [ 80.01575 592.0394 131.1357 604.0394 ] /Subtype /Link /Type /Annot
+/Count 16 /First 25 0 R /Last 25 0 R /Type /Outlines
 >>
 endobj
 25 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 441.4394 0 ] /Rect [ 549.6998 592.7894 555.2598 604.7894 ] /Subtype /Link /Type /Annot
+/Count 11 /Dest [ 13 0 R /XYZ 40.01575 799.0394 0 ] /First 26 0 R /Last 27 0 R /Parent 24 0 R /Title (Welcome to Django Project Base\220s documentation!)
 >>
 endobj
 26 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 179.8394 0 ] /Rect [ 80.01575 574.0394 117.8057 586.0394 ] /Subtype /Link /Type /Annot
+/Dest [ 13 0 R /XYZ 40.01575 759.0394 0 ] /Next 27 0 R /Parent 25 0 R /Title (What is django-project-base?)
 >>
 endobj
 27 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 179.8394 0 ] /Rect [ 549.6998 574.7894 555.2598 586.7894 ] /Subtype /Link /Type /Annot
+/Count 9 /Dest [ 13 0 R /XYZ 40.01575 663.8394 0 ] /First 28 0 R /Last 35 0 R /Parent 25 0 R /Prev 26 0 R 
+  /Title (Why django-project-base?)
 >>
 endobj
 28 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 129.0394 0 ] /Rect [ 100.0157 556.0394 163.3857 568.0394 ] /Subtype /Link /Type /Annot
+/Dest [ 13 0 R /XYZ 40.01575 484.6394 0 ] /Next 29 0 R /Parent 27 0 R /Title (Installation)
 >>
 endobj
 29 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 46 0 R /XYZ 40.01575 129.0394 0 ] /Rect [ 549.6998 556.7894 555.2598 568.7894 ] /Subtype /Link /Type /Annot
+/Dest [ 19 0 R /XYZ 40.01575 684.2394 0 ] /Next 30 0 R /Parent 27 0 R /Prev 28 0 R /Title (Settings)
 >>
 endobj
 30 0 obj
 <<
-/Annots [ 6 0 R 7 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R 15 0 R 
-  16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R 23 0 R 24 0 R 25 0 R 
-  26 0 R 27 0 R 28 0 R 29 0 R ] /Contents 66 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
+/Count 2 /Dest [ 19 0 R /XYZ 40.01575 483.8394 0 ] /First 31 0 R /Last 32 0 R /Next 33 0 R /Parent 27 0 R 
+  /Prev 29 0 R /Title (Javascript Client)
 >>
 endobj
 31 0 obj
 <<
-/Contents 67 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/Dest [ 19 0 R /XYZ 40.01575 451.0394 0 ] /Next 32 0 R /Parent 30 0 R /Title (Usage)
 >>
 endobj
 32 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (https://www.djangoproject.com/)
->> /Border [ 0 0 0 ] /Rect [ 80.02575 667.8394 110.0457 679.8394 ] /Subtype /Link /Type /Annot
+/Dest [ 19 0 R /XYZ 40.01575 318.6394 0 ] /Parent 30 0 R /Prev 31 0 R /Title (For developers)
 >>
 endobj
 33 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (https://www.django-rest-framework.org/)
->> /Border [ 0 0 0 ] /Rect [ 189.5257 667.8394 289.5457 679.8394 ] /Subtype /Link /Type /Annot
+/Dest [ 19 0 R /XYZ 40.01575 78.23937 0 ] /Next 34 0 R /Parent 27 0 R /Prev 30 0 R /Title (Tags)
 >>
 endobj
 34 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (https://github.com/pennersr/django-allauth)
->> /Border [ 0 0 0 ] /Rect [ 312.8857 667.8394 375.6957 679.8394 ] /Subtype /Link /Type /Annot
+/Dest [ 20 0 R /XYZ 40.01575 488.2394 0 ] /Next 35 0 R /Parent 27 0 R /Prev 33 0 R /Title (Middleware)
 >>
 endobj
 35 0 obj
 <<
-/BaseFont /Helvetica-BoldOblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
+/Count 1 /Dest [ 20 0 R /XYZ 40.01575 226.6394 0 ] /First 36 0 R /Last 36 0 R /Parent 27 0 R /Prev 34 0 R 
+  /Title (Modules)
 >>
 endobj
 36 0 obj
 <<
-/BaseFont /Courier /Encoding /WinAnsiEncoding /Name /F4 /Subtype /Type1 /Type /Font
+/Dest [ 20 0 R /XYZ 40.01575 175.8394 0 ] /Parent 35 0 R /Title (Authentication)
 >>
 endobj
 37 0 obj
 <<
-/BaseFont /Courier-Oblique /Encoding /WinAnsiEncoding /Name /F5 /Subtype /Type1 /Type /Font
+/Count 6 /Kids [ 4 0 R 5 0 R 13 0 R 19 0 R 20 0 R 21 0 R ] /Type /Pages
 >>
 endobj
 38 0 obj
-<<
-/BaseFont /Courier-Bold /Encoding /WinAnsiEncoding /Name /F6 /Subtype /Type1 /Type /Font
->>
-endobj
-39 0 obj
-<<
-/Annots [ 32 0 R 33 0 R 34 0 R ] /Contents 68 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
->>
-endobj
-40 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (https://nodejs.org/en/)
->> /Border [ 0 0 0 ] /Rect [ 157.2957 217.4394 253.4575 229.4394 ] /Subtype /Link /Type /Annot
->>
-endobj
-41 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (http://0.0.0.0:8080/)
->> /Border [ 0 0 0 ] /Rect [ 386.2657 205.4394 481.7025 217.4394 ] /Subtype /Link /Type /Annot
->>
-endobj
-42 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (https://vuejs.org/)
->> /Border [ 0 0 0 ] /Rect [ 361.2257 175.4394 437.1413 187.4394 ] /Subtype /Link /Type /Annot
->>
-endobj
-43 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (https://vuejs.org/v2/guide/components.html)
->> /Border [ 0 0 0 ] /Rect [ 182.3057 163.4394 371.9131 175.4394 ] /Subtype /Link /Type /Annot
->>
-endobj
-44 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (http://127.0.0.1:8000)
->> /Border [ 0 0 0 ] /Rect [ 40.01575 121.4394 131.7557 133.4394 ] /Subtype /Link /Type /Annot
->>
-endobj
-45 0 obj
-<<
-/Annots [ 40 0 R 41 0 R 42 0 R 43 0 R 44 0 R ] /Contents 69 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
->>
-endobj
-46 0 obj
-<<
-/Contents 70 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
-endobj
-47 0 obj
-<<
-/Contents 71 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 63 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
->>
-endobj
-48 0 obj
-<<
-/Outlines 50 0 R /PageLabels 72 0 R /PageMode /UseNone /Pages 63 0 R /Type /Catalog
->>
-endobj
-49 0 obj
-<<
-/Author () /CreationDate (D:20210414121823-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210414121823-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
-  /Subject (\(unspecified\)) /Title () /Trapped /False
->>
-endobj
-50 0 obj
-<<
-/Count 16 /First 51 0 R /Last 51 0 R /Type /Outlines
->>
-endobj
-51 0 obj
-<<
-/Count 11 /Dest [ 39 0 R /XYZ 40.01575 787.0394 0 ] /First 52 0 R /Last 53 0 R /Parent 50 0 R /Title (Welcome to Django Project Base\220s documentation!)
->>
-endobj
-52 0 obj
-<<
-/Dest [ 39 0 R /XYZ 40.01575 747.0394 0 ] /Next 53 0 R /Parent 51 0 R /Title (What is django-project-base?)
->>
-endobj
-53 0 obj
-<<
-/Count 9 /Dest [ 39 0 R /XYZ 40.01575 651.8394 0 ] /First 54 0 R /Last 61 0 R /Parent 51 0 R /Prev 52 0 R 
-  /Title (Why django-project-base?)
->>
-endobj
-54 0 obj
-<<
-/Dest [ 39 0 R /XYZ 40.01575 472.6394 0 ] /Next 55 0 R /Parent 53 0 R /Title (Installation)
->>
-endobj
-55 0 obj
-<<
-/Dest [ 45 0 R /XYZ 40.01575 621.4394 0 ] /Next 56 0 R /Parent 53 0 R /Prev 54 0 R /Title (Settings)
->>
-endobj
-56 0 obj
-<<
-/Count 2 /Dest [ 45 0 R /XYZ 40.01575 445.0394 0 ] /First 57 0 R /Last 58 0 R /Next 59 0 R /Parent 53 0 R 
-  /Prev 55 0 R /Title (Javascript Client)
->>
-endobj
-57 0 obj
-<<
-/Dest [ 45 0 R /XYZ 40.01575 412.2394 0 ] /Next 58 0 R /Parent 56 0 R /Title (Usage)
->>
-endobj
-58 0 obj
-<<
-/Dest [ 45 0 R /XYZ 40.01575 279.8394 0 ] /Parent 56 0 R /Prev 57 0 R /Title (For developers)
->>
-endobj
-59 0 obj
-<<
-/Dest [ 46 0 R /XYZ 40.01575 787.0394 0 ] /Next 60 0 R /Parent 53 0 R /Prev 56 0 R /Title (Tags)
->>
-endobj
-60 0 obj
-<<
-/Dest [ 46 0 R /XYZ 40.01575 441.4394 0 ] /Next 61 0 R /Parent 53 0 R /Prev 59 0 R /Title (Middleware)
->>
-endobj
-61 0 obj
-<<
-/Count 1 /Dest [ 46 0 R /XYZ 40.01575 179.8394 0 ] /First 62 0 R /Last 62 0 R /Parent 53 0 R /Prev 60 0 R 
-  /Title (Modules)
->>
-endobj
-62 0 obj
-<<
-/Dest [ 46 0 R /XYZ 40.01575 129.0394 0 ] /Parent 61 0 R /Title (Authentication)
->>
-endobj
-63 0 obj
-<<
-/Count 8 /Kids [ 4 0 R 5 0 R 30 0 R 31 0 R 39 0 R 45 0 R 46 0 R 47 0 R ] /Type /Pages
->>
-endobj
-64 0 obj
 <<
 /Length 754
 >>
@@ -431,7 +289,7 @@ Q
  
 endstream
 endobj
-65 0 obj
+39 0 obj
 <<
 /Length 75
 >>
@@ -443,9 +301,9 @@ Q
  
 endstream
 endobj
-66 0 obj
+40 0 obj
 <<
-/Length 2994
+/Length 10095
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -458,215 +316,11 @@ q
 n -10 0 525.2441 30 re B*
 Q
 q
-BT 1 0 0 1 0 4 Tm 24 TL /F2 20 Tf .12549 .262745 .360784 rg (Contents) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 553.0394 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 201 cm
-q
-BT 1 0 0 1 0 2 Tm 12 TL /F2 10 Tf 0 0 .501961 rg (Welcome to Django Project Base\222s documentation!) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 201 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL 66.44 0 Td (1) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 183 cm
-q
-BT 1 0 0 1 20 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (What is django-project-base?) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 183 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (1) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 165 cm
-q
-BT 1 0 0 1 20 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Why django-project-base?) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 165 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (1) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 147 cm
-q
-BT 1 0 0 1 40 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Installation) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 147 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (1) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 129 cm
-q
-BT 1 0 0 1 40 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Settings) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 129 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (2) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 111 cm
-q
-BT 1 0 0 1 40 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Javascript Client) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 111 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (2) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 93 cm
-q
-BT 1 0 0 1 60 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Usage) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 93 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (2) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 75 cm
-q
-BT 1 0 0 1 60 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (For developers) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 75 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (2) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 57 cm
-q
-BT 1 0 0 1 40 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Tags) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 57 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (3) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 39 cm
-q
-BT 1 0 0 1 40 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Middleware) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 39 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (3) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 21 cm
-q
-BT 1 0 0 1 40 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Modules) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 21 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (3) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-1 0 0 1 0 3 cm
-q
-BT 1 0 0 1 60 2 Tm 12 TL /F1 10 Tf 0 0 .501961 rg (Authentication) Tj T* ET
-Q
-Q
-q
-1 0 0 1 443.2441 3 cm
-q
-0 0 .501961 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 66.44 0 Td (3) Tj T* -66.44 0 Td ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 40.01575 553.0394 cm
-Q
-q
-1 0 0 1 40.01575 553.0394 cm
-Q
- 
-endstream
-endobj
-67 0 obj
-<<
-/Length 75
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 799.0394 cm
-Q
- 
-endstream
-endobj
-68 0 obj
-<<
-/Length 9913
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 763.0394 cm
-q
-.8 .8 .8 RG
-.3 w
-.94902 .94902 .94902 rg
-n -10 0 525.2441 30 re B*
-Q
-q
 BT 1 0 0 1 0 4 Tm 24 TL /F2 20 Tf .12549 .262745 .360784 rg (Welcome to Django Project Base\222s documentation!) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 727.8394 cm
+1 0 0 1 40.01575 739.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -678,20 +332,20 @@ BT 1 0 0 1 0 3.2 Tm 19.2 TL /F2 16 Tf .12549 .262745 .360784 rg (What is django-
 Q
 Q
 q
-1 0 0 1 40.01575 685.8394 cm
+1 0 0 1 40.01575 697.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL .721417 Tw (We start with a project. Everything revolves around it: users, roles, permissions, tags, etc. Everything belongs to a) Tj T* 0 Tw .715433 Tw (project first, then to database. This project makes it easy to work on that premise. At the same time it integrates a) Tj T* 0 Tw (few basic operations that you need in every project so that you don\222t have to do them over and over again.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 667.8394 cm
+1 0 0 1 40.01575 679.8394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (This is a ) Tj 0 0 .501961 rg (django) Tj 0 0 0 rg ( library, based on ) Tj 0 0 .501961 rg (django-rest-framework) Tj 0 0 0 rg ( with ) Tj 0 0 .501961 rg (django-allauth) Tj 0 0 0 rg ( integration.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 632.6394 cm
+1 0 0 1 40.01575 644.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -703,20 +357,20 @@ BT 1 0 0 1 0 3.2 Tm 19.2 TL /F2 16 Tf .12549 .262745 .360784 rg (Why django-proj
 Q
 Q
 q
-1 0 0 1 40.01575 614.6394 cm
+1 0 0 1 40.01575 626.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Functionalities provided:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 608.6394 cm
+1 0 0 1 40.01575 620.6394 cm
+Q
+q
+1 0 0 1 40.01575 620.6394 cm
 Q
 q
 1 0 0 1 40.01575 608.6394 cm
-Q
-q
-1 0 0 1 40.01575 596.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -739,10 +393,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 590.6394 cm
+1 0 0 1 40.01575 602.6394 cm
 Q
 q
-1 0 0 1 40.01575 578.6394 cm
+1 0 0 1 40.01575 590.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -765,10 +419,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 572.6394 cm
+1 0 0 1 40.01575 584.6394 cm
 Q
 q
-1 0 0 1 40.01575 560.6394 cm
+1 0 0 1 40.01575 572.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -791,10 +445,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 554.6394 cm
+1 0 0 1 40.01575 566.6394 cm
 Q
 q
-1 0 0 1 40.01575 542.6394 cm
+1 0 0 1 40.01575 554.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -817,10 +471,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 536.6394 cm
+1 0 0 1 40.01575 548.6394 cm
 Q
 q
-1 0 0 1 40.01575 524.6394 cm
+1 0 0 1 40.01575 536.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -843,10 +497,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 518.6394 cm
+1 0 0 1 40.01575 530.6394 cm
 Q
 q
-1 0 0 1 40.01575 506.6394 cm
+1 0 0 1 40.01575 518.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -868,10 +522,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 500.6394 cm
+1 0 0 1 40.01575 512.6394 cm
 Q
 q
-1 0 0 1 40.01575 488.6394 cm
+1 0 0 1 40.01575 500.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -893,10 +547,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 488.6394 cm
+1 0 0 1 40.01575 500.6394 cm
 Q
 q
-1 0 0 1 40.01575 455.8394 cm
+1 0 0 1 40.01575 467.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -908,14 +562,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Installation) T
 Q
 Q
 q
-1 0 0 1 40.01575 437.8394 cm
+1 0 0 1 40.01575 449.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Install the package:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 419.0394 cm
+1 0 0 1 40.01575 431.0394 cm
 q
 q
 q
@@ -935,13 +589,13 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 399.0394 cm
+1 0 0 1 40.01575 411.0394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Extend the BaseProject & BaseProfile model:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 296.2394 cm
+1 0 0 1 40.01575 308.2394 cm
 q
 q
 q
@@ -1002,14 +656,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 276.2394 cm
+1 0 0 1 40.01575 288.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Then also make sure your models are loaded instead of django-project-base models:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 65.43937 cm
+1 0 0 1 40.01575 53.43937 cm
 q
 q
 q
@@ -1018,119 +672,77 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 210 re B*
+n -4 0 514.4441 234 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 192 138 12 re f*
+n 0 216 138 12 re f*
 .933333 1 .8 rg
-n 0 168 198 12 re f*
+n 0 192 198 12 re f*
 .933333 1 .8 rg
-n 204 168 6 12 re f*
+n 204 192 6 12 re f*
 1 .941176 .941176 rg
-n 216 168 102 12 re f*
+n 216 192 102 12 re f*
 .933333 1 .8 rg
-n 0 156 198 12 re f*
+n 0 180 198 12 re f*
 .933333 1 .8 rg
-n 204 156 6 12 re f*
+n 204 180 6 12 re f*
 1 .941176 .941176 rg
-n 216 156 102 12 re f*
+n 216 180 102 12 re f*
 .933333 1 .8 rg
-n 0 132 78 12 re f*
+n 0 156 78 12 re f*
 .933333 1 .8 rg
-n 0 120 24 12 re f*
+n 0 144 24 12 re f*
 .933333 1 .8 rg
-n 30 120 156 12 re f*
+n 30 144 156 12 re f*
 .933333 1 .8 rg
-n 192 120 36 12 re f*
+n 192 144 36 12 re f*
 .933333 1 .8 rg
-n 234 120 186 12 re f*
+n 234 144 186 12 re f*
 .933333 1 .8 rg
-n 0 108 66 12 re f*
+n 0 132 66 12 re f*
 .933333 1 .8 rg
-n 72 108 6 12 re f*
+n 72 132 6 12 re f*
 .933333 1 .8 rg
-n 84 108 6 12 re f*
+n 84 132 6 12 re f*
 .933333 1 .8 rg
-n 96 108 18 12 re f*
+n 96 132 18 12 re f*
 .933333 1 .8 rg
-n 120 108 6 12 re f*
+n 120 132 6 12 re f*
 .933333 1 .8 rg
-n 132 108 6 12 re f*
+n 132 132 6 12 re f*
 .933333 1 .8 rg
-n 144 108 186 12 re f*
+n 144 132 186 12 re f*
 .933333 1 .8 rg
-n 0 84 18 12 re f*
+n 0 108 18 12 re f*
 .933333 1 .8 rg
-n 24 84 12 12 re f*
+n 24 108 12 12 re f*
 .933333 1 .8 rg
-n 42 84 84 12 re f*
+n 42 108 84 12 re f*
 1 .941176 .941176 rg
-n 6 72 114 12 re f*
+n 6 96 114 12 re f*
 .933333 1 .8 rg
-n 120 72 6 12 re f*
+n 120 96 6 12 re f*
 1 .941176 .941176 rg
-n 6 60 126 12 re f*
+n 6 84 126 12 re f*
 .933333 1 .8 rg
-n 132 60 6 12 re f*
+n 132 84 6 12 re f*
 1 .941176 .941176 rg
-n 6 48 102 12 re f*
+n 6 72 102 12 re f*
 .933333 1 .8 rg
-n 108 48 6 12 re f*
+n 108 72 6 12 re f*
 .933333 1 .8 rg
-n 0 24 18 12 re f*
+n 0 48 18 12 re f*
 .933333 1 .8 rg
-n 18 24 6 12 re f*
+n 18 48 6 12 re f*
 .933333 1 .8 rg
-n 12 12 84 12 re f*
+n 12 36 84 12 re f*
 .933333 1 .8 rg
-n 102 12 6 12 re f*
+n 102 36 6 12 re f*
 .933333 1 .8 rg
-n 114 12 6 12 re f*
+n 114 36 6 12 re f*
 .933333 1 .8 rg
-n 6 0 90 12 re f*
-BT 1 0 0 1 0 194 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myproject/settings.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (DJANGO_PROJECT_BASE_PROJECT_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProject') Tj 0 0 0 rg  T* (DJANGO_PROJECT_BASE_PROFILE_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProfile') Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# urls.py add) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.router) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj ( ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg ( ) Tj (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T*  T* (Add) Tj ( ) Tj (to) Tj ( ) Tj (INSTALLED_APPS) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('rest_registration') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('django_project_base') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular') Tj 0 0 0 rg (,) Tj  T*  T* (Add) Tj (:) Tj  T* (  ) Tj (REST_FRAMEWORK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ({) Tj  T* ( ) Tj /F5 10 Tf .501961 .501961 .501961 rg (# YOUR SETTINGS) Tj /F4 10 Tf 0 0 0 rg  T* ET
-Q
-Q
-Q
-Q
-Q
-q
-1 0 0 1 34.01575 807.2126 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Welcome to Django Project Base\222s documentation!) Tj T* ET
-Q
-Q
-q
-1 0 0 1 34.01575 22.67717 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (1) Tj T* ET
-Q
-Q
- 
-endstream
-endobj
-69 0 obj
-<<
-/Length 9060
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 756.2394 cm
-q
-q
-q
-1 0 0 1 4.4 .4 cm
-q
-.666667 .8 .6 RG
-.3 w
-.933333 1 .8 rg
-n -4 0 514.4441 30 re B*
-Q
-q
+n 6 24 90 12 re f*
 1 .941176 .941176 rg
 n 6 12 132 12 re f*
 .933333 1 .8 rg
@@ -1141,17 +753,26 @@ n 150 12 216 12 re f*
 n 366 12 6 12 re f*
 .933333 1 .8 rg
 n 6 0 6 12 re f*
-BT 1 0 0 1 0 14 Tm 12 TL /F4 10 Tf 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('DEFAULT_SCHEMA_CLASS') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular.openapi.AutoSchema') Tj 0 0 0 rg (,) Tj  T* ( ) Tj (}) Tj T* ET
+BT 1 0 0 1 0 218 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myproject/settings.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (DJANGO_PROJECT_BASE_PROJECT_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProject') Tj 0 0 0 rg  T* (DJANGO_PROJECT_BASE_PROFILE_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProfile') Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# urls.py add) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.router) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj ( ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg ( ) Tj (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T*  T* (Add) Tj ( ) Tj (to) Tj ( ) Tj (INSTALLED_APPS) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('rest_registration') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('django_project_base') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular') Tj 0 0 0 rg (,) Tj  T*  T* (Add) Tj (:) Tj  T* (  ) Tj (REST_FRAMEWORK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ({) Tj  T* ( ) Tj /F5 10 Tf .501961 .501961 .501961 rg (# YOUR SETTINGS) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj .729412 .129412 .129412 rg ('DEFAULT_SCHEMA_CLASS') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular.openapi.AutoSchema') Tj 0 0 0 rg (,) Tj  T* ( ) Tj (}) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 736.2394 cm
+1 0 0 1 40.01575 42.85039 cm
 Q
+ 
+endstream
+endobj
+41 0 obj
+<<
+/Length 8650
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 643.4394 cm
+1 0 0 1 40.01575 706.2394 cm
 q
 1 .894118 .894118 rg
 n 0 92.8 515.2441 -92.8 re f*
@@ -1185,10 +806,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 637.4394 cm
+1 0 0 1 40.01575 700.2394 cm
 Q
 q
-1 0 0 1 40.01575 604.6394 cm
+1 0 0 1 40.01575 667.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1200,7 +821,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Settings) Tj T*
 Q
 Q
 q
-1 0 0 1 40.01575 567.8394 cm
+1 0 0 1 40.01575 606.6394 cm
 q
 q
 q
@@ -1209,74 +830,76 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 742 30 re B*
+n -4 0 514.4441 54 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 12 276 12 re f*
+n 0 36 276 12 re f*
 .933333 1 .8 rg
-n 276 12 6 12 re f*
+n 276 36 6 12 re f*
 .933333 1 .8 rg
-n 288 12 6 12 re f*
+n 288 36 6 12 re f*
 1 .941176 .941176 rg
-n 294 12 54 12 re f*
+n 24 24 54 12 re f*
 .933333 1 .8 rg
-n 348 12 6 12 re f*
+n 78 24 6 12 re f*
 .933333 1 .8 rg
-n 360 12 6 12 re f*
+n 90 24 6 12 re f*
 1 .941176 .941176 rg
-n 366 12 72 12 re f*
+n 96 24 72 12 re f*
 .933333 1 .8 rg
-n 438 12 6 12 re f*
+n 168 24 6 12 re f*
 1 .941176 .941176 rg
-n 450 12 132 12 re f*
+n 180 24 132 12 re f*
 .933333 1 .8 rg
-n 582 12 6 12 re f*
+n 312 24 6 12 re f*
 1 .941176 .941176 rg
-n 594 12 60 12 re f*
+n 324 24 60 12 re f*
 .933333 1 .8 rg
-n 654 12 6 12 re f*
+n 384 24 6 12 re f*
 1 .941176 .941176 rg
-n 666 12 60 12 re f*
+n 396 24 60 12 re f*
 .933333 1 .8 rg
-n 726 12 12 12 re f*
+n 456 24 12 12 re f*
 1 .941176 .941176 rg
-n 48 0 60 12 re f*
+n 24 12 60 12 re f*
 .933333 1 .8 rg
-n 108 0 6 12 re f*
+n 84 12 6 12 re f*
 .933333 1 .8 rg
-n 120 0 6 12 re f*
+n 96 12 6 12 re f*
 1 .941176 .941176 rg
-n 126 0 72 12 re f*
+n 102 12 72 12 re f*
 .933333 1 .8 rg
-n 198 0 6 12 re f*
+n 174 12 6 12 re f*
 1 .941176 .941176 rg
-n 210 0 108 12 re f*
+n 186 12 108 12 re f*
 .933333 1 .8 rg
-n 318 0 6 12 re f*
+n 294 12 6 12 re f*
 1 .941176 .941176 rg
-n 330 0 60 12 re f*
+n 306 12 60 12 re f*
 .933333 1 .8 rg
-n 390 0 6 12 re f*
+n 366 12 6 12 re f*
 1 .941176 .941176 rg
-n 402 0 66 12 re f*
+n 378 12 66 12 re f*
 .933333 1 .8 rg
-n 468 0 12 12 re f*
-BT 1 0 0 1 0 14 Tm 12 TL /F4 10 Tf 0 0 0 rg (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES) Tj (:) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('project') Tj 0 0 0 rg (:) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('value_name') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('current_project_slug') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('url_part') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('project-') Tj 0 0 0 rg (},) Tj  T* (        ) Tj .729412 .129412 .129412 rg ('language') Tj 0 0 0 rg (:) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('value_name') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('current_language') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('url_part') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('language-') Tj 0 0 0 rg (}}) Tj T* ET
+n 444 12 6 12 re f*
+.933333 1 .8 rg
+n 0 0 6 12 re f*
+BT 1 0 0 1 0 38 Tm 12 TL /F4 10 Tf 0 0 0 rg (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES) Tj (:) Tj ( ) Tj ({) Tj  T* (    ) Tj .729412 .129412 .129412 rg ('project') Tj 0 0 0 rg (:) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('value_name') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('current_project_slug') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('url_part') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('project-') Tj 0 0 0 rg (},) Tj  T* (    ) Tj .729412 .129412 .129412 rg ('language') Tj 0 0 0 rg (:) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('value_name') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('current_language') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('url_part') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('language-') Tj 0 0 0 rg (}) Tj  T* (}) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 511.8394 cm
+1 0 0 1 40.01575 550.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.32745 Tw (This setting defines dictionary of attribute names on request object. For e.g. project info is set on request object) Tj T* 0 Tw 3.752008 Tw (under propery current_project_slug. Language information is set on request objects under property current) Tj T* 0 Tw .678005 Tw (language. Is language or project is given in request path like: language-EN, then url_part settings is found and EN) Tj T* 0 Tw (string is taken as language value.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 493.0394 cm
+1 0 0 1 40.01575 531.8394 cm
 q
 q
 q
@@ -1301,14 +924,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 461.0394 cm
+1 0 0 1 40.01575 499.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .994952 Tw (When creating models with slug field they should be named with this setting value. This enables that we can use) Tj T* 0 Tw (object slug instead of object pk when making api requests.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 428.2394 cm
+1 0 0 1 40.01575 467.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1320,7 +943,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Javascript Clie
 Q
 Q
 q
-1 0 0 1 40.01575 397.8394 cm
+1 0 0 1 40.01575 436.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1332,40 +955,40 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Usage) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 379.8394 cm
+1 0 0 1 40.01575 418.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Look at django_project_base/templates/index.html for examples.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 361.8394 cm
+1 0 0 1 40.01575 400.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (API Documentation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 343.8394 cm
+1 0 0 1 40.01575 382.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Swagger UI is accessible on /schema/swagger-ui/ url by running example project.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 325.8394 cm
+1 0 0 1 40.01575 364.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F2 10 Tf 0 0 0 rg (Translations) Tj /F1 10 Tf (:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 295.8394 cm
+1 0 0 1 40.01575 334.6394 cm
 q
 BT 1 0 0 1 0 14 Tm .505881 Tw 12 TL /F1 10 Tf 0 0 0 rg (If you want to use your Django translations in your app include <) Tj (script src=\224{% url \221javascript-catalog\222 %}\224) Tj (>) Tj (<) Tj (/script) Tj (>) Tj T* 0 Tw (in your html document header.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 265.4394 cm
+1 0 0 1 40.01575 304.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1377,38 +1000,38 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (For developers)
 Q
 Q
 q
-1 0 0 1 40.01575 235.4394 cm
+1 0 0 1 40.01575 274.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .760742 Tw (For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2) Tj T* 0 Tw (places.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 193.4394 cm
+1 0 0 1 40.01575 232.2394 cm
 q
 BT 1 0 0 1 0 26 Tm .554358 Tw 12 TL /F1 10 Tf 0 0 0 rg (For JS development go to ) Tj 0 0 .501961 rg (https://nodejs.org/en/) Tj 0 0 0 rg ( and install latest stable version of nodejs and npm. In project base) Tj T* 0 Tw .80245 Tw (directory run npm install. To run a development server run npm run dev \(go to ) Tj 0 0 .501961 rg (http://0.0.0.0:8080/) Tj 0 0 0 rg (\). To generate a) Tj T* 0 Tw (build run npm run build.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 151.4394 cm
+1 0 0 1 40.01575 190.2394 cm
 q
 BT 1 0 0 1 0 26 Tm .212131 Tw 12 TL /F1 10 Tf 0 0 0 rg (JS code is present in src directory. For web UI components library vuejs\() Tj 0 0 .501961 rg (https://vuejs.org/) Tj 0 0 0 rg (\) is used. Components are) Tj T* 0 Tw -0.120656 Tw (built as Vue global components\() Tj 0 0 .501961 rg (https://vuejs.org/v2/guide/components.html) Tj 0 0 0 rg (\) with x-templates. Templates are present) Tj T* 0 Tw (in templates directory.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 109.4394 cm
+1 0 0 1 40.01575 148.2394 cm
 q
 BT 1 0 0 1 0 26 Tm 5.003392 Tw 12 TL /F1 10 Tf 0 0 0 rg (When developing webpack development server expects that service which provides data runs on host) Tj T* 0 Tw 1.323392 Tw 0 0 .501961 rg (http://127.0.0.1:8000) Tj 0 0 0 rg (. This can be changed in webpack.config.js file. For running example django project prepare) Tj T* 0 Tw (python environment and run \(run in repository root\):) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 103.4394 cm
+1 0 0 1 40.01575 142.2394 cm
 Q
 q
-1 0 0 1 40.01575 103.4394 cm
+1 0 0 1 40.01575 142.2394 cm
 Q
 q
-1 0 0 1 40.01575 91.43937 cm
+1 0 0 1 40.01575 130.2394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -1431,10 +1054,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 85.43937 cm
+1 0 0 1 40.01575 124.2394 cm
 Q
 q
-1 0 0 1 40.01575 73.43937 cm
+1 0 0 1 40.01575 112.2394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -1457,40 +1080,17 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 73.43937 cm
+1 0 0 1 40.01575 112.2394 cm
 Q
 q
-1 0 0 1 40.01575 55.43937 cm
+1 0 0 1 40.01575 94.23937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Try logging in with user \223miha\224, pass \223mihamiha\224.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 34.01575 807.2126 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Welcome to Django Project Base\222s documentation!) Tj T* ET
-Q
-Q
-q
-1 0 0 1 34.01575 22.67717 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (2) Tj T* ET
-Q
-Q
- 
-endstream
-endobj
-70 0 obj
-<<
-/Length 15802
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 770.2394 cm
+1 0 0 1 40.01575 61.43937 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1502,14 +1102,23 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Tags) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 752.2394 cm
+1 0 0 1 40.01575 43.43937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Django project base supports tags usage. See example implementation bellow.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+42 0 obj
+<<
+/Length 15595
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 457.4394 cm
+1 0 0 1 40.01575 504.2394 cm
 q
 q
 q
@@ -1870,7 +1479,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 424.6394 cm
+1 0 0 1 40.01575 471.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1882,28 +1491,28 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Middleware) Tj 
 Q
 Q
 q
-1 0 0 1 40.01575 406.6394 cm
+1 0 0 1 40.01575 453.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (*Project Middleware*) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 316.6394 cm
+1 0 0 1 40.01575 363.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 74 Tm /F1 10 Tf 12 TL 4.447756 Tw (ProjectMiddleware: If you wan\222t to set current project which is selected to request object you can use) Tj T* 0 Tw 4.408776 Tw (ProjectMiddleware which should be placed to start of MIDDLEWARE list in settings.py. Middleware sets) Tj T* 0 Tw 2.864871 Tw (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting dict values to request object. Default) Tj T* 0 Tw 17.90882 Tw (value for DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting is {\221project\222:) Tj T* 0 Tw 1.238233 Tw (\221current_project_slug\222, \221language\222: \221current_language\222}. This means request will have current_project_slug attribute) Tj T* 0 Tw 1.244358 Tw (which will have value set to current project slug and request will have current_language attribute which will have) Tj T* 0 Tw (value set to current language set. If project or language cannnot be determined its value is set to None.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 274.6394 cm
+1 0 0 1 40.01575 321.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.313864 Tw (To set current project to ajax requests \221Current-Project\222 header should be used: \221Current-Project\222: \221current project) Tj T* 0 Tw 22.34441 Tw (slug\222. Current slug can also be determined from request path. See) Tj T* 0 Tw (DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PART setting description in setting section.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 195.8394 cm
+1 0 0 1 40.01575 242.6394 cm
 q
 q
 q
@@ -1938,7 +1547,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 163.0394 cm
+1 0 0 1 40.01575 209.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1950,14 +1559,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Modules) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 145.0394 cm
+1 0 0 1 40.01575 191.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (The page contains all information about Django Project Base modules:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 114.6394 cm
+1 0 0 1 40.01575 161.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1969,58 +1578,37 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Authentication)
 Q
 Q
 q
-1 0 0 1 40.01575 96.63937 cm
+1 0 0 1 40.01575 143.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (*Impersonate user*) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 66.63937 cm
+1 0 0 1 40.01575 89.43937 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.872321 Tw (Sometimes is useful if we can login into app as another user for debugging or help purposes. User change is) Tj T* 0 Tw 21.56741 Tw (supported via REST api calls or you can use userProfile component) Tj T* 0 Tw ET
+BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.872321 Tw (Sometimes is useful if we can login into app as another user for debugging or help purposes. User change is) Tj T* 0 Tw 21.56741 Tw (supported via REST api calls or you can use userProfile component) Tj T* 0 Tw 4.896819 Tw (\(django_project_base/templates/user-profile/bootstrap/template.html\) which already integrates api functionality.) Tj T* 0 Tw (Functionality is based on django-hijack package.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 34.01575 807.2126 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Welcome to Django Project Base\222s documentation!) Tj T* ET
-Q
-Q
-q
-1 0 0 1 34.01575 22.67717 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (3) Tj T* ET
-Q
-Q
- 
-endstream
-endobj
-71 0 obj
-<<
-/Length 5057
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 763.0394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 4.896819 Tw (\(django_project_base/templates/user-profile/bootstrap/template.html\) which already integrates api functionality.) Tj T* 0 Tw (Functionality is based on django-hijack package.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 745.0394 cm
+1 0 0 1 40.01575 71.43937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (For determining which user can impersonate which user you can set your own logic. Example below:) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+43 0 obj
+<<
+/Length 4353
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 594.2394 cm
+1 0 0 1 40.01575 648.2394 cm
 q
 q
 q
@@ -2087,14 +1675,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 574.2394 cm
+1 0 0 1 40.01575 628.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (To increase AUTH performance you can set backend which caches users:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 535.2394 cm
+1 0 0 1 40.01575 589.2394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -2162,14 +1750,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 517.2394 cm
+1 0 0 1 40.01575 571.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Example \(add in settings.py\):) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 438.4394 cm
+1 0 0 1 40.01575 492.4394 cm
 q
 q
 q
@@ -2207,162 +1795,108 @@ Q
 Q
 Q
 Q
-q
-1 0 0 1 34.01575 807.2126 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Welcome to Django Project Base\222s documentation!) Tj T* ET
-Q
-Q
-q
-1 0 0 1 34.01575 22.67717 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (4) Tj T* ET
-Q
-Q
  
 endstream
 endobj
-72 0 obj
+44 0 obj
 <<
-/Nums [ 0 73 0 R 1 74 0 R 2 75 0 R 3 76 0 R 4 77 0 R 
-  5 78 0 R 6 79 0 R 7 80 0 R ]
+/Nums [ 0 45 0 R 1 46 0 R 2 47 0 R 3 48 0 R 4 49 0 R 
+  5 50 0 R ]
 >>
 endobj
-73 0 obj
-<<
-/S /D /St 1
->>
-endobj
-74 0 obj
-<<
-/S /D /St 2
->>
-endobj
-75 0 obj
-<<
-/S /r /St 1
->>
-endobj
-76 0 obj
-<<
-/S /r /St 2
->>
-endobj
-77 0 obj
+45 0 obj
 <<
 /S /D /St 1
 >>
 endobj
-78 0 obj
+46 0 obj
 <<
 /S /D /St 2
 >>
 endobj
-79 0 obj
+47 0 obj
 <<
 /S /D /St 3
 >>
 endobj
-80 0 obj
+48 0 obj
 <<
 /S /D /St 4
 >>
 endobj
+49 0 obj
+<<
+/S /D /St 5
+>>
+endobj
+50 0 obj
+<<
+/S /D /St 6
+>>
+endobj
 xref
-0 81
+0 51
 0000000000 65535 f 
 0000000073 00000 n 
-0000000158 00000 n 
-0000000265 00000 n 
-0000000377 00000 n 
-0000000582 00000 n 
-0000000787 00000 n 
-0000000955 00000 n 
-0000001123 00000 n 
-0000001291 00000 n 
-0000001459 00000 n 
-0000001628 00000 n 
-0000001797 00000 n 
-0000001966 00000 n 
-0000002135 00000 n 
-0000002304 00000 n 
-0000002473 00000 n 
-0000002642 00000 n 
-0000002811 00000 n 
-0000002980 00000 n 
-0000003149 00000 n 
-0000003318 00000 n 
-0000003487 00000 n 
-0000003656 00000 n 
-0000003825 00000 n 
-0000003994 00000 n 
-0000004163 00000 n 
-0000004332 00000 n 
+0000000157 00000 n 
+0000000264 00000 n 
+0000000376 00000 n 
+0000000581 00000 n 
+0000000786 00000 n 
+0000000968 00000 n 
+0000001158 00000 n 
+0000001352 00000 n 
+0000001471 00000 n 
+0000001577 00000 n 
+0000001691 00000 n 
+0000001802 00000 n 
+0000002038 00000 n 
+0000002213 00000 n 
+0000002386 00000 n 
+0000002557 00000 n 
+0000002752 00000 n 
+0000002926 00000 n 
+0000003179 00000 n 
+0000003385 00000 n 
+0000003591 00000 n 
+0000003697 00000 n 
+0000003955 00000 n 
+0000004030 00000 n 
+0000004206 00000 n 
+0000004336 00000 n 
 0000004501 00000 n 
-0000004670 00000 n 
-0000004839 00000 n 
-0000005227 00000 n 
-0000005433 00000 n 
-0000005616 00000 n 
-0000005807 00000 n 
-0000006002 00000 n 
-0000006122 00000 n 
-0000006228 00000 n 
-0000006342 00000 n 
-0000006453 00000 n 
-0000006692 00000 n 
-0000006867 00000 n 
-0000007040 00000 n 
-0000007211 00000 n 
-0000007406 00000 n 
-0000007580 00000 n 
-0000007833 00000 n 
-0000008039 00000 n 
-0000008245 00000 n 
-0000008351 00000 n 
-0000008609 00000 n 
-0000008684 00000 n 
-0000008860 00000 n 
-0000008990 00000 n 
-0000009155 00000 n 
-0000009269 00000 n 
-0000009392 00000 n 
-0000009563 00000 n 
-0000009670 00000 n 
-0000009786 00000 n 
-0000009905 00000 n 
-0000010030 00000 n 
-0000010178 00000 n 
-0000010281 00000 n 
-0000010389 00000 n 
-0000011194 00000 n 
-0000011319 00000 n 
-0000014365 00000 n 
-0000014490 00000 n 
-0000024455 00000 n 
-0000033567 00000 n 
-0000049422 00000 n 
-0000054531 00000 n 
-0000054638 00000 n 
-0000054672 00000 n 
-0000054706 00000 n 
-0000054740 00000 n 
-0000054774 00000 n 
-0000054808 00000 n 
-0000054842 00000 n 
-0000054876 00000 n 
+0000004615 00000 n 
+0000004738 00000 n 
+0000004909 00000 n 
+0000005016 00000 n 
+0000005132 00000 n 
+0000005251 00000 n 
+0000005376 00000 n 
+0000005524 00000 n 
+0000005627 00000 n 
+0000005721 00000 n 
+0000006526 00000 n 
+0000006651 00000 n 
+0000016799 00000 n 
+0000025501 00000 n 
+0000041149 00000 n 
+0000045554 00000 n 
+0000045643 00000 n 
+0000045677 00000 n 
+0000045711 00000 n 
+0000045745 00000 n 
+0000045779 00000 n 
+0000045813 00000 n 
 trailer
 <<
 /ID 
-[<348f552c57d39c9b0aa7044435157dca><348f552c57d39c9b0aa7044435157dca>]
+[<d519a480e961d857ccc119ee5a2dd8fd><d519a480e961d857ccc119ee5a2dd8fd>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
-/Info 49 0 R
-/Root 48 0 R
-/Size 81
+/Info 23 0 R
+/Root 22 0 R
+/Size 51
 >>
 startxref
-54910
+45847
 %%EOF

@@ -3,8 +3,10 @@ Settings
 
 .. code-block:: python
 
-    DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES: {'project': {'value_name': 'current_project_slug', 'url_part': 'project-'},
-            'language': {'value_name': 'current_language', 'url_part': 'language-'}}
+    DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES: {
+        'project': {'value_name': 'current_project_slug', 'url_part': 'project-'},
+        'language': {'value_name': 'current_language', 'url_part': 'language-'}
+    }
 
 
 This setting defines dictionary of attribute names on request object. For e.g. project info is set on request object under
