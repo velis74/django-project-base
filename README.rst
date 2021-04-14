@@ -1,5 +1,5 @@
 
-`Link to documentation <tree/dpb_96/docs/djangoprojectbase.pdf>`_
+`Link to documentation </blob/dpb_96/docs/djangoprojectbase.pdf>`_
 
 
 

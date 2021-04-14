@@ -10,16 +10,18 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../..'))
+from django_project_base import VERSION
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'Django Project Base'
-copyright = '2021, Jure Erznožnik'
-author = 'Jure Erznožnik'
+copyright = '2021'
+author = ''
+version = VERSION
 
 # -- General configuration ---------------------------------------------------
 
@@ -29,6 +31,7 @@ author = 'Jure Erznožnik'
 extensions = [
     'rst2pdf.pdfbuilder',
 ]
+pdf_documents = [('index', u'djangoprojectbase', u'Django Project Base', u''),]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

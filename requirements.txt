@@ -9,3 +9,4 @@ django-taggit
 svgwrite
 django-hijack
 sphinx
+rst2pdf
