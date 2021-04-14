@@ -1,5 +1,7 @@
 
-`Link to documentation <docs/index.html>`_
+`Link to documentation <tree/dpb_96/docs/djangoprojectbase.pdf>`_
+
+
 
 
 
