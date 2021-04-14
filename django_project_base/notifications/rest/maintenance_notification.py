@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import Serializer as RestFrameworkSerializer
 
 from django_project_base.notifications.base.enums import NotificationType
+from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
 from django_project_base.notifications.base.rest.serializer import Serializer
 from django_project_base.notifications.base.rest.viewset import ViewSet
 from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
@@ -60,12 +61,7 @@ class MaintenanceNotificationSerializer(Serializer):
     delayed_to_timestamp = fields.SerializerMethodField()
     notification_acknowledged_data = fields.SerializerMethodField()
     message = MessageSerializer()
-    type = fields.CharField(required=False, allow_null=True, default=NotificationType.MAINTENANCE.value)
-
     created_at = UTCDateTimeField(read_only=True, help_text='Time in UTC.')
-    sent_at = UTCDateTimeField(
-        required=not _is_model_field_null(DjangoProjectBaseNotification, 'sent_at'),
-        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'sent_at'), help_text='Time in UTC.')
     delayed_to = UTCDateTimeField(
         required=not _is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'),
         allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'), help_text='Time in UTC.')
@@ -79,11 +75,7 @@ class MaintenanceNotificationSerializer(Serializer):
 
     def create(self, validated_data) -> DjangoProjectBaseNotification:
         message: DjangoProjectBaseMessage = DjangoProjectBaseMessage.objects.create(**validated_data['message'])
-        validated_data['message'] = message
-        if not validated_data['type']:
-            validated_data['type'] = NotificationType.MAINTENANCE.value
-        # todo: create should be done with API: django_project_base/notifications/base/maintenance_notification.py
-        return super().create(validated_data)
+        return MaintenanceNotification(delay=validated_data['delayed_to'], message=message, locale=None).send()
 
     # todo: update and partial update, destroy
 
@@ -108,7 +100,7 @@ class MaintenanceNotificationSerializer(Serializer):
 
     class Meta:
         model = DjangoProjectBaseNotification
-        exclude = ('required_channels', 'sent_channels', 'failed_channels', 'recipients', 'level',)
+        exclude = ('required_channels', 'sent_channels', 'failed_channels', 'recipients', 'level', 'sent_at', 'type', )
 
 
 @extend_schema_view(

@@ -8,7 +8,7 @@ from django.conf import settings
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
 from django_project_base.notifications.utils import utc_now
 
 
@@ -20,8 +20,10 @@ class Notification(ABC, QueableNotificationMixin):
     type = NotificationType.STANDARD.value
     level = None
     locale = None
+    message: DjangoProjectBaseMessage
 
-    def __init__(self, persist: bool = False, level: Optional[NotificationLevel] = None,
+    def __init__(self, message: DjangoProjectBaseMessage, persist: bool = False,
+                 level: Optional[NotificationLevel] = None,
                  locale: Optional[str] = None, delay: Optional[datetime] = None,
                  type: Optional[NotificationType] = None, recipients: List[settings.AUTH_USER_MODEL] = [],
                  **kwargs) -> None:
@@ -43,6 +45,8 @@ class Notification(ABC, QueableNotificationMixin):
         assert isinstance(recipients, list), "Recipients must be a list"
         self._recipients = recipients
         self._extra_data = kwargs
+        assert isinstance(message, DjangoProjectBaseMessage), "Invalid value for message"
+        self.message = message
 
     @property
     @abstractmethod
@@ -57,7 +61,7 @@ class Notification(ABC, QueableNotificationMixin):
     def persist(self) -> bool:
         return bool(self._persist)
 
-    def send(self) -> None:
+    def send(self) -> DjangoProjectBaseNotification:
 
         required_channels: list = list(
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, self.via_channels))))
@@ -70,6 +74,7 @@ class Notification(ABC, QueableNotificationMixin):
                 delayed_to=self.delay,
                 required_channels=",".join(required_channels) if required_channels else None,
                 type=self.type,
+                message=self.message
             )
 
         if self.delay:
@@ -78,7 +83,7 @@ class Notification(ABC, QueableNotificationMixin):
             notification.save()
             notification.recipients.add(*self._recipients)
             self.enqueue_notification(notification)
-            return
+            return notification
 
         sent_channels: list = []
         failed_channels: list = []
@@ -101,3 +106,4 @@ class Notification(ABC, QueableNotificationMixin):
             notification.sent_at = utc_now()
             notification.save()
             notification.recipients.add(*self._recipients)
+        return notification

@@ -2,7 +2,7 @@ Authentication
 ==============
 
 
-***Impersonate user***
+**Impersonate user**
 
 Sometimes is useful if we can login into app as another user for debugging or help purposes.
 User change is supported via REST api calls or you can use userProfile component (django_project_base/templates/user-profile/bootstrap/template.html)
@@ -25,6 +25,8 @@ For determining which user can impersonate which user you can set your own logic
         else:
             return False
 
+
+**Authentication performance**
 
 To increase AUTH performance you can set backend which caches users:
    - django_project_base.base.auth_backends.UsersCachingBackend

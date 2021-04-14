@@ -28,6 +28,8 @@ Functionalities provided:
 * Tags editor & manager + support API for marking tagged items with their colours or icons
 
 
+Index:
+
 .. toctree::
    :maxdepth: 2
    :name: mastertoc
