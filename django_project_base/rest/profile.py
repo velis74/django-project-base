@@ -1,15 +1,13 @@
-from django.db.models import Model, CharField, Q
+from django.apps import apps
+from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
+from django_project_base.base.rest.project_base_serializer import ProjectBaseSerializer
+from django_project_base.base.rest.project_base_viewset import ProjectBaseViewSet
+from django_project_base.rest.project import ProjectSerializer
 from rest_framework import exceptions
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from django_project_base.base.rest.project_base_serializer import ProjectBaseSerializer
-from django_project_base.base.rest.project_base_viewset import ProjectBaseViewSet
-from django.apps import apps
-
-from django_project_base.rest.project import ProjectSerializer
 
 
 class ProfileSerializer(ProjectBaseSerializer):
@@ -49,7 +47,7 @@ class ProfileViewSet(ProjectBaseViewSet):
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
 
-    @action(methods=['GET'], detail=False, url_path='search/(?P<query>\w+)', url_name='users-search')
+    @action(methods=['GET'], detail=False, url_path=r'search/(?P<query>\w+)', url_name='users-search')
     def users_search(self, request: Request, query: str, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
         if not user:

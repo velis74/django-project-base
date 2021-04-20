@@ -1,25 +1,22 @@
-from django import get_version
 from django.conf.urls import url
-from django.urls import path, include
-from django.views.decorators.cache import cache_page
-from django.views.i18n import JSONCatalog, JavaScriptCatalog
-from drf_spectacular.settings import SPECTACULAR_DEFAULTS
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
+from django.urls import include, path
+from django.views.i18n import JavaScriptCatalog
 from django_project_base.base.rest.project_base_router import ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
+from drf_spectacular.settings import SPECTACULAR_DEFAULTS
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 
 def filter_rest_documentation_endpoints(endpoints: list) -> list:
     _endpoints: list = []
-    for (path, path_regex, method, callback) in endpoints:
+    for (path_, path_regex, method, callback) in endpoints:
         module: str = getattr(getattr(callback, 'view_class', object()), '__module__', '')
-        exclude: bool = 'profile' in path and 'rest_registration' in module
+        exclude: bool = 'profile' in path_ and 'rest_registration' in module
         if not exclude:
-            _endpoints.append((path, path_regex, method, callback))
+            _endpoints.append((path_, path_regex, method, callback))
     return _endpoints
 
 

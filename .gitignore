@@ -41,3 +41,7 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+/.tox/
+/django_project_base.egg-info/
+/docs/.doctrees/
+/docs/build/

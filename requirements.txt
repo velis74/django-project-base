@@ -8,3 +8,4 @@ drf-spectacular
 django-taggit
 svgwrite
 django-hijack
+tox
