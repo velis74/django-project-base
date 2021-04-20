@@ -1,5 +1,4 @@
 from django.apps import AppConfig
-
 from django_project_base.settings import set_django_project_base_settings
 
 

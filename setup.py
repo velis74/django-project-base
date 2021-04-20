@@ -50,7 +50,7 @@ if sys.argv[1] == 'publish':
     write_ver_to_init(version)
     os.system('python setup.py sdist bdist_wheel')
     os.system('twine upload dist/*')
-    os.system('rm -rf build && rm -rf dist && rm -rf DynamicForms.egg-info')
+    os.system('rm -rf build && rm -rf dist && rm -rf django_project_base.egg-info')
     os.system('git checkout django_project_base/__init__.py')
     os.system('git tag -a %s -m \'version %s\'' % (version, version))
     os.system('git push --tags')

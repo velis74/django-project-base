@@ -3,7 +3,6 @@ from typing import Union
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404
-
 from django_project_base.base.rest.project_base_serializer import ProjectBaseSerializer
 from django_project_base.base.rest.project_base_viewset import ProjectBaseViewSet
 
