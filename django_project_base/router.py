@@ -43,5 +43,5 @@ django_project_base_urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    path('social-auth/', include('social_django.urls', namespace="social")),
+    path('%s/social/' % ACCOUNT_URL_PREFIX, include('social_django.urls', namespace="social")),
 ]
