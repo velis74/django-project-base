@@ -1,0 +1,65 @@
+[v-cloak] {
+    display: none;
+}
+
+/* titlebar styling*/
+
+.titlebar-app .card, .card-body {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.user-names {
+    padding-left: 55px;
+}
+
+.logo-image {
+    max-height: 60px;
+    max-width: 60px;
+}
+
+.project-link-image {
+    max-height: 30px;
+    max-width: 30px;
+}
+
+.login-container {
+    position: absolute;
+    right: 1em;
+}
+
+.rounded-circle {
+    margin-top: 0.25em;
+}
+
+.breadcrumb {
+    margin-bottom: 0;
+}
+
+.left-spacing {
+    margin-left: 1em;
+}
+
+/* modal window css */
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+}

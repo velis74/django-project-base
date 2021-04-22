@@ -1,0 +1,11 @@
+django
+djangorestframework
+dynamicforms
+swapper
+django-rest-registration
+drf-spectacular
+django-taggit
+svgwrite
+django-hijack
+tox
+social-auth-app-django

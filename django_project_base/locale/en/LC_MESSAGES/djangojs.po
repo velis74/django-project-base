@@ -1,0 +1,30 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+
+msgid "Add new project"
+msgstr "Add new project"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Invalid login credentials"
+msgstr "Invalid login credentials"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "User profile"
+msgstr "User profile"
+
+msgid "User settings"
+msgstr "User settings"
+
+msgid "Change password"
+msgstr "Change password"
+
