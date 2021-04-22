@@ -9,3 +9,4 @@ django-taggit
 svgwrite
 django-hijack
 tox
+social-auth-app-django

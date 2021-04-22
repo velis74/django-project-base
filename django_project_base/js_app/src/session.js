@@ -5,6 +5,7 @@ import {showNotification} from './notifications';
 import {PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME} from './constants';
 
 class Session {
+
   static login(username, password) {
     Store.set('redirect-to-auth', false);
     ApiClient.post('account/login/',
@@ -12,17 +13,7 @@ class Session {
         login: username,
         password: password,
       }).then(() => {
-      ApiClient.get('account/profile/current?decorate=default-project').then(response => {
-        Store.set('current-user', response.data);
-        Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
-        document.dispatchEvent(createEvent('login', response.data));
-        showNotification(null,
-          'Now redirect should be made to ' + 'project/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
-      });
-    }).catch(error => {
-      if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {
-        showNotification(null, gettext('Invalid login credentials')); // jshint ignore:line
-      }
+        Session.checkLogin();
     });
   }
 
@@ -35,7 +26,16 @@ class Session {
         window.location.href = '/';
       }).catch(() => {
     });
+  }
 
+  static checkLogin(showNotAuthorizedNotice = true) {
+    ApiClient.get('account/profile/current?decorate=default-project', {'hideErrorNotice': !showNotAuthorizedNotice}).then(response => {
+      Store.set('current-user', response.data);
+      Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
+      document.dispatchEvent(createEvent('login', response.data));
+      showNotification(null,
+        'Now redirect should be made to ' + 'project/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
+    });
   }
 }
 
