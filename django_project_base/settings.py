@@ -1,3 +1,5 @@
+from django_project_base.settings_parser import parse_settings
+
 DJANGO_PROJECT_BASE_SETTINGS = (
     {
         "name": "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES",
@@ -13,6 +15,4 @@ DJANGO_PROJECT_BASE_SETTINGS = (
 
 
 def set_django_project_base_settings():
-    from django.conf import settings
-    for _setting in DJANGO_PROJECT_BASE_SETTINGS:
-        setattr(settings, _setting["name"], getattr(_setting, _setting["name"], _setting["default"]))
+    parse_settings(DJANGO_PROJECT_BASE_SETTINGS)

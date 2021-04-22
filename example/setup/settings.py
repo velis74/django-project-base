@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django_project_base.accounts import ACCOUNT_APP_ID
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -35,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_registration',
     'django_project_base',
     'example.demo_django_base',
     'drf_spectacular',
     'social_django',
+    ACCOUNT_APP_ID,
 ]
 
 MIDDLEWARE = [
@@ -145,13 +149,6 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.microsoft.MicrosoftOAuth2',
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.gitlab.GitLabOAuth2',
-    'social_core.backends.apple.AppleIdAuth',
     'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -188,30 +185,3 @@ SOCIAL_AUTH_GITHUB_SECRET = '0945595ac7fcfb13ab0039dcc35d21e4cfb62438'
 SOCIAL_AUTH_GITLAB_KEY = '8c55f7a7912587ce828ad7cf1ed83590aa5671f056f59b0220335939c3a8b1fa'
 SOCIAL_AUTH_GITLAB_SECRET = '016756b4f2d9c8fe7d7032bc14c8f34c351d05fca27fe06ad642dc5bd77630c9'
 
-SOCIAL_AUTH_APPLE_ID_CLIENT = '...'             # Your client_id com.application.your, aka "Service ID"
-SOCIAL_AUTH_APPLE_ID_TEAM = '...'               # Your Team ID, ie K2232113
-SOCIAL_AUTH_APPLE_ID_KEY = '...'                # Your Key ID, ie Y2P99J3N81K
-SOCIAL_AUTH_APPLE_ID_SECRET = """
------BEGIN PRIVATE KEY-----
-MIGTAgE.....
------END PRIVATE KEY-----"""
-SOCIAL_AUTH_APPLE_ID_SCOPE = ['email', 'name']
-
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
-
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.auth_allowed',
-    # 'social_core.tests.pipeline.ask_for_password',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    # 'social_core.tests.pipeline.set_password',
-    'social_core.pipeline.user.user_details',
-)
