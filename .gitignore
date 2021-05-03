@@ -45,3 +45,5 @@ Thumbs.db
 /django_project_base.egg-info/
 /docs/.doctrees/
 /docs/build/
+
+package-lock.json
