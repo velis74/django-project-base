@@ -1,10 +1,9 @@
 from typing import Union
 
-from django.apps import apps
 from django.conf import settings
 from django.http import Http404
-from django_project_base.base.rest.project_base_serializer import ProjectBaseSerializer
-from django_project_base.base.rest.project_base_viewset import ProjectBaseViewSet
+from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
+from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
 
 
 class ProjectSerializer(ProjectBaseSerializer):
@@ -16,15 +15,10 @@ class ProjectSerializer(ProjectBaseSerializer):
 class ProjectViewSet(ProjectBaseViewSet):
 
     def get_queryset(self):
-        return apps.get_model(
-            self._get_application_name('DJANGO_PROJECT_BASE_PROJECT_MODEL'),
-            self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL')
-        ).objects.all()
+        return self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL').objects.all()
 
     def get_serializer_class(self):
-        ProjectSerializer.Meta.model = apps.get_model(
-            self._get_application_name('DJANGO_PROJECT_BASE_PROJECT_MODEL'),
-            self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL'))
+        ProjectSerializer.Meta.model = self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL')
         return ProjectSerializer
 
     def get_object(self):

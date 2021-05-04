@@ -19,10 +19,6 @@ class Session {
         showNotification(null,
           'Now redirect should be made to ' + 'project/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
       });
-    }).catch(error => {
-      if (error.response && error.response.data && (error.response.data.login || error.response.data.password || error.response.data.detail)) {
-        showNotification(null, gettext('Invalid login credentials')); // jshint ignore:line
-      }
     });
   }
 
@@ -33,9 +29,7 @@ class Session {
         Store.set('redirect-to-auth', true);
         document.dispatchEvent(LogoutEvent);
         window.location.href = '/';
-      }).catch(() => {
-    });
-
+      });
   }
 }
 

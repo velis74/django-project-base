@@ -1,8 +1,7 @@
-from django.apps import apps
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
-from django_project_base.base.rest.project_base_serializer import ProjectBaseSerializer
-from django_project_base.base.rest.project_base_viewset import ProjectBaseViewSet
+from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
+from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
 from django_project_base.rest.project import ProjectSerializer
 from rest_framework import exceptions
 from rest_framework.decorators import action
@@ -18,15 +17,10 @@ class ProfileSerializer(ProjectBaseSerializer):
 
 class ProfileViewSet(ProjectBaseViewSet):
     def get_queryset(self):
-        return apps.get_model(
-            self._get_application_name('DJANGO_PROJECT_BASE_PROFILE_MODEL'),
-            self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL')
-        ).objects.all()
+        return self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL').objects.all()
 
     def get_serializer_class(self):
-        ProfileSerializer.Meta.model = apps.get_model(
-            self._get_application_name('DJANGO_PROJECT_BASE_PROFILE_MODEL'),
-            self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL'))
+        ProfileSerializer.Meta.model = self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL')
         return ProfileSerializer
 
     @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current')
@@ -37,9 +31,7 @@ class ProfileViewSet(ProjectBaseViewSet):
         serializer = self.get_serializer(user.userprofile)
         response_data: dict = serializer.data
         if getattr(request, 'GET', None) and request.GET.get('decorate', '') == 'default-project':
-            project_model: Model = apps.get_model(
-                self._get_application_name('DJANGO_PROJECT_BASE_PROFILE_MODEL'),
-                self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL'))
+            project_model: Model = self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL')
             response_data['default-project'] = None
             if project_model:
                 ProjectSerializer.Meta.model = project_model
@@ -52,11 +44,7 @@ class ProfileViewSet(ProjectBaseViewSet):
         user: Model = getattr(request, 'user', None)
         if not user:
             raise exceptions.AuthenticationFailed
-        profile_model: Model = apps.get_model(
-            # TODO: get model code -> make generic, its repeated
-            self._get_application_name('DJANGO_PROJECT_BASE_PROFILE_MODEL'),
-            self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL')
-        )
+        profile_model: Model = self._get_model('DJANGO_PROJECT_BASE_PROFILE_MODEL')
         fields: list = [f for f in profile_model._meta.fields if not f.is_relation]
         annotations: dict = {"as_str_%s" % v.name: Cast(v.name, CharField()) for v in fields}
         queries: list = [Q(**{"as_str_%s__icontains" % f.name: query}) for f in fields]

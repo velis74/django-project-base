@@ -8,4 +8,7 @@ drf-spectacular
 django-taggit
 svgwrite
 django-hijack
+pytz
+sphinx
+rst2pdf
 tox

@@ -49,7 +49,27 @@
                 <login></login>
             </div>
         </nav>
-        <notifications position="top center"/>
+        <notifications width="350" position="top center" v-if="loggedIn">
+            <template slot="body" slot-scope="{ item, close }">
+                <div @click="item.data.onNotificationClose(item, close, true)" class="vue-notification"
+                     :class="item.type">
+                    <div>
+                        <div style="display: inline-block; max-width: 95%;" class="notification-title">
+                            <div v-html="item.title"></div>
+                        </div>
+                        <div style="display: inline-block; max-width: 95%;" class="notification-content">
+                            <div v-html="item.text"/>
+                        </div>
+                        <div style="display: inline-block; float: right; vertical-align: middle;"
+                             v-if="item.data.duration === -1">
+                            <button class="close" @click="item.data.onNotificationClose(item, close)">
+                                <i class="fas fa-times fa-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </notifications>
     </div>
 </script>
 {% endverbatim %}

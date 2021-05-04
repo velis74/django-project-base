@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,7 +44,8 @@
                 <li class="nav-item dropdown">
                     <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a v-for="(project, idx) in projectList" v-on:click="projectSelected(project[projectTablePkName])"
+                        <a v-for="(project, idx) in projectList"
+                           v-on:click="projectSelected(project[projectTablePkName])"
                            v-bind:key="project[projectTablePkName]" class="dropdown-item project-item" href="#">
                             <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
                         <a v-if="permissions['add-project']" v-on:click="addNewProject"
@@ -196,7 +198,27 @@
                 <login></login>
             </div>
         </nav>
-        <notifications position="top center"/>
+        <notifications width="350" position="top center">
+            <template slot="body" slot-scope="{ item, close }">
+                <div @click="item.data.onNotificationClose(item, close, true)" class="vue-notification"
+                     :class="item.type">
+                    <div>
+                        <div style="display: inline-block; max-width: 95%;" class="notification-title">
+                            <div v-html="item.title"></div>
+                        </div>
+                        <div style="display: inline-block; max-width: 95%;" class="notification-content">
+                            <div v-html="item.text"/>
+                        </div>
+                        <div style="display: inline-block; float: right; vertical-align: middle;"
+                             v-if="item.data.duration === -1">
+                            <button class="close" @click="item.data.onNotificationClose(item, close)">
+                                <i class="fas fa-times fa-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </notifications>
     </div>
 </script>
 

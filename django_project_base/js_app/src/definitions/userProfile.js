@@ -102,7 +102,7 @@ const userProfile = {
     },
   },
   childComponentsDefinition: [
-    modalWindow,
+    modalWindow
   ],
 };
 
