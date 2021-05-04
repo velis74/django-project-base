@@ -25,4 +25,3 @@ class UrlVarsMiddleware:
         for value, config in settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES.items():
             setattr(request, config['value_name'], get_parameter(request, value, config['url_part']))
         return self.get_response(request)
-

@@ -4,26 +4,25 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import transaction
+from django_project_base.notifications.base.enums import NotificationType
+from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
+from django_project_base.notifications.base.rest.serializer import Serializer
+from django_project_base.notifications.base.rest.viewset import ViewSet
+from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.notifications.utils import utc_now
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from pytz import UTC
 from rest_framework import fields, status
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError, APIException
+from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer as RestFrameworkSerializer
 
-from django_project_base.notifications.base.enums import NotificationType
-from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
-from django_project_base.notifications.base.rest.serializer import Serializer
-from django_project_base.notifications.base.rest.viewset import ViewSet
-from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
-from django_project_base.notifications.utils import utc_now
 
-
-def _is_model_field_null(model: 'Model', field_name: str) -> bool:
+def _is_model_field_null(model: 'Model', field_name: str) -> bool:  # noqa: F821
     return next(filter(lambda c: c.name == field_name, model._meta.fields)).null
 
 
@@ -100,7 +99,7 @@ class MaintenanceNotificationSerializer(Serializer):
 
     class Meta:
         model = DjangoProjectBaseNotification
-        exclude = ('required_channels', 'sent_channels', 'failed_channels', 'recipients', 'level', 'sent_at', 'type', )
+        exclude = ('required_channels', 'sent_channels', 'failed_channels', 'recipients', 'level', 'sent_at', 'type',)
 
 
 @extend_schema_view(

@@ -6,5 +6,5 @@ class MailChannel(Channel):
     id = ChannelIdentifier.MAIL.value
 
     @staticmethod
-    def send(notification: 'Notification') -> None:
+    def send(notification: 'Notification') -> None:  # noqa: F821
         print('send mail')

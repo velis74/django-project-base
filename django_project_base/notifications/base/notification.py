@@ -1,14 +1,13 @@
 import logging
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Optional, List, Type
+from typing import List, Optional, Type
 
 from django.conf import settings
-
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
-from django_project_base.notifications.models import DjangoProjectBaseNotification, DjangoProjectBaseMessage
+from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 from django_project_base.notifications.utils import utc_now
 
 
@@ -32,7 +31,7 @@ class Notification(ABC, QueableNotificationMixin):
         self._persist = persist
         if level is not None:
             assert isinstance(level, str) and level in [
-                l.value for l in NotificationLevel], "Invalid notification level value"
+                _level.value for _level in NotificationLevel], "Invalid notification level value"
             self.level = level
         self.locale = locale
         if delay is not None:

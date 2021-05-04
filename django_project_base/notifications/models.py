@@ -4,7 +4,6 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.db.models import SET_NULL
-
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
 from django_project_base.notifications.utils import utc_now
@@ -49,11 +48,13 @@ class AbstractDjangoProjectBaseNotification(models.Model):
             tzinfo=datetime.timezone.utc) if self.delayed_to and \
                                              self.delayed_to.tzinfo != datetime.timezone.utc else self.delayed_to
         self.created_at = self.created_at.replace(
-            tzinfo=datetime.timezone.utc) if self.created_at \
-                                             and self.created_at.tzinfo != datetime.timezone.utc else self.created_at
+            tzinfo=datetime.timezone.utc
+        ) if self.created_at and self.created_at.tzinfo != datetime.timezone.utc else self.created_at
+
         self.sent_at = self.sent_at.replace(
-            tzinfo=datetime.timezone.utc) if self.sent_at \
-                                             and self.sent_at.tzinfo != datetime.timezone.utc else self.sent_at
+            tzinfo=datetime.timezone.utc
+        ) if self.sent_at and self.sent_at.tzinfo != datetime.timezone.utc else self.sent_at
+
         super().save(force_insert, force_update, using, update_fields)
 
     class Meta:

@@ -43,3 +43,7 @@ Thumbs.db
 *.wmv
 /docs/build/
 /docs/.doctrees/
+/.tox/
+/django_project_base.egg-info/
+package-lock.json
+

@@ -17,7 +17,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-
 from django_project_base.router import django_project_base_urlpatterns
 from example.demo_django_base.views import index_view
 
