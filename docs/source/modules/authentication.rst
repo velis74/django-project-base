@@ -26,20 +26,41 @@ For determining which user can impersonate which user you can set your own logic
             return False
 
 
-**Authentication performance**
+**User caching backend**
 
-To increase AUTH performance you can set backend which caches users:
-   - django_project_base.base.auth_backends.UsersCachingBackend
+To increase AUTH performance you can set a backend that caches users.
 
-
-Example (add in settings.py):
+To enable User caching backend to add the following line to *AUTHENTICATION_BACKENDS* section in settings.py:
 
 .. code-block:: python
 
    # myproject/settings.py
 
    AUTHENTICATION_BACKENDS = (
+       ...
        'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
-       'django.contrib.auth.backends.ModelBackend',
+       ...
    )
 
+User caching is not enabled for bulk updates by default, since Django doesn't call event on .update(). Running bulk
+update without clearing cache could potentially cause race conditions. Avoid it if possible.
+
+It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can find
+example code below.
+
+.. code-block:: python
+
+  # models.py
+  ...
+  class ProfilesQuerySet(models.QuerySet):
+      def update(self, **kwargs):
+          res = super(ProfilesQuerySet, self).update(**kwargs)
+          for profile in self:
+              cache.delete(profile.django_user_cache_id())
+          return res
+
+
+  class UserProfile(BaseProfile):
+      """Use this only for enabling cache clear for bulk update"""
+      objects = ProfilesQuerySet.as_manager()
+  ...

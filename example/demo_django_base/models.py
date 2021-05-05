@@ -3,10 +3,20 @@ from django.db.models import fields
 from django_project_base.base.models import BaseProfile, BaseProject, BaseTag
 from taggit.managers import TaggableManager
 from taggit.models import GenericTaggedItemBase
+from django.core.cache import cache
+
+
+class ProfilesQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        res = super(ProfilesQuerySet, self).update(**kwargs)
+        for profile in self:
+            cache.delete(profile.django_user_cache_id())
+        return res
 
 
 class UserProfile(BaseProfile):
-    pass
+    """Use this only for enabling cache clear for bulk update"""
+    objects = ProfilesQuerySet.as_manager()
 
 
 class Project(BaseProject):
