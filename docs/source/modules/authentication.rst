@@ -30,7 +30,6 @@ For determining which user can impersonate which user you can set your own logic
 
 To increase AUTH performance you can set backend which caches users:
    - django_project_base.base.auth_backends.UsersCachingBackend
-   - django_project_base.base.auth_backends.CachedTokenAuthentication
 
 
 Example (add in settings.py):

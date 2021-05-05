@@ -19,6 +19,7 @@ target/
 
 # JetBrains IDE
 .idea/
+venv/
 
 # Unit test reports
 TEST*.xml
