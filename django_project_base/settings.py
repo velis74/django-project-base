@@ -11,6 +11,10 @@ DJANGO_PROJECT_BASE_SETTINGS = (
 
 )
 
+MIDDLEWARE = [
+    'ScantronServer.profile_middleware.profile_middleware',
+]
+
 CACHE_IMPERSONATE_USER = 'impersonate-user-%d'
 
 def set_django_project_base_settings():

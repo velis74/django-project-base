@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_project_base.netdata.middleware.profile_middleware.profile_middleware'
 ]
 
 ROOT_URLCONF = 'example.setup.urls'
@@ -150,3 +151,5 @@ AUTHENTICATION_BACKENDS = (
     'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
     'django.contrib.auth.backends.ModelBackend',
 )
+
+WSGI_LOG_LONG_REQUESTS = True
