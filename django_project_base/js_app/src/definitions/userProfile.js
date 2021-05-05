@@ -1,16 +1,20 @@
-import {Session} from '../session';
-import {apiClient as ApiClient} from '../apiClient';
-import {Store} from '../store';
-import {ProjectBaseData} from '../projectBaseData';
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable arrow-parens */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-param-reassign */
+/* eslint-disable consistent-return */
 import _ from 'lodash';
-import {modalWindow} from './modalWindow';
-
+import { Session } from '../session';
+import { apiClient as ApiClient } from '../apiClient';
+import { Store } from '../store';
+import { ProjectBaseData } from '../projectBaseData';
+import { modalWindow } from './modalWindow';
 
 const userProfile = {
   id: 'user-profile',
   type: 'x-template',
   definition: {
-    template: `#user-profile`,
+    template: '#user-profile',
     data() {
       return {
         componentData: {},
@@ -35,7 +39,7 @@ const userProfile = {
     },
     methods: {
       setAvatarImg(profileData) {
-        let avatar = profileData.avatar;
+        const avatar = profileData.avatar;
         if (!avatar) {
           profileData.avatar = 'https://via.placeholder.com/45';
         }
@@ -46,7 +50,7 @@ const userProfile = {
           this.permissions = p;
         });
         this.isImpersonated = !!Store.get('impersonated-user');
-        let cachedProfile = Store.get('current-user');
+        const cachedProfile = Store.get('current-user');
         if (cachedProfile && !force) {
           this.componentData = this.setAvatarImg(cachedProfile);
           return;
@@ -69,7 +73,7 @@ const userProfile = {
         this.impersonateModalVisible = !this.impersonateModalVisible;
       },
       changeUser() {
-        ApiClient.post('/account/impersonate/start', {email: this.selectedUser.email}).then(() => {
+        ApiClient.post('/account/impersonate/start', { email: this.selectedUser.email }).then(() => {
           this.impersonateModalVisible = false;
           Store.set('impersonated-user', true);
           this.reloadAfterImpersonationChange();
@@ -83,7 +87,7 @@ const userProfile = {
         if (!this.userSearchInputQueryString) {
           return;
         }
-        let url = `/account/profile/search/${this.userSearchInputQueryString}`;
+        const url = `/account/profile/search/${this.userSearchInputQueryString}`;
         ApiClient.get(url).then((response) => {
           this.usersFilter = response.data;
         });
@@ -102,8 +106,8 @@ const userProfile = {
     },
   },
   childComponentsDefinition: [
-    modalWindow
+    modalWindow,
   ],
 };
 
-export {userProfile};
+export { userProfile };

@@ -1,18 +1,22 @@
-import {Store} from '../store';
-import {breadcrumbs} from './breadcrumbs';
-import {projectList} from './projectList';
-import {login} from './login';
-import {userProfile} from './userProfile';
-import {apiClient as ApiClient} from '../apiClient';
-import {showMaintenanceNotification} from '../notifications';
+/* eslint-disable  import/prefer-default-export */
+/* eslint-disable arrow-parens */
+/* eslint-disable max-len */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-template */
 import _ from 'lodash';
-
+import { Store } from '../store';
+import { breadcrumbs } from './breadcrumbs';
+import { projectList } from './projectList';
+import { login } from './login';
+import { userProfile } from './userProfile';
+import { apiClient as ApiClient } from '../apiClient';
+import { showMaintenanceNotification } from '../notifications';
 
 const titlebar = {
   id: 'titlebar',
   type: 'x-template',
   definition: {
-    template: `#titlebar`,
+    template: '#titlebar',
     data() {
       return {
         titleBarProps: {},
@@ -69,18 +73,18 @@ const titlebar = {
         this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
           if (this.loggedIn) {
             ApiClient.get('maintenance-notification/').then(notificationResponse => {
-              let _notification = _.first(notificationResponse.data);
+              const _notification = _.first(notificationResponse.data);
               if (_notification) {
-                let acknowledgeData = _notification.notification_acknowledged_data;
-                let delayed = _notification.delayed_to_timestamp;
-                let hours8Range = [delayed - 10 * 3600, (delayed - 2 * 3600) - 1];
-                let hours1Range = [delayed - 2 * 3600, (delayed - 10 * 60) - 1];
-                let minutes5Range = [delayed - 10 * 60, delayed];
-                let now = Math.floor(Date.now() / 1000);
+                const acknowledgeData = _notification.notification_acknowledged_data;
+                const delayed = _notification.delayed_to_timestamp;
+                const hours8Range = [delayed - 10 * 3600, (delayed - 2 * 3600) - 1];
+                const hours1Range = [delayed - 2 * 3600, (delayed - 10 * 60) - 1];
+                const minutes5Range = [delayed - 10 * 60, delayed];
+                const now = Math.floor(Date.now() / 1000);
                 let rangeIdentifier = 8;
-                let hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 8));
-                let hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 1));
-                let minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 5));
+                const hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 8));
+                const hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 1));
+                const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) && !_.size(_.filter(acknowledgeData, v => v === 5));
                 if (hours1) {
                   rangeIdentifier = 1;
                 }
@@ -99,10 +103,8 @@ const titlebar = {
     },
   },
   childComponentsDefinition: [
-    breadcrumbs, projectList, login, userProfile
+    breadcrumbs, projectList, login, userProfile,
   ],
 };
 
-export {titlebar};
-
-
+export { titlebar };

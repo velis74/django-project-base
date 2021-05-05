@@ -1,8 +1,13 @@
-import {Store} from './store';
-import {apiClient as ApiClient} from './apiClient';
-import {logoutEvent as LogoutEvent, createEvent} from './events';
-import {showNotification} from './notifications';
-import {PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME} from './constants';
+/* eslint-disable prefer-template */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-useless-concat */
+/* eslint-disable arrow-parens */
+/* eslint-disable object-shorthand */
+import { Store } from './store';
+import { apiClient as ApiClient } from './apiClient';
+import { logoutEvent as LogoutEvent, createEvent } from './events';
+import { showNotification } from './notifications';
+import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './constants';
 
 class Session {
   static login(username, password) {
@@ -33,4 +38,4 @@ class Session {
   }
 }
 
-export {Session};
+export { Session };

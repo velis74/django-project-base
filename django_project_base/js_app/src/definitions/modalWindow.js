@@ -1,8 +1,9 @@
+/* eslint-disable import/prefer-default-export */
 const modalWindow = {
   id: 'modal-window',
   type: 'x-template',
   definition: {
-    template: `#modal-window`,
+    template: '#modal-window',
     data() {
       return {};
     },
@@ -14,13 +15,11 @@ const modalWindow = {
     computed: {},
     methods: {
       open() {
-        console.log('open');
       },
       close() {
-        console.log('close');
       },
     },
   },
 };
 
-export {modalWindow};
+export { modalWindow };

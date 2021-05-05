@@ -1,10 +1,15 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable function-paren-newline */
+/* eslint-disable arrow-parens */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-template */
 import _ from 'lodash';
 
 const breadcrumbs = {
   id: 'breadcrumbs',
   type: 'x-template',
   definition: {
-    template: `#breadcrumbs`,
+    template: '#breadcrumbs',
     data() {
       return {};
     },
@@ -17,21 +22,21 @@ const breadcrumbs = {
     computed: {
       currentBreadcrumbsLocation() {
         let data = window.location.pathname;
-        //todo: remove
+        // todo: remove
         data = '/peoject/ddd/info/last.html';
-        let parts = _.filter(_.trim(data, '/').split('/'), l => l);
+        const parts = _.filter(_.trim(data, '/').split('/'), l => l);
         return _.map(parts,
           v => {
-            let _idx = _.indexOf(parts, v);
-            let _url = _.take(parts, _idx + 1);
+            const _idx = _.indexOf(parts, v);
+            const _url = _.take(parts, _idx + 1);
             return {
-              'url': '/' + _.join(_url, '/'),
-              'breadcrumb': _.startCase(
-                _.replace(_.replace(v, '.html', ''), ' ', ''))
+              url: '/' + _.join(_url, '/'),
+              breadcrumb: _.startCase(
+                _.replace(_.replace(v, '.html', ''), ' ', '')),
             };
-          }
+          },
         );
-        //return brd;
+        // return brd;
         // return _.concat({
         //   'url': '/',
         //   'breadcrumb': 'Home'
@@ -39,7 +44,7 @@ const breadcrumbs = {
       },
     },
     methods: {},
-  }
+  },
 };
 
-export {breadcrumbs};
+export { breadcrumbs };

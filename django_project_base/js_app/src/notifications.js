@@ -1,6 +1,9 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable no-undef */
+/* eslint-disable no-extra-boolean-cast */
 import Vue from 'vue';
-import {apiClient as ApiClient} from "./apiClient";
-import {maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged} from './events';
+import { apiClient as ApiClient } from './apiClient';
+import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from './events';
 
 const showNotification = (title, text, type = 'info') => {
   Vue.notify({
@@ -10,14 +13,14 @@ const showNotification = (title, text, type = 'info') => {
     data: {
       onNotificationClose: (item, closeFunction) => {
         closeFunction();
-      }
+      },
     },
   });
 };
 
 const showMaintenanceNotification = (noticeItem, rangeId) => {
   const duration = -1;
-  let delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
+  const delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
   Vue.notify({
     title: noticeItem.message.subject,
     text: `
@@ -50,13 +53,13 @@ const showMaintenanceNotification = (noticeItem, rangeId) => {
 };
 
 const showGeneralErrorNotification = (text) => {
-  let options = {
+  const options = {
     title: gettext('Error'), // jshint ignore:line
     type: 'error',
     data: {
       onNotificationClose: (item, closeFunction) => {
         closeFunction();
-      }
+      },
     },
   };
   if (!!text) {
@@ -65,4 +68,4 @@ const showGeneralErrorNotification = (text) => {
   Vue.notify(options);
 };
 
-export {showNotification, showGeneralErrorNotification, showMaintenanceNotification};
+export { showNotification, showGeneralErrorNotification, showMaintenanceNotification };

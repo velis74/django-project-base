@@ -1,3 +1,6 @@
+/* eslint-disable arrow-parens */
+/* eslint-disable arrow-body-style */
+/* eslint-disable max-len */
 import Vue from 'vue';
 import Notifications from 'vue-notification';
 import _ from 'lodash';
@@ -21,4 +24,4 @@ const createApp = (elementId, mainComponentDefnition) => {
   });
 };
 
-export {createApp, registerComponent};
+export { createApp, registerComponent };

@@ -5,7 +5,7 @@ const webpack = require('webpack');
 
 const libraryName = 'django-project-base';
 const outputFile = `${libraryName}.min.js`;
-
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
   entry: [
@@ -22,7 +22,7 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'],
     alias: {
-      vue: 'vue/dist/vue.js'
+      vue: 'vue/dist/vue.js',
     },
   },
   module: {
@@ -68,10 +68,10 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
+              outputPath: 'fonts/',
+            },
+          },
+        ],
       },
     ],
   },
@@ -82,6 +82,7 @@ module.exports = {
       inject: 'head',
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new ESLintPlugin({}),
   ],
   devServer: {
     host: '0.0.0.0',
@@ -93,9 +94,9 @@ module.exports = {
     proxy: {
       '*': {
         target: 'http://127.0.0.1:8000',
-        secure: false
+        secure: false,
       },
     },
-    open: 'chrome'
+    open: 'chrome',
   },
 };

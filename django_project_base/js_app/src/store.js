@@ -1,13 +1,14 @@
+/* eslint no-underscore-dangle: 0 */
+/* eslint-disable import/prefer-default-export */
 class Store {
-
   static store() {
     return localStorage;
   }
 
   static get(key) {
-    let _storeData = Store.store().getItem(key);
-    if (_storeData) {
-      return JSON.parse(_storeData).__val;
+    const storeData = Store.store().getItem(key);
+    if (storeData) {
+      return JSON.parse(storeData).__val;
     }
     return null;
   }
@@ -15,7 +16,7 @@ class Store {
   static set(key, data) {
     if (data !== null) {
       Store.store().setItem(key, JSON.stringify({
-        '__val': data
+        __val: data,
       }));
     }
   }
@@ -29,4 +30,4 @@ class Store {
   }
 }
 
-export {Store};
+export { Store };

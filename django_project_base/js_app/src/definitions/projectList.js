@@ -1,16 +1,20 @@
-import {Store} from '../store';
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable arrow-parens */
+/* eslint-disable function-paren-newline */
+/* eslint-disable prefer-template */
+/* eslint-disable no-shadow */
 import _ from 'lodash';
-import {ProjectBaseData} from '../projectBaseData';
-import {showNotification} from '../notifications';
-import {projectSelected as ProjectSelected} from '../events';
-import {PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME} from '../constants';
-
+import { Store } from '../store';
+import { ProjectBaseData } from '../projectBaseData';
+import { showNotification } from '../notifications';
+import { projectSelected as ProjectSelected } from '../events';
+import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from '../constants';
 
 const projectList = {
   id: 'project-list',
   type: 'x-template',
   definition: {
-    template: `#project-list`,
+    template: '#project-list',
     data() {
       return {
         projectList: [],
@@ -40,7 +44,7 @@ const projectList = {
           return;
         }
         Store.set('current-project', _.first(_.filter(this.projectList,
-          p => p[this.projectTablePkName] === slug)
+          p => p[this.projectTablePkName] === slug),
         )[this.projectTablePkName]);
         showNotification(null, 'project ' + slug + ' selected');
         document.dispatchEvent(ProjectSelected);
@@ -63,7 +67,7 @@ const projectList = {
         showNotification('Make project', 'TODO');
       },
     },
-  }
+  },
 };
 
-export {projectList};
+export { projectList };
