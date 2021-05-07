@@ -51,7 +51,7 @@ django_project_base_urlpatterns = [
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
     url(
-        r'^docs/(?P<path>.*)$',
+        r'^docs-files/(?P<path>.*)$',
         documentation_view, {'document_root': documentation_directory}, name='docs-files'
     ),  # url for sphinx
 ]
