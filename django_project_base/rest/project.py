@@ -2,6 +2,7 @@ from typing import Union
 
 from django.conf import settings
 from django.http import Http404
+
 from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
 from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
 
