@@ -4,6 +4,9 @@ from django.conf import settings
 from django.conf.urls import url
 from django.urls import include, path
 from django.views.i18n import JavaScriptCatalog
+from drf_spectacular.settings import SPECTACULAR_DEFAULTS
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
@@ -12,8 +15,6 @@ from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
 from django_project_base.views import documentation_view
-from drf_spectacular.settings import SPECTACULAR_DEFAULTS
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 
 def filter_rest_documentation_endpoints(endpoints: list) -> list:
