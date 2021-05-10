@@ -42,7 +42,7 @@ To enable User caching backend to add the following line to *AUTHENTICATION_BACK
        ...
    )
 
-User caching is not enabled for bulk updates by default, since Django doesn't call event on .update(). Running bulk
+User caching is not enabled for bulk updates by default, since Django doesn't call signal on .update(). Running bulk
 update without clearing cache could potentially cause race conditions. Avoid it if possible.
 
 It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can find
@@ -54,9 +54,9 @@ example code below.
   ...
   class ProfilesQuerySet(models.QuerySet):
       def update(self, **kwargs):
-          res = super(ProfilesQuerySet, self).update(**kwargs)
           for profile in self:
               cache.delete(profile.django_user_cache_id())
+          res = super(ProfilesQuerySet, self).update(**kwargs)
           return res
 
 

@@ -25,6 +25,6 @@ class UsersCachingBackend(ModelBackend):
         if not user:
             user = super().get_user(user_id)
             if user_id and user:
-                cache.set(DJANGO_USER_CACHE % (user_id if user_id else 0), user)
+                cache.set(DJANGO_USER_CACHE % (user_id or 0), user)
         return user
 
