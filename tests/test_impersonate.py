@@ -26,6 +26,5 @@ class TestImpersonateUserViewset(TestCase):
         cache.delete('django-user-%d' % janez.id)
 
         # Now Janez should be able to impersonate
-        response = self.api_client.post('/account/impersonate/start', {'email':'user1@user1.si'}, format='json')
+        response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, 200)
-
