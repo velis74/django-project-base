@@ -1,8 +1,8 @@
-from example.demo_django_base.models import UserProfile
-
+from django.core.cache import cache
 from django.test import TestCase
 from rest_framework.test import APIClient
-from django.core.cache import cache
+
+from example.demo_django_base.models import UserProfile
 
 
 class TestImpersonateUserViewset(TestCase):
