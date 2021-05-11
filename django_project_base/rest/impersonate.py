@@ -16,7 +16,11 @@ from rest_framework.serializers import Serializer
 
 
 class ImpersonateRequestSerializer(Serializer):
-    email = fields.EmailField(required=True)
+    id = fields.IntegerField(required=False)
+    email = fields.EmailField(required=False)
+    username = fields.CharField(required=False)
+
+
 
 
 response_schema: dict = {
@@ -52,7 +56,7 @@ class ImpersonateUserViewset(viewsets.ViewSet):
             permission_classes=[IsAuthenticated, IsAdminUser])
     def start(self, request: Request) -> Response:
         validated_data: dict = self.__validate(request.data)
-        hijacked_user: Model = get_object_or_404(get_user_model(), email=validated_data['email'])
+        hijacked_user: Model = get_object_or_404(get_user_model(), **validated_data)
         if request.user == hijacked_user:
             raise PermissionDenied(_('Impersonating self is not allowed'))
         login_user(request, hijacked_user)
