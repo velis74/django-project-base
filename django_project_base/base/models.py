@@ -38,18 +38,11 @@ class BaseProfile(User):
     theme = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported themes
     avatar = models.FileField(null=True, blank=True)
 
-    def django_user_cache_id(self):
-        return 'django-user-%d' % self.id
-
     class Meta:
         abstract = True
 
 
 class Profile(BaseProfile):
-    @property
-    def django_user_cache_id(self):
-        return 'django-user-%d' % self.id
-
     class Meta:
         swappable = swapper.swappable_setting('django_project_base', 'Profile')
 

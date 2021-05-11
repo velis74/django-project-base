@@ -2,8 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.cache import cache
 from django.db.models.signals import post_delete, post_save
-
-DJANGO_USER_CACHE = 'django-user-%d'
+from django_project_base.settings import DJANGO_USER_CACHE
 
 
 def invalidate_cache(sender, instance, **kwargs):
@@ -27,4 +26,3 @@ class UsersCachingBackend(ModelBackend):
             if user_id and user:
                 cache.set(DJANGO_USER_CACHE % (user_id or 0), user)
         return user
-
