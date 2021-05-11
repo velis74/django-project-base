@@ -11,6 +11,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
 
 )
 
+CACHE_IMPERSONATE_USER = 'impersonate-user-%d'
 
 def set_django_project_base_settings():
     from django.conf import settings

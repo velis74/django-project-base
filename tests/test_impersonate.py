@@ -10,10 +10,10 @@ class TestImpersonateUserViewset(TestCase):
         super().setUp()
         self.api_client = APIClient()
 
-    def test_start(self):
+    def test_impersonate(self):
         self.assertTrue(self.api_client.login(username='janez', password='janezjanez'), 'Not logged in')
 
-        # Janez iz not superuser and is not allowd to impersonate
+        # Janez iz not superuser and is not allowed to impersonate
         response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, 403)
 
@@ -27,4 +27,11 @@ class TestImpersonateUserViewset(TestCase):
 
         # Now Janez should be able to impersonate
         response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        # Check if is impersonated
+        response = self.api_client.get('/account/profile/1', {}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.api_client.post('/account/impersonate/end', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, 200)

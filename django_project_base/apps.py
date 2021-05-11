@@ -9,3 +9,4 @@ class DjangoProjectBaseConfig(AppConfig):
 
     def ready(self):
         set_django_project_base_settings()
+        import django_project_base.base.signals
