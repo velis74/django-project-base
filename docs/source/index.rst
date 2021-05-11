@@ -38,6 +38,7 @@ Index:
    settings
    javascript_client
    tags
+   fields
    middleware
    modules/index
 
