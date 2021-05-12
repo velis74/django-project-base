@@ -13,6 +13,9 @@ DJANGO_PROJECT_BASE_SETTINGS = (
 
 CACHE_IMPERSONATE_USER = 'impersonate-user-%d'
 
+WSGI_LOG_LONG_REQUESTS_COUNT = 50
+
+
 def set_django_project_base_settings():
     from django.conf import settings
     for _setting in DJANGO_PROJECT_BASE_SETTINGS:

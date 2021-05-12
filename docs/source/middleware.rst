@@ -21,3 +21,20 @@ be determined from request path. See DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PAR
     'django_project_base.base.middleware.UrlsVarsMiddleware',
     ...
     ]
+
+Performance middleware
+----------------------
+
+Logs and displays summary of most time consuming requests.
+
+To enable middleware add following line to projects settings.py
+
+.. code-block:: python
+
+  # myproject/settings.py
+
+  MIDDLEWARE = [
+    ...
+    'django_project_base.performance_middleware.middleware.profile_middleware.profile_middleware'
+    ...
+  ]

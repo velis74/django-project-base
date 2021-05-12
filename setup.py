@@ -4,7 +4,6 @@ import os
 import sys
 
 import setuptools
-
 from django_project_base import __version__
 
 

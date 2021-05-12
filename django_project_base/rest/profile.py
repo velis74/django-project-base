@@ -1,13 +1,12 @@
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
+from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
+from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
+from django_project_base.rest.project import ProjectSerializer
 from rest_framework import exceptions
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-
-from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
-from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
-from django_project_base.rest.project import ProjectSerializer
 
 
 class ProfileSerializer(ProjectBaseSerializer):

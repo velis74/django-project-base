@@ -1,9 +1,8 @@
 from django.db import models
 from django.db.models import fields
+from django_project_base.base.models import BaseProfile, BaseProject, BaseTag
 from taggit.managers import TaggableManager
 from taggit.models import GenericTaggedItemBase
-
-from django_project_base.base.models import BaseProfile, BaseProject, BaseTag
 
 
 class UserProfile(BaseProfile):

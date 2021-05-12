@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
-import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -55,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_project_base.performance_middleware.middleware.profile_middleware.profile_middleware'
 ]
 
 ROOT_URLCONF = 'example.setup.urls'
@@ -150,3 +150,5 @@ AUTHENTICATION_BACKENDS = (
     'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
     'django.contrib.auth.backends.ModelBackend',
 )
+
+WSGI_LOG_LONG_REQUESTS = True

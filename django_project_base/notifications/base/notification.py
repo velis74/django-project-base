@@ -4,7 +4,6 @@ from datetime import datetime
 from typing import List, Optional, Type
 
 from django.conf import settings
-
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
