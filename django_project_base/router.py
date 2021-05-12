@@ -6,7 +6,7 @@ from django.urls import include, path
 from django.views.i18n import JavaScriptCatalog
 from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
-from django_project_base.netdata.request_statistics.app_debug_view import app_debug_view
+from django_project_base.performance_middleware.request_statistics.app_debug_view import app_debug_view
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.rest.impersonate import ImpersonateUserViewset
