@@ -21,8 +21,6 @@ class ImpersonateRequestSerializer(Serializer):
     username = fields.CharField(required=False)
 
 
-
-
 response_schema: dict = {
     status.HTTP_200_OK: '',
     status.HTTP_403_FORBIDDEN: '',

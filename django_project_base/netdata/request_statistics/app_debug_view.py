@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.core.cache import cache
 from django.shortcuts import render
+from django_project_base.settings import WSGI_LOG_LONG_REQUESTS_COUNT
 from dynamicforms.struct import Struct
 
 
@@ -13,20 +14,16 @@ def app_debug_view(request):
     return render(request, 'app-debug/main.html', __get_debug_data())
 
 
-def get_random_int():
-    return random.randint(0, 255)
-
-
 def __get_debug_data():
     import time
 
     result_data = []
     requests = []
 
-    # for cache_ptr in range(WSGI_LOG_LONG_REQUESTS_COUNT):
-    #     item = cache.get('long_running_cmds_data%d' % cache_ptr)
-    #     if item:
-    #         requests.append(item)
+    for cache_ptr in range(WSGI_LOG_LONG_REQUESTS_COUNT):
+        item = cache.get('long_running_cmds_data%d' % cache_ptr)
+        if item:
+            requests.append(item)
 
     totals = {}
     min_timestamp = time.time()
@@ -36,6 +33,7 @@ def __get_debug_data():
 
         num_of_queries: int = len(queries_executed)
         num_of_distinct_queries: int = len(set(map(lambda d: d['sql'], queries_executed)))
+        r = lambda: random.randint(0, 255)  # noqa: E731
         item = dict(
             r_data=dict(
                 num_of_duplicate_queries=num_of_queries - num_of_distinct_queries,
@@ -49,7 +47,7 @@ def __get_debug_data():
                 query_string=req.get('QUERY_STRING'),
             ),
             db_queries=queries_executed,
-            color='rgba(%d, %d, %d, 0.3)' % (get_random_int(), get_random_int(), get_random_int()),
+            color='rgba(%d, %d, %d, 0.3)' % (r(), r(), r()),
         )
         item_data = item['r_data']
         totals.setdefault(item_data['path_info'], Struct(count=0, time=0, path=''))

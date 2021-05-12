@@ -7,9 +7,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from taggit.models import TagBase
-
 from django_project_base.base.fields import HexColorField
+from taggit.models import TagBase
 
 
 class BaseProject(models.Model):

@@ -1,7 +1,6 @@
 from django.test import TestCase
-from rest_framework.test import APIClient
-
 from example.demo_django_base.models import Project, UserProfile
+from rest_framework.test import APIClient
 
 
 class TestProject(TestCase):

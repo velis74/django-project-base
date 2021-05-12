@@ -3,7 +3,6 @@ from typing import Optional
 
 from django.conf import settings
 from django.core.cache import cache
-
 from django_project_base.base.queryset_with_cache import QuerySetWithCache
 from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.utils import utc_now

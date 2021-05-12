@@ -1,5 +1,4 @@
 from django.apps import AppConfig
-
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 from django_project_base.notifications.settings import NOTIFICATIONS_SETTINGS
 
