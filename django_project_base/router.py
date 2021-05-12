@@ -51,7 +51,6 @@ django_project_base_urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    url(r'^app-debug/', app_debug_view, name='app-debug'),
     url(
         r'^docs-files/(?P<path>.*)$',
         documentation_view, {'document_root': documentation_directory}, name='docs-files'
@@ -60,3 +59,6 @@ django_project_base_urlpatterns = [
 
 if NOTIFICATIONS_APP_ID in settings.INSTALLED_APPS:
     django_project_base_urlpatterns.append(url(r'', include(notifications_router.urls)))
+
+if 'django_project_base.performance_middleware.middleware.profile_middleware.profile_middleware' in settings.MIDDLEWARE:
+    django_project_base_urlpatterns.append(url(r'^app-debug/', app_debug_view, name='app-debug'))
