@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from django_project_base import VERSION
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 
@@ -144,6 +145,12 @@ REST_REGISTRATION = {
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Django Project Base Example API',
+    'DESCRIPTION': 'Django project base',
+    'VERSION': VERSION,
 }
 
 AUTHENTICATION_BACKENDS = (

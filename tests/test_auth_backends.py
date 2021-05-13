@@ -17,18 +17,16 @@ class TestUsersCachingBackend(TestCase):
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 403)
 
-        # make Miha a superuser
-        miha = UserProfile.objects.get(username='miha')
-        miha.is_staff = True
-        miha.is_superuser = True
-        miha.save()
+        UserProfile.objects.filter(username__in=['miha', 'janez']).update(is_superuser=True, is_staff=True)
 
         # I still shouldn't be able to do superuser stuff
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 403)
 
         # Clearing cache, now Miha can do better stuff
-        cache.delete(DJANGO_USER_CACHE % miha.id)
+        staff = UserProfile.objects.filter(is_staff=True)
+        for user in staff:
+            cache.delete(DJANGO_USER_CACHE % user.id)
 
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 200)

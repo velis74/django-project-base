@@ -42,16 +42,26 @@ To enable User caching backend to add the following line to *AUTHENTICATION_BACK
        ...
    )
 
-User caching is not enabled for bulk updates by default, since Django doesn't call signal on .update(). Running bulk
-update without clearing cache could potentially cause race conditions. Avoid it if possible, or take care of manually
-clearing cache for user.
+User caching is not enabled for bulk updates by default, since Django doesn't call signal on .update() .bulk_update()
+or .delete(). Updating data with a query or running bulk update, without clearing cache for every object could
+potentially cause race conditions. Avoid it if possible, or take care of manually clearing the cache for the user.
+
+Example for clearing cache after bulk update.
 
 .. code-block:: python
 
   ...
+  from django.core.cache import cache
   from django_project_base.settings import DJANGO_USER_CACHE
   ...
-  cache.delete(DJANGO_USER_CACHE % profile.id)
+  # Bulk update multiple users. Give them superuser permission.
+  # If those users are logged in, they don't have permission until cache is cleared or they log out and log in again.
+  UserProfile.objects.filter(username__in=['miha', 'janez']).update(is_superuser=True, is_staff=True)
+
+  # After clearing users cache for those users will be able to work with additional permissions
+  staff = UserProfile.objects.filter(username__in=['miha', 'janez'])
+        for user in staff:
+            cache.delete(DJANGO_USER_CACHE % user.id)
 
 It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can find
 example code below.
@@ -60,6 +70,7 @@ example code below.
 
   # models.py
   ...
+  from django.core.cache import cache
   from django_project_base.settings import DJANGO_USER_CACHE
   ...
   class ProfilesQuerySet(models.QuerySet):
@@ -68,6 +79,12 @@ example code below.
               cache.delete(DJANGO_USER_CACHE % profile.id)
           res = super(ProfilesQuerySet, self).update(**kwargs)
           return res
+
+      def delete(self):
+        for profile in self:
+            cache.delete(DJANGO_USER_CACHE % profile.id)
+        res = super(ProfilesQuerySet, self).delete()
+        return res
 
 
   class UserProfile(BaseProfile):
