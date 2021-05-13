@@ -37,8 +37,10 @@ Index:
    installation
    settings
    javascript_client
+   Authentication <authentication>
    tags
    fields
    middleware
    modules/index
+   example_project
 

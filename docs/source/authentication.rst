@@ -1,8 +1,8 @@
 Authentication
 ==============
 
-
-**Impersonate user**
+Impersonate user
+----------------
 
 Sometimes is useful if we can login into app as another user for debugging or help purposes.
 User change is supported via REST api calls or you can use userProfile component (django_project_base/templates/user-profile/bootstrap/template.html)
@@ -26,7 +26,8 @@ For determining which user can impersonate which user you can set your own logic
             return False
 
 
-**User caching backend**
+User caching backend
+--------------------
 
 To increase AUTH performance you can set a backend that caches users.
 
@@ -46,7 +47,7 @@ User caching is not enabled for bulk updates by default, since Django doesn't ca
 or .delete(). Updating data with a query or running bulk update, without clearing cache for every object could
 potentially cause race conditions. Avoid it if possible, or take care of manually clearing the cache for the user.
 
-Example for clearing cache after bulk update.
+Example for clearing cache after bulk update:
 
 .. code-block:: python
 
