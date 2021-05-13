@@ -43,8 +43,10 @@ Thumbs.db
 *.mov
 *.wmv
 /docs/build/
+/docs/_buildhtml/
 /docs/.doctrees/
 /.tox/
 /django_project_base.egg-info/
 package-lock.json
+example/db.sqlite3
 
