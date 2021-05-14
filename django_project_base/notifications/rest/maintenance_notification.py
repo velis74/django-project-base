@@ -7,8 +7,6 @@ from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
-from django_project_base.notifications.base.rest.serializer import Serializer
-from django_project_base.notifications.base.rest.viewset import ViewSet
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 from django_project_base.notifications.utils import utc_now
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
@@ -20,7 +18,8 @@ from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.serializers import Serializer as RestFrameworkSerializer
+from rest_framework.serializers import ModelSerializer, Serializer as RestFrameworkSerializer
+from rest_framework.viewsets import ModelViewSet
 
 
 def _is_model_field_null(model: 'Model', field_name: str) -> bool:  # noqa: F821
@@ -51,13 +50,13 @@ class UTCDateTimeField(fields.DateTimeField):
         return value
 
 
-class MessageSerializer(Serializer):
+class MessageSerializer(ModelSerializer):
     class Meta:
         model = DjangoProjectBaseMessage
         exclude = (DjangoProjectBaseMessage._meta.pk.name,)
 
 
-class MaintenanceNotificationSerializer(Serializer):
+class MaintenanceNotificationSerializer(ModelSerializer):
     delayed_to_timestamp = fields.SerializerMethodField()
     notification_acknowledged_data = fields.SerializerMethodField()
     message = MessageSerializer()
@@ -108,7 +107,7 @@ class MaintenanceNotificationSerializer(Serializer):
     update=extend_schema(exclude=True),
     partial_update=extend_schema(exclude=True),
 )
-class UsersMaintenanceNotificationViewset(ViewSet):
+class UsersMaintenanceNotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 

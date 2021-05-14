@@ -2,13 +2,13 @@ import swapper
 from django.conf import settings
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
-from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
 from django_project_base.rest.project import ProjectSerializer
 from dynamicforms.serializers import ModelSerializer
 from rest_framework import exceptions, serializers
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 
 class ProfileSerializer(ModelSerializer):
@@ -30,7 +30,7 @@ class ProfileSerializer(ModelSerializer):
         exclude = ()
 
 
-class ProfileViewSet(ProjectBaseViewSet):
+class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
