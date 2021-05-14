@@ -1,8 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable no-useless-concat */
-/* eslint-disable arrow-parens */
-/* eslint-disable object-shorthand */
 import { Store } from './store';
 import { apiClient as ApiClient } from './apiClient';
 import { logoutEvent as LogoutEvent, createEvent } from './events';
@@ -15,14 +10,15 @@ class Session {
     ApiClient.post('account/login/',
       {
         login: username,
-        password: password,
+        password,
       }).then(() => {
-      ApiClient.get('account/profile/current?decorate=default-project').then(response => {
+      ApiClient.get('account/profile/current?decorate=default-project').then((response) => {
         Store.set('current-user', response.data);
         Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
         document.dispatchEvent(createEvent('login', response.data));
         showNotification(null,
-          'Now redirect should be made to ' + 'project/' + response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
+          // eslint-disable-next-line no-useless-concat
+          `${'Now redirect should be made to ' + 'project/'}${response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]}`);
       });
     });
   }
@@ -38,4 +34,5 @@ class Session {
   }
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export { Session };
