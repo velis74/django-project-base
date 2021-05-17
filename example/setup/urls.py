@@ -18,8 +18,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django_project_base.router import django_project_base_urlpatterns
-from example.demo_django_base.views import index_view
+from example.demo_django_base.views import index_view, page1_view
 
 urlpatterns = [path('', index_view, name='index'),
+               path('page1/', page1_view, name='page1'),
                path('admin/', admin.site.urls), ] + django_project_base_urlpatterns + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT)

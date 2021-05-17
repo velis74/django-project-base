@@ -1,8 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable function-paren-newline */
-/* eslint-disable arrow-parens */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-template */
 import _ from 'lodash';
 
 const breadcrumbs = {
@@ -21,21 +16,19 @@ const breadcrumbs = {
     },
     computed: {
       currentBreadcrumbsLocation() {
-        let data = window.location.pathname;
-        // todo: remove
-        data = '/peoject/ddd/info/last.html';
-        const parts = _.filter(_.trim(data, '/').split('/'), l => l);
+        const data = window.location.pathname;
+        const parts = _.filter(_.trim(data, '/').split('/'), (l) => l);
         return _.map(parts,
-          v => {
-            const _idx = _.indexOf(parts, v);
-            const _url = _.take(parts, _idx + 1);
+          (v) => {
+            const idx = _.indexOf(parts, v);
+            const url = _.take(parts, idx + 1);
             return {
-              url: '/' + _.join(_url, '/'),
+              url: `/${_.join(url, '/')}`,
               breadcrumb: _.startCase(
-                _.replace(_.replace(v, '.html', ''), ' ', '')),
+                _.replace(_.replace(v, '.html', ''), ' ', ''),
+              ),
             };
-          },
-        );
+          });
         // return brd;
         // return _.concat({
         //   'url': '/',
@@ -47,4 +40,5 @@ const breadcrumbs = {
   },
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export { breadcrumbs };
