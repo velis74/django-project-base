@@ -57,7 +57,7 @@ class ProfileViewSet(ModelViewSet):
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
 
-    @action(methods=['GET'], detail=False, url_path=r'search/(?P<query>\w+)', url_name='users-search')
+    @action(methods=['GET'], detail=False, url_path=r'(?P<query>\w+)', url_name='users-search')
     def users_search(self, request: Request, query: str, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
         if not user:

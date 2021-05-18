@@ -12,7 +12,7 @@ class TestImpersonateUserViewset(TestCase):
     def test_impersonate(self):
         self.assertTrue(self.api_client.login(username='janez', password='janezjanez'), 'Not logged in')
 
-        # Janez iz not superuser and is not allowed to impersonate
+        # Janez is not superuser and is not allowed to impersonate
         response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, 403)
 
