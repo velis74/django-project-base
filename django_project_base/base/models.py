@@ -7,17 +7,18 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
 from django_project_base.base.fields import HexColorField
 from taggit.models import TagBase
 
 
 class BaseProject(models.Model):
-    name = models.CharField(max_length=80, null=False, blank=False, db_index=True)
-    slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True)
-    description = models.TextField(null=True, blank=True)
-    logo = models.FileField(null=True, blank=True)
+    name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_('Name'))
+    slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_('Slug'))
+    description = models.TextField(null=True, blank=True, verbose_name=_('Description'))
+    logo = models.FileField(null=True, blank=True, verbose_name=_('Logo'))
     owner = parent = models.ForeignKey(swapper.get_model_name('django_project_base', 'Profile'),
-                                       on_delete=models.CASCADE)
+                                       on_delete=models.CASCADE, verbose_name=_('Owner'))
 
     class Meta:
         abstract = True
@@ -32,11 +33,13 @@ class BaseProfile(User):
     """
     User profile. We start with some easy common settings
     """
-    bio = models.TextField(max_length=500, null=True, blank=True)
-    phone_number = models.CharField(max_length=20, null=True, blank=True)
-    language = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported languages
-    theme = models.CharField(max_length=10, null=True, blank=True)  # This one will list all supported themes
-    avatar = models.FileField(null=True, blank=True)
+    bio = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('Bio'))
+    phone_number = models.CharField(max_length=20, null=True, blank=True, verbose_name=_('Phone number'))
+    # This one will list all supported languages
+    language = models.CharField(max_length=10, null=True, blank=True, verbose_name=_('Language'))
+    # This one will list all supported themes
+    theme = models.CharField(max_length=10, null=True, blank=True, verbose_name=_('Theme'))
+    avatar = models.FileField(null=True, blank=True, verbose_name=_('Avatar'))
 
     class Meta:
         abstract = True
@@ -56,11 +59,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 
 class BaseTag(TagBase):
-    color = HexColorField()
+    color = HexColorField(verbose_name=_('Color'))
     # icon if char for now # todo: what will be used for icon
-    icon = models.CharField(max_length=10, null=True, blank=True)
+    icon = models.CharField(max_length=10, null=True, blank=True, verbose_name=_('Icon'))
     project = models.ForeignKey(settings.DJANGO_PROJECT_BASE_PROJECT_MODEL, on_delete=models.CASCADE, null=True,
-                                blank=True)
+                                blank=True, verbose_name=_('Project'))
 
     def save(self, *args, **kwargs):
         if not self.slug:

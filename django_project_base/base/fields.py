@@ -1,5 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db.models import fields
+from django.utils.translation import ugettext_lazy as _
 
 
 class HexColorField(fields.CharField):
@@ -9,5 +10,5 @@ class HexColorField(fields.CharField):
         super().__init__(*args, **kwargs)
         self.validators.append(RegexValidator(
             regex="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-            message='Value is not a hex color',
+            message=_('Value is not a hex color'),
         ))

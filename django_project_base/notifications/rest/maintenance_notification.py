@@ -4,6 +4,7 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import transaction
+from django.utils.translation import ugettext_lazy as _
 from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
 from django_project_base.notifications.base.rest.serializer import Serializer
@@ -34,7 +35,7 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
                                                                               help_text='Notification identifier')
         new.fields['acknowledged_identifier'] = fields.IntegerField(
             required=True, allow_null=False,
-            help_text='Time interval identifying at what time notification was acknnowledged by user')
+            help_text=_('Time interval identifying at what time notification was acknnowledged by user'))
         return new
 
     def create(self, validated_data):
@@ -60,10 +61,10 @@ class MaintenanceNotificationSerializer(Serializer):
     delayed_to_timestamp = fields.SerializerMethodField()
     notification_acknowledged_data = fields.SerializerMethodField()
     message = MessageSerializer()
-    created_at = UTCDateTimeField(read_only=True, help_text='Time in UTC.')
+    created_at = UTCDateTimeField(read_only=True, help_text=_('Time in UTC.'))
     delayed_to = UTCDateTimeField(
         required=not _is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'),
-        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'), help_text='Time in UTC.')
+        allow_null=_is_model_field_null(DjangoProjectBaseNotification, 'delayed_to'), help_text=_('Time in UTC.'))
 
     def get_delayed_to_timestamp(self, notification: DjangoProjectBaseNotification) -> Optional[int]:
         return int(notification.delayed_to.timestamp()) if notification and notification.delayed_to else None

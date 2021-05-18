@@ -4,16 +4,17 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.db.models import SET_NULL
+from django.utils.translation import ugettext_lazy as _
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
 from django_project_base.notifications.utils import utc_now
 
 
 class AbstractDjangoProjectBaseMessage(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    subject = models.TextField(null=True, blank=True)
-    body = models.TextField(null=False, blank=False)
-    footer = models.TextField(null=True, blank=True)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_('Id'))
+    subject = models.TextField(null=True, blank=True, verbose_name=_('Subject'))
+    body = models.TextField(null=False, blank=False, verbose_name=_('Body'))
+    footer = models.TextField(null=True, blank=True, verbose_name=_('Footer'))
 
     class Meta:
         abstract = True
@@ -24,24 +25,23 @@ class DjangoProjectBaseMessage(AbstractDjangoProjectBaseMessage):
 
 
 class AbstractDjangoProjectBaseNotification(models.Model):
-    locale = models.CharField(null=True, blank=True, max_length=8)
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_('Locale'))
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_('Id'))
     level = models.CharField(null=False, blank=False, max_length=16, choices=[
-        (i.value, i.name.lower().title()) for i in NotificationLevel])
-    required_channels = models.CharField(null=True, blank=True, max_length=32)
-    sent_channels = models.CharField(null=True, blank=True, max_length=32)
-    failed_channels = models.CharField(null=True, blank=True, max_length=32)
-    created_at = models.DateTimeField(default=utc_now, editable=False, blank=False, null=False)
-    sent_at = models.DateTimeField(null=True, blank=True)
-    delayed_to = models.DateTimeField(null=True, blank=True)
-    type = models.CharField(null=False, blank=False, max_length=16, choices=[
-        (i.value, i.name.lower().title()) for i in NotificationType], default=NotificationType.STANDARD.value)
-    recipients = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        blank=True,
-        related_name='notifications',
-    )
-    message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True)
+        (i.value, i.name.lower().title()) for i in NotificationLevel], verbose_name=_('Level'))
+    required_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_('Required channels'))
+    sent_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_('Sent channels'))
+    failed_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_('Failed channels'))
+    created_at = models.DateTimeField(default=utc_now, editable=False, blank=False, null=False,
+                                      verbose_name=_('Created at'))
+    sent_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Sent at'))
+    delayed_to = models.DateTimeField(null=True, blank=True, verbose_name=_('Delayed to'))
+    type = models.CharField(
+        null=False, blank=False, max_length=16, choices=[(i.value, i.name.lower().title()) for i in NotificationType],
+        default=NotificationType.STANDARD.value, verbose_name=_('Type'))
+    recipients = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='notifications',
+                                        verbose_name=_('Recipients'))
+    message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True, verbose_name=_('Message'))
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.delayed_to = self.delayed_to.replace(

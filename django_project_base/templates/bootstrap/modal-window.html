@@ -1,36 +1,35 @@
 {% verbatim %}
 <script type="text/x-template" id="modal-window">
-    <transition name="modal" v-cloak>
-        <div class="modal-mask">
-            <div class="modal-wrapper">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <slot name="modal-title">
-                                <h5 class="modal-title">Modal title</h5>
-                            </slot>
-                            <slot name="header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </slot>
-                        </div>
-                        <div class="modal-body">
-                            <slot name="body">
-                                default body
-                            </slot>
-                        </div>
-                        <div class="modal-footer">
-                            <slot name="footer">
-                                <button type="button" class="btn btn-secondary">Close
-                                </button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </slot>
-                        </div>
-                    </div>
-                </div>
+  <transition name="modal" v-cloak>
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <slot name="modal-title">
+                <h5 class="modal-title">Modal title</h5>
+              </slot>
+              <slot name="header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </slot>
             </div>
+            <div class="modal-body">
+              <slot name="body">
+                default body
+              </slot>
+            </div>
+            <div class="modal-footer">
+              <slot name="footer">
+                <button type="button" class="btn btn-secondary">{{ translations('Close') }}
+                </button>
+                <button type="button" class="btn btn-primary">{{ translations('Save changes') }}</button>
+              </slot>
+            </div>
+          </div>
         </div>
-    </transition>
-</script>
-{% endverbatim %}
+      </div>
+    </div>
+  </transition>
+</script>{% endverbatim %}
