@@ -52,3 +52,25 @@ Then also make sure your models are loaded instead of django-project-base models
    been created and used is a really hard and painful process. So make triple sure you don't deploy your application
    without first making sure the model you want to use is either your own or you are satisfied with our default
    implementation.
+
+Dynamic Forms
+-------------
+
+Django project base is dependent on Dynamic Forms project https://github.com/velis74/DynamicForms
+
+Read Dynamic Forms documentation for installation steps and more information about project.
+
+You should add at least following code to your project, to enable Dynamic Forms.
+
+.. code-block:: python
+
+  # myproject/settings.py
+
+  REST_FRAMEWORK = {
+  ...
+        'DEFAULT_RENDERER_CLASSES': (
+          'rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer',
+          'dynamicforms.renderers.TemplateHTMLRenderer',
+      )
+  ...
+  }

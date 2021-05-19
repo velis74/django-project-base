@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from dynamicforms.serializers import ModelSerializer
 
 
 class Serializer(ModelSerializer):

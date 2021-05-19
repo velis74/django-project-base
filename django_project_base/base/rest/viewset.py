@@ -1,8 +1,8 @@
 from django.apps import apps
 from django.conf import settings
 from django.db.models import Model
+from dynamicforms.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
 
 
 class ViewSet(ModelViewSet):
