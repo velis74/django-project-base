@@ -21,6 +21,8 @@ Extend the BaseProject & BaseProfile model:
    class MyProfile(BaseProfile):
        # add any fields & methods you like here
 
+
+
 Then also make sure your models are loaded instead of django-project-base models:
 
 .. code-block:: python
@@ -48,10 +50,10 @@ Then also make sure your models are loaded instead of django-project-base models
 
 .. warning::
 
-   This is important!!! You need to do the overriding before you create migrations. Migrating after default models had
-   been created and used is a really hard and painful process. So make triple sure you don't deploy your application
-   without first making sure the model you want to use is either your own or you are satisfied with our default
-   implementation.
+   This is important!!! You need to do the overriding before you create migrations, overriding base class is **mandatory**.
+   There arent any migrations available for *default models*. Migrating after models had been created and used is a
+   really hard and painful process. So make triple sure you don't deploy your application without first making sure the
+   model you want to use is either your own or you are satisfied with our default implementation.
 
 Dynamic Forms
 -------------
