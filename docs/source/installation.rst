@@ -55,6 +55,21 @@ Then also make sure your models are loaded instead of django-project-base models
    really hard and painful process. So make triple sure you don't deploy your application without first making sure the
    model you want to use is either your own or you are satisfied with our default implementation.
 
+Append django project base urls:
+
+.. code-block:: python
+
+  # myproject/urls.py
+  urlpatterns = [
+    ...
+    path('', include('django_project_base.urls')),
+    ...
+  ]
+
+There are some additional URLs available for the Django project base, like swagger or documentation. Appending those
+URLs is described in more details in suitable chapters.
+
+
 Dynamic Forms
 -------------
 

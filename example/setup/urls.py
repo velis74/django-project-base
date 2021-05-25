@@ -16,11 +16,16 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django_project_base.router import django_project_base_urlpatterns
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from example.demo_django_base.views import index_view, page1_view
 
-urlpatterns = [path('', index_view, name='index'),
-               path('page1/', page1_view, name='page1'),
-               path('admin/', admin.site.urls), ] + django_project_base_urlpatterns + static(
-    settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns = [
+    path('', index_view, name='index'),
+    path('page1/', page1_view, name='page1'),
+    path('admin/', admin.site.urls),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
+    path('', include('django_project_base.urls')),
+] + django_project_base_urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

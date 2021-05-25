@@ -43,4 +43,5 @@ Index:
    middleware
    modules/index
    example_project
+   swagger
 

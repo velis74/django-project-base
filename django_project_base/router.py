@@ -2,8 +2,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.conf.urls import url
-from django.urls import include, path
-from django.views.i18n import JavaScriptCatalog
+from django.urls import include, path, re_path
 from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
@@ -46,15 +45,10 @@ SPECTACULAR_DEFAULTS['PREPROCESSING_HOOKS'] = [
 documentation_directory: str = str(Path().resolve()) + '/docs/build/'
 
 django_project_base_urlpatterns = [
-    path('%s/' % ACCOUNT_URL_PREFIX, include('rest_registration.api.urls')),
-    url(r'', include(django_project_base_router.urls)),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
-    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    url(
-        r'^docs-files/(?P<path>.*)$',
+    re_path(r'', include(django_project_base_router.urls)),
+    re_path(r'^docs-files/(?P<path>.*)$',
         documentation_view, {'document_root': documentation_directory}, name='docs-files'
-    ),  # url for sphinx
+        ),  # url for sphinx
 ]
 
 if NOTIFICATIONS_APP_ID in settings.INSTALLED_APPS:
