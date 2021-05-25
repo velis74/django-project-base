@@ -69,17 +69,6 @@ Append django project base urls:
 There are some additional URLs available for the Django project base, like swagger or documentation. Appending those
 URLs is described in more details in suitable chapters.
 
-Project settings
-----------------
-.. code-block:: python
-
-  PROFILE_REVERSE_FULL_NAME_ORDER = (bool)
-
-Defines first_name, last_name order for readonly field *full_name*. Default order is *False* - "First Last". Changing
-setting to true will reverse order to "Last First".
-
-Global setting can be also overrided with profile option reverse_full_name_order (bool).
-
 Dynamic Forms
 -------------
 

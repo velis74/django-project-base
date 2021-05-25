@@ -1,6 +1,8 @@
 Settings
 ========
 
+**DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES**
+
 .. code-block:: python
 
     DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES: {
@@ -13,9 +15,22 @@ This setting defines dictionary of attribute names on request object. For e.g. p
 propery current_project_slug. Language information is set on request objects under property current language. Is language
 or project is given in request path like: language-EN, then url_part settings is found and EN string is taken as language value.
 
+**DJANGO_PROJECT_BASE_SLUG_FIELD_NAME**
+
 .. code-block:: python
 
     DJANGO_PROJECT_BASE_SLUG_FIELD_NAME: 'slug'
 
 When creating models with slug field they should be named with this setting value. This enables that we can use object slug instead of
 object pk when making api requests.
+
+**PROFILE_REVERSE_FULL_NAME_ORDER**
+
+.. code-block:: python
+
+  PROFILE_REVERSE_FULL_NAME_ORDER = (bool)
+
+Defines first_name, last_name order for readonly field *full_name*. Default order is *False* - "First Last". Changing
+setting to true will reverse order to "Last First".
+
+Global setting can be also overrided with profile option reverse_full_name_order (bool).
