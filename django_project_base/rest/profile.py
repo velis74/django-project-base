@@ -1,22 +1,38 @@
 import swapper
+from django.conf import settings
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
-from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
 from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
 from django_project_base.rest.project import ProjectSerializer
-from rest_framework import exceptions
+from dynamicforms.serializers import ModelSerializer
+from rest_framework import exceptions, serializers
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 
-class ProfileSerializer(ProjectBaseSerializer):
+class ProfileSerializer(ModelSerializer):
+    full_name = serializers.SerializerMethodField('get_full_name', read_only=True)
+
+    def get_full_name(self, obj):
+        if obj.reverse_full_name_order is None:
+            reversed_order = getattr(settings, 'PROFILE_REVERSE_FULL_NAME_ORDER', False)
+        else:
+            reversed_order = obj.reverse_full_name_order
+
+        if reversed_order:
+            return self.instance.last_name + ' ' + self.instance.first_name
+        else:
+            return self.instance.first_name + ' ' + self.instance.last_name
+
     class Meta:
         model = None
         exclude = ()
 
 
 class ProfileViewSet(ProjectBaseViewSet):
+    serializer_class = ProfileSerializer
+
     def get_queryset(self):
         return swapper.load_model('django_project_base', 'Profile').objects.all()
 

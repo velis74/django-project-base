@@ -40,6 +40,7 @@ class BaseProfile(User):
     # This one will list all supported themes
     theme = models.CharField(max_length=10, null=True, blank=True, verbose_name=_('Theme'))
     avatar = models.FileField(null=True, blank=True, verbose_name=_('Avatar'))
+    reverse_full_name_order = models.BooleanField(null=True, blank=True, verbose_name=_('Reverse full name order'))
 
     class Meta:
         abstract = True
