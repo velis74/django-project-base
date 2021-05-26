@@ -46,13 +46,11 @@ class TestLoginViewset(TestCase):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login'),
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
         self.assertEqual(response.status_code, 200)
-        pass
 
     def test_logout_not_authorized(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'logout'),
                                         {}, format='json')
         self.assertEqual(response.status_code, 403)
-        pass
 
     def test_logout(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login'),
@@ -62,7 +60,6 @@ class TestLoginViewset(TestCase):
         response = self.api_client.post(os.path.join(self.url_prefix, 'logout'),
                                         {}, format='json')
         self.assertEqual(response.status_code, 200)
-        pass
 
 
 class TestChangePasswordViewset(TestCase):
