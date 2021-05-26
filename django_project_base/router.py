@@ -48,6 +48,10 @@ django_project_base_urlpatterns = [
     re_path(r'^docs-files/(?P<path>.*)$',
             documentation_view, {'document_root': documentation_directory}, name='docs-files'
             ),  # url for sphinx
+    # path('%s/' % ACCOUNT_URL_PREFIX, include('rest_registration.api.urls')),
+    # url(r'', include(django_project_base_router.urls)),
+    # path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    # path('social-auth/', include('social_django.urls', namespace="social")),
 ]
 
 if NOTIFICATIONS_APP_ID in settings.INSTALLED_APPS:

@@ -16,6 +16,7 @@ const login = {
     created() {
     },
     mounted() {
+      Session.checkLogin(false);
     },
     computed: {},
     methods: {

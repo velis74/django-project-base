@@ -15,6 +15,7 @@ from pathlib import Path
 from django_project_base import VERSION
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
+from django_project_base.accounts import ACCOUNT_APP_ID
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,11 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    # 'django.contrib.sites',
     'rest_registration',
     'django_project_base',
     'example.demo_django_base',
     'drf_spectacular',
     NOTIFICATIONS_APP_ID,
+    'social_django',
+    ACCOUNT_APP_ID,
 ]
 
 MIDDLEWARE = [
@@ -146,7 +150,8 @@ REST_REGISTRATION = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
         'dynamicforms.renderers.TemplateHTMLRenderer',
     )
 }
@@ -160,7 +165,6 @@ SPECTACULAR_SETTINGS = {
         'defaultModelsExpandDepth': -1,
     },
     'COMPONENT_SPLIT_REQUEST': True,
-
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -169,3 +173,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 WSGI_LOG_LONG_REQUESTS = True
+
+from sett_tmp import *
+

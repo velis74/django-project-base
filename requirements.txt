@@ -10,3 +10,6 @@ django-hijack
 pytz
 sphinx
 rst2pdf
+tox
+social-auth-app-django
+
