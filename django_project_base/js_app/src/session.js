@@ -19,6 +19,8 @@ class Session {
         showNotification(null,
           // eslint-disable-next-line no-useless-concat
           `${'Now redirect should be made to ' + 'project/'}${response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]}`);
+        /* redirect to root */
+        window.location.href = '/';
       });
     });
   }
