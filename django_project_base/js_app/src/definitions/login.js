@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { Session } from '../session';
 
 const login = {
@@ -27,4 +26,5 @@ const login = {
   },
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export { login };
