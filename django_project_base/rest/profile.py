@@ -1,5 +1,6 @@
 import swapper
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
 from django_project_base.rest.project import ProjectSerializer
@@ -43,7 +44,7 @@ class ProfileViewSet(ModelViewSet):
     @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current')
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
-        if not user:
+        if isinstance(user, AnonymousUser) or not user:
             raise exceptions.AuthenticationFailed
         serializer = self.get_serializer(
             getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name))
