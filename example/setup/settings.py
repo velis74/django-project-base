@@ -155,6 +155,11 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Django Project Base Example API',
     'DESCRIPTION': 'Django project base',
     'VERSION': VERSION,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'defaultModelsExpandDepth': -1,
+    },
+
 }
 
 AUTHENTICATION_BACKENDS = (
