@@ -42,6 +42,7 @@ Index:
    fields
    middleware
    modules/index
+   translations
    example_project
    swagger
 
