@@ -21,9 +21,9 @@ class ProfileSerializer(ModelSerializer):
             reversed_order = obj.reverse_full_name_order
 
         if reversed_order:
-            return self.instance.last_name + ' ' + self.instance.first_name
+            return obj.last_name + ' ' + obj.first_name
         else:
-            return self.instance.first_name + ' ' + self.instance.last_name
+            return obj.first_name + ' ' + obj.last_name
 
     class Meta:
         model = None
