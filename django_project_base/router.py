@@ -8,6 +8,7 @@ from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.performance_middleware.request_statistics.app_debug_view import app_debug_view
+from django_project_base.rest.auth import LoginViewset
 from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
@@ -34,6 +35,7 @@ django_project_base_router.register(r'project', ProjectViewSet, basename='projec
 django_project_base_router.register(r'%s/profile' % ACCOUNT_URL_PREFIX, ProfileViewSet, basename='profile-base-project')
 django_project_base_router.register(r'%s/impersonate' % ACCOUNT_URL_PREFIX, ImpersonateUserViewset,
                                     basename='profile-base-impersonate-user')
+django_project_base_router.register(r'account', LoginViewset, basename='login')
 
 SPECTACULAR_DEFAULTS['TITLE'] = 'Rest documentation'
 SPECTACULAR_DEFAULTS['DESCRIPTION'] = 'Api documentation'

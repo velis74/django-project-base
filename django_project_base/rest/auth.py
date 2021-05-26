@@ -7,16 +7,26 @@ from rest_registration.api.views import change_password, login, logout
 
 
 class LoginViewset(viewsets.ViewSet):
+    # , examples = [
+    #     OpenApiExample('Example 1'),
+    #     OpenApiExample('Example 2')
+    # ]
 
     @extend_schema(
         parameters=[
-            OpenApiParameter(name='login', description='Unique email address', required=True, type=str),
+            OpenApiParameter(name='login', description='Username', required=True, type=str),
             OpenApiParameter(name='password', description='Password', required=True, type=str)
         ],
+        responses={
+            200: OpenApiResponse(description='OK'),
+            400: OpenApiResponse(
+                description='Bad request. Missing either one of parameters or wrong login or password.'
+            ),
+        }
     )
     @action(detail=False, methods=['post'], url_name='login')
     def login(self, request: Request) -> Response:
-        """ Logs in the user via given login and password. """
+        """ Logs in the user via given username and password. """
         return login(request._request)
 
     @action(detail=False, methods=['post'], url_name='logout')
