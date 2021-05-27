@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-from django_project_base import VERSION
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from django_project_base.notifications import NOTIFICATIONS_APP_ID
+from django_project_base import VERSION
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django_project_base',
     'example.demo_django_base',
     'drf_spectacular',
-    NOTIFICATIONS_APP_ID,
 ]
 
 MIDDLEWARE = [
@@ -168,3 +167,15 @@ AUTHENTICATION_BACKENDS = (
 )
 
 WSGI_LOG_LONG_REQUESTS = True
+
+# Settings for Mailhog
+# https://github.com/mailhog/MailHog
+# MailHog is an email testing tool for developers. Configure your application to use MailHog for SMTP delivery.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 1025
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+SERVER_EMAIL = ''
+DEFAULT_FROM_EMAIL = 'info@example.com'

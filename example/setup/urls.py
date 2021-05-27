@@ -17,7 +17,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from django_project_base.router import django_project_base_urlpatterns
+from django_project_base.account import accounts_router
+from django_project_base.notifications import notifications_router
+from django_project_base.router import django_project_base_router
+from django_project_base.profiling import app_debug_view
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from example.demo_django_base.views import index_view, page1_view
 
@@ -27,5 +30,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
+    path('account/', include(accounts_router.urls)),
     path('', include('django_project_base.urls')),
-] + django_project_base_urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('', include(notifications_router.urls)),
+    path('', include(django_project_base_router.urls)),
+    path('app-debug/', app_debug_view, name='app-debug'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

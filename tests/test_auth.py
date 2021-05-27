@@ -92,3 +92,19 @@ class TestChangePasswordViewset(TestCase):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'janezjanez'}, format='json')
         self.assertEqual(response.status_code, 200)
+
+
+class TestSendResetPasswordLink(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.api_client = APIClient()
+
+    def test_send_reset_password_link(self):
+        response = self.api_client.post(os.path.join('/account/login/'),
+                                        {'login': 'miha', 'password': 'mihamiha'}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        # Send password link is disabled, returns 404
+        response = self.api_client.post('/account/send-reset-password-link/', {'login': 'miha'},
+                                        format='json')
+        self.assertEqual(response.status_code, 404)

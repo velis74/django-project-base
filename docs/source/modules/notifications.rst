@@ -38,13 +38,14 @@ Add app to your installed apps.
     ]
 
 
-Make sure you have django project base urls included:
+Add django-project-base notifications urls:
 
 .. code-block:: python
 
    # url.py
 
-   urlpatterns += django_project_base_urlpatterns
+   urlpatterns = [
+   ]
 
 Run migrations:
 

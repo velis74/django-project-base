@@ -28,7 +28,7 @@ be determined from request path. See DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PAR
 
 Performance profiler module is providing functionality to log and display the summary of the most time-consuming requests.
 
-To enable middleware add following line to projects settings.py
+To enable middleware add following line to project files:
 
 .. code-block:: python
 
@@ -41,4 +41,12 @@ To enable middleware add following line to projects settings.py
   ]
 
 
-Overview of current state is avialable on url *../app_debug/*
+  # myproject/urls.py
+  from django_project_base.profiling import app_debug_view
+
+  urlpatterns = [
+  path('app-debug/', app_debug_view, name='app-debug'),
+  ...
+  ]
+
+Overview of current state is avialable on url *http://hostname/app_debug/*

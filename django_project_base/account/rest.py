@@ -3,8 +3,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_registration.api.views import change_password, login, logout, reset_password, send_reset_password_link, \
-    verify_email, verify_registration
+from rest_registration.api.views import (
+    change_password, login, logout, reset_password, send_reset_password_link, verify_email, verify_registration
+)
 
 
 class AccountViewSet(viewsets.ViewSet):
