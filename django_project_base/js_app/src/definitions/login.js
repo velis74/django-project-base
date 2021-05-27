@@ -1,4 +1,6 @@
 import { Session } from '../session';
+import { apiClient as ApiClient } from '../apiClient';
+import { Store } from '../store';
 
 const login = {
   id: 'login',
@@ -18,7 +20,11 @@ const login = {
     },
     mounted() {
       Session.checkLogin(false);
-      this.socialAuth = ['sdgd', 'dfgdsfg', 'dfhsh'];
+      if (!Store.get('current-user')) {
+        ApiClient.get('account/social-auth-providers/').then((socProvResponse) => {
+          this.socialAuth = socProvResponse.data;
+        });
+      }
     },
     computed: {},
     methods: {

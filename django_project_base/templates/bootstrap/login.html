@@ -5,7 +5,17 @@
             <form @submit.prevent>
                 <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
                 <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
-                <button class="btn btn-sm" type="submit" @click="makeLogin">{{ translations('Login') }}</button>
+                <div class="btn-group dropleft" style="display: inline;">
+                    <button v-if="socialAuth.length" type="button" class="btn btn-sm dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </button>
+                    <button type="button" class="btn btn-sm" @click="makeLogin">
+                        {{ translations('Login') }}
+                    </button>
+                    <div v-if="socialAuth.length" class="dropdown-menu">
+                        <a v-for="(b, bx) in socialAuth" class="dropdown-item" :href="b.url">{{ b.title }}</a>
+                    </div>
+                </div>
             </form>
         </div>
         <notifications position="top center"/>

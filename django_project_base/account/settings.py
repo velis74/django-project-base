@@ -1,8 +1,6 @@
-from django_project_base.accounts.social_auth.settings import SOCIAL_AUTH_SETTINGS
+from django_project_base.account.social_auth.settings import SOCIAL_AUTH_SETTINGS
 
-ACCOUNT_SETTINGS = [
-
-]
+ACCOUNT_SETTINGS = []
 
 for set in SOCIAL_AUTH_SETTINGS:
     ACCOUNT_SETTINGS.append(set)

@@ -22,6 +22,7 @@ def parse_settings(input_settings: tuple) -> None:
                     _setting_existing_val: tuple = tuple(set(_setting_existing_val))
                 setattr(settings, setting_name, _setting_existing_val)
             else:
-                raise ValueError('Cannot handle setting with same name when parsing Django Project Base custom settings')
+                raise ValueError(
+                    'Cannot handle setting with same name when parsing Django Project Base custom settings')
         else:
             setattr(settings, setting_name, setting_value)

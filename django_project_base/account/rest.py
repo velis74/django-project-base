@@ -1,3 +1,6 @@
+import importlib
+from typing import List
+
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -5,6 +8,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import change_password, login, logout, reset_password, send_reset_password_link, \
     verify_email, verify_registration
+from django.utils.translation import ugettext_lazy as _
+
+from django_project_base.constants import ACCOUNT_URL_PREFIX
 
 
 class AccountViewSet(viewsets.ViewSet):
@@ -120,3 +126,33 @@ class AccountViewSet(viewsets.ViewSet):
     def verify_registration(self, request: Request) -> Response:
         """ Verify registration via signature. """
         return verify_registration(request._request)
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(description='OK'),
+        }
+    )
+    @action(detail=False, methods=['get'], url_path='social-auth-providers', url_name='social-auth-providers',
+            permission_classes=[], authentication_classes=[])
+    def social_auth_providers(self, request: Request) -> Response:
+        """ Get enabled social auth providers configuration. """
+        config: List[dict] = []
+        from django.conf import settings
+        locals()['social_core'] = importlib.import_module('social_core')
+        authentication_backends: iter = filter(lambda b: 'social_core' in b, settings.AUTHENTICATION_BACKENDS)
+        existing_settings: list = list(
+            map(lambda e: e.lower(), filter(lambda s: s.lower().startswith('social_auth_'), dir(settings))))
+        for auth_bckend in authentication_backends:
+            __import__('.'.join(auth_bckend.split('.')[:3]))
+            name: str = getattr(eval(auth_bckend), 'name')
+            search_query: str = next(iter(name.split('-'))).lower()
+            search_results: list = list(
+                filter(lambda d: search_query in d and (d.endswith('_key') or d.endswith('_secret')),
+                       existing_settings))
+            if search_results:
+                config.append({
+                    'name': name,
+                    'title': '%s %s' % (_('Login with'), search_query.lower().title()),
+                    'url': '/%s/social/login/%s/' % (ACCOUNT_URL_PREFIX, name),
+                })
+        return Response(config)

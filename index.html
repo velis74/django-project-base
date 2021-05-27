@@ -167,7 +167,7 @@
                         {{ translations('Login') }}
                     </button>
                     <div v-if="socialAuth.length" class="dropdown-menu">
-                        <a v-for="(b, bx) in socialAuth" class="dropdown-item" href="#">{{ b }}</a>
+                        <a v-for="(b, bx) in socialAuth" class="dropdown-item" :href="b.url">{{ b.title }}</a>
                     </div>
                 </div>
             </form>
