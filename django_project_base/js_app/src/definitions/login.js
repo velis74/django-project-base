@@ -11,12 +11,14 @@ const login = {
           username: null,
           password: null,
         },
+        socialAuth: [],
       };
     },
     created() {
     },
     mounted() {
       Session.checkLogin(false);
+      this.socialAuth = ['sdgd', 'dfgdsfg', 'dfhsh'];
     },
     computed: {},
     methods: {

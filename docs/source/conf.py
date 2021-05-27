@@ -13,9 +13,9 @@
 import os
 import sys
 
-from django_project_base import VERSION
-
 sys.path.insert(0, os.path.abspath('../..'))
+
+from django_project_base import VERSION
 
 # -- Project information -----------------------------------------------------
 

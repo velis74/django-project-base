@@ -27,7 +27,7 @@ class ProfileSerializer(ModelSerializer):
             return obj.first_name + ' ' + obj.last_name
 
     class Meta:
-        model = None
+        model = swapper.load_model('django_project_base', 'Profile')
         exclude = ()
 
 
@@ -38,7 +38,6 @@ class ProfileViewSet(ModelViewSet):
         return swapper.load_model('django_project_base', 'Profile').objects.all()
 
     def get_serializer_class(self):
-        ProfileSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProfileSerializer
 
     @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current')

@@ -37,7 +37,6 @@ Index:
    installation
    settings
    javascript_client
-   Authentication <authentication>
    tags
    fields
    middleware

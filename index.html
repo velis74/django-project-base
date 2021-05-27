@@ -10,7 +10,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
-
     <link href="/static/bootstrap_template.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
@@ -18,6 +17,66 @@
     <titlebar>
     </titlebar>
 </div>
+
+
+<script type="text/x-template" id="user-profile">
+    <div class="nav-item left-spacing">
+        <div class="card" data-toggle="dropdown">
+            <div class="card-body">
+                <img v-bind:src="componentData.avatar"
+                     class="float-left rounded-circle">
+                <div class="user-names">
+                    <h5 class="card-title">{{ componentData.first_name }} <br/>
+                        {{ componentData.last_name }} <span v-if="isImpersonated">({{
+                                translations('Impersonated')
+                            }})</span></h5>
+                </div>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
+                            <a class="dropdown-item" href="#">{{ translations('User profile') }}</a>
+                            <a class="dropdown-item" href="#">{{ translations('User settings') }}</a>
+                            <a class="dropdown-item" href="#">{{ translations('Change password') }}</a>
+                            <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
+                               @click="showImpersonateLogin" href="#">{{ translations('Impersonate user') }}</a>
+                            <a v-else-if="isImpersonated" class="dropdown-item"
+                               @click="stopImpersonation" href="#">{{ translations('Stop impersonation') }}</a>
+                            <a class="dropdown-item" href="#" @click="makeLogout">{{
+                                    translations('Logout')
+                                }}</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <modal-window v-if="impersonateModalVisible">
+            <h5 slot="modal-title">{{ translations('Search for user') }}</h5>
+            <h3 slot="header">
+                <button @click="showImpersonateLogin" type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </h3>
+            <div slot="body" v-if="permissions['add-project']" class="col-sm-9">
+                <div class="row">
+                    <input type="text" @keyup="searchUsers" v-model="userSearchInputQueryString"
+                           class="autocomplete form-control"
+                           id="userAutocomplete"
+                           data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
+                    <ul class="dropdown-menu" style="width: 100%;" role="menu">
+                        <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
+                            v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
+                                user.email
+                            }}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div slot="footer">
+                <button class="btn-sm btn-primary" @click="changeUser">{{ translations('OK') }}</button>
+            </div>
+        </modal-window>
+    </div>
+</script>
 
 
 <script type="text/x-template" id="breadcrumbs">
@@ -94,73 +153,23 @@
 </script>
 
 
-<script type="text/x-template" id="user-profile">
-    <div class="nav-item left-spacing">
-        <div class="card" data-toggle="dropdown">
-            <div class="card-body">
-                <img v-bind:src="componentData.avatar"
-                     class="float-left rounded-circle">
-                <div class="user-names">
-                    <h5 class="card-title">{{ componentData.first_name }} <br/>
-                        {{ componentData.last_name }} <span v-if="isImpersonated">({{
-                                translations('Impersonated')
-                            }})</span></h5>
-                </div>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
-                            <a class="dropdown-item" href="#">{{ translations('User profile') }}</a>
-                            <a class="dropdown-item" href="#">{{ translations('User settings') }}</a>
-                            <a class="dropdown-item" href="#">{{ translations('Change password') }}</a>
-                            <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
-                               @click="showImpersonateLogin" href="#">{{ translations('Impersonate user') }}</a>
-                            <a v-else-if="isImpersonated" class="dropdown-item"
-                               @click="stopImpersonation" href="#">{{ translations('Stop impersonation') }}</a>
-                            <a class="dropdown-item" href="#" @click="makeLogout">{{
-                                    translations('Logout')
-                                }}</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <modal-window v-if="impersonateModalVisible">
-            <h5 slot="modal-title">{{ translations('Search for user') }}</h5>
-            <h3 slot="header">
-                <button @click="showImpersonateLogin" type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </h3>
-            <div slot="body" v-if="permissions['add-project']" class="col-sm-9">
-                <div class="row">
-                    <input type="text" @keyup="searchUsers" v-model="userSearchInputQueryString"
-                           class="autocomplete form-control"
-                           id="userAutocomplete"
-                           data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
-                    <ul class="dropdown-menu" style="width: 100%;" role="menu">
-                        <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
-                            v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
-                                user.email
-                            }}</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div slot="footer">
-                <button class="btn-sm btn-primary" @click="changeUser">OK</button>
-            </div>
-        </modal-window>
-    </div>
-</script>
-
-
 <script type="text/x-template" id="login">
     <div class="nav-item login-container" v-cloak>
         <div>
             <form @submit.prevent>
                 <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
                 <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
-                <button class="btn btn-sm" type="submit" @click="makeLogin">{{ translations('Login') }}</button>
+                <div class="btn-group dropleft" style="display: inline;">
+                    <button v-if="socialAuth.length" type="button" class="btn btn-sm dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </button>
+                    <button type="button" class="btn btn-sm" @click="makeLogin">
+                        {{ translations('Login') }}
+                    </button>
+                    <div v-if="socialAuth.length" class="dropdown-menu">
+                        <a v-for="(b, bx) in socialAuth" class="dropdown-item" href="#">{{ b }}</a>
+                    </div>
+                </div>
             </form>
         </div>
         <notifications position="top center"/>

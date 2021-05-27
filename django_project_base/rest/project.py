@@ -9,17 +9,16 @@ from rest_framework.viewsets import ModelViewSet
 
 class ProjectSerializer(ModelSerializer):
     class Meta:
-        model = None
+        model = swapper.load_model('django_project_base', 'Project')
         exclude = ()
 
 
 class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
-        return swapper.load_model('django_project_base', 'Profile').objects.all()
+        return swapper.load_model('django_project_base', 'Project').objects.all()
 
     def get_serializer_class(self):
-        ProjectSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProjectSerializer
 
     def get_object(self):
