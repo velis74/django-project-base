@@ -18,6 +18,27 @@ be determined from request path. See DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PAR
    # myproject/settings.py
 
    MIDDLEWARE = [
-    'django_project_base.base.middleware.UrlsVarsMiddleware',
+    'django_project_base.base.UrlsVarsMiddleware',
     ...
     ]
+
+
+***Performance profiler***
+
+
+Performance profiler module is providing functionality to log and display the summary of the most time-consuming requests.
+
+To enable middleware add following line to projects settings.py
+
+.. code-block:: python
+
+  # myproject/settings.py
+
+  MIDDLEWARE = [
+    ...
+    'django_project_base.profiling.profile_middleware',
+    ...
+  ]
+
+
+Overview of current state is avialable on url *../app_debug/*

@@ -7,7 +7,7 @@ from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 from django_project_base.notifications.rest.router import notifications_router
-from django_project_base.performance_middleware.request_statistics.app_debug_view import app_debug_view
+from django_project_base.profiling.views import app_debug_view
 from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
@@ -57,5 +57,5 @@ django_project_base_urlpatterns = [
 if NOTIFICATIONS_APP_ID in settings.INSTALLED_APPS:
     django_project_base_urlpatterns.append(url(r'', include(notifications_router.urls)))
 
-if 'django_project_base.performance_middleware.middleware.profile_middleware.profile_middleware' in settings.MIDDLEWARE:
+if 'django_project_base.profiling.profile_middleware' in settings.MIDDLEWARE:
     django_project_base_urlpatterns.append(url(r'^app-debug/', app_debug_view, name='app-debug'))
