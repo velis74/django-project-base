@@ -1,24 +1,25 @@
 from typing import Union
 
+import swapper
 from django.conf import settings
 from django.http import Http404
-from django_project_base.base.rest.serializer import Serializer as ProjectBaseSerializer
-from django_project_base.base.rest.viewset import ViewSet as ProjectBaseViewSet
+from rest_framework.serializers import ModelSerializer
+from rest_framework.viewsets import ModelViewSet
 
 
-class ProjectSerializer(ProjectBaseSerializer):
+class ProjectSerializer(ModelSerializer):
     class Meta:
         model = None
         exclude = ()
 
 
-class ProjectViewSet(ProjectBaseViewSet):
+class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
-        return self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL').objects.all()
+        return swapper.load_model('django_project_base', 'Profile').objects.all()
 
     def get_serializer_class(self):
-        ProjectSerializer.Meta.model = self._get_model('DJANGO_PROJECT_BASE_PROJECT_MODEL')
+        ProjectSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProjectSerializer
 
     def get_object(self):
