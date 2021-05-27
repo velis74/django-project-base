@@ -24,12 +24,11 @@ class Session {
   }
 
   static logout() {
-    ApiClient.post('account/logout/').then(() => {
+    ApiClient.post('account/logout/').finally(() => {
       Store.clear();
       Store.set('redirect-to-auth', true);
       document.dispatchEvent(LogoutEvent);
       window.location.href = '/';
-    }).catch(() => {
     });
   }
 
