@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from django.urls import include, re_path
+from django.urls import re_path
 from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.rest.impersonate import ImpersonateUserViewset

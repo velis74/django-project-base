@@ -19,8 +19,8 @@ from django.contrib import admin
 from django.urls import include, path
 from django_project_base.account import accounts_router
 from django_project_base.notifications import notifications_router
-from django_project_base.router import django_project_base_router
 from django_project_base.profiling import app_debug_view
+from django_project_base.router import django_project_base_router
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from example.demo_django_base.views import index_view, page1_view
 
