@@ -26,10 +26,17 @@
                 <img v-bind:src="componentData.avatar"
                      class="float-left rounded-circle">
                 <div class="user-names">
-                    <h5 class="card-title">{{ componentData.first_name }} <br/>
-                        {{ componentData.last_name }} <span v-if="isImpersonated">({{
+                    <h5 class="card-title" v-if="componentData.first_name && componentData.last_name">
+                        {{ componentData.first_name }} <br/> {{ componentData.last_name }}
+                        <span v-if="isImpersonated">({{
                                 translations('Impersonated')
                             }})</span></h5>
+                    <h5 class="card-title" v-else-if="componentData.email">
+                        {{ componentData.email }}
+                        <span v-if="isImpersonated">({{ translations('Impersonated') }})</span></h5>
+                    <h5 class="card-title" v-else>
+                        {{ componentData.username || translations('App user') }}
+                        <span v-if="isImpersonated">({{ translations('Impersonated') }})</span></h5>
                 </div>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">

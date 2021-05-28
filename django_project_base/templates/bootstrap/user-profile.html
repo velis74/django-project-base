@@ -7,10 +7,17 @@
                 <img v-bind:src="componentData.avatar"
                      class="float-left rounded-circle">
                 <div class="user-names">
-                    <h5 class="card-title">{{ componentData.first_name }} <br/>
-                        {{ componentData.last_name }} <span v-if="isImpersonated">({{
+                    <h5 class="card-title" v-if="componentData.first_name && componentData.last_name">
+                        {{ componentData.first_name }} <br/> {{ componentData.last_name }}
+                        <span v-if="isImpersonated">({{
                                 translations('Impersonated')
                             }})</span></h5>
+                    <h5 class="card-title" v-else-if="componentData.email">
+                        {{ componentData.email }}
+                        <span v-if="isImpersonated">({{ translations('Impersonated') }})</span></h5>
+                    <h5 class="card-title" v-else>
+                        {{ componentData.username || translations('App user') }}
+                        <span v-if="isImpersonated">({{ translations('Impersonated') }})</span></h5>
                 </div>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
@@ -23,7 +30,7 @@
                             <a v-else-if="isImpersonated" class="dropdown-item"
                                @click="stopImpersonation" href="#">{{ translations('Stop impersonation') }}</a>
                             <a class="dropdown-item" href="#" @click="makeLogout">{{
-                                translations('Logout')
+                                    translations('Logout')
                                 }}</a>
                         </div>
                     </li>
@@ -47,7 +54,7 @@
                     <ul class="dropdown-menu" style="width: 100%;" role="menu">
                         <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
                             v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
-                            user.email
+                                user.email
                             }}</a></li>
                     </ul>
                 </div>
