@@ -1,7 +1,6 @@
 import { Store } from './store';
 import { apiClient as ApiClient } from './apiClient';
 import { logoutEvent as LogoutEvent, createEvent } from './events';
-import { showNotification } from './notifications';
 import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './constants';
 
 class Session {
@@ -13,9 +12,6 @@ class Session {
         Store.set('current-user', response.data);
         Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
         document.dispatchEvent(createEvent('login', response.data));
-        showNotification(null,
-          // eslint-disable-next-line no-useless-concat
-          `${'Now redirect should be made to ' + 'project/'}${response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]}`);
         /* redirect to root */
         window.location.href = '/';
       });
@@ -37,8 +33,6 @@ class Session {
       Store.set('current-user', response.data);
       Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
       document.dispatchEvent(createEvent('login', response.data));
-      showNotification(null,
-        `'Now redirect should be made to project/${response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]}`);
     });
   }
 }
