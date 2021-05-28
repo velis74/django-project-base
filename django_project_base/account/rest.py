@@ -27,7 +27,7 @@ class AccountViewSet(viewsets.ViewSet):
             )
         }
     )
-    @action(detail=False, methods=['post'], url_name='login')
+    @action(detail=False, methods=['post'], url_name='login', permission_classes=[], authentication_classes=[])
     def login(self, request: Request) -> Response:
         """ Logs in the user via given username and password. """
         return login(request._request)
