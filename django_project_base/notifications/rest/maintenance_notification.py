@@ -109,7 +109,6 @@ class MaintenanceNotificationSerializer(ModelSerializer):
 )
 class UsersMaintenanceNotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer

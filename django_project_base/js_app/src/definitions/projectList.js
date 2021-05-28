@@ -46,7 +46,6 @@ const projectList = {
         Store.set('current-project', _.first(_.filter(this.projectList,
           p => p[this.projectTablePkName] === slug),
         )[this.projectTablePkName]);
-        showNotification(null, 'project ' + slug + ' selected');
         document.dispatchEvent(ProjectSelected);
       },
       loadData() {

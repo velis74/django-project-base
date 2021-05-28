@@ -29,11 +29,6 @@ const breadcrumbs = {
               ),
             };
           });
-        // return brd;
-        // return _.concat({
-        //   'url': '/',
-        //   'breadcrumb': 'Home'
-        // }, brd);
       },
     },
     methods: {},

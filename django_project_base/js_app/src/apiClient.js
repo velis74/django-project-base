@@ -6,7 +6,6 @@
 /* eslint-disable arrow-body-style */
 import axios from 'axios';
 import { Store } from './store';
-// import { showGeneralErrorNotification } from './notifications';
 
 const apiClient = axios.create({
   xsrfCookieName: 'csrftoken',
