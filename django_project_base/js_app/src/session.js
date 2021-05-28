@@ -6,9 +6,9 @@ import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './constants';
 class Session {
   static login(username, password) {
     Store.set('redirect-to-auth', false);
-    ApiClient.post('account/login/',
+    ApiClient.post('/account/login/',
       { login: username, password }).then(() => {
-      ApiClient.get('account/profile/current?decorate=default-project').then((response) => {
+      ApiClient.get('/account/profile/current?decorate=default-project').then((response) => {
         Store.set('current-user', response.data);
         Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
         document.dispatchEvent(createEvent('login', response.data));
@@ -20,7 +20,7 @@ class Session {
   }
 
   static logout() {
-    ApiClient.post('account/logout/').finally(() => {
+    ApiClient.post('/account/logout/').finally(() => {
       Store.clear();
       Store.set('redirect-to-auth', true);
       document.dispatchEvent(LogoutEvent);
@@ -29,7 +29,7 @@ class Session {
   }
 
   static checkLogin(showNotAuthorizedNotice = true) {
-    ApiClient.get('account/profile/current?decorate=default-project', { hideErrorNotice: !showNotAuthorizedNotice }).then((response) => {
+    ApiClient.get('/account/profile/current?decorate=default-project', { hideErrorNotice: !showNotAuthorizedNotice }).then((response) => {
       Store.set('current-user', response.data);
       Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
       document.dispatchEvent(createEvent('login', response.data));

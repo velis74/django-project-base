@@ -56,7 +56,7 @@ const userProfile = {
           return;
         }
         return new Promise((resolve, reject) => {
-          ApiClient.get('account/profile/current').then(profileResponse => {
+          ApiClient.get('/account/profile/current').then(profileResponse => {
             this.componentData = this.setAvatarImg(profileResponse.data);
             Store.set('current-user', this.componentData);
             resolve();

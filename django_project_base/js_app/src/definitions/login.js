@@ -21,7 +21,7 @@ const login = {
     mounted() {
       Session.checkLogin(false);
       if (!Store.get('current-user')) {
-        ApiClient.get('account/social-auth-providers/').then((socProvResponse) => {
+        ApiClient.get('/account/social-auth-providers/').then((socProvResponse) => {
           this.socialAuth = socProvResponse.data;
         });
       }
