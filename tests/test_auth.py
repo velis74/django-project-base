@@ -75,7 +75,7 @@ class TestChangePasswordViewset(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Test to short password
-        response = self.api_client.post(os.path.join(self.url_prefix, 'change_password/'),
+        response = self.api_client.post('/account/change-password/',
                                         {'old_password': 'mihamiha', 'password': 'janez', 'password_confirm': 'janez'},
                                         format='json')
         self.assertEqual(response.status_code, 400)
@@ -83,7 +83,7 @@ class TestChangePasswordViewset(TestCase):
                          b'{"password":["This password is too short. It must contain at least 8 characters."]}')
 
         # Test ok password
-        response = self.api_client.post(os.path.join(self.url_prefix, 'change_password/'),
+        response = self.api_client.post(os.path.join(self.url_prefix, 'change-password/'),
                                         {'old_password': 'mihamiha', 'password': 'janezjanez',
                                          'password_confirm': 'janezjanez'},
                                         format='json')

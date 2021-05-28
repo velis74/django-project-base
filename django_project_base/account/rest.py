@@ -1,10 +1,11 @@
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password, login, logout, reset_password, send_reset_password_link, verify_email, verify_registration
+    change_password, login, logout, reset_password, send_reset_password_link, verify_email
 )
 
 
@@ -37,7 +38,7 @@ class AccountViewSet(viewsets.ViewSet):
         }
 
     )
-    @action(detail=False, methods=['post'], url_name='logout')
+    @action(detail=False, methods=['post'], url_name='logout', permission_classes=[IsAuthenticated])
     def logout(self, request: Request) -> Response:
         """ Logs out user."""
         return logout(request._request)
@@ -54,7 +55,8 @@ class AccountViewSet(viewsets.ViewSet):
             403: OpenApiResponse(description='Bad request'),
         }
     )
-    @action(detail=False, methods=['post'], url_path='change-password', url_name='change-password')
+    @action(detail=False, methods=['post'], url_path='change-password', url_name='change-password',
+            permission_classes=[IsAuthenticated])
     def change_password(self, request: Request) -> Response:
         """ Change the user password. """
         return change_password(request._request)
@@ -105,19 +107,3 @@ class AccountViewSet(viewsets.ViewSet):
     def verify_email(self, request: Request) -> Response:
         """ Verify email via signature. """
         return verify_email(request._request)
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(name='user_id', description='User id', required=True, type=str),
-            OpenApiParameter(name='timestamp', description='Timestamp', required=True),
-            OpenApiParameter(name='signature', description='Signature', required=True, type=str),
-            OpenApiParameter(name='password', description='Password', required=True, type=str),
-        ],
-        responses={
-            200: OpenApiResponse(description='OK'),
-        }
-    )
-    @action(detail=False, methods=['post'], url_path='verify-registration', url_name='verify-registration')
-    def verify_registration(self, request: Request) -> Response:
-        """ Verify registration via signature. """
-        return verify_registration(request._request)
