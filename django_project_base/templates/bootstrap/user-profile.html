@@ -12,10 +12,10 @@
                         <span v-if="isImpersonated">({{
                                 translations('Impersonated')
                             }})</span></h5>
-                    <h5 class="card-title" style="margin-top: 0.5em;" v-else-if="componentData.email">
+                    <h5 class="card-title" style="margin-top: 0.6em;" v-else-if="componentData.email">
                         {{ componentData.email }}
                         <span v-if="isImpersonated">({{ translations('Impersonated') }})</span></h5>
-                    <h5 class="card-title" style="margin-top: 0.5em;" v-else>
+                    <h5 class="card-title" style="margin-top: 0.6em;" v-else>
                         {{ componentData.username || translations('App user') }}
                         <span v-if="isImpersonated">({{ translations('Impersonated') }})</span></h5>
                 </div>
