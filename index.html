@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>Titlebar component example</title>
     <script src="/jsi18n/"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet"
-          crossorigin="anonymous">
+    <link href="/static/fa-5.13.3/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
@@ -73,7 +72,7 @@
                     <ul class="dropdown-menu" style="width: 100%;" role="menu">
                         <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
                             v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
-                                user.email
+                                user.full_name || user.email
                             }}</a></li>
                     </ul>
                 </div>
