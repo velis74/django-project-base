@@ -22,9 +22,10 @@ class ProfileSerializer(ModelSerializer):
             reversed_order = obj.reverse_full_name_order
 
         if reversed_order:
-            return obj.last_name + ' ' + obj.first_name
+            full_name = obj.last_name + ' ' + obj.first_name
         else:
-            return obj.first_name + ' ' + obj.last_name
+            full_name = obj.first_name + ' ' + obj.last_name
+        return full_name if full_name != ' ' else ''
 
     class Meta:
         model = swapper.load_model('django_project_base', 'Profile')
