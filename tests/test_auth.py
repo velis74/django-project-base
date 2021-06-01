@@ -75,7 +75,7 @@ class TestChangePasswordViewset(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # Test to short password
-        response = self.api_client.post(os.path.join(self.url_prefix, 'change_password/'),
+        response = self.api_client.post('/account/change-password/',
                                         {'old_password': 'mihamiha', 'password': 'janez', 'password_confirm': 'janez'},
                                         format='json')
         self.assertEqual(response.status_code, 400)
@@ -83,7 +83,7 @@ class TestChangePasswordViewset(TestCase):
                          b'{"password":["This password is too short. It must contain at least 8 characters."]}')
 
         # Test ok password
-        response = self.api_client.post(os.path.join(self.url_prefix, 'change_password/'),
+        response = self.api_client.post(os.path.join(self.url_prefix, 'change-password/'),
                                         {'old_password': 'mihamiha', 'password': 'janezjanez',
                                          'password_confirm': 'janezjanez'},
                                         format='json')
@@ -92,3 +92,19 @@ class TestChangePasswordViewset(TestCase):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'janezjanez'}, format='json')
         self.assertEqual(response.status_code, 200)
+
+
+class TestSendResetPasswordLink(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.api_client = APIClient()
+
+    def test_send_reset_password_link(self):
+        response = self.api_client.post(os.path.join('/account/login/'),
+                                        {'login': 'miha', 'password': 'mihamiha'}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        # Send password link is disabled, returns 404
+        response = self.api_client.post('/account/send-reset-password-link/', {'login': 'miha'},
+                                        format='json')
+        self.assertEqual(response.status_code, 404)

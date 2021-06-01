@@ -7,3 +7,4 @@ pip install -r requirements.txt
 cd docs
 sphinx-build -b html source build
 sphinx-build -b pdf source .
+
