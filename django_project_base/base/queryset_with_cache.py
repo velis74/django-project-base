@@ -49,6 +49,9 @@ class QuerySetWithCache(models.query.QuerySet):
         return item
 
     def filter(self, *args, **kwargs):
+        return super().filter(*args, **kwargs)
+
+    def filter_cached(self, *args, **kwargs):
         ck: str = '%s_%s_%s' % (self.base_cache_key, 'filter', self.hash_args_kwargs(args, kwargs))
         cached_data: list = cache.get(ck)
         if cached_data is not None:
