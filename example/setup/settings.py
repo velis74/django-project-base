@@ -151,7 +151,8 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Django Project Base Example API',
-    'DESCRIPTION': 'Django project base',
+    'DESCRIPTION': 'This is API documentation for Django project base example project. API is showcase for all'
+                   'available api endpoint for "Django project base" project',
     'VERSION': VERSION,
     'SWAGGER_UI_SETTINGS': {
         'deepLinking': True,

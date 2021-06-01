@@ -1,8 +1,15 @@
 Authentication
 ==============
 
-Overridden rest_registration
-----------------------------
+Rest_registration
+-----------------
+
+Currently, for basic authentication operations, rest_registration module is used. It is overridden with custom rest
+actions used to override api documentation, but it just redirects requests back to rest_registration.
+
+Use rest_registration documentation https://django-rest-registration.readthedocs.io/en/latest/index.html for details.
+
+***Overridden rest_registration***
 
 If you want to use overrided rest_registration views, replace rest_registration urls with:
 
