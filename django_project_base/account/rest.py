@@ -1,16 +1,16 @@
 import importlib
 from typing import List
 
+from django.utils.translation import ugettext_lazy as _
+from django_project_base.constants import ACCOUNT_URL_PREFIX
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_registration.api.views import change_password, login, logout, reset_password, send_reset_password_link, \
-    verify_email, verify_registration
-from django.utils.translation import ugettext_lazy as _
-
-from django_project_base.constants import ACCOUNT_URL_PREFIX
+from rest_registration.api.views import (
+    change_password, login, logout, reset_password, send_reset_password_link, verify_email, verify_registration
+)
 
 
 class AccountViewSet(viewsets.ViewSet):

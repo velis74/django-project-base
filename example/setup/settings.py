@@ -171,7 +171,3 @@ AUTHENTICATION_BACKENDS = (
     'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
     'django.contrib.auth.backends.ModelBackend',
 )
-
-
-
-
