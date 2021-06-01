@@ -4,7 +4,7 @@ from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
 from django_project_base.rest.project import ProjectSerializer
 from dynamicforms.serializers import ModelSerializer
-from rest_framework import exceptions, serializers
+from rest_framework import exceptions, filters, serializers
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -32,6 +32,8 @@ class ProfileSerializer(ModelSerializer):
 
 class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email', 'first_name', 'last_name']
 
     def get_queryset(self):
         return swapper.load_model('django_project_base', 'Profile').objects.all()

@@ -87,7 +87,7 @@ const userProfile = {
         if (!this.userSearchInputQueryString) {
           return;
         }
-        const url = `/account/profile/search/${this.userSearchInputQueryString}`;
+        const url = `/account/profile?search=${this.userSearchInputQueryString}`;
         ApiClient.get(url).then((response) => {
           this.usersFilter = response.data;
         });

@@ -21,3 +21,15 @@ class TestProfileViewSet(TestCase):
         self.assertTrue(self.api_client.login(username='miha', password='mihamiha'), 'Not logged in')
         response = self.api_client.get('/account/profile/search/miha', {}, format='json')
         self.assertEqual(response.status_code, 404)
+
+    def test_search_query(self):
+        self.assertTrue(self.api_client.login(username='miha', password='mihamiha'), 'Not logged in')
+        response = self.api_client.get('/account/profile?search=mi', {}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['full_name'], 'Miha Novak')
+
+        response = self.api_client.get('/account/profile?search=j', {}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['full_name'], 'Janez Novak')
