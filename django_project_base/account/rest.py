@@ -20,8 +20,8 @@ class LoginViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Logs in the user via given username and password.',
         responses={
-            200: OpenApiResponse(description='OK'),
-            400: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description='Bad request. Missing either one of parameters or wrong login or password.'
             )
         }
@@ -43,7 +43,7 @@ class LogoutViewSet(viewsets.ViewSet):
                     'If revoke_token is selected, revokes the given token for a given user. If the token is not  '
                     'provided, revoke all tokens for given user. ',
         responses={
-            200: OpenApiResponse(description='OK'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
             403: OpenApiResponse(description='Not authorised'),
         }
 
@@ -65,8 +65,8 @@ class ChangePasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Change the user password.',
         responses={
-            200: OpenApiResponse(description='OK'),
-            403: OpenApiResponse(description='Bad request'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed'),
         }
     )
     @action(detail=False, methods=['post'], url_path='change-password', url_name='change-password',
@@ -88,7 +88,8 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Reset password, given the signature and timestamp from the link.',
         responses={
-            200: OpenApiResponse(description='OK'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request')
         }
     )
     @action(detail=False, methods=['post'], url_path='reset-password', url_name='reset-password')
@@ -98,7 +99,8 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Verify email via signature.',
         responses={
-            200: OpenApiResponse(description='OK'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request')
         }
     )
     @action(detail=False, methods=['post'], url_path='verify-email', url_name='verify-email')
@@ -116,8 +118,8 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Send email with reset password link.',
         responses={
-            200: OpenApiResponse(description='OK'),
-            400: OpenApiResponse(description='???'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request'),
         }
     )
     @action(detail=False, methods=['post'], url_path='send-reset-password-link', url_name='send-reset-password-link')
