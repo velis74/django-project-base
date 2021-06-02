@@ -3,12 +3,13 @@ from django.conf import settings
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
 from django_project_base.rest.project import ProjectSerializer
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from dynamicforms.serializers import ModelSerializer
+from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, serializers
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 
 class ProfileSerializer(ModelSerializer):
@@ -30,6 +31,11 @@ class ProfileSerializer(ModelSerializer):
         exclude = ()
 
 
+@extend_schema_view(
+    destroy=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+)
 class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     filter_backends = [filters.SearchFilter]
