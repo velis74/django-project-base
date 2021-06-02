@@ -88,7 +88,9 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Reset password, given the signature and timestamp from the link.',
         responses={
-            200: OpenApiResponse(description='OK'),
+            200: OpenApiResponse(description='OK Reset link sent'),
+            400: OpenApiResponse(description='Bad request.'),
+            404: OpenApiResponse(description='Reset password verification disabled'),
         }
     )
     @action(detail=False, methods=['post'], url_path='reset-password', url_name='reset-password')
@@ -98,7 +100,7 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Verify email via signature.',
         responses={
-            200: OpenApiResponse(description='OK'),
+            200: OpenApiResponse(description='OK Email verified successfully'),
         }
     )
     @action(detail=False, methods=['post'], url_path='verify-email', url_name='verify-email')
@@ -116,8 +118,9 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Send email with reset password link.',
         responses={
-            200: OpenApiResponse(description='OK'),
-            400: OpenApiResponse(description='???'),
+            200: OpenApiResponse(description='OK Reset link sent'),
+            400: OpenApiResponse(description='Bad request.'),
+            404: 'Reset password verification disabled'
         }
     )
     @action(detail=False, methods=['post'], url_path='send-reset-password-link', url_name='send-reset-password-link')

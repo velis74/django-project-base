@@ -6,8 +6,9 @@ from django_project_base.rest.project import ProjectSerializer
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
-from rest_framework import exceptions, filters, serializers
+from rest_framework import exceptions, filters, serializers, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import APIException
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -38,9 +39,10 @@ class ProfileSerializer(ModelSerializer):
 
 
 @extend_schema_view(
+    create=extend_schema(exclude=True),
     destroy=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
-    partial_update=extend_schema(exclude=True),
+    # partial_update=extend_schema(exclude=True),
 )
 class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
@@ -53,6 +55,15 @@ class ProfileViewSet(ModelViewSet):
     def get_serializer_class(self):
         ProfileSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProfileSerializer
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
+        return super().create(request, *args, **kwargs)
+
+    @action(methods=['PATCH'], detail=False, url_path=r'/', url_name='user-patch')
+    def patch(self, request: Request, *args, **kwargs) -> Response:
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
 
     @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current')
     def get_current_profile(self, request: Request, **kwargs) -> Response:
@@ -71,7 +82,7 @@ class ProfileViewSet(ModelViewSet):
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
 
-    @action(methods=['GET'], detail=False, url_path=r'(?P<query>\w+)', url_name='users-search')
+    @action(methods=['GET'], detail=False, url_path=r'', url_name='users-search')
     def users_search(self, request: Request, query: str, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
         if not user:
