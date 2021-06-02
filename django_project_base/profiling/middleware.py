@@ -4,6 +4,7 @@ import json
 import os
 import re
 import time
+import threading
 from typing import Optional
 
 from django.conf import settings
@@ -43,7 +44,7 @@ def profile_middleware(get_response):
         # the view (and later middleware) are called.
         tms = os.times()
         start_time = (int(time.time() * 1000), int(tms.user * 1000), int(tms.system * 1000))
-
+        set_profiling_path(None, None)
         # Get the response itself
         response = get_response(request)
 
@@ -58,22 +59,29 @@ def profile_middleware(get_response):
     return middleware
 
 
+def set_profiling_path(path_info, query_string):
+    threading.currentThread().profiling_path = (path_info, query_string)
+
+def get_profiling_path() -> tuple:
+    return threading.currentThread().profiling_path
+
 def do_profile(request, response, start_time, end_time):
     try:
         environ = request.META
-
         locs = locals()
         if 'PATH_INFO' in environ:
-            path_info = get_path_info(environ['PATH_INFO'])
+            _profiling_path: tuple = next(iter(get_profiling_path()), None)
+            path_info = _profiling_path or get_path_info(str(environ['PATH_INFO']), str(environ['QUERY_STRING']))
             if path_info:
                 duration = (end_time[0] - start_time[0], end_time[1] - start_time[1], end_time[2] - start_time[2])
                 if settings.WSGI_LOG_LONG_REQUESTS:
 
                     if duration[0] > 1000:
                         queries = get_queries(response)
-                        r_data = {'timestamp': end_time[0] / 1000, 'duration': duration[0], 'queries': queries}
+                        r_data = {'timestamp': end_time[0] / 1000, 'duration': duration[0], 'queries': queries,
+                                  'PATH_INFO': path_info}
                         r_data.update({i: str(environ[i])
-                                       for i in ('PATH_INFO', 'HTTP_HOST', 'REQUEST_METHOD', 'QUERY_STRING')})
+                                       for i in ('HTTP_HOST', 'REQUEST_METHOD', 'QUERY_STRING')})
 
                         with CacheLock('long_running_cmds'):
                             cache_ptr = (cache.get('long_running_cmds_pointer', -1) + 1) % 50
@@ -81,7 +89,7 @@ def do_profile(request, response, start_time, end_time):
                         cache.set('long_running_cmds_data%d' % cache_ptr, r_data, timeout=86400)
 
                     with CacheLock('last_hour_running_cmds'):
-                        r_data = (get_path_info(str(environ['PATH_INFO']), str(environ['QUERY_STRING'])), duration[0],
+                        r_data = (path_info, duration[0],
                                   duration[1], duration[2])
                         # get cache entries in the last 10 seconds
                         cache_ptr = cache.get('last_hour_running_cmds%d' % (int(time.time()) // 10), [])
@@ -171,6 +179,7 @@ MATCH_DETAIL_QUERIES = re.compile(r'(rest/\w+)/((?:[0-9a-f]{8}(?:-[0-9a-f]{4}){3
 
 
 def get_path_info(path: str, params: Optional[str] = None):
+    original_path = path
     path = path.strip('/')
     if 'robots.txt' in path:
         return 'other'
@@ -188,6 +197,7 @@ def get_path_info(path: str, params: Optional[str] = None):
         split_module_path: list = settings.WSGI_PARSE_REQUEST_PATH_FUNCTION.split('.')
         module: str = '.'.join(split_module_path[:(len(split_module_path) - 1)])
         method: str = split_module_path[-1]
-        path = getattr(importlib.import_module(module), method)(path, params)
+        path = getattr(importlib.import_module(module), method)(
+            path, {'original_path': original_path, 'params': params})
 
     return path
