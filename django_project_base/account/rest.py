@@ -1,11 +1,11 @@
 from drf_spectacular.utils import extend_schema, OpenApiResponse
-from rest_framework import fields, serializers, viewsets
+from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password, login, logout, reset_password, send_reset_password_link, verify_email
+    change_password, login, logout, register, reset_password, send_reset_password_link, verify_email
 )
 
 
@@ -91,8 +91,7 @@ class ResetPasswordViewSet(viewsets.ViewSet):
             200: OpenApiResponse(description='OK'),
         }
     )
-    @action(detail=False, methods=['post'], url_path='reset-password', url_name='reset-password',
-            permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['post'], url_path='reset-password', url_name='reset-password')
     def reset_password(self, request: Request) -> Response:
         return reset_password(request._request)
 
@@ -124,3 +123,53 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='send-reset-password-link', url_name='send-reset-password-link')
     def send_reset_password_link(self, request: Request) -> Response:
         return send_reset_password_link(request._request)
+
+
+class RegisterSerializer(serializers.Serializer):
+    username = fields.CharField(required=True)
+    email = fields.CharField(required=True)
+    password = fields.CharField(required=True)
+    password_confirm = fields.CharField(required=True)
+    first_name = fields.CharField(required=False)
+    last_name = fields.CharField(required=False)
+
+
+class RegisterReturnSerializer(serializers.Serializer):
+    id = fields.IntegerField()
+    username = fields.CharField()
+    email = fields.CharField()
+    first_name = fields.CharField()
+    last_name = fields.CharField()
+
+
+class PasswordToShortSerializer(serializers.Serializer):
+    password = fields.CharField(label='This password is too short. It must contain at least 8 characters.')
+
+
+class PasswordToSimilarSerializer(serializers.Serializer):
+    password = fields.CharField(label='The password is too similar to the username.')
+
+
+class UsernameAlreadyExistSerializer(serializers.Serializer):
+    username = fields.CharField(label='A user with that username already exists.')
+
+
+class Register404Serializer(serializers.Serializer):
+    a = PasswordToShortSerializer()
+    b = PasswordToSimilarSerializer()
+    c = UsernameAlreadyExistSerializer()
+
+
+@extend_schema(
+    description='Register new user.',
+    responses={
+        status.HTTP_200_OK: OpenApiResponse(description='OK', response=RegisterReturnSerializer),
+        status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='BadRequest', response=Register404Serializer),
+    }
+)
+class RegisterViewSet(viewsets.ViewSet):
+    serializer_class = RegisterSerializer
+
+    @action(detail=False, methods=['post'], url_path='register', url_name='register')
+    def register(self, request: Request) -> Response:
+        return register(request._request)

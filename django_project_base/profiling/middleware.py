@@ -3,8 +3,8 @@ import importlib
 import json
 import os
 import re
-import time
 import threading
+import time
 from typing import Optional
 
 from django.conf import settings
@@ -62,8 +62,10 @@ def profile_middleware(get_response):
 def set_profiling_path(path_info, query_string):
     threading.currentThread().profiling_path = (path_info, query_string)
 
+
 def get_profiling_path() -> tuple:
     return threading.currentThread().profiling_path
+
 
 def do_profile(request, response, start_time, end_time):
     try:
