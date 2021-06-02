@@ -1,4 +1,5 @@
 import glob
+import importlib
 import json
 import os
 import re
@@ -182,5 +183,11 @@ def get_path_info(path: str, params: Optional[str] = None):
     if path.startswith('configure_site') and '&type=' in (params or ''):
         pos = params.find('&type=')
         return path + '/' + params[pos + 6:pos + 9]
+
+    if getattr(settings, 'WSGI_PARSE_REQUEST_PATH_FUNCTION', None):
+        split_module_path: list = settings.WSGI_PARSE_REQUEST_PATH_FUNCTION.split('.')
+        module: str = '.'.join(split_module_path[:(len(split_module_path) - 1)])
+        method: str = split_module_path[-1]
+        path = getattr(importlib.import_module(module), method)(path, params)
 
     return path
