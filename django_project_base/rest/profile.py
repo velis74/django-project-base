@@ -15,6 +15,12 @@ from rest_framework.response import Response
 class ProfileSerializer(ModelSerializer):
     full_name = serializers.SerializerMethodField('get_full_name', read_only=True)
 
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        if not self._context.get('request').user.is_superuser:
+            self.fields.pop('is_staff', None)
+            self.fields.pop('is_superuser', None)
+
     def get_full_name(self, obj):
         if obj.reverse_full_name_order is None:
             reversed_order = getattr(settings, 'PROFILE_REVERSE_FULL_NAME_ORDER', False)
