@@ -35,6 +35,36 @@ class LoginViewSet(viewsets.ViewSet):
     def login(self, request: Request) -> Response:
         return login(request._request)
 
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(description='OK'),
+        }
+    )
+    @action(detail=False, methods=['get'], url_path='social-auth-providers', url_name='social-auth-providers',
+            permission_classes=[], authentication_classes=[])
+    def social_auth_providers(self, request: Request) -> Response:
+        """ Get enabled social auth providers configuration. """
+        config: List[dict] = []
+        from django.conf import settings
+        locals()['social_core'] = importlib.import_module('social_core')
+        authentication_backends: iter = filter(lambda b: 'social_core' in b, settings.AUTHENTICATION_BACKENDS)
+        existing_settings: list = list(
+            map(lambda e: e.lower(), filter(lambda s: s.lower().startswith('social_auth_'), dir(settings))))
+        for auth_bckend in authentication_backends:
+            __import__('.'.join(auth_bckend.split('.')[:3]))
+            name: str = getattr(eval(auth_bckend), 'name')
+            search_query: str = next(iter(name.split('-'))).lower()
+            search_results: list = list(
+                filter(lambda d: search_query in d and (d.endswith('_key') or d.endswith('_secret')),
+                       existing_settings))
+            if search_results:
+                config.append({
+                    'name': name,
+                    'title': '%s %s' % (_('Login with'), search_query.lower().title()),
+                    'url': '/%s/social/login/%s/' % (ACCOUNT_URL_PREFIX, name),
+                })
+        return Response(config)
+
 
 class LogoutSerializer(serializers.Serializer):
     revoke_token = fields.BooleanField(required=False)
@@ -129,36 +159,6 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='send-reset-password-link', url_name='send-reset-password-link')
     def send_reset_password_link(self, request: Request) -> Response:
         return send_reset_password_link(request._request)
-
-    @extend_schema(
-        responses={
-            200: OpenApiResponse(description='OK'),
-        }
-    )
-    @action(detail=False, methods=['get'], url_path='social-auth-providers', url_name='social-auth-providers',
-            permission_classes=[], authentication_classes=[])
-    def social_auth_providers(self, request: Request) -> Response:
-        """ Get enabled social auth providers configuration. """
-        config: List[dict] = []
-        from django.conf import settings
-        locals()['social_core'] = importlib.import_module('social_core')
-        authentication_backends: iter = filter(lambda b: 'social_core' in b, settings.AUTHENTICATION_BACKENDS)
-        existing_settings: list = list(
-            map(lambda e: e.lower(), filter(lambda s: s.lower().startswith('social_auth_'), dir(settings))))
-        for auth_bckend in authentication_backends:
-            __import__('.'.join(auth_bckend.split('.')[:3]))
-            name: str = getattr(eval(auth_bckend), 'name')
-            search_query: str = next(iter(name.split('-'))).lower()
-            search_results: list = list(
-                filter(lambda d: search_query in d and (d.endswith('_key') or d.endswith('_secret')),
-                       existing_settings))
-            if search_results:
-                config.append({
-                    'name': name,
-                    'title': '%s %s' % (_('Login with'), search_query.lower().title()),
-                    'url': '/%s/social/login/%s/' % (ACCOUNT_URL_PREFIX, name),
-                })
-        return Response(config)
 
 
 class RegisterSerializer(serializers.Serializer):
