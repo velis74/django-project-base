@@ -4,16 +4,23 @@ from django.contrib.auth.models import AnonymousUser
 from django.db.models import CharField, Model, Q
 from django.db.models.functions import Cast
 from django_project_base.rest.project import ProjectSerializer
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from dynamicforms.serializers import ModelSerializer
-from rest_framework import exceptions, serializers
+from dynamicforms.viewsets import ModelViewSet
+from rest_framework import exceptions, filters, serializers
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 
 class ProfileSerializer(ModelSerializer):
     full_name = serializers.SerializerMethodField('get_full_name', read_only=True)
+
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        if not self._context.get('request').user.is_superuser:
+            self.fields.pop('is_staff', None)
+            self.fields.pop('is_superuser', None)
 
     def get_full_name(self, obj):
         if obj.reverse_full_name_order is None:
@@ -32,8 +39,15 @@ class ProfileSerializer(ModelSerializer):
         exclude = ()
 
 
+@extend_schema_view(
+    destroy=extend_schema(exclude=True),
+    update=extend_schema(exclude=True),
+    partial_update=extend_schema(exclude=True),
+)
 class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email', 'first_name', 'last_name']
 
     def get_queryset(self):
         return swapper.load_model('django_project_base', 'Profile').objects.all()

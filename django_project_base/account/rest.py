@@ -3,14 +3,14 @@ from typing import List
 
 from django.utils.translation import ugettext_lazy as _
 from django_project_base.constants import ACCOUNT_URL_PREFIX
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from rest_framework import fields, serializers, viewsets
+from drf_spectacular.utils import extend_schema, OpenApiResponse
+from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password, login, logout, reset_password, send_reset_password_link, verify_email, verify_registration
+    change_password, login, logout, register, reset_password, send_reset_password_link, verify_email
 )
 
 
@@ -131,38 +131,6 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
         return send_reset_password_link(request._request)
 
     @extend_schema(
-        parameters=[
-            OpenApiParameter(name='user_id', description='User id', required=True, type=str),
-            OpenApiParameter(name='timestamp', description='Timestamp', required=True),
-            OpenApiParameter(name='signature', description='Signature', required=True, type=str),
-            OpenApiParameter(name='password', description='Password', required=True, type=str),
-        ],
-        responses={
-            200: OpenApiResponse(description='OK'),
-        }
-    )
-    @action(detail=False, methods=['post'], url_path='verify-email', url_name='verify-email')
-    def verify_email(self, request: Request) -> Response:
-        """ Verify email via signature. """
-        return verify_email(request._request)
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(name='user_id', description='User id', required=True, type=str),
-            OpenApiParameter(name='timestamp', description='Timestamp', required=True),
-            OpenApiParameter(name='signature', description='Signature', required=True, type=str),
-            OpenApiParameter(name='password', description='Password', required=True, type=str),
-        ],
-        responses={
-            200: OpenApiResponse(description='OK'),
-        }
-    )
-    @action(detail=False, methods=['post'], url_path='verify-registration', url_name='verify-registration')
-    def verify_registration(self, request: Request) -> Response:
-        """ Verify registration via signature. """
-        return verify_registration(request._request)
-
-    @extend_schema(
         responses={
             200: OpenApiResponse(description='OK'),
         }
@@ -191,3 +159,53 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
                     'url': '/%s/social/login/%s/' % (ACCOUNT_URL_PREFIX, name),
                 })
         return Response(config)
+
+
+class RegisterSerializer(serializers.Serializer):
+    username = fields.CharField(required=True)
+    email = fields.CharField(required=True)
+    password = fields.CharField(required=True)
+    password_confirm = fields.CharField(required=True)
+    first_name = fields.CharField(required=False)
+    last_name = fields.CharField(required=False)
+
+
+class RegisterReturnSerializer(serializers.Serializer):
+    id = fields.IntegerField()
+    username = fields.CharField()
+    email = fields.CharField()
+    first_name = fields.CharField()
+    last_name = fields.CharField()
+
+
+class PasswordToShortSerializer(serializers.Serializer):
+    password = fields.CharField(label='This password is too short. It must contain at least 8 characters.')
+
+
+class PasswordToSimilarSerializer(serializers.Serializer):
+    password = fields.CharField(label='The password is too similar to the username.')
+
+
+class UsernameAlreadyExistSerializer(serializers.Serializer):
+    username = fields.CharField(label='A user with that username already exists.')
+
+
+class Register404Serializer(serializers.Serializer):
+    a = PasswordToShortSerializer()
+    b = PasswordToSimilarSerializer()
+    c = UsernameAlreadyExistSerializer()
+
+
+@extend_schema(
+    description='Register new user.',
+    responses={
+        status.HTTP_200_OK: OpenApiResponse(description='OK', response=RegisterReturnSerializer),
+        status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='BadRequest', response=Register404Serializer),
+    }
+)
+class RegisterViewSet(viewsets.ViewSet):
+    serializer_class = RegisterSerializer
+
+    @action(detail=False, methods=['post'], url_path='register', url_name='register')
+    def register(self, request: Request) -> Response:
+        return register(request._request)
