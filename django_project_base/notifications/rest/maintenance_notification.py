@@ -5,6 +5,8 @@ from typing import Optional
 from django.conf import settings
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
+from rest_framework.permissions import IsAuthenticated
+
 from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
@@ -108,6 +110,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
 )
 class UsersMaintenanceNotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer

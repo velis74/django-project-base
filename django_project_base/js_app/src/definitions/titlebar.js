@@ -71,7 +71,7 @@ const titlebar = {
       },
       monitorMaintenanceNotifications() {
         this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
-          if (this.loggedIn) {
+          if (Store.get('current-user')) {
             ApiClient.get('/maintenance-notification/').then(notificationResponse => {
               const _notification = _.first(notificationResponse.data);
               if (_notification) {
