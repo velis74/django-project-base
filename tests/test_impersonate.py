@@ -28,11 +28,6 @@ class TestImpersonateUserViewset(TestCase):
         response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, 200)
 
-        # Check if is impersonated
-        response = self.api_client.get('/account/profile/1', {}, format='json')
-        self.assertEqual(response.status_code, 200)
-        # TODO check for is_impersonated value
-
         response = self.api_client.post('/account/impersonate/end', {}, format='json')
         self.assertEqual(response.status_code, 200)
 

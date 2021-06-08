@@ -75,7 +75,7 @@ class ChangePasswordViewSet(viewsets.ViewSet):
         return change_password(request._request)
 
 
-class ResetPasswordSerializer():
+class ResetPasswordSerializer(serializers.Serializer):
     user_id = fields.CharField(required=True)
     timestamp = fields.CharField(required=True)
     signature = fields.CharField(required=True)
@@ -113,12 +113,12 @@ class SendResetPasswordLinkSerializer(serializers.Serializer):
 
 
 class SendResetPasswordLinkViewSet(viewsets.ViewSet):
-    serializer_class = SendResetPasswordLinkSerializer
+    serializer_class = SendResetPasswordLinkSerializer()
 
     @extend_schema(
         description='Send email with reset password link.',
         responses={
-            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK', response=SendResetPasswordLinkSerializer()),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request'),
         }
     )
@@ -144,29 +144,17 @@ class RegisterReturnSerializer(serializers.Serializer):
     last_name = fields.CharField()
 
 
-class PasswordToShortSerializer(serializers.Serializer):
-    password = fields.CharField(label='This password is too short. It must contain at least 8 characters.')
-
-
-class PasswordToSimilarSerializer(serializers.Serializer):
-    password = fields.CharField(label='The password is too similar to the username.')
-
-
-class UsernameAlreadyExistSerializer(serializers.Serializer):
-    username = fields.CharField(label='A user with that username already exists.')
-
-
-class Register404Serializer(serializers.Serializer):
-    a = PasswordToShortSerializer()
-    b = PasswordToSimilarSerializer()
-    c = UsernameAlreadyExistSerializer()
-
-
 @extend_schema(
-    description='Register new user.',
+    description='Register new user. The user who wants to register itself sends AJAX POST request to register/ '
+                'endpoint. The register/ endpoint will generate an e-mail which will contain an URL which the newly '
+                'registered user should click to activate account. ',
     responses={
         status.HTTP_200_OK: OpenApiResponse(description='OK', response=RegisterReturnSerializer),
-        status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='BadRequest', response=Register404Serializer),
+        status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+            description='BadRequest. Responce cam be either of: "This password is too short. It must contain at least'
+                        ' 8 characters.","The password is too similar to the username." or  "A user with that username'
+                        ' already exists."'
+        ),
     }
 )
 class RegisterViewSet(viewsets.ViewSet):

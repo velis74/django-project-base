@@ -11,7 +11,8 @@ few basic operations that you need in every project so that you don't have to do
 
 This is a `django <https://www.djangoproject.com/>`_ library, based on
 `django-rest-framework <https://www.django-rest-framework.org/>`_ with
-`django-allauth <https://github.com/pennersr/django-allauth>`_ integration.
+`DynamicForms <https://github.com/velis74/DynamicForms>`_ and
+`Django REST Registration <https://django-rest-registration.readthedocs.io/en/latest/>`_ integration.
 
 
 Why django-project-base?

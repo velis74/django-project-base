@@ -1,12 +1,11 @@
 import swapper
 from django.conf import settings
-from django.db.models import CharField, Model, Q
-from django.db.models.functions import Cast
+from django.db.models import Model
 from django_project_base.rest.project import ProjectSerializer
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
-from rest_framework import exceptions, filters, serializers
+from rest_framework import exceptions, filters, serializers, status
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -38,9 +37,9 @@ class ProfileSerializer(ModelSerializer):
 
 
 @extend_schema_view(
+    create=extend_schema(exclude=True),
     destroy=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
-    partial_update=extend_schema(exclude=True),
 )
 class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
@@ -54,6 +53,29 @@ class ProfileViewSet(ModelViewSet):
         ProfileSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProfileSerializer
 
+    @extend_schema(
+        description="Get list of users",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK', response=get_serializer_class),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
+        }
+    )
+    def list(self, request, *args, **kwargs):
+        return super(ProfileViewSet, self).list(request, *args, **kwargs)
+
+    @extend_schema(
+        description='Update profile data (partially)',
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)
+
+    @extend_schema(
+        description="Get user profile of calling user",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
+        }
+    )
     @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current')
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
@@ -70,18 +92,3 @@ class ProfileViewSet(ModelViewSet):
                 response_data['default-project'] = ProjectSerializer(
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
-
-    @action(methods=['GET'], detail=False, url_path=r'(?P<query>\w+)', url_name='users-search')
-    def users_search(self, request: Request, query: str, **kwargs) -> Response:
-        user: Model = getattr(request, 'user', None)
-        if not user:
-            raise exceptions.AuthenticationFailed
-        profile_model: Model = swapper.load_model('django_project_base', 'Profile')
-        fields: list = [f for f in profile_model._meta.fields if not f.is_relation]
-        annotations: dict = {"as_str_%s" % v.name: Cast(v.name, CharField()) for v in fields}
-        queries: list = [Q(**{"as_str_%s__icontains" % f.name: query}) for f in fields]
-        qs = Q()
-        for _query in queries:
-            qs = qs | _query
-        res = profile_model.objects.annotate(**annotations).filter(qs)
-        return Response(self.get_serializer(res, many=True).data)

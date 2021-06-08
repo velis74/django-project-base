@@ -24,6 +24,12 @@ or project is given in request path like: language-EN, then url_part settings is
 When creating models with slug field they should be named with this setting value. This enables that we can use object slug instead of
 object pk when making api requests.
 
+**MAINTENENACE_NOTIFICATIONS_CACHE_KEY**
+
+.. code-block:: python
+
+  MAINTENENACE_NOTIFICATIONS_CACHE_KEY=""
+
 **DJANGO_USER_CACHE**
 
 .. code-block:: python
