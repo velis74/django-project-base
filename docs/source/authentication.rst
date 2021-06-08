@@ -62,7 +62,7 @@ To enable User caching backend to add the following line to *AUTHENTICATION_BACK
 
    AUTHENTICATION_BACKENDS = (
        ...
-       'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
+       'django_project_base.base.auth_backends.UsersCachingBackend',
        ...
    )
 
@@ -79,10 +79,13 @@ Example for clearing cache after bulk update:
   from django_project_base.settings import DJANGO_USER_CACHE
   ...
   # Bulk update multiple users. Give them superuser permission.
-  # If those users are logged in, they don't have permission until cache is cleared or they log out and log in again.
-  UserProfile.objects.filter(username__in=['miha', 'janez']).update(is_superuser=True, is_staff=True)
+  # If those users are logged in, they don't have permission until cache is
+  # cleared or they log out and log in again.
+  UserProfile.objects.filter(username__in=['miha', 'janez']).update(
+    is_superuser=True, is_staff=True)
 
-  # After clearing users cache for those users will be able to work with additional permissions
+  # After clearing users cache for those users will be able
+  # to work with additional permissions
   staff = UserProfile.objects.filter(username__in=['miha', 'janez'])
         for user in staff:
             cache.delete(DJANGO_USER_CACHE % user.id)

@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password, login, logout, register, reset_password, send_reset_password_link, verify_email
+    change_password, login, logout, register, reset_password, send_reset_password_link, verify_email,
+    verify_registration
 )
 
 
@@ -44,7 +45,7 @@ class LogoutViewSet(viewsets.ViewSet):
                     'provided, revoke all tokens for given user. ',
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK'),
-            403: OpenApiResponse(description='Not authorised'),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not authorised'),
         }
 
     )
@@ -88,8 +89,9 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Reset password, given the signature and timestamp from the link.',
         responses={
-            status.HTTP_200_OK: OpenApiResponse(description='OK'),
-            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request')
+            status.HTTP_200_OK: OpenApiResponse(description='OK Reset link sent'),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request.'),
+            status.HTTP_404_NOT_FOUND: OpenApiResponse(description='Reset password verification disabled'),
         }
     )
     @action(detail=False, methods=['post'], url_path='reset-password', url_name='reset-password')
@@ -99,13 +101,36 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Verify email via signature.',
         responses={
-            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK Email verified successfully'),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request')
         }
     )
     @action(detail=False, methods=['post'], url_path='verify-email', url_name='verify-email')
     def verify_email(self, request: Request) -> Response:
         return verify_email(request._request)
+
+
+class VerifyRegistrationSerializer(serializers.Serializer):
+    user_id = fields.CharField(required=True)
+    timestamp = fields.IntegerField(required=True)
+    signature = fields.CharField(required=True)
+
+
+class VerifyRegistrationViewSet(viewsets.ViewSet):
+    serializer_class = VerifyRegistrationSerializer()
+
+    @extend_schema(
+        description='Verify registration via signature. The user who wants to register itself sends AJAX POST request '
+                    'to register/ endpoint. The register endpoint will generate an e-mail which will contain an URL '
+                    'which the newly registered user should click to activate account.',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK', response=ResetPasswordSerializer),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request')
+        }
+    )
+    @action(detail=False, methods=['post'], url_path='verify_registration', url_name='verify-registration')
+    def verify_registration(self, request: Request) -> Response:
+        return verify_registration(request._request)
 
 
 class SendResetPasswordLinkSerializer(serializers.Serializer):
@@ -118,8 +143,10 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     @extend_schema(
         description='Send email with reset password link.',
         responses={
-            status.HTTP_200_OK: OpenApiResponse(description='OK', response=SendResetPasswordLinkSerializer()),
+            status.HTTP_200_OK: OpenApiResponse(description='OK Reset link sent',
+                                                response=SendResetPasswordLinkSerializer()),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request'),
+            404: 'Reset password verification disabled'
         }
     )
     @action(detail=False, methods=['post'], url_path='send-reset-password-link', url_name='send-reset-password-link')

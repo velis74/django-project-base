@@ -2,11 +2,12 @@ import swapper
 from django.conf import settings
 from django.db.models import Model
 from django_project_base.rest.project import ProjectSerializer
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, serializers, status
 from rest_framework.decorators import action
+from rest_framework.exceptions import APIException
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -54,6 +55,10 @@ class ProfileViewSet(ModelViewSet):
         return ProfileSerializer
 
     @extend_schema(
+        parameters=[
+            OpenApiParameter('search',
+                             description="Search users by all of those fields: username, email, first_name, last_name")
+        ],
         description="Get list of users",
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK', response=get_serializer_class),
@@ -63,8 +68,27 @@ class ProfileViewSet(ModelViewSet):
     def list(self, request, *args, **kwargs):
         return super(ProfileViewSet, self).list(request, *args, **kwargs)
 
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(
+        description='Get user profile by id',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK', response=get_serializer_class),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
+        }
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super(ProfileViewSet, self).retrieve(request, *args, **kwargs)
+
     @extend_schema(
         description='Update profile data (partially)',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK',
+                                                response=get_serializer_class),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
+        }
     )
     def partial_update(self, request, *args, **kwargs):
         return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)

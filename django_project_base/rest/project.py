@@ -16,10 +16,10 @@ class ProjectSerializer(ModelSerializer):
 class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
-        return swapper.load_model('django_project_base', 'Profile').objects.all()
+        return swapper.load_model('django_project_base', 'Project').objects.all()
 
     def get_serializer_class(self):
-        ProjectSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
+        ProjectSerializer.Meta.model = swapper.load_model('django_project_base', 'Project')
         return ProjectSerializer
 
     def get_object(self):

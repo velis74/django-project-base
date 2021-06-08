@@ -85,7 +85,8 @@ You should add at least following code to your project, to enable Dynamic Forms.
   REST_FRAMEWORK = {
   ...
         'DEFAULT_RENDERER_CLASSES': (
-          'rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer',
+          'rest_framework.renderers.JSONRenderer',
+          'rest_framework.renderers.BrowsableAPIRenderer',
           'dynamicforms.renderers.TemplateHTMLRenderer',
       )
   ...
