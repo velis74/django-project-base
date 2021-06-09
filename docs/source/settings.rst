@@ -56,3 +56,11 @@ Defines first_name, last_name order for readonly field *full_name*. Default orde
 setting to true will reverse order to "Last First".
 
 Global setting can be also overrided with profile option reverse_full_name_order (bool).
+
+**DELETE_PROFILE_TIMEDELTA**
+
+.. code-block:: python
+
+  DELETE_PROFILE_TIMEDELTA = 0
+
+How far in future will user profile be actually deleted with automatic process. Time delta is set in days.

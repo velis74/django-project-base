@@ -80,8 +80,8 @@ class TestProfileViewSet(TestCase):
         miha.is_staff = True
         miha.is_superuser = True
         miha.save()
-
         cache.delete('django-user-%d' % miha.id)
+
         response = self.api_client.get('/account/profile/1', {}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get('is_staff', 'not_exist'), True)
@@ -91,3 +91,28 @@ class TestProfileViewSet(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data.get('is_staff', 'not_exist'), False)
         self.assertEqual(response.data.get('is_superuser', 'not_exist'), False)
+
+    def test_profile_destroy(self):
+        self.assertTrue(self.api_client.login(username='miha', password='mihamiha'), 'Not logged in')
+        response = self.api_client.delete('/account/profile/1', {}, format='json')
+        self.assertEqual(response.status_code, 403)
+        expected_response = b'{"detail":"You do not have permission to perform this action."}'
+        self.assertEqual(response.content, expected_response)
+
+        miha = UserProfile.objects.get(username='miha')
+        miha.is_staff = True
+        miha.is_superuser = True
+        miha.save()
+        cache.delete('django-user-%d' % miha.id)
+
+        response = self.api_client.delete('/account/profile/2', {}, format='json')
+        self.assertEqual(response.status_code, 204)
+
+    def test_profile_destroy_my_profile(self):
+        self.assertTrue(self.api_client.login(username='miha', password='mihamiha'), 'Not logged in')
+        response = self.api_client.get('/account/profile/current', {}, format='json')
+        self.assertEqual(response.status_code, 200)
+        response = self.api_client.delete('/account/profile/current', {}, format='json')
+        self.assertEqual(response.status_code, 204)
+        response = self.api_client.get('/account/profile/current', {}, format='json')
+        self.assertEqual(response.status_code, 403)

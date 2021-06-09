@@ -1,19 +1,26 @@
+import datetime
+
 import swapper
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Model
+from django.utils import timezone
 from django_project_base.rest.project import ProjectSerializer
+from django_project_base.settings import DJANGO_USER_CACHE, DELETE_PROFILE_TIMEDELTA
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, serializers, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
 
 class ProfileSerializer(ModelSerializer):
     full_name = serializers.SerializerMethodField('get_full_name', read_only=True)
+    delete_at = serializers.DateTimeField(write_only=True)
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -33,13 +40,12 @@ class ProfileSerializer(ModelSerializer):
             return obj.first_name + ' ' + obj.last_name
 
     class Meta:
-        model = None
+        model = swapper.load_model('django_project_base', 'Profile')
         exclude = ()
 
 
 @extend_schema_view(
     create=extend_schema(exclude=True),
-    destroy=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
 )
 class ProfileViewSet(ModelViewSet):
@@ -53,6 +59,11 @@ class ProfileViewSet(ModelViewSet):
     def get_serializer_class(self):
         ProfileSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProfileSerializer
+
+    def get_permissions(self):
+        if self.action == 'destroy':
+            return [IsAdminUser(), ]
+        return super(ProfileViewSet, self).get_permissions()
 
     @extend_schema(
         parameters=[
@@ -94,17 +105,26 @@ class ProfileViewSet(ModelViewSet):
         return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)
 
     @extend_schema(
-        description="Get user profile of calling user",
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description='OK'),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
-        }
+        description="GET: Get user profile of calling user. \n\n"
+                    "DELETE: Marks profile of calling user for deletion in future. Future date is determined "
+                    "by settings",
     )
-    @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current')
+    @action(methods=['GET', 'DELETE'], detail=False, url_path='current', url_name='profile-current',
+            permission_classes=[IsAuthenticated])
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
         if not user:
             raise exceptions.AuthenticationFailed
+        if self.request.method == 'DELETE':
+            user.is_active = False
+            profile_obj = getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name)
+            profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
+
+            profile_obj.save()
+            user.save()
+            cache.delete(DJANGO_USER_CACHE % user.id)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
         serializer = self.get_serializer(
             getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name))
         response_data: dict = serializer.data
@@ -116,3 +136,12 @@ class ProfileViewSet(ModelViewSet):
                 response_data['default-project'] = ProjectSerializer(
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
+
+    @extend_schema(
+        description="Immediately removes user from database",
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
+        }
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
