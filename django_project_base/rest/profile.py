@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.db.models import Model
 from django.utils import timezone
 from django_project_base.rest.project import ProjectSerializer
-from django_project_base.settings import DJANGO_USER_CACHE, DELETE_PROFILE_TIMEDELTA
+from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, DJANGO_USER_CACHE
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet

@@ -20,6 +20,7 @@ PROFILE_REVERSE_FULL_NAME_ORDER = False
 
 DELETE_PROFILE_TIMEDELTA = 0
 
+
 def set_django_project_base_settings():
     from django.conf import settings
     for _setting in DJANGO_PROJECT_BASE_SETTINGS:

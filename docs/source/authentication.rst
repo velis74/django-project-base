@@ -118,3 +118,4 @@ example code below.
       """Use this only for enabling cache clear for bulk update"""
       objects = ProfilesQuerySet.as_manager()
   ...
+
