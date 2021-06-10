@@ -105,26 +105,18 @@ class ProfileViewSet(ModelViewSet):
         return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)
 
     @extend_schema(
-        description="GET: Get user profile of calling user. \n\n"
-                    "DELETE: Marks profile of calling user for deletion in future. Future date is determined "
-                    "by settings",
+        description="Get user profile of calling user.",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
+        }
     )
-    @action(methods=['GET', 'DELETE'], detail=False, url_path='current', url_name='profile-current',
+    @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current',
             permission_classes=[IsAuthenticated])
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
         if not user:
             raise exceptions.AuthenticationFailed
-        if self.request.method == 'DELETE':
-            user.is_active = False
-            profile_obj = getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name)
-            profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
-
-            profile_obj.save()
-            user.save()
-            cache.delete(DJANGO_USER_CACHE % user.id)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
         serializer = self.get_serializer(
             getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name))
         response_data: dict = serializer.data
@@ -136,6 +128,28 @@ class ProfileViewSet(ModelViewSet):
                 response_data['default-project'] = ProjectSerializer(
                     project_model.objects.filter(owner=user).first()).data
         return Response(response_data)
+
+    @extend_schema(
+        description="Marks profile of calling user for deletion in future. Future date is determined "
+                    "by settings",
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description='No content'),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed')
+        }
+    )
+    @get_current_profile.mapping.delete
+    def mark_current_profile_delete(self, request: Request, **kwargs) -> Response:
+        user: Model = getattr(request, 'user', None)
+        if not user:
+            raise exceptions.AuthenticationFailed
+        user.is_active = False
+        profile_obj = getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name)
+        profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
+
+        profile_obj.save()
+        user.save()
+        cache.delete(DJANGO_USER_CACHE % user.id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
         description="Immediately removes user from database",
