@@ -18,7 +18,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.i18n import JavaScriptCatalog
-
 from django_project_base.account import accounts_router
 from django_project_base.profiling import app_debug_view
 from django_project_base.router import django_project_base_router
