@@ -287,7 +287,7 @@ endobj
 endobj
 39 0 obj
 <<
-/Author () /CreationDate (D:20210610123726-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210610123726-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+/Author () /CreationDate (D:20210610125128-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210610125128-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
   /Subject (\(unspecified\)) /Title () /Trapped /False
 >>
 endobj
@@ -2722,7 +2722,7 @@ endstream
 endobj
 78 0 obj
 <<
-/Length 7580
+/Length 7570
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -2867,7 +2867,7 @@ q
 1 0 0 1 40.01575 368.6394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Make sure you have django project base urls included:) Tj T* ET
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add django-project-base notifications urls:) Tj T* ET
 Q
 Q
 q
@@ -5139,27 +5139,27 @@ xref
 0000043947 00000 n 
 0000058575 00000 n 
 0000070771 00000 n 
-0000078403 00000 n 
-0000090343 00000 n 
-0000104288 00000 n 
-0000112941 00000 n 
-0000121287 00000 n 
-0000121435 00000 n 
-0000121469 00000 n 
-0000121503 00000 n 
-0000121537 00000 n 
-0000121571 00000 n 
-0000121605 00000 n 
-0000121639 00000 n 
-0000121673 00000 n 
-0000121707 00000 n 
-0000121741 00000 n 
-0000121776 00000 n 
-0000121811 00000 n 
+0000078393 00000 n 
+0000090333 00000 n 
+0000104278 00000 n 
+0000112931 00000 n 
+0000121277 00000 n 
+0000121425 00000 n 
+0000121459 00000 n 
+0000121493 00000 n 
+0000121527 00000 n 
+0000121561 00000 n 
+0000121595 00000 n 
+0000121629 00000 n 
+0000121663 00000 n 
+0000121697 00000 n 
+0000121731 00000 n 
+0000121766 00000 n 
+0000121801 00000 n 
 trailer
 <<
 /ID 
-[<a63885a3c443478c8e62d87f993bde60><a63885a3c443478c8e62d87f993bde60>]
+[<b9b4610132b044241726e7ccc1dfe3be><b9b4610132b044241726e7ccc1dfe3be>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 39 0 R
@@ -5167,5 +5167,5 @@ trailer
 /Size 96
 >>
 startxref
-121846
+121836
 %%EOF

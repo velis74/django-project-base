@@ -149,8 +149,7 @@ REST_REGISTRATION = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer',
         'dynamicforms.renderers.TemplateHTMLRenderer',
     )
 }
@@ -171,3 +170,17 @@ AUTHENTICATION_BACKENDS = (
     'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
     'django.contrib.auth.backends.ModelBackend',
 )
+
+WSGI_LOG_LONG_REQUESTS = True
+
+# Settings for Mailhog
+# https://github.com/mailhog/MailHog
+# MailHog is an email testing tool for developers. Configure your application to use MailHog for SMTP delivery.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 1025
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+SERVER_EMAIL = ''
+DEFAULT_FROM_EMAIL = 'info@example.com'
