@@ -1,23 +1,23 @@
 {% if breadcrumbs_template %}
-    {% include breadcrumbs_template %}
+{% include breadcrumbs_template %}
 {% else %}
-    {% include "bootstrap/breadcrumbs.html" %}
+{% include "bootstrap/breadcrumbs.html" %}
 {% endif %}
 
 {% if project_list_template %}
-    {% include project_list_template %}
+{% include project_list_template %}
 {% else %}
-    {% include "bootstrap/project-list.html" %}
+{% include "bootstrap/project-list.html" %}
 {% endif %}
 {% if user_profile_template %}
-    {% include user_profile_template %}
+{% include user_profile_template %}
 {% else %}
-    {% include "bootstrap/user-profile.html" %}
+{% include "bootstrap/user-profile.html" %}
 {% endif %}
 {% if login_template %}
-    {% include login_template %}
+{% include login_template %}
 {% else %}
-    {% include "bootstrap/login.html" %}
+{% include "bootstrap/login.html" %}
 {% endif %}
 {% verbatim %}
 <script type="text/x-template" id="titlebar">
@@ -34,19 +34,41 @@
             <div class="navbar-brand left-spacing" href="javascript:void(0);" style="cursor: default;">
                 {{ titleBarProps.name }}
             </div>
+            {% endverbatim %}
+            {% if not hide_breadcrumbs %}
+            {% verbatim %}
             <div v-if="loggedIn" class="left-spacing">
                 <breadcrumbs></breadcrumbs>
             </div>
+            {% endverbatim %}
+            {% endif %}
+            {% if not hide_project_list %}
+            {% verbatim %}
             <div class="collapse navbar-collapse" v-if="loggedIn">
                 <ul class="navbar-nav mr-auto">
                 </ul>
                 <project-list></project-list>
             </div>
+            {% endverbatim %}
+            {% endif %}
+            {% verbatim %}
             <div v-if="loggedIn">
+                {% endverbatim %}
+                {% if not hide_user_profile %}
+                {% verbatim %}
                 <user-profile></user-profile>
+                {% endverbatim %}
+                {% endif %}
+                {% verbatim %}
             </div>
             <div v-else>
+                {% endverbatim %}
+                {% if not hide_login %}
+                {% verbatim %}
                 <login></login>
+                {% endverbatim %}
+                {% endif %}
+                {% verbatim %}
             </div>
         </nav>
         <notifications width="350" position="top center" v-if="loggedIn">

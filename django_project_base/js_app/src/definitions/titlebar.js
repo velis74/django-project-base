@@ -64,15 +64,15 @@ const titlebar = {
       },
       loadProjectData() {
         if (Store.get('current-project')) {
-          ApiClient.get('project/' + Store.get('current-project')).then(projectResponse => {
+          ApiClient.get('/project/' + Store.get('current-project')).then(projectResponse => {
             this.titleBarProps = projectResponse.data;
           });
         }
       },
       monitorMaintenanceNotifications() {
         this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
-          if (this.loggedIn) {
-            ApiClient.get('maintenance-notification/').then(notificationResponse => {
+          if (Store.get('current-user')) {
+            ApiClient.get('/maintenance-notification/').then(notificationResponse => {
               const _notification = _.first(notificationResponse.data);
               if (_notification) {
                 const acknowledgeData = _notification.notification_acknowledged_data;

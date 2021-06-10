@@ -25,7 +25,7 @@ class NotificationQuerySet(QuerySetWithCache):
             return cached_data
 
         now: datetime.datetime = utc_now()
-        _data: list = super().filter(
+        _data: list = super().list(
             type=NotificationType.MAINTENANCE.value,
             delayed_to__gt=now,
             delayed_to__lt=now + datetime.timedelta(hours=8)

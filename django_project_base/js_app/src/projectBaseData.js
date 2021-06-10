@@ -10,7 +10,7 @@ class ProjectBaseData {
     if (!Store.get('current-user')) {
       return;
     }
-    ApiClient.get('project').then(response => {
+    ApiClient.get('/project').then(response => {
       callback(response.data);
     }).catch(error => {
       callback([]);

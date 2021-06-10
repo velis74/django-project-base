@@ -1,3 +1,7 @@
+from pathlib import Path
+
+from django_project_base.settings_parser import parse_settings
+
 DJANGO_PROJECT_BASE_SETTINGS = (
     {
         "name": "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES",
@@ -20,8 +24,8 @@ PROFILE_REVERSE_FULL_NAME_ORDER = False
 
 DELETE_PROFILE_TIMEDELTA = 0
 
+DOCUMENTATION_DIRECTORY: str = str(Path().resolve()) + '/docs/build/'
+
 
 def set_django_project_base_settings():
-    from django.conf import settings
-    for _setting in DJANGO_PROJECT_BASE_SETTINGS:
-        setattr(settings, _setting["name"], getattr(_setting, _setting["name"], _setting["default"]))
+    parse_settings(DJANGO_PROJECT_BASE_SETTINGS)

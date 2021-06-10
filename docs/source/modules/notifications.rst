@@ -45,6 +45,9 @@ Add django-project-base notifications urls:
    # url.py
 
    urlpatterns = [
+       ......
+       path('', include(notifications_router.urls)),
+       ......
    ]
 
 Run migrations:

@@ -2,6 +2,7 @@ import datetime
 
 import swapper
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.db.models import Model
 from django.utils import timezone
@@ -35,9 +36,10 @@ class ProfileSerializer(ModelSerializer):
             reversed_order = obj.reverse_full_name_order
 
         if reversed_order:
-            return obj.last_name + ' ' + obj.first_name
+            full_name = obj.last_name + ' ' + obj.first_name
         else:
-            return obj.first_name + ' ' + obj.last_name
+            full_name = obj.first_name + ' ' + obj.last_name
+        return full_name if full_name != ' ' else ''
 
     class Meta:
         model = swapper.load_model('django_project_base', 'Profile')
@@ -57,7 +59,6 @@ class ProfileViewSet(ModelViewSet):
         return swapper.load_model('django_project_base', 'Profile').objects.all()
 
     def get_serializer_class(self):
-        ProfileSerializer.Meta.model = swapper.load_model('django_project_base', 'Profile')
         return ProfileSerializer
 
     def get_permissions(self):
@@ -115,7 +116,7 @@ class ProfileViewSet(ModelViewSet):
             permission_classes=[IsAuthenticated])
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = getattr(request, 'user', None)
-        if not user:
+        if isinstance(user, AnonymousUser) or not user:
             raise exceptions.AuthenticationFailed
         serializer = self.get_serializer(
             getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name))

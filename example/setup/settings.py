@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django_project_base import VERSION
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django_project_base.account.constants import ACCOUNT_APP_ID
+from django_project_base.notifications import NOTIFICATIONS_APP_ID
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +44,9 @@ INSTALLED_APPS = [
     'django_project_base',
     'example.demo_django_base',
     'drf_spectacular',
+    NOTIFICATIONS_APP_ID,
+    'social_django',
+    ACCOUNT_APP_ID,
 ]
 
 MIDDLEWARE = [
@@ -158,7 +163,7 @@ SPECTACULAR_SETTINGS = {
         'deepLinking': True,
         'defaultModelsExpandDepth': -1,
     },
-
+    'COMPONENT_SPLIT_REQUEST': True,
 }
 
 AUTHENTICATION_BACKENDS = (

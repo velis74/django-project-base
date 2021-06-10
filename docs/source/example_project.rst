@@ -19,6 +19,25 @@ Run Python runserver from root directory of this project and visit url that is p
   Quit the server with CONTROL-C.
   ...
 
+
+Serve Sphinx documentation on localhost
+---------------------------------------
+
+Include documentation url to project urls.
+
+.. code-block:: python
+
+   # url.py
+
+   urlpatterns = [
+      .....
+      re_path(r'^docs-files/(?P<path>.*)$', documentation_view, {'document_root': DOCUMENTATION_DIRECTORY},
+            name='docs-files'),
+      .....
+   ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
 Sample data
 -----------
 

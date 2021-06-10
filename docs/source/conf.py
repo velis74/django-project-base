@@ -1,3 +1,5 @@
+# flake8: noqa
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -14,7 +16,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
-from django_project_base import VERSION # noqa E402
+
+from django_project_base import VERSION
 
 # -- Project information -----------------------------------------------------
 

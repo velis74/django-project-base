@@ -1,5 +1,4 @@
 django
-django-allauth
 djangorestframework
 dynamicforms
 swapper
@@ -11,3 +10,5 @@ django-hijack
 pytz
 sphinx
 rst2pdf
+tox
+social-auth-app-django

@@ -38,7 +38,7 @@ const showMaintenanceNotification = (noticeItem, rangeId) => {
         if (fromClick) {
           return;
         }
-        ApiClient.post('maintenance-notification/acknowledged/', {
+        ApiClient.post('/maintenance-notification/acknowledged/', {
           id: item.data.id,
           acknowledged_identifier: rangeId, // jshint ignore:line
         }).then(() => {

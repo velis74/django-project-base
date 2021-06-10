@@ -56,7 +56,7 @@ const userProfile = {
           return;
         }
         return new Promise((resolve, reject) => {
-          ApiClient.get('account/profile/current').then(profileResponse => {
+          ApiClient.get('/account/profile/current').then(profileResponse => {
             this.componentData = this.setAvatarImg(profileResponse.data);
             Store.set('current-user', this.componentData);
             resolve();
@@ -73,7 +73,7 @@ const userProfile = {
         this.impersonateModalVisible = !this.impersonateModalVisible;
       },
       changeUser() {
-        ApiClient.post('/account/impersonate/start', { email: this.selectedUser.email }).then(() => {
+        ApiClient.post('/account/impersonate/start', { id: this.selectedUser.id }).then(() => {
           this.impersonateModalVisible = false;
           Store.set('impersonated-user', true);
           this.reloadAfterImpersonationChange();
@@ -81,7 +81,7 @@ const userProfile = {
       },
       selectUser(user) {
         this.selectedUser = user;
-        this.userSearchInputQueryString = user.email;
+        this.userSearchInputQueryString = user.full_name || user.email;
       },
       searchUsers: _.debounce(function () {
         if (!this.userSearchInputQueryString) {
