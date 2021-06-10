@@ -38,7 +38,7 @@ class LoginViewSet(viewsets.ViewSet):
 
     @extend_schema(
         responses={
-            200: OpenApiResponse(description='OK'),
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
         }
     )
     @action(detail=False, methods=['get'], url_path='social-auth-providers', url_name='social-auth-providers',
