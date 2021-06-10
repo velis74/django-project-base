@@ -32,7 +32,7 @@ class LoginViewSet(viewsets.ViewSet):
             )
         }
     )
-    @action(detail=False, methods=['post'], url_name='login')
+    @action(detail=False, methods=['post'], url_name='login', authentication_classes=[], permission_classes=[])
     def login(self, request: Request) -> Response:
         return login(request._request)
 
