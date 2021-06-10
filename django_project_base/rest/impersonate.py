@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 from hijack.helpers import login_user, release_hijack
 from rest_framework import fields, status, viewsets
 from rest_framework.decorators import action
@@ -19,13 +19,6 @@ class ImpersonateRequestSerializer(Serializer):
     id = fields.IntegerField(required=False)
     email = fields.EmailField(required=False)
     username = fields.CharField(required=False)
-
-
-response_schema: dict = {
-    status.HTTP_200_OK: '',
-    status.HTTP_403_FORBIDDEN: '',
-    status.HTTP_400_BAD_REQUEST: '',
-}
 
 
 @extend_schema_view(
@@ -46,8 +39,13 @@ class ImpersonateUserViewset(viewsets.ViewSet):
         return ser.validated_data
 
     @extend_schema(
-        request=ImpersonateRequestSerializer(),
-        responses=response_schema,
+        request=ImpersonateRequestSerializer,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK', ),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(
+                description='Forbidden. You do not have permission to perform '
+                            'this action. or Impersonating self is not allowed')
+        },
         description='Login as another user and work on behalf of other user without having to know their credentials'
     )
     @action(detail=False, methods=['post'], url_name='impersonate-start',
@@ -61,7 +59,10 @@ class ImpersonateUserViewset(viewsets.ViewSet):
         return Response()
 
     @extend_schema(
-        responses=response_schema,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description='OK'),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Forbidden')
+        },
         description='Logout as another user'
     )
     @action(detail=False, methods=['post'], url_name='impersonate-end', permission_classes=[IsAuthenticated])

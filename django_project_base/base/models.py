@@ -41,6 +41,7 @@ class BaseProfile(User):
     theme = models.CharField(max_length=10, null=True, blank=True, verbose_name=_('Theme'))
     avatar = models.FileField(null=True, blank=True, verbose_name=_('Avatar'))
     reverse_full_name_order = models.BooleanField(null=True, blank=True, verbose_name=_('Reverse full name order'))
+    delete_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Delete profile at'))
 
     class Meta:
         abstract = True

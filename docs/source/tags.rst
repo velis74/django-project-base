@@ -20,7 +20,8 @@ Django project base supports tags usage. See example implementation bellow.
 
    class Apartment(models.Model):
        number = fields.IntegerField()
-       tags = TaggableManager(blank=True, through=TaggedItemThrough, related_name="apartment_tags")
+       tags = TaggableManager(blank=True, through=TaggedItemThrough,
+                              related_name="apartment_tags")
 
    # Example code
    from example.demo_django_base.models import DemoProjectTag

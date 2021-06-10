@@ -34,34 +34,40 @@ your html document header.
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <title>Titlebar component example</title>
-        {# include django javascript catalog for internationalization #}
-        <script src="{% url 'javascript-catalog' %}"></script>
-        {# add bootstrap library with dependencies and font-awesome #}
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet"
-            crossorigin="anonymous">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
-            crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
-        {# include django project base js lib and appropriate css #}
-        <link href="{% static 'bootstrap_template.css' %}" rel="stylesheet" crossorigin="anonymous">
-        <script src="{% static 'django-project-base.min.js' %}"></script>
+      <meta charset="UTF-8">
+      <title>Titlebar component example</title>
+      {# include django javascript catalog for internationalization #}
+      <script src="{% url 'javascript-catalog' %}"></script>
+      {# add bootstrap library with dependencies and font-awesome #}
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        rel="stylesheet" crossorigin="anonymous">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"
+        crossorigin="anonymous">
+      </script>
+      <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css"
+        rel="stylesheet" crossorigin="anonymous">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        crossorigin="anonymous">
+      </script>
+      {# include django project base js lib and appropriate css #}
+      <link href="{% static 'bootstrap_template.css' %}" rel="stylesheet"
+        crossorigin="anonymous">
+      <script src="{% static 'django-project-base.min.js' %}"></script>
     </head>
     <body>
-        {# set div which will contain titlebar component #}
-        <div id="titlebar-app" class="titlebar-app">
-            {# use/render titlebar component #}
-            <titlebar>
-            </titlebar>
-        </div>
-        {# include vue inline template for titlebar component from folder coresponding to included css file #}
-        {% include "bootstrap/titlebar.html" %}
-        <script>
-            // initialize titlebar component
-            createApp('titlebar-app', titlebar);
-        </script>
+      {# set div which will contain titlebar component #}
+      <div id="titlebar-app" class="titlebar-app">
+        {# use/render titlebar component #}
+          <titlebar></titlebar>
+      </div>
+      {# include vue inline template for titlebar component from folder
+        coresponding to included css file #}
+      {% include "bootstrap/titlebar.html" %}
+      <script>
+        // initialize titlebar component
+        createApp('titlebar-app', titlebar);
+      </script>
     </body>
     </html>
 

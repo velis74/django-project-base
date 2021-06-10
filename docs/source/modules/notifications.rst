@@ -44,7 +44,11 @@ Make sure you have django project base urls included:
 
    # url.py
 
-   urlpatterns += django_project_base_urlpatterns
+   urlpatterns = [
+       ......
+       path('', include(notifications_router.urls)),
+       ......
+   ]
 
 Run migrations:
 

@@ -24,6 +24,12 @@ or project is given in request path like: language-EN, then url_part settings is
 When creating models with slug field they should be named with this setting value. This enables that we can use object slug instead of
 object pk when making api requests.
 
+**MAINTENENACE_NOTIFICATIONS_CACHE_KEY**
+
+.. code-block:: python
+
+  MAINTENENACE_NOTIFICATIONS_CACHE_KEY=""
+
 **DJANGO_USER_CACHE**
 
 .. code-block:: python
@@ -50,3 +56,11 @@ Defines first_name, last_name order for readonly field *full_name*. Default orde
 setting to true will reverse order to "Last First".
 
 Global setting can be also overrided with profile option reverse_full_name_order (bool).
+
+**DELETE_PROFILE_TIMEDELTA**
+
+.. code-block:: python
+
+  DELETE_PROFILE_TIMEDELTA = 0
+
+How far in future will user profile be actually deleted with automatic process. Time delta is set in days.

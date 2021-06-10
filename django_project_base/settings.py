@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django_project_base.settings_parser import parse_settings
 
 DJANGO_PROJECT_BASE_SETTINGS = (
@@ -19,6 +21,10 @@ CACHE_IMPERSONATE_USER = 'impersonate-user-%d'
 WSGI_LOG_LONG_REQUESTS_COUNT = 50
 
 PROFILE_REVERSE_FULL_NAME_ORDER = False
+
+DELETE_PROFILE_TIMEDELTA = 0
+
+DOCUMENTATION_DIRECTORY: str = str(Path().resolve()) + '/docs/build/'
 
 
 def set_django_project_base_settings():

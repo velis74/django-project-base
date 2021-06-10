@@ -20,10 +20,8 @@ class TestUsersCachingBackend(TestCase):
         UserProfile.objects.filter(username__in=['miha', 'janez']).update(is_superuser=True, is_staff=True)
 
         # I still shouldn't be able to do superuser stuff
-        # TODO: something has changed and cache gets cleared eather way
-        # discover if this test can still be performed
-        # response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
-        # self.assertEqual(response.status_code, 403)
+        response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
+        self.assertEqual(response.status_code, 403)
 
         # Clearing cache, now Miha can do better stuff
         staff = UserProfile.objects.filter(is_staff=True)
