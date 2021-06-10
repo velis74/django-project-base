@@ -17,6 +17,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from django.views.i18n import JavaScriptCatalog
+
 from django_project_base.account import accounts_router
 from django_project_base.profiling import app_debug_view
 from django_project_base.router import django_project_base_router
@@ -30,7 +32,7 @@ urlpatterns = [
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('account/', include(accounts_router.urls)),
-    path('', include('django_project_base.urls')),
     path('', include(django_project_base_router.urls)),
     path('app-debug/', app_debug_view, name='app-debug'),
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
