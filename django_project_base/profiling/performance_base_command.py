@@ -4,21 +4,17 @@ import time
 from os import path
 from typing import List, Optional
 
-from django.core.cache import cache
 from django.core.management import BaseCommand
 from django_project_base.constants import MANAGEMENT_COMMANDS_PERFORMANCE_STATS_FILES_NAME
 
 
 class PerformanceCommand(BaseCommand):
     file_path: str = '/tmp/' + MANAGEMENT_COMMANDS_PERFORMANCE_STATS_FILES_NAME + '_%s.txt'
-    use_cache_store = bool(getattr(cache, 'delete_pattern', None))
 
     def __init__(self, stdout=None, stderr=None, no_color=False, force_color=False):
         super().__init__(stdout, stderr, no_color, force_color)
 
     def __read_performance_data(self, filename: str) -> Optional[dict]:
-        if self.use_cache_store:
-            cache.get(filename, None)
         _file: str = self.file_path % filename
         if not path.exists(_file):
             return None
@@ -31,8 +27,6 @@ class PerformanceCommand(BaseCommand):
                 return None
 
     def __write_performance_data(self, filename: str, perf_data: dict) -> None:
-        if self.use_cache_store:
-            cache.set(filename, perf_data, timeout=None)
         with open(self.file_path % filename, "w") as f:
             f.write(json.dumps(perf_data) + "\n")
 
