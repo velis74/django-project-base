@@ -1,8 +1,12 @@
+import glob
+import json
+import logging
 import random
 from datetime import datetime
 
 from django.core.cache import cache
 from django.shortcuts import render
+from django_project_base.constants import MANAGEMENT_COMMANDS_PERFORMANCE_STATS_FILES_NAME
 from django_project_base.settings import WSGI_LOG_LONG_REQUESTS_COUNT
 from dynamicforms.struct import Struct
 
@@ -12,6 +16,19 @@ def app_debug_view(request):
     if not getattr(request, 'user', None):
         raise PermissionError
     return render(request, 'app-debug/main.html', __get_debug_data())
+
+
+def __get_management_commands_stats() -> dict:
+    stats: dict = {}
+    for file in glob.glob('/tmp/' + MANAGEMENT_COMMANDS_PERFORMANCE_STATS_FILES_NAME + '*'):
+        with open(file, 'r') as f:
+            content = f.read()
+            try:
+                stats[file] = json.loads(content)
+            except Exception as e:
+                logger = logging.getLogger(__name__)
+                logger.error(e)
+    return stats
 
 
 def __get_debug_data():
@@ -84,4 +101,5 @@ def __get_debug_data():
         debug_data=result_data, spenders=spenders,
         long_running_time=int(time.time() - min_timestamp),
         all_requests=all_requests,
+        management_commands=__get_management_commands_stats()
     )
