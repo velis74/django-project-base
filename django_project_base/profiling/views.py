@@ -32,7 +32,8 @@ def __get_debug_data():
         queries_executed: list = req.get('queries', []) or []
 
         num_of_queries: int = len(queries_executed)
-        num_of_distinct_queries: int = len(set(map(lambda d: d['sql'], queries_executed)))
+        num_of_distinct_queries: int = len(
+            set(map(lambda d: d['sql'], filter(lambda e: isinstance(e, dict), queries_executed))))
         r = lambda: random.randint(0, 255)  # noqa: E731
         item = dict(
             r_data=dict(
