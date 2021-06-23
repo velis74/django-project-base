@@ -42,15 +42,15 @@ class CacheLock(object):
 
 class ProfileRequest(object):
     response: object
-    _start_time: float
-    _end_time: float
-    _process_function: object
+    _start_time: tuple
+    _end_time: tuple
+    _process_function: callable
     _process_function_args: tuple
     _process_function_kwargs: dict
     _settings: dict
     _profile_path: str
 
-    def __init__(self, settings: dict, process_function: object,
+    def __init__(self, settings: dict, process_function: callable,
                  process_function_args: tuple, process_function_kwargs: dict):
         assert 'REQUEST_METHOD' in settings
         assert 'QUERY_STRING' in settings
