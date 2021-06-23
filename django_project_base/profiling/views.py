@@ -1,12 +1,8 @@
-import glob
-import json
-import logging
 import random
 from datetime import datetime
 
 from django.core.cache import cache
 from django.shortcuts import render
-from django_project_base.constants import MANAGEMENT_COMMANDS_PERFORMANCE_STATS_FILES_NAME
 from django_project_base.settings import WSGI_LOG_LONG_REQUESTS_COUNT
 from dynamicforms.struct import Struct
 
@@ -16,19 +12,6 @@ def app_debug_view(request):
     if not getattr(request, 'user', None):
         raise PermissionError
     return render(request, 'app-debug/main.html', __get_debug_data())
-
-
-def __get_management_commands_stats() -> dict:
-    stats: dict = {}
-    for file in glob.glob('/tmp/' + MANAGEMENT_COMMANDS_PERFORMANCE_STATS_FILES_NAME + '*'):
-        with open(file, 'r') as f:
-            content = f.read()
-            try:
-                stats[file] = json.loads(content)
-            except Exception as e:
-                logger = logging.getLogger(__name__)
-                logger.error(e)
-    return stats
 
 
 def __get_debug_data():
@@ -49,7 +32,8 @@ def __get_debug_data():
         queries_executed: list = req.get('queries', []) or []
 
         num_of_queries: int = len(queries_executed)
-        num_of_distinct_queries: int = len(set(map(lambda d: d['sql'], queries_executed)))
+        num_of_distinct_queries: int = len(
+            set(map(lambda d: d['sql'], filter(lambda e: isinstance(e, dict), queries_executed))))
         r = lambda: random.randint(0, 255)  # noqa: E731
         item = dict(
             r_data=dict(
@@ -101,5 +85,4 @@ def __get_debug_data():
         debug_data=result_data, spenders=spenders,
         long_running_time=int(time.time() - min_timestamp),
         all_requests=all_requests,
-        management_commands=__get_management_commands_stats()
     )

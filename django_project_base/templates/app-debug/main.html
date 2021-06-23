@@ -5,36 +5,6 @@
   <title>App Debug</title>
 </head>
 <body>
-<h5>Management commands overview</h5>
-<div>
-  <table>
-    <thead>
-      <tr>
-        <th>Command</th>
-        <th>Params</th>
-        <th>Number of runs</th>
-        <th>Total time</th>
-        <th>Average time</th>
-        <th>Max time</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for kstat, stat in management_commands.items %}
-    <tr>
-      <td style="text-align: left">{{ stat.name }}</td>
-      <td style="text-align: left">{{ stat.params }}</td>
-      <td style="text-align: right">{{ stat.number_of_runs }}</td>
-      <td style="text-align: right">{{ stat.total__run_time }}</td>
-      <td style="text-align: right">{{ stat.avg_run_time }}</td>
-      <td style="text-align: right">{{ stat.max_run_time }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-<br/>
-<hr>
-<br/>
-</div>
 <h5>Summary of most time consuming requests</h5>
 <h6>Long-running requests for the last {{ long_running_time }} seconds</h6>
 <table>
