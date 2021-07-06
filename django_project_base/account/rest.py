@@ -1,4 +1,5 @@
 import importlib
+import re
 from typing import List
 
 from django.utils.translation import ugettext_lazy as _
@@ -207,15 +208,24 @@ class RegisterReturnSerializer(serializers.Serializer):
 
 
 @extend_schema(
-    description='Register new user. The user who wants to register itself sends AJAX POST request to register/ '
-                'endpoint. The register/ endpoint will generate an e-mail which will contain an URL which the newly '
-                'registered user should click to activate account. ',
+    description='Register new user. The endpoint will generate an e-mail with a confirmation URL which the newly '
+                'registered user should GET to activate the newly created account.',
     responses={
         status.HTTP_200_OK: OpenApiResponse(description='OK', response=RegisterReturnSerializer),
         status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-            description='BadRequest. Responce cam be either of: "This password is too short. It must contain at least'
-                        ' 8 characters.","The password is too similar to the username." or  "A user with that username'
-                        ' already exists."'
+            description=re.sub(r' +', ' ', """
+                   There was a problem with the data. Response contains a JSON object showing validation errors per 
+                   field. JSON object keys are field names with issues, containing a list of issues and a 
+                   "non_field_errors" field containing errors that do not apply to a single field. Example: {
+                     "password": [
+                       "The password is too similar to the username.",
+                       "This password is too short. It must contain at least 8 characters."
+                     ],
+                     "password_confirm": [
+                       "Passwords don't match"
+                     ],
+                     "non_field_errors": []
+                   }""".replace('\n', ' '))
         ),
     }
 )
