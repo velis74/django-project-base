@@ -25,7 +25,7 @@ class LoginViewSet(viewsets.ViewSet):
     serializer_class = LoginSerializer
 
     @extend_schema(
-        description='Logs in the user via given username and password.',
+        description='Logs in the user with given username and password.',
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK'),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
@@ -76,8 +76,8 @@ class LogoutViewSet(viewsets.ViewSet):
     serializer_class = LogoutSerializer
 
     @extend_schema(
-        description='Logs out the user. returns an error if the user is not authenticated. '
-                    'If revoke_token is selected, revokes the given token for a given user. If the token is not  '
+        description='Logs out the user. Returns an error if the user is not authenticated. '
+                    'If revoke_token is provided, revokes the given token for a given user. If the token is not  '
                     'provided, revoke all tokens for given user. ',
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK'),
@@ -123,7 +123,7 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     serializer_class = ResetPasswordSerializer
 
     @extend_schema(
-        description='Reset password, given the signature and timestamp from the link.',
+        description='Reset password through a link sent in email, given the signature and timestamp from the link.',
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK Reset link sent'),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request.'),
@@ -156,9 +156,8 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
     serializer_class = VerifyRegistrationSerializer()
 
     @extend_schema(
-        description='Verify registration via signature. The user who wants to register itself sends AJAX POST request '
-                    'to register/ endpoint. The register endpoint will generate an e-mail which will contain an URL '
-                    'which the newly registered user should click to activate account.',
+        description='Verify registration with signature. The endpoint will generate an e-mail with a confirmation URL '
+                    'which the user should GET to confirm the account.',
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK', response=ResetPasswordSerializer),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description='Bad request')
@@ -214,8 +213,8 @@ class RegisterReturnSerializer(serializers.Serializer):
         status.HTTP_200_OK: OpenApiResponse(description='OK', response=RegisterReturnSerializer),
         status.HTTP_400_BAD_REQUEST: OpenApiResponse(
             description=re.sub(r' +', ' ', """
-                   There was a problem with the data. Response contains a JSON object showing validation errors per 
-                   field. JSON object keys are field names with issues, containing a list of issues and a 
+                   There was a problem with the data. Response contains a JSON object showing validation errors per
+                   field. JSON object keys are field names with issues, containing a list of issues and a
                    "non_field_errors" field containing errors that do not apply to a single field. Example: {
                      "password": [
                        "The password is too similar to the username.",
