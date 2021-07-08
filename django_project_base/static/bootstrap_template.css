@@ -4,7 +4,7 @@
 
 /* titlebar styling*/
 
-.titlebar-app .card, .card-body {
+.titlebar-app .card, .nav-item > .card > .card-body {
     border: none;
     padding: 0;
     cursor: pointer;
