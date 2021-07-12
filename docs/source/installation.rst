@@ -10,6 +10,11 @@ Install the package:
 
 Extend the BaseProject & BaseProfile model:
 
+You need to override the Project and Profile models before you can use the library: there aren't any migrations
+available in the library itself. The library only declares properties it itself supports, but you have the option to
+extend them as you wish to fit your needs too.
+
+
 .. code-block:: python
 
    # myapp/models.py
@@ -48,12 +53,7 @@ Then also make sure your models are loaded instead of django-project-base models
     }
 
 
-.. warning::
 
-   This is important!!! You need to do the overriding before you create migrations, overriding base class is **mandatory**.
-   There arent any migrations available for *default models*. Migrating after models had been created and used is a
-   really hard and painful process. So make triple sure you don't deploy your application without first making sure the
-   model you want to use is either your own or you are satisfied with our default implementation.
 
 Append django project base urls:
 
