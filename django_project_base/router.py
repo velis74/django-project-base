@@ -1,8 +1,8 @@
-from django_project_base.base.rest.router import Router as ProjectBaseRouter
 from django_project_base.constants import ACCOUNT_URL_PREFIX
 from django_project_base.rest.impersonate import ImpersonateUserViewset
 from django_project_base.rest.profile import ProfileViewSet
 from django_project_base.rest.project import ProjectViewSet
+from rest_framework.routers import DefaultRouter
 
 
 def filter_rest_documentation_endpoints(endpoints: list) -> list:
@@ -15,7 +15,7 @@ def filter_rest_documentation_endpoints(endpoints: list) -> list:
     return _endpoints
 
 
-class RestRouter(ProjectBaseRouter):
+class RestRouter(DefaultRouter):
     pass
 
 

@@ -1,11 +1,11 @@
-from django_project_base.base.rest.router import Router as ProjectBaseRouter
+from rest_framework.routers import DefaultRouter
 
 from .rest import (
     ChangePasswordViewSet, LoginViewSet, LogoutViewSet, RegisterViewSet, ResetPasswordViewSet,
     SendResetPasswordLinkViewSet, VerifyRegistrationViewSet
 )
 
-accounts_router = ProjectBaseRouter(trailing_slash=True)
+accounts_router = DefaultRouter(trailing_slash=True)
 
 accounts_router.register(r'', LoginViewSet, basename='account')
 accounts_router.register(r'', LogoutViewSet, basename='account')
