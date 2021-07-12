@@ -3,7 +3,7 @@ djangorestframework
 dynamicforms
 swapper
 django-rest-registration
-drf-spectacular
+drf-spectacular>=0.17.2
 django-taggit
 svgwrite
 django-hijack
