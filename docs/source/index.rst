@@ -37,12 +37,12 @@ Index:
 
    installation
    settings
-   javascript_client
    tags
    fields
    middleware
    modules/index
    translations
-   example_project
+   examples
    swagger
+   open_api
 

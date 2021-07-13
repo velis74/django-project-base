@@ -1,21 +1,8 @@
-Javascript Client
-=================
+Examples
+========
 
-Usage
-------
-
-Look at django_project_base/templates/index.html for examples.
-
-**API Documentation**
-
-Swagger UI is accessible on /schema/swagger-ui/ url by running example project.
-
-**Translations**:
-
-If you want to use your Django translations in your app include <script src="{% url 'javascript-catalog' %}"></script> in
-your html document header.
-
-**Titlebar component integration example**
+Titlebar component integration example
+--------------------------------------
 
 .. code-block:: python
 
@@ -72,23 +59,57 @@ your html document header.
     </html>
 
 
-For developers
----------------
-For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2 places.
+Example project
+===============
 
-For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
-In project base directory run npm install. To run a development server run npm run dev (go to http://0.0.0.0:8080/).
-To generate a build run npm run build.
+You can find examples of most of the functionality of Django project base project in */example/* folder.
 
-JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
-Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
-with x-templates. Templates are present in templates directory.
 
-When developing webpack development server expects that service which provides data runs on host
-http://127.0.0.1:8000. This can be changed in webpack.config.js file.
-For running example django project prepare python environment and run (run in repository root):
+Run example project
+-------------------
 
-- pip install -r requirements.txt (run in content root)
-- python manage.py runserver
+Run Python runserver from root directory of this project and visit url that is provided in command output.
 
-Try logging in with user "miha", pass "mihamiha".
+.. code:: bash
+
+  $python manage.py runserver
+
+  ...
+  Django version 3.1.8, using settings 'example.setup.settings'
+  Starting development server at http://127.0.0.1:8000/
+  Quit the server with CONTROL-C.
+  ...
+
+
+Serve Sphinx documentation on localhost
+---------------------------------------
+
+Include documentation url to project urls.
+
+.. code-block:: python
+
+   # url.py
+
+   urlpatterns = [
+      .....
+      re_path(r'^docs-files/(?P<path>.*)$', documentation_view, {'document_root': DOCUMENTATION_DIRECTORY},
+            name='docs-files'),
+      .....
+   ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+
+Sample data
+-----------
+
+**Users**
+
+- **miha**:
+
+  - username: miha
+  - password: mihamiha
+
+- **janez**:
+
+  - username: janez
+  - password: janezjanez
