@@ -33,6 +33,7 @@ version = VERSION
 # ones.
 extensions = [
     'rst2pdf.pdfbuilder',
+    'sphinx.ext.autosectionlabel',
 ]
 pdf_documents = [('index', u'djangoprojectbase', u'Django Project Base', u''), ]
 pdf_fit_mode = "shrink"
