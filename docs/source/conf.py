@@ -35,7 +35,7 @@ extensions = [
     'rst2pdf.pdfbuilder',
 ]
 pdf_documents = [('index', u'djangoprojectbase', u'Django Project Base', u''), ]
-df_fit_mode = "shrink"
+pdf_fit_mode = "shrink"
 pdf_use_toc = False
 pdf_use_numbered_links = False
 pdf_fit_background_mode = "scale"

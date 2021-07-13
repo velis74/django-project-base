@@ -8,7 +8,7 @@ django-taggit
 svgwrite
 django-hijack
 pytz
-sphinx
+sphinx==3.5.4
 rst2pdf
 tox
 social-auth-app-django
