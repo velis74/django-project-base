@@ -16,3 +16,6 @@ To enable swagger gui, add following to urls.py
         name='swagger-ui'),
     ...
   ]
+
+
+Swagger UI is now accessible on /schema/swagger-ui/ url by running example project.

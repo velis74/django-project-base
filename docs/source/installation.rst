@@ -1,6 +1,10 @@
 Installation
 ============
 
+Django project base
+-------------------
+
+
 Install the package:
 
 .. code-block:: bash
@@ -10,6 +14,7 @@ Install the package:
 
 Extend the BaseProject & BaseProfile model:
 
+Django project base uses Swapper https://pypi.org/project/swapper/, an unofficial API for Django swappable models.
 You need to override the Project and Profile models before you can use the library: there aren't any migrations
 available in the library itself. The library only declares properties it itself supports, but you have the option to
 extend them as you wish to fit your needs too.
@@ -91,3 +96,26 @@ You should add at least following code to your project, to enable Dynamic Forms.
       )
   ...
   }
+
+Environment setup
+-----------------
+
+For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor
+to 2 places.
+
+For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
+In project base directory run npm install. To run a development server run *npm run dev* (go to http://0.0.0.0:8080/).
+To generate a build run *npm run build*.
+
+JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
+Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
+with x-templates. Templates are present in templates directory.
+
+When developing webpack development server expects that service which provides data runs on host
+http://127.0.0.1:8000. This can be changed in webpack.config.js file.
+For running example django project prepare python environment and run (run in repository root):
+
+- pip install -r requirements.txt (run in content root)
+- python manage.py runserver
+
+Try logging in with user "miha", pass "mihamiha".
