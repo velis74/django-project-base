@@ -31,9 +31,8 @@ extend them as you wish to fit your needs too.
    class MyProfile(BaseProfile):
        # add any fields & methods you like here
 
+Then also make sure your swappable models are loaded instead of django-project-base models:
 
-
-Then also make sure your models are loaded instead of django-project-base models:
 
 .. code-block:: python
 

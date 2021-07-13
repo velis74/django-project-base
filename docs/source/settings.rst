@@ -1,5 +1,22 @@
-Settings
-========
+.. _Settings:
+Settings options - quick overview
+=================================
+
+**DJANGO_PROJECT_BASE_PROJECT_MODEL**
+
+.. code-block:: python
+
+  DJANGO_PROJECT_BASE_PROJECT_MODEL = 'myapp.MyProject'
+
+Set swappable model for Django project base Project model. Read more in :ref:`Installation` chapter.
+
+**DJANGO_PROJECT_BASE_PROFILE_MODEL**
+
+.. code-block:: python
+
+  DJANGO_PROJECT_BASE_PROFILE_MODEL = 'myapp.MyProfile'
+
+Set swappable model for Django project base Profile model. Read more in :ref:`Installation` chapter.
 
 **DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES**
 
@@ -36,7 +53,7 @@ object pk when making api requests.
 
   DJANGO_USER_CACHE='django-user-%d'
 
-Key name for user caching background. Default value is usually the best, change it if you really must.
+Key name for user caching background. Default value is 'django-user-%d'.
 
 **CACHE_IMPERSONATE_USER**
 
@@ -44,7 +61,7 @@ Key name for user caching background. Default value is usually the best, change 
 
   CACHE_IMPERSONATE_USER = 'impersonate-user-%d'
 
-Cache key name for imperonate user. Default value is usually the best, change it if you really must.
+Cache key name for impersonate user. Default value is 'impersonate-user-%d'.
 
 **PROFILE_REVERSE_FULL_NAME_ORDER**
 
@@ -63,4 +80,10 @@ Global setting can be also overrided with profile option reverse_full_name_order
 
   DELETE_PROFILE_TIMEDELTA = 0
 
-How far in future will user profile be actually deleted with automatic process. Time delta is set in days.
+How far in future will user profile be actually deleted with automatic process. Value is set in days.
+
+**DOCUMENTATION_DIRECTORY**
+
+.. code-block:: python
+
+  DOCUMENTATION_DIRECTORY='/docs/build/'
