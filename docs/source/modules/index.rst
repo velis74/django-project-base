@@ -11,6 +11,8 @@ The page contains all information about Django Project Base modules:
 .. toctree::
    :name: modules
 
+   Project <project>
+   Profile <profile>
    Notifications <notifications>
    Authentication <authentication>
 
