@@ -2,8 +2,8 @@
 %“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
 1 0 obj
 <<
-/F1 2 0 R /F2 3 0 R /F3 10 0 R /F4 11 0 R /F5 12 0 R /F6 13 0 R 
-  /F7 17 0 R
+/F1 2 0 R /F2 3 0 R /F3 10 0 R /F4 11 0 R /F5 13 0 R /F6 14 0 R 
+  /F7 18 0 R
 >>
 endobj
 2 0 obj
@@ -18,7 +18,7 @@ endobj
 endobj
 4 0 obj
 <<
-/Contents 71 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Contents 74 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -28,7 +28,7 @@ endobj
 endobj
 5 0 obj
 <<
-/Contents 72 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Contents 75 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -76,34 +76,24 @@ endobj
 endobj
 12 0 obj
 <<
-/BaseFont /Courier-Oblique /Encoding /WinAnsiEncoding /Name /F5 /Subtype /Type1 /Type /Font
+/A <<
+/S /URI /Type /Action /URI (https://pypi.org/project/swapper/)
+>> /Border [ 0 0 0 ] /Rect [ 197.8657 332.6394 339.8308 344.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 13 0 obj
 <<
-/BaseFont /Courier-Bold /Encoding /WinAnsiEncoding /Name /F6 /Subtype /Type1 /Type /Font
+/BaseFont /Courier-Oblique /Encoding /WinAnsiEncoding /Name /F5 /Subtype /Type1 /Type /Font
 >>
 endobj
 14 0 obj
 <<
-/Annots [ 6 0 R 7 0 R 8 0 R 9 0 R ] /Contents 73 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
+/BaseFont /Courier-Bold /Encoding /WinAnsiEncoding /Name /F6 /Subtype /Type1 /Type /Font
 >>
 endobj
 15 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (https://github.com/velis74/DynamicForms)
->> /Border [ 0 0 0 ] /Rect [ 311.2357 541.0394 494.0657 553.0394 ] /Subtype /Link /Type /Annot
->>
-endobj
-16 0 obj
-<<
-/Annots [ 15 0 R ] /Contents 74 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Annots [ 6 0 R 7 0 R 8 0 R 9 0 R 12 0 R ] /Contents 76 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -111,14 +101,66 @@ endobj
 >> /Type /Page
 >>
 endobj
+16 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://github.com/velis74/DynamicForms)
+>> /Border [ 0 0 0 ] /Rect [ 311.2357 505.0394 494.0657 517.0394 ] /Subtype /Link /Type /Annot
+>>
+endobj
 17 0 obj
 <<
-/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F7 /Subtype /Type1 /Type /Font
+/A <<
+/S /URI /Type /Action /URI (https://nodejs.org/en/)
+>> /Border [ 0 0 0 ] /Rect [ 157.2957 251.8394 253.4575 263.8394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 18 0 obj
 <<
-/Contents 75 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F7 /Subtype /Type1 /Type /Font
+>>
+endobj
+19 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (http://0.0.0.0:8080/)
+>> /Border [ 0 0 0 ] /Rect [ 386.2657 239.8394 481.7025 251.8394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+20 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://vuejs.org/)
+>> /Border [ 0 0 0 ] /Rect [ 361.2257 209.8394 437.1413 221.8394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+21 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://vuejs.org/v2/guide/components.html)
+>> /Border [ 0 0 0 ] /Rect [ 182.3057 197.8394 371.9131 209.8394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+22 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (http://127.0.0.1:8000)
+>> /Border [ 0 0 0 ] /Rect [ 40.01575 155.8394 131.7557 167.8394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+23 0 obj
+<<
+/Annots [ 16 0 R 17 0 R 19 0 R 20 0 R 21 0 R 22 0 R ] /Contents 77 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
+>>
+endobj
+24 0 obj
+<<
+/Contents 78 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -126,54 +168,9 @@ endobj
   /Type /Page
 >>
 endobj
-19 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (https://nodejs.org/en/)
->> /Border [ 0 0 0 ] /Rect [ 157.2957 485.8394 253.4575 497.8394 ] /Subtype /Link /Type /Annot
->>
-endobj
-20 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (http://0.0.0.0:8080/)
->> /Border [ 0 0 0 ] /Rect [ 386.2657 473.8394 481.7025 485.8394 ] /Subtype /Link /Type /Annot
->>
-endobj
-21 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (https://vuejs.org/)
->> /Border [ 0 0 0 ] /Rect [ 361.2257 443.8394 437.1413 455.8394 ] /Subtype /Link /Type /Annot
->>
-endobj
-22 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (https://vuejs.org/v2/guide/components.html)
->> /Border [ 0 0 0 ] /Rect [ 182.3057 431.8394 371.9131 443.8394 ] /Subtype /Link /Type /Annot
->>
-endobj
-23 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (http://127.0.0.1:8000)
->> /Border [ 0 0 0 ] /Rect [ 40.01575 389.8394 131.7557 401.8394 ] /Subtype /Link /Type /Annot
->>
-endobj
-24 0 obj
-<<
-/Annots [ 19 0 R 20 0 R 21 0 R 22 0 R 23 0 R ] /Contents 76 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
->>
-endobj
 25 0 obj
 <<
-/Contents 77 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Contents 79 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -185,19 +182,19 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (file:///schema/swagger-ui/#/maintenance-notification/maintenance_notification_create)
->> /Border [ 0 0 0 ] /Rect [ 446.8757 476.6394 503.3692 488.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 446.8757 440.6394 503.3692 452.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 27 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://django-rest-registration.readthedocs.io/en/latest/index.html)
->> /Border [ 0 0 0 ] /Rect [ 203.4157 80.63937 493.5457 92.63937 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 203.4157 44.63937 493.5457 56.63937 ] /Subtype /Link /Type /Annot
 >>
 endobj
 28 0 obj
 <<
-/Annots [ 26 0 R 27 0 R ] /Contents 78 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Annots [ 26 0 R 27 0 R ] /Contents 80 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -207,7 +204,7 @@ endobj
 endobj
 29 0 obj
 <<
-/Contents 79 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Contents 81 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -219,19 +216,19 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io/en/latest/backends/index.html)
->> /Border [ 0 0 0 ] /Rect [ 40.01575 127.0394 354.6157 139.0394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 40.01575 88.23937 354.6157 100.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 31 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io)
->> /Border [ 0 0 0 ] /Rect [ 214.5357 109.0394 300.9346 121.0394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 214.5357 70.23937 300.9346 82.23937 ] /Subtype /Link /Type /Annot
 >>
 endobj
 32 0 obj
 <<
-/Annots [ 30 0 R 31 0 R ] /Contents 80 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Annots [ 30 0 R 31 0 R ] /Contents 82 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -243,26 +240,26 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://console.developers.google.com/apis/credentials)
->> /Border [ 0 0 0 ] /Rect [ 115.0457 450.6394 367.646 462.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 115.0457 420.6394 367.646 432.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 34 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (http://localhost:8080)
->> /Border [ 0 0 0 ] /Rect [ 287.8957 420.6394 377.3957 432.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 287.8957 390.6394 377.3957 402.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 35 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (http://localhost:8080/account/social/complete/google-oauth2/)
->> /Border [ 0 0 0 ] /Rect [ 267.3257 402.6394 535.8057 414.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 267.3257 372.6394 535.8057 384.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 36 0 obj
 <<
-/Annots [ 33 0 R 34 0 R 35 0 R ] /Contents 81 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Annots [ 33 0 R 34 0 R 35 0 R ] /Contents 83 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -272,7 +269,7 @@ endobj
 endobj
 37 0 obj
 <<
-/Contents 82 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 70 0 R /Resources <<
+/Contents 84 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -282,181 +279,201 @@ endobj
 endobj
 38 0 obj
 <<
-/Outlines 40 0 R /PageLabels 83 0 R /PageMode /UseNone /Pages 70 0 R /Type /Catalog
+/Contents 85 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 73 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 39 0 obj
 <<
-/Author () /CreationDate (D:20210713133836-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210713133836-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
-  /Subject (\(unspecified\)) /Title () /Trapped /False
+/Outlines 41 0 R /PageLabels 86 0 R /PageMode /UseNone /Pages 73 0 R /Type /Catalog
 >>
 endobj
 40 0 obj
 <<
-/Count 39 /First 41 0 R /Last 41 0 R /Type /Outlines
+/Author () /CreationDate (D:20210713134859-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210713134859-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+  /Subject (\(unspecified\)) /Title () /Trapped /False
 >>
 endobj
 41 0 obj
 <<
-/Count 28 /Dest [ 14 0 R /XYZ 40.01575 799.0394 0 ] /First 42 0 R /Last 43 0 R /Parent 40 0 R /Title (Welcome to Django Project Base\220s documentation!)
+/Count 41 /First 42 0 R /Last 42 0 R /Type /Outlines
 >>
 endobj
 42 0 obj
 <<
-/Dest [ 14 0 R /XYZ 40.01575 759.0394 0 ] /Next 43 0 R /Parent 41 0 R /Title (What is django-project-base?)
+/Count 30 /Dest [ 15 0 R /XYZ 40.01575 799.0394 0 ] /First 43 0 R /Last 44 0 R /Parent 41 0 R /Title (Welcome to Django Project Base\220s documentation!)
 >>
 endobj
 43 0 obj
 <<
-/Count 26 /Dest [ 14 0 R /XYZ 40.01575 651.8394 0 ] /First 44 0 R /Last 68 0 R /Parent 41 0 R /Prev 42 0 R 
-  /Title (Why django-project-base?)
+/Dest [ 15 0 R /XYZ 40.01575 759.0394 0 ] /Next 44 0 R /Parent 42 0 R /Title (What is django-project-base?)
 >>
 endobj
 44 0 obj
 <<
-/Count 1 /Dest [ 14 0 R /XYZ 40.01575 454.6394 0 ] /First 45 0 R /Last 45 0 R /Next 46 0 R /Parent 43 0 R 
-  /Title (Installation)
+/Count 28 /Dest [ 15 0 R /XYZ 40.01575 651.8394 0 ] /First 45 0 R /Last 72 0 R /Parent 42 0 R /Prev 43 0 R 
+  /Title (Why django-project-base?)
 >>
 endobj
 45 0 obj
 <<
-/Dest [ 16 0 R /XYZ 40.01575 573.4394 0 ] /Parent 44 0 R /Title (Dynamic Forms)
+/Count 3 /Dest [ 15 0 R /XYZ 40.01575 454.6394 0 ] /First 46 0 R /Last 48 0 R /Next 49 0 R /Parent 44 0 R 
+  /Title (Installation)
 >>
 endobj
 46 0 obj
 <<
-/Dest [ 16 0 R /XYZ 40.01575 350.2394 0 ] /Next 47 0 R /Parent 43 0 R /Prev 44 0 R /Title (Settings)
+/Dest [ 15 0 R /XYZ 40.01575 421.8394 0 ] /Next 47 0 R /Parent 45 0 R /Title (Django project base)
 >>
 endobj
 47 0 obj
 <<
-/Count 2 /Dest [ 18 0 R /XYZ 40.01575 570.6394 0 ] /First 48 0 R /Last 49 0 R /Next 50 0 R /Parent 43 0 R 
-  /Prev 46 0 R /Title (Javascript Client)
+/Dest [ 23 0 R /XYZ 40.01575 537.4394 0 ] /Next 48 0 R /Parent 45 0 R /Prev 46 0 R /Title (Dynamic Forms)
 >>
 endobj
 48 0 obj
 <<
-/Dest [ 18 0 R /XYZ 40.01575 537.8394 0 ] /Next 49 0 R /Parent 47 0 R /Title (Usage)
+/Dest [ 23 0 R /XYZ 40.01575 314.2394 0 ] /Parent 45 0 R /Prev 47 0 R /Title (Environment setup)
 >>
 endobj
 49 0 obj
 <<
-/Dest [ 24 0 R /XYZ 40.01575 548.2394 0 ] /Parent 47 0 R /Prev 48 0 R /Title (For developers)
+/Dest [ 24 0 R /XYZ 40.01575 799.0394 0 ] /Next 50 0 R /Parent 44 0 R /Prev 45 0 R /Title (Settings)
 >>
 endobj
 50 0 obj
 <<
-/Dest [ 24 0 R /XYZ 40.01575 307.8394 0 ] /Next 51 0 R /Parent 43 0 R /Prev 47 0 R /Title (Tags)
+/Dest [ 24 0 R /XYZ 40.01575 272.6394 0 ] /Next 51 0 R /Parent 44 0 R /Prev 49 0 R /Title (Tags)
 >>
 endobj
 51 0 obj
 <<
-/Count 1 /Dest [ 25 0 R /XYZ 40.01575 621.9761 0 ] /First 52 0 R /Last 52 0 R /Next 53 0 R /Parent 43 0 R 
+/Count 1 /Dest [ 25 0 R /XYZ 40.01575 586.3602 0 ] /First 52 0 R /Last 52 0 R /Next 53 0 R /Parent 44 0 R 
   /Prev 50 0 R /Title (Fields)
 >>
 endobj
 52 0 obj
 <<
-/Dest [ 25 0 R /XYZ 40.01575 589.1761 0 ] /Parent 51 0 R /Title (HEXColorField)
+/Dest [ 25 0 R /XYZ 40.01575 553.5602 0 ] /Parent 51 0 R /Title (HEXColorField)
 >>
 endobj
 53 0 obj
 <<
-/Dest [ 25 0 R /XYZ 40.01575 540.7761 0 ] /Next 54 0 R /Parent 43 0 R /Prev 51 0 R /Title (Middleware)
+/Dest [ 25 0 R /XYZ 40.01575 505.1602 0 ] /Next 54 0 R /Parent 44 0 R /Prev 51 0 R /Title (Middleware)
 >>
 endobj
 54 0 obj
 <<
-/Count 8 /Dest [ 28 0 R /XYZ 40.01575 720.2394 0 ] /First 55 0 R /Last 58 0 R /Next 63 0 R /Parent 43 0 R 
+/Count 8 /Dest [ 28 0 R /XYZ 40.01575 684.2394 0 ] /First 55 0 R /Last 58 0 R /Next 63 0 R /Parent 44 0 R 
   /Prev 53 0 R /Title (Modules)
 >>
 endobj
 55 0 obj
 <<
-/Count 2 /Dest [ 28 0 R /XYZ 40.01575 669.4394 0 ] /First 56 0 R /Last 57 0 R /Next 58 0 R /Parent 54 0 R 
+/Count 2 /Dest [ 28 0 R /XYZ 40.01575 633.4394 0 ] /First 56 0 R /Last 57 0 R /Next 58 0 R /Parent 54 0 R 
   /Title (Notifications)
 >>
 endobj
 56 0 obj
 <<
-/Dest [ 28 0 R /XYZ 40.01575 639.0394 0 ] /Next 57 0 R /Parent 55 0 R /Title (What is notifications module?)
+/Dest [ 28 0 R /XYZ 40.01575 603.0394 0 ] /Next 57 0 R /Parent 55 0 R /Title (What is notifications module?)
 >>
 endobj
 57 0 obj
 <<
-/Dest [ 28 0 R /XYZ 40.01575 579.8394 0 ] /Parent 55 0 R /Prev 56 0 R /Title (Maintenance notifications)
+/Dest [ 28 0 R /XYZ 40.01575 543.8394 0 ] /Parent 55 0 R /Prev 56 0 R /Title (Maintenance notifications)
 >>
 endobj
 58 0 obj
 <<
-/Count 4 /Dest [ 28 0 R /XYZ 40.01575 172.2394 0 ] /First 59 0 R /Last 62 0 R /Parent 54 0 R /Prev 55 0 R 
+/Count 4 /Dest [ 28 0 R /XYZ 40.01575 136.2394 0 ] /First 59 0 R /Last 62 0 R /Parent 54 0 R /Prev 55 0 R 
   /Title (Authentication)
 >>
 endobj
 59 0 obj
 <<
-/Dest [ 28 0 R /XYZ 40.01575 141.8394 0 ] /Next 60 0 R /Parent 58 0 R /Title (Rest_registration)
+/Dest [ 28 0 R /XYZ 40.01575 105.8394 0 ] /Next 60 0 R /Parent 58 0 R /Title (Rest_registration)
 >>
 endobj
 60 0 obj
 <<
-/Dest [ 29 0 R /XYZ 40.01575 692.2394 0 ] /Next 61 0 R /Parent 58 0 R /Prev 59 0 R /Title (Impersonate user)
+/Dest [ 29 0 R /XYZ 40.01575 662.2394 0 ] /Next 61 0 R /Parent 58 0 R /Prev 59 0 R /Title (Impersonate user)
 >>
 endobj
 61 0 obj
 <<
-/Dest [ 29 0 R /XYZ 40.01575 440.2394 0 ] /Next 62 0 R /Parent 58 0 R /Prev 60 0 R /Title (User caching backend)
+/Dest [ 29 0 R /XYZ 40.01575 410.2394 0 ] /Next 62 0 R /Parent 58 0 R /Prev 60 0 R /Title (User caching backend)
 >>
 endobj
 62 0 obj
 <<
-/Dest [ 32 0 R /XYZ 40.01575 476.2394 0 ] /Parent 58 0 R /Prev 61 0 R /Title (Social auth integrations)
+/Dest [ 32 0 R /XYZ 40.01575 437.4394 0 ] /Parent 58 0 R /Prev 61 0 R /Title (Social auth integrations)
 >>
 endobj
 63 0 obj
 <<
-/Dest [ 36 0 R /XYZ 40.01575 307.8394 0 ] /Next 64 0 R /Parent 43 0 R /Prev 54 0 R /Title (Translations)
+/Dest [ 36 0 R /XYZ 40.01575 277.8394 0 ] /Next 64 0 R /Parent 44 0 R /Prev 54 0 R /Title (Translations)
 >>
 endobj
 64 0 obj
 <<
-/Count 3 /Dest [ 36 0 R /XYZ 40.01575 227.0394 0 ] /First 65 0 R /Last 67 0 R /Next 68 0 R /Parent 43 0 R 
-  /Prev 63 0 R /Title (Example project)
+/Count 1 /Dest [ 36 0 R /XYZ 40.01575 197.0394 0 ] /First 65 0 R /Last 65 0 R /Next 66 0 R /Parent 44 0 R 
+  /Prev 63 0 R /Title (Examples)
 >>
 endobj
 65 0 obj
 <<
-/Dest [ 36 0 R /XYZ 40.01575 176.2394 0 ] /Next 66 0 R /Parent 64 0 R /Title (Run example project)
+/Dest [ 36 0 R /XYZ 40.01575 164.2394 0 ] /Parent 64 0 R /Title (Titlebar component integration example)
 >>
 endobj
 66 0 obj
 <<
-/Dest [ 37 0 R /XYZ 40.01575 799.0394 0 ] /Next 67 0 R /Parent 64 0 R /Prev 65 0 R /Title (Serve Sphinx documentation on localhost)
+/Count 3 /Dest [ 37 0 R /XYZ 40.01575 310.3621 0 ] /First 67 0 R /Last 69 0 R /Next 70 0 R /Parent 44 0 R 
+  /Prev 64 0 R /Title (Example project)
 >>
 endobj
 67 0 obj
 <<
-/Dest [ 37 0 R /XYZ 40.01575 666.4042 0 ] /Parent 64 0 R /Prev 66 0 R /Title (Sample data)
+/Dest [ 37 0 R /XYZ 40.01575 259.5621 0 ] /Next 68 0 R /Parent 66 0 R /Title (Run example project)
 >>
 endobj
 68 0 obj
 <<
-/Count 1 /Dest [ 37 0 R /XYZ 40.01575 510.0042 0 ] /First 69 0 R /Last 69 0 R /Parent 43 0 R /Prev 64 0 R 
-  /Title (Swagger)
+/Dest [ 37 0 R /XYZ 40.01575 120.3621 0 ] /Next 69 0 R /Parent 66 0 R /Prev 67 0 R /Title (Serve Sphinx documentation on localhost)
 >>
 endobj
 69 0 obj
 <<
-/Dest [ 37 0 R /XYZ 40.01575 477.2042 0 ] /Parent 68 0 R /Title (Installation)
+/Dest [ 38 0 R /XYZ 40.01575 728.3029 0 ] /Parent 66 0 R /Prev 68 0 R /Title (Sample data)
 >>
 endobj
 70 0 obj
 <<
-/Count 12 /Kids [ 4 0 R 5 0 R 14 0 R 16 0 R 18 0 R 24 0 R 25 0 R 28 0 R 29 0 R 32 0 R 
-  36 0 R 37 0 R ] /Type /Pages
+/Count 1 /Dest [ 38 0 R /XYZ 40.01575 571.9029 0 ] /First 71 0 R /Last 71 0 R /Next 72 0 R /Parent 44 0 R 
+  /Prev 66 0 R /Title (Swagger)
 >>
 endobj
 71 0 obj
+<<
+/Dest [ 38 0 R /XYZ 40.01575 539.1029 0 ] /Parent 70 0 R /Title (Installation)
+>>
+endobj
+72 0 obj
+<<
+/Dest [ 38 0 R /XYZ 40.01575 367.9029 0 ] /Parent 44 0 R /Prev 70 0 R /Title (Open Api)
+>>
+endobj
+73 0 obj
+<<
+/Count 12 /Kids [ 4 0 R 5 0 R 15 0 R 23 0 R 24 0 R 25 0 R 28 0 R 29 0 R 32 0 R 36 0 R 
+  37 0 R 38 0 R ] /Type /Pages
+>>
+endobj
+74 0 obj
 <<
 /Length 755
 >>
@@ -510,7 +527,7 @@ Q
  
 endstream
 endobj
-72 0 obj
+75 0 obj
 <<
 /Length 75
 >>
@@ -522,9 +539,9 @@ Q
  
 endstream
 endobj
-73 0 obj
+76 0 obj
 <<
-/Length 9891
+/Length 9796
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -790,14 +807,26 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Installation) T
 Q
 Q
 q
-1 0 0 1 40.01575 419.8394 cm
+1 0 0 1 40.01575 407.4394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 20.4 re B*
+Q
+q
+BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Django project base) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 389.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Install the package:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 401.0394 cm
+1 0 0 1 40.01575 370.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -818,20 +847,19 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 381.0394 cm
+1 0 0 1 40.01575 350.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Extend the BaseProject & BaseProfile model:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 339.0394 cm
+1 0 0 1 40.01575 296.6394 cm
 q
-0 0 0 rg
-BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.544116 Tw (You need to override the Project and Profile models before you can use the library: there aren\222t any migrations) Tj T* 0 Tw .410215 Tw (available in the library itself. The library only declares properties it itself supports, but you have the option to extend) Tj T* 0 Tw (them as you wish to fit your needs too.) Tj T* ET
+BT 1 0 0 1 0 38 Tm .047008 Tw 12 TL /F1 10 Tf 0 0 0 rg (Django project base uses Swapper ) Tj 0 0 .501961 rg (https://pypi.org/project/swapper/) Tj 0 0 0 rg (, an unofficial API for Django swappable models.) Tj T* 0 Tw 1.544116 Tw (You need to override the Project and Profile models before you can use the library: there aren\222t any migrations) Tj T* 0 Tw .410215 Tw (available in the library itself. The library only declares properties it itself supports, but you have the option to extend) Tj T* 0 Tw (them as you wish to fit your needs too.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 236.2394 cm
+1 0 0 1 40.01575 193.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -893,14 +921,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 216.2394 cm
+1 0 0 1 40.01575 173.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Then also make sure your models are loaded instead of django-project-base models:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 53.43937 cm
+1 0 0 1 40.01575 47.03937 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -910,66 +938,54 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 162 re B*
+n -4 0 514.4441 126 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 144 138 12 re f*
+n 0 108 138 12 re f*
 .933333 1 .8 rg
-n 0 120 198 12 re f*
+n 0 84 198 12 re f*
 .933333 1 .8 rg
-n 204 120 6 12 re f*
+n 204 84 6 12 re f*
 1 .941176 .941176 rg
-n 216 120 102 12 re f*
+n 216 84 102 12 re f*
 .933333 1 .8 rg
-n 0 108 198 12 re f*
+n 0 72 198 12 re f*
 .933333 1 .8 rg
-n 204 108 6 12 re f*
+n 204 72 6 12 re f*
 1 .941176 .941176 rg
-n 216 108 102 12 re f*
+n 216 72 102 12 re f*
 .933333 1 .8 rg
-n 0 84 78 12 re f*
+n 0 48 78 12 re f*
 .933333 1 .8 rg
-n 0 72 24 12 re f*
+n 0 36 24 12 re f*
 .933333 1 .8 rg
-n 30 72 156 12 re f*
+n 30 36 156 12 re f*
 .933333 1 .8 rg
-n 192 72 36 12 re f*
+n 192 36 36 12 re f*
 .933333 1 .8 rg
-n 234 72 186 12 re f*
+n 234 36 186 12 re f*
 .933333 1 .8 rg
-n 0 60 66 12 re f*
+n 0 24 66 12 re f*
 .933333 1 .8 rg
-n 72 60 6 12 re f*
+n 72 24 6 12 re f*
 .933333 1 .8 rg
-n 84 60 6 12 re f*
+n 84 24 6 12 re f*
 .933333 1 .8 rg
-n 96 60 18 12 re f*
-.933333 1 .8 rg
-n 120 60 6 12 re f*
-.933333 1 .8 rg
-n 132 60 6 12 re f*
-.933333 1 .8 rg
-n 144 60 186 12 re f*
-.933333 1 .8 rg
-n 0 36 18 12 re f*
-.933333 1 .8 rg
-n 24 36 12 12 re f*
-.933333 1 .8 rg
-n 42 36 84 12 re f*
-1 .941176 .941176 rg
-n 6 24 114 12 re f*
+n 96 24 18 12 re f*
 .933333 1 .8 rg
 n 120 24 6 12 re f*
-1 .941176 .941176 rg
-n 6 12 126 12 re f*
 .933333 1 .8 rg
-n 132 12 6 12 re f*
-1 .941176 .941176 rg
-n 6 0 102 12 re f*
+n 132 24 6 12 re f*
 .933333 1 .8 rg
-n 108 0 6 12 re f*
-BT 1 0 0 1 0 146 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myproject/settings.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (DJANGO_PROJECT_BASE_PROJECT_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProject') Tj 0 0 0 rg  T* (DJANGO_PROJECT_BASE_PROFILE_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProfile') Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# urls.py add) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.router) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj ( ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg ( ) Tj (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T*  T* (Add) Tj ( ) Tj (to) Tj ( ) Tj (INSTALLED_APPS) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('rest_registration') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('django_project_base') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular') Tj 0 0 0 rg (,) Tj  T* ET
+n 144 24 186 12 re f*
+.933333 1 .8 rg
+n 0 0 18 12 re f*
+.933333 1 .8 rg
+n 24 0 12 12 re f*
+.933333 1 .8 rg
+n 42 0 84 12 re f*
+BT 1 0 0 1 0 110 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myproject/settings.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (DJANGO_PROJECT_BASE_PROJECT_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProject') Tj 0 0 0 rg  T* (DJANGO_PROJECT_BASE_PROFILE_MODEL) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('myapp.MyProfile') Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# urls.py add) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.router) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj ( ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg ( ) Tj (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (django_project_base_urlpatterns) Tj  T*  T* (Add) Tj ( ) Tj (to) Tj ( ) Tj (INSTALLED_APPS) Tj  T* ET
 Q
 Q
 Q
@@ -978,14 +994,14 @@ Q
  
 endstream
 endobj
-74 0 obj
+77 0 obj
 <<
-/Length 9889
+/Length 8217
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 720.2394 cm
+1 0 0 1 40.01575 684.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -995,9 +1011,21 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 78 re B*
+n -4 0 514.4441 114 re B*
 Q
 q
+1 .941176 .941176 rg
+n 6 96 114 12 re f*
+.933333 1 .8 rg
+n 120 96 6 12 re f*
+1 .941176 .941176 rg
+n 6 84 126 12 re f*
+.933333 1 .8 rg
+n 132 84 6 12 re f*
+1 .941176 .941176 rg
+n 6 72 102 12 re f*
+.933333 1 .8 rg
+n 108 72 6 12 re f*
 .933333 1 .8 rg
 n 0 48 18 12 re f*
 .933333 1 .8 rg
@@ -1020,21 +1048,21 @@ n 150 12 216 12 re f*
 n 366 12 6 12 re f*
 .933333 1 .8 rg
 n 6 0 6 12 re f*
-BT 1 0 0 1 0 62 Tm 12 TL /F4 10 Tf 0 0 0 rg  T* (Add) Tj (:) Tj  T* (  ) Tj (REST_FRAMEWORK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ({) Tj  T* ( ) Tj /F5 10 Tf .501961 .501961 .501961 rg (# YOUR SETTINGS) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj .729412 .129412 .129412 rg ('DEFAULT_SCHEMA_CLASS') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular.openapi.AutoSchema') Tj 0 0 0 rg (,) Tj  T* ( ) Tj (}) Tj T* ET
+BT 1 0 0 1 0 98 Tm 12 TL /F4 10 Tf 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('rest_registration') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('django_project_base') Tj 0 0 0 rg (,) Tj  T* ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular') Tj 0 0 0 rg (,) Tj  T*  T* (Add) Tj (:) Tj  T* (  ) Tj (REST_FRAMEWORK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ({) Tj  T* ( ) Tj /F5 10 Tf .501961 .501961 .501961 rg (# YOUR SETTINGS) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj .729412 .129412 .129412 rg ('DEFAULT_SCHEMA_CLASS') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular.openapi.AutoSchema') Tj 0 0 0 rg (,) Tj  T* ( ) Tj (}) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 700.2394 cm
+1 0 0 1 40.01575 664.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Append django project base urls:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 621.4394 cm
+1 0 0 1 40.01575 585.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1084,14 +1112,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 589.4394 cm
+1 0 0 1 40.01575 553.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .77894 Tw (There are some additional URLs available for the Django project base, like swagger or documentation. Appending) Tj T* 0 Tw (those URLs is described in more details in suitable chapters.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 559.0394 cm
+1 0 0 1 40.01575 523.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1103,27 +1131,27 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Dynamic Forms) 
 Q
 Q
 q
-1 0 0 1 40.01575 541.0394 cm
+1 0 0 1 40.01575 505.0394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Django project base is dependent on Dynamic Forms project ) Tj 0 0 .501961 rg (https://github.com/velis74/DynamicForms) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 523.0394 cm
+1 0 0 1 40.01575 487.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Read Dynamic Forms documentation for installation steps and more information about project.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 505.0394 cm
+1 0 0 1 40.01575 469.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (You should add at least following code to your project, to enable Dynamic Forms.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 366.2394 cm
+1 0 0 1 40.01575 330.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1177,7 +1205,118 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 333.4394 cm
+1 0 0 1 40.01575 299.8394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 20.4 re B*
+Q
+q
+BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Environment setup) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 269.8394 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .760742 Tw (For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2) Tj T* 0 Tw (places.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 227.8394 cm
+q
+BT 1 0 0 1 0 26 Tm .554358 Tw 12 TL /F1 10 Tf 0 0 0 rg (For JS development go to ) Tj 0 0 .501961 rg (https://nodejs.org/en/) Tj 0 0 0 rg ( and install latest stable version of nodejs and npm. In project base) Tj T* 0 Tw .80245 Tw (directory run npm install. To run a development server run ) Tj /F7 10 Tf (npm run dev) Tj /F1 10 Tf ( \(go to ) Tj 0 0 .501961 rg (http://0.0.0.0:8080/) Tj 0 0 0 rg (\). To generate a) Tj T* 0 Tw (build run ) Tj /F7 10 Tf (npm run build) Tj /F1 10 Tf (.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 185.8394 cm
+q
+BT 1 0 0 1 0 26 Tm .212131 Tw 12 TL /F1 10 Tf 0 0 0 rg (JS code is present in src directory. For web UI components library vuejs\() Tj 0 0 .501961 rg (https://vuejs.org/) Tj 0 0 0 rg (\) is used. Components are) Tj T* 0 Tw -0.120656 Tw (built as Vue global components\() Tj 0 0 .501961 rg (https://vuejs.org/v2/guide/components.html) Tj 0 0 0 rg (\) with x-templates. Templates are present) Tj T* 0 Tw (in templates directory.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 143.8394 cm
+q
+BT 1 0 0 1 0 26 Tm 5.003392 Tw 12 TL /F1 10 Tf 0 0 0 rg (When developing webpack development server expects that service which provides data runs on host) Tj T* 0 Tw 1.323392 Tw 0 0 .501961 rg (http://127.0.0.1:8000) Tj 0 0 0 rg (. This can be changed in webpack.config.js file. For running example django project prepare) Tj T* 0 Tw (python environment and run \(run in repository root\):) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 137.8394 cm
+Q
+q
+1 0 0 1 40.01575 137.8394 cm
+Q
+q
+1 0 0 1 40.01575 125.8394 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (pip install -r requirements.txt \(run in content root\)) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 119.8394 cm
+Q
+q
+1 0 0 1 40.01575 107.8394 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (python manage.py runserver) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 107.8394 cm
+Q
+q
+1 0 0 1 40.01575 89.83937 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Try logging in with user \223miha\224, pass \223mihamiha\224.) Tj T* ET
+Q
+Q
+ 
+endstream
+endobj
+78 0 obj
+<<
+/Length 13606
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 40.01575 782.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1189,14 +1328,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Settings) Tj T*
 Q
 Q
 q
-1 0 0 1 40.01575 315.4394 cm
+1 0 0 1 40.01575 764.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 260.6394 cm
+1 0 0 1 40.01575 709.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1268,21 +1407,21 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 204.6394 cm
+1 0 0 1 40.01575 653.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.32745 Tw (This setting defines dictionary of attribute names on request object. For e.g. project info is set on request object) Tj T* 0 Tw 3.752008 Tw (under propery current_project_slug. Language information is set on request objects under property current) Tj T* 0 Tw .678005 Tw (language. Is language or project is given in request path like: language-EN, then url_part settings is found and EN) Tj T* 0 Tw (string is taken as language value.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 186.6394 cm
+1 0 0 1 40.01575 635.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_SLUG_FIELD_NAME) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 167.8394 cm
+1 0 0 1 40.01575 616.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1308,21 +1447,21 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 135.8394 cm
+1 0 0 1 40.01575 584.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .994952 Tw (When creating models with slug field they should be named with this setting value. This enables that we can use) Tj T* 0 Tw (object slug instead of object pk when making api requests.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 117.8394 cm
+1 0 0 1 40.01575 566.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (MAINTENENACE_NOTIFICATIONS_CACHE_KEY) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 99.03937 cm
+1 0 0 1 40.01575 547.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1348,14 +1487,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 79.03937 cm
+1 0 0 1 40.01575 527.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_USER_CACHE) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 60.23937 cm
+1 0 0 1 40.01575 509.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1384,31 +1523,22 @@ Q
 Q
 Q
 Q
- 
-endstream
-endobj
-75 0 obj
-<<
-/Length 13096
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 787.0394 cm
+1 0 0 1 40.01575 489.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Key name for user caching background. Default value is usually the best, change it if you really must.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 769.0394 cm
+1 0 0 1 40.01575 471.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (CACHE_IMPERSONATE_USER) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 750.2394 cm
+1 0 0 1 40.01575 452.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1438,21 +1568,21 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 730.2394 cm
+1 0 0 1 40.01575 432.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Cache key name for imperonate user. Default value is usually the best, change it if you really must.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 712.2394 cm
+1 0 0 1 40.01575 414.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (PROFILE_REVERSE_FULL_NAME_ORDER) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 693.4394 cm
+1 0 0 1 40.01575 395.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1482,27 +1612,27 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 661.4394 cm
+1 0 0 1 40.01575 363.4394 cm
 q
 BT 1 0 0 1 0 14 Tm 1.708273 Tw 12 TL /F1 10 Tf 0 0 0 rg (Defines first_name, last_name order for readonly field ) Tj /F7 10 Tf (full_name) Tj /F1 10 Tf (. Default order is ) Tj /F7 10 Tf (False) Tj /F1 10 Tf ( - \223First Last\224. Changing) Tj T* 0 Tw (setting to true will reverse order to \223Last First\224.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 643.4394 cm
+1 0 0 1 40.01575 345.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Global setting can be also overrided with profile option reverse_full_name_order \(bool\).) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 625.4394 cm
+1 0 0 1 40.01575 327.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DELETE_PROFILE_TIMEDELTA) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 606.6394 cm
+1 0 0 1 40.01575 308.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1528,609 +1658,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 586.6394 cm
+1 0 0 1 40.01575 288.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (How far in future will user profile be actually deleted with automatic process. Time delta is set in days.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 553.8394 cm
-q
-.8 .8 .8 RG
-.3 w
-.94902 .94902 .94902 rg
-n -10 0 525.2441 22.8 re B*
-Q
-q
-BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Javascript Client) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 523.4394 cm
-q
-.8 .8 .8 RG
-.3 w
-.94902 .94902 .94902 rg
-n -10 0 525.2441 20.4 re B*
-Q
-q
-BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Usage) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 505.4394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Look at django_project_base/templates/index.html for examples.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 487.4394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (API Documentation) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 469.4394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Swagger UI is accessible on /schema/swagger-ui/ url by running example project.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 451.4394 cm
-q
-BT 1 0 0 1 0 2 Tm 12 TL /F2 10 Tf 0 0 0 rg (Translations) Tj /F1 10 Tf (:) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 421.4394 cm
-q
-BT 1 0 0 1 0 14 Tm .505881 Tw 12 TL /F1 10 Tf 0 0 0 rg (If you want to use your Django translations in your app include <) Tj (script src=\224{% url \221javascript-catalog\222 %}\224) Tj (>) Tj (<) Tj (/script) Tj (>) Tj T* 0 Tw (in your html document header.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 403.4394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Titlebar component integration example) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 336.6394 cm
-q
-q
-1 0 0 1 0 0 cm
-q
-1 0 0 1 4.4 .4 cm
-q
-.666667 .8 .6 RG
-.3 w
-.933333 1 .8 rg
-n -4 0 514.4441 66 re B*
-Q
-q
-.933333 1 .8 rg
-n 0 48 402 12 re f*
-.933333 1 .8 rg
-n 0 36 24 12 re f*
-.933333 1 .8 rg
-n 30 36 96 12 re f*
-.933333 1 .8 rg
-n 132 36 36 12 re f*
-.933333 1 .8 rg
-n 174 36 36 12 re f*
-.933333 1 .8 rg
-n 0 12 18 12 re f*
-.933333 1 .8 rg
-n 24 12 60 12 re f*
-.933333 1 .8 rg
-n 84 12 6 12 re f*
-.933333 1 .8 rg
-n 90 12 42 12 re f*
-.933333 1 .8 rg
-n 132 12 12 12 re f*
-.933333 1 .8 rg
-n 18 0 36 12 re f*
-.933333 1 .8 rg
-n 60 0 36 12 re f*
-.933333 1 .8 rg
-n 96 0 6 12 re f*
-.933333 1 .8 rg
-n 102 0 42 12 re f*
-.933333 1 .8 rg
-n 144 0 6 12 re f*
-.933333 1 .8 rg
-n 150 0 42 12 re f*
-.933333 1 .8 rg
-n 192 0 6 12 re f*
-.933333 1 .8 rg
-n 204 0 78 12 re f*
-.933333 1 .8 rg
-n 282 0 6 12 re f*
-1 .941176 .941176 rg
-n 288 0 90 12 re f*
-.933333 1 .8 rg
-n 378 0 6 12 re f*
-BT 1 0 0 1 0 50 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# define view function, put it in one of urls definition in urls.py) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.shortcuts) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (render) Tj  T*  T* /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (index_view) Tj /F4 10 Tf 0 0 0 rg (\() Tj (request) Tj (\):) Tj  T* (   ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (render) Tj (\() Tj (request) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (request) Tj (,) Tj ( ) Tj (template_name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('template.html') Tj 0 0 0 rg (\)) Tj T* ET
-Q
-Q
-Q
-Q
-Q
-q
-1 0 0 1 40.01575 66.94571 cm
-q
-q
-.925367 0 0 .925367 0 0 cm
-q
-1 0 0 1 4.4 .432261 cm
-q
-.666667 .8 .6 RG
-.3 w
-.933333 1 .8 rg
-n -4 0 556 282 re B*
-Q
-q
-.933333 1 .8 rg
-n 0 264 6 12 re f*
-.933333 1 .8 rg
-n 6 264 252 12 re f*
-.933333 1 .8 rg
-n 258 264 6 12 re f*
-.933333 1 .8 rg
-n 6 228 6 12 re f*
-.933333 1 .8 rg
-n 12 228 78 12 re f*
-.933333 1 .8 rg
-n 90 228 6 12 re f*
-.933333 1 .8 rg
-n 6 216 6 12 re f*
-.933333 1 .8 rg
-n 12 216 24 12 re f*
-.933333 1 .8 rg
-n 42 216 24 12 re f*
-.933333 1 .8 rg
-n 66 216 6 12 re f*
-1 .941176 .941176 rg
-n 72 216 24 12 re f*
-.933333 1 .8 rg
-n 96 216 6 12 re f*
-.933333 1 .8 rg
-n 6 204 6 12 re f*
-.933333 1 .8 rg
-n 12 204 24 12 re f*
-.933333 1 .8 rg
-n 36 204 6 12 re f*
-.933333 1 .8 rg
-n 18 192 6 12 re f*
-.933333 1 .8 rg
-n 24 192 24 12 re f*
-.933333 1 .8 rg
-n 54 192 42 12 re f*
-.933333 1 .8 rg
-n 96 192 6 12 re f*
-1 .941176 .941176 rg
-n 102 192 42 12 re f*
-.933333 1 .8 rg
-n 144 192 6 12 re f*
-.933333 1 .8 rg
-n 18 180 6 12 re f*
-.933333 1 .8 rg
-n 24 180 30 12 re f*
-.933333 1 .8 rg
-n 54 180 6 12 re f*
-.933333 1 .8 rg
-n 216 180 6 12 re f*
-.933333 1 .8 rg
-n 222 180 6 12 re f*
-.933333 1 .8 rg
-n 228 180 30 12 re f*
-.933333 1 .8 rg
-n 258 180 6 12 re f*
-.933333 1 .8 rg
-n 18 156 6 12 re f*
-.933333 1 .8 rg
-n 24 156 36 12 re f*
-.933333 1 .8 rg
-n 66 156 18 12 re f*
-.933333 1 .8 rg
-n 84 156 6 12 re f*
-1 .941176 .941176 rg
-n 90 156 192 12 re f*
-.933333 1 .8 rg
-n 282 156 6 12 re f*
-.933333 1 .8 rg
-n 288 156 6 12 re f*
-.933333 1 .8 rg
-n 294 156 6 12 re f*
-.933333 1 .8 rg
-n 300 156 36 12 re f*
-.933333 1 .8 rg
-n 336 156 6 12 re f*
-.933333 1 .8 rg
-n 18 132 6 12 re f*
-.933333 1 .8 rg
-n 24 132 24 12 re f*
-.933333 1 .8 rg
-n 54 132 24 12 re f*
-.933333 1 .8 rg
-n 78 132 6 12 re f*
-1 .941176 .941176 rg
-n 84 132 456 12 re f*
-.933333 1 .8 rg
-n 30 120 18 12 re f*
-.933333 1 .8 rg
-n 48 120 6 12 re f*
-1 .941176 .941176 rg
-n 54 120 72 12 re f*
-.933333 1 .8 rg
-n 132 120 66 12 re f*
-.933333 1 .8 rg
-n 198 120 6 12 re f*
-1 .941176 .941176 rg
-n 204 120 66 12 re f*
-.933333 1 .8 rg
-n 270 120 6 12 re f*
-.933333 1 .8 rg
-n 18 108 6 12 re f*
-.933333 1 .8 rg
-n 24 108 36 12 re f*
-.933333 1 .8 rg
-n 66 108 18 12 re f*
-.933333 1 .8 rg
-n 84 108 6 12 re f*
-1 .941176 .941176 rg
-n 90 108 378 12 re f*
-.933333 1 .8 rg
-n 30 96 66 12 re f*
-.933333 1 .8 rg
-n 96 96 6 12 re f*
-1 .941176 .941176 rg
-n 102 96 66 12 re f*
-.933333 1 .8 rg
-n 168 96 6 12 re f*
-.933333 1 .8 rg
-n 18 84 6 12 re f*
-.933333 1 .8 rg
-n 24 84 6 12 re f*
-.933333 1 .8 rg
-n 30 84 36 12 re f*
-.933333 1 .8 rg
-n 66 84 6 12 re f*
-.933333 1 .8 rg
-n 18 72 6 12 re f*
-.933333 1 .8 rg
-n 24 72 24 12 re f*
-.933333 1 .8 rg
-n 30 60 24 12 re f*
-.933333 1 .8 rg
-n 54 60 6 12 re f*
-1 .941176 .941176 rg
-n 60 60 492 12 re f*
-.933333 1 .8 rg
-n 30 48 18 12 re f*
-.933333 1 .8 rg
-n 48 48 6 12 re f*
-1 .941176 .941176 rg
-n 54 48 72 12 re f*
-.933333 1 .8 rg
-n 132 48 66 12 re f*
-.933333 1 .8 rg
-n 198 48 6 12 re f*
-1 .941176 .941176 rg
-n 204 48 66 12 re f*
-.933333 1 .8 rg
-n 270 48 6 12 re f*
-.933333 1 .8 rg
-n 18 36 6 12 re f*
-.933333 1 .8 rg
-n 24 36 36 12 re f*
-.933333 1 .8 rg
-n 66 36 18 12 re f*
-.933333 1 .8 rg
-n 84 36 6 12 re f*
-1 .941176 .941176 rg
-n 90 36 414 12 re f*
-.933333 1 .8 rg
-n 30 24 66 12 re f*
-.933333 1 .8 rg
-n 96 24 6 12 re f*
-1 .941176 .941176 rg
-n 102 24 66 12 re f*
-.933333 1 .8 rg
-n 168 24 6 12 re f*
-.933333 1 .8 rg
-n 18 12 6 12 re f*
-.933333 1 .8 rg
-n 24 12 6 12 re f*
-.933333 1 .8 rg
-n 30 12 36 12 re f*
-.933333 1 .8 rg
-n 66 12 6 12 re f*
-BT 1 0 0 1 0 266 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (<) Tj (!-- prepare html template template.html --) Tj (>) Tj /F4 10 Tf 0 0 0 rg  T*  T* ( {% load static %}) Tj T* ( ) Tj .313725 .439216 .564706 rg (<) Tj (!DOCTYPE html) Tj (>) Tj 0 0 0 rg  T* ( ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (html) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (lang) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("en") Tj 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (head) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (meta) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (charset) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("UTF-8") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (title) Tj /F4 10 Tf 0 0 0 rg (>) Tj (Titlebar component example) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (title) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# include django javascript catalog for internationalization #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("{% url 'javascript-catalog' %}") Tj 0 0 0 rg (>) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# add bootstrap library with dependencies and font-awesome #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (link) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (href) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (rel) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("stylesheet") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (link) Tj /F4 10 Tf 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (href) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (rel) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("stylesheet") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# include django project base js lib and appropriate css #}) Tj T* ET
-Q
-Q
-Q
-Q
-Q
- 
-endstream
-endobj
-76 0 obj
-<<
-/Length 14652
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 564.2394 cm
-q
-q
-1 0 0 1 0 0 cm
-q
-1 0 0 1 4.4 .4 cm
-q
-.666667 .8 .6 RG
-.3 w
-.933333 1 .8 rg
-n -4 0 514.4441 234 re B*
-Q
-q
-.933333 1 .8 rg
-n 18 216 6 12 re f*
-.933333 1 .8 rg
-n 24 216 24 12 re f*
-.933333 1 .8 rg
-n 54 216 24 12 re f*
-.933333 1 .8 rg
-n 78 216 6 12 re f*
-1 .941176 .941176 rg
-n 84 216 234 12 re f*
-.933333 1 .8 rg
-n 324 216 18 12 re f*
-.933333 1 .8 rg
-n 342 216 6 12 re f*
-1 .941176 .941176 rg
-n 348 216 72 12 re f*
-.933333 1 .8 rg
-n 30 204 66 12 re f*
-.933333 1 .8 rg
-n 96 204 6 12 re f*
-1 .941176 .941176 rg
-n 102 204 66 12 re f*
-.933333 1 .8 rg
-n 168 204 6 12 re f*
-.933333 1 .8 rg
-n 18 192 6 12 re f*
-.933333 1 .8 rg
-n 24 192 36 12 re f*
-.933333 1 .8 rg
-n 66 192 18 12 re f*
-.933333 1 .8 rg
-n 84 192 6 12 re f*
-1 .941176 .941176 rg
-n 90 192 258 12 re f*
-.933333 1 .8 rg
-n 348 192 6 12 re f*
-.933333 1 .8 rg
-n 354 192 6 12 re f*
-.933333 1 .8 rg
-n 360 192 6 12 re f*
-.933333 1 .8 rg
-n 366 192 36 12 re f*
-.933333 1 .8 rg
-n 402 192 6 12 re f*
-.933333 1 .8 rg
-n 6 180 6 12 re f*
-.933333 1 .8 rg
-n 12 180 6 12 re f*
-.933333 1 .8 rg
-n 18 180 24 12 re f*
-.933333 1 .8 rg
-n 42 180 6 12 re f*
-.933333 1 .8 rg
-n 6 168 6 12 re f*
-.933333 1 .8 rg
-n 12 168 24 12 re f*
-.933333 1 .8 rg
-n 36 168 6 12 re f*
-.933333 1 .8 rg
-n 18 144 6 12 re f*
-.933333 1 .8 rg
-n 24 144 18 12 re f*
-.933333 1 .8 rg
-n 48 144 12 12 re f*
-.933333 1 .8 rg
-n 60 144 6 12 re f*
-1 .941176 .941176 rg
-n 66 144 84 12 re f*
-.933333 1 .8 rg
-n 156 144 30 12 re f*
-.933333 1 .8 rg
-n 186 144 6 12 re f*
-1 .941176 .941176 rg
-n 192 144 84 12 re f*
-.933333 1 .8 rg
-n 276 144 6 12 re f*
-.933333 1 .8 rg
-n 42 120 6 12 re f*
-.933333 1 .8 rg
-n 48 120 48 12 re f*
-.933333 1 .8 rg
-n 96 120 6 12 re f*
-.933333 1 .8 rg
-n 102 120 6 12 re f*
-.933333 1 .8 rg
-n 108 120 6 12 re f*
-.933333 1 .8 rg
-n 114 120 48 12 re f*
-.933333 1 .8 rg
-n 162 120 6 12 re f*
-.933333 1 .8 rg
-n 18 108 6 12 re f*
-.933333 1 .8 rg
-n 24 108 6 12 re f*
-.933333 1 .8 rg
-n 30 108 18 12 re f*
-.933333 1 .8 rg
-n 48 108 6 12 re f*
-.933333 1 .8 rg
-n 18 60 6 12 re f*
-.933333 1 .8 rg
-n 24 60 36 12 re f*
-.933333 1 .8 rg
-n 60 60 6 12 re f*
-.933333 1 .8 rg
-n 30 48 192 12 re f*
-.933333 1 .8 rg
-n 30 36 54 12 re f*
-.933333 1 .8 rg
-n 84 36 6 12 re f*
-1 .941176 .941176 rg
-n 90 36 84 12 re f*
-.933333 1 .8 rg
-n 174 36 6 12 re f*
-.933333 1 .8 rg
-n 186 36 48 12 re f*
-.933333 1 .8 rg
-n 234 36 12 12 re f*
-.933333 1 .8 rg
-n 18 24 6 12 re f*
-.933333 1 .8 rg
-n 24 24 6 12 re f*
-.933333 1 .8 rg
-n 30 24 36 12 re f*
-.933333 1 .8 rg
-n 66 24 6 12 re f*
-.933333 1 .8 rg
-n 6 12 6 12 re f*
-.933333 1 .8 rg
-n 12 12 6 12 re f*
-.933333 1 .8 rg
-n 18 12 24 12 re f*
-.933333 1 .8 rg
-n 42 12 6 12 re f*
-.933333 1 .8 rg
-n 6 0 6 12 re f*
-.933333 1 .8 rg
-n 12 0 6 12 re f*
-.933333 1 .8 rg
-n 18 0 24 12 re f*
-.933333 1 .8 rg
-n 42 0 6 12 re f*
-BT 1 0 0 1 0 218 Tm 12 TL /F4 10 Tf 0 0 0 rg (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (link) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (href) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("{% static 'bootstrap_template.css' %}") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (rel) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("stylesheet") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("{% static 'django-project-base.min.js' %}") Tj 0 0 0 rg (>) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (head) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (body) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# set div which will contain titlebar component #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (div) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (id) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("titlebar-app") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (class) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("titlebar-app") Tj 0 0 0 rg (>) Tj  T* (     {# use/render titlebar component #}) Tj T* (       ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (titlebar) Tj /F4 10 Tf 0 0 0 rg (>) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (titlebar) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (div) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# include vue inline template for titlebar component from folder) Tj T* (     coresponding to included css file #}) Tj T* (   {% include "bootstrap/titlebar.html" %}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (     ) Tj /F5 10 Tf .501961 .501961 .501961 rg (// initialize titlebar component) Tj T* /F4 10 Tf 0 0 0 rg (     ) Tj (createApp) Tj (\() Tj .729412 .129412 .129412 rg ('titlebar-app') Tj 0 0 0 rg (,) Tj ( ) Tj (titlebar) Tj (\);) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (body) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (html) Tj /F4 10 Tf 0 0 0 rg (>) Tj T* ET
-Q
-Q
-Q
-Q
-Q
-q
-1 0 0 1 40.01575 533.8394 cm
-q
-.8 .8 .8 RG
-.3 w
-.94902 .94902 .94902 rg
-n -10 0 525.2441 20.4 re B*
-Q
-q
-BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (For developers) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 503.8394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .760742 Tw (For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor to 2) Tj T* 0 Tw (places.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 461.8394 cm
-q
-BT 1 0 0 1 0 26 Tm .554358 Tw 12 TL /F1 10 Tf 0 0 0 rg (For JS development go to ) Tj 0 0 .501961 rg (https://nodejs.org/en/) Tj 0 0 0 rg ( and install latest stable version of nodejs and npm. In project base) Tj T* 0 Tw .80245 Tw (directory run npm install. To run a development server run npm run dev \(go to ) Tj 0 0 .501961 rg (http://0.0.0.0:8080/) Tj 0 0 0 rg (\). To generate a) Tj T* 0 Tw (build run npm run build.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 419.8394 cm
-q
-BT 1 0 0 1 0 26 Tm .212131 Tw 12 TL /F1 10 Tf 0 0 0 rg (JS code is present in src directory. For web UI components library vuejs\() Tj 0 0 .501961 rg (https://vuejs.org/) Tj 0 0 0 rg (\) is used. Components are) Tj T* 0 Tw -0.120656 Tw (built as Vue global components\() Tj 0 0 .501961 rg (https://vuejs.org/v2/guide/components.html) Tj 0 0 0 rg (\) with x-templates. Templates are present) Tj T* 0 Tw (in templates directory.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 377.8394 cm
-q
-BT 1 0 0 1 0 26 Tm 5.003392 Tw 12 TL /F1 10 Tf 0 0 0 rg (When developing webpack development server expects that service which provides data runs on host) Tj T* 0 Tw 1.323392 Tw 0 0 .501961 rg (http://127.0.0.1:8000) Tj 0 0 0 rg (. This can be changed in webpack.config.js file. For running example django project prepare) Tj T* 0 Tw (python environment and run \(run in repository root\):) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 371.8394 cm
-Q
-q
-1 0 0 1 40.01575 371.8394 cm
-Q
-q
-1 0 0 1 40.01575 359.8394 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 6 -3 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
-Q
-Q
-q
-1 0 0 1 23 -3 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (pip install -r requirements.txt \(run in content root\)) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 40.01575 353.8394 cm
-Q
-q
-1 0 0 1 40.01575 341.8394 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 6 -3 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 10.5 0 Td (\177) Tj T* -10.5 0 Td ET
-Q
-Q
-q
-1 0 0 1 23 -3 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (python manage.py runserver) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 40.01575 341.8394 cm
-Q
-q
-1 0 0 1 40.01575 323.8394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Try logging in with user \223miha\224, pass \223mihamiha\224.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 291.0394 cm
+1 0 0 1 40.01575 255.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2142,14 +1677,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Tags) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 273.0394 cm
+1 0 0 1 40.01575 237.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Django project base supports tags usage. See example implementation bellow.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 50.23937 cm
+1 0 0 1 40.01575 51.03937 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2159,188 +1694,156 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 222 re B*
+n -4 0 514.4441 186 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 204 30 12 re f*
+n 0 168 30 12 re f*
 .933333 1 .8 rg
-n 36 204 84 12 re f*
+n 36 168 84 12 re f*
 .933333 1 .8 rg
-n 120 204 6 12 re f*
+n 120 168 6 12 re f*
 .933333 1 .8 rg
-n 126 204 42 12 re f*
+n 126 168 42 12 re f*
 .933333 1 .8 rg
-n 168 204 12 12 re f*
+n 168 168 12 12 re f*
 .933333 1 .8 rg
-n 24 192 42 12 re f*
+n 24 156 42 12 re f*
 .933333 1 .8 rg
-n 72 192 6 12 re f*
+n 72 156 6 12 re f*
 .933333 1 .8 rg
-n 84 192 36 12 re f*
+n 84 156 36 12 re f*
 .933333 1 .8 rg
-n 120 192 6 12 re f*
+n 120 156 6 12 re f*
 .933333 1 .8 rg
-n 126 192 54 12 re f*
+n 126 156 54 12 re f*
 .933333 1 .8 rg
-n 180 192 6 12 re f*
+n 180 156 6 12 re f*
 .933333 1 .8 rg
-n 186 192 60 12 re f*
+n 186 156 60 12 re f*
 .933333 1 .8 rg
-n 246 192 6 12 re f*
+n 246 156 6 12 re f*
 .933333 1 .8 rg
-n 252 192 12 12 re f*
+n 252 156 12 12 re f*
 .933333 1 .8 rg
-n 264 192 6 12 re f*
+n 264 156 6 12 re f*
 .933333 1 .8 rg
-n 276 192 24 12 re f*
+n 276 156 24 12 re f*
 .933333 1 .8 rg
-n 300 192 6 12 re f*
+n 300 156 6 12 re f*
 .933333 1 .8 rg
-n 306 192 24 12 re f*
+n 306 156 24 12 re f*
 .933333 1 .8 rg
-n 330 192 6 12 re f*
+n 330 156 6 12 re f*
 .933333 1 .8 rg
-n 342 192 30 12 re f*
+n 342 156 30 12 re f*
 .933333 1 .8 rg
-n 372 192 6 12 re f*
+n 372 156 6 12 re f*
 .933333 1 .8 rg
-n 378 192 24 12 re f*
+n 378 156 24 12 re f*
 .933333 1 .8 rg
-n 402 192 6 12 re f*
+n 402 156 6 12 re f*
 .933333 1 .8 rg
-n 24 180 30 12 re f*
+n 24 144 30 12 re f*
 .933333 1 .8 rg
-n 60 180 24 12 re f*
+n 60 144 24 12 re f*
 .933333 1 .8 rg
-n 84 180 6 12 re f*
+n 84 144 6 12 re f*
 .933333 1 .8 rg
-n 48 168 72 12 re f*
+n 48 132 72 12 re f*
 .933333 1 .8 rg
-n 126 168 6 12 re f*
+n 126 132 6 12 re f*
 1 .941176 .941176 rg
-n 138 168 30 12 re f*
+n 138 132 30 12 re f*
 .933333 1 .8 rg
-n 48 156 114 12 re f*
+n 48 120 114 12 re f*
 .933333 1 .8 rg
-n 168 156 6 12 re f*
+n 168 120 6 12 re f*
 1 .941176 .941176 rg
-n 180 156 36 12 re f*
+n 180 120 36 12 re f*
 .933333 1 .8 rg
-n 0 132 30 12 re f*
+n 0 96 30 12 re f*
 .933333 1 .8 rg
-n 36 132 102 12 re f*
+n 36 96 102 12 re f*
 .933333 1 .8 rg
-n 138 132 6 12 re f*
+n 138 96 6 12 re f*
 .933333 1 .8 rg
-n 144 132 126 12 re f*
+n 144 96 126 12 re f*
 .933333 1 .8 rg
-n 270 132 12 12 re f*
+n 270 96 12 12 re f*
 .933333 1 .8 rg
-n 24 120 18 12 re f*
+n 24 84 18 12 re f*
 .933333 1 .8 rg
-n 48 120 6 12 re f*
+n 48 84 6 12 re f*
 .933333 1 .8 rg
-n 60 120 36 12 re f*
+n 60 84 36 12 re f*
 .933333 1 .8 rg
-n 96 120 6 12 re f*
+n 96 84 6 12 re f*
 .933333 1 .8 rg
-n 102 120 60 12 re f*
+n 102 84 60 12 re f*
 .933333 1 .8 rg
-n 162 120 6 12 re f*
+n 162 84 6 12 re f*
 .933333 1 .8 rg
-n 48 108 84 12 re f*
+n 48 72 84 12 re f*
 .933333 1 .8 rg
-n 132 108 6 12 re f*
+n 132 72 6 12 re f*
 .933333 1 .8 rg
-n 48 96 54 12 re f*
+n 48 60 54 12 re f*
 .933333 1 .8 rg
-n 102 96 6 12 re f*
+n 102 60 6 12 re f*
 .933333 1 .8 rg
-n 108 96 36 12 re f*
+n 108 60 36 12 re f*
 .933333 1 .8 rg
-n 144 96 6 12 re f*
+n 144 60 6 12 re f*
 .933333 1 .8 rg
-n 150 96 42 12 re f*
+n 150 60 42 12 re f*
 .933333 1 .8 rg
-n 192 96 6 12 re f*
+n 192 60 6 12 re f*
 .933333 1 .8 rg
-n 48 84 72 12 re f*
+n 48 48 72 12 re f*
 .933333 1 .8 rg
-n 120 84 6 12 re f*
+n 120 48 6 12 re f*
 1 .941176 .941176 rg
-n 126 84 6 12 re f*
+n 126 48 6 12 re f*
 .878431 .878431 .878431 rg
-n 132 84 78 12 re f*
+n 132 48 78 12 re f*
 1 .941176 .941176 rg
-n 210 84 6 12 re f*
+n 210 48 6 12 re f*
 .878431 .878431 .878431 rg
-n 216 84 54 12 re f*
+n 216 48 54 12 re f*
 1 .941176 .941176 rg
-n 270 84 42 12 re f*
+n 270 48 42 12 re f*
 .933333 1 .8 rg
-n 312 84 6 12 re f*
+n 312 48 6 12 re f*
 .933333 1 .8 rg
-n 24 72 6 12 re f*
+n 24 36 6 12 re f*
 .933333 1 .8 rg
-n 0 48 30 12 re f*
+n 0 12 30 12 re f*
 .933333 1 .8 rg
-n 36 48 54 12 re f*
+n 36 12 54 12 re f*
 .933333 1 .8 rg
-n 90 48 6 12 re f*
+n 90 12 6 12 re f*
 .933333 1 .8 rg
-n 96 48 36 12 re f*
+n 96 12 36 12 re f*
 .933333 1 .8 rg
-n 132 48 6 12 re f*
+n 132 12 6 12 re f*
 .933333 1 .8 rg
-n 138 48 30 12 re f*
+n 138 12 30 12 re f*
 .933333 1 .8 rg
-n 168 48 12 12 re f*
+n 168 12 12 12 re f*
 .933333 1 .8 rg
-n 24 36 36 12 re f*
+n 24 0 36 12 re f*
 .933333 1 .8 rg
-n 66 36 6 12 re f*
+n 66 0 6 12 re f*
 .933333 1 .8 rg
-n 78 36 36 12 re f*
+n 78 0 36 12 re f*
 .933333 1 .8 rg
-n 114 36 6 12 re f*
+n 114 0 6 12 re f*
 .933333 1 .8 rg
-n 120 36 72 12 re f*
+n 120 0 72 12 re f*
 .933333 1 .8 rg
-n 192 36 12 12 re f*
-.933333 1 .8 rg
-n 24 24 24 12 re f*
-.933333 1 .8 rg
-n 54 24 6 12 re f*
-.933333 1 .8 rg
-n 66 24 90 12 re f*
-.933333 1 .8 rg
-n 156 24 6 12 re f*
-.933333 1 .8 rg
-n 162 24 30 12 re f*
-.933333 1 .8 rg
-n 192 24 6 12 re f*
-.933333 1 .8 rg
-n 198 24 24 12 re f*
-.933333 1 .8 rg
-n 222 24 6 12 re f*
-.933333 1 .8 rg
-n 234 24 42 12 re f*
-.933333 1 .8 rg
-n 276 24 6 12 re f*
-.933333 1 .8 rg
-n 282 24 102 12 re f*
-.933333 1 .8 rg
-n 384 24 6 12 re f*
-.933333 1 .8 rg
-n 162 12 72 12 re f*
-.933333 1 .8 rg
-n 234 12 6 12 re f*
-1 .941176 .941176 rg
-n 240 12 96 12 re f*
-.933333 1 .8 rg
-n 336 12 6 12 re f*
-BT 1 0 0 1 0 206 Tm 12 TL /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (DemoProjectTag) Tj /F4 10 Tf 0 0 0 rg (\() Tj (BaseTag) Tj (\):) Tj  T* (    ) Tj (content) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (CharField) Tj (\() Tj (max_length) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 0 .815686 rg (20) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (null) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (blank) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T* (    ) Tj /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (Meta) Tj /F4 10 Tf 0 0 0 rg (:) Tj  T* (        ) Tj (verbose_name) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ("Tag") Tj 0 0 0 rg  T* (        ) Tj (verbose_name_plural) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ("Tags") Tj 0 0 0 rg  T*  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (TaggedItemThrough) Tj /F4 10 Tf 0 0 0 rg (\() Tj (GenericTaggedItemBase) Tj (\):) Tj  T* (    ) Tj (tag) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (ForeignKey) Tj (\() Tj  T* (        ) Tj (DemoProjectTag) Tj (,) Tj  T* (        ) Tj (on_delete) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (CASCADE) Tj (,) Tj  T* (        ) Tj (related_name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg (") Tj /F6 10 Tf .733333 .4 .533333 rg (%\(app_label\)s) Tj /F4 10 Tf .729412 .129412 .129412 rg (_) Tj /F6 10 Tf .733333 .4 .533333 rg (%\(class\)s) Tj /F4 10 Tf .729412 .129412 .129412 rg (_items") Tj 0 0 0 rg (,) Tj  T* (    ) Tj (\)) Tj  T*  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (Apartment) Tj /F4 10 Tf 0 0 0 rg (\() Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (Model) Tj (\):) Tj  T* (    ) Tj (number) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (fields) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (IntegerField) Tj (\(\)) Tj  T* (    ) Tj (tags) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (TaggableManager) Tj (\() Tj (blank) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (through) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (TaggedItemThrough) Tj (,) Tj  T* (                           ) Tj (related_name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("apartment_tags") Tj 0 0 0 rg (\)) Tj  T*  T* ET
+n 192 0 12 12 re f*
+BT 1 0 0 1 0 170 Tm 12 TL /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (DemoProjectTag) Tj /F4 10 Tf 0 0 0 rg (\() Tj (BaseTag) Tj (\):) Tj  T* (    ) Tj (content) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (CharField) Tj (\() Tj (max_length) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 0 .815686 rg (20) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (null) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (blank) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T* (    ) Tj /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (Meta) Tj /F4 10 Tf 0 0 0 rg (:) Tj  T* (        ) Tj (verbose_name) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ("Tag") Tj 0 0 0 rg  T* (        ) Tj (verbose_name_plural) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ("Tags") Tj 0 0 0 rg  T*  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (TaggedItemThrough) Tj /F4 10 Tf 0 0 0 rg (\() Tj (GenericTaggedItemBase) Tj (\):) Tj  T* (    ) Tj (tag) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (ForeignKey) Tj (\() Tj  T* (        ) Tj (DemoProjectTag) Tj (,) Tj  T* (        ) Tj (on_delete) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (CASCADE) Tj (,) Tj  T* (        ) Tj (related_name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg (") Tj /F6 10 Tf .733333 .4 .533333 rg (%\(app_label\)s) Tj /F4 10 Tf .729412 .129412 .129412 rg (_) Tj /F6 10 Tf .733333 .4 .533333 rg (%\(class\)s) Tj /F4 10 Tf .729412 .129412 .129412 rg (_items") Tj 0 0 0 rg (,) Tj  T* (    ) Tj (\)) Tj  T*  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (Apartment) Tj /F4 10 Tf 0 0 0 rg (\() Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (Model) Tj (\):) Tj  T* (    ) Tj (number) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (fields) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (IntegerField) Tj (\(\)) Tj  T* ET
 Q
 Q
 Q
@@ -2349,14 +1852,14 @@ Q
  
 endstream
 endobj
-77 0 obj
+79 0 obj
 <<
-/Length 10964
+/Length 11466
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 637.9761 cm
+1 0 0 1 40.01575 602.3602 cm
 q
 q
 .989332 0 0 .989332 0 0 cm
@@ -2366,9 +1869,41 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 520 162 re B*
+n -4 0 520 198 re B*
 Q
 q
+.933333 1 .8 rg
+n 24 180 24 12 re f*
+.933333 1 .8 rg
+n 54 180 6 12 re f*
+.933333 1 .8 rg
+n 66 180 90 12 re f*
+.933333 1 .8 rg
+n 156 180 6 12 re f*
+.933333 1 .8 rg
+n 162 180 30 12 re f*
+.933333 1 .8 rg
+n 192 180 6 12 re f*
+.933333 1 .8 rg
+n 198 180 24 12 re f*
+.933333 1 .8 rg
+n 222 180 6 12 re f*
+.933333 1 .8 rg
+n 234 180 42 12 re f*
+.933333 1 .8 rg
+n 276 180 6 12 re f*
+.933333 1 .8 rg
+n 282 180 102 12 re f*
+.933333 1 .8 rg
+n 384 180 6 12 re f*
+.933333 1 .8 rg
+n 162 168 72 12 re f*
+.933333 1 .8 rg
+n 234 168 6 12 re f*
+1 .941176 .941176 rg
+n 240 168 96 12 re f*
+.933333 1 .8 rg
+n 336 168 6 12 re f*
 .933333 1 .8 rg
 n 0 144 84 12 re f*
 .933333 1 .8 rg
@@ -2533,14 +2068,14 @@ n 474 0 6 12 re f*
 n 480 0 18 12 re f*
 .933333 1 .8 rg
 n 498 0 18 12 re f*
-BT 1 0 0 1 0 146 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# Example code) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (example.demo_django_base.models) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DemoProjectTag) Tj  T* (dt) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (DemoProjectTag) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (create) Tj (\() Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('color tag 20') Tj 0 0 0 rg (,) Tj ( ) Tj (color) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('#ff0000') Tj 0 0 0 rg (\)) Tj  T*  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (example.demo_django_base.models) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (Apartment) Tj  T* (a) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (Apartment) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (create) Tj (\() Tj (number) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 0 .815686 rg (1) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T* (a) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (tags) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (add) Tj (\() Tj (dt) Tj (\)) Tj  T* (a) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (tags) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (all) Tj (\(\)) Tj  T*  T* .188235 .188235 .188235 rg (<) Tj 0 0 0 rg (QuerySet) Tj ( ) Tj ([) Tj .188235 .188235 .188235 rg (<) Tj 0 0 0 rg (DemoProjectTag) Tj (:) Tj ( ) Tj (color) Tj ( ) Tj (tag) Tj ( ) Tj /F6 10 Tf 0 0 .815686 rg (20) Tj /F4 10 Tf .188235 .188235 .188235 rg (>) Tj 0 0 0 rg (]) Tj .188235 .188235 .188235 rg (>) Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# Get background svg for tags) Tj /F4 10 Tf 0 0 0 rg  T* (DemoProjectTag) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (get_background_svg_for_tags) Tj (\() Tj (Apartment) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (all) Tj (\(\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (first) Tj (\(\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (tags) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (all) Tj (\(\)\)) Tj T* ET
+BT 1 0 0 1 0 182 Tm 12 TL /F4 10 Tf 0 0 0 rg (    ) Tj (tags) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (TaggableManager) Tj (\() Tj (blank) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (through) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (TaggedItemThrough) Tj (,) Tj  T* (                           ) Tj (related_name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("apartment_tags") Tj 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# Example code) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (example.demo_django_base.models) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DemoProjectTag) Tj  T* (dt) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (DemoProjectTag) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (create) Tj (\() Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('color tag 20') Tj 0 0 0 rg (,) Tj ( ) Tj (color) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('#ff0000') Tj 0 0 0 rg (\)) Tj  T*  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (example.demo_django_base.models) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (Apartment) Tj  T* (a) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (Apartment) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (create) Tj (\() Tj (number) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 0 .815686 rg (1) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T* (a) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (tags) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (add) Tj (\() Tj (dt) Tj (\)) Tj  T* (a) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (tags) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (all) Tj (\(\)) Tj  T*  T* .188235 .188235 .188235 rg (<) Tj 0 0 0 rg (QuerySet) Tj ( ) Tj ([) Tj .188235 .188235 .188235 rg (<) Tj 0 0 0 rg (DemoProjectTag) Tj (:) Tj ( ) Tj (color) Tj ( ) Tj (tag) Tj ( ) Tj /F6 10 Tf 0 0 .815686 rg (20) Tj /F4 10 Tf .188235 .188235 .188235 rg (>) Tj 0 0 0 rg (]) Tj .188235 .188235 .188235 rg (>) Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# Get background svg for tags) Tj /F4 10 Tf 0 0 0 rg  T* (DemoProjectTag) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (get_background_svg_for_tags) Tj (\() Tj (Apartment) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (all) Tj (\(\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (first) Tj (\(\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (tags) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (all) Tj (\(\)\)) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 605.1761 cm
+1 0 0 1 40.01575 569.5602 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2552,7 +2087,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Fields) Tj T* E
 Q
 Q
 q
-1 0 0 1 40.01575 574.7761 cm
+1 0 0 1 40.01575 539.1602 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2564,14 +2099,14 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (HEXColorField) 
 Q
 Q
 q
-1 0 0 1 40.01575 556.7761 cm
+1 0 0 1 40.01575 521.1602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Field with validator for color in hex format, currently used for setting background color for Tags.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 523.9761 cm
+1 0 0 1 40.01575 488.3602 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2583,35 +2118,35 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Middleware) Tj 
 Q
 Q
 q
-1 0 0 1 40.01575 505.9761 cm
+1 0 0 1 40.01575 470.3602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (*Project Middleware*) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 439.9761 cm
+1 0 0 1 40.01575 404.3602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 50 Tm /F1 10 Tf 12 TL 4.447756 Tw (ProjectMiddleware: If you wan\222t to set current project which is selected to request object you can use) Tj T* 0 Tw 4.408776 Tw (ProjectMiddleware which should be placed to start of MIDDLEWARE list in settings.py. Middleware sets) Tj T* 0 Tw 2.864871 Tw (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting dict values to request object. Default) Tj T* 0 Tw 17.90882 Tw (value for DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting is {\221project\222:) Tj T* 0 Tw (\221current_project_slug\222, \221language\222: \221current_language\222}.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 397.9761 cm
+1 0 0 1 40.01575 362.3602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.461506 Tw (This means request will have current_project_slug attribute which will have value set to current project slug and) Tj T* 0 Tw .261417 Tw (request will have current_language attribute which will have value set to current language set. If project or language) Tj T* 0 Tw (cannnot be determined its value is set to None.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 355.9761 cm
+1 0 0 1 40.01575 320.3602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.313864 Tw (To set current project to ajax requests \221Current-Project\222 header should be used: \221Current-Project\222: \221current project) Tj T* 0 Tw 22.34441 Tw (slug\222. Current slug can also be determined from request path. See) Tj T* 0 Tw (DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PART setting description in setting section.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 277.1761 cm
+1 0 0 1 40.01575 241.5602 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2647,28 +2182,28 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 257.1761 cm
+1 0 0 1 40.01575 221.5602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (*Performance profiler*) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 227.1761 cm
+1 0 0 1 40.01575 191.5602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .89294 Tw (Performance profiler module is providing functionality to log and display the summary of the most time-consuming) Tj T* 0 Tw (requests.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 209.1761 cm
+1 0 0 1 40.01575 173.5602 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable middleware add following line to project files:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 46.37612 cm
+1 0 0 1 40.01575 46.76017 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2678,44 +2213,30 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 162 re B*
+n -4 0 514.4441 126 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 144 138 12 re f*
+n 0 108 138 12 re f*
 .933333 1 .8 rg
-n 0 120 60 12 re f*
+n 0 84 60 12 re f*
 .933333 1 .8 rg
-n 66 120 6 12 re f*
+n 66 84 6 12 re f*
 .933333 1 .8 rg
-n 78 120 6 12 re f*
+n 78 84 6 12 re f*
 .933333 1 .8 rg
-n 12 108 18 12 re f*
+n 12 72 18 12 re f*
 1 .941176 .941176 rg
-n 12 96 300 12 re f*
+n 12 60 300 12 re f*
 .933333 1 .8 rg
-n 312 96 6 12 re f*
+n 312 60 6 12 re f*
 .933333 1 .8 rg
-n 12 84 18 12 re f*
+n 12 48 18 12 re f*
 .933333 1 .8 rg
-n 0 72 6 12 re f*
+n 0 36 6 12 re f*
 .933333 1 .8 rg
-n 0 36 114 12 re f*
-.933333 1 .8 rg
-n 0 24 24 12 re f*
-.933333 1 .8 rg
-n 30 24 174 12 re f*
-.933333 1 .8 rg
-n 210 24 36 12 re f*
-.933333 1 .8 rg
-n 252 24 84 12 re f*
-.933333 1 .8 rg
-n 0 0 66 12 re f*
-.933333 1 .8 rg
-n 72 0 6 12 re f*
-.933333 1 .8 rg
-n 84 0 6 12 re f*
-BT 1 0 0 1 0 146 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myproject/settings.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (MIDDLEWARE) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* (  ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (  ) Tj .729412 .129412 .129412 rg ('django_project_base.profiling.profile_middleware') Tj 0 0 0 rg (,) Tj  T* (  ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (]) Tj  T*  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# myproject/urls.py) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.profiling) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (app_debug_view) Tj  T*  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* ET
+n 0 0 114 12 re f*
+BT 1 0 0 1 0 110 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myproject/settings.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (MIDDLEWARE) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* (  ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (  ) Tj .729412 .129412 .129412 rg ('django_project_base.profiling.profile_middleware') Tj 0 0 0 rg (,) Tj  T* (  ) Tj .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (]) Tj  T*  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# myproject/urls.py) Tj /F4 10 Tf 0 0 0 rg  T* ET
 Q
 Q
 Q
@@ -2724,14 +2245,14 @@ Q
  
 endstream
 endobj
-78 0 obj
+80 0 obj
 <<
-/Length 7875
+/Length 8138
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 756.2394 cm
+1 0 0 1 40.01575 720.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2741,9 +2262,23 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 42 re B*
+n -4 0 514.4441 78 re B*
 Q
 q
+.933333 1 .8 rg
+n 0 60 24 12 re f*
+.933333 1 .8 rg
+n 30 60 174 12 re f*
+.933333 1 .8 rg
+n 210 60 36 12 re f*
+.933333 1 .8 rg
+n 252 60 84 12 re f*
+.933333 1 .8 rg
+n 0 36 66 12 re f*
+.933333 1 .8 rg
+n 72 36 6 12 re f*
+.933333 1 .8 rg
+n 84 36 6 12 re f*
 .933333 1 .8 rg
 n 0 24 24 12 re f*
 .933333 1 .8 rg
@@ -2768,20 +2303,20 @@ n 306 24 12 12 re f*
 n 0 12 18 12 re f*
 .933333 1 .8 rg
 n 0 0 6 12 re f*
-BT 1 0 0 1 0 26 Tm 12 TL /F4 10 Tf 0 0 0 rg (path) Tj (\() Tj .729412 .129412 .129412 rg ('app-debug/') Tj 0 0 0 rg (,) Tj ( ) Tj (app_debug_view) Tj (,) Tj ( ) Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('app-debug') Tj 0 0 0 rg (\),) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (]) Tj T* ET
+BT 1 0 0 1 0 62 Tm 12 TL /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.profiling) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (app_debug_view) Tj  T*  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* (path) Tj (\() Tj .729412 .129412 .129412 rg ('app-debug/') Tj 0 0 0 rg (,) Tj ( ) Tj (app_debug_view) Tj (,) Tj ( ) Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('app-debug') Tj 0 0 0 rg (\),) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (]) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 736.2394 cm
+1 0 0 1 40.01575 700.2394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Overview of current state is avialable on url ) Tj /F7 10 Tf (http://hostname/app_debug/) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 703.4394 cm
+1 0 0 1 40.01575 667.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2793,14 +2328,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Modules) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 685.4394 cm
+1 0 0 1 40.01575 649.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (The page contains all information about Django Project Base modules:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 655.0394 cm
+1 0 0 1 40.01575 619.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2812,7 +2347,7 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Notifications) 
 Q
 Q
 q
-1 0 0 1 40.01575 625.8394 cm
+1 0 0 1 40.01575 589.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2824,14 +2359,14 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (What is notific
 Q
 Q
 q
-1 0 0 1 40.01575 595.8394 cm
+1 0 0 1 40.01575 559.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.448273 Tw (Notifications module will provide functionality to create and deliver notifications to users via channels like: email,) Tj T* 0 Tw (websocket, push notification,.. Currently only maintenance notifications are implemented.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 566.6394 cm
+1 0 0 1 40.01575 530.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2843,41 +2378,41 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Maintenance not
 Q
 Q
 q
-1 0 0 1 40.01575 548.6394 cm
+1 0 0 1 40.01575 512.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Description) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 494.6394 cm
+1 0 0 1 40.01575 458.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.0239 Tw (When we have a planned server downtime to upgrade or some such, we need to somehow notifiy the users. But) Tj T* 0 Tw .401894 Tw (before maintenance occurs, the app itself must also notify the users that server will soon be down for maintenance.) Tj T* 0 Tw 2.118381 Tw (This notifications is presented to users 8 hours before planned downtime, 1 hour before planned downtime, 5) Tj T* 0 Tw (minutes before server is going offline.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 452.6394 cm
+1 0 0 1 40.01575 416.6394 cm
 q
 BT 1 0 0 1 0 26 Tm .250205 Tw 12 TL /F1 10 Tf 0 0 0 rg (In order to achieve that we can create a maintenance notification via REST api described in ) Tj 0 0 .501961 rg (Swagger UI) Tj 0 0 0 rg (. If we have) Tj T* 0 Tw 1.355881 Tw (django project base titlebar UI component integrated into our web UI this component will display notifications for) Tj T* 0 Tw (planned maintenance in above described intervals.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 434.6394 cm
+1 0 0 1 40.01575 398.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 416.6394 cm
+1 0 0 1 40.01575 380.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add app to your installed apps.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 337.8394 cm
+1 0 0 1 40.01575 301.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2913,14 +2448,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 317.8394 cm
+1 0 0 1 40.01575 281.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add django-project-base notifications urls:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 227.0394 cm
+1 0 0 1 40.01575 191.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2974,14 +2509,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 207.0394 cm
+1 0 0 1 40.01575 171.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Run migrations:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 188.2394 cm
+1 0 0 1 40.01575 152.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3011,7 +2546,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 157.8394 cm
+1 0 0 1 40.01575 121.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3023,7 +2558,7 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Authentication)
 Q
 Q
 q
-1 0 0 1 40.01575 128.6394 cm
+1 0 0 1 40.01575 92.63937 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3035,43 +2570,43 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Rest_registrati
 Q
 Q
 q
-1 0 0 1 40.01575 98.63937 cm
+1 0 0 1 40.01575 62.63937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.670292 Tw (Currently, for basic authentication operations, rest_registration module is used. It is overridden with custom rest) Tj T* 0 Tw (actions used to override api documentation, but it just redirects requests back to rest_registration.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 80.63937 cm
+1 0 0 1 40.01575 44.63937 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Use rest_registration documentation ) Tj 0 0 .501961 rg (https://django-rest-registration.readthedocs.io/en/latest/index.html) Tj 0 0 0 rg ( for details.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+81 0 obj
+<<
+/Length 11553
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 62.63937 cm
+1 0 0 1 40.01575 787.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (*Overridden rest_registration*) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 44.63937 cm
+1 0 0 1 40.01575 769.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (If you want to use overrided rest_registration views, replace rest_registration urls with:) Tj T* ET
 Q
 Q
- 
-endstream
-endobj
-79 0 obj
-<<
-/Length 12188
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 708.2394 cm
+1 0 0 1 40.01575 678.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3131,7 +2666,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 679.0394 cm
+1 0 0 1 40.01575 649.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3143,21 +2678,21 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Impersonate use
 Q
 Q
 q
-1 0 0 1 40.01575 625.0394 cm
+1 0 0 1 40.01575 595.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.872321 Tw (Sometimes is useful if we can login into app as another user for debugging or help purposes. User change is) Tj T* 0 Tw 21.56741 Tw (supported via REST api calls or you can use userProfile component) Tj T* 0 Tw 4.896819 Tw (\(django_project_base/templates/user-profile/bootstrap/template.html\) which already integrates api functionality.) Tj T* 0 Tw (Functionality is based on django-hijack package.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 607.0394 cm
+1 0 0 1 40.01575 577.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (For determining which user can impersonate which user you can set your own logic. Example below:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 456.2394 cm
+1 0 0 1 40.01575 426.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3225,7 +2760,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 427.0394 cm
+1 0 0 1 40.01575 397.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3237,20 +2772,20 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (User caching ba
 Q
 Q
 q
-1 0 0 1 40.01575 409.0394 cm
+1 0 0 1 40.01575 379.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To increase AUTH performance you can set a backend that caches users.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 391.0394 cm
+1 0 0 1 40.01575 361.0394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (To enable User caching backend to add the following line to ) Tj /F7 10 Tf (AUTHENTICATION_BACKENDS) Tj /F1 10 Tf ( section in settings.py:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 300.2394 cm
+1 0 0 1 40.01575 270.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3288,21 +2823,21 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 256.2394 cm
+1 0 0 1 40.01575 226.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL .195535 Tw (User caching is not enabled for bulk updates by default, since Django doesn\222t call signal on .update\(\) .bulk_update\(\)) Tj T* 0 Tw 2.223182 Tw (or .delete\(\). Updating data with a query or running bulk update, without clearing cache for every object could) Tj T* 0 Tw (potentially cause race conditions. Avoid it if possible, or take care of manually clearing the cache for the user.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 238.2394 cm
+1 0 0 1 40.01575 208.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Example for clearing cache after bulk update:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 51.43937 cm
+1 0 0 1 40.01575 45.43937 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3312,117 +2847,146 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 186 re B*
+n -4 0 514.4441 162 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 168 18 12 re f*
+n 0 144 18 12 re f*
 .933333 1 .8 rg
-n 0 156 24 12 re f*
+n 0 132 24 12 re f*
 .933333 1 .8 rg
-n 30 156 102 12 re f*
+n 30 132 102 12 re f*
 .933333 1 .8 rg
-n 138 156 36 12 re f*
+n 138 132 36 12 re f*
 .933333 1 .8 rg
-n 180 156 30 12 re f*
+n 180 132 30 12 re f*
 .933333 1 .8 rg
-n 0 144 24 12 re f*
+n 0 120 24 12 re f*
 .933333 1 .8 rg
-n 30 144 168 12 re f*
+n 30 120 168 12 re f*
 .933333 1 .8 rg
-n 204 144 36 12 re f*
+n 204 120 36 12 re f*
 .933333 1 .8 rg
-n 246 144 102 12 re f*
+n 246 120 102 12 re f*
 .933333 1 .8 rg
-n 0 132 18 12 re f*
+n 0 108 18 12 re f*
 .933333 1 .8 rg
-n 0 120 366 12 re f*
+n 0 96 366 12 re f*
 .933333 1 .8 rg
-n 0 108 438 12 re f*
+n 0 84 438 12 re f*
 .933333 1 .8 rg
-n 0 96 258 12 re f*
+n 0 72 258 12 re f*
 .933333 1 .8 rg
-n 0 84 66 12 re f*
+n 0 60 66 12 re f*
 .933333 1 .8 rg
-n 66 84 6 12 re f*
+n 66 60 6 12 re f*
 .933333 1 .8 rg
-n 72 84 42 12 re f*
+n 72 60 42 12 re f*
 .933333 1 .8 rg
-n 114 84 6 12 re f*
+n 114 60 6 12 re f*
 .933333 1 .8 rg
-n 120 84 36 12 re f*
+n 120 60 36 12 re f*
 .933333 1 .8 rg
-n 156 84 6 12 re f*
+n 156 60 6 12 re f*
 .933333 1 .8 rg
-n 162 84 72 12 re f*
+n 162 60 72 12 re f*
 .933333 1 .8 rg
-n 234 84 6 12 re f*
+n 234 60 6 12 re f*
 .933333 1 .8 rg
-n 240 84 6 12 re f*
+n 240 60 6 12 re f*
 1 .941176 .941176 rg
-n 246 84 36 12 re f*
+n 246 60 36 12 re f*
 .933333 1 .8 rg
-n 282 84 6 12 re f*
+n 282 60 6 12 re f*
 1 .941176 .941176 rg
-n 294 84 42 12 re f*
+n 294 60 42 12 re f*
 .933333 1 .8 rg
-n 336 84 12 12 re f*
+n 336 60 12 12 re f*
 .933333 1 .8 rg
-n 348 84 6 12 re f*
+n 348 60 6 12 re f*
 .933333 1 .8 rg
-n 354 84 36 12 re f*
+n 354 60 36 12 re f*
 .933333 1 .8 rg
-n 390 84 6 12 re f*
+n 390 60 6 12 re f*
 .933333 1 .8 rg
-n 12 72 72 12 re f*
+n 12 48 72 12 re f*
 .933333 1 .8 rg
-n 84 72 6 12 re f*
+n 84 48 6 12 re f*
 .933333 1 .8 rg
-n 90 72 24 12 re f*
+n 90 48 24 12 re f*
 .933333 1 .8 rg
-n 114 72 6 12 re f*
+n 114 48 6 12 re f*
 .933333 1 .8 rg
-n 126 72 48 12 re f*
+n 126 48 48 12 re f*
 .933333 1 .8 rg
-n 174 72 6 12 re f*
+n 174 48 6 12 re f*
 .933333 1 .8 rg
-n 180 72 24 12 re f*
+n 180 48 24 12 re f*
 .933333 1 .8 rg
-n 204 72 6 12 re f*
+n 204 48 6 12 re f*
 .933333 1 .8 rg
-n 0 48 342 12 re f*
+n 0 24 342 12 re f*
 .933333 1 .8 rg
-n 0 36 222 12 re f*
+n 0 12 222 12 re f*
 .933333 1 .8 rg
-n 0 24 30 12 re f*
+n 0 0 30 12 re f*
 .933333 1 .8 rg
-n 36 24 6 12 re f*
+n 36 0 6 12 re f*
 .933333 1 .8 rg
-n 48 24 66 12 re f*
+n 48 0 66 12 re f*
 .933333 1 .8 rg
-n 114 24 6 12 re f*
+n 114 0 6 12 re f*
 .933333 1 .8 rg
-n 120 24 42 12 re f*
+n 120 0 42 12 re f*
 .933333 1 .8 rg
-n 162 24 6 12 re f*
+n 162 0 6 12 re f*
 .933333 1 .8 rg
-n 168 24 36 12 re f*
+n 168 0 36 12 re f*
 .933333 1 .8 rg
-n 204 24 6 12 re f*
+n 204 0 6 12 re f*
 .933333 1 .8 rg
-n 210 24 72 12 re f*
+n 210 0 72 12 re f*
 .933333 1 .8 rg
-n 282 24 6 12 re f*
+n 282 0 6 12 re f*
 .933333 1 .8 rg
-n 288 24 6 12 re f*
+n 288 0 6 12 re f*
 1 .941176 .941176 rg
-n 294 24 36 12 re f*
+n 294 0 36 12 re f*
 .933333 1 .8 rg
-n 330 24 6 12 re f*
+n 330 0 6 12 re f*
 1 .941176 .941176 rg
-n 342 24 42 12 re f*
+n 342 0 42 12 re f*
 .933333 1 .8 rg
-n 384 24 12 12 re f*
+n 384 0 12 12 re f*
+BT 1 0 0 1 0 146 Tm 12 TL /F4 10 Tf .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.settings) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DJANGO_USER_CACHE) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# Bulk update multiple users. Give them superuser permission.) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# If those users are logged in, they don't have permission until cache is) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# cleared or they log out and log in again.) Tj /F4 10 Tf 0 0 0 rg  T* (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj  T* (  ) Tj (is_superuser) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (is_staff) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# After clearing users cache for those users will be able) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# to work with additional permissions) Tj /F4 10 Tf 0 0 0 rg  T* (staff) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj  T* ET
+Q
+Q
+Q
+Q
+Q
+ 
+endstream
+endobj
+82 0 obj
+<<
+/Length 14656
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 40.01575 768.2394 cm
+q
+q
+1 0 0 1 0 0 cm
+q
+1 0 0 1 4.4 .4 cm
+q
+.666667 .8 .6 RG
+.3 w
+.933333 1 .8 rg
+n -4 0 514.4441 30 re B*
+Q
+q
 .933333 1 .8 rg
 n 36 12 18 12 re f*
 .933333 1 .8 rg
@@ -3453,30 +3017,21 @@ n 282 0 6 12 re f*
 n 288 0 12 12 re f*
 .933333 1 .8 rg
 n 300 0 6 12 re f*
-BT 1 0 0 1 0 170 Tm 12 TL /F4 10 Tf .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.settings) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DJANGO_USER_CACHE) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# Bulk update multiple users. Give them superuser permission.) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# If those users are logged in, they don't have permission until cache is) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# cleared or they log out and log in again.) Tj /F4 10 Tf 0 0 0 rg  T* (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj  T* (  ) Tj (is_superuser) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (is_staff) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# After clearing users cache for those users will be able) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# to work with additional permissions) Tj /F4 10 Tf 0 0 0 rg  T* (staff) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj (staff) Tj (:) Tj  T* (          ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (user) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj T* ET
+BT 1 0 0 1 0 14 Tm 12 TL /F4 10 Tf 0 0 0 rg (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj (staff) Tj (:) Tj  T* (          ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (user) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj T* ET
 Q
 Q
 Q
 Q
 Q
- 
-endstream
-endobj
-80 0 obj
-<<
-/Length 13882
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 775.0394 cm
+1 0 0 1 40.01575 736.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .237338 Tw (It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can) Tj T* 0 Tw (find example code below.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 492.2394 cm
+1 0 0 1 40.01575 453.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3702,7 +3257,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 463.0394 cm
+1 0 0 1 40.01575 424.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3714,17 +3269,17 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Social auth int
 Q
 Q
 q
-1 0 0 1 40.01575 433.0394 cm
+1 0 0 1 40.01575 394.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.671175 Tw (Django Project Base offers easy-to-setup social authentication mechanism. Currently the following providers are) Tj T* 0 Tw (supported:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 427.0394 cm
+1 0 0 1 40.01575 388.2394 cm
 Q
 q
-1 0 0 1 40.01575 193.0394 cm
+1 0 0 1 40.01575 154.2394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4148,76 +3703,66 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 193.0394 cm
+1 0 0 1 40.01575 154.2394 cm
 Q
 q
-1 0 0 1 40.01575 175.0394 cm
+1 0 0 1 40.01575 136.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (OAuth providers require redirect URL which is called after the authentication process in Oauth flow.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 157.0394 cm
+1 0 0 1 40.01575 118.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Your redirect url is: [SCHEME]://[HOST]/account/social/complete/[PROVIDER IDENTIFIER]/) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 127.0394 cm
+1 0 0 1 40.01575 88.23937 cm
 q
 BT 1 0 0 1 0 14 Tm 15.10034 Tw 12 TL /F1 10 Tf 0 0 0 rg (Information which settings are required for a social provider can be found at) Tj T* 0 Tw 0 0 .501961 rg (https://python-social-auth.readthedocs.io/en/latest/backends/index.html) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 97.03937 cm
+1 0 0 1 40.01575 58.23937 cm
 q
 BT 1 0 0 1 0 14 Tm .31815 Tw 12 TL /F1 10 Tf 0 0 0 rg (For social authentication functionalities ) Tj 0 0 .501961 rg (Python Social Auth) Tj 0 0 0 rg ( library was used. Please checkout this documentation to) Tj T* 0 Tw (make any custom changes.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+83 0 obj
+<<
+/Length 9711
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 79.03937 cm
+1 0 0 1 40.01575 787.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 73.03937 cm
+1 0 0 1 40.01575 781.0394 cm
 Q
 q
-1 0 0 1 40.01575 61.03937 cm
+1 0 0 1 40.01575 468.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
 BT 1 0 0 1 0 2 Tm  T* ET
 q
-1 0 0 1 20 0 cm
+1 0 0 1 20 300.4 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add app to your installed apps.) Tj T* ET
 Q
 Q
-q
-Q
-Q
-Q
- 
-endstream
-endobj
-81 0 obj
-<<
-/Length 8807
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 498.6394 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-BT 1 0 0 1 0 2 Tm  T* ET
 q
 1 0 0 1 20 173.6 cm
 q
@@ -4229,7 +3774,7 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 488.4441 126 re B*
+n -4 0 494.4441 126 re B*
 Q
 q
 .933333 1 .8 rg
@@ -4395,45 +3940,45 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 498.6394 cm
+1 0 0 1 40.01575 468.6394 cm
 Q
 q
-1 0 0 1 40.01575 480.6394 cm
+1 0 0 1 40.01575 450.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Social login integration example - Google) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 438.6394 cm
+1 0 0 1 40.01575 408.6394 cm
 q
 BT 1 0 0 1 0 26 Tm -0.118206 Tw 12 TL /F1 10 Tf 0 0 0 rg (To enable a social provider create an account at provider webpage and create an oauth app. For example for Google) Tj T* 0 Tw 3.236762 Tw (OAuth login visit ) Tj 0 0 .501961 rg (https://console.developers.google.com/apis/credentials) Tj 0 0 0 rg (. Click + CREATE CREDENTIALS and) Tj T* 0 Tw (select Oauth Client ID. Then create OAuth app with OAuth Consent screen.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 420.6394 cm
+1 0 0 1 40.01575 390.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Example value for Authorized JavaScript origins can be ) Tj 0 0 .501961 rg (http://localhost:8080) Tj 0 0 0 rg (.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 402.6394 cm
+1 0 0 1 40.01575 372.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Example value for Authorized redirect URIs can be ) Tj 0 0 .501961 rg (http://localhost:8080/account/social/complete/google-oauth2/) Tj 0 0 0 rg (.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 384.6394 cm
+1 0 0 1 40.01575 354.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable Google OAuth login add folowing to settings:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 378.6394 cm
+1 0 0 1 40.01575 348.6394 cm
 Q
 q
-1 0 0 1 40.01575 323.8394 cm
+1 0 0 1 40.01575 293.8394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4479,10 +4024,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 323.8394 cm
+1 0 0 1 40.01575 293.8394 cm
 Q
 q
-1 0 0 1 40.01575 291.0394 cm
+1 0 0 1 40.01575 261.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4494,21 +4039,454 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Translations) T
 Q
 Q
 q
-1 0 0 1 40.01575 273.0394 cm
+1 0 0 1 40.01575 243.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Currently translations in JS code, are done with Vue custom translations method.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 243.0394 cm
+1 0 0 1 40.01575 213.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .000742 Tw (It should be trivial to enable Django javascript-catalog, but it doesn\222t work correctly at the moment. It might change to) Tj T* 0 Tw (correct Django javascript-catalog in future.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 210.2394 cm
+1 0 0 1 40.01575 180.2394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 22.8 re B*
+Q
+q
+BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Examples) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 149.8394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 20.4 re B*
+Q
+q
+BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Titlebar component integration example) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 77.03937 cm
+q
+q
+1 0 0 1 0 0 cm
+q
+1 0 0 1 4.4 .4 cm
+q
+.666667 .8 .6 RG
+.3 w
+.933333 1 .8 rg
+n -4 0 514.4441 66 re B*
+Q
+q
+.933333 1 .8 rg
+n 0 48 402 12 re f*
+.933333 1 .8 rg
+n 0 36 24 12 re f*
+.933333 1 .8 rg
+n 30 36 96 12 re f*
+.933333 1 .8 rg
+n 132 36 36 12 re f*
+.933333 1 .8 rg
+n 174 36 36 12 re f*
+.933333 1 .8 rg
+n 0 12 18 12 re f*
+.933333 1 .8 rg
+n 24 12 60 12 re f*
+.933333 1 .8 rg
+n 84 12 6 12 re f*
+.933333 1 .8 rg
+n 90 12 42 12 re f*
+.933333 1 .8 rg
+n 132 12 12 12 re f*
+.933333 1 .8 rg
+n 18 0 36 12 re f*
+.933333 1 .8 rg
+n 60 0 36 12 re f*
+.933333 1 .8 rg
+n 96 0 6 12 re f*
+.933333 1 .8 rg
+n 102 0 42 12 re f*
+.933333 1 .8 rg
+n 144 0 6 12 re f*
+.933333 1 .8 rg
+n 150 0 42 12 re f*
+.933333 1 .8 rg
+n 192 0 6 12 re f*
+.933333 1 .8 rg
+n 204 0 78 12 re f*
+.933333 1 .8 rg
+n 282 0 6 12 re f*
+1 .941176 .941176 rg
+n 288 0 90 12 re f*
+.933333 1 .8 rg
+n 378 0 6 12 re f*
+BT 1 0 0 1 0 50 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# define view function, put it in one of urls definition in urls.py) Tj /F4 10 Tf 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.shortcuts) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (render) Tj  T*  T* /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (index_view) Tj /F4 10 Tf 0 0 0 rg (\() Tj (request) Tj (\):) Tj  T* (   ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (render) Tj (\() Tj (request) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (request) Tj (,) Tj ( ) Tj (template_name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('template.html') Tj 0 0 0 rg (\)) Tj T* ET
+Q
+Q
+Q
+Q
+Q
+ 
+endstream
+endobj
+84 0 obj
+<<
+/Length 14326
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 40.01575 326.3621 cm
+q
+q
+.925367 0 0 .925367 0 0 cm
+q
+1 0 0 1 4.4 .432261 cm
+q
+.666667 .8 .6 RG
+.3 w
+.933333 1 .8 rg
+n -4 0 556 510 re B*
+Q
+q
+.933333 1 .8 rg
+n 0 492 6 12 re f*
+.933333 1 .8 rg
+n 6 492 252 12 re f*
+.933333 1 .8 rg
+n 258 492 6 12 re f*
+.933333 1 .8 rg
+n 6 456 6 12 re f*
+.933333 1 .8 rg
+n 12 456 78 12 re f*
+.933333 1 .8 rg
+n 90 456 6 12 re f*
+.933333 1 .8 rg
+n 6 444 6 12 re f*
+.933333 1 .8 rg
+n 12 444 24 12 re f*
+.933333 1 .8 rg
+n 42 444 24 12 re f*
+.933333 1 .8 rg
+n 66 444 6 12 re f*
+1 .941176 .941176 rg
+n 72 444 24 12 re f*
+.933333 1 .8 rg
+n 96 444 6 12 re f*
+.933333 1 .8 rg
+n 6 432 6 12 re f*
+.933333 1 .8 rg
+n 12 432 24 12 re f*
+.933333 1 .8 rg
+n 36 432 6 12 re f*
+.933333 1 .8 rg
+n 18 420 6 12 re f*
+.933333 1 .8 rg
+n 24 420 24 12 re f*
+.933333 1 .8 rg
+n 54 420 42 12 re f*
+.933333 1 .8 rg
+n 96 420 6 12 re f*
+1 .941176 .941176 rg
+n 102 420 42 12 re f*
+.933333 1 .8 rg
+n 144 420 6 12 re f*
+.933333 1 .8 rg
+n 18 408 6 12 re f*
+.933333 1 .8 rg
+n 24 408 30 12 re f*
+.933333 1 .8 rg
+n 54 408 6 12 re f*
+.933333 1 .8 rg
+n 216 408 6 12 re f*
+.933333 1 .8 rg
+n 222 408 6 12 re f*
+.933333 1 .8 rg
+n 228 408 30 12 re f*
+.933333 1 .8 rg
+n 258 408 6 12 re f*
+.933333 1 .8 rg
+n 18 384 6 12 re f*
+.933333 1 .8 rg
+n 24 384 36 12 re f*
+.933333 1 .8 rg
+n 66 384 18 12 re f*
+.933333 1 .8 rg
+n 84 384 6 12 re f*
+1 .941176 .941176 rg
+n 90 384 192 12 re f*
+.933333 1 .8 rg
+n 282 384 6 12 re f*
+.933333 1 .8 rg
+n 288 384 6 12 re f*
+.933333 1 .8 rg
+n 294 384 6 12 re f*
+.933333 1 .8 rg
+n 300 384 36 12 re f*
+.933333 1 .8 rg
+n 336 384 6 12 re f*
+.933333 1 .8 rg
+n 18 360 6 12 re f*
+.933333 1 .8 rg
+n 24 360 24 12 re f*
+.933333 1 .8 rg
+n 54 360 24 12 re f*
+.933333 1 .8 rg
+n 78 360 6 12 re f*
+1 .941176 .941176 rg
+n 84 360 456 12 re f*
+.933333 1 .8 rg
+n 30 348 18 12 re f*
+.933333 1 .8 rg
+n 48 348 6 12 re f*
+1 .941176 .941176 rg
+n 54 348 72 12 re f*
+.933333 1 .8 rg
+n 132 348 66 12 re f*
+.933333 1 .8 rg
+n 198 348 6 12 re f*
+1 .941176 .941176 rg
+n 204 348 66 12 re f*
+.933333 1 .8 rg
+n 270 348 6 12 re f*
+.933333 1 .8 rg
+n 18 336 6 12 re f*
+.933333 1 .8 rg
+n 24 336 36 12 re f*
+.933333 1 .8 rg
+n 66 336 18 12 re f*
+.933333 1 .8 rg
+n 84 336 6 12 re f*
+1 .941176 .941176 rg
+n 90 336 378 12 re f*
+.933333 1 .8 rg
+n 30 324 66 12 re f*
+.933333 1 .8 rg
+n 96 324 6 12 re f*
+1 .941176 .941176 rg
+n 102 324 66 12 re f*
+.933333 1 .8 rg
+n 168 324 6 12 re f*
+.933333 1 .8 rg
+n 18 312 6 12 re f*
+.933333 1 .8 rg
+n 24 312 6 12 re f*
+.933333 1 .8 rg
+n 30 312 36 12 re f*
+.933333 1 .8 rg
+n 66 312 6 12 re f*
+.933333 1 .8 rg
+n 18 300 6 12 re f*
+.933333 1 .8 rg
+n 24 300 24 12 re f*
+.933333 1 .8 rg
+n 30 288 24 12 re f*
+.933333 1 .8 rg
+n 54 288 6 12 re f*
+1 .941176 .941176 rg
+n 60 288 492 12 re f*
+.933333 1 .8 rg
+n 30 276 18 12 re f*
+.933333 1 .8 rg
+n 48 276 6 12 re f*
+1 .941176 .941176 rg
+n 54 276 72 12 re f*
+.933333 1 .8 rg
+n 132 276 66 12 re f*
+.933333 1 .8 rg
+n 198 276 6 12 re f*
+1 .941176 .941176 rg
+n 204 276 66 12 re f*
+.933333 1 .8 rg
+n 270 276 6 12 re f*
+.933333 1 .8 rg
+n 18 264 6 12 re f*
+.933333 1 .8 rg
+n 24 264 36 12 re f*
+.933333 1 .8 rg
+n 66 264 18 12 re f*
+.933333 1 .8 rg
+n 84 264 6 12 re f*
+1 .941176 .941176 rg
+n 90 264 414 12 re f*
+.933333 1 .8 rg
+n 30 252 66 12 re f*
+.933333 1 .8 rg
+n 96 252 6 12 re f*
+1 .941176 .941176 rg
+n 102 252 66 12 re f*
+.933333 1 .8 rg
+n 168 252 6 12 re f*
+.933333 1 .8 rg
+n 18 240 6 12 re f*
+.933333 1 .8 rg
+n 24 240 6 12 re f*
+.933333 1 .8 rg
+n 30 240 36 12 re f*
+.933333 1 .8 rg
+n 66 240 6 12 re f*
+.933333 1 .8 rg
+n 18 216 6 12 re f*
+.933333 1 .8 rg
+n 24 216 24 12 re f*
+.933333 1 .8 rg
+n 54 216 24 12 re f*
+.933333 1 .8 rg
+n 78 216 6 12 re f*
+1 .941176 .941176 rg
+n 84 216 234 12 re f*
+.933333 1 .8 rg
+n 324 216 18 12 re f*
+.933333 1 .8 rg
+n 342 216 6 12 re f*
+1 .941176 .941176 rg
+n 348 216 72 12 re f*
+.933333 1 .8 rg
+n 30 204 66 12 re f*
+.933333 1 .8 rg
+n 96 204 6 12 re f*
+1 .941176 .941176 rg
+n 102 204 66 12 re f*
+.933333 1 .8 rg
+n 168 204 6 12 re f*
+.933333 1 .8 rg
+n 18 192 6 12 re f*
+.933333 1 .8 rg
+n 24 192 36 12 re f*
+.933333 1 .8 rg
+n 66 192 18 12 re f*
+.933333 1 .8 rg
+n 84 192 6 12 re f*
+1 .941176 .941176 rg
+n 90 192 258 12 re f*
+.933333 1 .8 rg
+n 348 192 6 12 re f*
+.933333 1 .8 rg
+n 354 192 6 12 re f*
+.933333 1 .8 rg
+n 360 192 6 12 re f*
+.933333 1 .8 rg
+n 366 192 36 12 re f*
+.933333 1 .8 rg
+n 402 192 6 12 re f*
+.933333 1 .8 rg
+n 6 180 6 12 re f*
+.933333 1 .8 rg
+n 12 180 6 12 re f*
+.933333 1 .8 rg
+n 18 180 24 12 re f*
+.933333 1 .8 rg
+n 42 180 6 12 re f*
+.933333 1 .8 rg
+n 6 168 6 12 re f*
+.933333 1 .8 rg
+n 12 168 24 12 re f*
+.933333 1 .8 rg
+n 36 168 6 12 re f*
+.933333 1 .8 rg
+n 18 144 6 12 re f*
+.933333 1 .8 rg
+n 24 144 18 12 re f*
+.933333 1 .8 rg
+n 48 144 12 12 re f*
+.933333 1 .8 rg
+n 60 144 6 12 re f*
+1 .941176 .941176 rg
+n 66 144 84 12 re f*
+.933333 1 .8 rg
+n 156 144 30 12 re f*
+.933333 1 .8 rg
+n 186 144 6 12 re f*
+1 .941176 .941176 rg
+n 192 144 84 12 re f*
+.933333 1 .8 rg
+n 276 144 6 12 re f*
+.933333 1 .8 rg
+n 42 120 6 12 re f*
+.933333 1 .8 rg
+n 48 120 48 12 re f*
+.933333 1 .8 rg
+n 96 120 6 12 re f*
+.933333 1 .8 rg
+n 102 120 6 12 re f*
+.933333 1 .8 rg
+n 108 120 6 12 re f*
+.933333 1 .8 rg
+n 114 120 48 12 re f*
+.933333 1 .8 rg
+n 162 120 6 12 re f*
+.933333 1 .8 rg
+n 18 108 6 12 re f*
+.933333 1 .8 rg
+n 24 108 6 12 re f*
+.933333 1 .8 rg
+n 30 108 18 12 re f*
+.933333 1 .8 rg
+n 48 108 6 12 re f*
+.933333 1 .8 rg
+n 18 60 6 12 re f*
+.933333 1 .8 rg
+n 24 60 36 12 re f*
+.933333 1 .8 rg
+n 60 60 6 12 re f*
+.933333 1 .8 rg
+n 30 48 192 12 re f*
+.933333 1 .8 rg
+n 30 36 54 12 re f*
+.933333 1 .8 rg
+n 84 36 6 12 re f*
+1 .941176 .941176 rg
+n 90 36 84 12 re f*
+.933333 1 .8 rg
+n 174 36 6 12 re f*
+.933333 1 .8 rg
+n 186 36 48 12 re f*
+.933333 1 .8 rg
+n 234 36 12 12 re f*
+.933333 1 .8 rg
+n 18 24 6 12 re f*
+.933333 1 .8 rg
+n 24 24 6 12 re f*
+.933333 1 .8 rg
+n 30 24 36 12 re f*
+.933333 1 .8 rg
+n 66 24 6 12 re f*
+.933333 1 .8 rg
+n 6 12 6 12 re f*
+.933333 1 .8 rg
+n 12 12 6 12 re f*
+.933333 1 .8 rg
+n 18 12 24 12 re f*
+.933333 1 .8 rg
+n 42 12 6 12 re f*
+.933333 1 .8 rg
+n 6 0 6 12 re f*
+.933333 1 .8 rg
+n 12 0 6 12 re f*
+.933333 1 .8 rg
+n 18 0 24 12 re f*
+.933333 1 .8 rg
+n 42 0 6 12 re f*
+BT 1 0 0 1 0 494 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (<) Tj (!-- prepare html template template.html --) Tj (>) Tj /F4 10 Tf 0 0 0 rg  T*  T* ( {% load static %}) Tj T* ( ) Tj .313725 .439216 .564706 rg (<) Tj (!DOCTYPE html) Tj (>) Tj 0 0 0 rg  T* ( ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (html) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (lang) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("en") Tj 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (head) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (meta) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (charset) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("UTF-8") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (title) Tj /F4 10 Tf 0 0 0 rg (>) Tj (Titlebar component example) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (title) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# include django javascript catalog for internationalization #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("{% url 'javascript-catalog' %}") Tj 0 0 0 rg (>) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# add bootstrap library with dependencies and font-awesome #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (link) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (href) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (rel) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("stylesheet") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (link) Tj /F4 10 Tf 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (href) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (rel) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("stylesheet") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# include django project base js lib and appropriate css #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (link) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (href) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("{% static 'bootstrap_template.css' %}") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (rel) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("stylesheet") Tj 0 0 0 rg  T* (     ) Tj 0 0 .752941 rg (crossorigin) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("anonymous") Tj 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (src) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("{% static 'django-project-base.min.js' %}") Tj 0 0 0 rg (>) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (head) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (body) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# set div which will contain titlebar component #}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (div) Tj /F4 10 Tf 0 0 0 rg ( ) Tj 0 0 .752941 rg (id) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("titlebar-app") Tj 0 0 0 rg ( ) Tj 0 0 .752941 rg (class) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ("titlebar-app") Tj 0 0 0 rg (>) Tj  T* (     {# use/render titlebar component #}) Tj T* (       ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (titlebar) Tj /F4 10 Tf 0 0 0 rg (>) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (titlebar) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (div) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (   {# include vue inline template for titlebar component from folder) Tj T* (     coresponding to included css file #}) Tj T* (   {% include "bootstrap/titlebar.html" %}) Tj T* (   ) Tj (<) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* (     ) Tj /F5 10 Tf .501961 .501961 .501961 rg (// initialize titlebar component) Tj T* /F4 10 Tf 0 0 0 rg (     ) Tj (createApp) Tj (\() Tj .729412 .129412 .129412 rg ('titlebar-app') Tj 0 0 0 rg (,) Tj ( ) Tj (titlebar) Tj (\);) Tj  T* (   ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (script) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (body) Tj /F4 10 Tf 0 0 0 rg (>) Tj  T* ( ) Tj (<) Tj (/) Tj /F6 10 Tf 0 .439216 0 rg (html) Tj /F4 10 Tf 0 0 0 rg (>) Tj T* ET
+Q
+Q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 293.5621 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4520,13 +4498,13 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Example project
 Q
 Q
 q
-1 0 0 1 40.01575 192.2394 cm
+1 0 0 1 40.01575 275.5621 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (You can find examples of most of the functionality of Django project base project in ) Tj /F7 10 Tf (/example/) Tj /F1 10 Tf ( folder.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 161.8394 cm
+1 0 0 1 40.01575 245.1621 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4538,14 +4516,14 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Run example pro
 Q
 Q
 q
-1 0 0 1 40.01575 143.8394 cm
+1 0 0 1 40.01575 227.1621 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Run Python runserver from root directory of this project and visit url that is provided in command output.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 53.03937 cm
+1 0 0 1 40.01575 136.3621 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -4570,17 +4548,8 @@ Q
 Q
 Q
 Q
- 
-endstream
-endobj
-82 0 obj
-<<
-/Length 8341
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 784.6394 cm
+1 0 0 1 40.01575 105.9621 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4592,14 +4561,51 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Serve Sphinx do
 Q
 Q
 q
-1 0 0 1 40.01575 766.6394 cm
+1 0 0 1 40.01575 87.96214 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Include documentation url to project urls.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 682.4042 cm
+1 0 0 1 40.01575 45.16214 cm
+q
+q
+1 0 0 1 0 0 cm
+q
+1 0 0 1 4.4 .4 cm
+q
+.666667 .8 .6 RG
+.3 w
+.933333 1 .8 rg
+n -4 0 514.4441 42 re B*
+Q
+q
+.933333 1 .8 rg
+n 0 24 48 12 re f*
+.933333 1 .8 rg
+n 0 0 66 12 re f*
+.933333 1 .8 rg
+n 72 0 6 12 re f*
+.933333 1 .8 rg
+n 84 0 6 12 re f*
+BT 1 0 0 1 0 26 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# url.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* ET
+Q
+Q
+Q
+Q
+Q
+ 
+endstream
+endobj
+85 0 obj
+<<
+/Length 9212
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 40.01575 744.3029 cm
 q
 q
 .819409 0 0 .819409 0 0 cm
@@ -4609,17 +4615,9 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 628 102 re B*
+n -4 0 628 66 re B*
 Q
 q
-.933333 1 .8 rg
-n 0 84 48 12 re f*
-.933333 1 .8 rg
-n 0 60 66 12 re f*
-.933333 1 .8 rg
-n 72 60 6 12 re f*
-.933333 1 .8 rg
-n 84 60 6 12 re f*
 .933333 1 .8 rg
 n 18 48 30 12 re f*
 .933333 1 .8 rg
@@ -4692,14 +4690,14 @@ n 324 0 6 12 re f*
 n 330 0 66 12 re f*
 .933333 1 .8 rg
 n 396 0 6 12 re f*
-BT 1 0 0 1 0 86 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# url.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (   ) Tj (re_path) Tj (\() Tj .729412 .129412 .129412 rg (r) Tj ('^docs-files/\(?P) Tj (<) Tj (path) Tj (>) Tj (.*\)$') Tj 0 0 0 rg (,) Tj ( ) Tj (documentation_view) Tj (,) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('document_root') Tj 0 0 0 rg (:) Tj ( ) Tj (DOCUMENTATION_DIRECTORY) Tj (},) Tj  T* (         ) Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('docs-files') Tj 0 0 0 rg (\),) Tj  T* (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (static) Tj (\() Tj (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_URL) Tj (,) Tj ( ) Tj (document_root) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_ROOT) Tj (\)) Tj T* ET
+BT 1 0 0 1 0 50 Tm 12 TL /F4 10 Tf 0 0 0 rg (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (   ) Tj (re_path) Tj (\() Tj .729412 .129412 .129412 rg (r) Tj ('^docs-files/\(?P) Tj (<) Tj (path) Tj (>) Tj (.*\)$') Tj 0 0 0 rg (,) Tj ( ) Tj (documentation_view) Tj (,) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('document_root') Tj 0 0 0 rg (:) Tj ( ) Tj (DOCUMENTATION_DIRECTORY) Tj (},) Tj  T* (         ) Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('docs-files') Tj 0 0 0 rg (\),) Tj  T* (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (static) Tj (\() Tj (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_URL) Tj (,) Tj ( ) Tj (document_root) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_ROOT) Tj (\)) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 652.0042 cm
+1 0 0 1 40.01575 713.9029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4711,20 +4709,20 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Sample data) Tj
 Q
 Q
 q
-1 0 0 1 40.01575 634.0042 cm
+1 0 0 1 40.01575 695.9029 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Users) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 628.0042 cm
+1 0 0 1 40.01575 689.9029 cm
 Q
 q
-1 0 0 1 40.01575 628.0042 cm
+1 0 0 1 40.01575 689.9029 cm
 Q
 q
-1 0 0 1 40.01575 580.0042 cm
+1 0 0 1 40.01575 641.9029 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4804,10 +4802,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 574.0042 cm
+1 0 0 1 40.01575 635.9029 cm
 Q
 q
-1 0 0 1 40.01575 526.0042 cm
+1 0 0 1 40.01575 587.9029 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4887,10 +4885,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 526.0042 cm
+1 0 0 1 40.01575 587.9029 cm
 Q
 q
-1 0 0 1 40.01575 493.2042 cm
+1 0 0 1 40.01575 555.1029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4902,7 +4900,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Swagger) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 462.8042 cm
+1 0 0 1 40.01575 524.7029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4915,14 +4913,14 @@ BT 1 0 0 1 0 2.4 Tm /F3 12 Tf 14.4 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 444.8042 cm
+1 0 0 1 40.01575 506.7029 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable swagger gui, add following to urls.py) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 342.0042 cm
+1 0 0 1 40.01575 403.9029 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -5013,78 +5011,146 @@ Q
 Q
 Q
 Q
+q
+1 0 0 1 40.01575 383.9029 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Swagger UI is now accessible on /schema/swagger-ui/ url by running example project.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 351.1029 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 22.8 re B*
+Q
+q
+BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Open Api) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 333.1029 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add folloving to settings.py) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 254.3029 cm
+q
+q
+1 0 0 1 0 0 cm
+q
+1 0 0 1 4.4 .4 cm
+q
+.666667 .8 .6 RG
+.3 w
+.933333 1 .8 rg
+n -4 0 514.4441 78 re B*
+Q
+q
+.933333 1 .8 rg
+n 0 60 114 12 re f*
+.933333 1 .8 rg
+n 0 48 84 12 re f*
+.933333 1 .8 rg
+n 90 48 6 12 re f*
+.933333 1 .8 rg
+n 102 48 6 12 re f*
+.933333 1 .8 rg
+n 0 36 18 12 re f*
+1 .941176 .941176 rg
+n 0 24 132 12 re f*
+.933333 1 .8 rg
+n 132 24 6 12 re f*
+1 .941176 .941176 rg
+n 144 24 216 12 re f*
+.933333 1 .8 rg
+n 360 24 6 12 re f*
+.933333 1 .8 rg
+n 0 12 18 12 re f*
+.933333 1 .8 rg
+n 0 0 6 12 re f*
+BT 1 0 0 1 0 62 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# myapp/settings.py) Tj /F4 10 Tf 0 0 0 rg  T* (REST_FRAMEWORK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ({) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* .729412 .129412 .129412 rg ('DEFAULT_SCHEMA_CLASS') Tj 0 0 0 rg (:) Tj ( ) Tj .729412 .129412 .129412 rg ('drf_spectacular.openapi.AutoSchema') Tj 0 0 0 rg (,) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* (}) Tj T* ET
+Q
+Q
+Q
+Q
+Q
  
 endstream
 endobj
-83 0 obj
-<<
-/Nums [ 0 84 0 R 1 85 0 R 2 86 0 R 3 87 0 R 4 88 0 R 
-  5 89 0 R 6 90 0 R 7 91 0 R 8 92 0 R 9 93 0 R 
-  10 94 0 R 11 95 0 R ]
->>
-endobj
-84 0 obj
-<<
-/S /D /St 1
->>
-endobj
-85 0 obj
-<<
-/S /D /St 2
->>
-endobj
 86 0 obj
 <<
-/S /D /St 3
+/Nums [ 0 87 0 R 1 88 0 R 2 89 0 R 3 90 0 R 4 91 0 R 
+  5 92 0 R 6 93 0 R 7 94 0 R 8 95 0 R 9 96 0 R 
+  10 97 0 R 11 98 0 R ]
 >>
 endobj
 87 0 obj
 <<
-/S /D /St 4
+/S /D /St 1
 >>
 endobj
 88 0 obj
 <<
-/S /D /St 5
+/S /D /St 2
 >>
 endobj
 89 0 obj
 <<
-/S /D /St 6
+/S /D /St 3
 >>
 endobj
 90 0 obj
 <<
-/S /D /St 7
+/S /D /St 4
 >>
 endobj
 91 0 obj
 <<
-/S /D /St 8
+/S /D /St 5
 >>
 endobj
 92 0 obj
 <<
-/S /D /St 9
+/S /D /St 6
 >>
 endobj
 93 0 obj
 <<
-/S /D /St 10
+/S /D /St 7
 >>
 endobj
 94 0 obj
 <<
-/S /D /St 11
+/S /D /St 8
 >>
 endobj
 95 0 obj
+<<
+/S /D /St 9
+>>
+endobj
+96 0 obj
+<<
+/S /D /St 10
+>>
+endobj
+97 0 obj
+<<
+/S /D /St 11
+>>
+endobj
+98 0 obj
 <<
 /S /D /St 12
 >>
 endobj
 xref
-0 96
+0 99
 0000000000 65535 f 
 0000000073 00000 n 
 0000000172 00000 n 
@@ -5098,99 +5164,102 @@ xref
 0000001574 00000 n 
 0000001694 00000 n 
 0000001800 00000 n 
-0000001914 00000 n 
-0000002025 00000 n 
-0000002267 00000 n 
-0000002459 00000 n 
-0000002684 00000 n 
-0000002800 00000 n 
-0000003006 00000 n 
-0000003181 00000 n 
-0000003354 00000 n 
-0000003525 00000 n 
-0000003720 00000 n 
-0000003894 00000 n 
-0000004147 00000 n 
-0000004353 00000 n 
-0000004590 00000 n 
-0000004811 00000 n 
-0000005043 00000 n 
-0000005249 00000 n 
-0000005473 00000 n 
-0000005667 00000 n 
-0000005899 00000 n 
-0000006105 00000 n 
-0000006279 00000 n 
-0000006492 00000 n 
-0000006731 00000 n 
-0000006937 00000 n 
-0000007043 00000 n 
-0000007301 00000 n 
-0000007376 00000 n 
-0000007552 00000 n 
-0000007682 00000 n 
-0000007848 00000 n 
-0000008001 00000 n 
-0000008103 00000 n 
-0000008226 00000 n 
-0000008397 00000 n 
-0000008504 00000 n 
-0000008620 00000 n 
-0000008739 00000 n 
-0000008899 00000 n 
-0000009001 00000 n 
-0000009126 00000 n 
-0000009287 00000 n 
-0000009441 00000 n 
-0000009572 00000 n 
-0000009699 00000 n 
-0000009854 00000 n 
-0000009973 00000 n 
-0000010104 00000 n 
-0000010239 00000 n 
-0000010365 00000 n 
-0000010492 00000 n 
-0000010661 00000 n 
-0000010782 00000 n 
-0000010936 00000 n 
-0000011049 00000 n 
-0000011197 00000 n 
-0000011298 00000 n 
-0000011438 00000 n 
-0000012244 00000 n 
-0000012369 00000 n 
-0000022312 00000 n 
-0000032253 00000 n 
-0000045402 00000 n 
-0000060107 00000 n 
-0000071124 00000 n 
-0000079051 00000 n 
-0000091292 00000 n 
-0000105227 00000 n 
-0000114086 00000 n 
-0000122479 00000 n 
-0000122627 00000 n 
-0000122661 00000 n 
-0000122695 00000 n 
-0000122729 00000 n 
-0000122763 00000 n 
-0000122797 00000 n 
-0000122831 00000 n 
-0000122865 00000 n 
-0000122899 00000 n 
-0000122933 00000 n 
-0000122968 00000 n 
-0000123003 00000 n 
+0000001986 00000 n 
+0000002100 00000 n 
+0000002211 00000 n 
+0000002460 00000 n 
+0000002652 00000 n 
+0000002827 00000 n 
+0000002943 00000 n 
+0000003116 00000 n 
+0000003287 00000 n 
+0000003482 00000 n 
+0000003656 00000 n 
+0000003916 00000 n 
+0000004122 00000 n 
+0000004328 00000 n 
+0000004565 00000 n 
+0000004786 00000 n 
+0000005018 00000 n 
+0000005224 00000 n 
+0000005448 00000 n 
+0000005642 00000 n 
+0000005874 00000 n 
+0000006080 00000 n 
+0000006254 00000 n 
+0000006467 00000 n 
+0000006706 00000 n 
+0000006912 00000 n 
+0000007118 00000 n 
+0000007224 00000 n 
+0000007482 00000 n 
+0000007557 00000 n 
+0000007733 00000 n 
+0000007863 00000 n 
+0000008029 00000 n 
+0000008182 00000 n 
+0000008303 00000 n 
+0000008431 00000 n 
+0000008550 00000 n 
+0000008673 00000 n 
+0000008792 00000 n 
+0000008952 00000 n 
+0000009054 00000 n 
+0000009179 00000 n 
+0000009340 00000 n 
+0000009494 00000 n 
+0000009625 00000 n 
+0000009752 00000 n 
+0000009907 00000 n 
+0000010026 00000 n 
+0000010157 00000 n 
+0000010292 00000 n 
+0000010418 00000 n 
+0000010545 00000 n 
+0000010707 00000 n 
+0000010834 00000 n 
+0000011003 00000 n 
+0000011124 00000 n 
+0000011278 00000 n 
+0000011391 00000 n 
+0000011552 00000 n 
+0000011653 00000 n 
+0000011763 00000 n 
+0000011903 00000 n 
+0000012709 00000 n 
+0000012834 00000 n 
+0000022682 00000 n 
+0000030951 00000 n 
+0000044610 00000 n 
+0000056129 00000 n 
+0000064319 00000 n 
+0000075925 00000 n 
+0000090634 00000 n 
+0000100397 00000 n 
+0000114776 00000 n 
+0000124040 00000 n 
+0000124188 00000 n 
+0000124222 00000 n 
+0000124256 00000 n 
+0000124290 00000 n 
+0000124324 00000 n 
+0000124358 00000 n 
+0000124392 00000 n 
+0000124426 00000 n 
+0000124460 00000 n 
+0000124494 00000 n 
+0000124529 00000 n 
+0000124564 00000 n 
 trailer
 <<
 /ID 
-[<8f230153d1dd0c6772c9b3248461544e><8f230153d1dd0c6772c9b3248461544e>]
+[<ec69f7d6e0dcc04f034ac8803f274051><ec69f7d6e0dcc04f034ac8803f274051>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
-/Info 39 0 R
-/Root 38 0 R
-/Size 96
+/Info 40 0 R
+/Root 39 0 R
+/Size 99
 >>
 startxref
-123038
+124599
 %%EOF
