@@ -16,10 +16,9 @@ If you want to use overrided rest_registration views, replace rest_registration 
 .. code-block:: python
 
   # myproject/urls.py
-  from django_project_base.account import accounts_router
 
   urlpatterns = [
-    path('account/', include(accounts_router.urls)),
+    path('account/', include('django_project_base.account.urls')),
     ...
   ]
 
