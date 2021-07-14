@@ -17,7 +17,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
-from django_project_base.account.router import accounts_router
 from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.profiling import app_debug_view
 from django_project_base.settings import DOCUMENTATION_DIRECTORY
@@ -31,7 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
-    path('account/', include(accounts_router.urls)),
+    path('account/', include('django_project_base.account.urls')),
     path('', include(notifications_router.urls)),
     path('', include('django_project_base.urls')),
     path('app-debug/', app_debug_view, name='app-debug'),
