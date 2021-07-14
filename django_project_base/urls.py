@@ -10,10 +10,7 @@ SPECTACULAR_DEFAULTS['PREPROCESSING_HOOKS'] = [
     'django_project_base.router.filter_rest_documentation_endpoints'
 ]
 
-django_project_base_urlpatterns = [
-    re_path(r'', include(django_project_base_router.urls)),
-]
-
 urlpatterns = [
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-] + django_project_base_urlpatterns
+    re_path(r'', include(django_project_base_router.urls)),
+]

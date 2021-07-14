@@ -41,10 +41,6 @@ Then also make sure your swappable models are loaded instead of django-project-b
    DJANGO_PROJECT_BASE_PROJECT_MODEL = 'myapp.MyProject'
    DJANGO_PROJECT_BASE_PROFILE_MODEL = 'myapp.MyProfile'
 
-   # urls.py add
-   from django_project_base.router import django_project_base_urlpatterns
-   urlpatterns = [ ... ] + django_project_base_urlpatterns
-
    Add to INSTALLED_APPS
     'rest_registration',
     'django_project_base',
