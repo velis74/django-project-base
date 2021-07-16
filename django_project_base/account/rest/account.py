@@ -11,9 +11,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password, login, logout, register, reset_password, send_reset_password_link, verify_email,
-    verify_registration
+    change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
 )
+from rest_registration.api.views.login import perform_login
+from rest_registration.exceptions import LoginInvalid, UserNotFound
+from rest_registration.settings import registration_settings
+from rest_registration.utils.responses import get_ok_response
 
 
 class LoginSerializer(serializers.Serializer):
@@ -35,7 +38,23 @@ class LoginViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=['post'], url_name='login', authentication_classes=[], permission_classes=[])
     def login(self, request: Request) -> Response:
-        return login(request._request)
+        serializer_class = registration_settings.LOGIN_SERIALIZER_CLASS
+        serializer = serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        login_authenticator = registration_settings.LOGIN_AUTHENTICATOR
+        try:
+            user = login_authenticator(serializer.validated_data, serializer=serializer)
+        except UserNotFound:
+            raise LoginInvalid() from None
+
+        extra_data = perform_login(request, user)
+
+        try:
+            extra_data.update({'sessionid': request.session.session_key})
+        except:
+            pass
+
+        return get_ok_response(_("Login successful"), extra_data=extra_data)
 
     @extend_schema(
         responses={

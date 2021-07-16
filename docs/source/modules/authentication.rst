@@ -9,7 +9,7 @@ actions used to override api documentation, but it just redirects requests back 
 
 Use rest_registration documentation https://django-rest-registration.readthedocs.io/en/latest/index.html for details.
 
-***Overridden rest_registration***
+**Overridden rest_registration**
 
 If you want to use overrided rest_registration views, replace rest_registration urls with:
 
@@ -22,6 +22,34 @@ If you want to use overrided rest_registration views, replace rest_registration 
     ...
   ]
 
+Custom rest api with session
+----------------------------
+
+There is overridden SessionMiddleware available, to enable REST API with the session.
+
+To enable overridden SessionMiddleware, replace Django contrib SessionMiddleware with overridden
+SessionMiddleware in projects settings.py file.
+
+.. code-block:: python
+
+  # myproject/settings.py
+
+  MIDDLEWARE = [
+  ...
+  'django_project_base.account.SessionMiddleware',
+  ...]
+
+To enable overridden SessionMiddleware functionality, add parameter "return-type" with value "json". This
+will return "sessionid" parameter in returned json instead as cookie. It will also disable csrf checks.
+
+Use returned session api in authorization header as token with token type "sessionid" and returned sessionid
+as credentials.
+
+.. code-block::
+
+  Authorization: sessionid <credentials>
+
+To enable default behaviour, set "return-type" parameter with value "cookie" or simply don't use it at all.
 
 Impersonate user
 ----------------

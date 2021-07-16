@@ -1,6 +1,8 @@
 import os
 
+from django.core.cache import cache
 from django.test import TestCase
+from example.demo_django_base.models import UserProfile
 from rest_framework.test import APIClient
 
 
@@ -46,6 +48,38 @@ class TestLoginViewset(TestCase):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
         self.assertEqual(response.status_code, 200)
+
+    def test_login_json(self):
+        # make Miha a superuser
+        miha = UserProfile.objects.get(username='miha')
+        miha.is_staff = True
+        miha.is_superuser = True
+        miha.save()
+        cache.delete('django-user-%d' % miha.id)
+
+        response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
+                                        {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        self.api_client.credentials(HTTP_AUTHORIZATION='sessionid ' + response.data.get('sessionid', None))
+        response = self.api_client.get(os.path.join(self.url_prefix, '/account/profile/current'),
+                                       {'return-type': 'json'}, format='json')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.api_client.post('/account/impersonate/start', {'username': 'janez', 'return-type': 'json'},
+                                        format='json')
+        self.assertEqual(response.status_code, 200)
+
+    def test_profile_destroy_my_profile_json(self):
+        response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
+                                        {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
+        self.api_client.credentials(HTTP_AUTHORIZATION='sessionid ' + response.data.get('sessionid', None))
+        response = self.api_client.get('/account/profile/current', {'return-type': 'json'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        response = self.api_client.delete('/account/profile/current', {'return-type': 'json'}, format='json')
+        self.assertEqual(response.status_code, 204)
+        response = self.api_client.get('/account/profile/current', {'return-type': 'json'}, format='json')
+        self.assertEqual(response.status_code, 403)
 
     def test_logout_not_authorized(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'logout/'),
