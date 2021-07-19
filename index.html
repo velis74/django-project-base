@@ -114,7 +114,7 @@
                             <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
                         <a v-if="permissions['add-project']" v-on:click="addNewProject"
                            class="dropdown-item project-item" href="#">
-                            <i class="fas fa-plus-circle"></i>{{ translations('Add new project') }}</a>
+                            <i class="fas fa-plus-circle"></i>{{ gettext('Add new project') }}</a>
                     </div>
                 </li>
             </ul>

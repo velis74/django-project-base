@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
+from django.views.i18n import JavaScriptCatalog
 from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.profiling import app_debug_view
 from django_project_base.settings import DOCUMENTATION_DIRECTORY
@@ -37,4 +38,5 @@ urlpatterns = [
     re_path(r'^docs-files/(?P<path>.*)$', documentation_view, {'document_root': DOCUMENTATION_DIRECTORY},
             name='docs-files'),
     path('account/social/', include('social_django.urls', namespace="social")),
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

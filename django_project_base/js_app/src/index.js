@@ -9,20 +9,17 @@ import { userProfile as userProfileDef } from './definitions/userProfile';
 import { modalWindow as modalWindowDef } from './definitions/modalWindow';
 import { showNotification } from './notifications';
 import { showGeneralErrorNotification } from './notifications';
-import { translate } from './translations';
 import { apiClient } from './apiClient';
 import { Store } from './store';
 import { ProjectBaseData } from './projectBaseData';
 
 import { createApp, registerComponent } from './apps';
 
-Vue.mixin({
-  methods: {
-    translations(v) {
-      return translate(v);
-    },
-  },
-});
+if (typeof window.gettext === 'undefined') {
+  window.gettext = (v) => v;
+}
+
+Vue.prototype.gettext = window.gettext;
 
 window.Vue = Vue;
 window.createApp = createApp;
@@ -35,7 +32,6 @@ window.userProfile = userProfileDef;
 window.modalWindow = modalWindowDef;
 window.showNotification = showNotification;
 window.showGeneralErrorNotification = showGeneralErrorNotification;
-window.translate = translate;
 window.apiClient = apiClient;
 window.Store = Store;
 window.ProjectBaseData = ProjectBaseData;
