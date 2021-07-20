@@ -185,12 +185,12 @@ endobj
 endobj
 29 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 329.6394 0 ] /Rect [ 434.0657 473.0394 555.2598 485.0394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 317.6394 0 ] /Rect [ 434.0657 473.0394 555.2598 485.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 30 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 581.6394 0 ] /Rect [ 454.6057 404.2394 555.2598 416.2394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 569.6394 0 ] /Rect [ 454.6057 404.2394 555.2598 416.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 31 0 obj
@@ -281,35 +281,35 @@ endobj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io/en/latest/backends/index.html)
->> /Border [ 0 0 0 ] /Rect [ 40.01575 757.0394 354.6157 769.0394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 40.01575 739.0394 354.6157 751.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 42 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io)
->> /Border [ 0 0 0 ] /Rect [ 214.5357 739.0394 300.9346 751.0394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 214.5357 721.0394 300.9346 733.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 43 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (https://console.developers.google.com/apis/credentials)
->> /Border [ 0 0 0 ] /Rect [ 115.0457 342.6394 367.646 354.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 115.0457 324.6394 367.646 336.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 44 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (http://localhost:8080)
->> /Border [ 0 0 0 ] /Rect [ 287.8957 312.6394 377.3957 324.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 287.8957 294.6394 377.3957 306.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 45 0 obj
 <<
 /A <<
 /S /URI /Type /Action /URI (http://localhost:8080/account/social/complete/google-oauth2/)
->> /Border [ 0 0 0 ] /Rect [ 267.3257 294.6394 535.8057 306.6394 ] /Subtype /Link /Type /Annot
+>> /Border [ 0 0 0 ] /Rect [ 267.3257 276.6394 535.8057 288.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 46 0 obj
@@ -349,7 +349,7 @@ endobj
 endobj
 50 0 obj
 <<
-/Author () /CreationDate (D:20210719120014-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210719120014-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+/Author () /CreationDate (D:20210720091125-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20210720091125-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
   /Subject (\(unspecified\)) /Title () /Trapped /False
 >>
 endobj
@@ -493,22 +493,22 @@ endobj
 endobj
 77 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 579.4394 0 ] /Next 78 0 R /Parent 74 0 R /Prev 76 0 R /Title (Impersonate user)
+/Dest [ 39 0 R /XYZ 40.01575 567.4394 0 ] /Next 78 0 R /Parent 74 0 R /Prev 76 0 R /Title (Impersonate user)
 >>
 endobj
 78 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 327.4394 0 ] /Next 79 0 R /Parent 74 0 R /Prev 77 0 R /Title (User caching backend)
+/Dest [ 39 0 R /XYZ 40.01575 315.4394 0 ] /Next 79 0 R /Parent 74 0 R /Prev 77 0 R /Title (User caching backend)
 >>
 endobj
 79 0 obj
 <<
-/Dest [ 40 0 R /XYZ 40.01575 353.4394 0 ] /Parent 74 0 R /Prev 78 0 R /Title (Social auth integrations)
+/Dest [ 40 0 R /XYZ 40.01575 341.4394 0 ] /Parent 74 0 R /Prev 78 0 R /Title (Social auth integrations)
 >>
 endobj
 80 0 obj
 <<
-/Dest [ 46 0 R /XYZ 40.01575 199.8394 0 ] /Next 81 0 R /Parent 54 0 R /Prev 64 0 R /Title (Translations)
+/Dest [ 46 0 R /XYZ 40.01575 181.8394 0 ] /Next 81 0 R /Parent 54 0 R /Prev 64 0 R /Title (Translations)
 >>
 endobj
 81 0 obj
@@ -607,7 +607,7 @@ q
 1 0 0 1 40.01575 544.5606 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 2.4 Tm /F1 12 Tf 14.4 TL 221.934 0 Td (July 19, 2021) Tj T* -221.934 0 Td ET
+BT 1 0 0 1 0 2.4 Tm /F1 12 Tf 14.4 TL 221.934 0 Td (July 20, 2021) Tj T* -221.934 0 Td ET
 Q
 Q
 q
@@ -2732,7 +2732,7 @@ endstream
 endobj
 98 0 obj
 <<
-/Length 7939
+/Length 7946
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -3062,7 +3062,7 @@ q
 1 0 0 1 40.01575 48.23937 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (There is overridden SessionMiddleware available, to enable REST API with the session.) Tj T* ET
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (There is project base\222s SessionMiddleware available, to enable REST API with the session.) Tj T* ET
 Q
 Q
  
@@ -3070,7 +3070,7 @@ endstream
 endobj
 99 0 obj
 <<
-/Length 8960
+/Length 8889
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -3078,7 +3078,7 @@ q
 1 0 0 1 40.01575 775.0394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 7.292677 Tw (To enable overridden SessionMiddleware, replace Django contrib SessionMiddleware with overridden) Tj T* 0 Tw (SessionMiddleware in projects settings.py file.) Tj T* ET
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 3.339463 Tw (To enable project base\222s SessionMiddleware, replace Django contrib SessionMiddleware with project base\222s) Tj T* 0 Tw (SessionMiddleware in projects settings.py file.) Tj T* ET
 Q
 Q
 q
@@ -3120,21 +3120,21 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 664.2394 cm
+1 0 0 1 40.01575 652.2394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .176469 Tw (To enable overridden SessionMiddleware functionality, add parameter \223return-type\224 with value \223json\224. This will return) Tj T* 0 Tw (\223sessionid\224 parameter in returned json instead as cookie. It will also disable csrf checks.) Tj T* ET
+BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.288007 Tw (To enable project base\222s SessionMiddleware functionality, add parameter \223return-type\224 with value \223json\224. This will) Tj T* 0 Tw 2.365256 Tw (return \223sessionid\224 parameter in returned json instead as cookie. It will also disable csrf checks. See swagger) Tj T* 0 Tw (documentation for login for further details.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 634.2394 cm
+1 0 0 1 40.01575 622.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.355256 Tw (Use returned session api in authorization header as token with token type \223sessionid\224 and returned sessionid as) Tj T* 0 Tw (credentials.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 615.4394 cm
+1 0 0 1 40.01575 603.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3154,14 +3154,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 595.4394 cm
+1 0 0 1 40.01575 583.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable default behaviour, set \223return-type\224 parameter with value \223cookie\224 or simply don\222t use it at all.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 566.2394 cm
+1 0 0 1 40.01575 554.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3173,21 +3173,21 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Impersonate use
 Q
 Q
 q
-1 0 0 1 40.01575 512.2394 cm
+1 0 0 1 40.01575 500.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.872321 Tw (Sometimes is useful if we can login into app as another user for debugging or help purposes. User change is) Tj T* 0 Tw 21.56741 Tw (supported via REST api calls or you can use userProfile component) Tj T* 0 Tw 4.896819 Tw (\(django_project_base/templates/user-profile/bootstrap/template.html\) which already integrates api functionality.) Tj T* 0 Tw (Functionality is based on django-hijack package.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 494.2394 cm
+1 0 0 1 40.01575 482.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (For determining which user can impersonate which user you can set your own logic. Example below:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 343.4394 cm
+1 0 0 1 40.01575 331.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3255,7 +3255,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 314.2394 cm
+1 0 0 1 40.01575 302.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3267,20 +3267,20 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (User caching ba
 Q
 Q
 q
-1 0 0 1 40.01575 296.2394 cm
+1 0 0 1 40.01575 284.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To increase AUTH performance you can set a backend that caches users.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 278.2394 cm
+1 0 0 1 40.01575 266.2394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (To enable User caching backend to add the following line to ) Tj /F7 10 Tf (AUTHENTICATION_BACKENDS) Tj /F1 10 Tf ( section in settings.py:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 187.4394 cm
+1 0 0 1 40.01575 175.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3318,14 +3318,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 143.4394 cm
+1 0 0 1 40.01575 131.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL .195535 Tw (User caching is not enabled for bulk updates by default, since Django doesn\222t call signal on .update\(\) .bulk_update\(\)) Tj T* 0 Tw 2.223182 Tw (or .delete\(\). Updating data with a query or running bulk update, without clearing cache for every object could) Tj T* 0 Tw (potentially cause race conditions. Avoid it if possible, or take care of manually clearing the cache for the user.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 125.4394 cm
+1 0 0 1 40.01575 113.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Example for clearing cache after bulk update:) Tj T* ET
@@ -3342,34 +3342,32 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 78 re B*
+n -4 0 514.4441 66 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 60 18 12 re f*
-.933333 1 .8 rg
-n 0 48 24 12 re f*
-.933333 1 .8 rg
-n 30 48 102 12 re f*
-.933333 1 .8 rg
-n 138 48 36 12 re f*
-.933333 1 .8 rg
-n 180 48 30 12 re f*
+n 0 48 18 12 re f*
 .933333 1 .8 rg
 n 0 36 24 12 re f*
 .933333 1 .8 rg
-n 30 36 168 12 re f*
+n 30 36 102 12 re f*
 .933333 1 .8 rg
-n 204 36 36 12 re f*
+n 138 36 36 12 re f*
 .933333 1 .8 rg
-n 246 36 102 12 re f*
+n 180 36 30 12 re f*
 .933333 1 .8 rg
-n 0 24 18 12 re f*
+n 0 24 24 12 re f*
 .933333 1 .8 rg
-n 0 12 366 12 re f*
+n 30 24 168 12 re f*
 .933333 1 .8 rg
-n 0 0 438 12 re f*
-BT 1 0 0 1 0 62 Tm 12 TL /F4 10 Tf .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.settings) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DJANGO_USER_CACHE) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# Bulk update multiple users. Give them superuser permission.) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# If those users are logged in, they don't have permission until cache is) Tj /F4 10 Tf 0 0 0 rg  T* ET
+n 204 24 36 12 re f*
+.933333 1 .8 rg
+n 246 24 102 12 re f*
+.933333 1 .8 rg
+n 0 12 18 12 re f*
+.933333 1 .8 rg
+n 0 0 366 12 re f*
+BT 1 0 0 1 0 50 Tm 12 TL /F4 10 Tf .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.settings) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DJANGO_USER_CACHE) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# Bulk update multiple users. Give them superuser permission.) Tj /F4 10 Tf 0 0 0 rg  T* ET
 Q
 Q
 Q
@@ -3380,12 +3378,12 @@ endstream
 endobj
 100 0 obj
 <<
-/Length 16794
+/Length 16779
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 684.2394 cm
+1 0 0 1 40.01575 672.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3395,9 +3393,11 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 114 re B*
+n -4 0 514.4441 126 re B*
 Q
 q
+.933333 1 .8 rg
+n 0 108 438 12 re f*
 .933333 1 .8 rg
 n 0 96 258 12 re f*
 .933333 1 .8 rg
@@ -3512,21 +3512,21 @@ n 282 0 6 12 re f*
 n 288 0 12 12 re f*
 .933333 1 .8 rg
 n 300 0 6 12 re f*
-BT 1 0 0 1 0 98 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# cleared or they log out and log in again.) Tj /F4 10 Tf 0 0 0 rg  T* (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj  T* (  ) Tj (is_superuser) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (is_staff) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# After clearing users cache for those users will be able) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# to work with additional permissions) Tj /F4 10 Tf 0 0 0 rg  T* (staff) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj (staff) Tj (:) Tj  T* (          ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (user) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj T* ET
+BT 1 0 0 1 0 110 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# If those users are logged in, they don't have permission until cache is) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# cleared or they log out and log in again.) Tj /F4 10 Tf 0 0 0 rg  T* (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj  T* (  ) Tj (is_superuser) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (is_staff) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# After clearing users cache for those users will be able) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# to work with additional permissions) Tj /F4 10 Tf 0 0 0 rg  T* (staff) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj (staff) Tj (:) Tj  T* (          ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (user) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 652.2394 cm
+1 0 0 1 40.01575 640.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .237338 Tw (It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can) Tj T* 0 Tw (find example code below.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 369.4394 cm
+1 0 0 1 40.01575 357.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3752,7 +3752,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 340.2394 cm
+1 0 0 1 40.01575 328.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3764,17 +3764,17 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Social auth int
 Q
 Q
 q
-1 0 0 1 40.01575 310.2394 cm
+1 0 0 1 40.01575 298.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.671175 Tw (Django Project Base offers easy-to-setup social authentication mechanism. Currently the following providers are) Tj T* 0 Tw (supported:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 304.2394 cm
+1 0 0 1 40.01575 292.2394 cm
 Q
 q
-1 0 0 1 40.01575 70.23937 cm
+1 0 0 1 40.01575 58.23937 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4198,21 +4198,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 70.23937 cm
-Q
-q
-1 0 0 1 40.01575 52.23937 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (OAuth providers require redirect URL which is called after the authentication process in Oauth flow.) Tj T* ET
-Q
+1 0 0 1 40.01575 58.23937 cm
 Q
  
 endstream
 endobj
 101 0 obj
 <<
-/Length 8298
+/Length 8490
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -4220,33 +4213,40 @@ q
 1 0 0 1 40.01575 787.0394 cm
 q
 0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (OAuth providers require redirect URL which is called after the authentication process in Oauth flow.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 769.0394 cm
+q
+0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Your redirect url is: [SCHEME]://[HOST]/account/social/complete/[PROVIDER IDENTIFIER]/) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 757.0394 cm
+1 0 0 1 40.01575 739.0394 cm
 q
 BT 1 0 0 1 0 14 Tm 15.10034 Tw 12 TL /F1 10 Tf 0 0 0 rg (Information which settings are required for a social provider can be found at) Tj T* 0 Tw 0 0 .501961 rg (https://python-social-auth.readthedocs.io/en/latest/backends/index.html) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 727.0394 cm
+1 0 0 1 40.01575 709.0394 cm
 q
 BT 1 0 0 1 0 14 Tm .31815 Tw 12 TL /F1 10 Tf 0 0 0 rg (For social authentication functionalities ) Tj 0 0 .501961 rg (Python Social Auth) Tj 0 0 0 rg ( library was used. Please checkout this documentation to) Tj T* 0 Tw (make any custom changes.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 709.0394 cm
+1 0 0 1 40.01575 691.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 703.0394 cm
+1 0 0 1 40.01575 685.0394 cm
 Q
 q
-1 0 0 1 40.01575 390.6394 cm
+1 0 0 1 40.01575 372.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4435,45 +4435,45 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 390.6394 cm
+1 0 0 1 40.01575 372.6394 cm
 Q
 q
-1 0 0 1 40.01575 372.6394 cm
+1 0 0 1 40.01575 354.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Social login integration example - Google) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 330.6394 cm
+1 0 0 1 40.01575 312.6394 cm
 q
 BT 1 0 0 1 0 26 Tm -0.118206 Tw 12 TL /F1 10 Tf 0 0 0 rg (To enable a social provider create an account at provider webpage and create an oauth app. For example for Google) Tj T* 0 Tw 3.236762 Tw (OAuth login visit ) Tj 0 0 .501961 rg (https://console.developers.google.com/apis/credentials) Tj 0 0 0 rg (. Click + CREATE CREDENTIALS and) Tj T* 0 Tw (select Oauth Client ID. Then create OAuth app with OAuth Consent screen.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 312.6394 cm
+1 0 0 1 40.01575 294.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Example value for Authorized JavaScript origins can be ) Tj 0 0 .501961 rg (http://localhost:8080) Tj 0 0 0 rg (.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 294.6394 cm
+1 0 0 1 40.01575 276.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Example value for Authorized redirect URIs can be ) Tj 0 0 .501961 rg (http://localhost:8080/account/social/complete/google-oauth2/) Tj 0 0 0 rg (.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 276.6394 cm
+1 0 0 1 40.01575 258.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable Google OAuth login add folowing to settings:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 270.6394 cm
+1 0 0 1 40.01575 252.6394 cm
 Q
 q
-1 0 0 1 40.01575 215.8394 cm
+1 0 0 1 40.01575 197.8394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4519,10 +4519,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 215.8394 cm
+1 0 0 1 40.01575 197.8394 cm
 Q
 q
-1 0 0 1 40.01575 183.0394 cm
+1 0 0 1 40.01575 165.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4534,14 +4534,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Translations) T
 Q
 Q
 q
-1 0 0 1 40.01575 165.0394 cm
+1 0 0 1 40.01575 147.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Currently translations in JS code, are done with Vue custom translations method.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 135.0394 cm
+1 0 0 1 40.01575 117.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .000742 Tw (It should be trivial to enable Django javascript-catalog, but it doesn\222t work correctly at the moment. It might change to) Tj T* 0 Tw (correct Django javascript-catalog in future.) Tj T* ET
@@ -5750,29 +5750,29 @@ xref
 0000046288 00000 n 
 0000059299 00000 n 
 0000067787 00000 n 
-0000075778 00000 n 
-0000084790 00000 n 
-0000101638 00000 n 
-0000109989 00000 n 
-0000125583 00000 n 
-0000135803 00000 n 
-0000135975 00000 n 
-0000136010 00000 n 
-0000136045 00000 n 
-0000136080 00000 n 
-0000136115 00000 n 
-0000136150 00000 n 
-0000136185 00000 n 
-0000136220 00000 n 
-0000136255 00000 n 
-0000136290 00000 n 
-0000136326 00000 n 
-0000136362 00000 n 
-0000136398 00000 n 
+0000075785 00000 n 
+0000084726 00000 n 
+0000101559 00000 n 
+0000110102 00000 n 
+0000125696 00000 n 
+0000135916 00000 n 
+0000136088 00000 n 
+0000136123 00000 n 
+0000136158 00000 n 
+0000136193 00000 n 
+0000136228 00000 n 
+0000136263 00000 n 
+0000136298 00000 n 
+0000136333 00000 n 
+0000136368 00000 n 
+0000136403 00000 n 
+0000136439 00000 n 
+0000136475 00000 n 
+0000136511 00000 n 
 trailer
 <<
 /ID 
-[<67be0eb9a7a7349816cdd7d5873a3078><67be0eb9a7a7349816cdd7d5873a3078>]
+[<3dea48c34b806a0fd16b5ae13137c559><3dea48c34b806a0fd16b5ae13137c559>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
 /Info 50 0 R
@@ -5780,5 +5780,5 @@ trailer
 /Size 118
 >>
 startxref
-136434
+136547
 %%EOF

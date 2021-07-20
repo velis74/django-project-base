@@ -47,6 +47,8 @@ class TestLoginViewset(TestCase):
     def test_login(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
+        self.assertIsNotNone(response.cookies.get('sessionid', None))
+        self.assertIsNotNone(response.cookies.get('csrftoken', None))
         self.assertEqual(response.status_code, 200)
 
     def test_login_json(self):
@@ -58,7 +60,11 @@ class TestLoginViewset(TestCase):
         cache.delete('django-user-%d' % miha.id)
 
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
-                                        {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
+                                        {'login': 'miha', 'password': 'mihamiha',
+                                         'return-type': 'json'
+                                         }, format='json')
+        self.assertIsNone(response.cookies.get('sessionid', None))
+        self.assertIsNone(response.cookies.get('csrftoken', None))
         self.assertEqual(response.status_code, 200)
 
         self.api_client.credentials(HTTP_AUTHORIZATION='sessionid ' + response.data.get('sessionid', None))
@@ -66,8 +72,7 @@ class TestLoginViewset(TestCase):
                                        {'return-type': 'json'}, format='json')
         self.assertEqual(response.status_code, 200)
 
-        response = self.api_client.post('/account/impersonate/start', {'username': 'janez', 'return-type': 'json'},
-                                        format='json')
+        response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 200)
 
     def test_profile_destroy_my_profile_json(self):

@@ -25,9 +25,9 @@ If you want to use overrided rest_registration views, replace rest_registration 
 Custom rest api with session
 ----------------------------
 
-There is overridden SessionMiddleware available, to enable REST API with the session.
+There is project base's SessionMiddleware available, to enable REST API with the session.
 
-To enable overridden SessionMiddleware, replace Django contrib SessionMiddleware with overridden
+To enable project base's SessionMiddleware, replace Django contrib SessionMiddleware with project base's
 SessionMiddleware in projects settings.py file.
 
 .. code-block:: python
@@ -39,8 +39,9 @@ SessionMiddleware in projects settings.py file.
   'django_project_base.account.SessionMiddleware',
   ...]
 
-To enable overridden SessionMiddleware functionality, add parameter "return-type" with value "json". This
-will return "sessionid" parameter in returned json instead as cookie. It will also disable csrf checks.
+To enable project base's SessionMiddleware functionality, add parameter "return-type" with value "json". This
+will return "sessionid" parameter in returned json instead as cookie. It will also disable csrf checks. See swagger
+documentation for login for further details.
 
 Use returned session api in authorization header as token with token type "sessionid" and returned sessionid
 as credentials.
