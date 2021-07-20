@@ -60,9 +60,7 @@ class TestLoginViewset(TestCase):
         cache.delete('django-user-%d' % miha.id)
 
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
-                                        {'login': 'miha', 'password': 'mihamiha',
-                                         'return-type': 'json'
-                                         }, format='json')
+                                        {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
         self.assertIsNone(response.cookies.get('sessionid', None))
         self.assertIsNone(response.cookies.get('csrftoken', None))
         self.assertEqual(response.status_code, 200)
@@ -74,6 +72,16 @@ class TestLoginViewset(TestCase):
 
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 200)
+
+    def test_login_json_missing_session(self):
+        response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
+                                        {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
+        self.assertIsNone(response.cookies.get('sessionid', None))
+        self.assertIsNone(response.cookies.get('csrftoken', None))
+        self.assertEqual(response.status_code, 200)
+        response = self.api_client.get(os.path.join(self.url_prefix, '/account/profile/current'), {}, format='json')
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.content, b'{"detail":"Authentication credentials were not provided."}')
 
     def test_profile_destroy_my_profile_json(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
