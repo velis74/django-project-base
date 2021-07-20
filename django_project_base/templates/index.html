@@ -38,8 +38,8 @@
         <a v-for="(project, idx) in projectList" v-on:click="projectSelectedNew" v-bind:key="project.slug + 'new_idx'"
            href="#">
             <img v-bind:src="project.logo">{{ project.name }}</a>
-        <a v-on:click="addNewProject" href="#">{{ translations('Add project') }}</a>
-        <a v-on:click="newMethod" href="#">{{ translations('Call method from global mixin') }}</a>
+        <a v-on:click="addNewProject" href="#">{{ gettext('Add project') }}</a>
+        <a v-on:click="newMethod" href="#">{{ gettext('Call method from global mixin') }}</a>
     </div>
 </script>
 {% endverbatim %}

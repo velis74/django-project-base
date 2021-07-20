@@ -34,7 +34,7 @@ const userProfile = {
     },
     computed: {
       searchUserPlaceholder() {
-        return this.translations('Enter any user attribute');
+        return this.gettext('Enter any user attribute');
       },
     },
     methods: {

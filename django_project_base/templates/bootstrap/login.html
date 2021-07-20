@@ -10,7 +10,7 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     </button>
                     <button type="button" class="btn btn-sm" @click="makeLogin">
-                        {{ translations('Login') }}
+                        {{ gettext('Login') }}
                     </button>
                     <div v-if="socialAuth.length" class="dropdown-menu">
                         <a v-for="(b, bx) in socialAuth" class="dropdown-item" :href="b.url">{{ b.title }}</a>
