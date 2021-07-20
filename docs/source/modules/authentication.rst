@@ -1,17 +1,27 @@
 Authentication
 ==============
 
-Rest_registration
------------------
+Obtaining and maintaining sessions
+----------------------------------
 
-Currently, for basic authentication operations, rest_registration module is used. It is overridden with custom rest
-actions used to override api documentation, but it just redirects requests back to rest_registration.
+We support two methods of maintaining session information for your client: cookie-based and header-based.
 
-Use rest_registration documentation https://django-rest-registration.readthedocs.io/en/latest/index.html for details.
+When you perform the account/login function, you can choose whether the function should return a session cookie or 
+JSON with session id. Add parameter "return-type" with value "json" to login function parameters. This will return 
+"sessionid" parameter in returned json instead of cookie. There is no CSRF when session is passed by the 
+authorization header. See swagger documentation on login for further details.
 
-**Overridden rest_registration**
+If you choose the cookie, you will then need to supply the cookie(s) to all subsequent requests. Likewise, if you opt 
+for session id as a variable, you will have to provide Authorization header to all subsequent requests.
 
-If you want to use overrided rest_registration views, replace rest_registration urls with:
+The default uses cookies as those also add a CSRF cookie providing a bit more security. Use of JSON / header should
+only be preferred for clients without support for cookies, such as background maintenance / data exchange scripts.
+
+Our modified SessionMiddleware only overrides Django's as much to also accept the Authorization header and clears the 
+session and CSRF cookies in the responses.
+
+Activate project base accounts API endpoints
+--------------------------------------------
 
 .. code-block:: python
 
@@ -22,13 +32,12 @@ If you want to use overrided rest_registration views, replace rest_registration 
     ...
   ]
 
-Custom rest api with session
-----------------------------
-
-There is project base's SessionMiddleware available, to enable REST API with the session.
+Session middleware
+------------------
 
 To enable project base's SessionMiddleware, replace Django contrib SessionMiddleware with project base's
-SessionMiddleware in projects settings.py file.
+SessionMiddleware in projects settings.py file. This is only necessary if you intend to support the JSON method for login
+and keeping the session id.
 
 .. code-block:: python
 
@@ -39,18 +48,15 @@ SessionMiddleware in projects settings.py file.
   'django_project_base.account.SessionMiddleware',
   ...]
 
-To enable project base's SessionMiddleware functionality, add parameter "return-type" with value "json". This
-will return "sessionid" parameter in returned json instead as cookie. It will also disable csrf checks. See swagger
-documentation for login for further details.
+Use of json session id in subsequent requests
+---------------------------------------------
 
-Use returned session api in authorization header as token with token type "sessionid" and returned sessionid
+When using  the Authorisation header, use returned session api as token with token type "sessionid" and returned sessionid
 as credentials.
 
 .. code-block::
 
   Authorization: sessionid <credentials>
-
-To enable default behaviour, set "return-type" parameter with value "cookie" or simply don't use it at all.
 
 Impersonate user
 ----------------
