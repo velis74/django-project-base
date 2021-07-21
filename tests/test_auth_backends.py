@@ -17,6 +17,8 @@ class TestUsersCachingBackend(TestCase):
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 403)
 
+        self.assertIsNotNone(cache.get(DJANGO_USER_CACHE % 1))
+
         UserProfile.objects.filter(username__in=['miha', 'janez']).update(is_superuser=True, is_staff=True)
 
         # I still shouldn't be able to do superuser stuff

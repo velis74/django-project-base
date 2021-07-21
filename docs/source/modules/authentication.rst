@@ -88,7 +88,8 @@ User caching backend
 
 To increase AUTH performance you can set a backend that caches users.
 
-To enable User caching backend to add the following line to *AUTHENTICATION_BACKENDS* section in settings.py:
+To enable User caching backend replace django.contrib.auth.backends.ModelBackend with the following line to
+*AUTHENTICATION_BACKENDS* section in settings.py:
 
 .. code-block:: python
 
