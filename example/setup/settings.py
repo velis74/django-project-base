@@ -52,13 +52,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django_project_base.base.UrlVarsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_project_base.account.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_project_base.profiling.profile_middleware'
+    'django_project_base.profiling.profile_middleware',
 ]
 
 ROOT_URLCONF = 'example.setup.urls'
