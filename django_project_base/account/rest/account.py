@@ -29,18 +29,18 @@ class LoginViewSet(viewsets.ViewSet):
         description='<p>Logs in the user with given username and password. </p>'
                     '<p>We support two methods of maintaining session information for your client: cookie-based and '
                     'header-based.</p>'
-                    '<p>When you perform the account/login function, you can choose whether the function should return a '
-                    'session cookie or JSON with session id. Add parameter "return-type" with value "json" to login '
+                    '<p>When you perform the account/login function, you can choose whether the function should return '
+                    'a session cookie or JSON with session id. Add parameter "return-type" with value "json" to login '
                     'function parameters. This will return "sessionid" parameter in returned json instead of cookie. '
                     'There is no CSRF when session is passed by the authorization header.</p>'
-                    '<p>If you choose the cookie, you will then need to supply the cookie(s) to all subsequent requests. '
-                    'Likewise, if you opt for session id as a variable, you will have to provide Authorization header '
-                    'to all subsequent requests.</p>'
+                    '<p>If you choose the cookie, you will then need to supply the cookie(s) to all subsequent '
+                    'requests. Likewise, if you opt for session id as a variable, you will have to provide '
+                    'Authorization header to all subsequent requests.</p>'
                     '<p>The default uses cookies as those also add a CSRF cookie providing a bit more security. '
                     'Use of JSON / header should only be preferred for clients without support for cookies, such as '
                     'background maintenance / data exchange scripts.</p>'
-                    '<p>When using the Authorisation header, use returned session api as token with token type "sessionid" '
-                    'and returned sessionid as credentials. Authorization: sessionid credentials</p>',
+                    '<p>When using the Authorisation header, use returned session api as token with token type '
+                    '"sessionid" and returned sessionid as credentials. Authorization: sessionid credentials</p>',
         responses={
             status.HTTP_200_OK: OpenApiResponse(description='OK'),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
