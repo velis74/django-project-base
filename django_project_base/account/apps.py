@@ -7,6 +7,7 @@ from django_project_base.settings_parser import parse_settings
 class DjangoProjectBaseAccountsConfig(AppConfig):
     name = ACCOUNT_APP_ID
     verbose_name = "Django Project Base Account management"
+    label = 'django_project_base.account'
 
     def ready(self):
         parse_settings(ACCOUNT_SETTINGS)
