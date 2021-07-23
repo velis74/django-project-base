@@ -17,10 +17,18 @@ const titlebar = {
   type: 'x-template',
   definition: {
     template: '#titlebar',
+    props: {
+      darkMode: {
+        default: false,
+        type: Boolean,
+      },
+    },
     data() {
       return {
         titleBarProps: {},
         loggedIn: null,
+        lightClass: 'navbar-light bg-light',
+        darkClass: 'navbar-dark bg-dark',
         maintenanceNoticesPeriodicApiCall: null,
         maintenanceNotificationItem: null,
       };

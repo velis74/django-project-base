@@ -22,7 +22,7 @@
 {% verbatim %}
 <script type="text/x-template" id="titlebar">
     <div v-cloak>
-        <nav class="navbar navbar-expand-lg navbar-light" v-bind:class="{ 'bg-light': loggedIn }">
+        <nav class="navbar navbar-expand-lg " v-bind:class="[darkMode ? darkClass : lightClass]">
             <div class="nav-item">
                 <div class="card">
                     <div class="card-body">
