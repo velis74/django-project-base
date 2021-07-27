@@ -31,6 +31,9 @@ const login = {
       makeLogin() {
         Session.login(this.loginModel.username, this.loginModel.password);
       },
+      focusPassword() {
+        document.getElementsByName('psw')[0].focus();
+      },
     },
   },
 };

@@ -3,8 +3,8 @@
     <div class="nav-item login-container" v-cloak>
         <div>
             <form @submit.prevent>
-                <input type="text" v-model="loginModel['username']" placeholder="Username" name="username">
-                <input type="password" v-model="loginModel['password']" placeholder="Password" name="psw">
+                <input type="text" v-on:keyup.enter="focusPassword" v-model="loginModel['username']" placeholder="Username" name="username">
+                <input type="password" v-on:keyup.enter="makeLogin" v-model="loginModel['password']" placeholder="Password" name="psw">
                 <div class="btn-group dropleft" style="display: inline;">
                     <button v-if="socialAuth.length" type="button" class="btn btn-sm dropdown-toggle"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
