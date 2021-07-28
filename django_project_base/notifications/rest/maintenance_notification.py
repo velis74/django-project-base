@@ -114,8 +114,17 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer
 
-    def get_queryset(self) -> list:
-        return DjangoProjectBaseNotification.objects.maintenance_notifications()
+    def get_queryset(self):
+        if settings.MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET:
+            return DjangoProjectBaseNotification.objects.maintenance_notifications()
+        else:
+            now: datetime.datetime = utc_now()
+            queryset = DjangoProjectBaseNotification.objects.filter(
+                type=NotificationType.MAINTENANCE.value,
+                delayed_to__gt=now,
+                delayed_to__lt=now + datetime.timedelta(hours=8)
+            )
+            return queryset
 
     @extend_schema(
         request=MaintenanceNotificationSerializer(),

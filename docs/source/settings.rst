@@ -47,6 +47,16 @@ Read more in :ref:`Project slug` chapter.
 
 Read more in :ref:`Maintenance notifications` chapter.
 
+**MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET**
+
+.. code-block:: python
+
+  MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET=<bool>
+
+Maintenance notifications use cached queryset. Default is True.
+
+Read more in :ref:`Maintenance notifications` chapter.
+
 **DJANGO_USER_CACHE**
 
 .. code-block:: python
