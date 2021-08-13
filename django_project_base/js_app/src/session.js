@@ -18,6 +18,8 @@ class Session {
         window.location.href = '/';
       });
       Session.checkLogin();
+    }).catch(() => {
+      Store.delete('current-user');
     });
   }
 
@@ -37,6 +39,8 @@ class Session {
       // eslint-disable-next-line max-len
       // Store.set('current-project', response.data['default-project'][PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
       document.dispatchEvent(createEvent('login', response.data));
+    }).catch(() => {
+      Store.delete('current-user');
     });
   }
 }

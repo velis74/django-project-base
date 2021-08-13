@@ -43,7 +43,7 @@ const titlebar = {
         this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
         this.loadData();
         document.addEventListener('login', (payload) => {
-          if (payload.detail) {
+          if (payload.detail && payload.detail['default-project']) {
             this.titleBarProps = payload.detail['default-project'];
           } else {
             this.loadData();
