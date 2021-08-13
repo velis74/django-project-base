@@ -11,6 +11,7 @@ import { login } from './login';
 import { userProfile } from './userProfile';
 import { apiClient as ApiClient } from '../apiClient';
 import { showMaintenanceNotification } from '../notifications';
+import { Session } from '../session';
 
 const titlebar = {
   id: 'titlebar',
@@ -38,27 +39,29 @@ const titlebar = {
       this.maintenanceNoticesPeriodicApiCall = null;
     },
     created() {
-      this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
-      this.loadData();
-      document.addEventListener('login', (payload) => {
-        if (payload.detail) {
-          this.titleBarProps = payload.detail['default-project'];
-        } else {
-          this.loadData();
-        }
-        this.loggedIn = true;
-      });
-      document.addEventListener('logout', () => {
-        this.loggedIn = null;
-        this.titleBarProps = {};
-      });
-      document.addEventListener('project-selected', () => {
+      Session.checkLogin(false).then(() => {
+        this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
         this.loadData();
+        document.addEventListener('login', (payload) => {
+          if (payload.detail) {
+            this.titleBarProps = payload.detail['default-project'];
+          } else {
+            this.loadData();
+          }
+          this.loggedIn = true;
+        });
+        document.addEventListener('logout', () => {
+          this.loggedIn = null;
+          this.titleBarProps = {};
+        });
+        document.addEventListener('project-selected', () => {
+          this.loadData();
+        });
+        document.addEventListener('maintenance-notification-acknowledged', () => {
+          this.maintenanceNotificationItem = null;
+        });
+        this.monitorMaintenanceNotifications();
       });
-      document.addEventListener('maintenance-notification-acknowledged', () => {
-        this.maintenanceNotificationItem = null;
-      });
-      this.monitorMaintenanceNotifications();
     },
     mounted() {
     },

@@ -30,9 +30,6 @@ const projectList = {
         this.loadData();
       });
     },
-    mounted() {
-
-    },
     computed: {
       projectTablePkName() {
         return PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME;
@@ -54,10 +51,11 @@ const projectList = {
       },
       setProjects(projectList) {
         this.projectList = projectList;
-        if (!Store.get('current-project')) {
-          Store.set('current-project', _.first(this.projectList)[this.projectTablePkName]);
-          document.dispatchEvent(ProjectSelected);
-        }
+        //  WE DO NOT HAVE CURRENT PROJECT FOR USER IMPLEMENTED, FOR NOW WE SKIP THIS
+        // if (!Store.get('current-project')) {
+        //   Store.set('current-project', _.first(this.projectList)[this.projectTablePkName]);
+        //   document.dispatchEvent(ProjectSelected);
+        // }
       },
       setPermissions(permissions) {
         this.permissions = permissions;

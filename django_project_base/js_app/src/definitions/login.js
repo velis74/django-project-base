@@ -19,12 +19,13 @@ const login = {
     created() {
     },
     mounted() {
-      Session.checkLogin(false);
-      if (!Store.get('current-user')) {
-        ApiClient.get('/account/social-auth-providers/').then((socProvResponse) => {
-          this.socialAuth = socProvResponse.data;
-        });
-      }
+      Session.checkLogin(false).then(() => {
+        if (!Store.get('current-user')) {
+          ApiClient.get('/account/social-auth-providers/').then((socProvResponse) => {
+            this.socialAuth = socProvResponse.data;
+          });
+        }
+      });
     },
     computed: {},
     methods: {
