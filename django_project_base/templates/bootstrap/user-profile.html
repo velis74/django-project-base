@@ -15,8 +15,8 @@
                     <h5 class="card-title" style="margin-top: 0.6em;" v-else-if="componentData.email">
                         {{ componentData.email }}
                         <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span></h5>
-                    <h5 class="card-title" style="margin-top: 0.6em;" v-else>
-                        {{ componentData.username || gettext('App user') }}
+                    <h5 class="card-title" style="margin-top: 0.6em;" v-else-if="componentData.username">
+                        {{ componentData.username }}
                         <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span></h5>
                 </div>
                 <ul class="navbar-nav">
