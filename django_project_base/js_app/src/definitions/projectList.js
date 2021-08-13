@@ -20,6 +20,7 @@ const projectList = {
         projectList: [],
         permissions: {},
         dataStore: new ProjectBaseData(),
+        isLoadingData: false,
       };
     },
     created() {
@@ -46,7 +47,18 @@ const projectList = {
         document.dispatchEvent(ProjectSelected);
       },
       loadData() {
-        this.dataStore.getProjects(this.setProjects);
+        if (this.isLoadingData) {
+          return;
+        }
+        this.isLoadingData = true;
+        const dataPromise = this.dataStore.getProjects(this.setProjects);
+        if (dataPromise) {
+          dataPromise.finally(() => {
+            this.isLoadingData = false;
+          });
+        } else {
+          this.isLoadingData = false;
+        }
         this.dataStore.getPermissions(this.setPermissions);
       },
       setProjects(projectList) {

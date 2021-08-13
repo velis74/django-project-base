@@ -8,9 +8,9 @@ import { Store } from './store';
 class ProjectBaseData {
   getProjects(callback) {
     if (!Store.get('current-user')) {
-      return;
+      return null;
     }
-    ApiClient.get('/project').then(response => {
+    return ApiClient.get('/project').then(response => {
       callback(response.data);
     }).catch(error => {
       callback([]);
