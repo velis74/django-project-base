@@ -16,19 +16,17 @@ const login = {
         socialAuth: [],
       };
     },
-    created() {
-    },
     mounted() {
-      Session.checkLogin(false).then(() => {
+      Session.checkLogin(false, this.checkLoginSuccessCallback);
+    },
+    methods: {
+      checkLoginSuccessCallback() {
         if (!Store.get('current-user')) {
           ApiClient.get('/account/social-auth-providers/').then((socProvResponse) => {
             this.socialAuth = socProvResponse.data;
           });
         }
-      });
-    },
-    computed: {},
-    methods: {
+      },
       makeLogin() {
         Session.login(this.loginModel.username, this.loginModel.password);
       },

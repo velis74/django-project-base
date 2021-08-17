@@ -39,7 +39,13 @@ const titlebar = {
       this.maintenanceNoticesPeriodicApiCall = null;
     },
     created() {
-      Session.checkLogin(false).then(() => {
+      Session.checkLogin(false, this.createdCallback);
+    },
+    methods: {
+      createdCallback() {
+        if (document.title) {
+          this.titleBarProps.name = document.title;
+        }
         this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
         this.loadData();
         document.addEventListener('login', (payload) => {
@@ -61,12 +67,7 @@ const titlebar = {
           this.maintenanceNotificationItem = null;
         });
         this.monitorMaintenanceNotifications();
-      });
-    },
-    mounted() {
-    },
-    computed: {},
-    methods: {
+      },
       loadData() {
         if (Store.get('redirect-to-auth')) {
           return;
