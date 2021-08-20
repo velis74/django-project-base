@@ -111,7 +111,7 @@ class ProfileRequest(object):
     def _get_queries(self, response):
         try:
             if (response == 'ok' or response.status_code == 200) and hasattr(
-                settings, 'PROFILER_LONG_RUNNING_TASK_THRESHOLD'):
+                    settings, 'PROFILER_LONG_RUNNING_TASK_THRESHOLD'):
                 query_list = []
                 for c in connections:
                     con = connections[c]
