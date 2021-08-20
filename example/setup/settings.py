@@ -171,7 +171,7 @@ AUTHENTICATION_BACKENDS = (
     'django_project_base.base.auth_backends.UsersCachingBackend',  # cache users for auth to gain performance
 )
 
-WSGI_LOG_LONG_REQUESTS = True
+PROFILER_LONG_RUNNING_TASK_THRESHOLD = 1000
 
 # Settings for Mailhog
 # https://github.com/mailhog/MailHog

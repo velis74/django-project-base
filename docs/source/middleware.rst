@@ -1,7 +1,8 @@
 Middleware
 ==========
 
-***Project Middleware***
+Project Middleware
+------------------
 
 ProjectMiddleware: If you wan't to set current project which is selected to request object you can use ProjectMiddleware
 which should be placed to start of MIDDLEWARE list in settings.py. Middleware sets DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES
@@ -26,8 +27,8 @@ DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PART setting description in setting sect
     ]
 
 
-***Performance profiler***
-
+Performance profiler
+--------------------
 
 Performance profiler module is providing functionality to log and display the summary of the most time-consuming requests.
 

@@ -100,3 +100,11 @@ Value in days, when the automatic process should delete profile marked as for de
 
 Path for documentation directory. Read more in :ref:`Documentation` chapter.
 
+**PROFILER_LONG_RUNNING_TASK_THRESHOLD**
+
+.. code-block:: python
+
+  PROFILER_LONG_RUNNING_TASK_THRESHOLD = 1000
+
+Define treshold in ms for profiling long running tasks. Read more in :ref:`Performance profiler`
+chapter.

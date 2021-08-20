@@ -99,8 +99,8 @@ class ProfileRequest(object):
             pos = params.find('&type=')
             return path + '/' + params[pos + 6:pos + 9]
 
-        if getattr(settings, 'WSGI_PARSE_REQUEST_PATH_FUNCTION', None):
-            split_module_path: list = settings.WSGI_PARSE_REQUEST_PATH_FUNCTION.split('.')
+        if getattr(settings, 'PROFILER_PATH_TRANSFORM', None):
+            split_module_path: list = settings.PROFILER_PATH_TRANSFORM.split('.')
             module: str = '.'.join(split_module_path[:(len(split_module_path) - 1)])
             method: str = split_module_path[-1]
             path = getattr(importlib.import_module(module), method)(
@@ -110,7 +110,8 @@ class ProfileRequest(object):
 
     def _get_queries(self, response):
         try:
-            if (response == 'ok' or response.status_code == 200) and settings.WSGI_LOG_LONG_REQUESTS:
+            if (response == 'ok' or response.status_code == 200) and hasattr(
+                    settings, 'PROFILER_LONG_RUNNING_TASK_THRESHOLD'):
                 query_list = []
                 for c in connections:
                     con = connections[c]
@@ -130,8 +131,8 @@ class ProfileRequest(object):
                                                                    str(self._settings['QUERY_STRING']))
                 if path_info:
                     duration = (end_time[0] - start_time[0], end_time[1] - start_time[1], end_time[2] - start_time[2])
-                    if settings.WSGI_LOG_LONG_REQUESTS:
-                        if duration[0] > 1000:
+                    if hasattr(settings, 'PROFILER_LONG_RUNNING_TASK_THRESHOLD'):
+                        if duration[0] > settings.PROFILER_LONG_RUNNING_TASK_THRESHOLD:
                             queries = self._get_queries(response)
                             r_data = {'timestamp': end_time[0] / 1000, 'duration': duration[0], 'queries': queries,
                                       'PATH_INFO': path_info}
