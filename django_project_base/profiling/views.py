@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.core.cache import cache
 from django.shortcuts import render
-from django_project_base.settings import WSGI_LOG_LONG_REQUESTS_COUNT
+from django_project_base.settings import PROFILER_LOG_LONG_REQUESTS_COUNT
 from dynamicforms.struct import Struct
 
 
@@ -20,7 +20,7 @@ def __get_debug_data():
     result_data = []
     requests = []
 
-    for cache_ptr in range(WSGI_LOG_LONG_REQUESTS_COUNT):
+    for cache_ptr in range(PROFILER_LOG_LONG_REQUESTS_COUNT):
         item = cache.get('long_running_cmds_data%d' % cache_ptr)
         if item:
             requests.append(item)
