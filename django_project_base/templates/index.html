@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>  Titlebar component example</title>
+    <title> Titlebar component example</title>
     <script src="{% url 'javascript-catalog' %}"></script>
     <link href="/static/fa-5.13.3/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
@@ -11,84 +11,16 @@
           crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
     {# include js lib and appropriate css #}
-    <link href="{% static 'bootstrap_template.css' %}" rel="stylesheet" crossorigin="anonymous">
-    <script src="{% static 'django-project-base.min.js' %}"></script>
+    <script src="{% static 'django-project-base/js/django-project-base.js' %}"></script>
 </head>
 <body>
 <div id="titlebar-app" class="titlebar-app">
     <titlebar>
     </titlebar>
 </div>
-{# include vue inline template for titlebar component from folder coresponding to included css file #}
-{% include "bootstrap/titlebar.html" %}
 <script>
   // add title bar to page
-  createApp('titlebar-app', titlebar);
-</script>
-<br/>
-<br/>
-
-{# define html app container #}
-{% verbatim %}
-<div id="new-list-projects-app">
-    <custom-projects-list></custom-projects-list>
-</div>
-<script type="text/x-template" id="custom-projects-list">
-    <div>
-        <a v-for="(project, idx) in projectList" v-on:click="projectSelectedNew" v-bind:key="project.slug + 'new_idx'"
-           href="#">
-            <img v-bind:src="project.logo">{{ project.name }}</a>
-        <a v-on:click="addNewProject" href="#">{{ gettext('Add project') }}</a>
-        <a v-on:click="newMethod" href="#">{{ gettext('Call method from global mixin') }}</a>
-    </div>
-</script>
-{% endverbatim %}
-
-<script>
-  // register new custom component with inline template and exisiting component definition
-
-  var newComponentDefinition = {
-    id: 'custom-projects-list',
-    type: 'x-template',
-    definition: {
-      mixins: [{
-        methods: projectList.definition.methods,
-      }],
-      template: `#custom-projects-list`,
-      data() {
-        return {
-          projectList: [],
-        };
-      },
-      created() {
-        this.loadData();
-      },
-      computed: {
-        dataStore() {
-          return new ProjectBaseData();
-        },
-      },
-      methods: {
-        projectSelectedNew(pk) {
-          showNotification('DEMO', 'NEW PROJECT SELECTED')
-        },
-        addNewProject() {
-          showNotification('DEMO', 'CREATE NEW PROJECT')
-        },
-      },
-    }
-  };
-
-  // custom methods are registered in Vue.mixin which is global and its methods are accessible in any Vue component
-  Vue.mixin({
-    methods: {
-      newMethod: function () {
-        showNotification('DEMO', 'NEW METHOD CALLED')
-      },
-    }
-  });
-
-  createApp('new-list-projects-app', newComponentDefinition);
+  createApp('titlebar-app', '<titlebar :projectlistVisible="false"/>');
 </script>
 </body>
 </html>
