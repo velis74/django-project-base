@@ -180,5 +180,18 @@ export default {
 
   .left-spacing {
     margin-left: 1em;
-   }
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  .card {
+    background-color: transparent !important;
+    border: none;
+  }
+
+  .card-title {
+    margin-bottom: 0;
+  }
 </style>

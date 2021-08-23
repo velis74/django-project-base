@@ -1,4 +1,5 @@
 const path = require('path');
+
 const libraryFileName = 'django-project-base';
 
 module.exports = {

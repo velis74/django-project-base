@@ -1,18 +1,19 @@
 <template>
   <div v-cloak class="titlebar-app">
     <nav class="navbar navbar-expand-lg " v-bind:class="[darkMode ? darkClass : lightClass]">
-      <div class="nav-item">
+      <div class="nav-item" v-if="titleBarProps.logo">
         <div class="card">
           <div class="card-body">
-            <img v-if="titleBarProps.logo" v-bind:src="titleBarProps.logo"
+            <img v-bind:src="titleBarProps.logo"
                  class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
           </div>
         </div>
       </div>
-      <div class="navbar-brand left-spacing" href="javascript:void(0);" style="cursor: default;">
+      <div class="navbar-brand left-spacing" v-if="titleBarProps.name" href="javascript:void(0);"
+           style="cursor: default;">
         {{ titleBarProps.name }}
       </div>
-      <div v-if="loggedIn" class="left-spacing">
+      <div v-if="breadcrumbsVisible && loggedIn" class="left-spacing">
         <breadcrumbs></breadcrumbs>
       </div>
       <div class="collapse navbar-collapse" v-if="projectlistVisible && loggedIn">
@@ -20,10 +21,10 @@
         </ul>
         <projectlist></projectlist>
       </div>
-      <div v-if="loggedIn">
+      <div v-if="userprofileVisible && loggedIn">
         <userprofile></userprofile>
       </div>
-      <div v-else>
+      <div v-else-if="!loggedIn && loginVisible" class="login">
         <login></login>
       </div>
     </nav>
@@ -69,11 +70,19 @@ export default {
       default: false,
       type: Boolean,
     },
+    projectlistVisible: {
+      type: Boolean,
+      default: true,
+    },
+    userprofileVisible: {
+      type: Boolean,
+      default: true,
+    },
     breadcrumbsVisible: {
       type: Boolean,
       default: true,
     },
-    projectlistVisible: {
+    loginVisible: {
       type: Boolean,
       default: true,
     },
@@ -151,11 +160,11 @@ export default {
               const now = Math.floor(Date.now() / 1000);
               let rangeIdentifier = 8;
               const hours8 = _.inRange(now, hours8Range[0], hours8Range[1])
-                && !_.size(_.filter(acknowledgeData, (v) => v === 8));
+                  && !_.size(_.filter(acknowledgeData, (v) => v === 8));
               const hours1 = _.inRange(now, hours1Range[0], hours1Range[1])
-                && !_.size(_.filter(acknowledgeData, (v) => v === 1));
+                  && !_.size(_.filter(acknowledgeData, (v) => v === 1));
               const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1])
-                && !_.size(_.filter(acknowledgeData, (v) => v === 5));
+                  && !_.size(_.filter(acknowledgeData, (v) => v === 5));
               if (hours1) {
                 rangeIdentifier = 1;
               }
@@ -197,4 +206,7 @@ export default {
   margin-left: 1em;
 }
 
+.login {
+  min-height: 2em;
+}
 </style>
