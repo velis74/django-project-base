@@ -1,15 +1,12 @@
-/* eslint-disable object-shorthand */
-/* eslint-disable no-undef */
-/* eslint-disable no-extra-boolean-cast */
 import Vue from 'vue';
 import { apiClient as ApiClient } from './apiClient';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from './events';
 
 const showNotification = (title, text, type = 'info') => {
   Vue.notify({
-    title: title,
-    text: text,
-    type: type,
+    title,
+    text,
+    type,
     data: {
       onNotificationClose: (item, closeFunction) => {
         closeFunction();
@@ -24,14 +21,14 @@ const showMaintenanceNotification = (noticeItem, rangeId) => {
   Vue.notify({
     title: noticeItem.message.subject,
     text: `
-        ${noticeItem.message.body} 
-        <br>  
+        ${noticeItem.message.body}
+        <br>
         ${noticeItem.message.footer}
         <br>
         <br>
-        Maintenance starts at: ${delayed} 
+        Maintenance starts at: ${delayed}
     `,
-    duration: duration,
+    duration,
     type: 'error',
     data: {
       onNotificationClose: (item, closeFunction, fromClick) => {
@@ -47,14 +44,14 @@ const showMaintenanceNotification = (noticeItem, rangeId) => {
         });
       },
       id: noticeItem.id,
-      duration: duration,
+      duration,
     },
   });
 };
 
 const showGeneralErrorNotification = (text) => {
   const options = {
-    title: gettext('Error'), // jshint ignore:line
+    title: window.gettext('Error'), // jshint ignore:line
     type: 'error',
     data: {
       onNotificationClose: (item, closeFunction) => {
@@ -62,7 +59,7 @@ const showGeneralErrorNotification = (text) => {
       },
     },
   };
-  if (!!text) {
+  if (text) {
     options.text = text;
   }
   Vue.notify(options);

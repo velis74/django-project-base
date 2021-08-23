@@ -1,27 +1,31 @@
-/* eslint-disable arrow-parens */
-/* eslint-disable arrow-body-style */
-/* eslint-disable max-len */
+/* eslint-disable no-unused-vars */
+
 import Vue from 'vue';
 import Notifications from 'vue-notification';
-import _ from 'lodash';
 
-const registerComponent = (componentId, componentDefinition) => {
-  if (componentDefinition.childComponentsDefinition && componentDefinition.childComponentsDefinition.length > 0) {
-    _.each(componentDefinition.childComponentsDefinition, ch => {
-      return registerComponent(ch.id, ch);
-    });
-  }
-  Vue.component(componentId, componentDefinition.definition);
+import breadcrumbs from './components/bootstrap/breadcrumbs.vue';
+import login from './components/bootstrap/login.vue';
+import modalwindow from './components/bootstrap/modalwindow.vue';
+import projectlist from './components/bootstrap/projectlist.vue';
+import titlebar from './components/bootstrap/titlebar.vue';
+import userprofile from './components/bootstrap/userprofile.vue';
+
+const componentsConfig = {
+  titlebar,
+  breadcrumbs,
+  login,
+  modalwindow,
+  projectlist,
+  userprofile,
 };
 
-const createApp = (elementId, mainComponentDefnition) => {
-  registerComponent(mainComponentDefnition.id, mainComponentDefnition);
+const createApp = (elementId, template) => {
   Vue.use(Notifications);
-  Vue.config.productionTip = false;
-
   return new Vue({
     el: `#${elementId}`,
+    template,
+    components: componentsConfig,
   });
 };
 
-export { createApp, registerComponent };
+export default createApp;
