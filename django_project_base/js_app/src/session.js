@@ -6,7 +6,6 @@ import { logoutEvent as LogoutEvent, createEvent } from './events';
 class Session {
   static login(username, password) {
     Store.clear();
-    Store.set('redirect-to-auth', false);
     ApiClient.post('/account/login/',
       { login: username, password }).then(() => {
       // ApiClient.get('/account/profile/current').then((response) => {
@@ -26,7 +25,6 @@ class Session {
   static logout() {
     ApiClient.post('/account/logout/').finally(() => {
       Store.clear();
-      Store.set('redirect-to-auth', true);
       document.dispatchEvent(LogoutEvent);
       window.location.href = '/';
     });

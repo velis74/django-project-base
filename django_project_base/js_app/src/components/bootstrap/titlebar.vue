@@ -132,9 +132,6 @@ export default {
       this.monitorMaintenanceNotifications();
     },
     loadData() {
-      if (Store.get('redirect-to-auth')) {
-        return;
-      }
       this.loadProjectData();
     },
     loadProjectData() {
