@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-item" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
+  <div class="nav-item breadcrumbs-component" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
     <div class="card">
       <div class="card-body">
         <nav aria-label="breadcrumb">

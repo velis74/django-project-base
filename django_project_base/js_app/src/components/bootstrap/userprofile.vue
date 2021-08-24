@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-item left-spacing">
+  <div class="nav-item left-spacing userprofile-component">
     <div class="card" data-toggle="dropdown">
       <div class="card-body">
         <img v-bind:src="componentData.avatar"

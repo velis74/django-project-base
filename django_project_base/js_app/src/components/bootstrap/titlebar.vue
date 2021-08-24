@@ -1,5 +1,5 @@
 <template>
-  <div v-cloak class="titlebar-app">
+  <div v-cloak class="titlebar-app titlebar-component">
     <nav class="navbar navbar-expand-lg " v-bind:class="[darkMode ? darkClass : lightClass]">
       <div class="nav-item" v-if="titleBarProps.logo">
         <div class="card">

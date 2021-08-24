@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-item project-list-dropdown" v-cloak>
+  <div class="nav-item project-list-dropdown projectlist-component" v-cloak>
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav">
         <li class="nav-item dropdown">

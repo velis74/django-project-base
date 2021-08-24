@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-item login-container" v-cloak>
+  <div class="nav-item login-container login-component" v-cloak>
     <div>
       <form @submit.prevent>
         <input type="text" v-on:keyup.enter="focusPassword"
