@@ -19,8 +19,7 @@
         </div>
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown"
-                 :style="componentData.avatar ? 'left: -4em;' : 'left: -7em;'">
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -7em;">
               <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
                  @click="showImpersonateLogin" href="#">{{ gettext('Impersonate user') }}</a>
               <a v-else-if="isImpersonated" class="dropdown-item"

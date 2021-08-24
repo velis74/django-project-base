@@ -4,7 +4,7 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
             <a v-for="project in projectList"
                v-on:click="projectSelected(project[projectTablePkName])"
                v-bind:key="project[projectTablePkName]" class="dropdown-item project-item" href="#">
