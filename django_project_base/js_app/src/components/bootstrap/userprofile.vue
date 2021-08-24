@@ -2,9 +2,9 @@
   <div class="nav-item left-spacing userprofile-component">
     <div class="card" data-toggle="dropdown">
       <div class="card-body">
-        <img v-bind:src="componentData.avatar"
+        <img v-if="componentData.avatar" v-bind:src="componentData.avatar"
              class="float-left rounded-circle">
-        <div class="user-names">
+        <div class="user-names" :style="componentData.avatar ? 'padding-left: 55px;' : ''">
           <h5 class="card-title" v-if="componentData.first_name && componentData.last_name">
             {{ componentData.first_name }} <br/> {{ componentData.last_name }}
             <span v-if="isImpersonated">({{
@@ -19,7 +19,8 @@
         </div>
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown"
+                 :style="componentData.avatar ? 'left: -4em;' : 'left: -7em;'">
               <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
                  @click="showImpersonateLogin" href="#">{{ gettext('Impersonate user') }}</a>
               <a v-else-if="isImpersonated" class="dropdown-item"
@@ -94,14 +95,6 @@ export default {
     },
   },
   methods: {
-    setAvatarImg(profileData) {
-      const { avatar } = profileData;
-      if (!avatar) {
-        // eslint-disable-next-line no-param-reassign
-        profileData.avatar = 'https://via.placeholder.com/45';
-      }
-      return profileData;
-    },
     loadData(force = false) {
       new ProjectBaseData().getPermissions((p) => {
         this.permissions = p;
@@ -109,13 +102,13 @@ export default {
       this.isImpersonated = !!Store.get('impersonated-user');
       const cachedProfile = Store.get('current-user');
       if (cachedProfile && !force) {
-        this.componentData = this.setAvatarImg(cachedProfile);
+        this.componentData = cachedProfile;
         return;
       }
       // eslint-disable-next-line consistent-return
       return new Promise((resolve, reject) => {
         ApiClient.get('/account/profile/current').then((profileResponse) => {
-          this.componentData = this.setAvatarImg(profileResponse.data);
+          this.componentData = profileResponse.data;
           Store.set('current-user', this.componentData);
           resolve();
         }).catch((err) => {
@@ -172,10 +165,6 @@ export default {
 <style scoped>
   .cursor-pointer {
       cursor: pointer;
-  }
-
-  .user-names {
-    padding-left: 55px;
   }
 
   .left-spacing {
