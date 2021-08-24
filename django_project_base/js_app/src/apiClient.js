@@ -33,10 +33,8 @@ apiClient.interceptors.response.use((response) => {
   const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
   const noSession = status === HTTP_401_UNAUTHORIZED;
   const hideErrorMsg = error.config && error.config.hideErrorNotice === true;
-  if (noSession && !Store.get('redirect-to-auth')) {
-    Store.delete('current-user');
-    Store.set('redirect-to-auth', true);
-    window.location.href = '/';
+  if (noSession) {
+    Store.clear();
   }
   if (!hideErrorMsg) {
     showGeneralErrorNotification(errMsg);

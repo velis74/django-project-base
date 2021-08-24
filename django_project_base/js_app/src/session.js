@@ -5,7 +5,7 @@ import { logoutEvent as LogoutEvent, createEvent } from './events';
 
 class Session {
   static login(username, password) {
-    Store.set('redirect-to-auth', false);
+    Store.clear();
     ApiClient.post('/account/login/',
       { login: username, password }).then(() => {
       // ApiClient.get('/account/profile/current').then((response) => {
@@ -19,15 +19,12 @@ class Session {
       // });
       // eslint-disable-next-line no-return-assign
       Session.checkLogin(true, () => window.location.href = '/');
-    }).catch(() => {
-      Store.delete('current-user');
     });
   }
 
   static logout() {
     ApiClient.post('/account/logout/').finally(() => {
       Store.clear();
-      Store.set('redirect-to-auth', true);
       document.dispatchEvent(LogoutEvent);
       window.location.href = '/';
     });
@@ -44,7 +41,7 @@ class Session {
         successCallback();
       }
     }).catch(() => {
-      Store.delete('current-user');
+      Store.clear();
     });
   }
 }
