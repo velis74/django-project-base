@@ -5,6 +5,7 @@ import { logoutEvent as LogoutEvent, createEvent } from './events';
 
 class Session {
   static login(username, password) {
+    Store.clear();
     Store.set('redirect-to-auth', false);
     ApiClient.post('/account/login/',
       { login: username, password }).then(() => {
@@ -19,8 +20,6 @@ class Session {
       // });
       // eslint-disable-next-line no-return-assign
       Session.checkLogin(true, () => window.location.href = '/');
-    }).catch(() => {
-      Store.delete('current-user');
     });
   }
 
@@ -44,7 +43,7 @@ class Session {
         successCallback();
       }
     }).catch(() => {
-      Store.delete('current-user');
+      Store.clear();
     });
   }
 }

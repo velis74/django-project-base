@@ -29,7 +29,7 @@ class ProjectBaseData {
         _permissions = { 'add-project': true, 'impersonate-user': true };
         Store.set('user-permission', _permissions);
         resolveCallback();
-      }, 2000);
+      }, 100);
     });
     permissionPromise.then(() => {
       callback(_permissions);
