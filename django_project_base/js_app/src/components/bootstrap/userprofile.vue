@@ -144,7 +144,7 @@ export default {
       });
     }, 250),
     reloadAfterImpersonationChange() {
-      this.loadData(true).then(() => {
+      this.loadData(true).finally(() => {
         window.location.href = '/';
       });
     },
