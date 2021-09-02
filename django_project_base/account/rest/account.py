@@ -2,9 +2,7 @@ import importlib
 import re
 from typing import List
 
-from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
@@ -162,7 +160,6 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     )
     @action(detail=False, methods=['post'], url_path='submit-change', url_name='submit-change',
             permission_classes=[IsAuthenticated])
-    @method_decorator(csrf_exempt)
     def change(self, request: Request) -> Response:
         return change_password(request._request)
 
