@@ -110,7 +110,7 @@ export default {
       window.dynamicforms.dialog.fromURL('/account/impersonate/new.component', 'new', impUserFakeUUID);
     },
     reloadAfterImpersonationChange() {
-      this.loadData(true).then(() => {
+      this.loadData(true).finally(() => {
         window.location.href = '/';
       });
     },

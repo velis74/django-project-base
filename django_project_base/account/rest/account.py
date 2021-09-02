@@ -24,7 +24,10 @@ from django_project_base.constants import ACCOUNT_URL_PREFIX
 class LoginSerializer(serializers.Serializer):
     login = fields.CharField(required=True)
     password = fields.CharField(required=True)
-    response_type = fields.ChoiceField(choices=['json', 'cookie'], required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.update({"return-type": fields.ChoiceField(choices=['json', 'cookie'], required=False)})
 
 
 class LoginViewSet(viewsets.ViewSet):
