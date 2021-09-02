@@ -14,12 +14,15 @@ const apiClient = axios.create({
 });
 
 const HTTP_401_UNAUTHORIZED = 401;
+// TODO: Uporabi dynamic forms API client.
 
 // Add a request interceptor
+// eslint-disable-next-line func-names
 apiClient.interceptors.request.use(function (config) {
   config.headers['Content-Type'] = 'application/json';
   config.headers['Current-Project'] = Store.get('current-project');
   return config;
+// eslint-disable-next-line func-names
 }, function (error) {
   return Promise.reject(error);
 });

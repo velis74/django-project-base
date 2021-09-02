@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     NOTIFICATIONS_APP_ID,
     'social_django',
     ACCOUNT_APP_ID,
+    'dynamicforms',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dynamicforms.context_processors.add_dynamicforms_settings',
             ],
         },
     },
@@ -150,8 +152,13 @@ REST_REGISTRATION = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
         'dynamicforms.renderers.TemplateHTMLRenderer',
+        'dynamicforms.renderers.ComponentHTMLRenderer',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'dynamicforms.filters.FilterBackend',
     )
 }
 

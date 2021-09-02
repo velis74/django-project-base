@@ -3,8 +3,8 @@ from typing import Union
 import swapper
 from django.conf import settings
 from django.http import Http404
-from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import ModelViewSet
+from dynamicforms.serializers import ModelSerializer
+from dynamicforms.viewsets import ModelViewSet
 
 
 class ProjectSerializer(ModelSerializer):

@@ -156,12 +156,12 @@ export default {
               const minutes5Range = [delayed - 10 * 60, delayed];
               const now = Math.floor(Date.now() / 1000);
               let rangeIdentifier = 8;
-              const hours8 = _.inRange(now, hours8Range[0], hours8Range[1])
-                  && !_.size(_.filter(acknowledgeData, (v) => v === 8));
-              const hours1 = _.inRange(now, hours1Range[0], hours1Range[1])
-                  && !_.size(_.filter(acknowledgeData, (v) => v === 1));
-              const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1])
-                  && !_.size(_.filter(acknowledgeData, (v) => v === 5));
+              const hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) &&
+                !_.size(_.filter(acknowledgeData, (v) => v === 8));
+              const hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) &&
+                !_.size(_.filter(acknowledgeData, (v) => v === 1));
+              const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) &&
+                !_.size(_.filter(acknowledgeData, (v) => v === 5));
               if (hours1) {
                 rangeIdentifier = 1;
               }

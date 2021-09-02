@@ -20,6 +20,8 @@
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
             <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -7em;">
+              <a class="dropdown-item" href="#" @click="userProfile">{{gettext('User profile')}}</a>
+              <a class="dropdown-item" href="#" @click="changePassword">{{gettext('Change password')}}</a>
               <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
                  @click="showImpersonateLogin" href="#">{{ gettext('Impersonate user') }}</a>
               <a v-else-if="isImpersonated" class="dropdown-item"
@@ -32,42 +34,28 @@
         </ul>
       </div>
     </div>
-    <modalwindow v-if="impersonateModalVisible">
-      <h5 slot="modal-title">{{ gettext('Search for user') }}</h5>
-      <h3 slot="header">
-        <button @click="showImpersonateLogin" type="button" class="close" data-dismiss="modal"
-                aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </h3>
-      <div slot="body" v-if="permissions['add-project']" class="col-sm-9">
-        <div class="row">
-          <input type="text" @keyup="searchUsers" v-model="userSearchInputQueryString"
-                 class="autocomplete form-control"
-                 id="userAutocomplete"
-                 data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
-          <ul class="dropdown-menu" style="width: 100%;" role="menu">
-            <li style="width: 100%" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
-                v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
-                user.full_name || user.email
-              }}</a></li>
-          </ul>
-        </div>
-      </div>
-      <div slot="footer">
-        <button class="btn-sm btn-primary" @click="changeUser">{{ gettext('OK') }}</button>
-      </div>
-    </modalwindow>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
+import Vue from 'vue';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import eventBus from 'dynamicformscomponents/src/logic/eventBus';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import actionHandlerMixin from 'dynamicformscomponents/src/mixins/actionHandlerMixin';
+
 import ProjectBaseData from '../../projectBaseData';
 import { Store } from '../../store';
 import { apiClient as ApiClient } from '../../apiClient';
 import { Session } from '../../session';
-import modalwindow from './modalwindow.vue';
+import ImpersonateDialog from './impersonate_dialog.vue';
+
+Vue.component(ImpersonateDialog.name, ImpersonateDialog);
+
+const chgPassFakeUUID = 'fake-uuid-chg-pass-654654-634565';
+const userProfileFakeUUID = 'fake-uuid-usr-prof-654654-634565';
+const impUserFakeUUID = 'fake-uuid-imp-user-654654-634565';
 
 export default {
   name: 'userprofile',
@@ -75,10 +63,6 @@ export default {
     return {
       componentData: {},
       permissions: {},
-      impersonateModalVisible: false,
-      usersFilter: [],
-      selectedUser: null,
-      userSearchInputQueryString: '',
       isImpersonated: false,
     };
   },
@@ -86,12 +70,14 @@ export default {
     this.loadData();
   },
   mounted() {
-
+    eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
+    eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
+    eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
   },
-  computed: {
-    searchUserPlaceholder() {
-      return this.gettext('Enter any user attribute');
-    },
+  beforeDestroy() {
+    eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
+    eventBus.$off(`tableActionExecuted_${userProfileFakeUUID}`);
+    eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
   },
   methods: {
     loadData(force = false) {
@@ -119,30 +105,10 @@ export default {
       Session.logout();
     },
     showImpersonateLogin() {
-      this.userSearchInputQueryString = '';
-      this.impersonateModalVisible = !this.impersonateModalVisible;
+      // TODO: Pred predelavo na df modal handler je bilo narejeno, da se je body pokazal samo za
+      //  "permissions['add-project']" Ali je to dejansko potrebno???
+      window.dynamicforms.dialog.fromURL('/account/impersonate/new.component', 'new', impUserFakeUUID);
     },
-    changeUser() {
-      ApiClient.post('/account/impersonate/start', { id: this.selectedUser.id }).then(() => {
-        this.impersonateModalVisible = false;
-        Store.set('impersonated-user', true);
-        this.reloadAfterImpersonationChange();
-      });
-    },
-    selectUser(user) {
-      this.selectedUser = user;
-      this.userSearchInputQueryString = user.full_name || user.email;
-    },
-    // eslint-disable-next-line func-names
-    searchUsers: _.debounce(function () {
-      if (!this.userSearchInputQueryString) {
-        return;
-      }
-      const url = `/account/profile?search=${this.userSearchInputQueryString}`;
-      ApiClient.get(url).then((response) => {
-        this.usersFilter = response.data;
-      });
-    }, 250),
     reloadAfterImpersonationChange() {
       this.loadData(true).then(() => {
         window.location.href = '/';
@@ -154,9 +120,46 @@ export default {
         this.reloadAfterImpersonationChange();
       });
     },
-  },
-  components: {
-    modalwindow,
+    userProfile() {
+      window.dynamicforms.dialog.fromURL(`/account/profile/${this.componentData.id}.component`, 'edit',
+        userProfileFakeUUID);
+    },
+    changePassword() {
+      window.dynamicforms.dialog.fromURL('/account/change-password/new.component', 'new', chgPassFakeUUID);
+    },
+    dialogBtnClick(payload) {
+      console.log(payload);
+      let data;
+      let params;
+      if (payload.action.name !== 'cancel') {
+        if (payload.modal.currentDialog.tableUuid === chgPassFakeUUID) {
+          data = {
+            old_password: payload.data.old_password,
+            password: payload.data.password,
+            password_confirm: payload.data.password_confirm,
+          };
+          params = { detailUrl: '/account/change-password/submit-change/', headers: undefined };
+        } else if (payload.modal.currentDialog.tableUuid === userProfileFakeUUID) {
+          data = payload.data;
+          params = { detailUrl: `/account/profile/${this.componentData.id}.json` };
+        } else if (payload.modal.currentDialog.tableUuid === impUserFakeUUID) {
+          data = {
+            id: payload.data.user_id,
+          };
+          params = {
+            detailUrl: '/account/impersonate/start',
+            submitMethod: 'post',
+            headers: undefined,
+            then: (() => {
+              this.impersonateModalVisible = false;
+              Store.set('impersonated-user', true);
+              this.reloadAfterImpersonationChange();
+            }),
+          };
+        }
+      }
+      actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
+    },
   },
 };
 </script>

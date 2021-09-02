@@ -2,9 +2,12 @@ import importlib
 import re
 from typing import List
 
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django_project_base.constants import ACCOUNT_URL_PREFIX
+from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import extend_schema, OpenApiResponse
+from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
+from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -14,6 +17,8 @@ from rest_registration.api.views import (
     change_password, login, logout, register, reset_password, send_reset_password_link, verify_email,
     verify_registration
 )
+
+from django_project_base.constants import ACCOUNT_URL_PREFIX
 
 
 class LoginSerializer(serializers.Serializer):
@@ -112,14 +117,38 @@ class LogoutViewSet(viewsets.ViewSet):
         return logout(request._request)
 
 
-class ChangePasswordSerializer(serializers.Serializer):
-    old_password = fields.CharField(required=True)
-    password = fields.CharField(required=True)
-    confirm_password = fields.CharField(required=True)
+class ChangePasswordSerializer(df_serializers.Serializer):
+    template_context = dict(url_reverse='change-password', dialog_classes='modal-lg', dialog_header_classes='bg-info')
+    form_titles = {
+        'table': '',
+        'new': _('Change password'),
+        'edit': '',
+    }
+
+    old_password = df_fields.CharField(required=True, password_field=True)
+    password = df_fields.CharField(required=True, password_field=True)
+    password_confirm = df_fields.CharField(required=True, password_field=True)
+
+    actions = Actions(add_form_buttons=True)
 
 
-class ChangePasswordViewSet(viewsets.ViewSet):
+class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ChangePasswordSerializer
+
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        # We need to set following flag (which is used while testing), because otherwise CSRF middleware
+        # (django/middleware/csrf.py -> process_view()) would execute request.POST, which would cause
+        # "django.http.request.RawPostDataException: You cannot access body after reading from request's data stream"
+        # when request will be initialized and authenticated later for rest_registration.api.views.change_password
+        #
+        # It is quite an ugly hack. But I cant find other way around. And security checks are anyway made by
+        # rest_registration.api.views.
+        request._dont_enforce_csrf_checks = True
+        return request
+
+    def new_object(self):
+        return dict(old_password='', password='', password_confirm='')
 
     @extend_schema(
         description='Change the user password.',
@@ -128,9 +157,10 @@ class ChangePasswordViewSet(viewsets.ViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description='Not allowed'),
         }
     )
-    @action(detail=False, methods=['post'], url_path='change-password', url_name='change-password',
+    @action(detail=False, methods=['post'], url_path='submit-change', url_name='submit-change',
             permission_classes=[IsAuthenticated])
-    def change_password(self, request: Request) -> Response:
+    @method_decorator(csrf_exempt)
+    def change(self, request: Request) -> Response:
         return change_password(request._request)
 
 

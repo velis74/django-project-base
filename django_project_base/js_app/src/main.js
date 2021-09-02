@@ -7,7 +7,7 @@ import { apiClient } from './apiClient';
 import { Store } from './store';
 import ProjectBaseData from './projectBaseData';
 
-import '@/assets/global.css';
+import './assets/global.css';
 
 import createApp from './apps';
 

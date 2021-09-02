@@ -6,22 +6,32 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache
 from django.db.models import Model
 from django.utils import timezone
-from django_project_base.rest.project import ProjectSerializer
-from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, DJANGO_USER_CACHE
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
+from dynamicforms import fields
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
-from rest_framework import exceptions, filters, serializers, status
+from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from django_project_base.rest.project import ProjectSerializer
+from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, DJANGO_USER_CACHE
+
 
 class ProfileSerializer(ModelSerializer):
-    full_name = serializers.SerializerMethodField('get_full_name', read_only=True)
-    delete_at = serializers.DateTimeField(write_only=True)
+    template_context = dict(url_reverse='profile-base-project')
+
+    form_titles = {
+        'table': 'User profiles',
+        'new': 'New user',
+        'edit': 'Edit user',
+    }
+
+    full_name = fields.SerializerMethodField('get_full_name', read_only=True)
+    delete_at = fields.DateTimeField(write_only=True)
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -43,7 +53,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model('django_project_base', 'Profile')
-        exclude = ()
+        exclude = ('groups', 'user_permissions')
 
 
 @extend_schema_view(

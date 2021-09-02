@@ -6,20 +6,19 @@
     <title> Titlebar component example</title>
     <script src="{% url 'javascript-catalog' %}"></script>
     <link href="/static/fa-5.13.3/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <link href="{% static 'django-project-base/css/django-project-base.css' %}" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
-<div id="titlebar-app" class="titlebar-app">
-</div>
+<div id="titlebar-app" class="titlebar-app"></div>
+<div id="modal-app"></div>
 </body>
 <script src="{% static 'django-project-base/js/django-project-base.js' %}"></script>
 <script src="{% static 'django-project-base/js/django-project-base-vendors.js' %}"></script>
 <script>
   // add title bar to page
-  createApp('titlebar-app', '<titlebar :projectlistVisible="true"/>');
+  window.dynamicformsUi = 'bootstrap';
+  createApp('titlebar-app', '<titlebar :projectlistVisible="true"/>', 'modal-app');
 </script>
 </html>
