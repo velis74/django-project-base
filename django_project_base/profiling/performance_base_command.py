@@ -1,6 +1,7 @@
 from typing import List
 
 from django.core.management import BaseCommand
+
 from django_project_base.profiling.middleware import ProfileRequest
 
 

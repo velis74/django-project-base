@@ -1,10 +1,10 @@
 from django.conf.urls import url
 from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
+from drf_spectacular.settings import SPECTACULAR_DEFAULTS
 
 from django_project_base.account import urls as accounts_router
 from django_project_base.router import django_project_base_router
-from drf_spectacular.settings import SPECTACULAR_DEFAULTS
 
 SPECTACULAR_DEFAULTS['TITLE'] = 'Rest documentation'
 SPECTACULAR_DEFAULTS['DESCRIPTION'] = 'Api documentation'

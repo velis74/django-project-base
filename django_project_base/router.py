@@ -1,5 +1,6 @@
-from django_project_base.rest.project import ProjectViewSet
 from rest_framework.routers import DefaultRouter
+
+from django_project_base.rest.project import ProjectViewSet
 
 
 def filter_rest_documentation_endpoints(endpoints: list) -> list:

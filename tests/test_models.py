@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.test import TestCase
-from example.demo_django_base.models import Project, UserProfile
 from rest_framework.test import APIClient
+
+from example.demo_django_base.models import Project, UserProfile
 
 
 class TestProject(TestCase):

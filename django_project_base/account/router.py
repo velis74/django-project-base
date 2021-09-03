@@ -1,10 +1,11 @@
+from rest_framework.routers import DefaultRouter
+
 from django_project_base.account.rest.account import (
     ChangePasswordViewSet, LoginViewSet, LogoutViewSet, RegisterViewSet, ResetPasswordViewSet,
     SendResetPasswordLinkViewSet, VerifyRegistrationViewSet
 )
 from django_project_base.account.rest.impersonate import ImpersonateUserViewset
 from django_project_base.account.rest.profile import ProfileViewSet
-from rest_framework.routers import DefaultRouter
 
 accounts_router = DefaultRouter(trailing_slash=True)
 

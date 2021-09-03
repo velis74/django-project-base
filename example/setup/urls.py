@@ -18,11 +18,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.profiling import app_debug_view
 from django_project_base.settings import DOCUMENTATION_DIRECTORY
 from django_project_base.views import documentation_view
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from example.demo_django_base.views import index_view, page1_view
 
 urlpatterns = [

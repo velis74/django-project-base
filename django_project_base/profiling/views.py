@@ -3,8 +3,9 @@ from datetime import datetime
 
 from django.core.cache import cache
 from django.shortcuts import render
-from django_project_base.settings import PROFILER_LOG_LONG_REQUESTS_COUNT
 from dynamicforms.struct import Struct
+
+from django_project_base.settings import PROFILER_LOG_LONG_REQUESTS_COUNT
 
 
 def app_debug_view(request):

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import SET_NULL
 from django.utils.translation import ugettext_lazy as _
+
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
 from django_project_base.notifications.utils import utc_now

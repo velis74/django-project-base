@@ -4,6 +4,7 @@ import os
 import sys
 
 import setuptools
+
 from django_project_base import __version__
 
 
@@ -55,7 +56,6 @@ if sys.argv[1] == 'publish':
     os.system('git tag -a %s -m \'version %s\'' % (version, version))
     os.system('git push --tags')
     sys.exit()
-
 
 setuptools.setup(
     name="django-project-base",

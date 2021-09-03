@@ -1,8 +1,9 @@
 from django.core.cache import cache
 from django.test import TestCase
+from rest_framework.test import APIClient
+
 from django_project_base.settings import DJANGO_USER_CACHE
 from example.demo_django_base.models import UserProfile
-from rest_framework.test import APIClient
 
 
 class TestUsersCachingBackend(TestCase):

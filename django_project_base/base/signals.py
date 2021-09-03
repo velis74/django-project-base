@@ -1,6 +1,7 @@
 from django.core.cache import cache
-from django_project_base.settings import CACHE_IMPERSONATE_USER
 from hijack.helpers import hijack_ended, hijack_started
+
+from django_project_base.settings import CACHE_IMPERSONATE_USER
 
 
 def hijack_set_is_hijacked(sender, **kwargs):

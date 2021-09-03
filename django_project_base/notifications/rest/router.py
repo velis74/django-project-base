@@ -1,5 +1,6 @@
-from django_project_base.notifications.rest.maintenance_notification import UsersMaintenanceNotificationViewset
 from rest_framework.routers import DefaultRouter
+
+from django_project_base.notifications.rest.maintenance_notification import UsersMaintenanceNotificationViewset
 
 
 class NotificationsRouter(DefaultRouter):
