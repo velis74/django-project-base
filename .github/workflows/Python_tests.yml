@@ -22,7 +22,9 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox
+        run: |
+          pip install versio
+          pip install tox
       - name: Prepare Selenium enviroment
         run: |
           #Download geckodriver
