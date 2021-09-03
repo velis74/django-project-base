@@ -34,6 +34,10 @@ with open('README.rst', 'r') as fh:
 with open('requirements.txt', 'r') as fh:
     requirements = fh.readlines()
 
+for lnum, line in enumerate(requirements):
+    if line[:3] == 'git':
+        requirements.pop(lnum)
+
 version = __version__
 
 if sys.argv[1] == 'publish':
