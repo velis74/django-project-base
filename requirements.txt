@@ -12,3 +12,5 @@ sphinx==3.5.4
 rst2pdf
 tox
 social-auth-app-django
+django-permissions-policy
+django-csp
