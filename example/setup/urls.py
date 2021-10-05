@@ -29,7 +29,7 @@ from example.demo_django_base.views import index_view, page1_view
 urlpatterns = [
     path('', index_view, name='index'),
     path('page1/', page1_view, name='page1'),
-    path('admin/', admin.site.urls),
+    path('dpb_admin/', admin.site.urls),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
     path('account/', include('django_project_base.account.urls')),
