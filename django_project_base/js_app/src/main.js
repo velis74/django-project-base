@@ -1,20 +1,19 @@
 import 'es6-promise/auto';
 import Vue from 'vue';
 
-import { showNotification, showGeneralErrorNotification } from './notifications';
-
 import { apiClient } from './apiClient';
-import { Store } from './store';
+import createApp from './apps';
+import { showNotification, showGeneralErrorNotification } from './notifications';
 import ProjectBaseData from './projectBaseData';
+import { Store } from './store';
 
 import './assets/global.css';
-
-import createApp from './apps';
 
 if (typeof window.gettext === 'undefined') {
   window.gettext = (v) => v;
 }
 
+Vue.config.productionTip = false;
 Vue.prototype.gettext = window.gettext;
 
 window.Vue = Vue;
