@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -40,4 +41,5 @@ urlpatterns = [
             name='docs-files'),
     path('account/social/', include('social_django.urls', namespace="social")),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    url(r'^dynamicforms/', include('dynamicforms.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -192,3 +192,10 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 SERVER_EMAIL = ''
 DEFAULT_FROM_EMAIL = 'info@example.com'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+DYNAMICFORMS = {
+    'allow_anonymous_user_to_preupload_files': True,
+}
