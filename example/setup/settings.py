@@ -156,6 +156,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'dynamicforms.renderers.TemplateHTMLRenderer',
         'dynamicforms.renderers.ComponentHTMLRenderer',
+        'dynamicforms.renderers.ComponentDefRenderer',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'dynamicforms.filters.FilterBackend',

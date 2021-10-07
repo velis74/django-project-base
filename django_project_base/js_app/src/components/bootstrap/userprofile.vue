@@ -38,17 +38,18 @@
 </template>
 
 <script>
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import eventBus from 'dynamicforms/src/logic/eventBus';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
 import Vue from 'vue';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-import eventBus from 'dynamicformscomponents/src/logic/eventBus';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import actionHandlerMixin from 'dynamicformscomponents/src/mixins/actionHandlerMixin';
-
-import ProjectBaseData from '../../projectBaseData';
-import { Store } from '../../store';
 import { apiClient as ApiClient } from '../../apiClient';
+import ProjectBaseData from '../../projectBaseData';
 import { Session } from '../../session';
+import { Store } from '../../store';
+
 import ImpersonateDialog from './impersonate_dialog.vue';
 
 Vue.component(ImpersonateDialog.name, ImpersonateDialog);
@@ -105,9 +106,9 @@ export default {
       Session.logout();
     },
     showImpersonateLogin() {
-      // TODO: Pred predelavo na df modal handler je bilo narejeno, da se je body pokazal samo za
-      //  "permissions['add-project']" Ali je to dejansko potrebno???
-      window.dynamicforms.dialog.fromURL('/account/impersonate/new.component', 'new', impUserFakeUUID);
+      window.dynamicforms.dialog.fromURL(
+        '/account/impersonate/new.componentdef', 'new', impUserFakeUUID,
+      );
     },
     reloadAfterImpersonationChange() {
       this.loadData(true).finally(() => {
@@ -121,11 +122,11 @@ export default {
       });
     },
     userProfile() {
-      window.dynamicforms.dialog.fromURL(`/account/profile/${this.componentData.id}.component`, 'edit',
+      window.dynamicforms.dialog.fromURL(`/account/profile/${this.componentData.id}.componentdef`, 'edit',
         userProfileFakeUUID);
     },
     changePassword() {
-      window.dynamicforms.dialog.fromURL('/account/change-password/new.component', 'new', chgPassFakeUUID);
+      window.dynamicforms.dialog.fromURL('/account/change-password/new.componentdef', 'new', chgPassFakeUUID);
     },
     dialogBtnClick(payload) {
       console.log(payload);

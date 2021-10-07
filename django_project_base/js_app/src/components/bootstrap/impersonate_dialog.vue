@@ -22,7 +22,7 @@ record['user']"
 
 import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import eventBus from 'dynamicformscomponents/src/logic/eventBus';
+import eventBus from 'dynamicforms/src/logic/eventBus';
 import { apiClient as ApiClient } from '../../apiClient';
 
 export default {

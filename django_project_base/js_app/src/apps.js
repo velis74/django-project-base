@@ -1,15 +1,11 @@
-/* eslint-disable no-unused-vars */
-
+import ModalHandler from 'dynamicforms/src/components/modalhandler.vue';
 import Vue from 'vue';
 import Notifications from 'vue-notification';
 
 // Dokler nimamo npm packageja je najbolje, da se dynamicforms poveže preko npm link-a:
 //  - Na dynamicforms narediš "npm run build", in "npm link"
-//  - Na django project base narediš "npm link dynamicformscomponents"
+//  - Na django project base narediš "npm link dynamicforms"
 // Potem bi moralo delati
-
-// eslint-disable-next-line import/no-extraneous-dependencies
-import ModalHandler from 'dynamicformscomponents/src/components/modalhandler.vue';
 
 import breadcrumbs from './components/bootstrap/breadcrumbs.vue';
 import login from './components/bootstrap/login.vue';
