@@ -1,10 +1,12 @@
-def set_django_security(django_settings, deploy=True):
+def set_django_security(django_settings, deploy=True, swagger_version=None):
     """
     Sets django web security settings.
     Call this from settings.py
 
     :param django_settings: globals() of your application
     :param deploy: True if server is deployed, False for development
+    :param swagger_version: If you are using swagger or drf_spectacular set swagger version to allow CSP to access
+        swagger files.
     :return:
     """
 
@@ -54,6 +56,12 @@ def set_django_security(django_settings, deploy=True):
     ]
     # via.placeholder.com - because of default user logo
     django_settings['CSP_IMG_SRC'] = ["'self'", 'via.placeholder.com']
+
+    if swagger_version:
+        django_settings['CSP_STYLE_SRC'].append('unpkg.com/swagger-ui-dist@%s/' % swagger_version)
+        django_settings['CSP_SCRIPT_SRC'].append('unpkg.com/swagger-ui-dist@%s/' % swagger_version)
+        django_settings['CSP_IMG_SRC'].append('unpkg.com/swagger-ui-dist@%s/' % swagger_version)
+
     django_settings['CSP_FONT_SRC'] = ["'self'", 'cdnjs.cloudflare.com']
     django_settings['CSP_CONNECT_SRC'] = ["'self'", ]
     django_settings['CSP_OBJECT_SRC'] = ["'none'", ]
