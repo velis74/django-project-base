@@ -5,10 +5,11 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
 import axios from 'axios';
+
 import { Store } from './store';
 
 const apiClient = axios.create({
-  xsrfCookieName: 'csrftoken',
+  xsrfCookieName: window.csrf_token_name || '__Host-csrftoken',
   xsrfHeaderName: 'X-CSRFToken',
   withCredentials: true,
 });
@@ -21,6 +22,13 @@ const HTTP_401_UNAUTHORIZED = 401;
 apiClient.interceptors.request.use(function (config) {
   config.headers['Content-Type'] = 'application/json';
   config.headers['Current-Project'] = Store.get('current-project');
+  if (!config.headers['X-CSRFToken']) {
+    if (typeof dynamicforms !== 'undefined' && dynamicforms.csrf_token) {
+      config.headers['X-CSRFToken'] = dynamicforms.csrf_token;
+    } else if (window.csrf_token) {
+      config.headers['X-CSRFToken'] = window.csrf_token;
+    }
+  }
   return config;
 // eslint-disable-next-line func-names
 }, function (error) {

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ModalHandler from 'dynamicforms/src/components/modalhandler.vue';
 import Vue from 'vue';
 import Notifications from 'vue-notification';

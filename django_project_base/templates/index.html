@@ -10,15 +10,18 @@
           crossorigin="anonymous">
     <link href="{% static 'django-project-base/css/django-project-base.css' %}" rel="stylesheet" crossorigin="anonymous">
 </head>
+<script>
+    window.csrf_token_name = 'csrftoken';
+    window.dynamicformsUi = 'bootstrap';
+</script>
 <body>
 <div id="titlebar-app" class="titlebar-app"></div>
 <div id="modal-app"></div>
+<script type="application/javascript" src="{% static 'django-project-base/js/django-project-base-vendors.js' %}"></script>
+<script type="application/javascript" src="{% static 'django-project-base/js/django-project-base.js' %}"></script>
 </body>
-<script src="{% static 'django-project-base/js/django-project-base.js' %}"></script>
-<script src="{% static 'django-project-base/js/django-project-base-vendors.js' %}"></script>
 <script>
   // add title bar to page
-  window.dynamicformsUi = 'bootstrap';
   createApp('titlebar-app', '<titlebar :projectlistVisible="true"/>', 'modal-app');
 </script>
 </html>

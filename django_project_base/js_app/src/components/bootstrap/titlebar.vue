@@ -54,10 +54,12 @@
 
 <script>
 import _ from 'lodash';
-import { Session } from '../../session';
-import { Store } from '../../store';
+
 import { apiClient as ApiClient } from '../../apiClient';
 import { showMaintenanceNotification } from '../../notifications';
+import { Session } from '../../session';
+import { Store } from '../../store';
+
 import breadcrumbs from './breadcrumbs.vue';
 import login from './login.vue';
 import projectlist from './projectlist.vue';

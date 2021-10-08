@@ -10,13 +10,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
 </head>
+<script>
+  window.csrf_token_name = 'csrftoken';
+  window.dynamicformsUi = 'bootstrap';
+</script>
 <body>
 <div id="app"></div>
 <div id="modal-app"></div>
 <!-- built files will be auto injected -->
 </body>
 <script>
-  window.dynamicformsUi = 'bootstrap';
   createApp('app', '<titlebar :projectlistVisible="true"/>', 'modal-app');
 </script>
 </html>

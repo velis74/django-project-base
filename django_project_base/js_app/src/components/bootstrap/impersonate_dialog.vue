@@ -19,10 +19,10 @@ record['user']"
 </template>
 
 <script>
-
-import _ from 'lodash';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import eventBus from 'dynamicforms/src/logic/eventBus';
+import _ from 'lodash';
+
 import { apiClient as ApiClient } from '../../apiClient';
 
 export default {

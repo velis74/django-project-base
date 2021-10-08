@@ -21,11 +21,12 @@
 
 <script>
 import _ from 'lodash';
-import ProjectBaseData from '../../projectBaseData';
-import { Store } from '../../store';
+
 import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from '../../constants';
 import { projectSelected as ProjectSelected } from '../../events';
 import { showNotification } from '../../notifications';
+import ProjectBaseData from '../../projectBaseData';
+import { Store } from '../../store';
 
 export default {
   name: 'projectlist',
