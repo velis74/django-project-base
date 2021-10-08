@@ -1,6 +1,6 @@
-import { Store } from './store';
 import { apiClient as ApiClient } from './apiClient';
 import { logoutEvent as LogoutEvent, createEvent } from './events';
+import { Store } from './store';
 // import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './constants';
 
 class Session {

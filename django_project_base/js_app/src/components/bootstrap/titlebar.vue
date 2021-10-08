@@ -4,13 +4,18 @@
       <div class="nav-item" v-if="titleBarProps.logo">
         <div class="card">
           <div class="card-body">
-            <img v-bind:src="titleBarProps.logo"
-                 class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
+            <img
+              v-bind:src="titleBarProps.logo"
+              class="float-left rounded-circle logo-image"
+              onclick="window.location.href='/'">
           </div>
         </div>
       </div>
-      <div class="navbar-brand left-spacing" v-if="titleBarProps.name" href="javascript:void(0);"
-           style="cursor: default;">
+      <div
+        class="navbar-brand left-spacing"
+        v-if="titleBarProps.name"
+        href="javascript:void(0);"
+        style="cursor: default;">
         {{ titleBarProps.name }}
       </div>
       <div v-if="breadcrumbsVisible && loggedIn" class="left-spacing">
@@ -30,8 +35,10 @@
     </nav>
     <notifications width="350" position="top center" v-if="loggedIn">
       <template slot="body" slot-scope="{ item, close }">
-        <div @click="item.data.onNotificationClose(item, close, true)" class="vue-notification"
-             :class="item.type">
+        <div
+          @click="item.data.onNotificationClose(item, close, true)"
+          class="vue-notification"
+          :class="item.type">
           <div>
             <div style="display: inline-block; max-width: 95%;" class="notification-title">
               <div v-html="item.title"></div>
@@ -39,8 +46,9 @@
             <div style="display: inline-block; max-width: 95%;" class="notification-content">
               <div v-html="item.text"/>
             </div>
-            <div style="display: inline-block; float: right; vertical-align: middle;"
-                 v-if="item.data.duration === -1">
+            <div
+              style="display: inline-block; float: right; vertical-align: middle;"
+              v-if="item.data.duration === -1">
               <button class="close" @click="item.data.onNotificationClose(item, close)">
                 <i class="fas fa-times fa-xs"></i>
               </button>
@@ -54,10 +62,12 @@
 
 <script>
 import _ from 'lodash';
-import { Session } from '../../session';
-import { Store } from '../../store';
+
 import { apiClient as ApiClient } from '../../apiClient';
 import { showMaintenanceNotification } from '../../notifications';
+import { Session } from '../../session';
+import { Store } from '../../store';
+
 import breadcrumbs from './breadcrumbs.vue';
 import login from './login.vue';
 import projectlist from './projectlist.vue';
@@ -136,44 +146,47 @@ export default {
     },
     loadProjectData() {
       if (Store.get('current-project')) {
-        ApiClient.get(`/project/${Store.get('current-project')}`).then((projectResponse) => {
-          this.titleBarProps = projectResponse.data;
-        });
+        ApiClient.get(`/project/${Store.get('current-project')}`)
+          .then((projectResponse) => {
+            this.titleBarProps = projectResponse.data;
+          });
       }
     },
     monitorMaintenanceNotifications() {
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
         if (Store.get('current-user')) {
           ApiClient.get('/maintenance-notification/',
-            { hideErrorNotice: true }).then((notificationResponse) => {
-            // eslint-disable-next-line no-underscore-dangle
-            const _notification = _.first(notificationResponse.data);
-            if (_notification) {
-              const acknowledgeData = _notification.notification_acknowledged_data;
-              const delayed = _notification.delayed_to_timestamp;
-              const hours8Range = [delayed - 10 * 3600, (delayed - 2 * 3600) - 1];
-              const hours1Range = [delayed - 2 * 3600, (delayed - 10 * 60) - 1];
-              const minutes5Range = [delayed - 10 * 60, delayed];
-              const now = Math.floor(Date.now() / 1000);
-              let rangeIdentifier = 8;
-              const hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) &&
-                !_.size(_.filter(acknowledgeData, (v) => v === 8));
-              const hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) &&
-                !_.size(_.filter(acknowledgeData, (v) => v === 1));
-              const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) &&
-                !_.size(_.filter(acknowledgeData, (v) => v === 5));
-              if (hours1) {
-                rangeIdentifier = 1;
+            { hideErrorNotice: true })
+            .then((notificationResponse) => {
+              // eslint-disable-next-line no-underscore-dangle
+              const _notification = _.first(notificationResponse.data);
+              if (_notification) {
+                const acknowledgeData = _notification.notification_acknowledged_data;
+                const delayed = _notification.delayed_to_timestamp;
+                const hours8Range = [delayed - 10 * 3600, (delayed - 2 * 3600) - 1];
+                const hours1Range = [delayed - 2 * 3600, (delayed - 10 * 60) - 1];
+                const minutes5Range = [delayed - 10 * 60, delayed];
+                const now = Math.floor(Date.now() / 1000);
+                let rangeIdentifier = 8;
+                const hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) &&
+                  !_.size(_.filter(acknowledgeData, (v) => v === 8));
+                const hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) &&
+                  !_.size(_.filter(acknowledgeData, (v) => v === 1));
+                const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) &&
+                  !_.size(_.filter(acknowledgeData, (v) => v === 5));
+                if (hours1) {
+                  rangeIdentifier = 1;
+                }
+                if (minutes5) {
+                  rangeIdentifier = 5;
+                }
+                if (!this.maintenanceNotificationItem && (hours8 || hours1 || minutes5)) {
+                  this.maintenanceNotificationItem = _notification;
+                  showMaintenanceNotification(this.maintenanceNotificationItem, rangeIdentifier);
+                }
               }
-              if (minutes5) {
-                rangeIdentifier = 5;
-              }
-              if (!this.maintenanceNotificationItem && (hours8 || hours1 || minutes5)) {
-                this.maintenanceNotificationItem = _notification;
-                showMaintenanceNotification(this.maintenanceNotificationItem, rangeIdentifier);
-              }
-            }
-          }).catch();
+            })
+            .catch();
         }
       }, 45000);
     },

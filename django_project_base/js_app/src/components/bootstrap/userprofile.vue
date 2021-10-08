@@ -2,8 +2,10 @@
   <div class="nav-item left-spacing userprofile-component">
     <div class="card" data-toggle="dropdown">
       <div class="card-body">
-        <img v-if="componentData.avatar" v-bind:src="componentData.avatar"
-             class="float-left rounded-circle">
+        <img
+          v-if="componentData.avatar"
+          v-bind:src="componentData.avatar"
+          class="float-left rounded-circle">
         <div class="user-names" :style="componentData.avatar ? 'padding-left: 55px;' : ''">
           <h5 class="card-title" v-if="componentData.first_name && componentData.last_name">
             {{ componentData.first_name }} <br/> {{ componentData.last_name }}
@@ -20,12 +22,18 @@
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
             <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -7em;">
-              <a class="dropdown-item" href="#" @click="userProfile">{{gettext('User profile')}}</a>
-              <a class="dropdown-item" href="#" @click="changePassword">{{gettext('Change password')}}</a>
-              <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
-                 @click="showImpersonateLogin" href="#">{{ gettext('Impersonate user') }}</a>
-              <a v-else-if="isImpersonated" class="dropdown-item"
-                 @click="stopImpersonation" href="#">{{ gettext('Stop impersonation') }}</a>
+              <a class="dropdown-item" href="#" @click="userProfile">{{ gettext('User profile') }}</a>
+              <a class="dropdown-item" href="#" @click="changePassword">{{ gettext('Change password') }}</a>
+              <a
+                v-if="permissions['impersonate-user'] && !isImpersonated"
+                class="dropdown-item"
+                @click="showImpersonateLogin"
+                href="#">{{ gettext('Impersonate user') }}</a>
+              <a
+                v-else-if="isImpersonated"
+                class="dropdown-item"
+                @click="stopImpersonation"
+                href="#">{{ gettext('Stop impersonation') }}</a>
               <a class="dropdown-item" href="#" @click="makeLogout">{{
                   gettext('Logout')
                 }}</a>
@@ -93,13 +101,15 @@ export default {
       }
       // eslint-disable-next-line consistent-return
       return new Promise((resolve, reject) => {
-        ApiClient.get('/account/profile/current').then((profileResponse) => {
-          this.componentData = profileResponse.data;
-          Store.set('current-user', this.componentData);
-          resolve();
-        }).catch((err) => {
-          reject(err);
-        });
+        ApiClient.get('/account/profile/current')
+          .then((profileResponse) => {
+            this.componentData = profileResponse.data;
+            Store.set('current-user', this.componentData);
+            resolve();
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
     },
     makeLogout() {
@@ -111,15 +121,17 @@ export default {
       );
     },
     reloadAfterImpersonationChange() {
-      this.loadData(true).finally(() => {
-        window.location.href = '/';
-      });
+      this.loadData(true)
+        .finally(() => {
+          window.location.href = '/';
+        });
     },
     stopImpersonation() {
-      ApiClient.post('/account/impersonate/end').then(() => {
-        Store.delete('impersonated-user');
-        this.reloadAfterImpersonationChange();
-      });
+      ApiClient.post('/account/impersonate/end')
+        .then(() => {
+          Store.delete('impersonated-user');
+          this.reloadAfterImpersonationChange();
+        });
     },
     userProfile() {
       window.dynamicforms.dialog.fromURL(`/account/profile/${this.componentData.id}.componentdef`, 'edit',
@@ -139,7 +151,10 @@ export default {
             password: payload.data.password,
             password_confirm: payload.data.password_confirm,
           };
-          params = { detailUrl: '/account/change-password/submit-change/', headers: undefined };
+          params = {
+            detailUrl: '/account/change-password/submit-change/',
+            headers: undefined,
+          };
         } else if (payload.modal.currentDialog.tableUuid === userProfileFakeUUID) {
           data = payload.data;
           params = { detailUrl: `/account/profile/${this.componentData.id}.json` };
@@ -166,24 +181,24 @@ export default {
 </script>
 
 <style scoped>
-  .cursor-pointer {
-      cursor: pointer;
-  }
+.cursor-pointer {
+  cursor: pointer;
+}
 
-  .left-spacing {
-    margin-left: 1em;
-  }
+.left-spacing {
+  margin-left: 1em;
+}
 
-  .card-body {
-    padding: 0;
-  }
+.card-body {
+  padding: 0;
+}
 
-  .card {
-    background-color: transparent !important;
-    border: none;
-  }
+.card {
+  background-color: transparent !important;
+  border: none;
+}
 
-  .card-title {
-    margin-bottom: 0;
-  }
+.card-title {
+  margin-bottom: 0;
+}
 </style>

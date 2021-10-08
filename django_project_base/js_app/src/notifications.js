@@ -1,4 +1,5 @@
 import Vue from 'vue';
+
 import { apiClient as ApiClient } from './apiClient';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from './events';
 

@@ -1,5 +1,5 @@
 // eslint-disable-next-line consistent-return
-(function () {
+(function handleIE() {
   if (typeof window.CustomEvent === 'function') return false; // If not IE
 
   function CustomEvent(event, params) {
