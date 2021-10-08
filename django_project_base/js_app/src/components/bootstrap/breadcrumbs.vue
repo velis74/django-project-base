@@ -1,11 +1,12 @@
 <template>
-  <div class="nav-item breadcrumbs-component" v-if="currentBreadcrumbsLocation.length > 0" v-cloak>
+  <div v-if="currentBreadcrumbsLocation.length > 0" v-cloak class="nav-item breadcrumbs-component">
     <div class="card">
       <div class="card-body">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li v-for="(b, bx) in currentBreadcrumbsLocation" :key="bx" class="breadcrumb-item"><a
-                v-bind:href="b.url">{{ b.breadcrumb }}</a></li>
+            <li v-for="(b, bx) in currentBreadcrumbsLocation" :key="bx" class="breadcrumb-item">
+              <a :href="b.url">{{ b.breadcrumb }}</a>
+            </li>
           </ol>
         </nav>
       </div>
@@ -17,15 +18,9 @@
 import _ from 'lodash';
 
 export default {
-  name: 'breadcrumbs',
+  name: 'Breadcrumbs',
   data() {
     return {};
-  },
-  created() {
-
-  },
-  mounted() {
-
   },
   computed: {
     currentBreadcrumbsLocation() {
@@ -43,6 +38,12 @@ export default {
           };
         });
     },
+  },
+  created() {
+
+  },
+  mounted() {
+
   },
   methods: {},
 };

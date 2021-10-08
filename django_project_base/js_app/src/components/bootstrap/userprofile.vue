@@ -4,20 +4,24 @@
       <div class="card-body">
         <img
           v-if="componentData.avatar"
-          v-bind:src="componentData.avatar"
-          class="float-left rounded-circle">
+          :src="componentData.avatar"
+          class="float-left rounded-circle"
+        >
         <div class="user-names" :style="componentData.avatar ? 'padding-left: 55px;' : ''">
-          <h5 class="card-title" v-if="componentData.first_name && componentData.last_name">
-            {{ componentData.first_name }} <br/> {{ componentData.last_name }}
+          <h5 v-if="componentData.first_name && componentData.last_name" class="card-title">
+            {{ componentData.first_name }} <br> {{ componentData.last_name }}
             <span v-if="isImpersonated">({{
-                gettext('Impersonated')
-              }})</span></h5>
-          <h5 class="card-title" style="margin-top: 0.6em;" v-else-if="componentData.email">
+              gettext('Impersonated')
+            }})</span>
+          </h5>
+          <h5 v-else-if="componentData.email" class="card-title" style="margin-top: 0.6em;">
             {{ componentData.email }}
-            <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span></h5>
-          <h5 class="card-title" style="margin-top: 0.6em;" v-else-if="componentData.username">
+            <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
+          </h5>
+          <h5 v-else-if="componentData.username" class="card-title" style="margin-top: 0.6em;">
             {{ componentData.username }}
-            <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span></h5>
+            <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
+          </h5>
         </div>
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
@@ -27,16 +31,18 @@
               <a
                 v-if="permissions['impersonate-user'] && !isImpersonated"
                 class="dropdown-item"
+                href="#"
                 @click="showImpersonateLogin"
-                href="#">{{ gettext('Impersonate user') }}</a>
+              >{{ gettext('Impersonate user') }}</a>
               <a
                 v-else-if="isImpersonated"
                 class="dropdown-item"
+                href="#"
                 @click="stopImpersonation"
-                href="#">{{ gettext('Stop impersonation') }}</a>
+              >{{ gettext('Stop impersonation') }}</a>
               <a class="dropdown-item" href="#" @click="makeLogout">{{
-                  gettext('Logout')
-                }}</a>
+                gettext('Logout')
+              }}</a>
             </div>
           </li>
         </ul>
@@ -67,7 +73,7 @@ const userProfileFakeUUID = 'fake-uuid-usr-prof-654654-634565';
 const impUserFakeUUID = 'fake-uuid-imp-user-654654-634565';
 
 export default {
-  name: 'userprofile',
+  name: 'UserProfile',
   data() {
     return {
       componentData: {},

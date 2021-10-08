@@ -1,56 +1,59 @@
 <template>
   <div v-cloak class="titlebar-app titlebar-component">
-    <nav class="navbar navbar-expand-lg " v-bind:class="[darkMode ? darkClass : lightClass]">
-      <div class="nav-item" v-if="titleBarProps.logo">
+    <nav class="navbar navbar-expand-lg " :class="[darkMode ? darkClass : lightClass]">
+      <div v-if="titleBarProps.logo" class="nav-item">
         <div class="card">
           <div class="card-body">
             <img
-              v-bind:src="titleBarProps.logo"
+              :src="titleBarProps.logo"
               class="float-left rounded-circle logo-image"
-              onclick="window.location.href='/'">
+              onclick="window.location.href='/'"
+            >
           </div>
         </div>
       </div>
       <div
-        class="navbar-brand left-spacing"
         v-if="titleBarProps.name"
+        class="navbar-brand left-spacing"
         href="javascript:void(0);"
-        style="cursor: default;">
+        style="cursor: default;"
+      >
         {{ titleBarProps.name }}
       </div>
       <div v-if="breadcrumbsVisible && loggedIn" class="left-spacing">
-        <breadcrumbs></breadcrumbs>
+        <Breadcrumbs/>
       </div>
-      <div class="collapse navbar-collapse" v-if="projectlistVisible && loggedIn">
-        <ul class="navbar-nav mr-auto">
-        </ul>
-        <projectlist></projectlist>
+      <div v-if="projectlistVisible && loggedIn" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto"/>
+        <ProjectList/>
       </div>
       <div v-if="userprofileVisible && loggedIn">
-        <userprofile></userprofile>
+        <UserProfile/>
       </div>
       <div v-else-if="!loggedIn && loginVisible" class="login">
-        <login></login>
+        <Login/>
       </div>
     </nav>
-    <notifications width="350" position="top center" v-if="loggedIn">
+    <notifications v-if="loggedIn" width="350" position="top center">
       <template slot="body" slot-scope="{ item, close }">
         <div
-          @click="item.data.onNotificationClose(item, close, true)"
           class="vue-notification"
-          :class="item.type">
+          :class="item.type"
+          @click="item.data.onNotificationClose(item, close, true)"
+        >
           <div>
             <div style="display: inline-block; max-width: 95%;" class="notification-title">
-              <div v-html="item.title"></div>
+              <div v-html="item.title"/>
             </div>
             <div style="display: inline-block; max-width: 95%;" class="notification-content">
               <div v-html="item.text"/>
             </div>
             <div
+              v-if="item.data.duration === -1"
               style="display: inline-block; float: right; vertical-align: middle;"
-              v-if="item.data.duration === -1">
+            >
               <button class="close" @click="item.data.onNotificationClose(item, close)">
-                <i class="fas fa-times fa-xs"></i>
+                <i class="fas fa-times fa-xs"/>
               </button>
             </div>
           </div>
@@ -68,13 +71,19 @@ import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
 import { Store } from '../../store';
 
-import breadcrumbs from './breadcrumbs.vue';
-import login from './login.vue';
-import projectlist from './projectlist.vue';
-import userprofile from './userprofile.vue';
+import Breadcrumbs from './breadcrumbs.vue';
+import Login from './login.vue';
+import ProjectList from './projectlist.vue';
+import UserProfile from './userprofile.vue';
 
 export default {
-  name: 'titlebar',
+  name: 'TitleBar',
+  components: {
+    Breadcrumbs,
+    Login,
+    ProjectList,
+    UserProfile,
+  },
   props: {
     darkMode: {
       default: false,
@@ -187,12 +196,6 @@ export default {
         }
       }, 45000);
     },
-  },
-  components: {
-    breadcrumbs,
-    login,
-    projectlist,
-    userprofile,
   },
 };
 </script>

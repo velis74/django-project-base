@@ -8,20 +8,18 @@ import Notifications from 'vue-notification';
 //  - Na django project base narediš "npm link dynamicforms"
 // Potem bi moralo delati
 
-import breadcrumbs from './components/bootstrap/breadcrumbs.vue';
-import login from './components/bootstrap/login.vue';
-import modalwindow from './components/bootstrap/modalwindow.vue';
-import projectlist from './components/bootstrap/projectlist.vue';
-import titlebar from './components/bootstrap/titlebar.vue';
-import userprofile from './components/bootstrap/userprofile.vue';
+import Breadcrumbs from './components/bootstrap/breadcrumbs.vue';
+import Login from './components/bootstrap/login.vue';
+import ProjectList from './components/bootstrap/projectlist.vue';
+import TitleBar from './components/bootstrap/titlebar.vue';
+import UserProfile from './components/bootstrap/userprofile.vue';
 
 const componentsConfig = {
-  titlebar,
-  breadcrumbs,
-  login,
-  modalwindow,
-  projectlist,
-  userprofile,
+  TitleBar,
+  Breadcrumbs,
+  Login,
+  ProjectList,
+  UserProfile,
 };
 
 const createApp = (elementId, template, modalId) => {
@@ -41,8 +39,8 @@ const createApp = (elementId, template, modalId) => {
   Vue.use(Notifications);
   return new Vue({
     el: `#${elementId}`,
-    template,
     components: componentsConfig,
+    template,
   });
 };
 

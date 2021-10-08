@@ -7,14 +7,15 @@
       </div>
     </slot>
     <input
-        type="text"
-        @keyup="searchUsers"
-        v-model="
+      v-model="
 /* eslint-disable */
 record['user']"
-        class="autocomplete form-control"
-        id="userAutocomplete"
-        data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
+      type="text"
+      @keyup="searchUsers"
+      class="autocomplete form-control"
+      id="userAutocomplete"
+      data-toggle="dropdown"
+      :placeholder="searchUserPlaceholder">
     <ul class="dropdown-menu" style="width: 100%" role="menu">
       <li style="width: 100%; padding: 0 .75rem" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
           v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer">
@@ -32,23 +33,16 @@ import _ from 'lodash';
 import { apiClient as ApiClient } from '../../apiClient';
 
 export default {
-  name: 'accounts-impersonate_dialog.html',
-  props: ['rows', 'uuid', 'record'],
+  name: 'accounts-impersonate_dialog.html', // eslint-disable-line vue/component-definition-name-casing
+  props: {
+    uuid: { type: String, required: true },
+    record: { type: Object, required: true },
+  },
   data() {
     return {
       usersFilter: [],
       errors: {},
     };
-  },
-  mounted() {
-    eventBus.$on(`formEvents_${this.uuid}`, (payload) => {
-      if (payload.type === 'submitErrors') {
-        this.errors = payload.data;
-      }
-    });
-  },
-  beforeDestroy() {
-    eventBus.$off(`formEvents_${this.uuid}`);
   },
   computed: {
     searchUserPlaceholder() {
@@ -70,6 +64,16 @@ export default {
       } catch (e) {}
       return '';
     },
+  },
+  mounted() {
+    eventBus.$on(`formEvents_${this.uuid}`, (payload) => {
+      if (payload.type === 'submitErrors') {
+        this.errors = payload.data;
+      }
+    });
+  },
+  beforeDestroy() {
+    eventBus.$off(`formEvents_${this.uuid}`);
   },
   methods: {
     // eslint-disable-next-line func-names
