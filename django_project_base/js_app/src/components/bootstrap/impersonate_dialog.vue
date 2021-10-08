@@ -1,19 +1,25 @@
 <template>
   <div style="position: relative">
-    <slot name="form-error"><div v-if="getErrorText"><small :id="'form-' + uuid + '-err'"
-                                   class="form-text text-danger">{{ getErrorText }}</small><hr></div></slot>
-    <input type="text" @keyup="searchUsers"
-           v-model="
+    <slot name="form-error">
+      <div v-if="getErrorText">
+        <small :id="'form-' + uuid + '-err'" class="form-text text-danger">{{ getErrorText }}</small>
+        <hr>
+      </div>
+    </slot>
+    <input
+        type="text"
+        @keyup="searchUsers"
+        v-model="
 /* eslint-disable */
 record['user']"
-           class="autocomplete form-control"
-           id="userAutocomplete"
-           data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
+        class="autocomplete form-control"
+        id="userAutocomplete"
+        data-toggle="dropdown" v-bind:placeholder="searchUserPlaceholder"/>
     <ul class="dropdown-menu" style="width: 100%" role="menu">
       <li style="width: 100%; padding: 0 .75rem" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
-          v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer"><a>{{
-          user.full_name || user.email
-        }}</a></li>
+          v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer">
+        <a>{{ user.full_name || user.email }}</a>
+      </li>
     </ul>
   </div>
 </template>

@@ -5,12 +5,18 @@
         <li class="nav-item dropdown">
           <i class="nav-link fas fa-th-list fa-2x" data-toggle="dropdown"></i>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -4em;">
-            <a v-for="project in projectList"
-               v-on:click="projectSelected(project[projectTablePkName])"
-               v-bind:key="project[projectTablePkName]" class="dropdown-item project-item" href="#">
+            <a
+                v-for="project in projectList"
+                v-on:click="projectSelected(project[projectTablePkName])"
+                v-bind:key="project[projectTablePkName]"
+                class="dropdown-item project-item"
+                href="#">
               <img v-bind:src="project.logo" class="project-link-image">{{ project.name }}</a>
-            <a v-if="permissions['add-project']" v-on:click="addNewProject"
-               class="dropdown-item project-item" href="#">
+            <a
+                v-if="permissions['add-project']"
+                v-on:click="addNewProject"
+                class="dropdown-item project-item"
+                href="#">
               <i class="fas fa-plus-circle"></i>{{ gettext('Add new project') }}</a>
           </div>
         </li>
@@ -94,8 +100,8 @@ export default {
 </script>
 
 <style scoped>
-  .project-link-image {
-    max-height: 30px;
-    max-width: 30px;
-  }
+.project-link-image {
+  max-height: 30px;
+  max-width: 30px;
+}
 </style>

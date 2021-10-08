@@ -4,13 +4,18 @@
       <div class="nav-item" v-if="titleBarProps.logo">
         <div class="card">
           <div class="card-body">
-            <img v-bind:src="titleBarProps.logo"
-                 class="float-left rounded-circle logo-image" onclick="window.location.href='/'">
+            <img
+              v-bind:src="titleBarProps.logo"
+              class="float-left rounded-circle logo-image"
+              onclick="window.location.href='/'">
           </div>
         </div>
       </div>
-      <div class="navbar-brand left-spacing" v-if="titleBarProps.name" href="javascript:void(0);"
-           style="cursor: default;">
+      <div
+        class="navbar-brand left-spacing"
+        v-if="titleBarProps.name"
+        href="javascript:void(0);"
+        style="cursor: default;">
         {{ titleBarProps.name }}
       </div>
       <div v-if="breadcrumbsVisible && loggedIn" class="left-spacing">
@@ -30,8 +35,10 @@
     </nav>
     <notifications width="350" position="top center" v-if="loggedIn">
       <template slot="body" slot-scope="{ item, close }">
-        <div @click="item.data.onNotificationClose(item, close, true)" class="vue-notification"
-             :class="item.type">
+        <div
+          @click="item.data.onNotificationClose(item, close, true)"
+          class="vue-notification"
+          :class="item.type">
           <div>
             <div style="display: inline-block; max-width: 95%;" class="notification-title">
               <div v-html="item.title"></div>
@@ -39,8 +46,9 @@
             <div style="display: inline-block; max-width: 95%;" class="notification-content">
               <div v-html="item.text"/>
             </div>
-            <div style="display: inline-block; float: right; vertical-align: middle;"
-                 v-if="item.data.duration === -1">
+            <div
+              style="display: inline-block; float: right; vertical-align: middle;"
+              v-if="item.data.duration === -1">
               <button class="close" @click="item.data.onNotificationClose(item, close)">
                 <i class="fas fa-times fa-xs"></i>
               </button>
@@ -159,11 +167,11 @@ export default {
               const now = Math.floor(Date.now() / 1000);
               let rangeIdentifier = 8;
               const hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) &&
-                !_.size(_.filter(acknowledgeData, (v) => v === 8));
+                  !_.size(_.filter(acknowledgeData, (v) => v === 8));
               const hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) &&
-                !_.size(_.filter(acknowledgeData, (v) => v === 1));
+                  !_.size(_.filter(acknowledgeData, (v) => v === 1));
               const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) &&
-                !_.size(_.filter(acknowledgeData, (v) => v === 5));
+                  !_.size(_.filter(acknowledgeData, (v) => v === 5));
               if (hours1) {
                 rangeIdentifier = 1;
               }
@@ -190,22 +198,22 @@ export default {
 </script>
 
 <style scoped>
-.titlebar-app .card, .nav-item > .card > .card-body {
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
+  .titlebar-app .card, .nav-item > .card > .card-body {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
 
-.logo-image {
-  max-height: 60px;
-  max-width: 60px;
-}
+  .logo-image {
+    max-height: 60px;
+    max-width: 60px;
+  }
 
-.left-spacing {
-  margin-left: 1em;
-}
+  .left-spacing {
+    margin-left: 1em;
+  }
 
-.login {
-  min-height: 2em;
-}
+  .login {
+    min-height: 2em;
+  }
 </style>

@@ -1,5 +1,5 @@
 {
-  "name": "djangoprojectbasecomponents",
+  "name": "django_project_base",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "@babel/polyfill": "^7.12.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "dynamicforms": "^0.1.0",
     "es6-promise": "^4.2.8",
     "lodash": "^4.17.15",
     "vue": "^2.6.11",
@@ -35,6 +36,7 @@
   "eslintConfig": {
     "root": true,
     "env": { "node": true },
+    "plugins": ["es"],
     "extends": [
       "plugin:vue/essential",
       "@vue/airbnb"
@@ -73,6 +75,9 @@
       "vue/max-attributes-per-line": ["warn", { "singleline": { "max": 10 } }],
       "vue/singleline-html-element-content-newline": ["off"]
     }
+  },
+  "babel": {
+    "presets": ["@vue/cli-plugin-babel/preset"]
   },
   "browserslist": [
     "> 1%",
