@@ -66,8 +66,15 @@ Append django project base urls:
     ...
   ]
 
+Alternatively you can also choose to specify individual URLs. If that's the case, please refer to
+:code:`django_project_base.urls.py` and use only the URLs you need.
+
+.. note::
+   The above general include also includes the Django javascript localisation catalog, so make sure you don't include
+   it again.
+
 There are some additional URLs available for the Django project base, like swagger or documentation. Appending those
-URLs is described in more details in suitable chapters.
+URLs is described in more details in respective chapters.
 
 Dynamic Forms
 -------------
@@ -88,6 +95,8 @@ You should add at least following code to your project, to enable Dynamic Forms.
           'rest_framework.renderers.JSONRenderer',
           'rest_framework.renderers.BrowsableAPIRenderer',
           'dynamicforms.renderers.TemplateHTMLRenderer',
+          'dynamicforms.renderers.ComponentHTMLRenderer',
+          'dynamicforms.renderers.ComponentDefRenderer',
       )
   ...
   }
@@ -95,22 +104,19 @@ You should add at least following code to your project, to enable Dynamic Forms.
 Environment setup
 -----------------
 
-For code formatting use .jshintrc file present in repository. Set tab size, ident, continuation ident in your editor
-to 2 places.
-
 For JS development go to https://nodejs.org/en/ and install latest stable version of nodejs and npm.
-In project base directory run npm install. To run a development server run *npm run dev* (go to http://0.0.0.0:8080/).
-To generate a build run *npm run build*.
+In :code:`{project base directory}/django_project_base/js_app` run :code:`npm install`. To run a development server run
+:code:`npm run serve` (go to http://0.0.0.0:8080/).
+To generate a build run :code:`npm run build`.
 
-JS code is present in src directory. For web UI components library vuejs(https://vuejs.org/) is used.
-Components are built as Vue global components(https://vuejs.org/v2/guide/components.html)
-with x-templates. Templates are present in templates directory.
+JS code is present in src subdirectory. For web UI components library vuejs(https://vuejs.org/) is used with single file
+components.
 
 When developing webpack development server expects that service which provides data runs on host
-http://127.0.0.1:8000. This can be changed in webpack.config.js file.
-For running example django project prepare python environment and run (run in repository root):
+http://127.0.0.1:8000. This can be changed in :code:`vue.config.js` found in the same directory as :code:`package.json`.
+For running example django project prepare python environment and run :code:`{project base directory}`:
 
-- pip install -r requirements.txt (run in content root)
-- python manage.py runserver
+- :code:`pip install -r requirements.txt` (run in content root)
+- :code:`python manage.py runserver`
 
 Try logging in with user "miha", pass "mihamiha".

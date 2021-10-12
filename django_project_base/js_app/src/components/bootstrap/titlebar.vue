@@ -1,6 +1,6 @@
 <template>
   <div v-cloak class="titlebar-app titlebar-component">
-    <nav class="navbar navbar-expand-lg " :class="[darkMode ? darkClass : lightClass]">
+    <nav class="navbar navbar-expand-lg" :class="darkOrLightMode">
       <div v-if="titleBarProps.logo" class="nav-item">
         <div class="card">
           <div class="card-body">
@@ -20,15 +20,15 @@
       >
         {{ titleBarProps.name }}
       </div>
-      <div v-if="breadcrumbsVisible && loggedIn" class="left-spacing">
-        <Breadcrumbs/>
+      <div v-if="breadcrumbsComponent && loggedIn" class="left-spacing">
+        <component :is="breadcrumbsComponent"/>
       </div>
-      <div v-if="projectlistVisible && loggedIn" class="collapse navbar-collapse">
+      <div v-if="projectlistComponent && loggedIn" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto"/>
-        <ProjectList/>
+        <component :is="projectlistComponent"/>
       </div>
-      <div v-if="userprofileVisible && loggedIn">
-        <UserProfile/>
+      <div v-if="userprofileComponent && loggedIn">
+        <component :is="userprofileComponent"/>
       </div>
       <div v-else-if="!loggedIn && loginVisible" class="login">
         <Login/>
@@ -65,6 +65,8 @@
 
 <script>
 import _ from 'lodash';
+import Vue from 'vue';
+import Notifications from 'vue-notification';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import { showMaintenanceNotification } from '../../notifications';
@@ -76,35 +78,19 @@ import Login from './login.vue';
 import ProjectList from './projectlist.vue';
 import UserProfile from './userprofile.vue';
 
+Vue.use(Notifications);
+
 export default {
   name: 'TitleBar',
   components: {
-    Breadcrumbs,
-    Login,
-    ProjectList,
-    UserProfile,
+    Breadcrumbs, Login, ProjectList, UserProfile,
   },
   props: {
-    darkMode: {
-      default: false,
-      type: Boolean,
-    },
-    projectlistVisible: {
-      type: Boolean,
-      default: true,
-    },
-    userprofileVisible: {
-      type: Boolean,
-      default: true,
-    },
-    breadcrumbsVisible: {
-      type: Boolean,
-      default: true,
-    },
-    loginVisible: {
-      type: Boolean,
-      default: true,
-    },
+    darkMode: { type: Boolean, default: false }, // dark mode on when true
+    projectlistComponent: { type: String, default: 'ProjectList' }, // specify your own globally registered component
+    userprofileComponent: { type: String, default: 'UserProfile' }, // specify your own globally registered component
+    breadcrumbsComponent: { type: String, default: 'Breadcrumbs' }, // specify your own globally registered component
+    loginVisible: { type: Boolean, default: true }, // if user is not logged in, should we show the login inputs
   },
   data() {
     return {
@@ -115,6 +101,9 @@ export default {
       maintenanceNoticesPeriodicApiCall: null,
       maintenanceNotificationItem: null,
     };
+  },
+  computed: {
+    darkOrLightMode() { return this.darkMode ? this.darkClass : this.lightClass; },
   },
   beforeDestroy() {
     clearInterval(this.maintenanceNoticesPeriodicApiCall);

@@ -39,19 +39,19 @@ A dictionary of attribute names on the request object. Read more in
 
 Read more in :ref:`Project slug` chapter.
 
-**MAINTENENACE_NOTIFICATIONS_CACHE_KEY**
+**MAINTENANCE_NOTIFICATIONS_CACHE_KEY**
 
 .. code-block:: python
 
-  MAINTENENACE_NOTIFICATIONS_CACHE_KEY=""
+  MAINTENANCE_NOTIFICATIONS_CACHE_KEY=""
 
 Read more in :ref:`Maintenance notifications` chapter.
 
-**MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET**
+**MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET**
 
 .. code-block:: python
 
-  MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET=<bool>
+  MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET=<bool>
 
 Maintenance notifications use cached queryset. Default is True.
 
@@ -61,7 +61,7 @@ Read more in :ref:`Maintenance notifications` chapter.
 
 .. code-block:: python
 
-  DJANGO_USER_CACHE='django-user-%d'
+  DJANGO_USER_CACHE = 'django-user-%d'
 
 Key name for user caching background. Default value is 'django-user-%d'. Read more in :ref:`User caching backend`
 chapter.
@@ -98,7 +98,7 @@ Value in days, when the automatic process should delete profile marked as for de
 
   DOCUMENTATION_DIRECTORY='/docs/build/'
 
-Path for documentation directory. Read more in :ref:`Documentation` chapter.
+Path for documentation directory.
 
 **PROFILER_LONG_RUNNING_TASK_THRESHOLD**
 

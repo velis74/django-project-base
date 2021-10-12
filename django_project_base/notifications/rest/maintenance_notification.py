@@ -71,7 +71,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
 
     def get_notification_acknowledged_data(self, notification: DjangoProjectBaseNotification) -> list:
         request: Optional[Request] = self.context.get('request')
-        return request.session.get(settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY, {}).get(str(notification.pk), [])
+        return request.session.get(settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY, {}).get(str(notification.pk), [])
 
     def create(self, validated_data) -> DjangoProjectBaseNotification:
         message: DjangoProjectBaseMessage = DjangoProjectBaseMessage.objects.create(**validated_data['message'])
@@ -116,7 +116,7 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
         return MaintenanceNotificationSerializer
 
     def get_queryset(self):
-        if settings.MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET:
+        if settings.MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET:
             return DjangoProjectBaseNotification.objects.maintenance_notifications()
         else:
             now: datetime.datetime = utc_now()
@@ -157,7 +157,7 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
                 iter(DjangoProjectBaseNotification.objects.filter(
                     delayed_to__range=[now - time_delta, now + time_delta])), None)
             return Response(self.get_serializer(current_maintenance, many=False).data)
-        read_notifications: dict = request.session.get(settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY, {})
+        read_notifications: dict = request.session.get(settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY, {})
         pk_name: str = DjangoProjectBaseMessage._meta.pk.name
         return Response(self.get_serializer(
             filter(lambda n: len(read_notifications.get(str(getattr(n, pk_name)), [])) < 3, self.get_queryset()),
@@ -196,9 +196,9 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
         # todo: storage for acknowledged notifications should be configurable
         ser: NotificationAcknowledgedRequestSerializer = NotificationAcknowledgedRequestSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        if settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY not in request.session:
-            request.session[settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY] = {}
-        read_messages: dict = request.session[settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY]
+        if settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY not in request.session:
+            request.session[settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY] = {}
+        read_messages: dict = request.session[settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY]
         notice_pk: str = ser.data[DjangoProjectBaseMessage._meta.pk.name]
         notice_diff: int = ser.data['acknowledged_identifier']
         if notice_pk not in read_messages:
@@ -207,5 +207,5 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
         diffs.append(notice_diff)
         diffs = list(set(diffs))
         read_messages[notice_pk] = diffs
-        request.session[settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY] = read_messages
+        request.session[settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY] = read_messages
         return Response(status=status.HTTP_201_CREATED)

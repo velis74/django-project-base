@@ -1,10 +1,11 @@
 <template>
   <div v-cloak class="nav-item login-container login-component">
     <div>
-      <form @submit.prevent>
+      <form class="form-inline" @submit.prevent>
         <input
           v-model="loginModel['username']"
           type="text"
+          class="form-control btn-sm"
           placeholder="Username"
           name="username"
           @keyup.enter="focusPassword"
@@ -12,25 +13,24 @@
         <input
           v-model="loginModel['password']"
           type="password"
+          class="form-control btn-sm mx-1"
           placeholder="Password"
           name="psw"
           @keyup.enter="makeLogin"
         >
-        <div class="btn-group dropleft" style="display: inline;">
-          <button
-            v-if="socialAuth.length"
-            type="button"
-            class="btn btn-sm dropdown-toggle"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          />
-          <button type="button" class="btn btn-sm" @click="makeLogin">
-            {{ gettext('Login') }}
-          </button>
-          <div v-if="socialAuth.length" class="dropdown-menu">
-            <a v-for="(b, bidx) in socialAuth" :key="bidx" class="dropdown-item" :href="b.url">{{ b.title }}</a>
-          </div>
+        <button
+          v-if="socialAuth.length"
+          type="button"
+          class="btn btn-sm dropdown-toggle"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        />
+        <button type="button" class="btn btn-sm btn-primary" @click="makeLogin">
+          {{ gettext('Login') }}
+        </button>
+        <div v-if="socialAuth.length" class="dropdown-menu">
+          <a v-for="(b, bidx) in socialAuth" :key="bidx" class="dropdown-item" :href="b.url">{{ b.title }}</a>
         </div>
       </form>
     </div>
@@ -77,6 +77,9 @@ export default {
 </script>
 
 <style scoped>
+.form-control {
+  height: inherit;
+}
 .login-container {
   position: absolute;
   right: 1em;

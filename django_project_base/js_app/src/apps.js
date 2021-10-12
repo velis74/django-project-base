@@ -14,6 +14,8 @@ import ProjectList from './components/bootstrap/projectlist.vue';
 import TitleBar from './components/bootstrap/titlebar.vue';
 import UserProfile from './components/bootstrap/userprofile.vue';
 
+Vue.use(Notifications);
+
 const componentsConfig = {
   TitleBar,
   Breadcrumbs,
@@ -36,7 +38,6 @@ const createApp = (elementId, template, modalId) => {
       template: '<ModalHandler></ModalHandler>',
     });
   }
-  Vue.use(Notifications);
   return new Vue({
     el: `#${elementId}`,
     components: componentsConfig,

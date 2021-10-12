@@ -5,9 +5,12 @@ Welcome to Django Project Base's documentation!
 What is django-project-base?
 ----------------------------
 
-We start with a project. Everything revolves around it: users, roles, permissions, tags, etc. Everything belongs to a
-project first, then to database. This project makes it easy to work on that premise. At the same time it integrates a
-few basic operations that you need in every project so that you don't have to do them over and over again.
+This project removes the boilerplate associated with project / user handling: We start with a project. Everything
+revolves around it: users, roles, permissions, tags, etc. This project makes it easy to work on that premise: it
+provides foundations for user profiles, oauth authentication, permissions, projects, tagging, etc.
+
+In order to take advantage of all this, just enable desired middleware and extend the models. This project will take
+care of the groundwork while you focus on your own project.
 
 This is a `django <https://www.djangoproject.com/>`_ library, based on
 `django-rest-framework <https://www.django-rest-framework.org/>`_ with
@@ -27,7 +30,7 @@ Functionalities provided:
 * Project users editor. Invite users to project. Assign them into roles.
 * Roles management & rights assignment.
 * Tags editor & manager + support API for marking tagged items with their colours or icons
-
+* Various Vue components for visualising the above in browsers
 
 Index:
 
@@ -42,6 +45,7 @@ Index:
    middleware
    modules/index
    translations
+   vue
    examples
    swagger
    open_api

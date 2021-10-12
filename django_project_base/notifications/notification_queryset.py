@@ -13,11 +13,11 @@ class NotificationQuerySet(QuerySetWithCache):
 
     @property
     def cache_timeout(self) -> int:
-        return settings.MAINTENENACE_NOTIFICATIONS_CACHE_TIMEOUT
+        return settings.MAINTENANCE_NOTIFICATIONS_CACHE_TIMEOUT
 
     @property
     def base_cache_key(self) -> str:
-        return settings.MAINTENENACE_NOTIFICATIONS_CACHE_KEY
+        return settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY
 
     def maintenance_notifications(self):
         cached_data: Optional[list] = cache.get(self.base_cache_key)

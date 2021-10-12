@@ -1,4 +1,4 @@
-Install pdflatex tool on your system.
+Install pdflatex tool on your system. Jure 8.10.2021: I found this not necessary when building either pdf or html targets
 
 To build documentation run:
 

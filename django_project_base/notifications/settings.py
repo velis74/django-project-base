@@ -1,16 +1,16 @@
 NOTIFICATIONS_SETTINGS = (
     {
-        "name": "MAINTENENACE_NOTIFICATIONS_CACHE_TIMEOUT",
+        "name": "MAINTENANCE_NOTIFICATIONS_CACHE_TIMEOUT",
         "default": 30,
         "description": "Cache timeout for maintenance type notifications in UsersMaintenanceNotificationViewset",
     },
     {
-        "name": "MAINTENENACE_NOTIFICATIONS_CACHE_KEY",
+        "name": "MAINTENANCE_NOTIFICATIONS_CACHE_KEY",
         "default": "current_maintenance_notifications",
         "description": "Maintenance notifications list cache key.",
     },
     {
-        "name": "MAINTENENACE_NOTIFICATIONS_USE_CACHED_QUERYSET",
+        "name": "MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET",
         "default": True,
         "description": "Maintenance notifications use cached queryset.",
     },
