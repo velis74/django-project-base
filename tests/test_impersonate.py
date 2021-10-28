@@ -1,7 +1,7 @@
-from django.core.cache import cache
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from django_project_base.base.auth_backends import user_cache_invalidate
 from example.demo_django_base.models import UserProfile
 
 
@@ -23,7 +23,7 @@ class TestImpersonateUserViewset(TestCase):
         janez.is_superuser = True
         janez.save()
         # delete user cache
-        cache.delete('django-user-%d' % janez.id)
+        user_cache_invalidate(janez)
 
         # Now Janez should be able to impersonate
         response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
@@ -41,7 +41,7 @@ class TestImpersonateUserViewset(TestCase):
         janez.is_superuser = True
         janez.save()
         # delete user cache
-        cache.delete('django-user-%d' % janez.id)
+        user_cache_invalidate(janez)
 
         response = self.api_client.post('/account/impersonate/start', {'username': 'miha'}, format='json')
         self.assertEqual(response.status_code, 200)
@@ -57,7 +57,7 @@ class TestImpersonateUserViewset(TestCase):
         janez.is_superuser = True
         janez.save()
         # delete user cache
-        cache.delete('django-user-%d' % janez.id)
+        user_cache_invalidate(janez)
 
         response = self.api_client.post('/account/impersonate/start', {'id': 1}, format='json')
         self.assertEqual(response.status_code, 200)

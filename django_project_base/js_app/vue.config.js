@@ -1,5 +1,7 @@
 const path = require('path');
 
+const webpack = require('webpack');
+
 const libraryFileName = 'django-project-base';
 
 module.exports = {
@@ -26,7 +28,12 @@ module.exports = {
         },
       },
     },
-    plugins: [],
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+      }),
+    ],
     output: {
       filename: `js/${libraryFileName}.js`,
       chunkFilename: `js/${libraryFileName}-vendors.js`,

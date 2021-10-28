@@ -1,9 +1,9 @@
 import os
 
-from django.core.cache import cache
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from django_project_base.base.auth_backends import user_cache_invalidate
 from example.demo_django_base.models import UserProfile
 
 
@@ -58,7 +58,7 @@ class TestLoginViewset(TestCase):
         miha.is_staff = True
         miha.is_superuser = True
         miha.save()
-        cache.delete('django-user-%d' % miha.id)
+        user_cache_invalidate(miha)
 
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')

@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-from django_project_base.settings import DJANGO_USER_CACHE
+from django_project_base.settings import USER_CACHE_KEY
 from example.demo_django_base.models import UserProfile
 
 
@@ -18,7 +18,7 @@ class TestUsersCachingBackend(TestCase):
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 403)
 
-        self.assertIsNotNone(cache.get(DJANGO_USER_CACHE % 1))
+        self.assertIsNotNone(cache.get(USER_CACHE_KEY.format(id=1)))
 
         UserProfile.objects.filter(username__in=['miha', 'janez']).update(is_superuser=True, is_staff=True)
 
@@ -29,7 +29,7 @@ class TestUsersCachingBackend(TestCase):
         # Clearing cache, now Miha can do better stuff
         staff = UserProfile.objects.filter(is_staff=True)
         for user in staff:
-            cache.delete(DJANGO_USER_CACHE % user.id)
+            cache.delete(USER_CACHE_KEY.format(id=user.id))
 
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
         self.assertEqual(response.status_code, 200)

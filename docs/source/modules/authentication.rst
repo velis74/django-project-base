@@ -6,18 +6,18 @@ Obtaining and maintaining sessions
 
 We support two methods of maintaining session information for your client: cookie-based and header-based.
 
-When you perform the account/login function, you can choose whether the function should return a session cookie or 
-JSON with session id. Add parameter "return-type" with value "json" to login function parameters. This will return 
-"sessionid" parameter in returned json instead of cookie. There is no CSRF when session is passed by the 
+When you perform the account/login function, you can choose whether the function should return a session cookie or
+JSON with session id. Add parameter "return-type" with value "json" to login function parameters. This will return
+"sessionid" parameter in returned json instead of cookie. There is no CSRF when session is passed by the
 authorization header. See swagger documentation on login for further details.
 
-If you choose the cookie, you will then need to supply the cookie(s) to all subsequent requests. Likewise, if you opt 
+If you choose the cookie, you will then need to supply the cookie(s) to all subsequent requests. Likewise, if you opt
 for session id as a variable, you will have to provide Authorization header to all subsequent requests.
 
 The default uses cookies as those also add a CSRF cookie providing a bit more security. Use of JSON / header should
 only be preferred for clients without support for cookies, such as background maintenance / data exchange scripts.
 
-Our modified SessionMiddleware only overrides Django's as much to also accept the Authorization header and clears the 
+Our modified SessionMiddleware only overrides Django's as much to also accept the Authorization header and clears the
 session and CSRF cookies in the responses.
 
 Activate project base accounts API endpoints
@@ -101,9 +101,9 @@ To enable User caching backend replace django.contrib.auth.backends.ModelBackend
        ...
    )
 
-User caching is not enabled for bulk updates by default, since Django doesn't call signal on .update() .bulk_update()
-or .delete(). Updating data with a query or running bulk update, without clearing cache for every object could
-potentially cause race conditions. Avoid it if possible, or take care of manually clearing the cache for the user.
+User caching does not work on bulk updates as Django doesn't trigger signals on update(), bulk_update() or delete().
+Bulk updating user profiles without manually clearing cache for them will create stale cache entries, so make sure you
+clear any such cache entries manually using the provided :code:`user_cache_invalidate` function.
 
 Example for clearing cache after bulk update:
 
@@ -111,40 +111,40 @@ Example for clearing cache after bulk update:
 
   ...
   from django.core.cache import cache
-  from django_project_base.settings import DJANGO_USER_CACHE
+  from django_project_base.base.auth_backends import user_cache_invalidate
   ...
   # Bulk update multiple users. Give them superuser permission.
   # If those users are logged in, they don't have permission until cache is
   # cleared or they log out and log in again.
-  UserProfile.objects.filter(username__in=['miha', 'janez']).update(
-    is_superuser=True, is_staff=True)
+  UserProfile.objects.filter(username__in=['miha', 'janez'])\
+      .update(is_superuser=True, is_staff=True)
 
   # After clearing users cache for those users will be able
   # to work with additional permissions
   staff = UserProfile.objects.filter(username__in=['miha', 'janez'])
-        for user in staff:
-            cache.delete(DJANGO_USER_CACHE % user.id)
+  for user in staff:
+      user_cache_invalidate(user)
 
-It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can find
-example code below.
+It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager.
+Example code below.
 
 .. code-block:: python
 
   # models.py
   ...
   from django.core.cache import cache
-  from django_project_base.settings import DJANGO_USER_CACHE
+  from django_project_base.base.auth_backends import user_cache_invalidate
   ...
   class ProfilesQuerySet(models.QuerySet):
       def update(self, **kwargs):
           for profile in self:
-              cache.delete(DJANGO_USER_CACHE % profile.id)
+              user_cache_invalidate(profile)
           res = super(ProfilesQuerySet, self).update(**kwargs)
           return res
 
       def delete(self):
         for profile in self:
-            cache.delete(DJANGO_USER_CACHE % profile.id)
+            user_cache_invalidate(profile)
         res = super(ProfilesQuerySet, self).delete()
         return res
 

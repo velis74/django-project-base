@@ -18,7 +18,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django_project_base.rest.project import ProjectSerializer
-from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, DJANGO_USER_CACHE
+from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 
 
 class ProfileSerializer(ModelSerializer):
@@ -159,7 +159,7 @@ class ProfileViewSet(ModelViewSet):
 
         profile_obj.save()
         user.save()
-        cache.delete(DJANGO_USER_CACHE % user.id)
+        cache.delete(USER_CACHE_KEY.format(id=user.id))
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(

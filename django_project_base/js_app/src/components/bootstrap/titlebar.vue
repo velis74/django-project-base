@@ -1,30 +1,21 @@
 <template>
   <div v-cloak class="titlebar-app titlebar-component">
     <nav class="navbar navbar-expand-lg" :class="darkOrLightMode">
-      <div v-if="titleBarProps.logo" class="nav-item">
-        <div class="card">
-          <div class="card-body">
-            <img
-              :src="titleBarProps.logo"
-              class="float-left rounded-circle logo-image"
-              onclick="window.location.href='/'"
-            >
-          </div>
-        </div>
+      <div v-if="titleBarProps.name || titleBarProps.logo" class="navbar-brand" style="cursor: default;">
+        <img
+          v-if="titleBarProps.logo"
+          :src="titleBarProps.logo"
+          class="float-left rounded-circle logo-image"
+          onclick="window.location.href='/'"
+        >
+        {{ titleBarProps.name || '' }}
       </div>
-      <div
-        v-if="titleBarProps.name"
-        class="navbar-brand left-spacing"
-        href="javascript:void(0);"
-        style="cursor: default;"
-      >
-        {{ titleBarProps.name }}
-      </div>
-      <div v-if="breadcrumbsComponent && loggedIn" class="left-spacing">
+      <div v-if="breadcrumbsComponent && loggedIn">
         <component :is="breadcrumbsComponent"/>
       </div>
+      <div class="collapse navbar-collapse mr-auto"/>
       <div v-if="projectlistComponent && loggedIn" class="collapse navbar-collapse">
-        <ul class="navbar-nav mr-auto"/>
+        <ul class="navbar-nav"/>
         <component :is="projectlistComponent"/>
       </div>
       <div v-if="userprofileComponent && loggedIn">
@@ -199,10 +190,6 @@ export default {
   .logo-image {
     max-height: 60px;
     max-width: 60px;
-  }
-
-  .left-spacing {
-    margin-left: 1em;
   }
 
   .login {

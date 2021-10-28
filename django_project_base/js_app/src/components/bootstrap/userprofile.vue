@@ -1,62 +1,51 @@
 <template>
-  <div class="nav-item left-spacing userprofile-component">
-    <div class="card" data-toggle="dropdown">
-      <div class="card-body">
-        <img
-          v-if="componentData.avatar"
-          :src="componentData.avatar"
-          class="float-left rounded-circle"
-        >
-        <div class="user-names" :style="componentData.avatar ? 'padding-left: 55px;' : ''">
-          <h5 v-if="componentData.first_name && componentData.last_name" class="card-title">
-            {{ componentData.first_name }} <br> {{ componentData.last_name }}
-            <span v-if="isImpersonated">({{
-              gettext('Impersonated')
-            }})</span>
-          </h5>
-          <h5 v-else-if="componentData.email" class="card-title" style="margin-top: 0.6em;">
-            {{ componentData.email }}
-            <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
-          </h5>
-          <h5 v-else-if="componentData.username" class="card-title" style="margin-top: 0.6em;">
-            {{ componentData.username }}
-            <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
-          </h5>
-        </div>
-        <ul class="navbar-nav">
-          <li class="nav-item dropdown">
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -7em;">
-              <a class="dropdown-item" href="#" @click="userProfile">{{ gettext('User profile') }}</a>
-              <a class="dropdown-item" href="#" @click="changePassword">{{ gettext('Change password') }}</a>
-              <a
-                v-if="permissions['impersonate-user'] && !isImpersonated"
-                class="dropdown-item"
-                href="#"
-                @click="showImpersonateLogin"
-              >{{ gettext('Impersonate user') }}</a>
-              <a
-                v-else-if="isImpersonated"
-                class="dropdown-item"
-                href="#"
-                @click="stopImpersonation"
-              >{{ gettext('Stop impersonation') }}</a>
-              <a class="dropdown-item" href="#" @click="makeLogout">{{
-                gettext('Logout')
-              }}</a>
-            </div>
-          </li>
-        </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item dropdown userprofile-component">
+      <a
+        id="navbarDropdown"
+        class="nav-link dropdown-toggle text-nowrap"
+        href="#"
+        role="button"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <img v-if="componentData.avatar" :src="componentData.avatar" class="d-inline-block align-top size-2">
+        <h5 v-if="displayName" class="d-inline-block">
+          {{ displayName }}
+          <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
+        </h5>
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="#" @click="userProfile">{{ gettext('User profile') }}</a>
+        <a class="dropdown-item" href="#" @click="changePassword">{{ gettext('Change password') }}</a>
+        <a
+          v-if="permissions['impersonate-user'] && !isImpersonated"
+          class="dropdown-item"
+          href="#"
+          @click="showImpersonateLogin"
+        >{{ gettext('Impersonate user') }}</a>
+        <a
+          v-else-if="isImpersonated"
+          class="dropdown-item"
+          href="#"
+          @click="stopImpersonation"
+        >{{ gettext('Stop impersonation') }}</a>
+        <div class="dropdown-divider"/>
+        <a class="dropdown-item" href="#" @click="makeLogout">{{ gettext('Logout') }}</a>
       </div>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <script>
 
+import 'bootstrap';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import eventBus from 'dynamicforms/src/logic/eventBus';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
+import $ from 'jquery';
 import Vue from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
@@ -81,6 +70,16 @@ export default {
       isImpersonated: false,
     };
   },
+  computed: {
+    displayName() {
+      if (this.componentData.first_name && this.componentData.last_name) {
+        return `${this.componentData.first_name} ${this.componentData.last_name}`;
+      }
+      if (this.componentData.email) return this.componentData.email;
+      if (this.componentData.username) return this.componentData.username;
+      return null;
+    },
+  },
   created() {
     this.loadData();
   },
@@ -88,6 +87,10 @@ export default {
     eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
     eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
     eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
+  },
+  updated() {
+    // We have to do this otherwise dropdown does not work https://stackoverflow.com/a/29006010/1760858
+    this.$nextTick(() => { $('.dropdown-toggle').dropdown(); });
   },
   beforeDestroy() {
     eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
@@ -184,10 +187,6 @@ export default {
 <style scoped>
   .cursor-pointer {
     cursor: pointer;
-  }
-
-  .left-spacing {
-    margin-left: 1em;
   }
 
   .card-body {

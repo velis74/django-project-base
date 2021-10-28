@@ -1,7 +1,7 @@
-from django.core.cache import cache
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from django_project_base.base.auth_backends import user_cache_invalidate
 from example.demo_django_base.models import UserProfile
 
 
@@ -81,7 +81,7 @@ class TestProfileViewSet(TestCase):
         miha.is_staff = True
         miha.is_superuser = True
         miha.save()
-        cache.delete('django-user-%d' % miha.id)
+        user_cache_invalidate(miha)
 
         response = self.api_client.get('/account/profile/1', {}, format='json')
         self.assertEqual(response.status_code, 200)
@@ -104,7 +104,7 @@ class TestProfileViewSet(TestCase):
         miha.is_staff = True
         miha.is_superuser = True
         miha.save()
-        cache.delete('django-user-%d' % miha.id)
+        user_cache_invalidate(miha)
 
         response = self.api_client.delete('/account/profile/2', {}, format='json')
         self.assertEqual(response.status_code, 204)

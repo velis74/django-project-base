@@ -120,3 +120,13 @@ For running example django project prepare python environment and run :code:`{pr
 - :code:`python manage.py runserver`
 
 Try logging in with user "miha", pass "mihamiha".
+
+Activating features
+-------------------
+
+:ref:`User caching backend`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Requires a settings.py `AUTHENTICATION_BACKENDS <https://docs.djangoproject.com/en/dev/topics/auth/customizing/>`_
+setting. Optionally also a global cache server such as Redis.
+See `Django CACHES <https://docs.djangoproject.com/en/dev/topics/cache/>`_ setting.

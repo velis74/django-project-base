@@ -15,7 +15,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
 
 )
 
-DJANGO_USER_CACHE = 'django-user-%d'
+USER_CACHE_KEY = 'django-user-{id}'
 CACHE_IMPERSONATE_USER = 'impersonate-user-%d'
 
 PROFILER_LOG_LONG_REQUESTS_COUNT = 50

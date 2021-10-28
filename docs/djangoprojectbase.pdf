@@ -3,7 +3,7 @@
 1 0 obj
 <<
 /F1 2 0 R /F2 3 0 R /F3 10 0 R /F4 11 0 R /F5 13 0 R /F6 14 0 R 
-  /F7 35 0 R
+  /F7 38 0 R
 >>
 endobj
 2 0 obj
@@ -18,7 +18,7 @@ endobj
 endobj
 4 0 obj
 <<
-/Contents 101 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Contents 110 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -28,7 +28,7 @@ endobj
 endobj
 5 0 obj
 <<
-/Contents 102 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Contents 111 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -93,7 +93,7 @@ endobj
 endobj
 15 0 obj
 <<
-/Annots [ 6 0 R 7 0 R 8 0 R 9 0 R 12 0 R ] /Contents 103 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Annots [ 6 0 R 7 0 R 8 0 R 9 0 R 12 0 R ] /Contents 112 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -138,7 +138,7 @@ endobj
 endobj
 21 0 obj
 <<
-/Annots [ 16 0 R 17 0 R 18 0 R 19 0 R 20 0 R ] /Contents 104 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Annots [ 16 0 R 17 0 R 18 0 R 19 0 R 20 0 R ] /Contents 113 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -148,104 +148,92 @@ endobj
 endobj
 22 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 15 0 R /XYZ 40.01575 376.2394 0 ] /Rect [ 374.0457 661.4394 462.9757 673.4394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 33 0 R /XYZ 40.01575 706.8394 0 ] /Rect [ 40.01575 691.4394 148.8387 704.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 23 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 15 0 R /XYZ 40.01575 376.2394 0 ] /Rect [ 371.2657 604.6394 460.1957 616.6394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://docs.djangoproject.com/en/dev/topics/auth/customizing/)
+>> /Border [ 0 0 0 ] /Rect [ 141.7257 673.4394 296.7618 685.4394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 24 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 36 0 R /XYZ 40.01575 154.8394 0 ] /Rect [ 40.01575 499.8394 338.9957 511.8394 ] /Subtype /Link /Type /Annot
+/A <<
+/S /URI /Type /Action /URI (https://docs.djangoproject.com/en/dev/topics/cache/)
+>> /Border [ 0 0 0 ] /Rect [ 91.70575 661.4394 167.8357 673.4394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 25 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 36 0 R /XYZ 40.01575 232.0394 0 ] /Rect [ 102.8157 443.0394 155.0557 455.0394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 15 0 R /XYZ 40.01575 376.2394 0 ] /Rect [ 374.0457 571.8394 462.9757 583.8394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 26 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 38 0 R /XYZ 40.01575 438.8394 0 ] /Rect [ 102.8157 386.2394 215.6457 398.2394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 15 0 R /XYZ 40.01575 376.2394 0 ] /Rect [ 371.2657 515.0394 460.1957 527.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 27 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 38 0 R /XYZ 40.01575 438.8394 0 ] /Rect [ 102.8157 311.4394 215.6457 323.4394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 41 0 R /XYZ 40.01575 801.2394 0 ] /Rect [ 40.01575 410.2394 338.9957 422.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 28 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 40 0 R /XYZ 40.01575 718.4394 0 ] /Rect [ 434.0657 254.6394 555.2598 266.6394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 112.8394 0 ] /Rect [ 102.8157 353.4394 155.0557 365.4394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 29 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 225.6394 0 ] /Rect [ 454.6057 185.8394 555.2598 197.8394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 44 0 R /XYZ 40.01575 569.6394 0 ] /Rect [ 102.8157 296.6394 215.6457 308.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 30 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 38 0 R /XYZ 40.01575 712.8394 0 ] /Rect [ 102.8157 117.0394 221.1857 129.0394 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 44 0 R /XYZ 40.01575 569.6394 0 ] /Rect [ 102.8157 221.8394 215.6457 233.8394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 31 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 38 0 R /XYZ 40.01575 635.6394 0 ] /Rect [ 484.6657 60.23937 555.2598 72.23937 ] /Subtype /Link /Type /Annot
+/Border [ 0 0 0 ] /Contents () /Dest [ 33 0 R /XYZ 40.01575 706.8394 0 ] /Rect [ 434.0757 165.0394 555.2598 177.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 32 0 obj
 <<
-/Annots [ 22 0 R 23 0 R 24 0 R 25 0 R 26 0 R 27 0 R 28 0 R 29 0 R 30 0 R 31 0 R ] /Contents 105 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
+/Border [ 0 0 0 ] /Contents () /Dest [ 45 0 R /XYZ 40.01575 347.2394 0 ] /Rect [ 454.6057 96.23937 555.2598 108.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 33 0 obj
 <<
-/Border [ 0 0 0 ] /Contents () /Dest [ 36 0 R /XYZ 40.01575 628.6394 0 ] /Rect [ 338.4657 691.4394 429.0457 703.4394 ] /Subtype /Link /Type /Annot
+/Annots [ 22 0 R 23 0 R 24 0 R 25 0 R 26 0 R 27 0 R 28 0 R 29 0 R 30 0 R 31 0 R 
+  32 0 R ] /Contents 114 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
 >>
 endobj
 34 0 obj
 <<
-/Annots [ 33 0 R ] /Contents 106 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
+/Border [ 0 0 0 ] /Contents () /Dest [ 41 0 R /XYZ 40.01575 552.8394 0 ] /Rect [ 102.8157 787.0394 221.1857 799.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 35 0 obj
 <<
-/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F7 /Subtype /Type1 /Type /Font
+/Border [ 0 0 0 ] /Contents () /Dest [ 41 0 R /XYZ 40.01575 475.6394 0 ] /Rect [ 484.6657 730.2394 555.2598 742.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 36 0 obj
 <<
-/Contents 107 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 509.4394 0 ] /Rect [ 338.4657 604.6394 429.0457 616.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 37 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (file:///schema/swagger-ui/#/maintenance-notification/maintenance_notification_create)
->> /Border [ 0 0 0 ] /Rect [ 446.8757 333.4394 503.3692 345.4394 ] /Subtype /Link /Type /Annot
->>
-endobj
-38 0 obj
-<<
-/Annots [ 37 0 R ] /Contents 108 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Annots [ 34 0 R 35 0 R 36 0 R ] /Contents 115 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -253,9 +241,14 @@ endobj
 >> /Type /Page
 >>
 endobj
+38 0 obj
+<<
+/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F7 /Subtype /Type1 /Type /Font
+>>
+endobj
 39 0 obj
 <<
-/Contents 109 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Contents 116 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -265,67 +258,38 @@ endobj
 endobj
 40 0 obj
 <<
-/Contents 110 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/A <<
+/S /URI /Type /Action /URI (https://stackoverflow.com/questions/12838111)
+>> /Border [ 0 0 0 ] /Rect [ 265.3257 206.0394 300.3357 218.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 41 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io/en/latest/backends/index.html)
->> /Border [ 0 0 0 ] /Rect [ 40.01575 379.0394 354.6157 391.0394 ] /Subtype /Link /Type /Annot
+/Annots [ 40 0 R ] /Contents 117 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
 >>
 endobj
 42 0 obj
 <<
 /A <<
-/S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io)
->> /Border [ 0 0 0 ] /Rect [ 214.5357 361.0394 300.9346 373.0394 ] /Subtype /Link /Type /Annot
+/S /URI /Type /Action /URI (https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)
+>> /Border [ 0 0 0 ] /Rect [ 237.0057 772.0394 257.3862 784.0394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 43 0 obj
 <<
-/Annots [ 41 0 R 42 0 R ] /Contents 111 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 
-  /Trans <<
-
->> /Type /Page
+/A <<
+/S /URI /Type /Action /URI (file:///schema/swagger-ui/#/maintenance-notification/maintenance_notification_create)
+>> /Border [ 0 0 0 ] /Rect [ 446.8757 464.2394 503.3692 476.2394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 44 0 obj
 <<
-/A <<
-/S /URI /Type /Action /URI (https://console.developers.google.com/apis/credentials)
->> /Border [ 0 0 0 ] /Rect [ 115.0457 720.2394 367.646 732.2394 ] /Subtype /Link /Type /Annot
->>
-endobj
-45 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (http://localhost:8080)
->> /Border [ 0 0 0 ] /Rect [ 287.8957 690.2394 377.3957 702.2394 ] /Subtype /Link /Type /Annot
->>
-endobj
-46 0 obj
-<<
-/A <<
-/S /URI /Type /Action /URI (http://localhost:8080/account/social/complete/google-oauth2/)
->> /Border [ 0 0 0 ] /Rect [ 267.3257 672.2394 535.8057 684.2394 ] /Subtype /Link /Type /Annot
->>
-endobj
-47 0 obj
-<<
-/Border [ 0 0 0 ] /Contents () /Dest [ 39 0 R /XYZ 40.01575 801.4394 0 ] /Rect [ 448.5757 91.63178 511.9457 103.6318 ] /Subtype /Link /Type /Annot
->>
-endobj
-48 0 obj
-<<
-/Annots [ 44 0 R 45 0 R 46 0 R 47 0 R ] /Contents 112 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Annots [ 42 0 R 43 0 R ] /Contents 118 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 
   /Trans <<
@@ -333,19 +297,89 @@ endobj
 >> /Type /Page
 >>
 endobj
-49 0 obj
+45 0 obj
 <<
-/Contents 113 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/Contents 119 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
 >> 
   /Type /Page
+>>
+endobj
+46 0 obj
+<<
+/Contents 120 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+47 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io/en/latest/backends/index.html)
+>> /Border [ 0 0 0 ] /Rect [ 40.01575 505.0394 354.6157 517.0394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+48 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://python-social-auth.readthedocs.io)
+>> /Border [ 0 0 0 ] /Rect [ 214.5357 487.0394 300.9346 499.0394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+49 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://console.developers.google.com/apis/credentials)
+>> /Border [ 0 0 0 ] /Rect [ 115.0457 90.63937 367.646 102.6394 ] /Subtype /Link /Type /Annot
 >>
 endobj
 50 0 obj
 <<
-/Contents 114 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 100 0 R /Resources <<
+/A <<
+/S /URI /Type /Action /URI (http://localhost:8080)
+>> /Border [ 0 0 0 ] /Rect [ 287.8957 60.63937 377.3957 72.63937 ] /Subtype /Link /Type /Annot
+>>
+endobj
+51 0 obj
+<<
+/Annots [ 47 0 R 48 0 R 49 0 R 50 0 R ] /Contents 121 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
+>>
+endobj
+52 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (http://localhost:8080/account/social/complete/google-oauth2/)
+>> /Border [ 0 0 0 ] /Rect [ 267.3257 787.0394 535.8057 799.0394 ] /Subtype /Link /Type /Annot
+>>
+endobj
+53 0 obj
+<<
+/Border [ 0 0 0 ] /Contents () /Dest [ 44 0 R /XYZ 40.01575 162.2394 0 ] /Rect [ 448.5757 206.4318 511.9457 218.4318 ] /Subtype /Link /Type /Annot
+>>
+endobj
+54 0 obj
+<<
+/Annots [ 52 0 R 53 0 R ] /Contents 122 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
+>>
+endobj
+55 0 obj
+<<
+/Contents 123 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
 /Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
 >> /Rotate 0 /Trans <<
 
@@ -353,272 +387,298 @@ endobj
   /Type /Page
 >>
 endobj
-51 0 obj
-<<
-/Outlines 53 0 R /PageLabels 115 0 R /PageMode /UseNone /Pages 100 0 R /Type /Catalog
->>
-endobj
-52 0 obj
-<<
-/Author () /CreationDate (D:20211012064034-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20211012064034-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
-  /Subject (\(unspecified\)) /Title () /Trapped /False
->>
-endobj
-53 0 obj
-<<
-/Count 61 /First 54 0 R /Last 54 0 R /Type /Outlines
->>
-endobj
-54 0 obj
-<<
-/Count 45 /Dest [ 15 0 R /XYZ 40.01575 799.0394 0 ] /First 55 0 R /Last 56 0 R /Parent 53 0 R /Title (Welcome to Django Project Base\220s documentation!)
->>
-endobj
-55 0 obj
-<<
-/Dest [ 15 0 R /XYZ 40.01575 759.0394 0 ] /Next 56 0 R /Parent 54 0 R /Title (What is django-project-base?)
->>
-endobj
 56 0 obj
 <<
-/Count 43 /Dest [ 15 0 R /XYZ 40.01575 621.8394 0 ] /First 57 0 R /Last 99 0 R /Parent 54 0 R /Prev 55 0 R 
-  /Title (Why django-project-base?)
+/Contents 124 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 109 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 57 0 obj
 <<
-/Count 3 /Dest [ 15 0 R /XYZ 40.01575 406.6394 0 ] /First 58 0 R /Last 60 0 R /Next 61 0 R /Parent 56 0 R 
-  /Title (Installation)
+/Outlines 59 0 R /PageLabels 125 0 R /PageMode /UseNone /Pages 109 0 R /Type /Catalog
 >>
 endobj
 58 0 obj
 <<
-/Dest [ 15 0 R /XYZ 40.01575 373.8394 0 ] /Next 59 0 R /Parent 57 0 R /Title (Django project base)
+/Author () /CreationDate (D:20211028084407-01'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20211028084407-01'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+  /Subject (\(unspecified\)) /Title () /Trapped /False
 >>
 endobj
 59 0 obj
 <<
-/Dest [ 21 0 R /XYZ 40.01575 420.6394 0 ] /Next 60 0 R /Parent 57 0 R /Prev 58 0 R /Title (Dynamic Forms)
+/Count 65 /First 60 0 R /Last 60 0 R /Type /Outlines
 >>
 endobj
 60 0 obj
 <<
-/Dest [ 21 0 R /XYZ 40.01575 173.4394 0 ] /Parent 57 0 R /Prev 59 0 R /Title (Environment setup)
+/Count 48 /Dest [ 15 0 R /XYZ 40.01575 799.0394 0 ] /First 61 0 R /Last 62 0 R /Parent 59 0 R /Title (Welcome to Django Project Base\220s documentation!)
 >>
 endobj
 61 0 obj
 <<
-/Dest [ 32 0 R /XYZ 40.01575 735.0394 0 ] /Next 62 0 R /Parent 56 0 R /Prev 57 0 R /Title (Settings options - quick overview)
+/Dest [ 15 0 R /XYZ 40.01575 759.0394 0 ] /Next 62 0 R /Parent 60 0 R /Title (What is django-project-base?)
 >>
 endobj
 62 0 obj
 <<
-/Dest [ 34 0 R /XYZ 40.01575 675.4394 0 ] /Next 63 0 R /Parent 56 0 R /Prev 61 0 R /Title (Tags)
+/Count 46 /Dest [ 15 0 R /XYZ 40.01575 621.8394 0 ] /First 63 0 R /Last 108 0 R /Parent 60 0 R /Prev 61 0 R 
+  /Title (Why django-project-base?)
 >>
 endobj
 63 0 obj
 <<
-/Count 1 /Dest [ 34 0 R /XYZ 40.01575 249.8804 0 ] /First 64 0 R /Last 64 0 R /Next 65 0 R /Parent 56 0 R 
-  /Prev 62 0 R /Title (Fields)
+/Count 5 /Dest [ 15 0 R /XYZ 40.01575 406.6394 0 ] /First 64 0 R /Last 67 0 R /Next 69 0 R /Parent 62 0 R 
+  /Title (Installation)
 >>
 endobj
 64 0 obj
 <<
-/Dest [ 34 0 R /XYZ 40.01575 217.0804 0 ] /Parent 63 0 R /Title (HEXColorField)
+/Dest [ 15 0 R /XYZ 40.01575 373.8394 0 ] /Next 65 0 R /Parent 63 0 R /Title (Django project base)
 >>
 endobj
 65 0 obj
 <<
-/Count 2 /Dest [ 34 0 R /XYZ 40.01575 168.6804 0 ] /First 66 0 R /Last 67 0 R /Next 68 0 R /Parent 56 0 R 
-  /Prev 63 0 R /Title (Middleware)
+/Dest [ 21 0 R /XYZ 40.01575 420.6394 0 ] /Next 66 0 R /Parent 63 0 R /Prev 64 0 R /Title (Dynamic Forms)
 >>
 endobj
 66 0 obj
 <<
-/Dest [ 34 0 R /XYZ 40.01575 135.8804 0 ] /Next 67 0 R /Parent 65 0 R /Title (Project Middleware)
+/Dest [ 21 0 R /XYZ 40.01575 173.4394 0 ] /Next 67 0 R /Parent 63 0 R /Prev 65 0 R /Title (Environment setup)
 >>
 endobj
 67 0 obj
 <<
-/Dest [ 36 0 R /XYZ 40.01575 626.2394 0 ] /Parent 65 0 R /Prev 66 0 R /Title (Performance profiler)
+/Count 1 /Dest [ 33 0 R /XYZ 40.01575 735.0394 0 ] /First 68 0 R /Last 68 0 R /Parent 63 0 R /Prev 66 0 R 
+  /Title (Activating features)
 >>
 endobj
 68 0 obj
 <<
-/Count 17 /Dest [ 36 0 R /XYZ 40.01575 329.0394 0 ] /First 69 0 R /Last 78 0 R /Next 86 0 R /Parent 56 0 R 
-  /Prev 65 0 R /Title (Modules)
+/Dest [ 33 0 R /XYZ 40.01575 704.6394 0 ] /Parent 67 0 R /Title (User caching backend)
 >>
 endobj
 69 0 obj
 <<
-/Count 2 /Dest [ 36 0 R /XYZ 40.01575 278.2394 0 ] /First 70 0 R /Last 71 0 R /Next 72 0 R /Parent 68 0 R 
-  /Title (Project)
+/Dest [ 33 0 R /XYZ 40.01575 645.4394 0 ] /Next 70 0 R /Parent 62 0 R /Prev 63 0 R /Title (Settings options - quick overview)
 >>
 endobj
 70 0 obj
 <<
-/Dest [ 36 0 R /XYZ 40.01575 229.8394 0 ] /Next 71 0 R /Parent 69 0 R /Title (Project slug)
+/Dest [ 37 0 R /XYZ 40.01575 588.6394 0 ] /Next 71 0 R /Parent 62 0 R /Prev 69 0 R /Title (Tags)
 >>
 endobj
 71 0 obj
 <<
-/Dest [ 36 0 R /XYZ 40.01575 152.6394 0 ] /Parent 69 0 R /Prev 70 0 R /Title (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES)
+/Count 1 /Dest [ 37 0 R /XYZ 40.01575 163.0804 0 ] /First 72 0 R /Last 72 0 R /Next 73 0 R /Parent 62 0 R 
+  /Prev 70 0 R /Title (Fields)
 >>
 endobj
 72 0 obj
 <<
-/Count 2 /Dest [ 38 0 R /XYZ 40.01575 759.0394 0 ] /First 73 0 R /Last 74 0 R /Next 75 0 R /Parent 68 0 R 
-  /Prev 69 0 R /Title (Profile)
+/Dest [ 37 0 R /XYZ 40.01575 130.2804 0 ] /Parent 71 0 R /Title (HEXColorField)
 >>
 endobj
 73 0 obj
 <<
-/Dest [ 38 0 R /XYZ 40.01575 710.6394 0 ] /Next 74 0 R /Parent 72 0 R /Title (Profile reverse name order)
+/Count 2 /Dest [ 39 0 R /XYZ 40.01575 799.0394 0 ] /First 74 0 R /Last 75 0 R /Next 76 0 R /Parent 62 0 R 
+  /Prev 71 0 R /Title (Middleware)
 >>
 endobj
 74 0 obj
 <<
-/Dest [ 38 0 R /XYZ 40.01575 633.4394 0 ] /Parent 72 0 R /Prev 73 0 R /Title (Deleting profile)
+/Dest [ 39 0 R /XYZ 40.01575 766.2394 0 ] /Next 75 0 R /Parent 73 0 R /Title (Project Middleware)
 >>
 endobj
 75 0 obj
 <<
-/Count 2 /Dest [ 38 0 R /XYZ 40.01575 526.2394 0 ] /First 76 0 R /Last 77 0 R /Next 78 0 R /Parent 68 0 R 
-  /Prev 72 0 R /Title (Notifications)
+/Dest [ 39 0 R /XYZ 40.01575 507.0394 0 ] /Parent 73 0 R /Prev 74 0 R /Title (Performance profiler)
 >>
 endobj
 76 0 obj
 <<
-/Dest [ 38 0 R /XYZ 40.01575 495.8394 0 ] /Next 77 0 R /Parent 75 0 R /Title (What is notifications module?)
+/Count 18 /Dest [ 39 0 R /XYZ 40.01575 209.8394 0 ] /First 77 0 R /Last 87 0 R /Next 95 0 R /Parent 62 0 R 
+  /Prev 73 0 R /Title (Modules)
 >>
 endobj
 77 0 obj
 <<
-/Dest [ 38 0 R /XYZ 40.01575 436.6394 0 ] /Parent 75 0 R /Prev 76 0 R /Title (Maintenance notifications)
+/Count 2 /Dest [ 39 0 R /XYZ 40.01575 159.0394 0 ] /First 78 0 R /Last 79 0 R /Next 80 0 R /Parent 76 0 R 
+  /Title (Project)
 >>
 endobj
 78 0 obj
 <<
-/Count 7 /Dest [ 39 0 R /XYZ 40.01575 799.0394 0 ] /First 79 0 R /Last 85 0 R /Parent 68 0 R /Prev 75 0 R 
-  /Title (Authentication)
+/Dest [ 39 0 R /XYZ 40.01575 110.6394 0 ] /Next 79 0 R /Parent 77 0 R /Title (Project slug)
 >>
 endobj
 79 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 768.6394 0 ] /Next 80 0 R /Parent 78 0 R /Title (Obtaining and maintaining sessions)
+/Dest [ 41 0 R /XYZ 40.01575 799.0394 0 ] /Parent 77 0 R /Prev 78 0 R /Title (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES)
 >>
 endobj
 80 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 565.4394 0 ] /Next 81 0 R /Parent 78 0 R /Prev 79 0 R /Title (Activate project base accounts API endpoints)
+/Count 3 /Dest [ 41 0 R /XYZ 40.01575 653.0394 0 ] /First 81 0 R /Last 83 0 R /Next 84 0 R /Parent 76 0 R 
+  /Prev 77 0 R /Title (Profile)
 >>
 endobj
 81 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 451.4394 0 ] /Next 82 0 R /Parent 78 0 R /Prev 80 0 R /Title (Session middleware)
+/Dest [ 41 0 R /XYZ 40.01575 550.6394 0 ] /Next 82 0 R /Parent 80 0 R /Title (Profile reverse name order)
 >>
 endobj
 82 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 301.4394 0 ] /Next 83 0 R /Parent 78 0 R /Prev 81 0 R /Title (Use of json session id in subsequent requests)
+/Dest [ 41 0 R /XYZ 40.01575 473.4394 0 ] /Next 83 0 R /Parent 80 0 R /Prev 81 0 R /Title (Deleting profile)
 >>
 endobj
 83 0 obj
 <<
-/Dest [ 39 0 R /XYZ 40.01575 223.4394 0 ] /Next 84 0 R /Parent 78 0 R /Prev 82 0 R /Title (Impersonate user)
+/Dest [ 41 0 R /XYZ 40.01575 354.2394 0 ] /Parent 80 0 R /Prev 82 0 R /Title (Existing profile table troubleshooting)
 >>
 endobj
 84 0 obj
 <<
-/Dest [ 40 0 R /XYZ 40.01575 716.2394 0 ] /Next 85 0 R /Parent 78 0 R /Prev 83 0 R /Title (User caching backend)
+/Count 2 /Dest [ 44 0 R /XYZ 40.01575 657.0394 0 ] /First 85 0 R /Last 86 0 R /Next 87 0 R /Parent 76 0 R 
+  /Prev 80 0 R /Title (Notifications)
 >>
 endobj
 85 0 obj
 <<
-/Dest [ 43 0 R /XYZ 40.01575 728.2394 0 ] /Parent 78 0 R /Prev 84 0 R /Title (Social auth integrations)
+/Dest [ 44 0 R /XYZ 40.01575 626.6394 0 ] /Next 86 0 R /Parent 84 0 R /Title (What is notifications module?)
 >>
 endobj
 86 0 obj
 <<
-/Dest [ 48 0 R /XYZ 40.01575 577.4394 0 ] /Next 87 0 R /Parent 56 0 R /Prev 68 0 R /Title (Translations)
+/Dest [ 44 0 R /XYZ 40.01575 567.4394 0 ] /Parent 84 0 R /Prev 85 0 R /Title (Maintenance notifications)
 >>
 endobj
 87 0 obj
 <<
-/Count 3 /Dest [ 48 0 R /XYZ 40.01575 496.6394 0 ] /First 88 0 R /Last 88 0 R /Next 91 0 R /Parent 56 0 R 
-  /Prev 86 0 R /Title (VUE components)
+/Count 7 /Dest [ 44 0 R /XYZ 40.01575 159.8394 0 ] /First 88 0 R /Last 94 0 R /Parent 76 0 R /Prev 84 0 R 
+  /Title (Authentication)
 >>
 endobj
 88 0 obj
 <<
-/Count 2 /Dest [ 48 0 R /XYZ 40.01575 409.8394 0 ] /First 89 0 R /Last 90 0 R /Parent 87 0 R /Title (TitleBar component)
+/Dest [ 44 0 R /XYZ 40.01575 129.4394 0 ] /Next 89 0 R /Parent 87 0 R /Title (Obtaining and maintaining sessions)
 >>
 endobj
 89 0 obj
 <<
-/Dest [ 48 0 R /XYZ 40.01575 349.4394 0 ] /Next 90 0 R /Parent 88 0 R /Title (TitleBar)
+/Dest [ 45 0 R /XYZ 40.01575 687.0394 0 ] /Next 90 0 R /Parent 87 0 R /Prev 88 0 R /Title (Activate project base accounts API endpoints)
 >>
 endobj
 90 0 obj
 <<
-/Dest [ 48 0 R /XYZ 40.01575 152.8318 0 ] /Parent 88 0 R /Prev 89 0 R /Title (UserProfile)
+/Dest [ 45 0 R /XYZ 40.01575 573.0394 0 ] /Next 91 0 R /Parent 87 0 R /Prev 89 0 R /Title (Session middleware)
 >>
 endobj
 91 0 obj
 <<
-/Count 1 /Dest [ 49 0 R /XYZ 40.01575 799.0394 0 ] /First 92 0 R /Last 92 0 R /Next 93 0 R /Parent 56 0 R 
-  /Prev 87 0 R /Title (Examples)
+/Dest [ 45 0 R /XYZ 40.01575 423.0394 0 ] /Next 92 0 R /Parent 87 0 R /Prev 90 0 R /Title (Use of json session id in subsequent requests)
 >>
 endobj
 92 0 obj
 <<
-/Dest [ 49 0 R /XYZ 40.01575 766.2394 0 ] /Parent 91 0 R /Title (Titlebar component integration example)
+/Dest [ 45 0 R /XYZ 40.01575 345.0394 0 ] /Next 93 0 R /Parent 87 0 R /Prev 91 0 R /Title (Impersonate user)
 >>
 endobj
 93 0 obj
 <<
-/Count 3 /Dest [ 49 0 R /XYZ 40.01575 182.3621 0 ] /First 94 0 R /Last 96 0 R /Next 97 0 R /Parent 56 0 R 
-  /Prev 91 0 R /Title (Example project)
+/Dest [ 45 0 R /XYZ 40.01575 93.03937 0 ] /Next 94 0 R /Parent 87 0 R /Prev 92 0 R /Title (User caching backend)
 >>
 endobj
 94 0 obj
 <<
-/Dest [ 49 0 R /XYZ 40.01575 131.5621 0 ] /Next 95 0 R /Parent 93 0 R /Title (Run example project)
+/Dest [ 46 0 R /XYZ 40.01575 104.6394 0 ] /Parent 87 0 R /Prev 93 0 R /Title (Social auth integrations)
 >>
 endobj
 95 0 obj
 <<
-/Dest [ 50 0 R /XYZ 40.01575 740.2394 0 ] /Next 96 0 R /Parent 93 0 R /Prev 94 0 R /Title (Serve Sphinx documentation on localhost)
+/Dest [ 54 0 R /XYZ 40.01575 692.2394 0 ] /Next 96 0 R /Parent 62 0 R /Prev 76 0 R /Title (Translations)
 >>
 endobj
 96 0 obj
 <<
-/Dest [ 50 0 R /XYZ 40.01575 607.6042 0 ] /Parent 93 0 R /Prev 95 0 R /Title (Sample data)
+/Count 3 /Dest [ 54 0 R /XYZ 40.01575 611.4394 0 ] /First 97 0 R /Last 97 0 R /Next 100 0 R /Parent 62 0 R 
+  /Prev 95 0 R /Title (VUE components)
 >>
 endobj
 97 0 obj
 <<
-/Count 1 /Dest [ 50 0 R /XYZ 40.01575 451.2042 0 ] /First 98 0 R /Last 98 0 R /Next 99 0 R /Parent 56 0 R 
-  /Prev 93 0 R /Title (Swagger)
+/Count 2 /Dest [ 54 0 R /XYZ 40.01575 524.6394 0 ] /First 98 0 R /Last 99 0 R /Parent 96 0 R /Title (TitleBar component)
 >>
 endobj
 98 0 obj
 <<
-/Dest [ 50 0 R /XYZ 40.01575 418.4042 0 ] /Parent 97 0 R /Title (Installation)
+/Dest [ 54 0 R /XYZ 40.01575 464.2394 0 ] /Next 99 0 R /Parent 97 0 R /Title (TitleBar)
 >>
 endobj
 99 0 obj
 <<
-/Dest [ 50 0 R /XYZ 40.01575 247.2042 0 ] /Parent 56 0 R /Prev 97 0 R /Title (Open Api)
+/Dest [ 54 0 R /XYZ 40.01575 267.6318 0 ] /Parent 97 0 R /Prev 98 0 R /Title (UserProfile)
 >>
 endobj
 100 0 obj
 <<
-/Count 14 /Kids [ 4 0 R 5 0 R 15 0 R 21 0 R 32 0 R 34 0 R 36 0 R 38 0 R 39 0 R 40 0 R 
-  43 0 R 48 0 R 49 0 R 50 0 R ] /Type /Pages
+/Count 1 /Dest [ 54 0 R /XYZ 40.01575 190.4318 0 ] /First 101 0 R /Last 101 0 R /Next 102 0 R /Parent 62 0 R 
+  /Prev 96 0 R /Title (Examples)
 >>
 endobj
 101 0 obj
+<<
+/Dest [ 54 0 R /XYZ 40.01575 157.6318 0 ] /Parent 100 0 R /Title (Titlebar component integration example)
+>>
+endobj
+102 0 obj
+<<
+/Count 3 /Dest [ 55 0 R /XYZ 40.01575 310.3621 0 ] /First 103 0 R /Last 105 0 R /Next 106 0 R /Parent 62 0 R 
+  /Prev 100 0 R /Title (Example project)
+>>
+endobj
+103 0 obj
+<<
+/Dest [ 55 0 R /XYZ 40.01575 259.5621 0 ] /Next 104 0 R /Parent 102 0 R /Title (Run example project)
+>>
+endobj
+104 0 obj
+<<
+/Dest [ 55 0 R /XYZ 40.01575 120.3621 0 ] /Next 105 0 R /Parent 102 0 R /Prev 103 0 R /Title (Serve Sphinx documentation on localhost)
+>>
+endobj
+105 0 obj
+<<
+/Dest [ 56 0 R /XYZ 40.01575 728.3029 0 ] /Parent 102 0 R /Prev 104 0 R /Title (Sample data)
+>>
+endobj
+106 0 obj
+<<
+/Count 1 /Dest [ 56 0 R /XYZ 40.01575 571.9029 0 ] /First 107 0 R /Last 107 0 R /Next 108 0 R /Parent 62 0 R 
+  /Prev 102 0 R /Title (Swagger)
+>>
+endobj
+107 0 obj
+<<
+/Dest [ 56 0 R /XYZ 40.01575 539.1029 0 ] /Parent 106 0 R /Title (Installation)
+>>
+endobj
+108 0 obj
+<<
+/Dest [ 56 0 R /XYZ 40.01575 367.9029 0 ] /Parent 62 0 R /Prev 106 0 R /Title (Open Api)
+>>
+endobj
+109 0 obj
+<<
+/Count 15 /Kids [ 4 0 R 5 0 R 15 0 R 21 0 R 33 0 R 37 0 R 39 0 R 41 0 R 44 0 R 45 0 R 
+  46 0 R 51 0 R 54 0 R 55 0 R 56 0 R ] /Type /Pages
+>>
+endobj
+110 0 obj
 <<
 /Length 757
 >>
@@ -660,7 +720,7 @@ q
 1 0 0 1 40.01575 544.5606 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 2.4 Tm /F1 12 Tf 14.4 TL 212.592 0 Td (oktober 12, 2021) Tj T* -212.592 0 Td ET
+BT 1 0 0 1 0 2.4 Tm /F1 12 Tf 14.4 TL 212.592 0 Td (oktober 28, 2021) Tj T* -212.592 0 Td ET
 Q
 Q
 q
@@ -672,7 +732,7 @@ Q
  
 endstream
 endobj
-102 0 obj
+111 0 obj
 <<
 /Length 75
 >>
@@ -684,7 +744,7 @@ Q
  
 endstream
 endobj
-103 0 obj
+112 0 obj
 <<
 /Length 9407
 >>
@@ -1148,7 +1208,7 @@ Q
  
 endstream
 endobj
-104 0 obj
+113 0 obj
 <<
 /Length 9662
 >>
@@ -1500,9 +1560,9 @@ Q
  
 endstream
 endobj
-105 0 obj
+114 0 obj
 <<
-/Length 11373
+/Length 11173
 >>
 stream
 1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
@@ -1591,7 +1651,37 @@ BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Try logging in with user \223miha\224, pass \
 Q
 Q
 q
-1 0 0 1 40.01575 718.2394 cm
+1 0 0 1 40.01575 720.6394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 20.4 re B*
+Q
+q
+BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Activating features) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 691.4394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 19.2 re B*
+Q
+q
+BT 1 0 0 1 0 2.2 Tm 13.2 TL /F1 11 Tf 0 0 0 rg (User caching backend) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 661.4394 cm
+q
+BT 1 0 0 1 0 14 Tm 2.228675 Tw 12 TL /F1 10 Tf 0 0 0 rg (Requires a settings.py ) Tj 0 0 .501961 rg (AUTHENTICATION_BACKENDS) Tj 0 0 0 rg ( setting. Optionally also a global cache server such as) Tj T* 0 Tw (Redis. See ) Tj 0 0 .501961 rg (Django CACHES) Tj 0 0 0 rg ( setting.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 628.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -1603,14 +1693,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Settings option
 Q
 Q
 q
-1 0 0 1 40.01575 700.2394 cm
+1 0 0 1 40.01575 610.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_PROJECT_MODEL) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 681.4394 cm
+1 0 0 1 40.01575 591.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1636,20 +1726,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 661.4394 cm
+1 0 0 1 40.01575 571.8394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Set swappable model for Django project base Project model. Read more in ) Tj (Django project base) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 643.4394 cm
+1 0 0 1 40.01575 553.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_PROFILE_MODEL) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 624.6394 cm
+1 0 0 1 40.01575 535.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1675,20 +1765,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 604.6394 cm
+1 0 0 1 40.01575 515.0394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Set swappable model for Django project base Profile model. Read more in ) Tj (Django project base) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 586.6394 cm
+1 0 0 1 40.01575 497.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 531.8394 cm
+1 0 0 1 40.01575 442.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1760,20 +1850,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 499.8394 cm
+1 0 0 1 40.01575 410.2394 cm
 q
 BT 1 0 0 1 0 14 Tm 19.85764 Tw 12 TL /F1 10 Tf 0 0 0 rg (A dictionary of attribute names on the request object. Read more in) Tj T* 0 Tw (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 481.8394 cm
+1 0 0 1 40.01575 392.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_SLUG_FIELD_NAME) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 463.0394 cm
+1 0 0 1 40.01575 373.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1799,20 +1889,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 443.0394 cm
+1 0 0 1 40.01575 353.4394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Read more in ) Tj (Project slug) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 425.0394 cm
+1 0 0 1 40.01575 335.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (MAINTENANCE_NOTIFICATIONS_CACHE_KEY) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 406.2394 cm
+1 0 0 1 40.01575 316.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1838,20 +1928,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 386.2394 cm
+1 0 0 1 40.01575 296.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Read more in ) Tj (Maintenance notifications) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 368.2394 cm
+1 0 0 1 40.01575 278.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 349.4394 cm
+1 0 0 1 40.01575 259.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1881,27 +1971,27 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 329.4394 cm
+1 0 0 1 40.01575 239.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Maintenance notifications use cached queryset. Default is True.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 311.4394 cm
+1 0 0 1 40.01575 221.8394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Read more in ) Tj (Maintenance notifications) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 293.4394 cm
+1 0 0 1 40.01575 203.8394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_USER_CACHE) Tj T* ET
+BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (USER_CACHE_KEY) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 274.6394 cm
+1 0 0 1 40.01575 185.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1915,36 +2005,36 @@ n -4 0 514.4441 18 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 0 102 12 re f*
+n 0 0 84 12 re f*
 .933333 1 .8 rg
-n 102 0 6 12 re f*
+n 90 0 6 12 re f*
 1 .941176 .941176 rg
-n 108 0 78 12 re f*
+n 102 0 78 12 re f*
 .878431 .878431 .878431 rg
-n 186 0 12 12 re f*
+n 180 0 24 12 re f*
 1 .941176 .941176 rg
-n 198 0 6 12 re f*
-BT 1 0 0 1 0 2 Tm 12 TL /F4 10 Tf 0 0 0 rg (DJANGO_USER_CACHE) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('django-user-) Tj /F6 10 Tf .733333 .4 .533333 rg (%d) Tj /F4 10 Tf .729412 .129412 .129412 rg (') Tj T* ET
+n 204 0 6 12 re f*
+BT 1 0 0 1 0 2 Tm 12 TL /F4 10 Tf 0 0 0 rg (USER_CACHE_KEY) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('django-user-) Tj /F6 10 Tf .733333 .4 .533333 rg ({id}) Tj /F4 10 Tf .729412 .129412 .129412 rg (') Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 242.6394 cm
+1 0 0 1 40.01575 153.0394 cm
 q
-BT 1 0 0 1 0 14 Tm 1.484273 Tw 12 TL /F1 10 Tf 0 0 0 rg (Key name for user caching background. Default value is \221django-user-%d\222. Read more in ) Tj (User caching backend) Tj  T* 0 Tw (chapter.) Tj T* ET
+BT 1 0 0 1 0 14 Tm 1.483606 Tw 12 TL /F1 10 Tf 0 0 0 rg (Key name for user caching background. Default value is \221django-user-{id}\222. Read more in ) Tj (User caching backend) Tj  T* 0 Tw (chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 224.6394 cm
+1 0 0 1 40.01575 135.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (CACHE_IMPERSONATE_USER) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 205.8394 cm
+1 0 0 1 40.01575 116.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -1974,20 +2064,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 173.8394 cm
+1 0 0 1 40.01575 84.23937 cm
 q
 BT 1 0 0 1 0 14 Tm 1.631721 Tw 12 TL /F1 10 Tf 0 0 0 rg (Cache key name for impersonate user. Default value is \221impersonate-user-%d\222. Read more in ) Tj (Impersonate user) Tj  T* 0 Tw (chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 155.8394 cm
+1 0 0 1 40.01575 66.23937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (PROFILE_REVERSE_FULL_NAME_ORDER) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 137.0394 cm
+1 0 0 1 40.01575 47.43937 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2016,21 +2106,30 @@ Q
 Q
 Q
 Q
+ 
+endstream
+endobj
+115 0 obj
+<<
+/Length 15114
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 117.0394 cm
+1 0 0 1 40.01575 787.0394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Read more in ) Tj (Profile reverse name order) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 99.03937 cm
+1 0 0 1 40.01575 769.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DELETE_PROFILE_TIMEDELTA) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 80.23937 cm
+1 0 0 1 40.01575 750.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2056,29 +2155,20 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 48.23937 cm
+1 0 0 1 40.01575 718.2394 cm
 q
 BT 1 0 0 1 0 14 Tm .216894 Tw 12 TL /F1 10 Tf 0 0 0 rg (Value in days, when the automatic process should delete profile marked as for delete. Read more in ) Tj (Deleting profile) Tj  T* 0 Tw (chapter.) Tj T* ET
 Q
 Q
- 
-endstream
-endobj
-106 0 obj
-<<
-/Length 15230
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 787.0394 cm
+1 0 0 1 40.01575 700.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DOCUMENTATION_DIRECTORY) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 768.2394 cm
+1 0 0 1 40.01575 681.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2104,21 +2194,21 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 748.2394 cm
+1 0 0 1 40.01575 661.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Path for documentation directory.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 730.2394 cm
+1 0 0 1 40.01575 643.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (PROFILER_LONG_RUNNING_TASK_THRESHOLD) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 711.4394 cm
+1 0 0 1 40.01575 624.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2144,13 +2234,13 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 691.4394 cm
+1 0 0 1 40.01575 604.6394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Define treshold in ms for profiling long running tasks. Read more in ) Tj (Performance profiler) Tj ( chapter.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 658.6394 cm
+1 0 0 1 40.01575 571.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2162,14 +2252,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Tags) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 640.6394 cm
+1 0 0 1 40.01575 553.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Django project base supports tags usage. See example implementation bellow.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 265.8804 cm
+1 0 0 1 40.01575 179.0804 cm
 q
 q
 .989332 0 0 .989332 0 0 cm
@@ -2531,7 +2621,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 233.0804 cm
+1 0 0 1 40.01575 146.2804 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2543,7 +2633,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Fields) Tj T* E
 Q
 Q
 q
-1 0 0 1 40.01575 202.6804 cm
+1 0 0 1 40.01575 115.8804 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2555,14 +2645,23 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (HEXColorField) 
 Q
 Q
 q
-1 0 0 1 40.01575 184.6804 cm
+1 0 0 1 40.01575 97.88042 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Field with validator for color in hex format, currently used for setting background color for Tags.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+116 0 obj
+<<
+/Length 7236
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 151.8804 cm
+1 0 0 1 40.01575 782.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2574,7 +2673,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Middleware) Tj 
 Q
 Q
 q
-1 0 0 1 40.01575 121.4804 cm
+1 0 0 1 40.01575 751.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2586,37 +2685,28 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Project Middlew
 Q
 Q
 q
-1 0 0 1 40.01575 55.48042 cm
+1 0 0 1 40.01575 685.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 50 Tm /F1 10 Tf 12 TL 4.447756 Tw (ProjectMiddleware: If you wan\222t to set current project which is selected to request object you can use) Tj T* 0 Tw 4.408776 Tw (ProjectMiddleware which should be placed to start of MIDDLEWARE list in settings.py. Middleware sets) Tj T* 0 Tw 2.864871 Tw (DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting dict values to request object. Default) Tj T* 0 Tw 17.90882 Tw (value for DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting is {\221project\222:) Tj T* 0 Tw (\221current_project_slug\222, \221language\222: \221current_language\222}.) Tj T* ET
 Q
 Q
- 
-endstream
-endobj
-107 0 obj
-<<
-/Length 8764
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 763.0394 cm
+1 0 0 1 40.01575 643.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.461506 Tw (This means request will have current_project_slug attribute which will have value set to current project slug and) Tj T* 0 Tw .261417 Tw (request will have current_language attribute which will have value set to current language set. If project or language) Tj T* 0 Tw (cannnot be determined its value is set to None.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 721.0394 cm
+1 0 0 1 40.01575 601.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.313864 Tw (To set current project to ajax requests \221Current-Project\222 header should be used: \221Current-Project\222: \221current project) Tj T* 0 Tw 22.34441 Tw (slug\222. Current slug can also be determined from request path. See) Tj T* 0 Tw (DJANGO_PROJECT_BASE_PROJECT_DEFINED_URL_PART setting description in setting section.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 642.2394 cm
+1 0 0 1 40.01575 523.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2652,7 +2742,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 611.8394 cm
+1 0 0 1 40.01575 492.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2664,21 +2754,21 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Performance pro
 Q
 Q
 q
-1 0 0 1 40.01575 581.8394 cm
+1 0 0 1 40.01575 462.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .89294 Tw (Performance profiler module is providing functionality to log and display the summary of the most time-consuming) Tj T* 0 Tw (requests.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 563.8394 cm
+1 0 0 1 40.01575 444.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable middleware add following line to project files:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 365.0394 cm
+1 0 0 1 40.01575 245.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2756,13 +2846,13 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 345.0394 cm
+1 0 0 1 40.01575 225.8394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Overview of current state is avialable on url ) Tj /F7 10 Tf (http://hostname/app_debug/) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 312.2394 cm
+1 0 0 1 40.01575 193.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2774,14 +2864,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Modules) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 294.2394 cm
+1 0 0 1 40.01575 175.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (The page contains all information about Django Project Base modules:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 263.8394 cm
+1 0 0 1 40.01575 144.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2793,14 +2883,14 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Project) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 245.8394 cm
+1 0 0 1 40.01575 126.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Project API is core part of Django project base.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 216.6394 cm
+1 0 0 1 40.01575 97.43937 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2812,21 +2902,30 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Project slug) T
 Q
 Q
 q
-1 0 0 1 40.01575 198.6394 cm
+1 0 0 1 40.01575 79.43937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (DJANGO_PROJECT_BASE_SLUG_FIELD_NAME) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 168.6394 cm
+1 0 0 1 40.01575 49.43937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .994952 Tw (When creating models with slug field they should be named with this setting value. This enables that we can use) Tj T* 0 Tw (object slug instead of object pk when making api requests. Default value is \223slug\224.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+117 0 obj
+<<
+/Length 11845
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 139.4394 cm
+1 0 0 1 40.01575 785.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2838,7 +2937,7 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (DJANGO_PROJECT_
 Q
 Q
 q
-1 0 0 1 40.01575 78.63937 cm
+1 0 0 1 40.01575 725.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -2910,30 +3009,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 46.63937 cm
+1 0 0 1 40.01575 669.0394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL -0.056795 Tw (This setting defines a dictionary of attribute names on the request object. E.g. project info is set on the request object) Tj T* 0 Tw 3.520341 Tw (under property current_project_slug. Language information is set on request objects under property current) Tj T* 0 Tw ET
-Q
-Q
- 
-endstream
-endobj
-108 0 obj
-<<
-/Length 7544
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 775.0394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .83245 Tw (language. Is language or project is given in request path like language-EN, then url_part settings is found and EN) Tj T* 0 Tw (string is taken as language value.) Tj T* ET
+BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL -0.056795 Tw (This setting defines a dictionary of attribute names on the request object. E.g. project info is set on the request object) Tj T* 0 Tw 3.520341 Tw (under property current_project_slug. Language information is set on request objects under property current) Tj T* 0 Tw .83245 Tw (language. Is language or project is given in request path like language-EN, then url_part settings is found and EN) Tj T* 0 Tw (string is taken as language value.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 744.6394 cm
+1 0 0 1 40.01575 638.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2945,14 +3028,21 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Profile) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 726.6394 cm
+1 0 0 1 40.01575 620.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Account / profile API.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 697.4394 cm
+1 0 0 1 40.01575 566.6394 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.78815 Tw (Django project base uses multi-table inheritance together with abstract base classes to provide boilerplate user) Tj T* 0 Tw .530215 Tw (profile fields. The goal of our profile was to provide some social aspects as well as cover small communities where) Tj T* 0 Tw .819064 Tw (personal details like phone numbers are more commonly used as means of communication. Of course, any of the) Tj T* 0 Tw (fields may be freely skipped with customisation.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 537.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2964,20 +3054,20 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Profile reverse
 Q
 Q
 q
-1 0 0 1 40.01575 667.4394 cm
+1 0 0 1 40.01575 507.4394 cm
 q
 BT 1 0 0 1 0 14 Tm .317122 Tw 12 TL /F1 10 Tf 0 0 0 rg (Settings option ) Tj /F2 10 Tf (PROFILE_REVERSE_FULL_NAME_ORDER) Tj /F1 10 Tf ( defines first_name, last_name order for readonly field) Tj T* 0 Tw /F7 10 Tf (full_name) Tj /F1 10 Tf (. Default order is ) Tj /F7 10 Tf (False) Tj /F1 10 Tf ( - \223First Last\224. Changing setting to true will reverse order to \223Last First\224.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 649.4394 cm
+1 0 0 1 40.01575 489.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Global setting can be also overrided with profile option reverse_full_name_order \(bool\).) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 620.2394 cm
+1 0 0 1 40.01575 460.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -2989,27 +3079,327 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Deleting profil
 Q
 Q
 q
-1 0 0 1 40.01575 602.2394 cm
+1 0 0 1 40.01575 442.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Super admins can either delete profile or mark it for deletion in future.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 572.2394 cm
+1 0 0 1 40.01575 412.2394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .668205 Tw (User cannot delete its profile, he can only mark it for deletion in future. After confirmation for deletion, his profile is) Tj T* 0 Tw (marked for deletion, user is logged out and is not able to log in or use features that require logged in user.) Tj T* ET
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL -0.028206 Tw (User cannot delete their profile, they can only mark it for deletion in future. After confirmation for deletion, their profile) Tj T* 0 Tw (is marked for deletion, user is logged out and is not able to log in or use features that require logged in user.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 542.2394 cm
+1 0 0 1 40.01575 370.2394 cm
 q
-BT 1 0 0 1 0 14 Tm .957435 Tw 12 TL /F1 10 Tf 0 0 0 rg (Settings value ) Tj /F2 10 Tf (DELETE_PROFILE_TIMEDELTA) Tj /F1 10 Tf ( defines how far in future will user profile be actually deleted with) Tj T* 0 Tw (automatic process. Value is set in days.) Tj T* ET
+BT 1 0 0 1 0 26 Tm .957435 Tw 12 TL /F1 10 Tf 0 0 0 rg (Settings value ) Tj /F2 10 Tf (DELETE_PROFILE_TIMEDELTA) Tj /F1 10 Tf ( defines how far in future user profile will be actually deleted with) Tj T* 0 Tw 1.583705 Tw (automatic process. Value is set in days. The intent is in keeping user data in case they change their mind and) Tj T* 0 Tw (re-register.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 511.8394 cm
+1 0 0 1 40.01575 341.0394 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 19.2 re B*
+Q
+q
+BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Existing profile table troubleshooting) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 299.0394 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL .053052 Tw (You may find yourself in a pinch if your project already has a user profile table and it\222s not linked to django.auth.User) Tj T* 0 Tw 1.391721 Tw (model using multi-model inheritance. Instead, you might have implemented it with a separate OneToOneField or) Tj T* 0 Tw (even a ForeignKey. Even worse, if you linked all the user fields to this model and not the django.auth.User model.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 269.0394 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .476385 Tw (You are SOL: migration will not be a matter of extending the model, but rather one of REPLACING the model. It is,) Tj T* 0 Tw (however, only a 4-step \(optionally 5-step\) process in terms of migrations:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 263.0394 cm
+Q
+q
+1 0 0 1 40.01575 263.0394 cm
+Q
+q
+1 0 0 1 40.01575 239.0394 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (1.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+BT 1 0 0 1 0 14 Tm .824705 Tw 12 TL /F1 10 Tf 0 0 0 rg (Declare the new user profile model, new foreign keys to the profile model in all tables where you link to your) Tj T* 0 Tw (existing model. Basically you have duplicated all the fields and the model. run ) Tj /F7 10 Tf (makemigrations) Tj /F1 10 Tf (.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 233.0394 cm
+Q
+q
+1 0 0 1 40.01575 127.6482 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 90.3912 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (2.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 78.3912 cm
+q
+BT 1 0 0 1 0 14 Tm .298561 Tw 12 TL /F1 10 Tf 0 0 0 rg (Create a new ) Tj /F7 10 Tf (runPython) Tj /F1 10 Tf ( migration where you copy all the values from existing fields to new fields. This cannot) Tj T* 0 Tw (be done in the first migration, you will just get ) Tj 0 0 .501961 rg (an error) Tj 0 0 0 rg ( running it.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 23 72.3912 cm
+Q
+q
+1 0 0 1 23 72.3912 cm
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 60.3912 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (a.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 36.3912 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL .409672 Tw (if your references to previous profile model were to its own ID and not to django.auth.User model ID, you) Tj T* 0 Tw 1.774358 Tw (will have to also perform the translations between the two ID fields. Should be relatively easy in you) Tj T* 0 Tw (migration code, something like:) Tj T* ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+q
+.718818 0 0 .718818 0 0 cm
+q
+1 0 0 1 4.4 .556469 cm
+q
+.666667 .8 .6 RG
+.3 w
+.933333 1 .8 rg
+n -4 0 652 54 re B*
+Q
+q
+.933333 1 .8 rg
+n 0 36 378 12 re f*
+.933333 1 .8 rg
+n 0 24 30 12 re f*
+.933333 1 .8 rg
+n 30 24 6 12 re f*
+.933333 1 .8 rg
+n 36 24 42 12 re f*
+.933333 1 .8 rg
+n 78 24 6 12 re f*
+.933333 1 .8 rg
+n 84 24 36 12 re f*
+.933333 1 .8 rg
+n 120 24 6 12 re f*
+.933333 1 .8 rg
+n 126 24 12 12 re f*
+.933333 1 .8 rg
+n 138 24 6 12 re f*
+.933333 1 .8 rg
+n 24 12 60 12 re f*
+.933333 1 .8 rg
+n 90 12 6 12 re f*
+1 .941176 .941176 rg
+n 102 12 36 12 re f*
+.933333 1 .8 rg
+n 138 12 6 12 re f*
+.933333 1 .8 rg
+n 150 12 48 12 re f*
+.933333 1 .8 rg
+n 198 12 6 12 re f*
+.933333 1 .8 rg
+n 204 12 30 12 re f*
+.933333 1 .8 rg
+n 234 12 6 12 re f*
+.933333 1 .8 rg
+n 240 12 42 12 re f*
+.933333 1 .8 rg
+n 282 12 6 12 re f*
+.933333 1 .8 rg
+n 288 12 36 12 re f*
+.933333 1 .8 rg
+n 324 12 6 12 re f*
+.933333 1 .8 rg
+n 330 12 12 12 re f*
+.933333 1 .8 rg
+n 342 12 6 12 re f*
+.933333 1 .8 rg
+n 348 12 48 12 re f*
+.933333 1 .8 rg
+n 396 12 6 12 re f*
+1 .941176 .941176 rg
+n 402 12 24 12 re f*
+.933333 1 .8 rg
+n 426 12 12 12 re f*
+.933333 1 .8 rg
+n 438 12 6 12 re f*
+.933333 1 .8 rg
+n 444 12 36 12 re f*
+.933333 1 .8 rg
+n 480 12 6 12 re f*
+.933333 1 .8 rg
+n 486 12 60 12 re f*
+.933333 1 .8 rg
+n 552 12 6 12 re f*
+1 .941176 .941176 rg
+n 564 12 48 12 re f*
+.933333 1 .8 rg
+n 612 12 18 12 re f*
+.933333 1 .8 rg
+n 630 12 6 12 re f*
+.933333 1 .8 rg
+n 636 12 12 12 re f*
+.933333 1 .8 rg
+n 0 0 12 12 re f*
+BT 1 0 0 1 0 38 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# assumes you had a relation named "user" in your profile table) Tj /F4 10 Tf 0 0 0 rg  T* (model) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj .188235 .188235 .188235 rg (**) Tj 0 0 0 rg ({) Tj  T* (    ) Tj (field_name) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('_new') Tj 0 0 0 rg (:) Tj ( ) Tj (Subquery) Tj (\() Tj (model) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (pk) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (OuterRef) Tj (\() Tj .729412 .129412 .129412 rg ('pk') Tj 0 0 0 rg (\)\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (values) Tj (\() Tj (field_name) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('__user') Tj 0 0 0 rg (\)[:) Tj /F6 10 Tf 0 0 .815686 rg (1) Tj /F4 10 Tf 0 0 0 rg (]\)) Tj  T* (}\)) Tj T* ET
+Q
+Q
+Q
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 121.6482 cm
+Q
+q
+1 0 0 1 40.01575 109.6482 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (3.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Delete all the old fields and model) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 103.6482 cm
+Q
+q
+1 0 0 1 40.01575 79.64817 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 9 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (4.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+BT 1 0 0 1 0 14 Tm .152006 Tw 12 TL /F1 10 Tf 0 0 0 rg (Rename all the new fields and remove pre/postfixes. Optionally rename the new model as well, but don\222t forget) Tj T* 0 Tw (to keep the database table name \() Tj /F7 10 Tf (class Meta: db_table = \221module_model\222) Tj /F1 10 Tf (\).) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 73.64817 cm
+Q
+ 
+endstream
+endobj
+118 0 obj
+<<
+/Length 7949
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 40.01575 763.0394 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+q
+1 0 0 1 6 21 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL 5.66 0 Td (5.) Tj T* -5.66 0 Td ET
+Q
+Q
+q
+1 0 0 1 23 -3 cm
+q
+BT 1 0 0 1 0 26 Tm 1.346894 Tw 12 TL /F1 10 Tf 0 0 0 rg (If you decided not to rename everything back to original names, you will need to replace all the references) Tj T* 0 Tw -0.104217 Tw (throughout your code. If you\222re not into ) Tj 0 0 .501961 rg (DRY) Tj 0 0 0 rg (, you might consider renaming as a less painful option. Having tests) Tj T* 0 Tw (wiull help A LOT here.) Tj T* ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 40.01575 763.0394 cm
+Q
+q
+1 0 0 1 40.01575 673.0394 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 74 Tm /F1 10 Tf 12 TL .459743 Tw (You will now end up with a new model that replaces your old one. Of course, the entire procedure is only worth it if) Tj T* 0 Tw 2.281268 Tw (you have code from project base you like and would like to take advantage of. Code such as user merging,) Tj T* 0 Tw 2.195705 Tw (maintenance, profile editor, etc. Regardless, it\222s a pain taking a bit of time to solve. On the plus side: it\222s an) Tj T* 0 Tw -0.101178 Tw (opportunity for a bit of a refactoring that\222s long overdue anyway :D Actually this was written as I \(one of the authors of) Tj T* 0 Tw .767814 Tw (the library\) was converting one of our oldest projects to the new system. I think I just despaired and moaned for a) Tj T* 0 Tw 1.805705 Tw (couple of days before actually doing it in about two hours \(I decided NOT to rename the new model and took) Tj T* 0 Tw (advantage of the refactoring opportunity\)\205) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 642.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3021,7 +3411,7 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Notifications) 
 Q
 Q
 q
-1 0 0 1 40.01575 482.6394 cm
+1 0 0 1 40.01575 613.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3033,14 +3423,14 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (What is notific
 Q
 Q
 q
-1 0 0 1 40.01575 452.6394 cm
+1 0 0 1 40.01575 583.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.448273 Tw (Notifications module will provide functionality to create and deliver notifications to users via channels like: email,) Tj T* 0 Tw (websocket, push notification,.. Currently only maintenance notifications are implemented.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 423.4394 cm
+1 0 0 1 40.01575 554.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3052,41 +3442,41 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Maintenance not
 Q
 Q
 q
-1 0 0 1 40.01575 405.4394 cm
+1 0 0 1 40.01575 536.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Description) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 351.4394 cm
+1 0 0 1 40.01575 482.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.0239 Tw (When we have a planned server downtime to upgrade or some such, we need to somehow notifiy the users. But) Tj T* 0 Tw .401894 Tw (before maintenance occurs, the app itself must also notify the users that server will soon be down for maintenance.) Tj T* 0 Tw 2.118381 Tw (This notifications is presented to users 8 hours before planned downtime, 1 hour before planned downtime, 5) Tj T* 0 Tw (minutes before server is going offline.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 309.4394 cm
+1 0 0 1 40.01575 440.2394 cm
 q
 BT 1 0 0 1 0 26 Tm .250205 Tw 12 TL /F1 10 Tf 0 0 0 rg (In order to achieve that we can create a maintenance notification via REST api described in ) Tj 0 0 .501961 rg (Swagger UI) Tj 0 0 0 rg (. If we have) Tj T* 0 Tw 1.355881 Tw (django project base titlebar UI component integrated into our web UI this component will display notifications for) Tj T* 0 Tw (planned maintenance in above described intervals.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 291.4394 cm
+1 0 0 1 40.01575 422.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 273.4394 cm
+1 0 0 1 40.01575 404.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add app to your installed apps.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 194.6394 cm
+1 0 0 1 40.01575 325.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3122,14 +3512,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 174.6394 cm
+1 0 0 1 40.01575 305.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add django-project-base notifications urls:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 83.83937 cm
+1 0 0 1 40.01575 214.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3183,14 +3573,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 63.83937 cm
+1 0 0 1 40.01575 194.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Run migrations:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 45.03937 cm
+1 0 0 1 40.01575 175.8394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3219,17 +3609,8 @@ Q
 Q
 Q
 Q
- 
-endstream
-endobj
-109 0 obj
-<<
-/Length 8097
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 784.6394 cm
+1 0 0 1 40.01575 145.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3241,7 +3622,7 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Authentication)
 Q
 Q
 q
-1 0 0 1 40.01575 755.4394 cm
+1 0 0 1 40.01575 116.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3253,42 +3634,51 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Obtaining and m
 Q
 Q
 q
-1 0 0 1 40.01575 737.4394 cm
+1 0 0 1 40.01575 98.23937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (We support two methods of maintaining session information for your client: cookie-based and header-based.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 683.4394 cm
+1 0 0 1 40.01575 44.23937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL -0.06623 Tw (When you perform the account/login function, you can choose whether the function should return a session cookie or) Tj T* 0 Tw 1.255256 Tw (JSON with session id. Add parameter \223return-type\224 with value \223json\224 to login function parameters. This will return) Tj T* 0 Tw 2.650241 Tw (\223sessionid\224 parameter in returned json instead of cookie. There is no CSRF when session is passed by the) Tj T* 0 Tw (authorization header. See swagger documentation on login for further details.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+119 0 obj
+<<
+/Length 8077
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 653.4394 cm
+1 0 0 1 40.01575 775.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .471705 Tw (If you choose the cookie, you will then need to supply the cookie\(s\) to all subsequent requests. Likewise, if you opt) Tj T* 0 Tw (for session id as a variable, you will have to provide Authorization header to all subsequent requests.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 611.4394 cm
+1 0 0 1 40.01575 733.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 1.112705 Tw (The default uses cookies as those also add a CSRF cookie providing a bit more security. Use of JSON / header) Tj T* 0 Tw .694006 Tw (should only be preferred for clients without support for cookies, such as background maintenance / data exchange) Tj T* 0 Tw (scripts.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 581.4394 cm
+1 0 0 1 40.01575 703.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.82815 Tw (Our modified SessionMiddleware only overrides Django\222s as much to also accept the Authorization header and) Tj T* 0 Tw (clears the session and CSRF cookies in the responses.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 552.2394 cm
+1 0 0 1 40.01575 673.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3300,7 +3690,7 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Activate projec
 Q
 Q
 q
-1 0 0 1 40.01575 467.4394 cm
+1 0 0 1 40.01575 589.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3348,7 +3738,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 438.2394 cm
+1 0 0 1 40.01575 559.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3360,14 +3750,14 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Session middlew
 Q
 Q
 q
-1 0 0 1 40.01575 396.2394 cm
+1 0 0 1 40.01575 517.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL 3.339463 Tw (To enable project base\222s SessionMiddleware, replace Django contrib SessionMiddleware with project base\222s) Tj T* 0 Tw .557888 Tw (SessionMiddleware in projects settings.py file. This is only necessary if you intend to support the JSON method for) Tj T* 0 Tw (login and keeping the session id.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 317.4394 cm
+1 0 0 1 40.01575 439.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3405,7 +3795,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 288.2394 cm
+1 0 0 1 40.01575 409.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3417,14 +3807,14 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Use of json ses
 Q
 Q
 q
-1 0 0 1 40.01575 258.2394 cm
+1 0 0 1 40.01575 379.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .972131 Tw (When using the Authorisation header, use returned session api as token with token type \223sessionid\224 and returned) Tj T* 0 Tw (sessionid as credentials.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 239.4394 cm
+1 0 0 1 40.01575 361.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3444,7 +3834,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 210.2394 cm
+1 0 0 1 40.01575 331.8394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3456,21 +3846,21 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Impersonate use
 Q
 Q
 q
-1 0 0 1 40.01575 156.2394 cm
+1 0 0 1 40.01575 277.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 38 Tm /F1 10 Tf 12 TL 1.872321 Tw (Sometimes is useful if we can login into app as another user for debugging or help purposes. User change is) Tj T* 0 Tw 21.56741 Tw (supported via REST api calls or you can use userProfile component) Tj T* 0 Tw 4.896819 Tw (\(django_project_base/templates/user-profile/bootstrap/template.html\) which already integrates api functionality.) Tj T* 0 Tw (Functionality is based on django-hijack package.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 138.2394 cm
+1 0 0 1 40.01575 259.8394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (For determining which user can impersonate which user you can set your own logic. Example below:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 47.43937 cm
+1 0 0 1 40.01575 109.0394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3480,66 +3870,37 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 90 re B*
+n -4 0 514.4441 150 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 72 78 12 re f*
+n 0 132 78 12 re f*
 .933333 1 .8 rg
-n 6 60 156 12 re f*
+n 6 120 156 12 re f*
 .933333 1 .8 rg
-n 168 60 6 12 re f*
+n 168 120 6 12 re f*
 1 .941176 .941176 rg
-n 180 60 186 12 re f*
+n 180 120 186 12 re f*
 .933333 1 .8 rg
-n 0 36 84 12 re f*
+n 0 96 84 12 re f*
 .933333 1 .8 rg
-n 6 24 18 12 re f*
+n 6 84 18 12 re f*
 .933333 1 .8 rg
-n 30 24 114 12 re f*
+n 30 84 114 12 re f*
 .933333 1 .8 rg
-n 144 24 6 12 re f*
+n 144 84 6 12 re f*
 .933333 1 .8 rg
-n 150 24 48 12 re f*
+n 150 84 48 12 re f*
 .933333 1 .8 rg
-n 198 24 6 12 re f*
+n 198 84 6 12 re f*
 .933333 1 .8 rg
-n 210 24 48 12 re f*
+n 210 84 48 12 re f*
 .933333 1 .8 rg
-n 258 24 12 12 re f*
+n 258 84 12 12 re f*
 .933333 1 .8 rg
-n 30 12 18 12 re f*
+n 30 72 18 12 re f*
 .933333 1 .8 rg
-n 0 0 348 12 re f*
-BT 1 0 0 1 0 74 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# settings.py) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj (HIJACK_AUTHORIZATION_CHECK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('app.utils.authorization_check') Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# app.utils.py) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (authorization_check) Tj /F4 10 Tf 0 0 0 rg (\() Tj (hijacker) Tj (,) Tj ( ) Tj (hijacked) Tj (\):) Tj  T* (     ) Tj /F5 10 Tf .815686 .25098 .12549 rg (""") Tj T* (     Checks if a user is authorized to hijack another user) Tj T* ET
-Q
-Q
-Q
-Q
-Q
- 
-endstream
-endobj
-110 0 obj
-<<
-/Length 15364
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 732.2394 cm
-q
-q
-1 0 0 1 0 0 cm
-q
-1 0 0 1 4.4 .4 cm
-q
-.666667 .8 .6 RG
-.3 w
-.933333 1 .8 rg
-n -4 0 514.4441 66 re B*
-Q
-q
+n 0 60 348 12 re f*
 .933333 1 .8 rg
 n 0 48 48 12 re f*
 .933333 1 .8 rg
@@ -3560,14 +3921,14 @@ n 54 12 6 12 re f*
 n 54 0 36 12 re f*
 .933333 1 .8 rg
 n 96 0 30 12 re f*
-BT 1 0 0 1 0 50 Tm 12 TL /F5 10 Tf .815686 .25098 .12549 rg (     """) Tj /F4 10 Tf 0 0 0 rg  T* (     ) Tj /F6 10 Tf 0 .501961 0 rg (if) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (my_condition) Tj (:) Tj  T* (         ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg  T* (     ) Tj /F6 10 Tf 0 .501961 0 rg (else) Tj /F4 10 Tf 0 0 0 rg (:) Tj  T* (         ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (False) Tj T* ET
+BT 1 0 0 1 0 134 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# settings.py) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj (HIJACK_AUTHORIZATION_CHECK) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj .729412 .129412 .129412 rg ('app.utils.authorization_check') Tj 0 0 0 rg  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# app.utils.py) Tj /F4 10 Tf 0 0 0 rg  T* ( ) Tj /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (authorization_check) Tj /F4 10 Tf 0 0 0 rg (\() Tj (hijacker) Tj (,) Tj ( ) Tj (hijacked) Tj (\):) Tj  T* (     ) Tj /F5 10 Tf .815686 .25098 .12549 rg (""") Tj T* (     Checks if a user is authorized to hijack another user) Tj T* (     """) Tj /F4 10 Tf 0 0 0 rg  T* (     ) Tj /F6 10 Tf 0 .501961 0 rg (if) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (my_condition) Tj (:) Tj  T* (         ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg  T* (     ) Tj /F6 10 Tf 0 .501961 0 rg (else) Tj /F4 10 Tf 0 0 0 rg (:) Tj  T* (         ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (False) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 703.0394 cm
+1 0 0 1 40.01575 79.83937 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -3575,24 +3936,34 @@ q
 n -10 0 525.2441 19.2 re B*
 Q
 q
-BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (User caching backend) Tj T* ET
+.12549 .262745 .360784 rg
+BT 1 0 0 1 0 2.2 Tm /F3 11 Tf 13.2 TL (User caching backend) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 685.0394 cm
+1 0 0 1 40.01575 61.83937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To increase AUTH performance you can set a backend that caches users.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+120 0 obj
+<<
+/Length 14474
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 655.0394 cm
+1 0 0 1 40.01575 775.0394 cm
 q
 BT 1 0 0 1 0 14 Tm 2.071281 Tw 12 TL /F1 10 Tf 0 0 0 rg (To enable User caching backend replace django.contrib.auth.backends.ModelBackend with the following line to) Tj T* 0 Tw /F7 10 Tf (AUTHENTICATION_BACKENDS) Tj /F1 10 Tf ( section in settings.py:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 564.2394 cm
+1 0 0 1 40.01575 684.2394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3630,21 +4001,22 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 520.2394 cm
+1 0 0 1 40.01575 640.2394 cm
 q
-0 0 0 rg
-BT 1 0 0 1 0 26 Tm /F1 10 Tf 12 TL .195535 Tw (User caching is not enabled for bulk updates by default, since Django doesn\222t call signal on .update\(\) .bulk_update\(\)) Tj T* 0 Tw 2.223182 Tw (or .delete\(\). Updating data with a query or running bulk update, without clearing cache for every object could) Tj T* 0 Tw (potentially cause race conditions. Avoid it if possible, or take care of manually clearing the cache for the user.) Tj T* ET
+.933333 1 .8 rg
+n 275.68 0 126 12 re f*
+BT 1 0 0 1 0 26 Tm -0.065053 Tw 12 TL /F1 10 Tf 0 0 0 rg (User caching does not work on bulk updates as Django doesn\222t trigger signals on update\(\), bulk_update\(\) or delete\(\).) Tj T* 0 Tw .852594 Tw (Bulk updating user profiles without manually clearing cache for them will create stale cache entries, so make sure) Tj T* 0 Tw (you clear any such cache entries manually using the provided ) Tj /F4 10 Tf (user_cache_invalidate) Tj /F1 10 Tf ( function.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 502.2394 cm
+1 0 0 1 40.01575 622.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Example for clearing cache after bulk update:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 315.4394 cm
+1 0 0 1 40.01575 435.4394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3670,11 +4042,11 @@ n 180 156 30 12 re f*
 .933333 1 .8 rg
 n 0 144 24 12 re f*
 .933333 1 .8 rg
-n 30 144 168 12 re f*
+n 30 144 228 12 re f*
 .933333 1 .8 rg
-n 204 144 36 12 re f*
+n 264 144 36 12 re f*
 .933333 1 .8 rg
-n 246 144 102 12 re f*
+n 306 144 126 12 re f*
 .933333 1 .8 rg
 n 0 132 18 12 re f*
 .933333 1 .8 rg
@@ -3710,27 +4082,27 @@ n 294 84 42 12 re f*
 .933333 1 .8 rg
 n 336 84 12 12 re f*
 .933333 1 .8 rg
-n 348 84 6 12 re f*
+n 24 72 6 12 re f*
 .933333 1 .8 rg
-n 354 84 36 12 re f*
+n 30 72 36 12 re f*
 .933333 1 .8 rg
-n 390 84 6 12 re f*
+n 66 72 6 12 re f*
 .933333 1 .8 rg
-n 12 72 72 12 re f*
+n 72 72 72 12 re f*
 .933333 1 .8 rg
-n 84 72 6 12 re f*
+n 144 72 6 12 re f*
 .933333 1 .8 rg
-n 90 72 24 12 re f*
-.933333 1 .8 rg
-n 114 72 6 12 re f*
-.933333 1 .8 rg
-n 126 72 48 12 re f*
+n 150 72 24 12 re f*
 .933333 1 .8 rg
 n 174 72 6 12 re f*
 .933333 1 .8 rg
-n 180 72 24 12 re f*
+n 186 72 48 12 re f*
 .933333 1 .8 rg
-n 204 72 6 12 re f*
+n 234 72 6 12 re f*
+.933333 1 .8 rg
+n 240 72 24 12 re f*
+.933333 1 .8 rg
+n 264 72 6 12 re f*
 .933333 1 .8 rg
 n 0 48 342 12 re f*
 .933333 1 .8 rg
@@ -3766,50 +4138,38 @@ n 342 24 42 12 re f*
 .933333 1 .8 rg
 n 384 24 12 12 re f*
 .933333 1 .8 rg
-n 36 12 18 12 re f*
+n 0 12 18 12 re f*
 .933333 1 .8 rg
-n 60 12 24 12 re f*
+n 24 12 24 12 re f*
 .933333 1 .8 rg
-n 90 12 12 12 re f*
+n 54 12 12 12 re f*
 .933333 1 .8 rg
-n 108 12 30 12 re f*
+n 72 12 30 12 re f*
 .933333 1 .8 rg
-n 138 12 6 12 re f*
+n 102 12 6 12 re f*
 .933333 1 .8 rg
-n 60 0 30 12 re f*
+n 24 0 126 12 re f*
 .933333 1 .8 rg
-n 90 0 6 12 re f*
+n 150 0 6 12 re f*
 .933333 1 .8 rg
-n 96 0 36 12 re f*
+n 156 0 24 12 re f*
 .933333 1 .8 rg
-n 132 0 6 12 re f*
-.933333 1 .8 rg
-n 138 0 102 12 re f*
-.933333 1 .8 rg
-n 246 0 6 12 re f*
-.933333 1 .8 rg
-n 258 0 24 12 re f*
-.933333 1 .8 rg
-n 282 0 6 12 re f*
-.933333 1 .8 rg
-n 288 0 12 12 re f*
-.933333 1 .8 rg
-n 300 0 6 12 re f*
-BT 1 0 0 1 0 170 Tm 12 TL /F4 10 Tf .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.settings) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DJANGO_USER_CACHE) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# Bulk update multiple users. Give them superuser permission.) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# If those users are logged in, they don't have permission until cache is) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# cleared or they log out and log in again.) Tj /F4 10 Tf 0 0 0 rg  T* (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj  T* (  ) Tj (is_superuser) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (is_staff) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# After clearing users cache for those users will be able) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# to work with additional permissions) Tj /F4 10 Tf 0 0 0 rg  T* (staff) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj (staff) Tj (:) Tj  T* (          ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (user) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj T* ET
+n 180 0 6 12 re f*
+BT 1 0 0 1 0 170 Tm 12 TL /F4 10 Tf .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.base.auth_backends) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user_cache_invalidate) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# Bulk update multiple users. Give them superuser permission.) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# If those users are logged in, they don't have permission until cache is) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# cleared or they log out and log in again.) Tj /F4 10 Tf 0 0 0 rg  T* (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj (\\) Tj T* (    ) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj (is_superuser) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (,) Tj ( ) Tj (is_staff) Tj .188235 .188235 .188235 rg (=) Tj /F6 10 Tf 0 .501961 0 rg (True) Tj /F4 10 Tf 0 0 0 rg (\)) Tj  T*  T* /F5 10 Tf .501961 .501961 .501961 rg (# After clearing users cache for those users will be able) Tj /F4 10 Tf 0 0 0 rg  T* /F5 10 Tf .501961 .501961 .501961 rg (# to work with additional permissions) Tj /F4 10 Tf 0 0 0 rg  T* (staff) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (UserProfile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (objects) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (filter) Tj (\() Tj (username__in) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ([) Tj .729412 .129412 .129412 rg ('miha') Tj 0 0 0 rg (,) Tj ( ) Tj .729412 .129412 .129412 rg ('janez') Tj 0 0 0 rg (]\)) Tj  T* /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj (staff) Tj (:) Tj  T* (    ) Tj (user_cache_invalidate) Tj (\() Tj (user) Tj (\)) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 283.4394 cm
+1 0 0 1 40.01575 403.4394 cm
 q
 0 0 0 rg
-BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .237338 Tw (It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. You can) Tj T* 0 Tw (find example code below.) Tj T* ET
+BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .138705 Tw (It is possible to add a clear cache option also for bulk updates if needed with a custom QuerySet manager. Example) Tj T* 0 Tw (code below.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 48.63937 cm
+1 0 0 1 40.01575 120.6394 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -3819,218 +4179,165 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 234 re B*
+n -4 0 514.4441 282 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 216 66 12 re f*
+n 0 264 66 12 re f*
 .933333 1 .8 rg
-n 0 204 18 12 re f*
+n 0 252 18 12 re f*
 .933333 1 .8 rg
-n 0 192 24 12 re f*
+n 0 240 24 12 re f*
 .933333 1 .8 rg
-n 30 192 102 12 re f*
+n 30 240 102 12 re f*
+.933333 1 .8 rg
+n 138 240 36 12 re f*
+.933333 1 .8 rg
+n 180 240 30 12 re f*
+.933333 1 .8 rg
+n 0 228 24 12 re f*
+.933333 1 .8 rg
+n 30 228 228 12 re f*
+.933333 1 .8 rg
+n 264 228 36 12 re f*
+.933333 1 .8 rg
+n 306 228 126 12 re f*
+.933333 1 .8 rg
+n 0 216 18 12 re f*
+.933333 1 .8 rg
+n 0 204 30 12 re f*
+.933333 1 .8 rg
+n 36 204 96 12 re f*
+.933333 1 .8 rg
+n 132 204 6 12 re f*
+.933333 1 .8 rg
+n 138 204 36 12 re f*
+.933333 1 .8 rg
+n 174 204 6 12 re f*
+.933333 1 .8 rg
+n 180 204 48 12 re f*
+.933333 1 .8 rg
+n 228 204 12 12 re f*
+.933333 1 .8 rg
+n 24 192 18 12 re f*
+.933333 1 .8 rg
+n 48 192 36 12 re f*
+.933333 1 .8 rg
+n 84 192 6 12 re f*
+.933333 1 .8 rg
+n 90 192 24 12 re f*
+.933333 1 .8 rg
+n 114 192 6 12 re f*
+.933333 1 .8 rg
+n 126 192 12 12 re f*
 .933333 1 .8 rg
 n 138 192 36 12 re f*
 .933333 1 .8 rg
-n 180 192 30 12 re f*
+n 174 192 12 12 re f*
 .933333 1 .8 rg
-n 0 180 24 12 re f*
+n 48 180 18 12 re f*
 .933333 1 .8 rg
-n 30 180 168 12 re f*
+n 72 180 42 12 re f*
 .933333 1 .8 rg
-n 204 180 36 12 re f*
+n 120 180 12 12 re f*
 .933333 1 .8 rg
-n 246 180 102 12 re f*
+n 138 180 24 12 re f*
 .933333 1 .8 rg
-n 0 168 18 12 re f*
+n 162 180 6 12 re f*
 .933333 1 .8 rg
-n 0 156 30 12 re f*
+n 72 168 126 12 re f*
 .933333 1 .8 rg
-n 36 156 96 12 re f*
+n 198 168 6 12 re f*
 .933333 1 .8 rg
-n 132 156 6 12 re f*
+n 204 168 42 12 re f*
 .933333 1 .8 rg
-n 138 156 36 12 re f*
+n 246 168 6 12 re f*
 .933333 1 .8 rg
-n 174 156 6 12 re f*
+n 48 156 18 12 re f*
 .933333 1 .8 rg
-n 180 156 48 12 re f*
+n 72 156 6 12 re f*
 .933333 1 .8 rg
-n 228 156 12 12 re f*
+n 84 156 30 12 re f*
 .933333 1 .8 rg
-n 24 144 18 12 re f*
+n 114 156 6 12 re f*
+.933333 1 .8 rg
+n 120 156 96 12 re f*
+.933333 1 .8 rg
+n 216 156 6 12 re f*
+.933333 1 .8 rg
+n 228 156 24 12 re f*
+.933333 1 .8 rg
+n 252 156 6 12 re f*
+.933333 1 .8 rg
+n 258 156 6 12 re f*
+.933333 1 .8 rg
+n 264 156 36 12 re f*
+.933333 1 .8 rg
+n 300 156 6 12 re f*
+.933333 1 .8 rg
+n 306 156 12 12 re f*
+.933333 1 .8 rg
+n 318 156 36 12 re f*
+.933333 1 .8 rg
+n 354 156 6 12 re f*
 .933333 1 .8 rg
 n 48 144 36 12 re f*
 .933333 1 .8 rg
-n 84 144 6 12 re f*
+n 90 144 18 12 re f*
 .933333 1 .8 rg
-n 90 144 24 12 re f*
+n 24 120 18 12 re f*
 .933333 1 .8 rg
-n 114 144 6 12 re f*
+n 48 120 36 12 re f*
 .933333 1 .8 rg
-n 126 144 12 12 re f*
+n 84 120 6 12 re f*
 .933333 1 .8 rg
-n 138 144 36 12 re f*
+n 90 120 24 12 re f*
 .933333 1 .8 rg
-n 174 144 12 12 re f*
+n 114 120 12 12 re f*
 .933333 1 .8 rg
-n 48 132 18 12 re f*
+n 36 108 18 12 re f*
 .933333 1 .8 rg
-n 72 132 42 12 re f*
+n 60 108 42 12 re f*
 .933333 1 .8 rg
-n 120 132 12 12 re f*
+n 108 108 12 12 re f*
 .933333 1 .8 rg
-n 138 132 24 12 re f*
+n 126 108 24 12 re f*
 .933333 1 .8 rg
-n 162 132 6 12 re f*
+n 150 108 6 12 re f*
 .933333 1 .8 rg
-n 72 120 30 12 re f*
+n 60 96 126 12 re f*
 .933333 1 .8 rg
-n 102 120 6 12 re f*
+n 186 96 6 12 re f*
 .933333 1 .8 rg
-n 108 120 36 12 re f*
+n 192 96 42 12 re f*
 .933333 1 .8 rg
-n 144 120 6 12 re f*
+n 234 96 6 12 re f*
 .933333 1 .8 rg
-n 150 120 102 12 re f*
+n 36 84 18 12 re f*
 .933333 1 .8 rg
-n 258 120 6 12 re f*
+n 60 84 6 12 re f*
 .933333 1 .8 rg
-n 270 120 42 12 re f*
+n 72 84 30 12 re f*
 .933333 1 .8 rg
-n 312 120 6 12 re f*
+n 102 84 6 12 re f*
 .933333 1 .8 rg
-n 318 120 12 12 re f*
+n 108 84 96 12 re f*
 .933333 1 .8 rg
-n 330 120 6 12 re f*
+n 204 84 6 12 re f*
 .933333 1 .8 rg
-n 48 108 18 12 re f*
+n 216 84 24 12 re f*
 .933333 1 .8 rg
-n 72 108 6 12 re f*
+n 240 84 6 12 re f*
 .933333 1 .8 rg
-n 84 108 30 12 re f*
+n 246 84 6 12 re f*
 .933333 1 .8 rg
-n 114 108 6 12 re f*
+n 252 84 36 12 re f*
 .933333 1 .8 rg
-n 120 108 96 12 re f*
+n 288 84 12 12 re f*
 .933333 1 .8 rg
-n 216 108 6 12 re f*
+n 36 72 36 12 re f*
 .933333 1 .8 rg
-n 228 108 24 12 re f*
-.933333 1 .8 rg
-n 252 108 6 12 re f*
-.933333 1 .8 rg
-n 258 108 6 12 re f*
-.933333 1 .8 rg
-n 264 108 36 12 re f*
-.933333 1 .8 rg
-n 300 108 6 12 re f*
-.933333 1 .8 rg
-n 306 108 12 12 re f*
-.933333 1 .8 rg
-n 318 108 36 12 re f*
-.933333 1 .8 rg
-n 354 108 6 12 re f*
-.933333 1 .8 rg
-n 48 96 36 12 re f*
-.933333 1 .8 rg
-n 90 96 18 12 re f*
-.933333 1 .8 rg
-n 24 72 18 12 re f*
-.933333 1 .8 rg
-n 48 72 36 12 re f*
-.933333 1 .8 rg
-n 84 72 6 12 re f*
-.933333 1 .8 rg
-n 90 72 24 12 re f*
-.933333 1 .8 rg
-n 114 72 12 12 re f*
-.933333 1 .8 rg
-n 36 60 18 12 re f*
-.933333 1 .8 rg
-n 60 60 42 12 re f*
-.933333 1 .8 rg
-n 108 60 12 12 re f*
-.933333 1 .8 rg
-n 126 60 24 12 re f*
-.933333 1 .8 rg
-n 150 60 6 12 re f*
-.933333 1 .8 rg
-n 60 48 30 12 re f*
-.933333 1 .8 rg
-n 90 48 6 12 re f*
-.933333 1 .8 rg
-n 96 48 36 12 re f*
-.933333 1 .8 rg
-n 132 48 6 12 re f*
-.933333 1 .8 rg
-n 138 48 102 12 re f*
-.933333 1 .8 rg
-n 246 48 6 12 re f*
-.933333 1 .8 rg
-n 258 48 42 12 re f*
-.933333 1 .8 rg
-n 300 48 6 12 re f*
-.933333 1 .8 rg
-n 306 48 12 12 re f*
-.933333 1 .8 rg
-n 318 48 6 12 re f*
-.933333 1 .8 rg
-n 36 36 18 12 re f*
-.933333 1 .8 rg
-n 60 36 6 12 re f*
-.933333 1 .8 rg
-n 72 36 30 12 re f*
-.933333 1 .8 rg
-n 102 36 6 12 re f*
-.933333 1 .8 rg
-n 108 36 96 12 re f*
-.933333 1 .8 rg
-n 204 36 6 12 re f*
-.933333 1 .8 rg
-n 216 36 24 12 re f*
-.933333 1 .8 rg
-n 240 36 6 12 re f*
-.933333 1 .8 rg
-n 246 36 6 12 re f*
-.933333 1 .8 rg
-n 252 36 36 12 re f*
-.933333 1 .8 rg
-n 288 36 12 12 re f*
-.933333 1 .8 rg
-n 36 24 36 12 re f*
-.933333 1 .8 rg
-n 78 24 18 12 re f*
-BT 1 0 0 1 0 218 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# models.py) Tj /F4 10 Tf 0 0 0 rg  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.settings) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (DJANGO_USER_CACHE) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (ProfilesQuerySet) Tj /F4 10 Tf 0 0 0 rg (\() Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (QuerySet) Tj (\):) Tj  T* (    ) Tj /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (update) Tj /F4 10 Tf 0 0 0 rg (\() Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (,) Tj ( ) Tj .188235 .188235 .188235 rg (**) Tj 0 0 0 rg (kwargs) Tj (\):) Tj  T* (        ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (profile) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (:) Tj  T* (            ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (profile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj  T* (        ) Tj (res) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj 0 .439216 .12549 rg (super) Tj 0 0 0 rg (\() Tj (ProfilesQuerySet) Tj (,) Tj ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj .188235 .188235 .188235 rg (**) Tj 0 0 0 rg (kwargs) Tj (\)) Tj  T* (        ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (res) Tj  T*  T* (    ) Tj /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (delete) Tj /F4 10 Tf 0 0 0 rg (\() Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (\):) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (profile) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (:) Tj  T* (          ) Tj (cache) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\() Tj (DJANGO_USER_CACHE) Tj ( ) Tj .188235 .188235 .188235 rg (%) Tj 0 0 0 rg ( ) Tj (profile) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (id) Tj (\)) Tj  T* (      ) Tj (res) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj 0 .439216 .12549 rg (super) Tj 0 0 0 rg (\() Tj (ProfilesQuerySet) Tj (,) Tj ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\(\)) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (res) Tj  T*  T*  T* ET
-Q
-Q
-Q
-Q
-Q
- 
-endstream
-endobj
-111 0 obj
-<<
-/Length 10914
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 744.2394 cm
-q
-q
-1 0 0 1 0 0 cm
-q
-1 0 0 1 4.4 .4 cm
-q
-.666667 .8 .6 RG
-.3 w
-.933333 1 .8 rg
-n -4 0 514.4441 54 re B*
-Q
-q
+n 78 72 18 12 re f*
 .933333 1 .8 rg
 n 0 36 30 12 re f*
 .933333 1 .8 rg
@@ -4057,14 +4364,14 @@ n 186 12 60 12 re f*
 n 246 12 12 12 re f*
 .933333 1 .8 rg
 n 0 0 18 12 re f*
-BT 1 0 0 1 0 38 Tm 12 TL /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (UserProfile) Tj /F4 10 Tf 0 0 0 rg (\() Tj (BaseProfile) Tj (\):) Tj  T* (    ) Tj /F5 10 Tf .815686 .25098 .12549 rg ("""Use this only for enabling cache clear for bulk update""") Tj /F4 10 Tf 0 0 0 rg  T* (    ) Tj (objects) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (ProfilesQuerySet) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (as_manager) Tj (\(\)) Tj  T* .188235 .188235 .188235 rg (...) Tj T* ET
+BT 1 0 0 1 0 266 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# models.py) Tj /F4 10 Tf 0 0 0 rg  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django.core.cache) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (cache) Tj  T* /F6 10 Tf 0 .501961 0 rg (from) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .054902 .517647 .709804 rg (django_project_base.base.auth_backends) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .501961 0 rg (import) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (user_cache_invalidate) Tj  T* .188235 .188235 .188235 rg (...) Tj 0 0 0 rg  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (ProfilesQuerySet) Tj /F4 10 Tf 0 0 0 rg (\() Tj (models) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (QuerySet) Tj (\):) Tj  T* (    ) Tj /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (update) Tj /F4 10 Tf 0 0 0 rg (\() Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (,) Tj ( ) Tj .188235 .188235 .188235 rg (**) Tj 0 0 0 rg (kwargs) Tj (\):) Tj  T* (        ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (profile) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (:) Tj  T* (            ) Tj (user_cache_invalidate) Tj (\() Tj (profile) Tj (\)) Tj  T* (        ) Tj (res) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj 0 .439216 .12549 rg (super) Tj 0 0 0 rg (\() Tj (ProfilesQuerySet) Tj (,) Tj ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (update) Tj (\() Tj .188235 .188235 .188235 rg (**) Tj 0 0 0 rg (kwargs) Tj (\)) Tj  T* (        ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (res) Tj  T*  T* (    ) Tj /F6 10 Tf 0 .501961 0 rg (def) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf 0 .376471 .690196 rg (delete) Tj /F4 10 Tf 0 0 0 rg (\() Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (\):) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (for) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (profile) Tj ( ) Tj /F6 10 Tf (in) Tj /F4 10 Tf ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (:) Tj  T* (          ) Tj (user_cache_invalidate) Tj (\() Tj (profile) Tj (\)) Tj  T* (      ) Tj (res) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj 0 .439216 .12549 rg (super) Tj 0 0 0 rg (\() Tj (ProfilesQuerySet) Tj (,) Tj ( ) Tj 0 .439216 .12549 rg (self) Tj 0 0 0 rg (\)) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (delete) Tj (\(\)) Tj  T* (      ) Tj /F6 10 Tf 0 .501961 0 rg (return) Tj /F4 10 Tf 0 0 0 rg ( ) Tj (res) Tj  T*  T*  T* /F6 10 Tf 0 .501961 0 rg (class) Tj /F4 10 Tf 0 0 0 rg ( ) Tj /F6 10 Tf .690196 0 .376471 rg (UserProfile) Tj /F4 10 Tf 0 0 0 rg (\() Tj (BaseProfile) Tj (\):) Tj  T* (    ) Tj /F5 10 Tf .815686 .25098 .12549 rg ("""Use this only for enabling cache clear for bulk update""") Tj /F4 10 Tf 0 0 0 rg  T* (    ) Tj (objects) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj (ProfilesQuerySet) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (as_manager) Tj (\(\)) Tj  T* .188235 .188235 .188235 rg (...) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 715.0394 cm
+1 0 0 1 40.01575 91.43937 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4076,27 +4383,46 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (Social auth int
 Q
 Q
 q
-1 0 0 1 40.01575 685.0394 cm
+1 0 0 1 40.01575 61.43937 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.671175 Tw (Django Project Base offers easy-to-setup social authentication mechanism. Currently the following providers are) Tj T* 0 Tw (supported:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 679.0394 cm
+1 0 0 1 40.01575 55.43937 cm
 Q
 q
-1 0 0 1 40.01575 445.0394 cm
+1 0 0 1 287.6378 43.43937 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
 BT 1 0 0 1 0 2 Tm  T* ET
 q
-1 0 0 1 20 228 cm
+1 0 0 1 20 0 cm
 Q
 q
-1 0 0 1 20 228 cm
+1 0 0 1 20 0 cm
 Q
+q
+Q
+Q
+Q
+ 
+endstream
+endobj
+121 0 obj
+<<
+/Length 10629
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+q
+1 0 0 1 40.01575 571.0394 cm
+q
+0 0 0 rg
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 0 2 Tm  T* ET
 q
 1 0 0 1 20 195 cm
 q
@@ -4510,59 +4836,59 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 445.0394 cm
+1 0 0 1 40.01575 571.0394 cm
 Q
 q
-1 0 0 1 40.01575 427.0394 cm
+1 0 0 1 40.01575 553.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (OAuth providers require redirect URL which is called after the authentication process in Oauth flow.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 409.0394 cm
+1 0 0 1 40.01575 535.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Your redirect url is: [SCHEME]://[HOST]/account/social/complete/[PROVIDER IDENTIFIER]/) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 379.0394 cm
+1 0 0 1 40.01575 505.0394 cm
 q
 BT 1 0 0 1 0 14 Tm 15.10034 Tw 12 TL /F1 10 Tf 0 0 0 rg (Information which settings are required for a social provider can be found at) Tj T* 0 Tw 0 0 .501961 rg (https://python-social-auth.readthedocs.io/en/latest/backends/index.html) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 349.0394 cm
+1 0 0 1 40.01575 475.0394 cm
 q
 BT 1 0 0 1 0 14 Tm .31815 Tw 12 TL /F1 10 Tf 0 0 0 rg (For social authentication functionalities ) Tj 0 0 .501961 rg (Python Social Auth) Tj 0 0 0 rg ( library was used. Please checkout this documentation to) Tj T* 0 Tw (make any custom changes.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 331.0394 cm
+1 0 0 1 40.01575 457.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 325.0394 cm
+1 0 0 1 40.01575 451.0394 cm
 Q
 q
-1 0 0 1 40.01575 57.43937 cm
+1 0 0 1 40.01575 138.6394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
 BT 1 0 0 1 0 2 Tm  T* ET
 q
-1 0 0 1 20 255.6 cm
+1 0 0 1 20 300.4 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add app to your installed apps.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 20 128.8 cm
+1 0 0 1 20 173.6 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -4572,7 +4898,7 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 488.4441 126 re B*
+n -4 0 494.4441 126 re B*
 Q
 q
 .933333 1 .8 rg
@@ -4612,14 +4938,14 @@ Q
 Q
 Q
 q
-1 0 0 1 20 102.8 cm
+1 0 0 1 20 147.6 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Make sure you have django project base urls included:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 20 0 cm
+1 0 0 1 20 44.8 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -4629,7 +4955,7 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 488.4441 102 re B*
+n -4 0 494.4441 102 re B*
 Q
 q
 .933333 1 .8 rg
@@ -4697,25 +5023,6 @@ Q
 Q
 Q
 q
-Q
-Q
-Q
- 
-endstream
-endobj
-112 0 obj
-<<
-/Length 11745
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 40.01575 768.2394 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-BT 1 0 0 1 0 2 Tm  T* ET
-q
 1 0 0 1 20 18.8 cm
 q
 0 0 0 rg
@@ -4757,45 +5064,54 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 768.2394 cm
+1 0 0 1 40.01575 138.6394 cm
 Q
 q
-1 0 0 1 40.01575 750.2394 cm
+1 0 0 1 40.01575 120.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Social login integration example - Google) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 708.2394 cm
+1 0 0 1 40.01575 78.63937 cm
 q
 BT 1 0 0 1 0 26 Tm -0.118206 Tw 12 TL /F1 10 Tf 0 0 0 rg (To enable a social provider create an account at provider webpage and create an oauth app. For example for Google) Tj T* 0 Tw 3.236762 Tw (OAuth login visit ) Tj 0 0 .501961 rg (https://console.developers.google.com/apis/credentials) Tj 0 0 0 rg (. Click + CREATE CREDENTIALS and) Tj T* 0 Tw (select Oauth Client ID. Then create OAuth app with OAuth Consent screen.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 690.2394 cm
+1 0 0 1 40.01575 60.63937 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Example value for Authorized JavaScript origins can be ) Tj 0 0 .501961 rg (http://localhost:8080) Tj 0 0 0 rg (.) Tj T* ET
 Q
 Q
+ 
+endstream
+endobj
+122 0 obj
+<<
+/Length 12414
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 672.2394 cm
+1 0 0 1 40.01575 787.0394 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (Example value for Authorized redirect URIs can be ) Tj 0 0 .501961 rg (http://localhost:8080/account/social/complete/google-oauth2/) Tj 0 0 0 rg (.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 654.2394 cm
+1 0 0 1 40.01575 769.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable Google OAuth login add folowing to settings:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 648.2394 cm
+1 0 0 1 40.01575 763.0394 cm
 Q
 q
-1 0 0 1 40.01575 593.4394 cm
+1 0 0 1 40.01575 708.2394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4841,10 +5157,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 593.4394 cm
+1 0 0 1 40.01575 708.2394 cm
 Q
 q
-1 0 0 1 40.01575 560.6394 cm
+1 0 0 1 40.01575 675.4394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4856,21 +5172,21 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Translations) T
 Q
 Q
 q
-1 0 0 1 40.01575 542.6394 cm
+1 0 0 1 40.01575 657.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Currently translations in JS code, are done with Vue custom translations method.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 512.6394 cm
+1 0 0 1 40.01575 627.4394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL .000742 Tw (It should be trivial to enable Django javascript-catalog, but it doesn\222t work correctly at the moment. It might change to) Tj T* 0 Tw (correct Django javascript-catalog in future.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 479.8394 cm
+1 0 0 1 40.01575 594.6394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4882,28 +5198,28 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (VUE components)
 Q
 Q
 q
-1 0 0 1 40.01575 461.8394 cm
+1 0 0 1 40.01575 576.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Project base currently supports a few components for visualisation of the exposed APIs.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 443.8394 cm
+1 0 0 1 40.01575 558.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (The components are designed to be customisable making it easy to replace any subcomponents with your own.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 425.8394 cm
+1 0 0 1 40.01575 540.6394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Here\222s the overview of the built-in components:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 395.4394 cm
+1 0 0 1 40.01575 510.2394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4915,14 +5231,14 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (TitleBar compon
 Q
 Q
 q
-1 0 0 1 40.01575 365.4394 cm
+1 0 0 1 40.01575 480.2394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 1.026469 Tw (The toolbar component provides the application toolbar containing page title, breadcrumbs, projects overview and) Tj T* 0 Tw (account UI. Each of the subsections is fully customisable, but here\222s what the built-in components do:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 336.2394 cm
+1 0 0 1 40.01575 451.0394 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -4934,28 +5250,28 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (TitleBar) Tj T*
 Q
 Q
 q
-1 0 0 1 40.01575 306.2394 cm
+1 0 0 1 40.01575 421.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 2.160227 Tw (Master component providing the grayed out area at the top of the page. It also provides visualisation for any) Tj T* 0 Tw (messages the user needs to see, e.g. maintenance notices.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 288.2394 cm
+1 0 0 1 40.01575 403.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Composed of project image, page title, messages toast, breadcrumbs, projects overview and user profile menu.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 272.2394 cm
+1 0 0 1 40.01575 387.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (..file:) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 257.2394 cm
+1 0 0 1 40.01575 372.0394 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -4972,14 +5288,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 239.2394 cm
+1 0 0 1 40.01575 354.0394 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Props) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 188.8318 cm
+1 0 0 1 40.01575 303.6318 cm
 q
 q
 .754605 0 0 .754605 0 0 cm
@@ -5119,13 +5435,13 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 168.8318 cm
+1 0 0 1 40.01575 283.6318 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (All the ) Tj 1 0 0 rg (*) Tj 0 0 0 rg (Component parameters can be left out to use the provided components.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 139.6318 cm
+1 0 0 1 40.01575 254.4318 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5137,29 +5453,20 @@ BT 1 0 0 1 0 2.2 Tm 13.2 TL /F3 11 Tf .12549 .262745 .360784 rg (UserProfile) Tj
 Q
 Q
 q
-1 0 0 1 40.01575 109.6318 cm
+1 0 0 1 40.01575 224.4318 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 14 Tm /F1 10 Tf 12 TL 3.848776 Tw (Handles user menu and associated UX for logging in, out, impersonation, maintaining social connections,) Tj T* 0 Tw (credentials, etc.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 91.63178 cm
+1 0 0 1 40.01575 206.4318 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (You need to enable the ) Tj /F7 10 Tf (/account/) Tj /F1 10 Tf ( URLs so that the component can actually do its work. See ) Tj (Authentication) Tj (.) Tj T* ET
 Q
 Q
- 
-endstream
-endobj
-113 0 obj
-<<
-/Length 15540
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 782.2394 cm
+1 0 0 1 40.01575 173.6318 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5171,7 +5478,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Examples) Tj T*
 Q
 Q
 q
-1 0 0 1 40.01575 751.8394 cm
+1 0 0 1 40.01575 143.2318 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5183,7 +5490,7 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Titlebar compon
 Q
 Q
 q
-1 0 0 1 40.01575 679.0394 cm
+1 0 0 1 40.01575 70.43178 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -5244,8 +5551,17 @@ Q
 Q
 Q
 Q
+ 
+endstream
+endobj
+123 0 obj
+<<
+/Length 14326
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 198.3621 cm
+1 0 0 1 40.01575 326.3621 cm
 q
 q
 .925367 0 0 .925367 0 0 cm
@@ -5583,7 +5899,7 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 165.5621 cm
+1 0 0 1 40.01575 293.5621 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5595,13 +5911,13 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Example project
 Q
 Q
 q
-1 0 0 1 40.01575 147.5621 cm
+1 0 0 1 40.01575 275.5621 cm
 q
 BT 1 0 0 1 0 2 Tm 12 TL /F1 10 Tf 0 0 0 rg (You can find examples of most of the functionality of Django project base project in ) Tj /F7 10 Tf (/example/) Tj /F1 10 Tf ( folder.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 117.1621 cm
+1 0 0 1 40.01575 245.1621 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5613,14 +5929,14 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Run example pro
 Q
 Q
 q
-1 0 0 1 40.01575 99.16214 cm
+1 0 0 1 40.01575 227.1621 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Run Python runserver from root directory of this project and visit url that is provided in command output.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 44.36214 cm
+1 0 0 1 40.01575 136.3621 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -5630,32 +5946,42 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 514.4441 54 re B*
+n -4 0 514.4441 90 re B*
 Q
 q
 .933333 1 .8 rg
-n 0 36 42 12 re f*
+n 0 72 42 12 re f*
 .933333 1 .8 rg
-n 90 0 6 12 re f*
+n 90 36 6 12 re f*
 1 .941176 .941176 rg
-n 222 0 144 12 re f*
-BT 1 0 0 1 0 38 Tm 12 TL /F4 10 Tf .564706 .376471 .188235 rg ($python) Tj 0 0 0 rg ( manage.py runserver) Tj T*  T* (...) Tj T* (Django version ) Tj /F6 10 Tf .376471 0 .878431 rg (3) Tj /F4 10 Tf 0 0 0 rg (.1.8, using settings ) Tj .729412 .129412 .129412 rg ('example.setup.settings') Tj 0 0 0 rg  T* ET
+n 222 36 144 12 re f*
+BT 1 0 0 1 0 74 Tm 12 TL /F4 10 Tf .564706 .376471 .188235 rg ($python) Tj 0 0 0 rg ( manage.py runserver) Tj T*  T* (...) Tj T* (Django version ) Tj /F6 10 Tf .376471 0 .878431 rg (3) Tj /F4 10 Tf 0 0 0 rg (.1.8, using settings ) Tj .729412 .129412 .129412 rg ('example.setup.settings') Tj 0 0 0 rg  T* (Starting development server at http://127.0.0.1:8000/) Tj T* (Quit the server with CONTROL-C.) Tj T* (...) Tj T* ET
 Q
 Q
 Q
 Q
 Q
- 
-endstream
-endobj
-114 0 obj
-<<
-/Length 10166
->>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 756.2394 cm
+1 0 0 1 40.01575 105.9621 cm
+q
+.8 .8 .8 RG
+.3 w
+.94902 .94902 .94902 rg
+n -10 0 525.2441 20.4 re B*
+Q
+q
+BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Serve Sphinx documentation on localhost) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 87.96214 cm
+q
+0 0 0 rg
+BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Include documentation url to project urls.) Tj T* ET
+Q
+Q
+q
+1 0 0 1 40.01575 45.16214 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -5668,33 +5994,31 @@ q
 n -4 0 514.4441 42 re B*
 Q
 q
-BT 1 0 0 1 0 26 Tm 12 TL /F4 10 Tf 0 0 0 rg (Starting development server at http://127.0.0.1:8000/) Tj T* (Quit the server with CONTROL-C.) Tj T* (...) Tj T* ET
+.933333 1 .8 rg
+n 0 24 48 12 re f*
+.933333 1 .8 rg
+n 0 0 66 12 re f*
+.933333 1 .8 rg
+n 72 0 6 12 re f*
+.933333 1 .8 rg
+n 84 0 6 12 re f*
+BT 1 0 0 1 0 26 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# url.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* ET
 Q
 Q
 Q
 Q
 Q
+ 
+endstream
+endobj
+124 0 obj
+<<
+/Length 9212
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
 q
-1 0 0 1 40.01575 725.8394 cm
-q
-.8 .8 .8 RG
-.3 w
-.94902 .94902 .94902 rg
-n -10 0 525.2441 20.4 re B*
-Q
-q
-BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Serve Sphinx documentation on localhost) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 707.8394 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Include documentation url to project urls.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 40.01575 623.6042 cm
+1 0 0 1 40.01575 744.3029 cm
 q
 q
 .819409 0 0 .819409 0 0 cm
@@ -5704,17 +6028,9 @@ q
 .666667 .8 .6 RG
 .3 w
 .933333 1 .8 rg
-n -4 0 628 102 re B*
+n -4 0 628 66 re B*
 Q
 q
-.933333 1 .8 rg
-n 0 84 48 12 re f*
-.933333 1 .8 rg
-n 0 60 66 12 re f*
-.933333 1 .8 rg
-n 72 60 6 12 re f*
-.933333 1 .8 rg
-n 84 60 6 12 re f*
 .933333 1 .8 rg
 n 18 48 30 12 re f*
 .933333 1 .8 rg
@@ -5787,14 +6103,14 @@ n 324 0 6 12 re f*
 n 330 0 66 12 re f*
 .933333 1 .8 rg
 n 396 0 6 12 re f*
-BT 1 0 0 1 0 86 Tm 12 TL /F5 10 Tf .501961 .501961 .501961 rg (# url.py) Tj /F4 10 Tf 0 0 0 rg  T*  T* (urlpatterns) Tj ( ) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg ( ) Tj ([) Tj  T* (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (   ) Tj (re_path) Tj (\() Tj .729412 .129412 .129412 rg (r) Tj ('^docs-files/\(?P) Tj (<) Tj (path) Tj (>) Tj (.*\)$') Tj 0 0 0 rg (,) Tj ( ) Tj (documentation_view) Tj (,) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('document_root') Tj 0 0 0 rg (:) Tj ( ) Tj (DOCUMENTATION_DIRECTORY) Tj (},) Tj  T* (         ) Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('docs-files') Tj 0 0 0 rg (\),) Tj  T* (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (static) Tj (\() Tj (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_URL) Tj (,) Tj ( ) Tj (document_root) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_ROOT) Tj (\)) Tj T* ET
+BT 1 0 0 1 0 50 Tm 12 TL /F4 10 Tf 0 0 0 rg (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (   ) Tj (re_path) Tj (\() Tj .729412 .129412 .129412 rg (r) Tj ('^docs-files/\(?P) Tj (<) Tj (path) Tj (>) Tj (.*\)$') Tj 0 0 0 rg (,) Tj ( ) Tj (documentation_view) Tj (,) Tj ( ) Tj ({) Tj .729412 .129412 .129412 rg ('document_root') Tj 0 0 0 rg (:) Tj ( ) Tj (DOCUMENTATION_DIRECTORY) Tj (},) Tj  T* (         ) Tj (name) Tj .188235 .188235 .188235 rg (=) Tj .729412 .129412 .129412 rg ('docs-files') Tj 0 0 0 rg (\),) Tj  T* (   ) Tj .188235 .188235 .188235 rg (.....) Tj 0 0 0 rg  T* (]) Tj ( ) Tj .188235 .188235 .188235 rg (+) Tj 0 0 0 rg ( ) Tj (static) Tj (\() Tj (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_URL) Tj (,) Tj ( ) Tj (document_root) Tj .188235 .188235 .188235 rg (=) Tj 0 0 0 rg (settings) Tj .188235 .188235 .188235 rg (.) Tj 0 0 0 rg (STATIC_ROOT) Tj (\)) Tj T* ET
 Q
 Q
 Q
 Q
 Q
 q
-1 0 0 1 40.01575 593.2042 cm
+1 0 0 1 40.01575 713.9029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5806,20 +6122,20 @@ BT 1 0 0 1 0 2.4 Tm 14.4 TL /F3 12 Tf .12549 .262745 .360784 rg (Sample data) Tj
 Q
 Q
 q
-1 0 0 1 40.01575 575.2042 cm
+1 0 0 1 40.01575 695.9029 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F2 10 Tf 12 TL (Users) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 569.2042 cm
+1 0 0 1 40.01575 689.9029 cm
 Q
 q
-1 0 0 1 40.01575 569.2042 cm
+1 0 0 1 40.01575 689.9029 cm
 Q
 q
-1 0 0 1 40.01575 521.2042 cm
+1 0 0 1 40.01575 641.9029 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -5899,10 +6215,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 515.2042 cm
+1 0 0 1 40.01575 635.9029 cm
 Q
 q
-1 0 0 1 40.01575 467.2042 cm
+1 0 0 1 40.01575 587.9029 cm
 q
 0 0 0 rg
 BT /F1 10 Tf 12 TL ET
@@ -5982,10 +6298,10 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 467.2042 cm
+1 0 0 1 40.01575 587.9029 cm
 Q
 q
-1 0 0 1 40.01575 434.4042 cm
+1 0 0 1 40.01575 555.1029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -5997,7 +6313,7 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Swagger) Tj T* 
 Q
 Q
 q
-1 0 0 1 40.01575 404.0042 cm
+1 0 0 1 40.01575 524.7029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -6010,14 +6326,14 @@ BT 1 0 0 1 0 2.4 Tm /F3 12 Tf 14.4 TL (Installation) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 386.0042 cm
+1 0 0 1 40.01575 506.7029 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (To enable swagger gui, add following to urls.py) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 283.2042 cm
+1 0 0 1 40.01575 403.9029 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -6109,14 +6425,14 @@ Q
 Q
 Q
 q
-1 0 0 1 40.01575 263.2042 cm
+1 0 0 1 40.01575 383.9029 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Swagger UI is now accessible on /schema/swagger-ui/ url by running example project.) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 230.4042 cm
+1 0 0 1 40.01575 351.1029 cm
 q
 .8 .8 .8 RG
 .3 w
@@ -6128,14 +6444,14 @@ BT 1 0 0 1 0 2.8 Tm 16.8 TL /F3 14 Tf .12549 .262745 .360784 rg (Open Api) Tj T*
 Q
 Q
 q
-1 0 0 1 40.01575 212.4042 cm
+1 0 0 1 40.01575 333.1029 cm
 q
 0 0 0 rg
 BT 1 0 0 1 0 2 Tm /F1 10 Tf 12 TL (Add folloving to settings.py) Tj T* ET
 Q
 Q
 q
-1 0 0 1 40.01575 133.6042 cm
+1 0 0 1 40.01575 254.3029 cm
 q
 q
 1 0 0 1 0 0 cm
@@ -6179,85 +6495,90 @@ Q
  
 endstream
 endobj
-115 0 obj
-<<
-/Nums [ 0 116 0 R 1 117 0 R 2 118 0 R 3 119 0 R 4 120 0 R 
-  5 121 0 R 6 122 0 R 7 123 0 R 8 124 0 R 9 125 0 R 
-  10 126 0 R 11 127 0 R 12 128 0 R 13 129 0 R ]
->>
-endobj
-116 0 obj
-<<
-/S /D /St 1
->>
-endobj
-117 0 obj
-<<
-/S /D /St 2
->>
-endobj
-118 0 obj
-<<
-/S /D /St 3
->>
-endobj
-119 0 obj
-<<
-/S /D /St 4
->>
-endobj
-120 0 obj
-<<
-/S /D /St 5
->>
-endobj
-121 0 obj
-<<
-/S /D /St 6
->>
-endobj
-122 0 obj
-<<
-/S /D /St 7
->>
-endobj
-123 0 obj
-<<
-/S /D /St 8
->>
-endobj
-124 0 obj
-<<
-/S /D /St 9
->>
-endobj
 125 0 obj
 <<
-/S /D /St 10
+/Nums [ 0 126 0 R 1 127 0 R 2 128 0 R 3 129 0 R 4 130 0 R 
+  5 131 0 R 6 132 0 R 7 133 0 R 8 134 0 R 9 135 0 R 
+  10 136 0 R 11 137 0 R 12 138 0 R 13 139 0 R 14 140 0 R ]
 >>
 endobj
 126 0 obj
 <<
-/S /D /St 11
+/S /D /St 1
 >>
 endobj
 127 0 obj
 <<
-/S /D /St 12
+/S /D /St 2
 >>
 endobj
 128 0 obj
 <<
-/S /D /St 13
+/S /D /St 3
 >>
 endobj
 129 0 obj
 <<
+/S /D /St 4
+>>
+endobj
+130 0 obj
+<<
+/S /D /St 5
+>>
+endobj
+131 0 obj
+<<
+/S /D /St 6
+>>
+endobj
+132 0 obj
+<<
+/S /D /St 7
+>>
+endobj
+133 0 obj
+<<
+/S /D /St 8
+>>
+endobj
+134 0 obj
+<<
+/S /D /St 9
+>>
+endobj
+135 0 obj
+<<
+/S /D /St 10
+>>
+endobj
+136 0 obj
+<<
+/S /D /St 11
+>>
+endobj
+137 0 obj
+<<
+/S /D /St 12
+>>
+endobj
+138 0 obj
+<<
+/S /D /St 13
+>>
+endobj
+139 0 obj
+<<
 /S /D /St 14
 >>
 endobj
+140 0 obj
+<<
+/S /D /St 15
+>>
+endobj
 xref
-0 130
+0 141
 0000000000 65535 f 
 0000000073 00000 n 
 0000000172 00000 n 
@@ -6282,122 +6603,133 @@ xref
 0000003351 00000 n 
 0000003606 00000 n 
 0000003775 00000 n 
-0000003944 00000 n 
-0000004113 00000 n 
-0000004282 00000 n 
-0000004451 00000 n 
-0000004620 00000 n 
-0000004789 00000 n 
-0000004958 00000 n 
-0000005127 00000 n 
-0000005296 00000 n 
-0000005586 00000 n 
-0000005755 00000 n 
-0000005982 00000 n 
-0000006098 00000 n 
-0000006306 00000 n 
-0000006543 00000 n 
-0000006770 00000 n 
-0000006978 00000 n 
-0000007186 00000 n 
-0000007410 00000 n 
-0000007604 00000 n 
-0000007838 00000 n 
-0000008044 00000 n 
-0000008218 00000 n 
-0000008431 00000 n 
-0000008600 00000 n 
-0000008848 00000 n 
-0000009056 00000 n 
-0000009264 00000 n 
-0000009372 00000 n 
-0000009630 00000 n 
-0000009705 00000 n 
-0000009881 00000 n 
-0000010011 00000 n 
-0000010177 00000 n 
-0000010330 00000 n 
-0000010451 00000 n 
-0000010579 00000 n 
-0000010698 00000 n 
-0000010846 00000 n 
-0000010965 00000 n 
-0000011125 00000 n 
-0000011227 00000 n 
-0000011391 00000 n 
-0000011511 00000 n 
-0000011633 00000 n 
-0000011795 00000 n 
-0000011943 00000 n 
-0000012057 00000 n 
-0000012205 00000 n 
-0000012366 00000 n 
-0000012494 00000 n 
-0000012612 00000 n 
-0000012779 00000 n 
-0000012910 00000 n 
-0000013037 00000 n 
-0000013192 00000 n 
-0000013328 00000 n 
-0000013487 00000 n 
-0000013620 00000 n 
-0000013780 00000 n 
-0000013911 00000 n 
-0000014046 00000 n 
-0000014172 00000 n 
-0000014299 00000 n 
-0000014467 00000 n 
-0000014610 00000 n 
-0000014720 00000 n 
-0000014833 00000 n 
-0000014995 00000 n 
-0000015122 00000 n 
-0000015291 00000 n 
-0000015412 00000 n 
-0000015566 00000 n 
-0000015679 00000 n 
-0000015840 00000 n 
-0000015941 00000 n 
-0000016051 00000 n 
-0000016206 00000 n 
-0000017015 00000 n 
-0000017141 00000 n 
-0000026601 00000 n 
-0000036316 00000 n 
-0000047743 00000 n 
-0000063027 00000 n 
-0000071844 00000 n 
-0000079441 00000 n 
-0000087591 00000 n 
-0000103009 00000 n 
-0000113977 00000 n 
-0000125776 00000 n 
-0000141370 00000 n 
-0000151590 00000 n 
-0000151773 00000 n 
-0000151808 00000 n 
-0000151843 00000 n 
-0000151878 00000 n 
-0000151913 00000 n 
-0000151948 00000 n 
-0000151983 00000 n 
-0000152018 00000 n 
-0000152053 00000 n 
-0000152088 00000 n 
-0000152124 00000 n 
-0000152160 00000 n 
-0000152196 00000 n 
-0000152232 00000 n 
+0000003990 00000 n 
+0000004194 00000 n 
+0000004363 00000 n 
+0000004532 00000 n 
+0000004701 00000 n 
+0000004870 00000 n 
+0000005039 00000 n 
+0000005208 00000 n 
+0000005377 00000 n 
+0000005546 00000 n 
+0000005846 00000 n 
+0000006015 00000 n 
+0000006184 00000 n 
+0000006353 00000 n 
+0000006594 00000 n 
+0000006710 00000 n 
+0000006918 00000 n 
+0000007115 00000 n 
+0000007342 00000 n 
+0000007548 00000 n 
+0000007785 00000 n 
+0000008019 00000 n 
+0000008227 00000 n 
+0000008435 00000 n 
+0000008659 00000 n 
+0000008853 00000 n 
+0000009059 00000 n 
+0000009233 00000 n 
+0000009481 00000 n 
+0000009694 00000 n 
+0000009863 00000 n 
+0000010097 00000 n 
+0000010305 00000 n 
+0000010513 00000 n 
+0000010621 00000 n 
+0000010879 00000 n 
+0000010954 00000 n 
+0000011130 00000 n 
+0000011260 00000 n 
+0000011427 00000 n 
+0000011580 00000 n 
+0000011701 00000 n 
+0000011829 00000 n 
+0000011961 00000 n 
+0000012121 00000 n 
+0000012230 00000 n 
+0000012378 00000 n 
+0000012497 00000 n 
+0000012657 00000 n 
+0000012759 00000 n 
+0000012923 00000 n 
+0000013043 00000 n 
+0000013165 00000 n 
+0000013327 00000 n 
+0000013475 00000 n 
+0000013589 00000 n 
+0000013737 00000 n 
+0000013898 00000 n 
+0000014026 00000 n 
+0000014157 00000 n 
+0000014297 00000 n 
+0000014464 00000 n 
+0000014595 00000 n 
+0000014722 00000 n 
+0000014877 00000 n 
+0000015013 00000 n 
+0000015172 00000 n 
+0000015305 00000 n 
+0000015465 00000 n 
+0000015596 00000 n 
+0000015731 00000 n 
+0000015857 00000 n 
+0000015984 00000 n 
+0000016153 00000 n 
+0000016296 00000 n 
+0000016406 00000 n 
+0000016519 00000 n 
+0000016685 00000 n 
+0000016814 00000 n 
+0000016988 00000 n 
+0000017112 00000 n 
+0000017270 00000 n 
+0000017386 00000 n 
+0000017552 00000 n 
+0000017655 00000 n 
+0000017767 00000 n 
+0000017929 00000 n 
+0000018738 00000 n 
+0000018864 00000 n 
+0000028324 00000 n 
+0000038039 00000 n 
+0000049266 00000 n 
+0000064434 00000 n 
+0000071723 00000 n 
+0000083622 00000 n 
+0000091624 00000 n 
+0000099754 00000 n 
+0000114282 00000 n 
+0000124965 00000 n 
+0000137433 00000 n 
+0000151813 00000 n 
+0000161078 00000 n 
+0000161272 00000 n 
+0000161307 00000 n 
+0000161342 00000 n 
+0000161377 00000 n 
+0000161412 00000 n 
+0000161447 00000 n 
+0000161482 00000 n 
+0000161517 00000 n 
+0000161552 00000 n 
+0000161587 00000 n 
+0000161623 00000 n 
+0000161659 00000 n 
+0000161695 00000 n 
+0000161731 00000 n 
+0000161767 00000 n 
 trailer
 <<
 /ID 
-[<695f7d4f1cea583ab3510ac834025b4b><695f7d4f1cea583ab3510ac834025b4b>]
+[<0333f6775c1359ab085276cc675d7fea><0333f6775c1359ab085276cc675d7fea>]
 % ReportLab generated PDF document -- digest (http://www.reportlab.com)
 
-/Info 52 0 R
-/Root 51 0 R
-/Size 130
+/Info 58 0 R
+/Root 57 0 R
+/Size 141
 >>
 startxref
-152268
+161803
 %%EOF

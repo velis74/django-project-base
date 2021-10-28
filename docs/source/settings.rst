@@ -57,13 +57,13 @@ Maintenance notifications use cached queryset. Default is True.
 
 Read more in :ref:`Maintenance notifications` chapter.
 
-**DJANGO_USER_CACHE**
+**USER_CACHE_KEY**
 
 .. code-block:: python
 
-  DJANGO_USER_CACHE = 'django-user-%d'
+  USER_CACHE_KEY = 'django-user-{id}'
 
-Key name for user caching background. Default value is 'django-user-%d'. Read more in :ref:`User caching backend`
+Key name for user caching background. Default value is 'django-user-{id}'. Read more in :ref:`User caching backend`
 chapter.
 
 **CACHE_IMPERSONATE_USER**
