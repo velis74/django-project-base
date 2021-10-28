@@ -16,7 +16,7 @@
           <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
         </h5>
       </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
         <a class="dropdown-item" href="#" @click="userProfile">{{ gettext('User profile') }}</a>
         <a class="dropdown-item" href="#" @click="changePassword">{{ gettext('Change password') }}</a>
         <a
