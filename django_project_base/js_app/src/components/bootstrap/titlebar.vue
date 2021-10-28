@@ -36,13 +36,12 @@ import { apiClient as ApiClient } from '../../apiClient';
 import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
 import { Store } from '../../store';
+import Notification from '../notification.vue';
 
 import Breadcrumbs from './breadcrumbs.vue';
 import Login from './login.vue';
 import ProjectList from './projectlist.vue';
 import UserProfile from './userprofile.vue';
-
-import Notification from '@/components/notification.vue';
 
 export default {
   name: 'TitleBar',

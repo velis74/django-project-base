@@ -42,8 +42,7 @@
 import { apiClient as ApiClient } from '../../apiClient';
 import { Session } from '../../session';
 import { Store } from '../../store';
-
-import Notification from '@/components/notification.vue';
+import Notification from '../notification.vue';
 
 export default {
   name: 'Login',
