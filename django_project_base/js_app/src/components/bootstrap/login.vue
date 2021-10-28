@@ -34,7 +34,7 @@
         </div>
       </form>
     </div>
-    <notifications position="top center"/>
+    <notification position="top center"/>
   </div>
 </template>
 
@@ -43,8 +43,13 @@ import { apiClient as ApiClient } from '../../apiClient';
 import { Session } from '../../session';
 import { Store } from '../../store';
 
+import Notification from '@/components/notification.vue';
+
 export default {
   name: 'Login',
+  components: {
+    Notification,
+  },
   data() {
     return {
       loginModel: {

@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ModalHandler from 'dynamicforms/src/components/modalhandler.vue';
 import Vue from 'vue';
-import Notifications from 'vue-notification';
 
 // Dokler nimamo npm packageja je najbolje, da se dynamicforms poveže preko npm link-a:
 //  - Na dynamicforms narediš "npm run build", in "npm link"
@@ -13,8 +12,7 @@ import Login from './components/bootstrap/login.vue';
 import ProjectList from './components/bootstrap/projectlist.vue';
 import TitleBar from './components/bootstrap/titlebar.vue';
 import UserProfile from './components/bootstrap/userprofile.vue';
-
-Vue.use(Notifications);
+import Notification from './components/notification.vue';
 
 const componentsConfig = {
   TitleBar,
@@ -22,6 +20,7 @@ const componentsConfig = {
   Login,
   ProjectList,
   UserProfile,
+  Notification,
 };
 
 const createApp = (elementId, template, modalId) => {

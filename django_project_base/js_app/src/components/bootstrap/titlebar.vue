@@ -25,39 +25,12 @@
         <Login/>
       </div>
     </nav>
-    <notifications v-if="loggedIn" width="350" position="top center">
-      <template slot="body" slot-scope="{ item, close }">
-        <div
-          class="vue-notification"
-          :class="item.type"
-          @click="item.data.onNotificationClose(item, close, true)"
-        >
-          <div>
-            <div style="display: inline-block; max-width: 95%;" class="notification-title">
-              <div v-html="item.title"/>
-            </div>
-            <div style="display: inline-block; max-width: 95%;" class="notification-content">
-              <div v-html="item.text"/>
-            </div>
-            <div
-              v-if="item.data.duration === -1"
-              style="display: inline-block; float: right; vertical-align: middle;"
-            >
-              <button class="close" @click="item.data.onNotificationClose(item, close)">
-                <i class="fas fa-times fa-xs"/>
-              </button>
-            </div>
-          </div>
-        </div>
-      </template>
-    </notifications>
+    <notification/>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
-import Vue from 'vue';
-import Notifications from 'vue-notification';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import { showMaintenanceNotification } from '../../notifications';
@@ -69,12 +42,16 @@ import Login from './login.vue';
 import ProjectList from './projectlist.vue';
 import UserProfile from './userprofile.vue';
 
-Vue.use(Notifications);
+import Notification from '@/components/notification.vue';
 
 export default {
   name: 'TitleBar',
   components: {
-    Breadcrumbs, Login, ProjectList, UserProfile,
+    Notification,
+    Breadcrumbs,
+    Login,
+    ProjectList,
+    UserProfile,
   },
   props: {
     darkMode: { type: Boolean, default: false }, // dark mode on when true
@@ -94,7 +71,9 @@ export default {
     };
   },
   computed: {
-    darkOrLightMode() { return this.darkMode ? this.darkClass : this.lightClass; },
+    darkOrLightMode() {
+      return this.darkMode ? this.darkClass : this.lightClass;
+    },
   },
   beforeDestroy() {
     clearInterval(this.maintenanceNoticesPeriodicApiCall);
@@ -181,18 +160,18 @@ export default {
 </script>
 
 <style scoped>
-  .titlebar-app .card, .nav-item > .card > .card-body {
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
+.titlebar-app .card, .nav-item > .card > .card-body {
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
 
-  .logo-image {
-    max-height: 60px;
-    max-width: 60px;
-  }
+.logo-image {
+  max-height: 60px;
+  max-width: 60px;
+}
 
-  .login {
-    min-height: 2em;
-  }
+.login {
+  min-height: 2em;
+}
 </style>
