@@ -34,3 +34,15 @@ Handles user menu and associated UX for logging in, out, impersonation, maintain
 etc.
 
 You need to enable the `/account/` URLs so that the component can actually do its work. See :ref:`Authentication`.
+
+Vue single file components
+--------------------------
+
+You can add django_project_base as a js library to your package.json when developing Vue projects.
+In order to have notifications functionality enabled please install: npm install --save vue-notification and
+add the following code to your main.js:
+
+.. code-block:: javascript
+
+    import Notifications from 'vue-notification';
+    Vue.use(Notifications);
