@@ -33,6 +33,7 @@
 import _ from 'lodash';
 
 import { apiClient as ApiClient } from '../../apiClient';
+import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from '../../events';
 import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
 import { Store } from '../../store';
@@ -147,7 +148,14 @@ export default {
               }
               if (!this.maintenanceNotificationItem && (hours8 || hours1 || minutes5)) {
                 this.maintenanceNotificationItem = _notification;
-                showMaintenanceNotification(this.maintenanceNotificationItem, rangeIdentifier);
+                showMaintenanceNotification(this.maintenanceNotificationItem, rangeIdentifier, () => {
+                  ApiClient.post('/maintenance-notification/acknowledged/', {
+                    id: this.maintenanceNotificationItem.id,
+                    acknowledged_identifier: rangeIdentifier,
+                  }).then(() => {
+                    document.dispatchEvent(MaintenanceNotificationAcknowledged);
+                  });
+                });
               }
             }
           }).catch();

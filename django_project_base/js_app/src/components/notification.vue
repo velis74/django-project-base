@@ -29,10 +29,6 @@
 
 <script>
 // https://www.npmjs.com/package/vue-notification is the library used for notification
-import Vue from 'vue';
-import Notifications from 'vue-notification';
-
-Vue.use(Notifications);
 export default {
   name: 'Notification',
   props: {

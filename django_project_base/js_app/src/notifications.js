@@ -1,8 +1,5 @@
 import Vue from 'vue';
 
-import { apiClient as ApiClient } from './apiClient';
-import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from './events';
-
 const showNotification = (title, text, type = 'info') => {
   Vue.notify({
     title,
@@ -16,7 +13,7 @@ const showNotification = (title, text, type = 'info') => {
   });
 };
 
-const showMaintenanceNotification = (noticeItem, rangeId) => {
+const showMaintenanceNotification = (noticeItem, rangeId, closeCallback = null) => {
   const duration = -1;
   const delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
   Vue.notify({
@@ -36,13 +33,10 @@ const showMaintenanceNotification = (noticeItem, rangeId) => {
         if (fromClick) {
           return;
         }
-        ApiClient.post('/maintenance-notification/acknowledged/', {
-          id: item.data.id,
-          acknowledged_identifier: rangeId, // jshint ignore:line
-        }).then(() => {
-          closeFunction();
-          document.dispatchEvent(MaintenanceNotificationAcknowledged);
-        });
+        if (closeCallback) {
+          closeCallback();
+        }
+        closeFunction();
       },
       id: noticeItem.id,
       duration,
