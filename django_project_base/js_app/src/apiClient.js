@@ -6,6 +6,7 @@
 /* eslint-disable arrow-body-style */
 import axios from 'axios';
 
+import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './apiConfig';
 import { showGeneralErrorNotification } from './notifications';
 import { Store } from './store';
 
@@ -15,12 +16,14 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
-const HTTP_401_UNAUTHORIZED = 401;
 // TODO: Uporabi dynamic forms API client.
 
 // Add a request interceptor
 // eslint-disable-next-line func-names
 apiClient.interceptors.request.use(function (config) {
+  if (_.includes(Store.get('ignored-apis') || [], config.url)) {
+    throw new axios.Cancel('app-canceled-err');
+  }
   config.headers['Content-Type'] = 'application/json';
   config.headers['Current-Project'] = Store.get('current-project');
   if (!config.headers['X-CSRFToken']) {
@@ -41,10 +44,22 @@ apiClient.interceptors.response.use((response) => {
   return Promise.resolve(response);
 },
 (error) => {
+  if (error.message === 'app-canceled-err') {
+    return Promise.reject(error);
+  }
   const errMsg = error && error.response && error.response.data && error.response.data.detail ? error.response.data.detail : '';
   const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
   const noSession = status === HTTP_401_UNAUTHORIZED;
   const hideErrorMsg = error.config && error.config.hideErrorNotice === true;
+
+  if (shouldUrlBeIgnoredAfterApiResponseNotFound(error)) {
+    const ignoredApis = Store.get('ignored-apis') || [];
+    if (!_.includes(ignoredApis, error.config.url)) {
+      ignoredApis.push(error.config.url);
+      Store.set('ignored-apis', ignoredApis);
+    }
+  }
+
   if (noSession) {
     Store.clear();
   }

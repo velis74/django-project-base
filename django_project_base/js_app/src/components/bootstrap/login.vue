@@ -34,7 +34,7 @@
         </div>
       </form>
     </div>
-    <notification position="top center"/>
+    <notification v-if="addNotificationsComponent" position="top center"/>
   </div>
 </template>
 
@@ -46,6 +46,12 @@ import Notification from '../notification.vue';
 
 export default {
   name: 'Login',
+  props: {
+    addNotificationsComponent: {
+      type: Boolean,
+      default: true,
+    },
+  },
   components: {
     Notification,
   },

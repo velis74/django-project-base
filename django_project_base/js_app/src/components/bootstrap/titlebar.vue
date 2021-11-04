@@ -22,7 +22,7 @@
         <component :is="userprofileComponent"/>
       </div>
       <div v-else-if="!loggedIn && loginVisible" class="login">
-        <Login/>
+        <Login :add-notifications-component="false"/>
       </div>
     </nav>
     <notification/>
@@ -33,6 +33,7 @@
 import _ from 'lodash';
 
 import { apiClient as ApiClient } from '../../apiClient';
+import { API_CONFIG } from '../../apiConfig';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from '../../events';
 import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
@@ -122,7 +123,7 @@ export default {
     monitorMaintenanceNotifications() {
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
         if (Store.get('current-user')) {
-          ApiClient.get('/maintenance-notification/',
+          ApiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url,
             { hideErrorNotice: true }).then((notificationResponse) => {
             // eslint-disable-next-line no-underscore-dangle
             const _notification = _.first(notificationResponse.data);
