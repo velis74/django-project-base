@@ -11,7 +11,7 @@ import { showGeneralErrorNotification } from './notifications';
 import { Store } from './store';
 
 const apiClient = axios.create({
-  xsrfCookieName: window.csrf_token_name || '__Host-csrftoken',
+  xsrfCookieName: window.csrf_token_name || 'csrftoken',
   xsrfHeaderName: 'X-CSRFToken',
   withCredentials: true,
 });
