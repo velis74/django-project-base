@@ -1,6 +1,5 @@
 import 'es6-promise/auto';
 import Vue from 'vue';
-import Notifications from 'vue-notification';
 
 import { apiClient } from './apiClient';
 import createApp from './apps';
@@ -16,7 +15,6 @@ if (typeof window.gettext === 'undefined') {
 
 Vue.config.productionTip = false;
 Vue.prototype.gettext = window.gettext;
-Vue.use(Notifications);
 
 window.Vue = Vue;
 window.createApp = createApp;

@@ -11,7 +11,7 @@
             <div v-html="item.title"/>
           </div>
           <div style="display: inline-block; max-width: 95%;" class="notification-content">
-            <div v-html="item.text"/>
+            <div style="margin-left: 0.4em;" v-html="item.text"/>
           </div>
           <div
             v-if="item.data.duration === -1"
@@ -28,9 +28,16 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
+import Notify from '../../node_modules/vue-notification/src/index';
+import Notifications from '../../node_modules/vue-notification/src/Notifications.vue';
+
+Notify.install(Vue);
 // https://www.npmjs.com/package/vue-notification is the library used for notification
 export default {
   name: 'Notification',
+  components: { Notifications },
   props: {
     width: {
       type: Number,
