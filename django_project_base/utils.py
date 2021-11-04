@@ -43,7 +43,7 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
     # CSP can be changed per request... with decorator:
     #  https://django-csp.readthedocs.io/en/latest/decorators.html#decorator-chapter
     # Content Security Policy
-    django_settings['CSP_DEFAULT_SRC'] = ["'none'", ]
+    django_settings['CSP_DEFAULT_SRC'] = ["'self'", ]
     # stackpath.bootstrapcdn.com - because of (old) login
     django_settings['CSP_STYLE_SRC'] = [
         "'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'stackpath.bootstrapcdn.com'
@@ -66,7 +66,7 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
     django_settings['CSP_CONNECT_SRC'] = ["'self'", ]
     django_settings['CSP_OBJECT_SRC'] = ["'none'", ]
     django_settings['CSP_BASE_URI'] = ["'self'", ]
-    django_settings['CSP_FRAME_ANCESTORS'] = ["'none'", ]
+    django_settings['CSP_FRAME_ANCESTORS'] = ["'self'", ]
     django_settings['CSP_FORM_ACTION'] = ["'self'", ]
 
     django_settings['PERMISSIONS_POLICY'] = {
