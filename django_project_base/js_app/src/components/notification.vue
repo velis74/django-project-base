@@ -29,9 +29,8 @@
 
 <script>
 import Vue from 'vue';
-
-import Notify from '../../node_modules/vue-notification/src/index';
-import Notifications from '../../node_modules/vue-notification/src/Notifications.vue';
+import Notify from 'vue-notification/src/index';
+import Notifications from 'vue-notification/src/Notifications.vue';
 
 Notify.install(Vue);
 // https://www.npmjs.com/package/vue-notification is the library used for notification
