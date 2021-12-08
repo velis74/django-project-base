@@ -199,3 +199,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DYNAMICFORMS = {
     'allow_anonymous_user_to_preupload_files': True,
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
