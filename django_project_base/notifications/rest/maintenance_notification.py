@@ -4,7 +4,7 @@ from typing import Optional
 
 from django.conf import settings
 from django.db import transaction
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from pytz import UTC
 from rest_framework import fields, status

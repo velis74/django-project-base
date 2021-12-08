@@ -2,7 +2,7 @@ import importlib
 import re
 from typing import List
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
