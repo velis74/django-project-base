@@ -53,8 +53,8 @@ class ProfileRequest(object):
     def __init__(self, settings: dict, process_function: callable,
                  process_function_args: tuple, process_function_kwargs: dict):
         assert 'REQUEST_METHOD' in settings
-        assert 'QUERY_STRING' in settings
         assert 'PATH_INFO' in settings
+        settings.setdefault('QUERY_STRING', '')
         settings.setdefault('HTTP_HOST', socket.gethostname())
         self._settings = settings
         self._process_function = process_function
