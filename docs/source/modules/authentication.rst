@@ -66,7 +66,8 @@ User change is supported via REST api calls or you can use userProfile component
 which already integrates api functionality. Functionality is based on django-hijack package.
 
 For determining which user can impersonate which user you can set your own logic. Procedure is described in
-https://django-hijack.readthedocs.io/en/stable/configuration/ (See "Custom authorization function")
+https://django-hijack.readthedocs.io/en/stable/configuration/ (See "Custom authorization function") By default
+only superusers are allowed to hijack other users.
 
 Example below:
 
