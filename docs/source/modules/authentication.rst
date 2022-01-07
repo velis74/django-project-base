@@ -65,7 +65,10 @@ Sometimes is useful if we can login into app as another user for debugging or he
 User change is supported via REST api calls or you can use userProfile component (django_project_base/templates/user-profile/bootstrap/template.html)
 which already integrates api functionality. Functionality is based on django-hijack package.
 
-For determining which user can impersonate which user you can set your own logic. Example below:
+For determining which user can impersonate which user you can set your own logic. Procedure is described in
+https://django-hijack.readthedocs.io/en/stable/configuration/ (See "Custom authorization function")
+
+Example below:
 
 .. code-block:: python
 
