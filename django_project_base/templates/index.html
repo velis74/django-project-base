@@ -8,20 +8,23 @@
     <link href="/static/fa-5.13.3/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet"
           crossorigin="anonymous">
-    <link href="{% static 'django-project-base/css/django-project-base.css' %}" rel="stylesheet" crossorigin="anonymous">
+    <link href="{% static 'django-project-base/css/django-project-base.css' %}" rel="stylesheet"
+          crossorigin="anonymous">
+    <script type="application/javascript"
+            src="{% static 'django-project-base/js/django-project-base-vendors.js' %}"></script>
+    <script type="application/javascript" src="{% static 'django-project-base/js/django-project-base.js' %}"></script>
 </head>
 <script>
-    window.csrf_token_name = 'csrftoken';
-    window.dynamicformsUi = 'bootstrap';
+  window.csrf_token_name = 'csrftoken';
+  window.dynamicformsUi = 'bootstrap';
 </script>
 <body>
-<div id="titlebar-app" class="titlebar-app"></div>
+<div id="app"></div>
 <div id="modal-app"></div>
-<script type="application/javascript" src="{% static 'django-project-base/js/django-project-base-vendors.js' %}"></script>
-<script type="application/javascript" src="{% static 'django-project-base/js/django-project-base.js' %}"></script>
+</body>
 </body>
 <script>
   // add title bar to page
-  createApp('titlebar-app', '<titlebar :projectlistVisible="true"/>', 'modal-app');
+  createApp('app', '<TitleBar :projectlistVisible="true"/>', 'modal-app');
 </script>
 </html>
