@@ -33,7 +33,7 @@ import _ from 'lodash';
 import { apiClient as ApiClient } from '../../apiClient';
 
 export default {
-  name: 'accounts-impersonate_dialog.html', // eslint-disable-line vue/component-definition-name-casing
+  name: 'accounts-impersonate-dialog.html', // eslint-disable-line vue/component-definition-name-casing
   props: {
     uuid: { type: String, required: true },
     record: { type: Object, required: true },

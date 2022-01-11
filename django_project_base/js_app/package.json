@@ -9,8 +9,9 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "bootstrap": "^4.6.0",
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
+    "browser-update": "^3.3.37",
     "core-js": "^3.6.5",
     "dynamicforms": "^0.1.0",
     "es6-promise": "^4.2.8",
