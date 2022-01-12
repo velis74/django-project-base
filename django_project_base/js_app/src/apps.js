@@ -26,28 +26,6 @@ const componentsConfig = {
 };
 
 const createApp = (elementId, template, modalId) => {
-  // eslint-disable-next-line no-unused-vars,no-var
-  var $buoop = {
-    required: {
-      e: -4, f: -3, o: -3, s: -1, c: -3,
-    },
-    insecure: true,
-    api: 2022.01,
-  };
-
-  // eslint-disable-next-line camelcase
-  function $buo_f() {
-    const e = document.createElement('script');
-    e.src = '//browser-update.org/update.min.js';
-    document.body.appendChild(e);
-  }
-
-  try {
-    document.addEventListener('DOMContentLoaded', $buo_f, false);
-  } catch (e) {
-    window.attachEvent('onload', $buo_f);
-  }
-
   if (typeof window.dynamicforms === 'undefined') {
     window.dynamicforms = {};
   }

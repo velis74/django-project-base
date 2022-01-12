@@ -10,7 +10,7 @@
 
   function $buo_f() {
     var e = document.createElement("script");
-    e.src = '//browser-update.org/update.min.js';
+    e.src = '/browser-update';
     document.body.appendChild(e);
   }
 
@@ -19,13 +19,5 @@
   } catch (e) {
     window.attachEvent("onload", $buo_f)
   }
-  /**
-   *
-   * readMe: this must be included right after <head> tag like:
-   *
-   * <head>
-   * <meta charset="UTF-8">
-   * {% include 'browser-check.html' %}
-   *
-   */
+  // readMe: this must template be included right after <head> tag like
 </script>
