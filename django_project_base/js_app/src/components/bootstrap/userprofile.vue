@@ -53,7 +53,7 @@ import ProjectBaseData from '../../projectBaseData';
 import { Session } from '../../session';
 import { Store } from '../../store';
 
-import ImpersonateDialog from './impersonate_dialog.vue';
+import ImpersonateDialog from './impersonate-dialog.vue';
 
 Vue.component(ImpersonateDialog.name, ImpersonateDialog);
 

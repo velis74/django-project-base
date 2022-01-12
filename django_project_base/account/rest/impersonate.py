@@ -31,7 +31,7 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
     }
 
     # TODO: Trenutno je narejena samo komponenta. HTML dialog pa ne... ali je to v redu?
-    form_template = 'accounts/impersonate_dialog.html'
+    form_template = 'accounts/impersonate-dialog.html'
 
     # TODO: Placeholderja še ni... je samo predviden v komponentah... ampak se še nikjer ne definira
     # TODO: Trenutno se polje na roko definira na custom layoutu. Treba je podpreti, da bo tudi standardni input

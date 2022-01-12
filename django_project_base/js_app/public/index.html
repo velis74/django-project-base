@@ -19,6 +19,6 @@
 <!-- built files will be auto injected -->
 </body>
 <script>
-  createApp('app', '<TitleBar :projectlistVisible="true"/>', 'modal-app');
+  createApp('app', '<BrowserCheck :hidePageIfUnSupportedBrowser="false"><TitleBar v-slot:content :projectlistVisible="true"/></BrowserCheck>', 'modal-app');
 </script>
 </html>

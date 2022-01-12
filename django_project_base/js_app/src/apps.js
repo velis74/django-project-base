@@ -12,6 +12,7 @@ import Login from './components/bootstrap/login.vue';
 import ProjectList from './components/bootstrap/projectlist.vue';
 import TitleBar from './components/bootstrap/titlebar.vue';
 import UserProfile from './components/bootstrap/userprofile.vue';
+import BrowserCheck from './components/browser-check.vue';
 import Notification from './components/notification.vue';
 
 const componentsConfig = {
@@ -21,6 +22,7 @@ const componentsConfig = {
   ProjectList,
   UserProfile,
   Notification,
+  BrowserCheck,
 };
 
 const createApp = (elementId, template, modalId) => {

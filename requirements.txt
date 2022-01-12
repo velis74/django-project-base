@@ -1,6 +1,6 @@
 django
 djangorestframework
-git+git://github.com/velis74/DynamicForms.git@viewmode
+git+https://github.com/velis74/DynamicForms.git@viewmode
 swapper
 django-rest-registration
 drf-spectacular>=0.17.2<0.18
