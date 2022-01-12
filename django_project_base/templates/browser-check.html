@@ -6,11 +6,12 @@
     reminder: 0,
     reminderClosed: 1,
     noclose: true,
+    domain: '/browser-update/js-script',
   };
 
   function $buo_f() {
     var e = document.createElement("script");
-    e.src = '/browser-update/js-script';
+    e.src = '/browser-update/js-script/';
     document.body.appendChild(e);
   }
 
@@ -19,5 +20,4 @@
   } catch (e) {
     window.attachEvent("onload", $buo_f)
   }
-  // readMe: this must template be included right after <head> tag like
 </script>

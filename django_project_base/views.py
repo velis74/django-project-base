@@ -10,5 +10,12 @@ def documentation_view(request: object, path='', document_root=None) -> FileResp
 
 
 def browser_update_script(request: object) -> HttpResponse:
-    return HttpResponse(requests.get('https://browser-update.org/update.min.js', verify=False).content.decode(),
-                        content_type='application/javascript')
+    try:
+        script: str = request.path.split('js-script')[-1].strip('/')
+    except Exception:
+        script: str = ''
+    http_response: HttpResponse = HttpResponse(
+        requests.get('https://browser-update.org/%s' % script or 'update.min.js', verify=False).content.decode(),
+        content_type='application/javascript',
+    )
+    return http_response
