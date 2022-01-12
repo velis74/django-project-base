@@ -14,6 +14,6 @@ SPECTACULAR_DEFAULTS['PREPROCESSING_HOOKS'] = [
 
 urlpatterns = [
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    path('browser-update/js-script', browser_update_script, name='browser-update-script'),
+    re_path('browser-update/js-script', browser_update_script, name='browser-update-script'),
     re_path(r'', include(django_project_base_router.urls)),
 ]

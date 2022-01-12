@@ -14,8 +14,9 @@ def browser_update_script(request: object) -> HttpResponse:
         script: str = request.path.split('js-script')[-1].strip('/')
     except Exception:
         script: str = ''
+    script = script or 'update.min.js'
     http_response: HttpResponse = HttpResponse(
-        requests.get('https://browser-update.org/%s' % script or 'update.min.js', verify=False).content.decode(),
+        requests.get('https://browser-update.org/%s' % script, verify=False).content.decode(),
         content_type='application/javascript',
     )
     return http_response
