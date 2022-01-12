@@ -3,6 +3,7 @@ from django.views.i18n import JavaScriptCatalog
 from drf_spectacular.settings import SPECTACULAR_DEFAULTS
 
 from django_project_base.router import django_project_base_router
+from django_project_base.views import browser_update_script
 
 SPECTACULAR_DEFAULTS['TITLE'] = 'Rest documentation'
 SPECTACULAR_DEFAULTS['DESCRIPTION'] = 'Api documentation'
@@ -13,5 +14,6 @@ SPECTACULAR_DEFAULTS['PREPROCESSING_HOOKS'] = [
 
 urlpatterns = [
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
+    path('browser-update/', browser_update_script, name='browser-update-script'),
     re_path(r'', include(django_project_base_router.urls)),
 ]
