@@ -28,7 +28,7 @@ export default {
   mounted() {
     browserUpdate({
       required: {
-        e: -1, f: -1, o: -1, s: -1, c: -1,
+        e: -4, f: -4, o: -4, s: -4, c: -4,
       },
       insecure: true,
       unsupported: true,
