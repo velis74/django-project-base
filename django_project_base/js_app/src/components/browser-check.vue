@@ -1,5 +1,6 @@
 <template>
-  <div style="display: none"/>
+  <div v-if="lockOverlayVisible" class="lockScreen" @touchmove.self.prevent>
+  </div>
 </template>
 
 <script>
@@ -17,11 +18,17 @@ export default {
     return {
       pageLocked: false,
       checkInterval: null,
-      a: null,
+      lockOverlayVisible: false,
     };
   },
+  beforeDestroy() {
+    clearInterval(this.checkInterval);
+    this.checkInterval = null;
+    document.body.style.overflow = '';
+    this.lockOverlayVisible = false;
+    this.pageLocked = false;
+  },
   mounted() {
-    console.log(this.lockScreen);
     browserUpdate({
       required: {
         e: -3, f: -3, o: -3, s: -3, c: -3,
@@ -31,26 +38,36 @@ export default {
       reminder: 0,
       reminderClosed: 1,
       noclose: true,
-      // test: true,
-    });
+    }, false);
     this.checkInterval = setInterval(() => {
-      console.log(this.isBrowserNotificationShown() && this.lockScreen);
-      if (this.isBrowserNotificationShown() && this.lockScreen) {
-        // eslint-disable-next-line no-debugger
-        debugger;
-        console.log('notification shown');
+      if (this.lockScreen && this.isBrowserNotificationShown() && !this.pageLocked) {
+        this.lockFullScreen();
       }
     }, 250);
   },
   methods: {
     isBrowserNotificationShown() {
-      console.log('check', Math.random());
-      return document.cookie.indexOf('browserupdateorg=pause') > -1;
+      return !!document.getElementById('buorg');
+    },
+    lockFullScreen() {
+      this.pageLocked = true;
+      this.lockOverlayVisible = true;
+      document.body.style.overflow = 'hidden';
     },
   },
 };
 </script>
 
 <style scoped>
-
+  .lockScreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, .5);
+    z-index: 100000;
+  }
 </style>
