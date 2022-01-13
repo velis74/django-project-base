@@ -12,6 +12,10 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "DJANGO_PROJECT_BASE_SLUG_FIELD_NAME",
         "default": "slug",
     },
+    {
+        "name": "DJANGO_PROJECT_BASE_COUNTRY_HOLIDAYS_CACHE_FOLDER",
+        "default": "/var/cache/django-project-base/country-holidays",
+    },
 
 )
 
