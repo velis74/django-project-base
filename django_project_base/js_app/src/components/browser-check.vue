@@ -14,6 +14,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    numberOfLastBrowserVersionsSupported: {
+      type: Number,
+      default: 4,
+    },
   },
   data() {
     return {
@@ -28,7 +32,11 @@ export default {
   mounted() {
     browserUpdate({
       required: {
-        e: -4, f: -4, o: -4, s: -4, c: -4,
+        e: -this.numberOfLastBrowserVersionsSupported,
+        f: -this.numberOfLastBrowserVersionsSupported,
+        o: -this.numberOfLastBrowserVersionsSupported,
+        s: -this.numberOfLastBrowserVersionsSupported,
+        c: -this.numberOfLastBrowserVersionsSupported,
       },
       insecure: true,
       unsupported: true,
