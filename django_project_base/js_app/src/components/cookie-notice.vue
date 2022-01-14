@@ -1,5 +1,9 @@
 <template>
-  <cookie-law :message="message || defaultMessage"/>
+  <cookie-law
+    :message="message || defaultMessage"
+    :button-text="agreeButtonText || defaultAgreeButtonText"
+    storageType="'cookies'"
+  />
 </template>
 <script>
 import translationsMixin from 'dynamicforms/src/mixins/translationsMixin';
@@ -14,7 +18,10 @@ export default {
   props: {
     message: {
       type: String,
-      // eslint-disable-next-line max-len
+      default: null,
+    },
+    agreeButtonText: {
+      type: String,
       default: null,
     },
   },
@@ -23,8 +30,10 @@ export default {
       // eslint-disable-next-line max-len
       return this.gettext('Our site saves small pieces of text information (cookies) on your device in order to deliver better content and for statistical purposes. You can disable the usage of cookies by changing the settings of your browser. By browsing our website without changing the browser settings you grant us permission to store that information on your device.');
     },
+    defaultAgreeButtonText() {
+      return this.gettext('Agree');
+    },
   },
-  methods: {},
 };
 </script>
 
