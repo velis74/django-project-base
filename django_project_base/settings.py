@@ -12,7 +12,6 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "DJANGO_PROJECT_BASE_SLUG_FIELD_NAME",
         "default": "slug",
     },
-
 )
 
 USER_CACHE_KEY = 'django-user-{id}'
