@@ -48,5 +48,6 @@ Index:
    vue
    examples
    swagger
+   utilities
    open_api
 
