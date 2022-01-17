@@ -7,11 +7,7 @@ const libraryFileName = 'django-project-base';
 module.exports = {
   outputDir: path.resolve(__dirname, `../static/${libraryFileName}/`),
   css: {
-    extract: {
-      ignoreOrder: true,
-      filename: `css/${libraryFileName}.css`,
-      chunkFilename: `css/${libraryFileName}-vendor.css`,
-    },
+    extract: false,
   },
   configureWebpack: {
     resolve: {
