@@ -1,6 +1,19 @@
 Cookie notice component
 =======================
 
+Some general guidelines for implementing cookie notice (check regulations for your needs):
+
+- before storing or accessing information on user's device informed user's consent is required
+
+ - users must be informed that the site uses cookies
+
+ - clearly explain how cookies work and they are being used
+
+ - provide link to a cookie policy or make details for cookie purposes, usage.
+
+
+
+
 For cookie notice component https://github.com/orestbida/cookieconsent libarary is integrated. See library
 documentation for defining cookie notification settings.
 Component can be used as a standalone Vue application:
