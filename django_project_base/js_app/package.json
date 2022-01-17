@@ -19,7 +19,6 @@
     "lodash": "^4.17.15",
     "vanilla-cookieconsent": "^2.8.0",
     "vue": "^2.6.11",
-    "vue-cookie-law": "^1.13.3",
     "vue-notification": "^1.3.20",
     "webpack": "^4.46.0"
   },

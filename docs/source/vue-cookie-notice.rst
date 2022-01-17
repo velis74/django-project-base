@@ -7,7 +7,7 @@ Some general guidelines for implementing cookie notice (check regulations for yo
 
  - users must be informed that the site uses cookies
 
- - clearly explain how cookies work and they are being used
+ - clearly explain how cookies work and how they are being used
 
  - provide link to a cookie policy or make details for cookie purposes, usage.
 
