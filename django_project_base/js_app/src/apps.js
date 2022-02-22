@@ -13,6 +13,7 @@ import ProjectList from './components/bootstrap/projectlist.vue';
 import TitleBar from './components/bootstrap/titlebar.vue';
 import UserProfile from './components/bootstrap/userprofile.vue';
 import BrowserCheck from './components/browser-check.vue';
+import CookieNotice from './components/cookie-notice.vue';
 import Notification from './components/notification.vue';
 
 const componentsConfig = {
@@ -23,9 +24,10 @@ const componentsConfig = {
   UserProfile,
   Notification,
   BrowserCheck,
+  CookieNotice,
 };
 
-const createApp = (elementId, template, modalId) => {
+const createApp = (elementId, template, modalId, data = {}) => {
   if (typeof window.dynamicforms === 'undefined') {
     window.dynamicforms = {};
   }
@@ -42,6 +44,7 @@ const createApp = (elementId, template, modalId) => {
   return new Vue({
     el: `#${elementId}`,
     components: componentsConfig,
+    data,
     template,
   });
 };

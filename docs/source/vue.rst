@@ -12,6 +12,7 @@ Here's the overview of the built-in components:
    :name: vuetoc
 
    vue-titlebar
+   vue-cookie-notice
 
 Vue single file components
 --------------------------
