@@ -12,7 +12,6 @@ from tests.test_base import TestBase
 
 class TestProject(TestBase):
     url: str = '/%s' % REST_API_CONFIG.Project.url
-    project_owner: UserProfile = UserProfile.objects.get(username=TEST_USER_ONE_DATA['username'])
 
     def setUp(self):
         super().setUp()
@@ -22,7 +21,7 @@ class TestProject(TestBase):
     def _create_project(self, payload: dict = {}) -> Response:
         _payload: dict = {
             'name': 'test-project',
-            'owner': self.project_owner.pk,
+            'owner': UserProfile.objects.get(username=TEST_USER_ONE_DATA['username']).pk,
             'slug': 'slug-test-project',
         }
         _payload.update(payload)
