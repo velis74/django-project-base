@@ -1,8 +1,9 @@
-from django.test import TestCase
 from rest_framework.test import APIClient
 
+from tests.test_base import TestBase
 
-class TestProfileViewSet(TestCase):
+
+class TestProfileViewSet(TestBase):
     def setUp(self):
         super().setUp()
         self.api_client = APIClient()

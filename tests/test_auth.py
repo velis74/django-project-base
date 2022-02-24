@@ -1,13 +1,14 @@
 import os
 
-from django.test import TestCase
+from rest_framework import status
 from rest_framework.test import APIClient
 
 from django_project_base.base.auth_backends import user_cache_invalidate
 from example.demo_django_base.models import UserProfile
+from tests.test_base import TestBase
 
 
-class TestLoginViewset(TestCase):
+class TestLoginViewset(TestBase):
     url_prefix = '/account/'
 
     def setUp(self):
@@ -50,7 +51,7 @@ class TestLoginViewset(TestCase):
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
         self.assertIsNotNone(response.cookies.get('sessionid', None))
         self.assertIsNotNone(response.cookies.get('csrftoken', None))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_json(self):
         # make Miha a superuser
@@ -64,24 +65,24 @@ class TestLoginViewset(TestCase):
                                         {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
         self.assertIsNone(response.cookies.get('sessionid', None))
         self.assertIsNone(response.cookies.get('csrftoken', None))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.api_client.credentials(HTTP_AUTHORIZATION='sessionid ' + response.data.get('sessionid', None))
         response = self.api_client.get(os.path.join(self.url_prefix, '/account/profile/current'),
                                        {'return-type': 'json'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_json_missing_session(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
         self.assertIsNone(response.cookies.get('sessionid', None))
         self.assertIsNone(response.cookies.get('csrftoken', None))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.api_client.get(os.path.join(self.url_prefix, '/account/profile/current'), {}, format='json')
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.content, b'{"detail":"Authentication credentials were not provided."}')
 
     def test_profile_destroy_my_profile_json(self):
@@ -89,28 +90,28 @@ class TestLoginViewset(TestCase):
                                         {'login': 'miha', 'password': 'mihamiha', 'return-type': 'json'}, format='json')
         self.api_client.credentials(HTTP_AUTHORIZATION='sessionid ' + response.data.get('sessionid', None))
         response = self.api_client.get('/account/profile/current', {'return-type': 'json'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.api_client.delete('/account/profile/current', {'return-type': 'json'}, format='json')
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.api_client.get('/account/profile/current', {'return-type': 'json'}, format='json')
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_logout_not_authorized(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'logout/'),
                                         {}, format='json')
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_logout(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.api_client.post(os.path.join(self.url_prefix, 'logout/'),
                                         {}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestChangePasswordViewset(TestCase):
+class TestChangePasswordViewset(TestBase):
     url_prefix = '/account/'
 
     def setUp(self):
@@ -120,13 +121,13 @@ class TestChangePasswordViewset(TestCase):
     def test_change_password(self):
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Test to short password
         response = self.api_client.post(os.path.join(self.url_prefix, 'change-password/submit-change/'),
                                         {'old_password': 'mihamiha', 'password': 'janez', 'password_confirm': 'janez'},
                                         format='json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.content,
                          b'{"password":["This password is too short. It must contain at least 8 characters."]}')
 
@@ -135,14 +136,14 @@ class TestChangePasswordViewset(TestCase):
                                         {'old_password': 'mihamiha', 'password': 'janezjanez',
                                          'password_confirm': 'janezjanez'},
                                         format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.api_client.post(os.path.join(self.url_prefix, 'login/'),
                                         {'login': 'miha', 'password': 'janezjanez'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestSendResetPasswordLink(TestCase):
+class TestSendResetPasswordLink(TestBase):
     def setUp(self):
         super().setUp()
         self.api_client = APIClient()
@@ -150,9 +151,9 @@ class TestSendResetPasswordLink(TestCase):
     def test_send_reset_password_link(self):
         response = self.api_client.post(os.path.join('/account/login/'),
                                         {'login': 'miha', 'password': 'mihamiha'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Send password link is disabled, returns 404
         response = self.api_client.post('/account/send-reset-password-link/', {'login': 'miha'},
                                         format='json')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

@@ -1,13 +1,13 @@
 import datetime
 
 import requests
-from django.test import TestCase
 from rest_framework import status
 
 from django_project_base.country_holidays import holidays_api_url
+from tests.test_base import TestBase
 
 
-class RetrieveHolidaysTest(TestCase):
+class RetrieveHolidaysTest(TestBase):
 
     def test_retieve_holidays(self):
         response: requests.Response = requests.get(
