@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework.test import APIClient
 
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.rest_config import REST_API_CONFIG
 from tests.test_base import TestBase
 
 
 class TestMaintenanceNotifications(TestBase):
-    url: str = '/maintenance-notification/'
+    url: str = '/%s/' % REST_API_CONFIG.MaintenanceNotification.url
 
     def setUp(self):
         super().setUp()
