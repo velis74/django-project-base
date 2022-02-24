@@ -20,7 +20,7 @@
 <!-- built files will be auto injected -->
 </body>
 <script>
-  createApp('app', '<BrowserCheck :hidePageIfUnSupportedBrowser="false"><TitleBar v-slot:content :projectlistVisible="true"/></BrowserCheck>', 'modal-app');
+  window.djangoProjectBase.createApp('app', '<BrowserCheck :hidePageIfUnSupportedBrowser="false"><TitleBar v-slot:content :projectlistVisible="true"/></BrowserCheck>', 'modal-app');
 
   var opt = {
     current_lang: 'en',
@@ -113,6 +113,6 @@
       }
     }
   };
-  createApp('cookie', '<CookieNotice/>', 'modal-app', opt);
+  window.djangoProjectBase.createApp('cookie', '<CookieNotice/>', 'modal-app', opt);
 </script>
 </html>

@@ -24,7 +24,7 @@
 </body>
 <script>
   // add title bar to page
-  createApp('app', '<TitleBar :projectlistVisible="true"/>', 'modal-app');
+  window.djangoProjectBase.createApp('app', '<TitleBar :projectlistVisible="true"/>', 'modal-app');
   var opt = {
     current_lang: 'en',
     autoclear_cookies: true,
@@ -116,8 +116,7 @@
       }
     }
   };
-
-  createApp('cookie', '<CookieNotice/>', 'modal-app', opt);
+  window.djangoProjectBase.createApp('cookie', '<CookieNotice/>', 'modal-app', opt);
 </script>
 {% include 'browser-check.html' with lockScreen=True %}
 </html>
