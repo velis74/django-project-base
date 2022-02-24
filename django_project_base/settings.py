@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from django.contrib.auth.hashers import make_password
-
 from django_project_base.settings_parser import parse_settings
 
 DJANGO_PROJECT_BASE_SETTINGS = (

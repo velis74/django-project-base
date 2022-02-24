@@ -30,9 +30,10 @@ class TestMaintenanceNotifications(TestBase):
         self.assertEqual(status.HTTP_201_CREATED, self._create_maintenance_notification({}).status_code)
         self.assertEqual(self._create_maintenance_notification(dict(
             delayed_to=datetime.datetime.now())).status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(self._create_maintenance_notification(dict(
-            delayed_to=(datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat() + 'Z')).status_code,
-                         status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(self._create_maintenance_notification(
+            dict(
+                delayed_to=(datetime.datetime.now() - datetime.timedelta(
+                    hours=1)).isoformat() + 'Z')).status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_list_maintenance_notification(self):
         create_response: Response = self._create_maintenance_notification({})

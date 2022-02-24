@@ -82,7 +82,6 @@ class MaintenanceNotificationSerializer(ModelSerializer):
         except Exception as e:
             raise APIException(e)
 
-
     # todo: update and partial update, destroy
 
     def validate(self, attrs: dict):
