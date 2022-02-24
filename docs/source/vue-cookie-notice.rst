@@ -33,7 +33,7 @@ Component can be used as a standalone Vue application:
                 /* options listed in cookieconsent library page */
             };
 
-            createApp('cookie', '<CookieNotice/>', 'modal-app', opt);
+            window.djangoProjectBase.createApp('cookie', '<CookieNotice/>', 'modal-app', opt);
         </script>
     ...
 

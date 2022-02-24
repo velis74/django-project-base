@@ -53,7 +53,7 @@ Titlebar component integration example
       {% include "bootstrap/titlebar.html" %}
       <script>
         // initialize titlebar component
-        createApp('titlebar-app', titlebar);
+        window.djangoProjectBase.createApp('titlebar-app', titlebar);
       </script>
     </body>
     </html>
