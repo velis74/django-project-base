@@ -1,12 +1,13 @@
 from django.core.cache import cache
-from django.test import TestCase
+from rest_framework import status
 from rest_framework.test import APIClient
 
 from django_project_base.settings import USER_CACHE_KEY
 from example.demo_django_base.models import UserProfile
+from tests.test_base import TestBase
 
 
-class TestUsersCachingBackend(TestCase):
+class TestUsersCachingBackend(TestBase):
     def setUp(self):
         super().setUp()
         self.api_client = APIClient()
@@ -24,7 +25,7 @@ class TestUsersCachingBackend(TestCase):
 
         # I still shouldn't be able to do superuser stuff
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # Clearing cache, now Miha can do better stuff
         staff = UserProfile.objects.filter(is_staff=True)
@@ -32,4 +33,4 @@ class TestUsersCachingBackend(TestCase):
             cache.delete(USER_CACHE_KEY.format(id=user.id))
 
         response = self.api_client.post('/account/impersonate/start', {'username': 'janez'}, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -28,7 +28,7 @@ class Notification(ABC, QueableNotificationMixin):
                  type: Optional[NotificationType] = None, recipients: List[settings.AUTH_USER_MODEL] = [],
                  **kwargs) -> None:
         super().__init__()
-        assert isinstance(persist, bool), "Persist must be valid boolena value"
+        assert isinstance(persist, bool), "Persist must be valid boolean value"
         self._persist = persist
         if level is not None:
             assert isinstance(level, str) and level in [

@@ -74,8 +74,14 @@ class MaintenanceNotificationSerializer(ModelSerializer):
         return request.session.get(settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY, {}).get(str(notification.pk), [])
 
     def create(self, validated_data) -> DjangoProjectBaseNotification:
-        message: DjangoProjectBaseMessage = DjangoProjectBaseMessage.objects.create(**validated_data['message'])
-        return MaintenanceNotification(delay=validated_data['delayed_to'], message=message, locale=None).send()
+        try:
+            message: DjangoProjectBaseMessage = DjangoProjectBaseMessage.objects.create(**validated_data['message'])
+            return MaintenanceNotification(delay=validated_data['delayed_to'], message=message, locale=None).send()
+        except AssertionError as ae:
+            raise ValidationError(str(ae))
+        except Exception as e:
+            raise APIException(e)
+
 
     # todo: update and partial update, destroy
 
