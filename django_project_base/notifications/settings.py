@@ -10,11 +10,6 @@ NOTIFICATIONS_SETTINGS = (
         "description": "Maintenance notifications list cache key.",
     },
     {
-        "name": "MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET",
-        "default": True,
-        "description": "Maintenance notifications use cached queryset.",
-    },
-    {
         "name": "TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY",
         "default": 900,
         "description": "When list maintenance notifications api is called with current=true in query param, "

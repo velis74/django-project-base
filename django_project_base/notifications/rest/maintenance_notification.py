@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from dynamicforms.viewsets import ModelViewSet
 from pytz import UTC
 from rest_framework import fields, status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
@@ -15,7 +16,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer as RestFrameworkSerializer
-from rest_framework.viewsets import ModelViewSet
 
 from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
@@ -117,20 +117,19 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
+    def handle_create_validation_exception(self, e, request, *args, **kwargs):
+        raise e
+
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer
 
     def get_queryset(self):
-        if settings.MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET:
-            return DjangoProjectBaseNotification.objects.maintenance_notifications()
-        else:
-            now: datetime.datetime = utc_now()
-            queryset = DjangoProjectBaseNotification.objects.filter(
-                type=NotificationType.MAINTENANCE.value,
-                delayed_to__gt=now,
-                delayed_to__lt=now + datetime.timedelta(hours=8)
-            )
-            return queryset
+        now: datetime.datetime = utc_now()
+        return DjangoProjectBaseNotification.objects.filter(
+            type=NotificationType.MAINTENANCE.value,
+            delayed_to__gt=now,
+            delayed_to__lt=now + datetime.timedelta(hours=8)
+        )
 
     @extend_schema(
         request=MaintenanceNotificationSerializer(),

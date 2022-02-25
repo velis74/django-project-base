@@ -47,16 +47,6 @@ Read more in :ref:`Project slug` chapter.
 
 Read more in :ref:`Maintenance notifications` chapter.
 
-**MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET**
-
-.. code-block:: python
-
-  MAINTENANCE_NOTIFICATIONS_USE_CACHED_QUERYSET=<bool>
-
-Maintenance notifications use cached queryset. Default is True.
-
-Read more in :ref:`Maintenance notifications` chapter.
-
 **USER_CACHE_KEY**
 
 .. code-block:: python
