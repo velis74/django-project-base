@@ -8,12 +8,13 @@ TitleBar
 --------
 
 Master component providing the grayed out area at the top of the page. It also provides visualisation for any messages
-the user needs to see, e.g. maintenance notices.
+the user needs to see, e.g. maintenance notices. Maintenance notices are working automatically just
+their rest API needs to be enabled. See :ref:`Notifications`.
 
 Composed of project image, page title, messages toast, breadcrumbs, projects overview and user profile menu.
 
 ..file:
-   django_project_base/src/components/bootstrap/titlebar.vue
+   django_project_base/js_app/src/components/bootstrap/titlebar.vue
 
 **Props**
 
