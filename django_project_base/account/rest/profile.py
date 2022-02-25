@@ -2,10 +2,11 @@ import datetime
 
 import swapper
 from django.conf import settings
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import Permission
 from django.core.cache import cache
 from django.db.models import Model
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
 from dynamicforms.serializers import ModelSerializer
@@ -21,6 +22,18 @@ from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 
 
+class ProfilePermissionsField(fields.ManyRelatedField):
+
+    def to_representation(self, value, row_data=None):
+        if row_data:
+            return [{
+                Permission._meta.pk.name: p.pk,
+                'codename': p.codename,
+                'name': p.name,
+            } for p in row_data.user_permissions.all()]
+        return []
+
+
 class ProfileSerializer(ModelSerializer):
     template_context = dict(url_reverse='profile-base-project')
 
@@ -32,6 +45,10 @@ class ProfileSerializer(ModelSerializer):
 
     full_name = fields.SerializerMethodField('get_full_name', read_only=True)
     delete_at = fields.DateTimeField(write_only=True)
+    permissions = ProfilePermissionsField(source='user_permissions', child_relation=fields.PrimaryKeyRelatedField(
+        help_text=_('Specific permissions for this user'),
+        queryset=Permission.objects.all(), required=False
+    ), help_text=_('Specific permissions for this user'), required=False, allow_null=False)
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -53,7 +70,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model('django_project_base', 'Profile')
-        exclude = ('groups', 'user_permissions')
+        exclude = ('groups', 'user_permissions',)
 
 
 @extend_schema_view(
@@ -125,9 +142,7 @@ class ProfileViewSet(ModelViewSet):
     @action(methods=['GET'], detail=False, url_path='current', url_name='profile-current',
             permission_classes=[IsAuthenticated])
     def get_current_profile(self, request: Request, **kwargs) -> Response:
-        user: Model = getattr(request, 'user', None)
-        if isinstance(user, AnonymousUser) or not user:
-            raise exceptions.AuthenticationFailed
+        user: Model = request.user
         serializer = self.get_serializer(
             getattr(user, swapper.load_model('django_project_base', 'Profile')._meta.model_name))
         response_data: dict = serializer.data
