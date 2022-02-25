@@ -4,7 +4,7 @@ Middleware
 Project Middleware
 ------------------
 
-ProjectMiddleware: If you wan't to set current project which is selected to request object you can use ProjectMiddleware
+ProjectMiddleware: If you wan't to set current project which is selected to request object you can use UrlVarsMiddleware
 which should be placed to start of MIDDLEWARE list in settings.py. Middleware sets DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES
 setting dict values to request object. Default value for DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES setting is
 {'project': 'current_project_slug', 'language': 'current_language'}.

@@ -36,6 +36,8 @@ import { showNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
 import { Store } from '../../store';
 
+import { apiClient as ApiClient } from '@/apiClient';
+
 export default {
   name: 'ProjectList',
   data() {
@@ -68,12 +70,24 @@ export default {
         (p) => p[this.projectTablePkName] === slug))[this.projectTablePkName]);
       document.dispatchEvent(ProjectSelected);
     },
+    getProjects(callback) {
+      if (!Store.get('current-user')) {
+        return null;
+      }
+      return ApiClient.get('/project').then((response) => {
+        callback(response.data);
+      }).catch((error) => {
+        callback([]);
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
+    },
     loadData() {
       if (this.isLoadingData) {
         return;
       }
       this.isLoadingData = true;
-      const dataPromise = this.dataStore.getProjects(this.setProjects);
+      const dataPromise = this.getProjects(this.setProjects);
       if (dataPromise) {
         dataPromise.finally(() => {
           this.isLoadingData = false;

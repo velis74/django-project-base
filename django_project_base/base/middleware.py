@@ -5,7 +5,7 @@ from django.conf import settings
 
 def get_parameter(request, value_name: str, url_part: str) -> Optional[object]:
     value_from_header: Optional[int] = request.headers.get('Current-%s' % value_name.lower().title())
-    if value_from_header is not None and value_from_header != '':
+    if value_from_header is not None and value_from_header not in ('', 'null',):
         return value_from_header
     try:
         project_info: Optional[str] = next(
