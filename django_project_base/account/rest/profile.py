@@ -2,7 +2,7 @@ import datetime
 
 import swapper
 from django.conf import settings
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db.models import Model
 from django.utils import timezone
@@ -24,13 +24,29 @@ from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KE
 
 class ProfilePermissionsField(fields.ManyRelatedField):
 
+    @staticmethod
+    def to_dict(permission: Permission) -> dict:
+        return {
+            Permission._meta.pk.name: permission.pk,
+            'codename': permission.codename,
+            'name': permission.name,
+        }
+
+    def to_representation(self, value, row_data=None):
+        if row_data:
+            return [ProfilePermissionsField.to_dict(p) for p in row_data.user_permissions.all()]
+        return []
+
+
+class ProfileGroupsField(fields.ManyRelatedField):
+
     def to_representation(self, value, row_data=None):
         if row_data:
             return [{
-                Permission._meta.pk.name: p.pk,
-                'codename': p.codename,
-                'name': p.name,
-            } for p in row_data.user_permissions.all()]
+                Group._meta.pk.name: g.pk,
+                'permissions': [ProfilePermissionsField.to_dict(p) for p in g.permissions.all()],
+                'name': g.name,
+            } for g in row_data.groups.all()]
         return []
 
 
@@ -45,10 +61,22 @@ class ProfileSerializer(ModelSerializer):
 
     full_name = fields.SerializerMethodField('get_full_name', read_only=True)
     delete_at = fields.DateTimeField(write_only=True)
-    permissions = ProfilePermissionsField(source='user_permissions', child_relation=fields.PrimaryKeyRelatedField(
+    permissions = ProfilePermissionsField(
+        source='user_permissions',
+        child_relation=fields.PrimaryKeyRelatedField(
+            help_text=_('Specific permissions for this user'),
+            queryset=Permission.objects.all(), required=False),
         help_text=_('Specific permissions for this user'),
-        queryset=Permission.objects.all(), required=False
-    ), help_text=_('Specific permissions for this user'), required=False, allow_null=False)
+        required=False, allow_null=False)
+
+    groups = ProfileGroupsField(child_relation=fields.PrimaryKeyRelatedField(
+        help_text=_(
+            'The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
+        queryset=Group.objects.all(),
+        required=False),
+        help_text=_(
+            'The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
+        required=False, allow_null=False)
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -70,7 +98,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model('django_project_base', 'Profile')
-        exclude = ('groups', 'user_permissions',)
+        exclude = ('user_permissions',)
 
 
 @extend_schema_view(
