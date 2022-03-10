@@ -12,6 +12,10 @@ class REST_API_CONFIG:
         url = 'maintenance-notification'
         basename = 'maintenance-notification'
 
+    class ProjectRole:
+        url = 'project-role'
+        basename = 'project-role'
+
     class Account(AccountBase):
         class Login(AccountBase):
             pass
