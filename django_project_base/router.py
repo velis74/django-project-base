@@ -1,6 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
 from django_project_base.rest.project import ProjectViewSet
+from django_project_base.rest.project_role import ProjectRoleViewSet
 from django_project_base.rest_config import REST_API_CONFIG
 
 
@@ -21,3 +22,5 @@ class RestRouter(DefaultRouter):
 django_project_base_router = RestRouter(trailing_slash=False)
 django_project_base_router.register(r'%s' % REST_API_CONFIG.Project.url, ProjectViewSet,
                                     basename=REST_API_CONFIG.Project.basename)
+django_project_base_router.register(r'%s' % REST_API_CONFIG.ProjectRole.url, ProjectRoleViewSet,
+                                    basename=REST_API_CONFIG.ProjectRole.basename)
