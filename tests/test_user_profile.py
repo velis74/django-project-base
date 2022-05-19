@@ -66,6 +66,16 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['full_name'], 'Miha Novak')
 
+        # we cannot query other users if we are not admins
+        response = self.api_client.get('/account/profile?search=j', {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+        miha = UserProfile.objects.get(username='miha')
+        miha.is_staff = True
+        miha.save()
+        user_cache_invalidate(miha)
+
         response = self.api_client.get('/account/profile?search=j', {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)

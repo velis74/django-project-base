@@ -109,9 +109,13 @@ class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['username', 'email', 'first_name', 'last_name']
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return swapper.load_model('django_project_base', 'Profile').objects.all()
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return swapper.load_model('django_project_base', 'Profile').objects.all()
+        return swapper.load_model('django_project_base', 'Profile').objects.filter(
+            user_ptr__pk=self.request.user.pk)
 
     def get_serializer_class(self):
         return ProfileSerializer
