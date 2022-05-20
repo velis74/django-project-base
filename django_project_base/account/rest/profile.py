@@ -112,10 +112,10 @@ class ProfileViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        qs = swapper.load_model('django_project_base', 'Profile').objects
         if self.request.user.is_staff or self.request.user.is_superuser:
-            return swapper.load_model('django_project_base', 'Profile').objects.all()
-        return swapper.load_model('django_project_base', 'Profile').objects.filter(
-            user_ptr__pk=self.request.user.pk)
+            return qs.all()
+        return qs.filter(user_ptr__pk=self.request.user.pk)
 
     def get_serializer_class(self):
         return ProfileSerializer
