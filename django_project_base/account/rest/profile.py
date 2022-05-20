@@ -66,7 +66,10 @@ class ProfileViewSet(ModelViewSet):
     search_fields = ['username', 'email', 'first_name', 'last_name']
 
     def get_queryset(self):
-        return swapper.load_model('django_project_base', 'Profile').objects.all()
+        qs = swapper.load_model('django_project_base', 'Profile').objects
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return qs.all()
+        return qs.filter(user_ptr__pk=self.request.user.pk)
 
     def get_serializer_class(self):
         return ProfileSerializer
