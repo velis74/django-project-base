@@ -1,6 +1,6 @@
 <template>
   <div v-cloak class="titlebar-app titlebar-component">
-    <nav class="navbar navbar-expand-lg" :class="darkOrLightMode">
+        <nav class="navbar navbar-expand-lg" :class="darkOrLightMode">
       <div v-if="titleBarProps.name || titleBarProps.logo" class="navbar-brand" style="cursor: default;">
         <img
           v-if="titleBarProps.logo"

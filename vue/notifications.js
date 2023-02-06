@@ -1,7 +1,7 @@
-import Vue from 'vue';
+import { notify } from '@kyvg/vue3-notification';
 
 const showNotification = (title, text, type = 'info') => {
-  Vue.notify({
+  notify({
     title,
     text,
     type,
@@ -16,7 +16,7 @@ const showNotification = (title, text, type = 'info') => {
 const showMaintenanceNotification = (noticeItem, rangeId, closeCallback = null) => {
   const duration = -1;
   const delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
-  Vue.notify({
+  notify({
     title: noticeItem.message.subject,
     text: `
         ${noticeItem.message.body}
@@ -57,7 +57,7 @@ const showGeneralErrorNotification = (text) => {
   if (text) {
     options.text = text;
   }
-  Vue.notify(options);
+  notify(options);
 };
 
 export { showNotification, showGeneralErrorNotification, showMaintenanceNotification };

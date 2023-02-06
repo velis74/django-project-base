@@ -1,0 +1,63 @@
+{
+  "name": "django_project_base",
+  "version": "0.1.2",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build; rm ./../static/django-project-base/index.html",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@kyvg/vue3-notification": "^2.8.0",
+    "axios": "^1.2.0",
+    "bootstrap": "^4.6.0",
+    "browser-update": "^3.3.37",
+    "core-js": "^3.6.5",
+    "dynamicforms": "file:node_libs/dynamicforms-1.0.0.tgz",
+    "es6-promise": "^4.2.8",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.15",
+    "vanilla-cookieconsent": "^2.8.0",
+    "vue": "^3.2.45",
+    "vuetify": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/test-utils": "^2.2.4",
+    "eslint": "^8.33.0",
+    "eslint-config-velis": "^1.1.13",
+    "http-proxy-middleware": "^2.0.6",
+    "vite": "^4.0.4",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-vuetify": "^1.0.2",
+    "vitest": "^0.28.3",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "extends": [
+      "velis"
+    ],
+    "rules": {
+      "vuejs-accessibility/click-events-have-key-events": "off",
+      "vuejs-accessibility/form-control-has-label": "off",
+      "vuejs-accessibility/label-has-for": "off"
+    },
+    "ignorePatterns": [
+      "dist/*",
+      "coverage/*",
+      "node_modules/*",
+      "vite.config.ts"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@vue/cli-plugin-babel/preset"
+    ]
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

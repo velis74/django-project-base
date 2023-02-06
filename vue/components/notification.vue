@@ -27,14 +27,13 @@
   </notifications>
 </template>
 
-<script>
-import Vue from 'vue';
-import Notify from 'vue-notification/src/index';
-import Notifications from 'vue-notification/src/Notifications.vue';
+<script lang="ts">
+import Notifications from '@kyvg/vue3-notification/src/Notifications.vue';
+import { defineComponent } from 'vue';
 
-Notify.install(Vue);
 // https://www.npmjs.com/package/vue-notification is the library used for notification
-export default {
+export default defineComponent({
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Notification',
   components: { Notifications },
   props: {
@@ -47,9 +46,5 @@ export default {
       default: 'top center',
     },
   },
-};
+});
 </script>
-
-<style scoped>
-
-</style>

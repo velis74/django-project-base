@@ -5,6 +5,4 @@ const logoutEvent = new CustomEvent('logout', {});
 const projectSelected = new CustomEvent('project-selected', {});
 const maintenanceNotificationAcknowledged = new CustomEvent('maintenance-notification-acknowledged', {});
 
-export {
-  loginEvent, logoutEvent, projectSelected, maintenanceNotificationAcknowledged, createEvent,
-};
+export { loginEvent, logoutEvent, projectSelected, maintenanceNotificationAcknowledged, createEvent };

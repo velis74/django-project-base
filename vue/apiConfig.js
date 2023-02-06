@@ -12,10 +12,8 @@ const API_CONFIG = {
 };
 
 const shouldUrlBeIgnoredAfterApiResponseNotFound = (error) => _.size(
-  _.filter(
-    _.values(API_CONFIG), (v) => v.url === error.config.url && v.ignoreAfterApiResponseNotFound &&
-      error.response.status === HTTP_404_NOT_FOUND,
-  ),
+  _.filter(_.values(API_CONFIG), (v) => v.url === error.config.url && v.ignoreAfterApiResponseNotFound &&
+      error.response.status === HTTP_404_NOT_FOUND),
 ) > 0;
 
 export { API_CONFIG, shouldUrlBeIgnoredAfterApiResponseNotFound, HTTP_401_UNAUTHORIZED };

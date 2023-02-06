@@ -30,7 +30,7 @@
 <script>
 import _ from 'lodash';
 
-import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from '../../constants';
+import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from 'vue/constants';
 import { projectSelected as ProjectSelected } from '../../events';
 import { showNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
