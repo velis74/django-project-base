@@ -28,14 +28,12 @@
 </template>
 
 <script lang="ts">
-import Notifications from '@kyvg/vue3-notification/src/Notifications.vue';
 import { defineComponent } from 'vue';
 
 // https://www.npmjs.com/package/vue-notification is the library used for notification
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Notification',
-  components: { Notifications },
   props: {
     width: {
       type: Number,

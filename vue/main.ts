@@ -4,20 +4,12 @@ import createCoreApp from './apps';
 
 import './assets/global.css';
 
-if (typeof window.gettext === 'undefined') {
-  window.gettext = (v: any) => v;
-}
-
-// Vue.config.productionTip = false;
-// Vue.prototype.gettext = window.gettext;
-
 createCoreApp(
   'app',
   '' +
   '<BrowserCheck :hidePageIfUnSupportedBrowser="false">' +
   '<TitleBar v-slot:content :projectlistVisible="true"/>' +
   '</BrowserCheck>',
-  'modal-app',
 );
 
 const opt = {
@@ -112,4 +104,4 @@ const opt = {
   },
 };
 
-createCoreApp('cookie', '<CookieNotice/>', 'modal-app', opt);
+createCoreApp('cookie', '<CookieNotice/>', opt);

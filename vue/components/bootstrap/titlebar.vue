@@ -1,13 +1,13 @@
 <template>
   <div v-cloak class="titlebar-app titlebar-component">
-        <nav class="navbar navbar-expand-lg" :class="darkOrLightMode">
+    <nav class="navbar navbar-expand-lg" :class="darkOrLightMode">
       <div v-if="titleBarProps.name || titleBarProps.logo" class="navbar-brand" style="cursor: default;">
         <img
           v-if="titleBarProps.logo"
           :src="titleBarProps.logo"
           class="float-left rounded-circle logo-image"
           onclick="window.location.href='/'"
-        >
+        />
         {{ titleBarProps.name || '' }}
       </div>
       <div v-if="breadcrumbsComponent && loggedIn">
@@ -25,11 +25,11 @@
         <Login :add-notifications-component="false"/>
       </div>
     </nav>
-    <notification/>
+    <!--    <notification/>-->
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
 
 import { apiClient as ApiClient } from '../../apiClient';
@@ -38,7 +38,7 @@ import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowled
 import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
 import { Store } from '../../store';
-import Notification from '../notification.vue';
+// import Notification from '../notification.vue';
 
 import Breadcrumbs from './breadcrumbs.vue';
 import Login from './login.vue';
@@ -48,7 +48,7 @@ import UserProfile from './userprofile.vue';
 export default {
   name: 'TitleBar',
   components: {
-    Notification,
+    // Notification,
     Breadcrumbs,
     Login,
     ProjectList,
@@ -125,7 +125,7 @@ export default {
         if (Store.get('current-user')) {
           ApiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url,
             { hideErrorNotice: true }).then((notificationResponse) => {
-            // eslint-disable-next-line no-underscore-dangle
+            // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
             const _notification = _.first(notificationResponse.data);
             if (_notification) {
               const acknowledgeData = _notification.notification_acknowledged_data;

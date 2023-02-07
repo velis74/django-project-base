@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 
-import { fileURLToPath, URL as URL_ } from 'node:url';
+import { fileURLToPath, URL } from 'node:url';
 
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import eslintPlugin from 'vite-plugin-eslint';
@@ -44,8 +44,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "~": fileURLToPath(new URL_('./node_modules', import.meta.url)),
-      "@": fileURLToPath(new URL_('./vue', import.meta.url)),
+      "~": fileURLToPath(new URL('./node_modules', import.meta.url)),
+      "@": fileURLToPath(new URL('./vue', import.meta.url)),
     },
     extensions: [
       '.js',

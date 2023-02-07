@@ -1,4 +1,4 @@
-const createEvent = (id, detail) => new CustomEvent(id, { detail });
+const createEvent = (id: any, detail: any) => new CustomEvent(id, { detail });
 
 const loginEvent = new CustomEvent('login', {});
 const logoutEvent = new CustomEvent('logout', {});

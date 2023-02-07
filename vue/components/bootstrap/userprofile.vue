@@ -42,20 +42,15 @@
 
 import 'bootstrap';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import eventBus from 'dynamicforms/src/logic/eventBus';
+// import eventBus from 'dynamicforms/src/logic/eventBus';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
+// import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
 import $ from 'jquery';
-import Vue from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import ProjectBaseData from '../../projectBaseData';
 import { Session } from '../../session';
 import { Store } from '../../store';
-
-import ImpersonateDialog from './impersonate-dialog.vue';
-
-Vue.component(ImpersonateDialog.name, ImpersonateDialog);
 
 const chgPassFakeUUID = 'fake-uuid-chg-pass-654654-634565';
 const userProfileFakeUUID = 'fake-uuid-usr-prof-654654-634565';
@@ -84,18 +79,18 @@ export default {
     this.loadData();
   },
   mounted() {
-    eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
-    eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
-    eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
+    // eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
+    // eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
+    // eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
   },
   updated() {
     // We have to do this otherwise dropdown does not work https://stackoverflow.com/a/29006010/1760858
     this.$nextTick(() => { $('.dropdown-toggle').dropdown(); });
   },
   beforeDestroy() {
-    eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
-    eventBus.$off(`tableActionExecuted_${userProfileFakeUUID}`);
-    eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
+    // eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
+    // eventBus.$off(`tableActionExecuted_${userProfileFakeUUID}`);
+    // eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
   },
   methods: {
     loadData(force = false) {
@@ -123,9 +118,7 @@ export default {
       Session.logout();
     },
     showImpersonateLogin() {
-      window.dynamicforms.dialog.fromURL(
-        '/account/impersonate/new.componentdef', 'new', impUserFakeUUID,
-      );
+      window.dynamicforms.dialog.fromURL('/account/impersonate/new.componentdef', 'new', impUserFakeUUID);
     },
     reloadAfterImpersonationChange() {
       this.loadData(true).finally(() => {
@@ -139,8 +132,11 @@ export default {
       });
     },
     userProfile() {
-      window.dynamicforms.dialog.fromURL(`/account/profile/${this.componentData.id}.componentdef`, 'edit',
-        userProfileFakeUUID);
+      window.dynamicforms.dialog.fromURL(
+        `/account/profile/${this.componentData.id}.componentdef`,
+        'edit',
+        userProfileFakeUUID,
+      );
     },
     changePassword() {
       window.dynamicforms.dialog.fromURL('/account/change-password/new.componentdef', 'new', chgPassFakeUUID);
@@ -163,9 +159,7 @@ export default {
           data = payload.data;
           params = { detailUrl: `/account/profile/${this.componentData.id}.json` };
         } else if (payload.modal.currentDialog.tableUuid === impUserFakeUUID) {
-          data = {
-            id: payload.data.user_id,
-          };
+          data = { id: payload.data.user_id };
           params = {
             detailUrl: '/account/impersonate/start',
             submitMethod: 'post',
@@ -178,7 +172,7 @@ export default {
           };
         }
       }
-      actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
+      // actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
     },
   },
 };

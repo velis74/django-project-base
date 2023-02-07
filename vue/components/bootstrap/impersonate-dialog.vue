@@ -27,9 +27,8 @@ record['user']"
 
 <script>
 // eslint-disable-next-line import/no-extraneous-dependencies
-import eventBus from 'dynamicforms/src/logic/eventBus';
+// import eventBus from 'dynamicforms/src/logic/eventBus';
 import _ from 'lodash';
-
 import { apiClient as ApiClient } from '../../apiClient';
 
 export default {
@@ -66,14 +65,14 @@ export default {
     },
   },
   mounted() {
-    eventBus.$on(`formEvents_${this.uuid}`, (payload) => {
-      if (payload.type === 'submitErrors') {
-        this.errors = payload.data;
-      }
-    });
+    // eventBus.$on(`formEvents_${this.uuid}`, (payload) => {
+    //   if (payload.type === 'submitErrors') {
+    //     this.errors = payload.data;
+    //   }
+    // });
   },
   beforeDestroy() {
-    eventBus.$off(`formEvents_${this.uuid}`);
+    // eventBus.$off(`formEvents_${this.uuid}`);
   },
   methods: {
     // eslint-disable-next-line func-names
