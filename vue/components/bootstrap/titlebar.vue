@@ -4,6 +4,7 @@
       <div v-if="titleBarProps.name || titleBarProps.logo" class="navbar-brand" style="cursor: default;">
         <img
           v-if="titleBarProps.logo"
+          alt=""
           :src="titleBarProps.logo"
           class="float-left rounded-circle logo-image"
           onclick="window.location.href='/'"
@@ -16,7 +17,7 @@
       <div class="collapse navbar-collapse mr-auto"/>
       <div v-if="projectlistComponent && loggedIn" class="collapse navbar-collapse">
         <ul class="navbar-nav"/>
-        <component :is="projectlistComponent"/>
+        <ProjectList/>
       </div>
       <div v-if="userprofileComponent && loggedIn">
         <component :is="userprofileComponent"/>

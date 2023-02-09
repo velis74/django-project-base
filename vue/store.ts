@@ -15,9 +15,7 @@ class Store {
 
   static set(key: string, data: any) {
     if (data !== null) {
-      Store.store().setItem(key, JSON.stringify({
-        __val: data,
-      }));
+      Store.store().setItem(key, JSON.stringify({ __val: data }));
     }
   }
 
