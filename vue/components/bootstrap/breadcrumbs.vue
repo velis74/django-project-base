@@ -14,10 +14,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Breadcrumbs',
   data() {
     return {};
@@ -26,8 +28,9 @@ export default {
     currentBreadcrumbsLocation() {
       const data = window.location.pathname;
       const parts = _.filter(_.trim(data, '/').split('/'), (l) => l);
-      return _.map(parts,
-        (v) => {
+      return _.map(
+        parts,
+        (v: string) => {
           const idx = _.indexOf(parts, v);
           const url = _.take(parts, idx + 1);
           return {
@@ -36,17 +39,11 @@ export default {
               _.replace(_.replace(v, '.html', ''), ' ', ''),
             ),
           };
-        });
+        },
+      );
     },
   },
-  created() {
-
-  },
-  mounted() {
-
-  },
-  methods: {},
-};
+});
 </script>
 
 <style scoped>

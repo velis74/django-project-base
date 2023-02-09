@@ -11,7 +11,7 @@
         {{ titleBarProps.name || '' }}
       </div>
       <div v-if="breadcrumbsComponent && loggedIn">
-        <component :is="breadcrumbsComponent"/>
+        <Breadcrumbs/>
       </div>
       <div class="collapse navbar-collapse mr-auto"/>
       <div v-if="projectlistComponent && loggedIn" class="collapse navbar-collapse">
