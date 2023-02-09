@@ -1,9 +1,11 @@
 <template>
   <div/>
 </template>
-<script>
+
+<script lang="ts">
 // eslint-disable-next-line import/extensions
 import 'vanilla-cookieconsent/src/cookieconsent.js';
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
 import _ from 'lodash';
 
 export default {
@@ -26,7 +28,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-  @import '~vanilla-cookieconsent/dist/cookieconsent.css';
-</style>
