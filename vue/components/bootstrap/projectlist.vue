@@ -19,7 +19,9 @@
               href="#"
               @click="addNewProject"
             >
-              <i class="fas fa-plus-circle"/>{{ gettext('Add new project') }}</a>
+              <i class="fas fa-plus-circle"/>
+              {{ gettext('Add new project') }}
+            </a>
           </div>
         </li>
       </ul>

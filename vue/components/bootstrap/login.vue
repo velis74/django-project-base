@@ -27,8 +27,7 @@
           aria-expanded="false"
         />
         <button type="button" class="btn btn-sm btn-primary" @click="makeLogin">
-        <!--          {{ gettext('Login') }}-->
-          {{ 'Login' }}
+          {{ gettext('Login') }}
         </button>
         <div v-if="socialAuth.length" class="dropdown-menu">
           <a v-for="(b, bidx) in socialAuth" :key="bidx" class="dropdown-item" :href="b.url">{{ b.title }}</a>

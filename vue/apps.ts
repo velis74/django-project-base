@@ -32,10 +32,16 @@ const createCoreApp = (elementId: string, template: any, data: Object = {}) => {
     data: () => data,
     template,
   });
+  // add components
   Object.values(componentsConfig).map((component: Component) => app.component(component.name || 'default', component));
+  // use plugins you intend to use
   app.use(Notifications);
   app.use(createVuetify());
   app.use(createDynamicForms());
+
+  // add translation function on a global scale
+  app.config.globalProperties.gettext = (value: string) => value;
+
   app.mount(`#${elementId}`);
 
   return app;

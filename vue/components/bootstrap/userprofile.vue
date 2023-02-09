@@ -10,29 +10,41 @@
         aria-haspopup="true"
         aria-expanded="false"
       >
-        <img v-if="componentData.avatar" :src="componentData.avatar" class="d-inline-block align-top size-2">
+        <img v-if="componentData.avatar" alt="" :src="componentData.avatar" class="d-inline-block align-top size-2">
         <h5 v-if="displayName" class="d-inline-block">
           {{ displayName }}
-          <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
+          <span v-if="isImpersonated">
+            ({{ gettext('Impersonated') }})
+          </span>
         </h5>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#" @click="userProfile">{{ gettext('User profile') }}</a>
-        <a class="dropdown-item" href="#" @click="changePassword">{{ gettext('Change password') }}</a>
+        <a class="dropdown-item" href="#" @click="userProfile">
+          {{ gettext('User profile') }}
+        </a>
+        <a class="dropdown-item" href="#" @click="changePassword">
+          {{ gettext('Change password') }}
+        </a>
         <a
           v-if="permissions['impersonate-user'] && !isImpersonated"
           class="dropdown-item"
           href="#"
           @click="showImpersonateLogin"
-        >{{ gettext('Impersonate user') }}</a>
+        >
+          {{ gettext('Impersonate user') }}
+        </a>
         <a
           v-else-if="isImpersonated"
           class="dropdown-item"
           href="#"
           @click="stopImpersonation"
-        >{{ gettext('Stop impersonation') }}</a>
+        >
+          {{ gettext('Stop impersonation') }}
+        </a>
         <div class="dropdown-divider"/>
-        <a class="dropdown-item" href="#" @click="makeLogout">{{ gettext('Logout') }}</a>
+        <a class="dropdown-item" href="#" @click="makeLogout">
+          {{ gettext('Logout') }}
+        </a>
       </div>
     </li>
   </ul>
