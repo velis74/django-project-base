@@ -4,10 +4,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import browserUpdate from 'browser-update';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   name: 'BrowserCheck',
   props: {
     hidePageIfUnSupportedBrowser: {
@@ -22,7 +23,7 @@ export default {
   data() {
     return {
       pageHidden: false,
-      checkInterval: null,
+      checkInterval: null as any,
     };
   },
   beforeDestroy() {
@@ -64,5 +65,5 @@ export default {
       }
     },
   },
-};
+});
 </script>
