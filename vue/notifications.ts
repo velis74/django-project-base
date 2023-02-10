@@ -1,19 +1,19 @@
-import { notify } from '@kyvg/vue3-notification';
+import { NotificationsOptions, notify } from '@kyvg/vue3-notification';
 
-const showNotification = (title, text, type = 'info') => {
+const showNotification = (title: string, text: string, type = 'info') => {
   notify({
     title,
     text,
     type,
     data: {
-      onNotificationClose: (item, closeFunction) => {
+      onNotificationClose: (item: any, closeFunction: any) => {
         closeFunction();
       },
     },
   });
 };
 
-const showMaintenanceNotification = (noticeItem, rangeId, closeCallback:any = null) => {
+const showMaintenanceNotification = (noticeItem: any, rangeId: any, closeCallback:any = null) => {
   const duration = -1;
   const delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
   notify({
@@ -29,7 +29,7 @@ const showMaintenanceNotification = (noticeItem, rangeId, closeCallback:any = nu
     duration,
     type: 'error',
     data: {
-      onNotificationClose: (item, closeFunction, fromClick) => {
+      onNotificationClose: (item: any, closeFunction: Function, fromClick: boolean) => {
         if (fromClick) {
           return;
         }
@@ -44,12 +44,13 @@ const showMaintenanceNotification = (noticeItem, rangeId, closeCallback:any = nu
   });
 };
 
-const showGeneralErrorNotification = (text) => {
-  const options = {
-    title: window.gettext('Error'), // jshint ignore:line
+const showGeneralErrorNotification = (text: string) => {
+  const options: NotificationsOptions = {
+    // title: window.gettext('Error'), // jshint ignore:line
+    title: 'Error',
     type: 'error',
     data: {
-      onNotificationClose: (item, closeFunction) => {
+      onNotificationClose: (item: any, closeFunction: Function) => {
         closeFunction();
       },
     },

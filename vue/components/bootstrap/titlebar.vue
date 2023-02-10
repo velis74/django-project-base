@@ -26,7 +26,7 @@
         <Login :add-notifications-component="false"/>
       </div>
     </nav>
-    <!--    <notification/>-->
+    <app-notification/>
   </div>
 </template>
 
@@ -40,7 +40,7 @@ import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowled
 import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
 import { Store } from '../../store';
-// import Notification from '../notification.vue';
+import AppNotification from '../notification.vue';
 
 import Breadcrumbs from './breadcrumbs.vue';
 import Login from './login.vue';
@@ -50,7 +50,7 @@ import UserProfile from './userprofile.vue';
 export default defineComponent({
   name: 'TitleBar',
   components: {
-    // Notification,
+    AppNotification,
     Breadcrumbs,
     Login,
     ProjectList,

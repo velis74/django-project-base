@@ -34,7 +34,7 @@
         </div>
       </form>
     </div>
-    <notifications v-if="addNotificationsComponent" position="top center"/>
+    <app-notification v-if="addNotificationsComponent" position="top center"/>
   </div>
 </template>
 
@@ -44,20 +44,18 @@ import { defineComponent } from 'vue';
 import { apiClient as ApiClient } from '../../apiClient';
 import { Session } from '../../session';
 import { Store } from '../../store';
-// import Notification from '../notification.vue';
+import AppNotification from '../notification.vue';
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Login',
+  components: { AppNotification },
   props: {
     addNotificationsComponent: {
       type: Boolean,
       default: true,
     },
   },
-  // components: {
-  //   Notification,
-  // },
   data() {
     return {
       loginModel: {

@@ -1,6 +1,6 @@
 <template>
   <notifications :width="width" :position="position">
-    <template slot="body" slot-scope="{ item, close }">
+    <template #body="{ item, close }">
       <div
         class="vue-notification"
         :class="item.type"
@@ -17,7 +17,7 @@
             v-if="item.data.duration === -1"
             style="display: inline-block; float: right; vertical-align: middle;"
           >
-            <button class="close" @click="item.data.onNotificationClose(item, close)">
+            <button type="button" class="close" @click="item.data.onNotificationClose(item, close)">
               <i class="fas fa-times fa-xs"/>
             </button>
           </div>
@@ -32,8 +32,7 @@ import { defineComponent } from 'vue';
 
 // https://www.npmjs.com/package/vue-notification is the library used for notification
 export default defineComponent({
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Notification',
+  name: 'AppNotification',
   props: {
     width: {
       type: Number,
