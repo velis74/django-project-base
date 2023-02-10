@@ -13,7 +13,7 @@ const showNotification = (title, text, type = 'info') => {
   });
 };
 
-const showMaintenanceNotification = (noticeItem, rangeId, closeCallback = null) => {
+const showMaintenanceNotification = (noticeItem, rangeId, closeCallback:any = null) => {
   const duration = -1;
   const delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
   notify({

@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
+import { defineComponent } from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import { API_CONFIG } from '../../apiConfig';
@@ -46,7 +47,7 @@ import Login from './login.vue';
 import ProjectList from './projectlist.vue';
 import UserProfile from './userprofile.vue';
 
-export default {
+export default defineComponent({
   name: 'TitleBar',
   components: {
     // Notification,
@@ -64,12 +65,12 @@ export default {
   },
   data() {
     return {
-      titleBarProps: {},
-      loggedIn: null,
+      titleBarProps: {} as any,
+      loggedIn: null as any,
       lightClass: 'navbar-light bg-light',
       darkClass: 'navbar-dark bg-dark',
-      maintenanceNoticesPeriodicApiCall: null,
-      maintenanceNotificationItem: null,
+      maintenanceNoticesPeriodicApiCall: null as any,
+      maintenanceNotificationItem: null as any,
     };
   },
   computed: {
@@ -91,7 +92,7 @@ export default {
       }
       this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
       this.loadData();
-      document.addEventListener('login', (payload) => {
+      document.addEventListener('login', (payload: any) => {
         if (payload.detail && payload.detail['default-project']) {
           this.titleBarProps = payload.detail['default-project'];
         } else {
@@ -124,10 +125,12 @@ export default {
     monitorMaintenanceNotifications() {
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
         if (Store.get('current-user')) {
-          ApiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url,
-            { hideErrorNotice: true }).then((notificationResponse) => {
+          ApiClient.get(
+            API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url,
+            { hideErrorNotice: true },
+          ).then((notificationResponse) => {
             // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
-            const _notification = _.first(notificationResponse.data);
+            const _notification: any = _.first(notificationResponse.data);
             if (_notification) {
               const acknowledgeData = _notification.notification_acknowledged_data;
               const delayed = _notification.delayed_to_timestamp;
@@ -165,7 +168,7 @@ export default {
       }, 45000);
     },
   },
-};
+});
 </script>
 
 <style scoped>
