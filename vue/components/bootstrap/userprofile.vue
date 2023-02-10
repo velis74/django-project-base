@@ -50,14 +50,14 @@
   </ul>
 </template>
 
-<script>
+<script lang="ts">
+// TODO: a lot of dynamic functionalities that I cannot fathom
 
-import 'bootstrap';
 // eslint-disable-next-line import/no-extraneous-dependencies
 // import eventBus from 'dynamicforms/src/logic/eventBus';
 // eslint-disable-next-line import/no-extraneous-dependencies
 // import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
-import $ from 'jquery';
+import { defineComponent } from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import ProjectBaseData from '../../projectBaseData';
@@ -68,13 +68,14 @@ const chgPassFakeUUID = 'fake-uuid-chg-pass-654654-634565';
 const userProfileFakeUUID = 'fake-uuid-usr-prof-654654-634565';
 const impUserFakeUUID = 'fake-uuid-imp-user-654654-634565';
 
-export default {
+export default defineComponent({
   name: 'UserProfile',
   data() {
     return {
-      componentData: {},
-      permissions: {},
+      componentData: {} as any,
+      permissions: {} as any,
       isImpersonated: false,
+      impersonateModalVisible: false as boolean,
     };
   },
   computed: {
@@ -105,7 +106,7 @@ export default {
     // eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
   },
   methods: {
-    loadData(force = false) {
+    loadData(force: boolean = false) {
       new ProjectBaseData().getPermissions((p) => {
         this.permissions = p;
       });
@@ -116,7 +117,7 @@ export default {
         return;
       }
       // eslint-disable-next-line consistent-return
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         ApiClient.get('/account/profile/current').then((profileResponse) => {
           this.componentData = profileResponse.data;
           Store.set('current-user', this.componentData);
@@ -153,7 +154,7 @@ export default {
     changePassword() {
       window.dynamicforms.dialog.fromURL('/account/change-password/new.componentdef', 'new', chgPassFakeUUID);
     },
-    dialogBtnClick(payload) {
+    dialogBtnClick(payload: any) {
       let data;
       let params;
       if (payload.action.name !== 'cancel') {
@@ -187,7 +188,7 @@ export default {
       // actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
     },
   },
-};
+});
 </script>
 
 <style scoped>
