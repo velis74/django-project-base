@@ -4,4 +4,10 @@ declare module '@vue/runtime-core' {
   }
 }
 
+declare global {
+  interface Window {
+    initCookieConsent: () => any
+  }
+}
+
 export {};

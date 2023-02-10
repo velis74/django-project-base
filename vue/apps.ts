@@ -27,7 +27,9 @@ const componentsConfig = {
   ImpersonateDialog,
 };
 
-const createCoreApp = (elementId: string, template: any, data: Object = {}) => {
+type AppData = Object;
+
+const createCoreApp = (elementId: string, template: any, data: AppData = {}) => {
   const app = createApp({
     data: () => data,
     template,
@@ -41,6 +43,7 @@ const createCoreApp = (elementId: string, template: any, data: Object = {}) => {
 
   // add translation function on a global scale
   app.config.globalProperties.gettext = (value: string) => value;
+  app.provide<AppData>('data', data);
 
   app.mount(`#${elementId}`);
 
