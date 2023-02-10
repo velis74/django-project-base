@@ -7,31 +7,38 @@
       </div>
     </slot>
     <input
-      v-model="
-/* eslint-disable */
-record['user']"
-      type="text"
-      @keyup="searchUsers"
-      class="autocomplete form-control"
       id="userAutocomplete"
+      v-model="record.user"
+      type="text"
+      class="autocomplete form-control"
       data-toggle="dropdown"
-      :placeholder="searchUserPlaceholder">
+      :placeholder="searchUserPlaceholder"
+      @keyup="searchUsers"
+    >
     <ul class="dropdown-menu" style="width: 100%" role="menu">
-      <li style="width: 100%; padding: 0 .75rem" @click="selectUser(user)" v-for="(user, idx) in usersFilter"
-          v-bind:key="'key_' + user.id + '_' + idx" class="cursor-pointer">
+      <li
+        v-for="(user, idx) in usersFilter"
+        :key="'key_' + user.id + '_' + idx"
+        style="width: 100%; padding: 0 .75rem"
+        class="cursor-pointer"
+        @click="selectUser(user)"
+      >
         <a>{{ user.full_name || user.email }}</a>
       </li>
     </ul>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+// TODO: rewrite DF eventbus
 // eslint-disable-next-line import/no-extraneous-dependencies
 // import eventBus from 'dynamicforms/src/logic/eventBus';
 import _ from 'lodash';
+import { defineComponent } from 'vue';
+
 import { apiClient as ApiClient } from '../../apiClient';
 
-export default {
+export default defineComponent({
   name: 'accounts-impersonate-dialog.html', // eslint-disable-line vue/component-definition-name-casing
   props: {
     uuid: { type: String, required: true },
@@ -39,8 +46,8 @@ export default {
   },
   data() {
     return {
-      usersFilter: [],
-      errors: {},
+      usersFilter: [] as any[],
+      errors: {} as Object,
     };
   },
   computed: {
@@ -54,7 +61,7 @@ export default {
       try {
         let errors = '';
         // eslint-disable-next-line no-unused-vars
-        _.forIn(this.errors, (value, key) => {
+        _.forIn(this.errors, (value) => {
           errors += `${value}\n`;
         });
         errors = errors.trim();
@@ -85,7 +92,7 @@ export default {
         this.usersFilter = response.data;
       });
     }, 250),
-    selectUser(user) {
+    selectUser(user: any) {
       // TODO: Ali je tole spodnje v redu, da se kar spreminja... Trenutno drugače ne znam.
       //  Se pa že itak spreminja, če je vezano na v-model...
 
@@ -95,5 +102,5 @@ export default {
       this.record.user = user.full_name || user.email;
     },
   },
-};
+});
 </script>

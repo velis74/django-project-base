@@ -20,7 +20,7 @@
         <ProjectList/>
       </div>
       <div v-if="userprofileComponent && loggedIn">
-        <component :is="userprofileComponent"/>
+        <UserProfile/>
       </div>
       <div v-else-if="!loggedIn && loginVisible" class="login">
         <Login :add-notifications-component="false"/>
