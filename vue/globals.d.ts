@@ -6,7 +6,9 @@ declare module '@vue/runtime-core' {
 
 declare global {
   interface Window {
-    initCookieConsent: () => any
+    initCookieConsent: () => any,
+    csrf_token_name: string,
+    csrf_token: any
   }
 }
 

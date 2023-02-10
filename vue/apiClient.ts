@@ -5,6 +5,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
 import axios from 'axios';
+import _ from 'lodash';
 
 import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './apiConfig';
 import { showGeneralErrorNotification } from './notifications';

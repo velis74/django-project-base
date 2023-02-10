@@ -13,7 +13,7 @@ import UserProfile from './components/bootstrap/userprofile.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import DefaultCookieOptions from './defaultCookieOptions';
-// import Notification from './components/notification.vue';
+import AppNotification from './components/notification.vue';
 
 const componentsConfig = {
   TitleBar,
@@ -21,7 +21,7 @@ const componentsConfig = {
   Login,
   ProjectList,
   UserProfile,
-  // Notification,
+  AppNotification,
   BrowserCheck,
   CookieNotice,
   ImpersonateDialog,
