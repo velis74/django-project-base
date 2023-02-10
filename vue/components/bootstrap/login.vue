@@ -34,17 +34,20 @@
         </div>
       </form>
     </div>
-    <notification v-if="addNotificationsComponent" position="top center"/>
+    <notifications v-if="addNotificationsComponent" position="top center"/>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+
 import { apiClient as ApiClient } from '../../apiClient';
 import { Session } from '../../session';
 import { Store } from '../../store';
 // import Notification from '../notification.vue';
 
-export default {
+export default defineComponent({
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Login',
   props: {
     addNotificationsComponent: {
@@ -58,8 +61,8 @@ export default {
   data() {
     return {
       loginModel: {
-        username: null,
-        password: null,
+        username: null as string | null,
+        password: null as string | null,
       },
       socialAuth: [],
     };
@@ -83,7 +86,7 @@ export default {
       document.getElementsByName('psw')[0].focus();
     },
   },
-};
+});
 </script>
 
 <style scoped>
