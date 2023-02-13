@@ -14,6 +14,7 @@
             >
               <img :src="project.logo" alt="" class="project-link-image">{{ project.name }}</a>
             <a
+              v-if="permissions['add-project']"
               class="dropdown-item project-item"
               href="#"
               @click="addNewProject"
@@ -32,7 +33,6 @@
 import _ from 'lodash';
 import { defineComponent } from 'vue';
 
-import 'bootstrap';
 import { apiClient as ApiClient } from '../../apiClient';
 import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from '../../constants';
 import { projectSelected as ProjectSelected } from '../../events';

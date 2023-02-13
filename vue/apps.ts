@@ -1,8 +1,7 @@
 import Notifications from '@kyvg/vue3-notification';
 import type { Component } from '@vue/runtime-core';
-import createDynamicForms from 'dynamicforms';
+// import createDynamicForms from 'dynamicforms';
 import { createApp } from 'vue';
-import { createVuetify } from 'vuetify';
 
 import Breadcrumbs from './components/bootstrap/breadcrumbs.vue';
 import ImpersonateDialog from './components/bootstrap/impersonate-dialog.vue';
@@ -12,8 +11,12 @@ import TitleBar from './components/bootstrap/titlebar.vue';
 import UserProfile from './components/bootstrap/userprofile.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
-import DefaultCookieOptions from './defaultCookieOptions';
 import AppNotification from './components/notification.vue';
+import DefaultCookieOptions from './defaultCookieOptions';
+
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import '../django_project_base/static/fa-5.13.3/css/all.min.css';
 
 const componentsConfig = {
   TitleBar,
@@ -38,8 +41,8 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
   Object.values(componentsConfig).map((component: Component) => app.component(component.name || 'default', component));
   // use plugins you intend to use
   app.use(Notifications);
-  app.use(createVuetify());
-  app.use(createDynamicForms());
+  // uncomment to add dynamic forms to project base
+  // app.use(createDynamicForms());
 
   // add translation function on a global scale
   app.config.globalProperties.gettext = (value: string) => value;
