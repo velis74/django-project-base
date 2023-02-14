@@ -5,6 +5,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
 import axios from 'axios';
+import _ from 'lodash';
 
 import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './apiConfig';
 import { showGeneralErrorNotification } from './notifications';
@@ -40,33 +41,36 @@ apiClient.interceptors.request.use(function (config) {
 });
 
 // Add a response interceptor
-apiClient.interceptors.response.use((response) => {
-  return Promise.resolve(response);
-},
-(error) => {
-  if (error.message === 'app-canceled-err') {
-    return Promise.reject(error);
-  }
-  const errMsg = error && error.response && error.response.data && error.response.data.detail ? error.response.data.detail : '';
-  const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
-  const noSession = status === HTTP_401_UNAUTHORIZED;
-  const hideErrorMsg = error.config && error.config.hideErrorNotice === true;
-
-  if (shouldUrlBeIgnoredAfterApiResponseNotFound(error)) {
-    const ignoredApis = Store.get('ignored-apis') || [];
-    if (!_.includes(ignoredApis, error.config.url)) {
-      ignoredApis.push(error.config.url);
-      Store.set('ignored-apis', ignoredApis);
+apiClient.interceptors.response.use(
+  (response) => {
+    return Promise.resolve(response);
+  },
+  (error) => {
+    if (error.message === 'app-canceled-err') {
+      return Promise.reject(error);
     }
-  }
+    // eslint-disable-next-line vue/max-len
+    const errMsg = error && error.response && error.response.data && error.response.data.detail ? error.response.data.detail : '';
+    const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
+    const noSession = status === HTTP_401_UNAUTHORIZED;
+    const hideErrorMsg = error.config && error.config.hideErrorNotice === true;
 
-  if (noSession) {
-    Store.clear();
-  }
-  if (!hideErrorMsg) {
-    showGeneralErrorNotification(errMsg);
-  }
-  return Promise.reject(error);
-});
+    if (shouldUrlBeIgnoredAfterApiResponseNotFound(error)) {
+      const ignoredApis = Store.get('ignored-apis') || [];
+      if (!_.includes(ignoredApis, error.config.url)) {
+        ignoredApis.push(error.config.url);
+        Store.set('ignored-apis', ignoredApis);
+      }
+    }
+
+    if (noSession) {
+      Store.clear();
+    }
+    if (!hideErrorMsg) {
+      showGeneralErrorNotification(errMsg);
+    }
+    return Promise.reject(error);
+  },
+);
 
 export { apiClient };

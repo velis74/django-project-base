@@ -10,64 +10,72 @@
         aria-haspopup="true"
         aria-expanded="false"
       >
-        <img v-if="componentData.avatar" :src="componentData.avatar" class="d-inline-block align-top size-2">
+        <img v-if="componentData.avatar" alt="" :src="componentData.avatar" class="d-inline-block align-top size-2">
         <h5 v-if="displayName" class="d-inline-block">
           {{ displayName }}
-          <span v-if="isImpersonated">({{ gettext('Impersonated') }})</span>
+          <span v-if="isImpersonated">
+            ({{ gettext('Impersonated') }})
+          </span>
         </h5>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#" @click="userProfile">{{ gettext('User profile') }}</a>
-        <a class="dropdown-item" href="#" @click="changePassword">{{ gettext('Change password') }}</a>
+        <a class="dropdown-item" href="#" @click="userProfile">
+          {{ gettext('User profile') }}
+        </a>
+        <a class="dropdown-item" href="#" @click="changePassword">
+          {{ gettext('Change password') }}
+        </a>
         <a
           v-if="permissions['impersonate-user'] && !isImpersonated"
           class="dropdown-item"
           href="#"
           @click="showImpersonateLogin"
-        >{{ gettext('Impersonate user') }}</a>
+        >
+          {{ gettext('Impersonate user') }}
+        </a>
         <a
           v-else-if="isImpersonated"
           class="dropdown-item"
           href="#"
           @click="stopImpersonation"
-        >{{ gettext('Stop impersonation') }}</a>
+        >
+          {{ gettext('Stop impersonation') }}
+        </a>
         <div class="dropdown-divider"/>
-        <a class="dropdown-item" href="#" @click="makeLogout">{{ gettext('Logout') }}</a>
+        <a class="dropdown-item" href="#" @click="makeLogout">
+          {{ gettext('Logout') }}
+        </a>
       </div>
     </li>
   </ul>
 </template>
 
-<script>
+<script lang="ts">
+// TODO: a lot of dynamic functionalities that I cannot fathom
 
-import 'bootstrap';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import eventBus from 'dynamicforms/src/logic/eventBus';
+// import eventBus from 'dynamicforms/src/logic/eventBus';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
-import $ from 'jquery';
-import Vue from 'vue';
+// import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
+import { defineComponent } from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import ProjectBaseData from '../../projectBaseData';
 import { Session } from '../../session';
 import { Store } from '../../store';
 
-import ImpersonateDialog from './impersonate-dialog.vue';
-
-Vue.component(ImpersonateDialog.name, ImpersonateDialog);
-
 const chgPassFakeUUID = 'fake-uuid-chg-pass-654654-634565';
 const userProfileFakeUUID = 'fake-uuid-usr-prof-654654-634565';
 const impUserFakeUUID = 'fake-uuid-imp-user-654654-634565';
 
-export default {
+export default defineComponent({
   name: 'UserProfile',
   data() {
     return {
-      componentData: {},
-      permissions: {},
+      componentData: {} as any,
+      permissions: {} as any,
       isImpersonated: false,
+      impersonateModalVisible: false as boolean,
     };
   },
   computed: {
@@ -84,21 +92,21 @@ export default {
     this.loadData();
   },
   mounted() {
-    eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
-    eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
-    eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
+    // eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
+    // eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
+    // eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
   },
   updated() {
     // We have to do this otherwise dropdown does not work https://stackoverflow.com/a/29006010/1760858
     this.$nextTick(() => { $('.dropdown-toggle').dropdown(); });
   },
   beforeDestroy() {
-    eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
-    eventBus.$off(`tableActionExecuted_${userProfileFakeUUID}`);
-    eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
+    // eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
+    // eventBus.$off(`tableActionExecuted_${userProfileFakeUUID}`);
+    // eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
   },
   methods: {
-    loadData(force = false) {
+    loadData(force: boolean = false) {
       new ProjectBaseData().getPermissions((p) => {
         this.permissions = p;
       });
@@ -109,7 +117,7 @@ export default {
         return;
       }
       // eslint-disable-next-line consistent-return
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         ApiClient.get('/account/profile/current').then((profileResponse) => {
           this.componentData = profileResponse.data;
           Store.set('current-user', this.componentData);
@@ -123,9 +131,7 @@ export default {
       Session.logout();
     },
     showImpersonateLogin() {
-      window.dynamicforms.dialog.fromURL(
-        '/account/impersonate/new.componentdef', 'new', impUserFakeUUID,
-      );
+      window.dynamicforms.dialog.fromURL('/account/impersonate/new.componentdef', 'new', impUserFakeUUID);
     },
     reloadAfterImpersonationChange() {
       this.loadData(true).finally(() => {
@@ -139,13 +145,16 @@ export default {
       });
     },
     userProfile() {
-      window.dynamicforms.dialog.fromURL(`/account/profile/${this.componentData.id}.componentdef`, 'edit',
-        userProfileFakeUUID);
+      window.dynamicforms.dialog.fromURL(
+        `/account/profile/${this.componentData.id}.componentdef`,
+        'edit',
+        userProfileFakeUUID,
+      );
     },
     changePassword() {
       window.dynamicforms.dialog.fromURL('/account/change-password/new.componentdef', 'new', chgPassFakeUUID);
     },
-    dialogBtnClick(payload) {
+    dialogBtnClick(payload: any) {
       let data;
       let params;
       if (payload.action.name !== 'cancel') {
@@ -163,9 +172,7 @@ export default {
           data = payload.data;
           params = { detailUrl: `/account/profile/${this.componentData.id}.json` };
         } else if (payload.modal.currentDialog.tableUuid === impUserFakeUUID) {
-          data = {
-            id: payload.data.user_id,
-          };
+          data = { id: payload.data.user_id };
           params = {
             detailUrl: '/account/impersonate/start',
             submitMethod: 'post',
@@ -178,10 +185,10 @@ export default {
           };
         }
       }
-      actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
+      // actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
     },
   },
-};
+});
 </script>
 
 <style scoped>

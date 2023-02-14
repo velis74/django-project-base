@@ -4,33 +4,35 @@
       <div v-if="titleBarProps.name || titleBarProps.logo" class="navbar-brand" style="cursor: default;">
         <img
           v-if="titleBarProps.logo"
+          alt=""
           :src="titleBarProps.logo"
           class="float-left rounded-circle logo-image"
           onclick="window.location.href='/'"
-        >
+        />
         {{ titleBarProps.name || '' }}
       </div>
       <div v-if="breadcrumbsComponent && loggedIn">
-        <component :is="breadcrumbsComponent"/>
+        <Breadcrumbs/>
       </div>
       <div class="collapse navbar-collapse mr-auto"/>
       <div v-if="projectlistComponent && loggedIn" class="collapse navbar-collapse">
         <ul class="navbar-nav"/>
-        <component :is="projectlistComponent"/>
+        <ProjectList/>
       </div>
       <div v-if="userprofileComponent && loggedIn">
-        <component :is="userprofileComponent"/>
+        <UserProfile/>
       </div>
       <div v-else-if="!loggedIn && loginVisible" class="login">
         <Login :add-notifications-component="false"/>
       </div>
     </nav>
-    <notification/>
+    <app-notification/>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import _ from 'lodash';
+import { defineComponent } from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
 import { API_CONFIG } from '../../apiConfig';
@@ -38,17 +40,17 @@ import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowled
 import { showMaintenanceNotification } from '../../notifications';
 import { Session } from '../../session';
 import { Store } from '../../store';
-import Notification from '../notification.vue';
+import AppNotification from '../notification.vue';
 
 import Breadcrumbs from './breadcrumbs.vue';
 import Login from './login.vue';
 import ProjectList from './projectlist.vue';
 import UserProfile from './userprofile.vue';
 
-export default {
+export default defineComponent({
   name: 'TitleBar',
   components: {
-    Notification,
+    AppNotification,
     Breadcrumbs,
     Login,
     ProjectList,
@@ -63,12 +65,12 @@ export default {
   },
   data() {
     return {
-      titleBarProps: {},
-      loggedIn: null,
+      titleBarProps: {} as any,
+      loggedIn: null as any,
       lightClass: 'navbar-light bg-light',
       darkClass: 'navbar-dark bg-dark',
-      maintenanceNoticesPeriodicApiCall: null,
-      maintenanceNotificationItem: null,
+      maintenanceNoticesPeriodicApiCall: null as any,
+      maintenanceNotificationItem: null as any,
     };
   },
   computed: {
@@ -90,7 +92,7 @@ export default {
       }
       this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
       this.loadData();
-      document.addEventListener('login', (payload) => {
+      document.addEventListener('login', (payload: any) => {
         if (payload.detail && payload.detail['default-project']) {
           this.titleBarProps = payload.detail['default-project'];
         } else {
@@ -123,10 +125,12 @@ export default {
     monitorMaintenanceNotifications() {
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
         if (Store.get('current-user')) {
-          ApiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url,
-            { hideErrorNotice: true }).then((notificationResponse) => {
-            // eslint-disable-next-line no-underscore-dangle
-            const _notification = _.first(notificationResponse.data);
+          ApiClient.get(
+            API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url,
+            { hideErrorNotice: true },
+          ).then((notificationResponse) => {
+            // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
+            const _notification: any = _.first(notificationResponse.data);
             if (_notification) {
               const acknowledgeData = _notification.notification_acknowledged_data;
               const delayed = _notification.delayed_to_timestamp;
@@ -164,7 +168,7 @@ export default {
       }, 45000);
     },
   },
-};
+});
 </script>
 
 <style scoped>

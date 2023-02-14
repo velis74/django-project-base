@@ -5,7 +5,7 @@ class Store {
     return localStorage;
   }
 
-  static get(key) {
+  static get(key: string) {
     const storeData = Store.store().getItem(key);
     if (storeData) {
       return JSON.parse(storeData).__val;
@@ -13,15 +13,13 @@ class Store {
     return null;
   }
 
-  static set(key, data) {
+  static set(key: string, data: any) {
     if (data !== null) {
-      Store.store().setItem(key, JSON.stringify({
-        __val: data,
-      }));
+      Store.store().setItem(key, JSON.stringify({ __val: data }));
     }
   }
 
-  static delete(key) {
+  static delete(key: string) {
     Store.store().removeItem(key);
   }
 
