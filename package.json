@@ -2,7 +2,7 @@
   "name": "django_project_base",
   "version": "0.1.2",
   "private": true,
-  "files": ["dist"],
+  "files": ["dist/*"],
   "main": "./dist/project-base.umd.js",
   "types": "./dist/apps.d.ts",
   "exports": {
@@ -16,7 +16,6 @@
   },
   "peerDependencies": {
     "axios": "^1.2.0",
-    "bootstrap": "^4.6.0",
     "vue": "^3.2.45"
   },
   "dependencies": {
@@ -25,9 +24,10 @@
     "browser-update": "^3.3.37",
     "core-js": "^3.6.5",
     "es6-promise": "^4.2.8",
-    "jquery": "^3.6.0",
     "lodash": "^4.17.15",
-    "vanilla-cookieconsent": "^2.8.0"
+    "vanilla-cookieconsent": "^2.8.0",
+    "vue": "^3.2.45",
+    "vuetify": "^3.0.1"
   },
   "devDependencies": {
     "@types/browser-update": "^3.3.0",
@@ -40,6 +40,7 @@
     "vite": "^4.0.4",
     "vite-plugin-css-injected-by-js": "^3.0.0",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-vuetify": "^1.0.0",
     "vitest": "^0.28.3",
     "vue-template-compiler": "^2.6.11",
     "vue-tsc": "^1.0.24"
@@ -48,11 +49,6 @@
     "extends": [
       "velis"
     ],
-    "rules": {
-      "vuejs-accessibility/click-events-have-key-events": "off",
-      "vuejs-accessibility/form-control-has-label": "off",
-      "vuejs-accessibility/label-has-for": "off"
-    },
     "ignorePatterns": [
       "dist/*",
       "coverage/*",

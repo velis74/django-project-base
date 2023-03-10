@@ -4,43 +4,42 @@ import { apiClient as ApiClient } from './apiClient';
 import { createEvent, logoutEvent } from './events';
 import { Store } from './store';
 
-class Session {
-  static login(username: string, password: string) {
+export default abstract class Session {
+  static async login(username: string, password: string) {
     Store.clear();
-    ApiClient.post(
-      '/account/login/',
-      { login: username, password },
-    ).then(() => {
-      // eslint-disable-next-line no-return-assign
-      Session.checkLogin(true, () => window.location.href = '/');
-    });
-  }
-
-  static logout() {
-    ApiClient.post('/account/logout/').finally(() => {
-      Store.clear();
-      document.dispatchEvent(logoutEvent);
+    try {
+      await ApiClient.post('/account/login/', { login: username, password });
+      await Session.checkLogin(true);
       window.location.href = '/';
-    });
+    } catch (err: any) {
+      console.error(err);
+    }
   }
 
-  static checkLogin(showNotAuthorizedNotice = true, successCallback: any = null) {
-    return ApiClient.get(
-      '/account/profile/current',
-      { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
-    ).then(
-      (response: any) => {
-        Store.set('current-user', response.data);
-        document.dispatchEvent(createEvent('login', response.data));
-        if (successCallback) {
-          successCallback();
-        }
-      },
-    ).catch(() => {
+  static async logout() {
+    try {
+      await ApiClient.post('/account/logout/');
+    } catch (error: unknown) {
+      console.error(error);
+    }
+    Store.clear();
+    document.dispatchEvent(logoutEvent);
+    window.location.href = '/';
+  }
+
+  static async checkLogin(showNotAuthorizedNotice = true) {
+    try {
+      const response = await ApiClient.get(
+        '/account/profile/current',
+        { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
+      );
+      Store.set('current-user', response.data);
+      document.dispatchEvent(createEvent('login', response.data));
+      return true;
+    } catch (error: any) {
       Store.clear();
-    });
+      if (error.response && error.response.status) return error.response.status;
+      throw error;
+    }
   }
 }
-
-// eslint-disable-next-line import/prefer-default-export
-export { Session };

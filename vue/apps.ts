@@ -1,22 +1,22 @@
 import Notifications from '@kyvg/vue3-notification';
 import type { Component } from '@vue/runtime-core';
-// import createDynamicForms from 'dynamicforms';
+// import { createDynamicForms, dfVuetifyConfiguration } from 'dynamicforms';
 import { createApp } from 'vue';
+import { createVuetify } from 'vuetify';
+import { ThemeDefinition } from 'vuetify/dist/vuetify';
+import 'vuetify/styles/main.css';
 
 import Breadcrumbs from './components/bootstrap/breadcrumbs.vue';
 import ImpersonateDialog from './components/bootstrap/impersonate-dialog.vue';
-import Login from './components/bootstrap/login.vue';
 import ProjectList from './components/bootstrap/projectlist.vue';
-import TitleBar from './components/bootstrap/titlebar.vue';
-import UserProfile from './components/bootstrap/userprofile.vue';
+import UserProfile from './components/userprofile.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
+import Login from './components/login.vue';
 import AppNotification from './components/notification.vue';
+import TitleBar from './components/titlebar.vue';
 import DefaultCookieOptions from './defaultCookieOptions';
-
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.css';
-import '../django_project_base/static/fa-5.13.3/css/all.min.css';
+import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 
 const componentsConfig = {
   TitleBar,
@@ -28,9 +28,27 @@ const componentsConfig = {
   BrowserCheck,
   CookieNotice,
   ImpersonateDialog,
+  TitlebarAppStandalone,
 };
 
 type AppData = Object;
+
+const defaultTheme: ThemeDefinition = {
+  dark: false,
+  colors: {
+    background: '#f8f8f8',
+    surface: '#ffffff',
+    // 'primary-darken-1': '#3700B3',
+    // 'secondary-darken-1': '#018786',
+    primary: '#3f51b5',
+    secondary: '#2196f3',
+    accent: '#ffc107',
+    error: '#f44336',
+    warning: '#ff9800',
+    info: '#8bc34a',
+    success: '#00bcd4',
+  },
+};
 
 const createCoreApp = (elementId: string, template: any, data: AppData = {}) => {
   const app = createApp({
@@ -38,14 +56,17 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
     template,
   });
   // add components
-  Object.values(componentsConfig).map((component: Component) => app.component(component.name || 'default', component));
+  Object.values(componentsConfig).map((component: Component) => app.component(component.name, component));
   // use plugins you intend to use
+
+  const vuetify = createVuetify({ theme: { defaultTheme: 'defaultTheme', themes: { defaultTheme } } });
+  app.use(vuetify);
+  // app.use(createDynamicForms({ ui: 'vuetify' }));
   app.use(Notifications);
-  // uncomment to add dynamic forms to project base
-  // app.use(createDynamicForms());
 
   // add translation function on a global scale
   app.config.globalProperties.gettext = (value: string) => value;
+  app.config.unwrapInjectedRef = true;
   app.provide<AppData>('data', data);
 
   app.mount(`#${elementId}`);
@@ -53,11 +74,7 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
   return app;
 };
 
-const titleBarTemplate = '<BrowserCheck :hidePageIfUnSupportedBrowser="false">' +
-    '<TitleBar v-slot:content :projectlistVisible="true"/>' +
-    '</BrowserCheck>';
-
-export function createTitleBar(elementId: string) { return createCoreApp(elementId, titleBarTemplate); }
+export function createTitleBar(elementId: string) { return createCoreApp(elementId, '<titlebar-app-standalone/>'); }
 
 export function createCookieNotice(elementId: string, cookieOptions: Object = DefaultCookieOptions) {
   return createCoreApp(elementId, '<CookieNotice/>', cookieOptions);

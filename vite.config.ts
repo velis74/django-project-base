@@ -6,12 +6,22 @@ import { resolve } from 'path';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import eslintPlugin from 'vite-plugin-eslint';
 import vuePlugin from '@vitejs/plugin-vue';
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 const axiosRedirectConfig = () => ({
   name: 'serverProxy',
   configureServer(server: any) {
     const filter = function filter(pathname: any, req: any) {
-      return typeof req.headers['x-df-axios'] !== 'undefined';
+      return (
+        typeof req.headers['x-df-axios'] !== 'undefined'
+        || (
+          pathname !== '/'
+          && !pathname.startsWith('/@')
+          && !pathname.startsWith('/vue')
+          && !pathname.startsWith('/node_modules')
+        )
+      );
+      // return ;
     };
     server.middlewares.use(
       '/',
@@ -26,7 +36,6 @@ const axiosRedirectConfig = () => ({
   },
 });
 
-
 export default defineConfig({
   plugins: [
     vuePlugin(),
@@ -38,15 +47,16 @@ export default defineConfig({
       apply: 'serve',
       enforce: 'post',
     },
+    vuetify({ autoImport: true }),
     axiosRedirectConfig()
   ],
   resolve: {
     alias: {
       // @ts-ignore
-      "~": fileURLToPath(new URL('./node_modules', import.meta.url)),
+      '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
       // @ts-ignore
-      "@": fileURLToPath(new URL('./vue', import.meta.url)),
-      "vue": "vue/dist/vue.esm-bundler.js"
+      '@': fileURLToPath(new URL('./vue', import.meta.url)),
+      'vue': 'vue/dist/vue.esm-bundler.js'
     },
     extensions: [
       '.js',
@@ -81,4 +91,4 @@ export default defineConfig({
       }
     }
   }
-})
+});

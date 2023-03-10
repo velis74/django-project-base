@@ -113,6 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '*Client ID*'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '*Client secret*'
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
