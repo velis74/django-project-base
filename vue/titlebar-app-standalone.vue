@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <BrowserCheck :hidePageIfUnSupportedBrowser="false">
-        <TitleBar v-slot:content :projectlistVisible="true"/>
+        <TitleBar/>
       </BrowserCheck>
     </v-main>
   </v-app>

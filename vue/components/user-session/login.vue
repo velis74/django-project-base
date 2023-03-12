@@ -42,9 +42,9 @@
 // import { dfModal } from 'dynamicforms';
 import { defineComponent } from 'vue';
 
-import { apiClient as ApiClient } from '../apiClient';
-import Session from '../session';
-import { Store } from '../store';
+import { apiClient as ApiClient } from '../../apiClient';
+
+import useUserSessionStore from './state';
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -63,8 +63,9 @@ export default defineComponent({
   },
   methods: {
     async checkLoginSuccess() {
-      if ([true, 403].includes(await Session.checkLogin(false))) {
-        if (!Store.get('current-user')) {
+      const userSession = useUserSessionStore();
+      if ([true, 403].includes(await userSession.checkLogin(false))) {
+        if (!userSession.loggedIn) {
           const socialAuthProvidersResponse = await ApiClient.get('/account/social-auth-providers/');
           this.socialAuth = socialAuthProvidersResponse.data as any[];
         }
@@ -72,7 +73,8 @@ export default defineComponent({
     },
     async makeLogin() {
       if (this.loginModel.username && this.loginModel.password) {
-        Session.login(this.loginModel.username, this.loginModel.password);
+        const userSession = useUserSessionStore();
+        userSession.login(this.loginModel.username, this.loginModel.password);
       } else {
         // await dfModal.message('Error', 'Username and password must both be non-empty!');
       }

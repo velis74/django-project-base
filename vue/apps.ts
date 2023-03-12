@@ -1,6 +1,7 @@
 import Notifications from '@kyvg/vue3-notification';
 import type { Component } from '@vue/runtime-core';
 // import { createDynamicForms, dfVuetifyConfiguration } from 'dynamicforms';
+import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import { createVuetify } from 'vuetify';
 import { ThemeDefinition } from 'vuetify/dist/vuetify';
@@ -8,13 +9,13 @@ import 'vuetify/styles/main.css';
 
 import Breadcrumbs from './components/bootstrap/breadcrumbs.vue';
 import ImpersonateDialog from './components/bootstrap/impersonate-dialog.vue';
-import ProjectList from './components/bootstrap/projectlist.vue';
-import UserProfile from './components/userprofile.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
-import Login from './components/login.vue';
 import AppNotification from './components/notification.vue';
+import ProjectList from './components/project-list.vue';
 import TitleBar from './components/titlebar.vue';
+import Login from './components/user-session/login.vue';
+import UserProfile from './components/user-session/userprofile.vue';
 import DefaultCookieOptions from './defaultCookieOptions';
 import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 
@@ -55,12 +56,16 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
     data: () => data,
     template,
   });
+
   // add components
   Object.values(componentsConfig).map((component: Component) => app.component(component.name, component));
+
   // use plugins you intend to use
+  app.use(createPinia());
 
   const vuetify = createVuetify({ theme: { defaultTheme: 'defaultTheme', themes: { defaultTheme } } });
   app.use(vuetify);
+
   // app.use(createDynamicForms({ ui: 'vuetify' }));
   app.use(Notifications);
 

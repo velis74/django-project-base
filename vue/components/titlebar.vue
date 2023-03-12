@@ -10,11 +10,11 @@
       />
       {{ titleBarProps.name || '' }}
     </v-toolbar-title>
-    <Breadcrumbs v-if="breadcrumbsComponent && loggedIn"/>
+    <Breadcrumbs v-if="breadcrumbsComponent && userSession.loggedIn"/>
     <v-spacer/>
-    <ProjectList v-if="projectlistComponent && loggedIn"/>
-    <UserProfile v-if="userprofileComponent && loggedIn"/>
-    <Login v-else-if="!loggedIn && loginVisible"/>
+    <ProjectList v-if="projectlistComponent && userSession.loggedIn"/>
+    <UserProfile v-if="userprofileComponent && userSession.loggedIn"/>
+    <Login v-else-if="!userSession.loggedIn && loginVisible"/>
     <app-notification/>
   </v-toolbar>
 </template>
@@ -27,14 +27,14 @@ import { apiClient as ApiClient } from '../apiClient';
 import { API_CONFIG } from '../apiConfig';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from '../events';
 import { showMaintenanceNotification } from '../notifications';
-import Session from '../session';
 import { Store } from '../store';
 
 import Breadcrumbs from './bootstrap/breadcrumbs.vue';
-import Login from './login.vue';
-import ProjectList from './bootstrap/projectlist.vue';
-import UserProfile from './userprofile.vue';
 import AppNotification from './notification.vue';
+import ProjectList from './project-list.vue';
+import Login from './user-session/login.vue';
+import useUserSessionStore from './user-session/state';
+import UserProfile from './user-session/userprofile.vue';
 
 export default defineComponent({
   name: 'TitleBar',
@@ -55,9 +55,9 @@ export default defineComponent({
   data() {
     return {
       titleBarProps: {} as any,
-      loggedIn: null as any,
       maintenanceNoticesPeriodicApiCall: null as any,
       maintenanceNotificationItem: null as any,
+      userSession: useUserSessionStore(),
     };
   },
   computed: {
@@ -70,30 +70,13 @@ export default defineComponent({
     this.maintenanceNoticesPeriodicApiCall = null;
   },
   async mounted() {
-    if (await Session.checkLogin(false) === true) {
+    const userSession = useUserSessionStore();
+    if (await userSession.checkLogin(false) === true) {
       if (document.title) {
+        // TODO: soon to be removed. This handles situation where titlebar is the only vue component on a legacy page
         this.titleBarProps.name = document.title;
       }
-      this.loggedIn = Store.get('current-user') !== null && Store.get('current-user') !== undefined;
       this.loadData();
-      document.addEventListener('login', (payload: any) => {
-        if (payload.detail && payload.detail['default-project']) {
-          this.titleBarProps = payload.detail['default-project'];
-        } else {
-          this.loadData();
-        }
-        this.loggedIn = true;
-      });
-      document.addEventListener('logout', () => {
-        this.loggedIn = null;
-        this.titleBarProps = {};
-      });
-      document.addEventListener('project-selected', () => {
-        this.loadData();
-      });
-      document.addEventListener('maintenance-notification-acknowledged', () => {
-        this.maintenanceNotificationItem = null;
-      });
       this.monitorMaintenanceNotifications();
     }
   },

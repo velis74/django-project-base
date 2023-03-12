@@ -81,13 +81,10 @@ export default defineConfig({
       name: 'project-base'
     },
     rollupOptions: {
-      external: ['vue', 'bootstrap'],
+      external: ['axios', 'pinia', 'vue', 'vuetify'],
       output: {
         exports: 'named',
-        globals: {
-          'vue': 'vue',
-          'bootstrap': 'bootstrap'
-        }
+        globals: { 'axios': 'axios', 'pinia': 'pinia', 'vue': 'vue', 'vuetify': 'vuetify' },
       }
     }
   }
