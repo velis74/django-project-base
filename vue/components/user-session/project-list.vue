@@ -2,38 +2,26 @@
 import _ from 'lodash';
 import { onMounted, Ref, ref, watch } from 'vue';
 
-import { apiClient as ApiClient } from '../apiClient';
-import { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from '../constants';
-import { projectSelected as ProjectSelected } from '../events';
-import { showNotification } from '../notifications';
-import ProjectBaseData from '../projectBaseData';
-import { Store } from '../store';
+import { apiClient as ApiClient } from '../../apiClient';
+import { showNotification } from '../../notifications';
+import ProjectBaseData from '../../projectBaseData';
 
-import useUserSessionStore from './user-session/state';
+import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
+import useUserSessionStore from './state';
 
 const userSession = useUserSessionStore();
 
-interface ProjectListItem {
-  [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: any;
-  logo: string;
-  name: string;
-}
-
-const projectList = ref([]) as Ref<ProjectListItem[]>;
+const projectList = ref([]) as Ref<Project[]>;
 const permissions = ref({});
 const dataStore = new ProjectBaseData();
 
 function projectSelected(slug: string) {
-  if (slug === Store.get('current-project')) return;
-  const project = _.first(_.filter(
-    projectList,
-    (p: ProjectListItem) => p[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] === slug,
-  ));
-  Store.set('current-project', project);
-  document.dispatchEvent(ProjectSelected);
+  if (slug === userSession.selectedProjectId) return;
+  const project = projectList.value.find((p: Project) => p[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] === slug);
+  userSession.setSelectedProject(project);
 }
 
-async function getProjects(): Promise<ProjectListItem[]> {
+async function getProjects(): Promise<Project[]> {
   if (!userSession.loggedIn) return [];
   try {
     return (await ApiClient.get('/project')).data;
@@ -50,12 +38,7 @@ function setPermissions(newPermissions: {}) {
 async function loadData() {
   if (!userSession.loggedIn) return;
   projectList.value = await getProjects();
-  //  WE DO NOT HAVE CURRENT PROJECT FOR USER IMPLEMENTED, FOR NOW WE SKIP THIS
-  // if (!Store.get('current-project')) {
-  //   Store.set('current-project', _.first(this.projectList)[this.projectTablePkName]);
-  //   document.dispatchEvent(ProjectSelected);
-  // }
-
+  if (!userSession.selectedProjectId) userSession.setSelectedProject(_.first(projectList.value));
   dataStore.getPermissions(setPermissions);
 }
 
@@ -69,7 +52,7 @@ watch(() => userSession.loggedIn, () => { loadData(); });
 
 <template>
   <v-btn style="min-width: 0">
-    &#9776;
+    &#9776; {{ userSession.selectedProject.name }}
     <v-menu activator="parent">
       <v-list>
         <v-list-item

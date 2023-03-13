@@ -22,7 +22,7 @@
           {{ gettext('Stop impersonation') }}
         </v-list-item>
         <v-divider/>
-        <v-list-item @click="userSession.session.logout()">{{ gettext('Logout') }}</v-list-item>
+        <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
       </v-list>
     </v-menu>
   </v-btn>

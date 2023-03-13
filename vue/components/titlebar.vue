@@ -31,8 +31,8 @@ import { Store } from '../store';
 
 import Breadcrumbs from './bootstrap/breadcrumbs.vue';
 import AppNotification from './notification.vue';
-import ProjectList from './project-list.vue';
 import Login from './user-session/login.vue';
+import ProjectList from './user-session/project-list.vue';
 import useUserSessionStore from './user-session/state';
 import UserProfile from './user-session/userprofile.vue';
 

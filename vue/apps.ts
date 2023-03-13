@@ -12,9 +12,9 @@ import ImpersonateDialog from './components/bootstrap/impersonate-dialog.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
-import ProjectList from './components/project-list.vue';
 import TitleBar from './components/titlebar.vue';
 import Login from './components/user-session/login.vue';
+import ProjectList from './components/user-session/project-list.vue';
 import UserProfile from './components/user-session/userprofile.vue';
 import DefaultCookieOptions from './defaultCookieOptions';
 import TitlebarAppStandalone from './titlebar-app-standalone.vue';
@@ -58,7 +58,7 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
   });
 
   // add components
-  Object.values(componentsConfig).map((component: Component) => app.component(component.name, component));
+  Object.values(componentsConfig).map((component: Component) => app.component(component.name as string, component));
 
   // use plugins you intend to use
   app.use(createPinia());

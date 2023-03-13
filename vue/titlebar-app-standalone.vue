@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <BrowserCheck :hidePageIfUnSupportedBrowser="false">
+      <BrowserCheck :hide-page-if-un-supported-browser="false">
         <TitleBar/>
       </BrowserCheck>
     </v-main>

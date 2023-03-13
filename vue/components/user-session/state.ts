@@ -4,8 +4,7 @@ import { defineStore } from 'pinia';
 import { apiClient as ApiClient } from '../../apiClient';
 import { logoutEvent } from '../../events';
 
-import UserDataJSON = UserSession.UserDataJSON;
-import UserSessionData = UserSession.UserSessionData;
+import { UserDataJSON, UserSessionData, Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 
 const useUserSessionStore = defineStore('user-session', {
   state: (): UserSessionData => ({
@@ -18,6 +17,11 @@ const useUserSessionStore = defineStore('user-session', {
       avatar: '',
     },
     impersonated: false,
+    selectedProject: {
+      [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: 0,
+      logo: '',
+      name: '',
+    },
   }),
   getters: {
     loggedIn(state) { return state.userData.username !== ''; },
@@ -28,15 +32,30 @@ const useUserSessionStore = defineStore('user-session', {
       if (userData.username) return userData.username;
       return null;
     },
+    selectedProjectId(state) {
+      return state.selectedProject[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+    },
   },
   actions: {
-    setUserData(data: UserDataJSON) {
+    setUserData(data: UserDataJSON | undefined) {
+      const input = data || {} as UserDataJSON;
       this.$patch({
         userData: {
-          firstName: data.first_name || '',
-          lastName: data.last_name || '',
-          email: data.email || '',
-          username: data.username || '',
+          firstName: input.first_name || '',
+          lastName: input.last_name || '',
+          email: input.email || '',
+          username: input.username || '',
+        },
+      });
+    },
+
+    setSelectedProject(data: Project | undefined) {
+      const input = data || {} as Project;
+      this.$patch({
+        selectedProject: {
+          [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: input[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] || 0,
+          logo: input.logo || '',
+          name: input.name || '',
         },
       });
     },
