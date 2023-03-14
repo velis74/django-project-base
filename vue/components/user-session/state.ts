@@ -2,7 +2,6 @@ import { AxiosRequestConfig } from 'axios';
 import { defineStore } from 'pinia';
 
 import { apiClient as ApiClient } from '../../apiClient';
-import { logoutEvent } from '../../events';
 
 import { UserDataJSON, UserSessionData, Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 
@@ -65,7 +64,8 @@ const useUserSessionStore = defineStore('user-session', {
       try {
         await ApiClient.post('/account/login/', { login: username, password });
         await this.checkLogin(true);
-        window.location.href = '/';
+        // TODO I don't think root is the way to go. Should be something like Django: next={url_to_go_to}
+        // window.location.href = '/';
       } catch (err: any) {
         console.error(err);
       }
@@ -78,8 +78,7 @@ const useUserSessionStore = defineStore('user-session', {
         console.error(error);
       }
       this.$reset();
-      document.dispatchEvent(logoutEvent);
-      window.location.href = '/';
+      // window.location.href = '/';
     },
 
     async checkLogin(showNotAuthorizedNotice = true) {

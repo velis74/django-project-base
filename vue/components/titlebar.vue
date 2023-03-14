@@ -14,7 +14,7 @@
     <v-spacer/>
     <ProjectList v-if="projectlistComponent && userSession.loggedIn"/>
     <UserProfile v-if="userprofileComponent && userSession.loggedIn"/>
-    <Login v-else-if="!userSession.loggedIn && loginVisible"/>
+    <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>
     <app-notification/>
   </v-toolbar>
 </template>
@@ -31,7 +31,7 @@ import { Store } from '../store';
 
 import Breadcrumbs from './bootstrap/breadcrumbs.vue';
 import AppNotification from './notification.vue';
-import Login from './user-session/login.vue';
+import LoginInline from './user-session/login-inline.vue';
 import ProjectList from './user-session/project-list.vue';
 import useUserSessionStore from './user-session/state';
 import UserProfile from './user-session/userprofile.vue';
@@ -41,7 +41,7 @@ export default defineComponent({
   components: {
     AppNotification,
     Breadcrumbs,
-    Login,
+    LoginInline,
     ProjectList,
     UserProfile,
   },
