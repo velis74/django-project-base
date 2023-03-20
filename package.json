@@ -25,7 +25,7 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^2.8.0",
     "browser-update": "^3.3.37",
-    "dynamicforms": "file:node_libs/dynamicforms-0.7.16.tgz",
+    "dynamicforms": "file:node_libs/dynamicforms-0.7.30.tgz",
     "lodash": "^4.17.15",
     "pinia": "^2.0.33",
     "vanilla-cookieconsent": "^2.8.0",

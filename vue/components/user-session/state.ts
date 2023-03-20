@@ -45,6 +45,7 @@ const useUserSessionStore = defineStore('user-session', {
           email: input.email || '',
           username: input.username || '',
         },
+        impersonated: input.is_impersonated,
       });
     },
 

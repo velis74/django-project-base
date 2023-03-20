@@ -9,7 +9,6 @@ import 'vuetify/styles/main.css';
 import 'dynamicforms/dynamicforms.css';
 
 import Breadcrumbs from './components/bootstrap/breadcrumbs.vue';
-import ImpersonateDialog from './components/bootstrap/impersonate-dialog.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
@@ -29,7 +28,6 @@ const componentsConfig = {
   AppNotification,
   BrowserCheck,
   CookieNotice,
-  ImpersonateDialog,
   TitlebarAppStandalone,
 };
 

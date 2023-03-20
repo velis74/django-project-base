@@ -29,101 +29,45 @@
 </template>
 
 <script lang="ts">
-// import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
+import { APIConsumerLogic } from 'dynamicforms';
 import { defineComponent } from 'vue';
 
-import { apiClient as ApiClient } from '../../apiClient';
+import { apiClient } from '../../apiClient';
 import ProjectBaseData from '../../projectBaseData';
 
 import useUserSessionStore from './state';
-
-const chgPassFakeUUID = 'fake-uuid-chg-pass-654654-634565';
-const userProfileFakeUUID = 'fake-uuid-usr-prof-654654-634565';
-const impUserFakeUUID = 'fake-uuid-imp-user-654654-634565';
 
 export default defineComponent({
   name: 'UserProfile',
   data() {
     return {
       permissions: {} as any,
-      impersonateModalVisible: false as boolean,
       userSession: useUserSessionStore(),
     };
   },
   mounted() {
     this.loadData();
-    // eventBus.$on(`tableActionExecuted_${chgPassFakeUUID}`, this.dialogBtnClick);
-    // eventBus.$on(`tableActionExecuted_${userProfileFakeUUID}`, this.dialogBtnClick);
-    // eventBus.$on(`tableActionExecuted_${impUserFakeUUID}`, this.dialogBtnClick);
-  },
-  unmounted() {
-    // eventBus.$off(`tableActionExecuted_${chgPassFakeUUID}`);
-    // eventBus.$off(`tableActionExecuted_${userProfileFakeUUID}`);
-    // eventBus.$off(`tableActionExecuted_${impUserFakeUUID}`);
   },
   methods: {
     async loadData(force: boolean = false) {
-      new ProjectBaseData().getPermissions((p) => { this.permissions = p; });
+      new ProjectBaseData().getPermissions((p: any) => { this.permissions = p; });
       if (this.userSession.loggedIn && !force) return;
 
       await this.userSession.checkLogin(false);
     },
-    showImpersonateLogin() {
-      window.dynamicforms.dialog.fromURL('/account/impersonate/new.componentdef', 'new', impUserFakeUUID);
+    async showImpersonateLogin() {
+      await new APIConsumerLogic('/account/impersonate').dialogForm(null);
+      await this.userSession.checkLogin(false);
     },
-    reloadAfterImpersonationChange() {
-      this.loadData(true).finally(() => {
-        window.location.href = '/';
-      });
+    async stopImpersonation() {
+      await apiClient.delete('/account/impersonate');
+      await this.userSession.checkLogin(false);
     },
-    stopImpersonation() {
-      ApiClient.post('/account/impersonate/end').then(() => {
-        userSession.impersonated = false;
-        this.reloadAfterImpersonationChange();
-      });
+    async userProfile() {
+      await new APIConsumerLogic('/account/profile').dialogForm(this.userSession.userData.id);
     },
-    userProfile() {
-      window.dynamicforms.dialog.fromURL(
-        `/account/profile/${this.componentData.id}.componentdef`,
-        'edit',
-        userProfileFakeUUID,
-      );
-    },
-    changePassword() {
-      window.dynamicforms.dialog.fromURL('/account/change-password/new.componentdef', 'new', chgPassFakeUUID);
-    },
-    dialogBtnClick(payload: any) {
-      let data;
-      let params;
-      if (payload.action.name !== 'cancel') {
-        if (payload.modal.currentDialog.tableUuid === chgPassFakeUUID) {
-          data = {
-            old_password: payload.data.old_password,
-            password: payload.data.password,
-            password_confirm: payload.data.password_confirm,
-          };
-          params = {
-            detailUrl: '/account/change-password/submit-change/',
-            headers: undefined,
-          };
-        } else if (payload.modal.currentDialog.tableUuid === userProfileFakeUUID) {
-          data = payload.data;
-          params = { detailUrl: `/account/profile/${this.componentData.id}.json` };
-        } else if (payload.modal.currentDialog.tableUuid === impUserFakeUUID) {
-          data = { id: payload.data.user_id };
-          params = {
-            detailUrl: '/account/impersonate/start',
-            submitMethod: 'post',
-            headers: undefined,
-            then: (() => {
-              this.impersonateModalVisible = false;
-              userSession.impersonated = true;
-              this.reloadAfterImpersonationChange();
-            }),
-          };
-        }
-      }
-      // actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
+    async changePassword() {
+      new APIConsumerLogic('/account/change-password/').dialogForm('new');
     },
   },
 });

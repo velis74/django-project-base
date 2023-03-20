@@ -9,6 +9,7 @@ export interface UserDataJSON {
   email: string,
   username: string,
   avatar: string;
+  is_impersonated: boolean;
 }
 
 export interface UserData {
