@@ -8,7 +8,7 @@ import { ThemeDefinition } from 'vuetify/dist/vuetify';
 import 'vuetify/styles/main.css';
 import 'dynamicforms/dynamicforms.css';
 
-import Breadcrumbs from './components/bootstrap/breadcrumbs.vue';
+import Breadcrumbs from './components/breadcrumbs.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';

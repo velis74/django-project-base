@@ -10,10 +10,12 @@
       />
       {{ titleBarProps.name || '' }}
     </v-toolbar-title>
-    <Breadcrumbs v-if="breadcrumbsComponent && userSession.loggedIn"/>
+    <template v-if="breadcrumbsComponent && userSession.loggedIn" #extension>
+      <component :is="breadcrumbsComponent"/>
+    </template>
     <v-spacer/>
-    <ProjectList v-if="projectlistComponent && userSession.loggedIn"/>
-    <UserProfile v-if="userprofileComponent && userSession.loggedIn"/>
+    <component :is="projectlistComponent" v-if="projectlistComponent && userSession.loggedIn"/>
+    <component :is="userprofileComponent" v-if="userprofileComponent && userSession.loggedIn"/>
     <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>
     <app-notification/>
   </v-toolbar>
@@ -29,7 +31,7 @@ import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowled
 import { showMaintenanceNotification } from '../notifications';
 import { Store } from '../store';
 
-import Breadcrumbs from './bootstrap/breadcrumbs.vue';
+import Breadcrumbs from './breadcrumbs.vue';
 import AppNotification from './notification.vue';
 import LoginInline from './user-session/login-inline.vue';
 import ProjectList from './user-session/project-list.vue';
