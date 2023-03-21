@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <BrowserCheck :hide-page-if-un-supported-browser="false">
-        <TitleBar/>
+        <TitleBar :breadcrumbs-component="null"/>
         <ModalView/>
       </BrowserCheck>
     </v-main>
