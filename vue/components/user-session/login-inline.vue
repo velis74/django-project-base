@@ -39,11 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { dfModal } from 'dynamicforms';
-import { onMounted, reactive, Ref, ref } from 'vue';
+import { dfModal, gettext, DialogSize, FormPayload } from 'dynamicforms';
+import { markRaw, onMounted, reactive, Ref, ref } from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
 
+import LoginDialog from './login-dialog.vue';
 import useUserSessionStore from './state';
 
 const loginModel = reactive({
@@ -68,7 +69,14 @@ async function doLogin() {
     const userSession = useUserSessionStore();
     userSession.login(loginModel.username, loginModel.password);
   } else {
-    await dfModal.message('Error', 'Username and password must both be non-empty!');
+    const title = ref(gettext('Sign In'));
+    const payload = new FormPayload();
+    const body = {
+      componentName: markRaw(LoginDialog),
+      props: { payload, title },
+    };
+    await dfModal.message(title, body, undefined, { size: DialogSize.MEDIUM });
+    console.log(payload);
   }
 }
 

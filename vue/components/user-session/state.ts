@@ -63,12 +63,14 @@ const useUserSessionStore = defineStore('user-session', {
     async login(username: string, password: string) {
       this.$reset();
       try {
-        await ApiClient.post('/account/login/', { login: username, password });
+        const result = await ApiClient.post('/account/login', { login: username, password });
         await this.checkLogin(true);
         // TODO I don't think root is the way to go. Should be something like Django: next={url_to_go_to}
         // window.location.href = '/';
+        return result;
       } catch (err: any) {
         console.error(err);
+        return err;
       }
     },
 
