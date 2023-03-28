@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent>
-    <v-container v-if="hasPayload">
+    <v-container v-if="payload != null">
       <v-row>
         <v-col>
           <v-text-field
@@ -45,26 +45,25 @@ import useUserSessionStore from './state';
 
 const userSession = useUserSessionStore();
 const loginConsumer = new APIConsumerLogic(userSession.apiEndpointLogin);
-const hasPayload = ref(false);
 
-let payload: FormPayload | null = null;
+const payload: Ref<FormPayload | null> = ref(null);
 const socialAuth = ref([]) as Ref<any[]>;
 const pwd = ref();
 
 async function getFormDefinition() {
   userSession.checkLogin(false);
   const formDef = await loginConsumer.getFormDefinition();
-  payload = formDef.payload;
-  hasPayload.value = true;
+  payload.value = formDef.payload;
   console.log(formDef);
   console.log(loginConsumer.ux_def);
+  console.log(payload);
   socialAuth.value = formDef.payload.social_auth_providers;
 }
 getFormDefinition();
 
 async function doLogin() {
-  if (payload?.username && payload?.password) {
-    userSession.login(payload.username, payload.password);
+  if (payload.value?.username && payload.value?.password) {
+    userSession.login(payload.value.username, payload.value.password);
   } else {
     const title = ref(gettext('Sign In'));
     const payload = new FormPayload();
