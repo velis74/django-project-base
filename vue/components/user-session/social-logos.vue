@@ -1,5 +1,9 @@
 <template>
-  <ion-icon class="social-logo mx-3 d-inline-block" style="width: 5em; height: 5em" :name="icons[socialProvider]"/>
+  <ion-icon
+    :class="`social-logo d-inline-block`"
+    :style="`width: ${sizeEm}em; height: ${sizeEm}em; margin: 0 ${hSpacing}em`"
+    :name="icons[socialProvider]"
+  />
 </template>
 
 <script setup lang="ts">
@@ -7,9 +11,13 @@ import IonIcon from 'vue-ionicon';
 
 interface Props {
   socialProvider: 'facebook' | 'google-oauth2' | 'twitter' | 'microsoft-graph' | 'github' | 'gitlab';
+  sizeEm?: number,
 }
 
-defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { sizeEm: 5 });
+
+const hSpacing = props.sizeEm * 0.1;
+
 const icons = {
   facebook: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 266.893 266.895">

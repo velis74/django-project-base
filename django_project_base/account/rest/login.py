@@ -1,20 +1,41 @@
+from typing import Iterable
+
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 from dynamicforms import fields, serializers, viewsets
+from dynamicforms.mixins import DisplayMode
+from dynamicforms.template_render.layout import Layout, Row
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import login
 
+from django_project_base.account.social_auth.providers import get_social_providers, SocialProviderItem
+
 
 class LoginSerializer(serializers.Serializer):
+    form_titles = {
+        "edit": _("Login"),
+    }
     template_context = dict(url_reverse="profile-base-login", url_reverse_kwargs=None)
     login = fields.CharField(required=True)
     password = fields.CharField(required=True)
-    return_type = fields.ChoiceField(choices=["json", "cookie"], required=False)
+    return_type = fields.ChoiceField(choices=["json", "cookie"], required=False, display_form=DisplayMode.HIDDEN)
+    social_auth_providers = fields.SerializerMethodField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields.update({"return-type": self.fields.pop("return_type")})
+
+    def get_dialog_def(self):
+        res = super().get_dialog_def()
+        layout = Layout(Row("login", "password", "return-type", "social_auth_providers", "df_control_data"), columns=4)
+        res["inline"] = layout.as_component_def(self)
+        del res["inline"]["fields"]  # fields are already on this level
+        return res
+
+    def get_social_auth_providers(self, unused) -> Iterable[SocialProviderItem]:
+        return map(lambda item: item._asdict(), get_social_providers())
 
 
 @extend_schema_view(

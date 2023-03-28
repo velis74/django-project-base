@@ -1,10 +1,10 @@
 <template>
   <v-form @submit.prevent>
-    <v-container>
+    <v-container v-if="hasPayload">
       <v-row>
         <v-col>
           <v-text-field
-            v-model="loginModel.username"
+            v-model="payload.username"
             density="compact"
             placeholder="Username"
             @keyup.enter="focusPassword"
@@ -13,7 +13,7 @@
         <v-col>
           <v-text-field
             ref="pwd"
-            v-model="loginModel.password"
+            v-model="payload.password"
             density="compact"
             type="password"
             placeholder="Password"
@@ -21,16 +21,13 @@
           />
         </v-col>
         <v-col>
-          <v-btn v-if="socialAuth.length" color="secondary" style="min-width: 0">
-            &#9660;
-            <v-menu activator="parent">
-              <v-list>
-                <v-list-item v-for="(b, bidx) in socialAuth" :key="bidx" :href="b.url">
-                  {{ b.title }}
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-btn>
+          <div :style="`margin-top: .5em; width: ${socialAuth.length * 1.5 * 1.2}em`">
+            <a v-for="(b, bidx) in socialAuth" :key="bidx" :href="b.url" :aria-label="b.title" class="d-inline-block">
+              <social-logos :social-provider="b.name" :title="b.title" :size-em="1.5"/>
+            </a>
+          </div>
+        </v-col>
+        <v-col>
           <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
         </v-col>
       </v-row>
@@ -39,35 +36,35 @@
 </template>
 
 <script setup lang="ts">
-import { dfModal, gettext, DialogSize, FormPayload } from 'dynamicforms';
-import { markRaw, onMounted, reactive, Ref, ref } from 'vue';
-
-import { apiClient as ApiClient } from '../../apiClient';
+import { APIConsumerLogic, dfModal, DialogSize, FormPayload, gettext } from 'dynamicforms';
+import { markRaw, Ref, ref } from 'vue';
 
 import LoginDialog from './login-dialog.vue';
+import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
 
-const loginModel = reactive({
-  username: null as string | null,
-  password: null as string | null,
-});
+const userSession = useUserSessionStore();
+const loginConsumer = new APIConsumerLogic(userSession.apiEndpointLogin);
+const hasPayload = ref(false);
+
+let payload: FormPayload | null = null;
 const socialAuth = ref([]) as Ref<any[]>;
 const pwd = ref();
 
-async function checkLoginSuccess() {
-  const userSession = useUserSessionStore();
-  if ([true, 403].includes(await userSession.checkLogin(false))) {
-    if (!userSession.loggedIn) {
-      const socialAuthProvidersResponse = await ApiClient.get('/account/social-auth-providers/');
-      socialAuth.value = socialAuthProvidersResponse.data as any[];
-    }
-  }
+async function getFormDefinition() {
+  userSession.checkLogin(false);
+  const formDef = await loginConsumer.getFormDefinition();
+  payload = formDef.payload;
+  hasPayload.value = true;
+  console.log(formDef);
+  console.log(loginConsumer.ux_def);
+  socialAuth.value = formDef.payload.social_auth_providers;
 }
+getFormDefinition();
 
 async function doLogin() {
-  if (loginModel.username && loginModel.password) {
-    const userSession = useUserSessionStore();
-    userSession.login(loginModel.username, loginModel.password);
+  if (payload?.username && payload?.password) {
+    userSession.login(payload.username, payload.password);
   } else {
     const title = ref(gettext('Sign In'));
     const payload = new FormPayload();
@@ -81,8 +78,6 @@ async function doLogin() {
 }
 
 function focusPassword() { pwd.value.focus(); }
-
-onMounted(() => checkLoginSuccess());
 </script>
 
 <script lang="ts">

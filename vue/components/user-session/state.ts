@@ -23,6 +23,7 @@ const useUserSessionStore = defineStore('user-session', {
     },
   }),
   getters: {
+    apiEndpointLogin() { return '/account/login'; },
     loggedIn(state) { return state.userData.username !== ''; },
     userDisplayName(state) {
       const userData = state.userData;

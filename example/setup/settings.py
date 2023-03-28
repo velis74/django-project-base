@@ -173,7 +173,9 @@ SPECTACULAR_SETTINGS = {
     "VERSION": VERSION,
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
-        "defaultModelsExpandDepth": -1,
+        "defaultModelsExpandDepth": 10,
+        "defaultModelExpandDepth": 10,
+        "tryItOutEnabled": True,
     },
     "COMPONENT_SPLIT_REQUEST": True,
 }
