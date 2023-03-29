@@ -3,6 +3,7 @@ from typing import Iterable
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 from dynamicforms import fields, serializers, viewsets
+from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.template_render.layout import Layout, Row
 from rest_framework import status
@@ -14,9 +15,13 @@ from django_project_base.account.social_auth.providers import get_social_provide
 
 
 class LoginSerializer(serializers.Serializer):
-    form_titles = {
-        "edit": _("Login"),
-    }
+    form_titles = {"edit": _("Login")}
+    actions = Actions(
+        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Back to site")),
+        FormButtonAction(btn_type=FormButtonTypes.SUBMIT, name="submit", label=_("Login")),
+        add_form_buttons=False,
+    )
+
     template_context = dict(url_reverse="profile-base-login", url_reverse_kwargs=None)
     login = fields.CharField(required=True)
     password = fields.CharField(required=True)
