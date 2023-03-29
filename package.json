@@ -25,11 +25,12 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^2.8.0",
     "browser-update": "^3.3.37",
-    "dynamicforms": "file:node_libs/dynamicforms-0.7.30.tgz",
+    "dynamicforms": "file:node_libs/dynamicforms-0.7.38.tgz",
     "lodash": "^4.17.15",
     "pinia": "^2.0.33",
     "vanilla-cookieconsent": "^2.8.0",
     "vue": "^3.2.45",
+    "vue-ionicon": "^2.1.0",
     "vuetify": "^3.0.1"
   },
   "devDependencies": {

@@ -23,6 +23,7 @@ const useUserSessionStore = defineStore('user-session', {
     },
   }),
   getters: {
+    apiEndpointLogin() { return '/account/login'; },
     loggedIn(state) { return state.userData.username !== ''; },
     userDisplayName(state) {
       const userData = state.userData;
@@ -63,12 +64,18 @@ const useUserSessionStore = defineStore('user-session', {
     async login(username: string, password: string) {
       this.$reset();
       try {
-        await ApiClient.post('/account/login/', { login: username, password });
+        const result = await ApiClient.post(
+          '/account/login',
+          { login: username, password },
+          { hideErrorNotice: true } as AxiosRequestConfig,
+        );
         await this.checkLogin(true);
         // TODO I don't think root is the way to go. Should be something like Django: next={url_to_go_to}
         // window.location.href = '/';
+        return result;
       } catch (err: any) {
         console.error(err);
+        return err;
       }
     },
 

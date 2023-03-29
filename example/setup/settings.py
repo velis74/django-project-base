@@ -115,6 +115,12 @@ AUTH_PASSWORD_VALIDATORS = [
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "*Client ID*"
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "*Client secret*"
 
+SOCIAL_AUTH_GITHUB_KEY = "a1b2c3d4"
+SOCIAL_AUTH_GITHUB_SECRET = "e5f6g7h8i9"
+
+SOCIAL_AUTH_MICROSOFT_GRAPH_KEY = "..."
+SOCIAL_AUTH_MICROSOFT_GRAPH_SECRET = "..."
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -167,7 +173,9 @@ SPECTACULAR_SETTINGS = {
     "VERSION": VERSION,
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
-        "defaultModelsExpandDepth": -1,
+        "defaultModelsExpandDepth": 10,
+        "defaultModelExpandDepth": 10,
+        "tryItOutEnabled": True,
     },
     "COMPONENT_SPLIT_REQUEST": True,
 }
