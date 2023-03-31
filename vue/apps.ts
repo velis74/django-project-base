@@ -1,12 +1,12 @@
 import Notifications from '@kyvg/vue3-notification';
+import { createDynamicForms } from '@velis/dynamicforms';
 import type { Component } from '@vue/runtime-core';
-import { createDynamicForms } from 'dynamicforms';
 import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import { createVuetify } from 'vuetify';
 import { ThemeDefinition } from 'vuetify/dist/vuetify';
 import 'vuetify/styles/main.css';
-import 'dynamicforms/dynamicforms.css';
+import '@velis/dynamicforms/styles.css';
 
 import Breadcrumbs from './components/breadcrumbs.vue';
 import BrowserCheck from './components/browser-check.vue';

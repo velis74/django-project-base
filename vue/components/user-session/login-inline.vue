@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { APIConsumerLogic, DialogSize, FormPayload, gettext, interpolate, DisplayMode } from 'dynamicforms';
+import { APIConsumerLogic, DialogSize, FormPayload, gettext, interpolate, DisplayMode } from '@velis/dynamicforms';
 import _ from 'lodash';
 import { reactive, Ref, ref } from 'vue';
 

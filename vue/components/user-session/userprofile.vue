@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { APIConsumerLogic } from 'dynamicforms';
+import { APIConsumerLogic } from '@velis/dynamicforms';
 import { defineComponent } from 'vue';
 
 import { apiClient } from '../../apiClient';

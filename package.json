@@ -1,6 +1,6 @@
 {
   "name": "django_project_base",
-  "version": "0.1.2",
+  "version": "0.1.8",
   "private": true,
   "files": [
     "dist/*"
@@ -9,7 +9,7 @@
   "types": "./dist/apps.d.ts",
   "exports": {
     ".": "./dist/project-base.umd.js",
-    "./styles": "./dist/style.css"
+    "./styles.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",
@@ -17,21 +17,18 @@
     "lint": "eslint vue && vue-tsc --noEmit"
   },
   "peerDependencies": {
+    "@velis/dynamicforms": "^0.7.43",
     "axios": "^1.2.0",
+    "lodash": "^4.17.15",
     "pinia": "^2.0.33",
     "vue": "^3.2.45",
+    "vue-ionicon": "^2.1.0",
     "vuetify": "^3.0.1"
   },
   "dependencies": {
     "@kyvg/vue3-notification": "^2.8.0",
     "browser-update": "^3.3.37",
-    "dynamicforms": "file:node_libs/dynamicforms-0.7.38.tgz",
-    "lodash": "^4.17.15",
-    "pinia": "^2.0.33",
-    "vanilla-cookieconsent": "^2.8.0",
-    "vue": "^3.2.45",
-    "vue-ionicon": "^2.1.0",
-    "vuetify": "^3.0.1"
+    "vanilla-cookieconsent": "^2.8.0"
   },
   "devDependencies": {
     "@types/browser-update": "^3.3.0",

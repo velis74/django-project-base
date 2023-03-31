@@ -51,13 +51,13 @@ export default defineConfig({
     axiosRedirectConfig()
   ],
   resolve: {
-    alias: {
+    // alias: {
       // @ts-ignore
-      '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
+      // '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
       // @ts-ignore
-      '@': fileURLToPath(new URL('./vue', import.meta.url)),
-      'vue': 'vue/dist/vue.esm-bundler.js'
-    },
+      // '@': fileURLToPath(new URL('./vue', import.meta.url)),
+      // 'vue': 'vue/dist/vue.esm-bundler.js'
+    // },
     extensions: [
       '.js',
       '.ts',
@@ -81,16 +81,10 @@ export default defineConfig({
       name: 'project-base'
     },
     rollupOptions: {
-      external: ['axios', 'pinia', 'vue', 'vuetify', 'dynamicforms'],
+      external: ['@velis/dynamicforms', 'axios', 'lodash', 'pinia', 'vue', 'vue-ionicon', 'vuetify'],
       output: {
         exports: 'named',
-        globals: {
-          'axios': 'axios',
-          'pinia': 'pinia',
-          'vue': 'vue',
-          'vuetify': 'vuetify',
-          'dynamicforms': 'dynamicforms'
-        },
+        globals: (id: string) => id, // all external modules are currently not aliased to anything but their own names
       }
     }
   }
