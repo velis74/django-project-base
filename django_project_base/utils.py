@@ -1,3 +1,6 @@
+from enum import IntEnum
+
+
 def set_django_security(django_settings, deploy=True, swagger_version=None):
     """
     Sets django web security settings.
@@ -10,66 +13,85 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
     :return:
     """
 
-    for app in ['django_permissions_policy', 'csp']:
-        if app not in django_settings['INSTALLED_APPS']:
-            django_settings['INSTALLED_APPS'].append(app)
+    for app in ["django_permissions_policy", "csp"]:
+        if app not in django_settings["INSTALLED_APPS"]:
+            django_settings["INSTALLED_APPS"].append(app)
 
-    for middleware in ['django_permissions_policy.PermissionsPolicyMiddleware', 'csp.middleware.CSPMiddleware']:
-        if middleware not in django_settings['MIDDLEWARE']:
-            django_settings['MIDDLEWARE'].append(middleware)
+    for middleware in ["django_permissions_policy.PermissionsPolicyMiddleware", "csp.middleware.CSPMiddleware"]:
+        if middleware not in django_settings["MIDDLEWARE"]:
+            django_settings["MIDDLEWARE"].append(middleware)
 
-    django_settings['SECURE_BROWSER_XSS_FILTER'] = True
-    django_settings['SECURE_CONTENT_TYPE_NOSNIFF'] = True
+    django_settings["SECURE_BROWSER_XSS_FILTER"] = True
+    django_settings["SECURE_CONTENT_TYPE_NOSNIFF"] = True
 
     if deploy:
-        django_settings['SECURE_SSL_REDIRECT'] = True
-        django_settings['SECURE_PROXY_SSL_HEADER'] = ('HTTP_X_FORWARDED_PROTO', 'https')
+        django_settings["SECURE_SSL_REDIRECT"] = True
+        django_settings["SECURE_PROXY_SSL_HEADER"] = ("HTTP_X_FORWARDED_PROTO", "https")
 
-        django_settings['CSRF_COOKIE_SECURE'] = True
-        django_settings['CSRF_COOKIE_NAME'] = '__Host-csrftoken'
-        django_settings['SESSION_COOKIE_SECURE'] = True
-        django_settings['SESSION_COOKIE_NAME'] = '__Host-sessionid'
+        django_settings["CSRF_COOKIE_SECURE"] = True
+        django_settings["CSRF_COOKIE_NAME"] = "__Host-csrftoken"
+        django_settings["SESSION_COOKIE_SECURE"] = True
+        django_settings["SESSION_COOKIE_NAME"] = "__Host-sessionid"
 
-        django_settings['SECURE_HSTS_SECONDS'] = 15768000  # 6 Months
-        django_settings['SECURE_HSTS_INCLUDE_SUBDOMAINS'] = True
-        django_settings['SECURE_HSTS_PRELOAD'] = True
+        django_settings["SECURE_HSTS_SECONDS"] = 15768000  # 6 Months
+        django_settings["SECURE_HSTS_INCLUDE_SUBDOMAINS"] = True
+        django_settings["SECURE_HSTS_PRELOAD"] = True
 
-    django_settings['CSRF_COOKIE_HTTPONLY'] = True
-    django_settings['SESSION_COOKIE_HTTPONLY'] = True
+    django_settings["CSRF_COOKIE_HTTPONLY"] = True
+    django_settings["SESSION_COOKIE_HTTPONLY"] = True
 
-    django_settings['CSRF_COOKIE_SAMESITE'] = 'Strict'
-    django_settings['SESSION_COOKIE_SAMESITE'] = 'Strict'
+    django_settings["CSRF_COOKIE_SAMESITE"] = "Strict"
+    django_settings["SESSION_COOKIE_SAMESITE"] = "Strict"
 
     # CSP can be changed per request... with decorator:
     #  https://django-csp.readthedocs.io/en/latest/decorators.html#decorator-chapter
     # Content Security Policy
-    django_settings['CSP_DEFAULT_SRC'] = ["'none'", ]
+    django_settings["CSP_DEFAULT_SRC"] = [
+        "'none'",
+    ]
     # stackpath.bootstrapcdn.com - because of (old) login
-    django_settings['CSP_STYLE_SRC'] = [
-        "'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'stackpath.bootstrapcdn.com'
+    django_settings["CSP_STYLE_SRC"] = [
+        "'self'",
+        "'unsafe-inline'",
+        "cdnjs.cloudflare.com",
+        "stackpath.bootstrapcdn.com",
     ]
     # unsafe-eval - because of Vue.js
     # code.jquery.com, stackpath.bootstrapcdn.com, connect.facebook.net - because of (old) login
-    django_settings['CSP_SCRIPT_SRC'] = [
-        "'self'", "'unsafe-inline'", "'unsafe-eval'", 'code.jquery.com', 'stackpath.bootstrapcdn.com',
-        'connect.facebook.net'
+    django_settings["CSP_SCRIPT_SRC"] = [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "code.jquery.com",
+        "stackpath.bootstrapcdn.com",
+        "connect.facebook.net",
     ]
     # via.placeholder.com - because of default user logo
-    django_settings['CSP_IMG_SRC'] = ["'self'", 'via.placeholder.com']
+    django_settings["CSP_IMG_SRC"] = ["'self'", "via.placeholder.com"]
 
     if swagger_version:
-        django_settings['CSP_STYLE_SRC'].append('unpkg.com/swagger-ui-dist@%s/' % swagger_version)
-        django_settings['CSP_SCRIPT_SRC'].append('unpkg.com/swagger-ui-dist@%s/' % swagger_version)
-        django_settings['CSP_IMG_SRC'].append('unpkg.com/swagger-ui-dist@%s/' % swagger_version)
+        django_settings["CSP_STYLE_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_SCRIPT_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_IMG_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
 
-    django_settings['CSP_FONT_SRC'] = ["'self'", 'cdnjs.cloudflare.com']
-    django_settings['CSP_CONNECT_SRC'] = ["'self'", ]
-    django_settings['CSP_OBJECT_SRC'] = ["'none'", ]
-    django_settings['CSP_BASE_URI'] = ["'self'", ]
-    django_settings['CSP_FRAME_ANCESTORS'] = ["'none'", ]
-    django_settings['CSP_FORM_ACTION'] = ["'self'", ]
+    django_settings["CSP_FONT_SRC"] = ["'self'", "cdnjs.cloudflare.com"]
+    django_settings["CSP_CONNECT_SRC"] = [
+        "'self'",
+    ]
+    django_settings["CSP_OBJECT_SRC"] = [
+        "'none'",
+    ]
+    django_settings["CSP_BASE_URI"] = [
+        "'self'",
+    ]
+    django_settings["CSP_FRAME_ANCESTORS"] = [
+        "'none'",
+    ]
+    django_settings["CSP_FORM_ACTION"] = [
+        "'self'",
+    ]
 
-    django_settings['PERMISSIONS_POLICY'] = {
+    django_settings["PERMISSIONS_POLICY"] = {
         "accelerometer": [],
         "ambient-light-sensor": [],
         "autoplay": [],
@@ -96,3 +118,26 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
         "web-share": [],
         "xr-spatial-tracking": [],
     }
+
+
+class IntDescribedEnum(IntEnum):
+    def __new__(cls, *args, **kwds):
+        obj = int.__new__(cls, args[0])
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by new
+    def __init__(self, _: str, description: str = None, data: dict = None):
+        self._description_ = description
+        self._data_ = data
+
+    description = property(lambda self: self._description_)
+    data = property(lambda self: self._data_)
+
+    @classmethod
+    def get_choices_tuple(cls):
+        return tuple((item, item.description) for item in cls)
+
+    @classmethod
+    def has_value(cls, value):
+        return value in cls.__members__.values()

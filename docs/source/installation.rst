@@ -23,7 +23,7 @@ extend them as you wish to fit your needs too.
 .. code-block:: python
 
    # myapp/models.py
-   from django_project_base import BaseProject
+   from django_project_base.base.models import BaseProject, BaseProfile
 
    class MyProject(BaseProject):
        # add any fields & methods you like here
@@ -51,6 +51,15 @@ Then also make sure your swappable models are loaded instead of django-project-b
     # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     }
+
+   And:
+    REST_REGISTRATION = {
+        "REGISTER_VERIFICATION_ENABLED": False,
+        "REGISTER_EMAIL_VERIFICATION_ENABLED": False,
+        "RESET_PASSWORD_VERIFICATION_ENABLED": False,
+        "LOGIN_DEFAULT_SESSION_AUTHENTICATION_BACKEND": "django_project_base.base.auth_backends.UsersCachingBackend",
+    }
+
 
 
 
