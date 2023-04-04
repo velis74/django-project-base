@@ -4,8 +4,7 @@ export const PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'id';
 
 export interface UserDataJSON {
   id: number | string,
-  first_name: string,
-  last_name: string,
+  full_name: string,
   email: string,
   username: string,
   avatar: string;
@@ -14,8 +13,7 @@ export interface UserDataJSON {
 
 export interface UserData {
   id: number | string,
-  firstName: string,
-  lastName: string,
+  fullName: string,
   email: string,
   username: string,
   avatar: string;
