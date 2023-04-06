@@ -135,15 +135,18 @@ class ProfileSerializer(ModelSerializer):
             "delete_at": dict(read_only=True, display=DisplayMode.HIDDEN),
             "last_login": dict(read_only=True, display=DisplayMode.HIDDEN),
             "date_joined": dict(read_only=True, display=DisplayMode.HIDDEN),
-            "phone_number": dict(read_only=True, display=DisplayMode.HIDDEN),
-            "language": dict(read_only=True, display=DisplayMode.HIDDEN),
-            "avatar": dict(read_only=True, display=DisplayMode.HIDDEN),
             "is_active": dict(read_only=True, display=DisplayMode.HIDDEN),
-            "reverse_full_name_order": dict(read_only=True, display=DisplayMode.HIDDEN),
         }
         layout = Layout(
             Row("username"),
             Row("password"),
+            Row("first_name"),
+            Row("last_name"),
+            Row("email"),
+            Row("phone_number"),
+            Row("language"),
+            Row("avatar"),
+            Row("reverse_full_name_order"),
         )
 
 
