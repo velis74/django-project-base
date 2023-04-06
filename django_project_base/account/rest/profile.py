@@ -9,7 +9,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
+from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
+from dynamicforms.template_render.layout import Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action, permission_classes as permission_classes_decorator
@@ -65,28 +67,32 @@ class ProfileSerializer(ModelSerializer):
 
     delete_at = fields.DateTimeField(write_only=True)
     permissions = ProfilePermissionsField(
-        source="user_permissions",
-        child_relation=fields.PrimaryKeyRelatedField(
-            help_text=_("Specific permissions for this user"), queryset=Permission.objects.all(), required=False
-        ),
-        help_text=_("Specific permissions for this user"),
-        required=False,
-        allow_null=False,
+            source="user_permissions",
+            child_relation=fields.PrimaryKeyRelatedField(
+                    help_text=_("Specific permissions for this user"), queryset=Permission.objects.all(), required=False
+            ),
+            help_text=_("Specific permissions for this user"),
+            required=False,
+            allow_null=False,
+            read_only=True,
+            display=DisplayMode.HIDDEN,
     )
 
     groups = ProfileGroupsField(
-        child_relation=fields.PrimaryKeyRelatedField(
-            help_text=_(
-                "The groups this user belongs to. A user will get all permissions granted to each of their groups."
+            child_relation=fields.PrimaryKeyRelatedField(
+                    help_text=_(
+                            "The groups this user belongs to. A user will get all permissions granted to each of their groups."
+                    ),
+                    queryset=Group.objects.all(),
+                    required=False,
             ),
-            queryset=Group.objects.all(),
+            help_text=_(
+                    "The groups this user belongs to. A user will get all permissions granted to each of their groups."
+            ),
             required=False,
-        ),
-        help_text=_(
-            "The groups this user belongs to. A user will get all permissions granted to each of their groups."
-        ),
-        required=False,
-        allow_null=False,
+            allow_null=False,
+            read_only=True,
+            display=DisplayMode.HIDDEN,
     )
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
@@ -119,6 +125,26 @@ class ProfileSerializer(ModelSerializer):
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
         exclude = ("user_permissions",)
+        changed_flds = {
+                'id': dict(display=DisplayMode.HIDDEN),
+                'full_name': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'is_impersonated': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'bio': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'theme': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'password': dict(password_field=True),
+                'delete_at': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'last_login': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'date_joined': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'phone_number': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'language': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'avatar': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'is_active': dict(read_only=True, display=DisplayMode.HIDDEN),
+                'reverse_full_name_order': dict(read_only=True, display=DisplayMode.HIDDEN),
+        }
+        layout = Layout(
+                Row('username'),
+                Row('password'),
+        )
 
 
 @extend_schema_view(
