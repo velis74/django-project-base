@@ -9,8 +9,7 @@ const useUserSessionStore = defineStore('user-session', {
   state: (): UserSessionData => ({
     userData: {
       id: 0,
-      firstName: '',
-      lastName: '',
+      fullName: '',
       email: '',
       username: '',
       avatar: '',
@@ -27,7 +26,7 @@ const useUserSessionStore = defineStore('user-session', {
     loggedIn(state) { return state.userData.username !== ''; },
     userDisplayName(state) {
       const userData = state.userData;
-      if (userData.firstName && userData.lastName) return `${userData.firstName} ${userData.lastName}`;
+      if (userData.fullName) return userData.fullName;
       if (userData.email) return userData.email;
       if (userData.username) return userData.username;
       return null;
@@ -41,8 +40,7 @@ const useUserSessionStore = defineStore('user-session', {
       const input = data || {} as UserDataJSON;
       this.$patch({
         userData: {
-          firstName: input.first_name || '',
-          lastName: input.last_name || '',
+          fullName: input.full_name || '',
           email: input.email || '',
           username: input.username || '',
         },

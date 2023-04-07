@@ -62,7 +62,7 @@ class ProfileSerializer(ModelSerializer):
         "edit": "Edit user",
     }
 
-    full_name = fields.SerializerMethodField("get_full_name", read_only=True)
+    full_name = fields.CharField(read_only=True)
     is_impersonated = fields.SerializerMethodField()
 
     delete_at = fields.DateTimeField(write_only=True)
@@ -100,18 +100,6 @@ class ProfileSerializer(ModelSerializer):
         if not self._context.get("request").user.is_superuser:
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
-
-    def get_full_name(self, obj):
-        if obj.reverse_full_name_order is None:
-            reversed_order = getattr(settings, "PROFILE_REVERSE_FULL_NAME_ORDER", False)
-        else:
-            reversed_order = obj.reverse_full_name_order
-
-        if reversed_order:
-            full_name = obj.last_name + " " + obj.first_name
-        else:
-            full_name = obj.first_name + " " + obj.last_name
-        return full_name if full_name != " " else ""
 
     def get_is_impersonated(self, obj):
         try:
