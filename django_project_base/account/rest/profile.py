@@ -11,7 +11,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from dynamicforms import fields
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
-from dynamicforms.template_render.layout import Layout, Row
+from dynamicforms.template_render.layout import Group as LayoutGroup, Column, Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action, permission_classes as permission_classes_decorator
@@ -138,15 +138,15 @@ class ProfileSerializer(ModelSerializer):
             "is_active": dict(read_only=True, display=DisplayMode.HIDDEN),
         }
         layout = Layout(
-            Row("username"),
-            Row("password"),
-            Row("first_name"),
-            Row("last_name"),
+            Row(Column("username"), Column("password")),
+            Row(Column("first_name"), Column("last_name")),
+            Row("reverse_full_name_order"),
             Row("email"),
             Row("phone_number"),
             Row("language"),
             Row("avatar"),
-            Row("reverse_full_name_order"),
+            columns=2,
+            size="large",
         )
 
 
