@@ -1,15 +1,9 @@
 <template>
-  <v-toolbar :theme="darkOrLightMode">
-    <v-toolbar-title v-if="titleBarProps.name || titleBarProps.logo" class="navbar-brand" style="cursor: default;">
-      <img
-        v-if="titleBarProps.logo"
-        alt=""
-        :src="titleBarProps.logo"
-        class="float-left rounded-circle logo-image"
-        onclick="window.location.href='/'"
-      />
-      {{ titleBarProps.name || '' }}
-    </v-toolbar-title>
+  <v-app-bar :theme="darkOrLightMode">
+    <template v-if="userSession.selectedProject.logo" #prepend>
+      <v-img :src="userSession.selectedProject.logo" @click="clickLogo"/>
+    </template>
+    <v-app-bar-title>{{ computeTitle() }}</v-app-bar-title>
     <template v-if="breadcrumbsComponent && userSession.loggedIn" #extension>
       <component :is="breadcrumbsComponent"/>
     </template>
@@ -18,7 +12,7 @@
     <component :is="userprofileComponent" v-if="userprofileComponent && userSession.loggedIn"/>
     <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>
     <app-notification/>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script lang="ts">
@@ -49,6 +43,9 @@ export default defineComponent({
   },
   props: {
     darkMode: { type: Boolean, default: false }, // dark mode on when true
+    title: { type: String, default: null }, // set to override automatic title composition
+    pageTitle: { type: String, default: null }, // set to add page title to currently selected project name
+    adjustDocumentTitle: { type: Boolean, default: true }, // when true, will adjust document title based on page title
     projectlistComponent: { type: String, default: 'ProjectList' }, // specify your own globally registered component
     userprofileComponent: { type: String, default: 'UserProfile' }, // specify your own globally registered component
     breadcrumbsComponent: { type: String, default: 'Breadcrumbs' }, // specify your own globally registered component
@@ -56,7 +53,6 @@ export default defineComponent({
   },
   data() {
     return {
-      titleBarProps: {} as any,
       maintenanceNoticesPeriodicApiCall: null as any,
       maintenanceNotificationItem: null as any,
       userSession: useUserSessionStore(),
@@ -74,20 +70,25 @@ export default defineComponent({
   async mounted() {
     const userSession = useUserSessionStore();
     if (await userSession.checkLogin(false) === true) {
-      if (document.title) {
-        // TODO: soon to be removed. This handles situation where titlebar is the only vue component on a legacy page
-        this.titleBarProps.name = document.title;
-      }
-      this.loadData();
       this.monitorMaintenanceNotifications();
     }
   },
   methods: {
-    async loadData() {
-      if (Store.get('current-project')) {
-        const projectResponse = await ApiClient.get(`/project/${Store.get('current-project')}`);
-        this.titleBarProps = projectResponse.data;
+    clickLogo() {
+      window.location.href = '/';
+    },
+    computeTitle() {
+      if (this.title) {
+        if (this.adjustDocumentTitle) document.title = this.title;
+        return this.title;
       }
+
+      if (this.adjustDocumentTitle) {
+        document.title = this.pageTitle ?
+          `${this.pageTitle} - ${this.userSession.selectedProject.name}` :
+          this.userSession.selectedProject.name;
+      }
+      return this.pageTitle || 'Project Base Demo';
     },
     monitorMaintenanceNotifications() {
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
