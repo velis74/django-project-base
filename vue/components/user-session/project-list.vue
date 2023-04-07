@@ -9,10 +9,14 @@ import ProjectBaseData from '../../projectBaseData';
 import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 import useUserSessionStore from './state';
 
+interface Permissions {
+  [key: string]: unknown;
+}
+
 const userSession = useUserSessionStore();
 
 const projectList = ref([]) as Ref<Project[]>;
-const permissions = ref({});
+const permissions = ref({} as Permissions);
 const dataStore = new ProjectBaseData();
 
 function projectSelected(slug: string) {
@@ -31,7 +35,7 @@ async function getProjects(): Promise<Project[]> {
   }
 }
 
-function setPermissions(newPermissions: {}) {
+function setPermissions(newPermissions: Permissions) {
   permissions.value = newPermissions;
 }
 

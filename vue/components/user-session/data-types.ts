@@ -1,6 +1,6 @@
 // todo: find a nicer solution, maybe some model functionality to keep data models metadata
-export const PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'slug';
-export const PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'id';
+export const PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'slug' as const;
+export const PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'id' as const;
 
 export interface UserDataJSON {
   [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: number | string,

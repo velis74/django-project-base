@@ -92,7 +92,7 @@ const loginConsumer = new ConsumerLogicApi(userSession.apiEndpointLogin);
 const payload: Ref<FormPayload | null> = ref(null);
 const socialAuth = ref([]) as Ref<any[]>;
 const pwd = ref();
-const formDef = reactive({} as APIConsumer.FormDefinition);
+const formDef = reactive({} as any); // as APIConsumer.FormDefinition
 const errors = reactive({} as { [key: string]: any[] });
 const showLoginDialog = ref(false);
 // TODO: needs to be moved to /rest/about or to some configuration. definitely needs to be app-specific

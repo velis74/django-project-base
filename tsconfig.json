@@ -1,17 +1,9 @@
 {
   "extends": "./node_modules/eslint-config-velis/tsconfig.json",
   "include": ["vue/**/*"],
-  "exclude": [
-    "dist",
-    "coverage",
-    "node_modules",
-    "node_libs",
-    "django_project_base",
-    "docs",
-    "example"
-  ],
   "compilerOptions": {
     "declaration": true,
     "outDir": "dist",
+    "skipLibCheck": true
   }
 }

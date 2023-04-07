@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import IonIcon from 'vue-ionicon';
 
-interface Props {
+export interface Props {
   socialProvider: 'facebook' | 'google-oauth2' | 'twitter' | 'microsoft-graph' | 'github' | 'gitlab';
   sizeEm?: number,
 }
