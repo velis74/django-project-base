@@ -5,7 +5,7 @@
         <v-row>
           <v-col>
             <v-text-field
-              v-model="payload.username"
+              v-model="payload.login"
               density="compact"
               placeholder="Username"
               @keyup.enter="focusPassword"
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { APIConsumerLogic, DialogSize, FormPayload, gettext, interpolate, DisplayMode } from '@velis/dynamicforms';
+import { ConsumerLogicApi, DialogSize, FormPayload, gettext, interpolate, DisplayMode } from '@velis/dynamicforms';
 import _ from 'lodash';
 import { reactive, Ref, ref } from 'vue';
 
@@ -87,7 +87,7 @@ import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
 
 const userSession = useUserSessionStore();
-const loginConsumer = new APIConsumerLogic(userSession.apiEndpointLogin);
+const loginConsumer = new ConsumerLogicApi(userSession.apiEndpointLogin);
 
 const payload: Ref<FormPayload | null> = ref(null);
 const socialAuth = ref([]) as Ref<any[]>;

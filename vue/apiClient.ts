@@ -1,4 +1,5 @@
-import axios, { CreateAxiosDefaults } from 'axios';
+import { apiClient } from '@velis/dynamicforms';
+import { InternalAxiosRequestConfig } from 'axios';
 import _ from 'lodash';
 
 import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './apiConfig';
@@ -11,23 +12,22 @@ declare module 'axios' {
   }
 }
 
-const apiClient = axios.create({
-  xsrfCookieName: window.csrf_token_name || 'csrftoken',
-  xsrfHeaderName: 'X-CSRFToken',
-  withCredentials: true,
-} as CreateAxiosDefaults);
+let currentProject = '';
 
-// TODO: Uporabi dynamic forms API client.
+export function setCurrentProject(slug: string) { currentProject = slug; }
 
 // Add a request interceptor
 // eslint-disable-next-line func-names
 apiClient.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig<any>) => {
     if (_.includes(Store.get('ignored-apis') || [], config.url)) {
       new AbortController().abort('app-canceled-err');
     }
+    config.withCredentials = true;
     config.headers['Content-Type'] = 'application/json';
-    config.headers['Current-Project'] = Store.get('current-project');
+    if (currentProject && currentProject.length) {
+      config.headers['Current-Project'] = currentProject;
+    }
     if (!config.headers['X-CSRFToken'] && window.csrf_token) {
       config.headers['X-CSRFToken'] = window.csrf_token;
     }

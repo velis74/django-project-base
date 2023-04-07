@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { APIConsumerLogic } from '@velis/dynamicforms';
+import { ConsumerLogicApi } from '@velis/dynamicforms';
 import { defineComponent } from 'vue';
 
 import { apiClient } from '../../apiClient';
@@ -56,7 +56,7 @@ export default defineComponent({
       await this.userSession.checkLogin(false);
     },
     async showImpersonateLogin() {
-      await new APIConsumerLogic('/account/impersonate').dialogForm(null);
+      await new ConsumerLogicApi('/account/impersonate').dialogForm(null);
       await this.userSession.checkLogin(false);
     },
     async stopImpersonation() {
@@ -64,10 +64,10 @@ export default defineComponent({
       await this.userSession.checkLogin(false);
     },
     async userProfile() {
-      await new APIConsumerLogic('/account/profile').dialogForm(this.userSession.userData.id);
+      await new ConsumerLogicApi('/account/profile').dialogForm(this.userSession.userData.id);
     },
     async changePassword() {
-      new APIConsumerLogic('/account/change-password/').dialogForm('new');
+      new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
   },
 });

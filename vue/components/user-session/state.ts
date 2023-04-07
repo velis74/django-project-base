@@ -1,14 +1,20 @@
 import { AxiosRequestConfig } from 'axios';
 import { defineStore } from 'pinia';
 
-import { apiClient as ApiClient } from '../../apiClient';
+import { apiClient, setCurrentProject } from '../../apiClient';
 
-import { UserDataJSON, UserSessionData, Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
+import {
+  UserDataJSON,
+  UserSessionData,
+  Project,
+  PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME,
+  PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME,
+} from './data-types';
 
 const useUserSessionStore = defineStore('user-session', {
   state: (): UserSessionData => ({
     userData: {
-      id: 0,
+      [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: 0,
       fullName: '',
       email: '',
       username: '',
@@ -16,7 +22,7 @@ const useUserSessionStore = defineStore('user-session', {
     },
     impersonated: false,
     selectedProject: {
-      [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: 0,
+      [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: '',
       logo: '',
       name: '',
     },
@@ -52,17 +58,18 @@ const useUserSessionStore = defineStore('user-session', {
       const input = data || {} as Project;
       this.$patch({
         selectedProject: {
-          [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: input[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] || 0,
+          [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: input[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] || '',
           logo: input.logo || '',
           name: input.name || '',
         },
       });
+      setCurrentProject(input[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] || '');
     },
 
     async login(username: string, password: string) {
       this.$reset();
       try {
-        const result = await ApiClient.post(
+        const result = await apiClient.post(
           '/account/login',
           { login: username, password },
           { hideErrorNotice: true } as AxiosRequestConfig,
@@ -79,7 +86,7 @@ const useUserSessionStore = defineStore('user-session', {
 
     async logout() {
       try {
-        await ApiClient.post('/account/logout/');
+        await apiClient.post('/account/logout/');
       } catch (error: unknown) {
         console.error(error);
       }
@@ -89,7 +96,7 @@ const useUserSessionStore = defineStore('user-session', {
 
     async checkLogin(showNotAuthorizedNotice = true) {
       try {
-        const response = await ApiClient.get(
+        const response = await apiClient.get(
           '/account/profile/current',
           { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
         );

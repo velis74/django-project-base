@@ -19,7 +19,10 @@ import UserProfile from './components/user-session/userprofile.vue';
 import DefaultCookieOptions from './defaultCookieOptions';
 import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 
-const componentsConfig = {
+export { default as useUserSessionStore } from './components/user-session/state';
+export { apiClient } from './apiClient';
+
+export const componentsConfig = {
   TitleBar,
   Breadcrumbs,
   Login,
@@ -50,7 +53,13 @@ const defaultTheme: ThemeDefinition = {
   },
 };
 
-const createCoreApp = (elementId: string, template: any, data: AppData = {}) => {
+const createCoreApp = (
+  elementId: string,
+  template: any,
+  data: AppData = {},
+  pluginsToRegister: Object = {},
+  componentsToRegister: Object = {},
+) => {
   const app = createApp({
     data: () => data,
     template,
@@ -58,6 +67,7 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
 
   // use plugins you intend to use
   app.use(createPinia());
+  Object.values(pluginsToRegister).map((plugin) => app.use(plugin));
 
   const vuetify = createVuetify({ defaults: {}, theme: { defaultTheme: 'defaultTheme', themes: { defaultTheme } } });
   app.use(vuetify);
@@ -72,13 +82,16 @@ const createCoreApp = (elementId: string, template: any, data: AppData = {}) => 
 
   // add components
   Object.values(componentsConfig).map((component: Component) => app.component(component.name as string, component));
+  Object.values(componentsToRegister).map((component: Component) => app.component(component.name as string, component));
 
   app.mount(`#${elementId}`);
 
   return app;
 };
 
-export function createTitleBar(elementId: string) { return createCoreApp(elementId, '<titlebar-app-standalone/>'); }
+export function createTitleBar(elementId: string) {
+  return createCoreApp(elementId, '<titlebar-app-standalone/>');
+}
 
 export function createCookieNotice(elementId: string, cookieOptions: Object = DefaultCookieOptions) {
   return createCoreApp(elementId, '<CookieNotice/>', cookieOptions);

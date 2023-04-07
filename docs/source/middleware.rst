@@ -54,9 +54,9 @@ If middleware cannot detect the configured value from headers or path, the varia
    # myproject/settings.py
 
    MIDDLEWARE = [
-    'django_project_base.base.UrlsVarsMiddleware',
-    ...
-    ]
+     'django_project_base.base.middleware.UrlsVarsMiddleware',
+     ...
+   ]
 
 
 Performance profiler

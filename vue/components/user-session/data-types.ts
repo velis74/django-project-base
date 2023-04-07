@@ -3,7 +3,7 @@ export const PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'slug';
 export const PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'id';
 
 export interface UserDataJSON {
-  id: number | string,
+  [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: number | string,
   full_name: string,
   email: string,
   username: string,
@@ -12,7 +12,7 @@ export interface UserDataJSON {
 }
 
 export interface UserData {
-  id: number | string,
+  [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: number | string,
   fullName: string,
   email: string,
   username: string,
