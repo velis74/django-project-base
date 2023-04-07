@@ -9,7 +9,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
+from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
+from dynamicforms.template_render.layout import Group as LayoutGroup, Column, Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action, permission_classes as permission_classes_decorator
@@ -72,6 +74,8 @@ class ProfileSerializer(ModelSerializer):
         help_text=_("Specific permissions for this user"),
         required=False,
         allow_null=False,
+        read_only=True,
+        display=DisplayMode.HIDDEN,
     )
 
     groups = ProfileGroupsField(
@@ -87,6 +91,8 @@ class ProfileSerializer(ModelSerializer):
         ),
         required=False,
         allow_null=False,
+        read_only=True,
+        display=DisplayMode.HIDDEN,
     )
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
@@ -107,6 +113,29 @@ class ProfileSerializer(ModelSerializer):
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
         exclude = ("user_permissions",)
+        changed_flds = {
+            "id": dict(display=DisplayMode.HIDDEN),
+            "full_name": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "is_impersonated": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "bio": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "theme": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "password": dict(password_field=True),
+            "delete_at": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "last_login": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "date_joined": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "is_active": dict(read_only=True, display=DisplayMode.HIDDEN),
+        }
+        layout = Layout(
+            Row(Column("username"), Column("password")),
+            Row(Column("first_name"), Column("last_name")),
+            Row("reverse_full_name_order"),
+            Row("email"),
+            Row("phone_number"),
+            Row("language"),
+            Row("avatar"),
+            columns=2,
+            size="large",
+        )
 
 
 @extend_schema_view(
