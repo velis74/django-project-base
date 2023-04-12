@@ -124,6 +124,8 @@ class ProfileSerializer(ModelSerializer):
             "last_login": dict(read_only=True, display=DisplayMode.HIDDEN),
             "date_joined": dict(read_only=True, display=DisplayMode.HIDDEN),
             "is_active": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "is_superuser": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "is_staff": dict(read_only=True, display=DisplayMode.HIDDEN),
         }
         layout = Layout(
             Row(Column("username"), Column("password")),
