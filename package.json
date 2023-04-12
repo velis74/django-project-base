@@ -1,6 +1,6 @@
 {
   "name": "django_project_base",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "private": true,
   "files": [
     "dist/*"

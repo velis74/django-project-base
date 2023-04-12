@@ -3,7 +3,7 @@
     <template v-if="userSession.selectedProject.logo" #prepend>
       <v-img :src="userSession.selectedProject.logo" @click="clickLogo"/>
     </template>
-    <v-toolbar-title>{{ computeTitle() }}</v-toolbar-title>
+    <v-toolbar-title @click="(event) => $emit('title-click', event)">{{ computeTitle() }}</v-toolbar-title>
     <template v-if="breadcrumbsComponent && userSession.loggedIn" #extension>
       <component :is="breadcrumbsComponent"/>
     </template>
@@ -51,6 +51,7 @@ export default defineComponent({
     breadcrumbsComponent: { type: String, default: 'Breadcrumbs' }, // specify your own globally registered component
     loginVisible: { type: Boolean, default: true }, // if user is not logged in, should we show the login inputs
   },
+  emits: ['title-click'],
   data() {
     return {
       maintenanceNoticesPeriodicApiCall: null as any,
