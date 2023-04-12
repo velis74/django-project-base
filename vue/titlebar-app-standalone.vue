@@ -1,12 +1,12 @@
 <template>
-  <v-app>
-    <v-main>
-      <BrowserCheck :hide-page-if-un-supported-browser="false">
-        <TitleBar :breadcrumbs-component="null"/>
+  <BrowserCheck :hide-page-if-un-supported-browser="false">
+    <v-app>
+      <v-app-bar><TitleBar :breadcrumbs-component="null"/></v-app-bar>
+      <v-main>
         <ModalView/>
-      </BrowserCheck>
-    </v-main>
-  </v-app>
+      </v-main>
+    </v-app>
+  </BrowserCheck>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';

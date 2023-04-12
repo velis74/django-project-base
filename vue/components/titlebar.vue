@@ -1,9 +1,9 @@
 <template>
-  <v-app-bar :theme="darkOrLightMode">
+  <v-toolbar :theme="darkOrLightMode">
     <template v-if="userSession.selectedProject.logo" #prepend>
       <v-img :src="userSession.selectedProject.logo" @click="clickLogo"/>
     </template>
-    <v-app-bar-title>{{ computeTitle() }}</v-app-bar-title>
+    <v-toolbar-title>{{ computeTitle() }}</v-toolbar-title>
     <template v-if="breadcrumbsComponent && userSession.loggedIn" #extension>
       <component :is="breadcrumbsComponent"/>
     </template>
@@ -12,7 +12,7 @@
     <component :is="userprofileComponent" v-if="userprofileComponent && userSession.loggedIn"/>
     <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>
     <app-notification/>
-  </v-app-bar>
+  </v-toolbar>
 </template>
 
 <script lang="ts">
