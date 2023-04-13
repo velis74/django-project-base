@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Django project base",
-  description: "This project removes the boilerplate associated with project, user handling.",
+  description: "This project removes the boilerplate associated with project and user handling.",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

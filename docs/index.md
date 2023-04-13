@@ -4,12 +4,12 @@ layout: home
 
 hero:
   name: "Django project base"
-  text: "This project removes the boilerplate associated with project, user handling."
-  tagline: My great project tagline
+  text: ""
+  tagline: This project removes the boilerplate associated with project and user handling.
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Quick start guide
+      link: /quick-start-guide
     - theme: alt
       text: API Examples
       link: /api-examples
