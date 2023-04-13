@@ -50,3 +50,6 @@ Thumbs.db
 /django_project_base.egg-info/
 package-lock.json
 example/db.sqlite3
+
+# Local configuration
+.env.local
