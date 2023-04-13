@@ -1,4 +1,4 @@
-import {ConfigEnv, defineConfig, loadEnv} from 'vite';
+import { ConfigEnv, defineConfig, loadEnv } from 'vite';
 
 import { fileURLToPath, URL } from 'node:url';
 import { resolve } from 'path';
