@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite';
+import {ConfigEnv, defineConfig, loadEnv} from 'vite';
 
 import { fileURLToPath, URL } from 'node:url';
 import { resolve } from 'path';
@@ -26,7 +26,7 @@ const axiosRedirectConfig = () => ({
     server.middlewares.use(
       '/',
       createProxyMiddleware(filter, {
-        target: process.env.VITE_PROXY_TARGET,
+        target: process.env.VITE_AXIOS_TARGET,
         changeOrigin: false,
         pathRewrite: (path) => {
           return path;
@@ -36,7 +36,7 @@ const axiosRedirectConfig = () => ({
   },
 });
 
-export default ({ mode }) => {
+export default ({ mode }: ConfigEnv) => {
     process.env = {...process.env, ...loadEnv(mode, process.cwd())};
     return defineConfig({
         plugins: [
