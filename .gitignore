@@ -51,6 +51,8 @@ Thumbs.db
 package-lock.json
 example/db.sqlite3
 
+# Local configuration
+.env.local
 
 # Make sure to add .vitepress/dist and .vitepress/cache to your .gitignore file.
 .vitepress/dist
