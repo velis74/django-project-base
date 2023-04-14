@@ -1,6 +1,6 @@
 {
   "name": "django_project_base",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "private": true,
   "files": [
     "dist/*"
@@ -17,7 +17,7 @@
     "lint": "eslint vue && vue-tsc --noEmit"
   },
   "peerDependencies": {
-    "@velis/dynamicforms": "^0.70.45",
+    "@velis/dynamicforms": "^0.70.46",
     "axios": "^1.2.0",
     "lodash": "^4.17.15",
     "pinia": "^2.0.33",

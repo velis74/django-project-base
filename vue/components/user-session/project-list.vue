@@ -26,6 +26,9 @@ function projectSelected(slug: string) {
 }
 
 async function getProjects(): Promise<Project[]> {
+  // TODO: this is wrong: anonymousUser has access to all free projects, at least for viewing.
+  //  Denoted by "anonymous user" or "external user" in permissions / roles editor
+  //  To be clear: what is wrong with the next line is requiring to be logged in before we check for projects
   if (!userSession.loggedIn) return [];
   try {
     return (await ApiClient.get('/project')).data;
@@ -42,6 +45,9 @@ function setPermissions(newPermissions: Permissions) {
 async function loadData() {
   if (!userSession.loggedIn) return;
   projectList.value = await getProjects();
+  // TODO: This is wrong: why would we select any project by default? we will display only the landing page,
+  //  which should provide available projects list as well to the user. THEN, when the user decides, wil we select
+  //  a project
   if (!userSession.selectedProjectId) userSession.setSelectedProject(_.first(projectList.value));
   dataStore.getPermissions(setPermissions);
 }
