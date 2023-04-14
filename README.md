@@ -18,3 +18,11 @@ $ npm run docs:dev
 ```
 
 The dev server should be running at http://localhost:5173. Visit the URL in your browser to read documentation!
+
+To generate pdf file. Run:
+
+```bash 
+$ npm run export-pdf  
+```
+
+Pdf file is located in docs/pdf folder.
