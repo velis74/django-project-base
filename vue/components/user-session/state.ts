@@ -70,6 +70,7 @@ const useUserSessionStore = defineStore('user-session', {
       const input = data || {} as UserDataJSON;
       this.$patch({
         userData: {
+          [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: input[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] || 0,
           fullName: input.full_name || '',
           email: input.email || '',
           username: input.username || '',
@@ -124,8 +125,10 @@ const useUserSessionStore = defineStore('user-session', {
           this.apiEndpointCurrentProfile,
           { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
         );
-        this.$reset();
-        this.setUserData(response.data);
+        if (this.userId === response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
+          this.$reset();
+          this.setUserData(response.data);
+        }
         return true;
       } catch (error: any) {
         this.$reset();
