@@ -29,7 +29,20 @@ const useUserSessionStore = defineStore('user-session', {
   }),
   getters: {
     apiEndpointLogin() { return '/account/login'; },
+    apiEndpointLogout() { return '/account/logout'; },
+    apiEndpointCurrentProfile() { return '/account/profile/current'; },
+
+    /**
+     * indicates whether we are anonymous or logged in with a registered profile
+     * @return: true when logged in with a registered profile, false when anonymous
+     */
     loggedIn(state) { return state.userData.username !== ''; },
+
+    /**
+     * Returns a printable version of user profile, searching profile data for first printable match
+     *
+     * @return: any piece of data in user profile that is printable (non-empty)
+     */
     userDisplayName(state) {
       const userData = state.userData;
       if (userData.fullName) return userData.fullName;
@@ -37,9 +50,17 @@ const useUserSessionStore = defineStore('user-session', {
       if (userData.username) return userData.username;
       return null;
     },
+
+    /**
+     * alias for getting primary key of the user
+     */
     userId(state) {
       return state.userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
     },
+
+    /**
+     * alias for getting primary key of currently selected project
+     */
     selectedProjectId(state) {
       return state.selectedProject[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME];
     },
@@ -73,7 +94,7 @@ const useUserSessionStore = defineStore('user-session', {
       this.$reset();
       try {
         const result = await apiClient.post(
-          '/account/login',
+          this.apiEndpointLogin,
           { login: username, password },
           { hideErrorNotice: true } as AxiosRequestConfig,
         );
@@ -89,7 +110,7 @@ const useUserSessionStore = defineStore('user-session', {
 
     async logout() {
       try {
-        await apiClient.post('/account/logout/');
+        await apiClient.post(this.apiEndpointLogout);
       } catch (error: unknown) {
         console.error(error);
       }
@@ -100,7 +121,7 @@ const useUserSessionStore = defineStore('user-session', {
     async checkLogin(showNotAuthorizedNotice = true) {
       try {
         const response = await apiClient.get(
-          '/account/profile/current',
+          this.apiEndpointCurrentProfile,
           { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
         );
         this.$reset();
