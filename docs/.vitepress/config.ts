@@ -4,6 +4,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Django project base",
   description: "This project removes the boilerplate associated with project and user handling.",
+  ignoreDeadLinks: [
+    /^https?:\/\/localhost/,
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -30,6 +33,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/velis74/django-project-base' }
-    ]
+    ],
+
   }
 })
