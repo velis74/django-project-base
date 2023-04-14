@@ -37,6 +37,9 @@ const useUserSessionStore = defineStore('user-session', {
       if (userData.username) return userData.username;
       return null;
     },
+    userId(state) {
+      return state.userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+    },
     selectedProjectId(state) {
       return state.selectedProject[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME];
     },
