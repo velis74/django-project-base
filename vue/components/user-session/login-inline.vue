@@ -115,6 +115,10 @@ getFormDefinition();
 async function doLogin() {
   if (payload.value?.login || payload.value?.password) {
     const result = await userSession.login(payload.value?.login, payload.value?.password);
+    if (result?.status === 200) {
+      // nothing to do: login was a success
+      return;
+    }
     if (result?.response?.status === 400) {
       Object.keys(errors).forEach((key: string) => { delete errors[key]; });
       if (result.response.data.detail) errors.non_field_errors = [result.response.data.detail];

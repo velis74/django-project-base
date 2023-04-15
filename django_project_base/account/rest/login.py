@@ -76,6 +76,19 @@ class LoginSerializer(serializers.Serializer):
 class LoginViewset(viewsets.SingleRecordViewSet):
     serializer_class = LoginSerializer
 
+    def initialize_request(self, request, *args, **kwargs):
+        # We need to lie to the CSRF middleware that CSRF processing is done, because otherwise CSRF middleware
+        # (django/middleware/csrf.py -> process_view()) would execute request.POST, which would parse request data as
+        # empty - because it is not encoded with form url encoding, but with JSON.
+        #
+        # As a result, DRF then doesn't get the JSON payload and can't process the request
+        #
+        # It is quite an ugly hack. But I cant find other way around. And security checks are anyway made by
+        # rest_registration.api.views.
+        request = super().initialize_request(request, *args, **kwargs)
+        request.csrf_processing_done = True
+        return request
+
     def new_object(self):
         return dict(login="", password="", return_type="cookie")
 

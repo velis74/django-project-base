@@ -125,7 +125,7 @@ const useUserSessionStore = defineStore('user-session', {
           this.apiEndpointCurrentProfile,
           { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
         );
-        if (this.userId === response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
+        if (this.userId !== response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
           this.$reset();
           this.setUserData(response.data);
         }
