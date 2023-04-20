@@ -22,7 +22,7 @@ def get_parameter(request, value_name: str, url_part: str) -> Optional[object]:
 
     path_parts = request.path_info.split("/")
     if isinstance(url_part, int):
-        return path_parts[url_part] if len(path_parts > url_part) else None
+        return path_parts[url_part] if len(path_parts) > url_part else None
 
     try:
         project_info = next(iter(filter(lambda f: f and url_part in f, path_parts)))
