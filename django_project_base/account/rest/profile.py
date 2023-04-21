@@ -34,14 +34,14 @@ class ProfilePermissionsField(fields.ManyRelatedField):
         }
 
     def to_representation(self, value, row_data=None):
-        if row_data:
+        if row_data and row_data.pk:
             return [ProfilePermissionsField.to_dict(p) for p in row_data.user_permissions.all()]
         return []
 
 
 class ProfileGroupsField(fields.ManyRelatedField):
     def to_representation(self, value, row_data=None):
-        if row_data:
+        if row_data and row_data.pk:
             return [
                 {
                     Group._meta.pk.name: g.pk,
@@ -149,13 +149,14 @@ class ProfileViewSet(ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ["username", "email", "first_name", "last_name"]
     permission_classes = [IsAuthenticated]
+    pagination_class = ModelViewSet.generate_paged_loader(30)
 
     def get_queryset(self):
         qs = swapper.load_model("django_project_base", "Profile").objects
 
         if getattr(self.request, "current_project_slug", None):
             # if current project was parsed from request, filter profiles to current project only
-            qs = qs.filter(projects__project_slug=self.request.current_project_slug)
+            qs = qs.filter(projects__project__slug=self.request.current_project_slug)
         elif not (self.request.user.is_staff or self.request.user.is_superuser):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
