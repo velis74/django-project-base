@@ -3,7 +3,7 @@ from django.db.models import fields
 from taggit.managers import TaggableManager
 from taggit.models import GenericTaggedItemBase
 
-from django_project_base.base.models import BaseProfile, BaseProject, BaseTag
+from django_project_base.base.models import BaseProfile, BaseProject, BaseTag, BaseProjectMember
 
 
 class UserProfile(BaseProfile):
@@ -11,7 +11,11 @@ class UserProfile(BaseProfile):
 
 
 class Project(BaseProject):
-    owner = models.ForeignKey(UserProfile, related_name='user_profiles', on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserProfile, related_name="user_profiles", on_delete=models.CASCADE)
+
+
+class ProjectMember(BaseProjectMember):
+    pass
 
 
 class DemoProjectTag(BaseTag):

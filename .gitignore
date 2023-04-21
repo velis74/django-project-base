@@ -46,6 +46,7 @@ Thumbs.db
 /docs/build/
 /docs/_buildhtml/
 /docs/.doctrees/
+/docs/.vitepress/
 /.tox/
 /django_project_base.egg-info/
 package-lock.json

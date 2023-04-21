@@ -86,6 +86,30 @@ def create_user_profile(sender, instance, created, **kwargs):
         profile(user_ptr=instance).save_base(raw=True)
 
 
+class BaseProjectMember(models.Model):
+    project = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Project"),
+        on_delete=models.CASCADE,
+        verbose_name=_("Project"),
+        related_name="members",  # the name is just reversed: you seek members from the project
+    )
+    member = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Profile"),
+        on_delete=models.CASCADE,
+        verbose_name=_("Owner"),
+        related_name="projects",  # the name is just reversed: you seek projects this member belongs to
+    )
+    # role = models.ForeignKey()  # TODO: we don't have role support yet
+
+    class Meta:
+        abstract = True
+
+
+class ProjectMember(BaseProjectMember):
+    class Meta:
+        swappable = swapper.swappable_setting("django_project_base", "ProjectMember")
+
+
 class BaseTag(TagBase):
     color = HexColorField(verbose_name=_("Color"))
     # icon if char for now # todo: what will be used for icon
