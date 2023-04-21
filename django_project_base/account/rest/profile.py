@@ -152,9 +152,15 @@ class ProfileViewSet(ModelViewSet):
 
     def get_queryset(self):
         qs = swapper.load_model("django_project_base", "Profile").objects
-        if self.request.user.is_staff or self.request.user.is_superuser:
-            return qs.all()
-        return qs.filter(user_ptr__pk=self.request.user.pk)
+
+        if getattr(self.request, "current_project_slug", None):
+            # if current project was parsed from request, filter profiles to current project only
+            qs = qs.filter(projects__project_slug=self.request.current_project_slug)
+        elif not (self.request.user.is_staff or self.request.user.is_superuser):
+            # but if user is not an admin, and the project is not known, only return this user's project
+            qs = qs.filter(pk=self.request.user.pk)
+
+        return qs.all()
 
     def get_serializer_class(self):
         return ProfileSerializer
