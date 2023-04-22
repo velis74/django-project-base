@@ -4,7 +4,8 @@ import swapper
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
-from django.db.models import Model
+from django.db.models import Model, Value
+from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
@@ -152,7 +153,9 @@ class ProfileViewSet(ModelViewSet):
     pagination_class = ModelViewSet.generate_paged_loader(30)
 
     def get_queryset(self):
-        qs = swapper.load_model("django_project_base", "Profile").objects
+        qs = swapper.load_model("django_project_base", "Profile").objects.annotate(
+            un=Concat(Coalesce("first_name", Value("")), Value(" "), Coalesce("last_name", "username"))
+        )
 
         if getattr(self.request, "current_project_slug", None):
             # if current project was parsed from request, filter profiles to current project only
@@ -161,10 +164,17 @@ class ProfileViewSet(ModelViewSet):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
 
+        qs = qs.order_by("un")
+
         return qs.all()
 
     def get_serializer_class(self):
         return ProfileSerializer
+
+    def filter_queryset_field(self, queryset, field, value):
+        if field == "full_name":
+            return queryset.filter(un__icontains=value)
+        return super().filter_queryset_field(queryset, field, value)
 
     @extend_schema(
         parameters=[
