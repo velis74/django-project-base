@@ -68,6 +68,7 @@ class BaseProfile(User):
         return f"{first_name} {last_name}".strip()
 
     full_name = property(lambda self: self.get_full_name())
+    full_name_reverse = property(lambda self: self.get_full_name(True))
 
     class Meta:
         abstract = True
