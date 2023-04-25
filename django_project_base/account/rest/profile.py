@@ -120,7 +120,7 @@ class ProfileSerializer(ModelSerializer):
             "is_impersonated": dict(read_only=True, display=DisplayMode.HIDDEN),
             "bio": dict(read_only=True, display=DisplayMode.HIDDEN),
             "theme": dict(read_only=True, display=DisplayMode.HIDDEN),
-            "password": dict(password_field=True),
+            "password": dict(password_field=True, display=DisplayMode.HIDDEN),
             "delete_at": dict(read_only=True, display=DisplayMode.HIDDEN),
             "last_login": dict(read_only=True, display=DisplayMode.HIDDEN),
             "date_joined": dict(read_only=True, display=DisplayMode.HIDDEN),
