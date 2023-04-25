@@ -13,6 +13,7 @@ from dynamicforms import fields
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.template_render.layout import Group as LayoutGroup, Column, Layout, Row
+from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action, permission_classes as permission_classes_decorator
@@ -116,7 +117,10 @@ class ProfileSerializer(ModelSerializer):
         exclude = ("user_permissions",)
         changed_flds = {
             "id": dict(display=DisplayMode.HIDDEN),
-            "full_name": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "full_name": dict(read_only=True, display_form=DisplayMode.HIDDEN),
+            "username": dict(display_table=DisplayMode.HIDDEN),
+            "first_name": dict(display_table=DisplayMode.HIDDEN),
+            "last_name": dict(display_table=DisplayMode.HIDDEN),
             "is_impersonated": dict(read_only=True, display=DisplayMode.HIDDEN),
             "bio": dict(read_only=True, display=DisplayMode.HIDDEN),
             "theme": dict(read_only=True, display=DisplayMode.HIDDEN),
@@ -127,6 +131,8 @@ class ProfileSerializer(ModelSerializer):
             "is_active": dict(read_only=True, display=DisplayMode.HIDDEN),
             "is_superuser": dict(read_only=True, display=DisplayMode.HIDDEN),
             "is_staff": dict(read_only=True, display=DisplayMode.HIDDEN),
+            "avatar": dict(display_table=DisplayMode.HIDDEN),
+            "reverse_full_name_order": dict(display_table=DisplayMode.HIDDEN),
         }
         layout = Layout(
             Row(Column("username"), Column("password")),
@@ -138,6 +144,14 @@ class ProfileSerializer(ModelSerializer):
             Row("avatar"),
             columns=2,
             size="large",
+        )
+        responsive_columns = ResponsiveTableLayouts(
+            auto_generate_single_row_layout=True,
+            layouts=[
+                ResponsiveTableLayout(auto_add_non_listed_columns=True),
+                ResponsiveTableLayout("full_name", "email", auto_add_non_listed_columns=False),
+                ResponsiveTableLayout(["full_name", "email"], auto_add_non_listed_columns=False),
+            ],
         )
 
 
