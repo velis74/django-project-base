@@ -3,7 +3,7 @@
     <v-form @submit.prevent>
       <v-container v-if="payload != null">
         <v-row>
-          <v-col>
+          <v-col class="d-none d-md-flex">
             <v-text-field
               v-model="payload.login"
               density="compact"
@@ -11,7 +11,7 @@
               @keyup.enter="focusPassword"
             />
           </v-col>
-          <v-col>
+          <v-col class="d-none d-md-flex">
             <v-text-field
               ref="pwd"
               v-model="payload.password"
@@ -22,7 +22,7 @@
             />
           </v-col>
           <v-col>
-            <div :style="`margin-top: .5em; width: ${socialAuth.length * 1.5 * 1.2}em`">
+            <div :style="`margin-top: .5em; width: ${socialAuth.length * 1.5 * 1.2}em`" class="d-none d-md-flex">
               <a v-for="(b, bidx) in socialAuth" :key="bidx" :href="b.url" :aria-label="b.title" class="d-inline-block">
                 <social-logos :social-provider="b.name" :title="b.title" :size-em="1.5"/>
               </a>
