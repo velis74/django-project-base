@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.cache import cache
 from django.db.models.signals import post_delete, post_save
+import swapper
 
 from django_project_base.settings import USER_CACHE_KEY
 
@@ -19,7 +20,12 @@ def invalidate_cache(sender, instance, **kwargs):
     user_cache_invalidate(instance)
 
 
-class UsersCachingBackend(ModelBackend):
+class UsersBackend(ModelBackend):
+    def get_user(self, user_id):
+        return swapper.load_model("django_project_base", "Profile").objects.get(pk=user_id)
+
+
+class UsersCachingBackend(UsersBackend):
     def __init__(self) -> None:
         super().__init__()
         post_save.connect(invalidate_cache, sender=get_user_model())

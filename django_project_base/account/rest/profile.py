@@ -245,9 +245,7 @@ class ProfileViewSet(ModelViewSet):
     )
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
-        serializer = self.get_serializer(
-            getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
-        )
+        serializer = self.get_serializer(user)
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
             project_model: Model = swapper.load_model("django_project_base", "Project")
