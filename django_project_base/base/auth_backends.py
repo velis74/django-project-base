@@ -5,7 +5,6 @@ from django.db.models.signals import post_delete, post_save
 import swapper
 
 from django_project_base.settings import USER_CACHE_KEY
-from example.demo_django_base.models import UserProfile
 
 
 def user_cache_invalidate(instance):
@@ -25,7 +24,7 @@ class UsersBackend(ModelBackend):
     def get_user(self, user_id):
         try:
             user = swapper.load_model("django_project_base", "Profile").objects.get(pk=user_id)
-        except UserProfile.DoesNotExist:
+        except Exception as e:
             return None
         return user if self.user_can_authenticate(user) else None
 
