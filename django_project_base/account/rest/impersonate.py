@@ -14,6 +14,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+import django_project_base.base.fields
+
 
 class ImpersonateRequestSerializer(serializers.Serializer):
     """
@@ -31,18 +33,22 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
     )
     form_titles = {"new": "Impersonate a user"}
 
-    id = fields.PrimaryKeyRelatedField(
-        queryset=swapper.load_model("django_project_base", "Profile").objects.all(),
-        label=_("User"),
-        url_reverse="profile-base-project-list",
-        query_field="search",
-        placeholder=_("Select a user to impersonate"),
-        required=False,
-        allow_null=True,
+    # id = fields.PrimaryKeyRelatedField(
+    #     queryset=swapper.load_model("django_project_base", "Profile").objects.all(),
+    #     label=_("User"),
+    #     url_reverse="profile-base-project-list",
+    #     query_field="search",
+    #     placeholder=_("Select a user to impersonate"),
+    #     required=False,
+    #     allow_null=True,
+    # )
+
+    id = django_project_base.base.fields.UserRelatedField(
+        placeholder=_("Select a user to impersonate"), label=_("User"), required=False, allow_null=True
     )
 
     actions = Actions(
-        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel"),
+        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Cancel")),
         FormButtonAction(btn_type=FormButtonTypes.SUBMIT, name="submit", label=_("Impersonate")),
         add_form_buttons=False,
     )

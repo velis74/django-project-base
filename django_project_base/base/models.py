@@ -70,6 +70,12 @@ class BaseProfile(User):
     full_name = property(lambda self: self.get_full_name())
     full_name_reverse = property(lambda self: self.get_full_name(True))
 
+    def get_users(self):
+        objects_all = BaseProfile.objects
+        return objects_all
+
+    users = property(lambda self: self.get_users())
+
     class Meta:
         abstract = True
 
