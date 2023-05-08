@@ -8,8 +8,6 @@ django-taggit
 svgwrite
 django-hijack < 3
 pytz
-sphinx==3.5.4
-rst2pdf
 tox
 social-auth-app-django
 django-permissions-policy
