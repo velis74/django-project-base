@@ -2,24 +2,24 @@
 
 ## What is django-project-base?
 
-This project removes the boilerplate associated with project / user handling: We start with a project. Everything
-revolves around it: users, roles, permissions, tags, etc. This project makes it easy to work on that premise: it
-provides foundations for user profiles, oauth authentication, permissions, projects, tagging, etc.
+Django project base is a library that simplifies project/user handling by removing boilerplate code. The library
+operates under the premise that a project is at the center of everything, including users, roles, permissions, tags, and
+other related entities. Django project base provides the foundation for user profiles, OAuth authentication,
+permissions, projects, tagging, and more, making it easy for developers to focus on their own project.
 
-In order to take advantage of all this, just enable desired middleware and extend the models. This project will take
-care of the groundwork while you focus on your own project.
-
-This is a django library, based on django-rest-framework with DynamicForms and Django REST Registration integration.
+To use the library, developers can simply enable the desired middleware and extend the models. Django project base will
+take care of the groundwork, leaving developers free to focus on their own project. The library is built on
+django-rest-framework, with DynamicForms and Django REST Registration integration.
 
 ## Why django-project-base?
 
-Functionalities provided:
+Functionalities Provided:
 
-- A base Project definition and editor for it. Extend as you like.
-- User profile editor. Manage emails, confirmations, social connections
-- Support for REST-based authentication / session creation
-- Session / user caching for speed
-- Project users editor. Invite users to project. Assign them into roles.
-- Roles management & rights assignment.
-- Tags editor & manager + support API for marking tagged items with their colours or icons
-- Various Vue components for visualising the above in browsers
+- A base project definition and editor that can be extended as needed
+- User profile editor for managing emails, confirmations, and social connections
+- Support for REST-based authentication and session creation
+- Session and user caching for improved speed
+- Project users editor for inviting users to a project and assigning them to specific roles
+- Roles management and rights assignment
+- Tags editor and manager with API support for marking tagged items with colors or icons
+- Various Vue components for visualizing the above in web browsers.

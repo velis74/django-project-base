@@ -8,8 +8,14 @@ hero:
   tagline: This project removes the boilerplate associated with project and user handling.
   actions:
     - theme: brand
-      text: Quick start guide
+      text: Getting started
+      link: /installation
+    - theme: brand
+      text: Manual
       link: /introduction
+    - theme: alt
+      text: View on Github
+      link: https://github.com/velis74/django-project-base
 
 features:
   - title: Removes the boilerplate

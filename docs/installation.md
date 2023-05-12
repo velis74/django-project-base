@@ -2,13 +2,13 @@
 
 ## Django project base
 
-Install the package:
+To install the package, run the following command:
 
 ```bash
 $ pip install django-project-base
 ```
 
-Extend the BaseProject & BaseProfile model:
+To use the library, extend the BaseProject and BaseProfile models in your app's models.py file:
 
 ::: code-group
 
@@ -26,12 +26,12 @@ class MyProfile(BaseProfile):
 
 :::
 
-Django project base uses Swapper https://pypi.org/project/swapper/, an unofficial API for Django swappable models. You
-need to override the Project and Profile models before you can use the library: there aren’t any migrations available in
-the library itself. The library only declares properties it itself supports, but you have the option to extend them as
-you wish to fit your needs too.
+Django Project Base utilizes Swapper (https://pypi.org/project/swapper/), an unofficial API for Django swappable models.
+Before you can use the library, you must override the Project and Profile models as there are no migrations included in
+the library. The library only declares the properties it supports, but you have the option to extend them as needed to
+fit your project's requirements.
 
-Then also make sure your swappable models are loaded instead of django-project-base models:
+Make sure to load your swappable models instead of the django-project-base models in your settings.py file:
 
 ::: code-group
 
@@ -39,7 +39,15 @@ Then also make sure your swappable models are loaded instead of django-project-b
 DJANGO_PROJECT_BASE_PROJECT_MODEL = 'myapp.MyProject'
 DJANGO_PROJECT_BASE_PROFILE_MODEL = 'myapp.MyProfile'
 
-# Add to INSTALLED_APPS
+```
+
+:::
+
+Add the following to your INSTALLED_APPS:
+
+::: code-group
+
+```python [myproject/settings.py]
 INSTALLED_APPS = [
 # ...
     'rest_registration',
@@ -47,14 +55,20 @@ INSTALLED_APPS = [
     'drf_spectacular',
 # ...
 ]
+```
 
-# Add:
+:::
+
+Include the following settings for REST_FRAMEWORK and REST_REGISTRATION:
+
+::: code-group
+
+```python [myproject/settings.py]
 REST_FRAMEWORK = {
 # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# Add:
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,
     "REGISTER_EMAIL_VERIFICATION_ENABLED": False,
@@ -66,7 +80,7 @@ REST_REGISTRATION = {
 
 :::
 
-Append django project base urls:
+Append the django project base URLs to your project's urls.py file:
 
 ::: code-group
 
@@ -80,26 +94,25 @@ urlpatterns = [
 
 :::
 
-Alternatively you can also choose to specify individual URLs. If that's the case, please refer to
-django_project_base.urls.py and use only the URLs you need.
+Alternatively, you can specify individual URLs. Refer to django_project_base.urls.py and include only the URLs you need.
 
 ::: info
 
-The above general include also includes the Django javascript localisation catalog, so make sure you don't include it
-again.
+Note that the general include above also includes the Django JavaScript localization catalog, so be sure not to include
+it again.
 
 :::
 
-There are some additional URLs available for the Django project base, like swagger or documentation. Appending those
-URLs is described in more details in respective chapters.
+Additional URLs are available for the Django project base, such as Swagger or documentation. Details on appending those
+URLs can be found in their respective chapters."
 
 ## Dynamic Forms
 
-Django project base is dependent on Dynamic Forms project https://github.com/velis74/DynamicForms
+Django Project Base is dependent on the Dynamic Forms project (https://github.com/velis74/DynamicForms).
 
-Read Dynamic Forms documentation for installation steps and more information about project.
+Please refer to the Dynamic Forms documentation for installation steps and more information about the project.
 
-You should add at least following code to your project, to enable Dynamic Forms.
+To enable Dynamic Forms, you should add the following code to your project:
 
 ::: code-group
 
@@ -120,6 +133,8 @@ REST_FRAMEWORK = {
 ```
 
 :::
+
+This code adds the Dynamic Forms renderers to your REST framework settings.
 
 ## Environment setup
 
