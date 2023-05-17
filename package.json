@@ -8,7 +8,10 @@
   "main": "./dist/project-base.umd.js",
   "types": "./dist/apps.d.ts",
   "exports": {
-    ".": "./dist/project-base.umd.js",
+    ".": {
+      "require": "./dist/project-base.umd.js",
+      "import": "./dist/project-base.mjs"
+    },
     "./styles.css": "./dist/style.css"
   },
   "scripts": {

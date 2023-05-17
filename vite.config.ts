@@ -78,7 +78,7 @@ export default ({ mode }: ConfigEnv) => {
             target: 'es2015',
             lib: {
                 entry: resolve(__dirname, 'vue/apps.ts'),
-                formats: ['umd'],
+                formats: ['umd', 'es'],
                 fileName: 'project-base',
                 name: 'project-base'
             },
