@@ -1,4 +1,7 @@
-from collections import Iterable
+try:
+    from collections import Iterable
+except:
+    from collections.abc import Iterable
 from typing import Any
 
 
