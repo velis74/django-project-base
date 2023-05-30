@@ -1,10 +1,9 @@
 import datetime
 
 import swapper
-from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
-from django.db.models import Model, Value
+from django.db.models import Case, CharField, Model, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -12,7 +11,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from dynamicforms import fields
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
-from dynamicforms.template_render.layout import Group as LayoutGroup, Column, Layout, Row
+from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
@@ -164,11 +163,32 @@ class ProfileViewSet(ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = ["username", "email", "first_name", "last_name"]
     permission_classes = [IsAuthenticated]
-    pagination_class = ModelViewSet.generate_paged_loader(30)
+    pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):
         qs = swapper.load_model("django_project_base", "Profile").objects.annotate(
-            un=Concat(Coalesce("first_name", Value("")), Value(" "), Coalesce("last_name", "username"))
+            un=Concat(
+                Coalesce(
+                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                    Value(""),
+                ),
+                Value(" "),
+                Coalesce(
+                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                    "username",
+                ),
+            ),
+            un_sort=Concat(
+                Coalesce(
+                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                    "username",
+                ),
+                Value(" "),
+                Coalesce(
+                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                    Value(""),
+                ),
+            ),
         )
 
         if getattr(self.request, "current_project_slug", None):
@@ -178,7 +198,7 @@ class ProfileViewSet(ModelViewSet):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
 
-        qs = qs.order_by("un")
+        qs = qs.order_by("un", "id")
 
         return qs.all()
 
