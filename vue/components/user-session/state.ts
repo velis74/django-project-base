@@ -8,7 +8,7 @@ import {
   UserSessionData,
   Project,
   PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME,
-  PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME,
+  PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME, UserPermissionJSON,
 } from './data-types';
 
 const useUserSessionStore = defineStore('user-session', {
@@ -19,6 +19,8 @@ const useUserSessionStore = defineStore('user-session', {
       email: '',
       username: '',
       avatar: '',
+      permissions: [],
+      isSuperUser: false,
     },
     impersonated: false,
     selectedProject: {
@@ -58,6 +60,11 @@ const useUserSessionStore = defineStore('user-session', {
       return state.userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
     },
 
+    userHasPermission: (state) => (permissionName: string): boolean => (
+      state.userData.isSuperUser ||
+        !!state.userData.permissions.find((permission: UserPermissionJSON) => permission.codename === permissionName)
+    ),
+
     /**
      * alias for getting primary key of currently selected project
      */
@@ -67,15 +74,20 @@ const useUserSessionStore = defineStore('user-session', {
   },
   actions: {
     setUserData(data: UserDataJSON | undefined) {
-      const input = data || {} as UserDataJSON;
+      const permissions = (data?.permissions ?? [])
+        .concat(
+          (data?.groups ?? []).map((group) => (group.permissions ?? [])).flat(),
+        ) ?? [];
       this.$patch({
         userData: {
-          [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: input[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] || 0,
-          fullName: input.full_name || '',
-          email: input.email || '',
-          username: input.username || '',
+          [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: data?.[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] ?? 0,
+          fullName: data?.full_name ?? '',
+          email: data?.email ?? '',
+          username: data?.username ?? '',
+          isSuperUser: data?.is_superuser ?? false,
+          permissions,
         },
-        impersonated: input.is_impersonated,
+        impersonated: data?.is_impersonated,
       });
     },
 

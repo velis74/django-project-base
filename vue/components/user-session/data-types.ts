@@ -2,21 +2,37 @@
 export const PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'slug' as const;
 export const PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME = 'id' as const;
 
+export interface UserPermissionJSON {
+  id: number
+  codename: string
+  name: string
+}
+
+export interface UserGroupJSON {
+  permissions: UserPermissionJSON[]
+  name: string
+}
+
 export interface UserDataJSON {
   [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: number | string,
-  full_name: string,
-  email: string,
-  username: string,
-  avatar: string;
-  is_impersonated: boolean;
+  full_name: string
+  email: string
+  username: string
+  avatar: string
+  is_impersonated: boolean
+  is_superuser: boolean
+  permissions: UserPermissionJSON[]
+  groups: UserGroupJSON[]
 }
 
 export interface UserData {
   [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: number | string,
-  fullName: string,
-  email: string,
-  username: string,
-  avatar: string;
+  fullName: string
+  email: string
+  username: string
+  avatar: string
+  isSuperUser: boolean
+  permissions: UserPermissionJSON[]
 }
 
 export interface SessionInterface {
