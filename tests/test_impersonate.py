@@ -15,7 +15,7 @@ class TestImpersonateUserViewset(TestBase):
         self.assertTrue(self._login_with_test_user_two(), 'Not logged in')
 
         # Janez is not superuser and is not allowed to impersonate
-        response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
+        response = self.api_client.post('/account/impersonate', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, 403)
 
         # make Janez a superuser
@@ -27,10 +27,10 @@ class TestImpersonateUserViewset(TestBase):
         user_cache_invalidate(janez)
 
         # Now Janez should be able to impersonate
-        response = self.api_client.post('/account/impersonate/start', {'email': 'user1@user1.si'}, format='json')
+        response = self.api_client.post('/account/impersonate', {'email': 'user1@user1.si'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.api_client.post('/account/impersonate/end', {}, format='json')
+        response = self.api_client.delete('/account/impersonate', {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_impersonate_with_username(self):
@@ -44,9 +44,9 @@ class TestImpersonateUserViewset(TestBase):
         # delete user cache
         user_cache_invalidate(janez)
 
-        response = self.api_client.post('/account/impersonate/start', {'username': 'miha'}, format='json')
+        response = self.api_client.post('/account/impersonate', {'username': 'miha'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.api_client.post('/account/impersonate/end', {}, format='json')
+        response = self.api_client.delete('/account/impersonate', {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_impersonate_with_id(self):
@@ -60,7 +60,7 @@ class TestImpersonateUserViewset(TestBase):
         # delete user cache
         user_cache_invalidate(janez)
 
-        response = self.api_client.post('/account/impersonate/start', {'id': 1}, format='json')
+        response = self.api_client.post('/account/impersonate', {'id': 1}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.api_client.post('/account/impersonate/end', {}, format='json')
+        response = self.api_client.delete('/account/impersonate', {}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

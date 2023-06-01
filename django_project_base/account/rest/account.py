@@ -1,6 +1,4 @@
-import importlib
 import re
-from typing import Iterable, List
 
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
@@ -12,13 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password,
-    logout,
-    register,
-    reset_password,
-    send_reset_password_link,
-    verify_email,
-    verify_registration,
+    change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
 )
 
 from django_project_base.account.social_auth.providers import get_social_providers

@@ -1,4 +1,3 @@
-import swapper
 from django.contrib.auth import get_user_model
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
@@ -8,7 +7,7 @@ from dynamicforms import fields, serializers, viewsets
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
 from hijack.helpers import login_user, release_hijack
 from rest_framework import status
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
@@ -55,7 +54,6 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
 
 
 @extend_schema_view(
-    # create=extend_schema(exclude=True),
     retrieve=extend_schema(
         description="Retrieves dialog definition for impersonation dialog",
         parameters=[OpenApiParameter("id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"])],
