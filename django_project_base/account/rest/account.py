@@ -1,12 +1,13 @@
 import re
 
+import swapper
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
@@ -134,6 +135,50 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="verify-email", url_name="verify-email")
     def verify_email(self, request: Request) -> Response:
         return verify_email(request._request)
+
+
+class ResetPasswordAdminSerializer(df_serializers.Serializer):
+    template_context = dict(url_reverse="reset-password-admin", dialog_classes="modal-lg", dialog_header_classes="bg-info")
+    form_titles = {
+        "table": "",
+        "new": _("Reset password"),
+        "edit": "",
+    }
+
+    user_id = fields.CharField(required=True)
+
+    actions = Actions(add_form_buttons=True)
+
+class ResetPasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
+    serializer_class = ResetPasswordAdminSerializer
+    # permission_classes = (IsAuthenticated, IsAdminUser) # TODO: UNCOMMENT THIS
+
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        # We need to set following flag (which is used while testing), because otherwise CSRF middleware
+        # (django/middleware/csrf.py -> process_view()) would execute request.POST, which would cause
+        # "django.http.request.RawPostDataException: You cannot access body after reading from request's data stream"
+        # when request will be initialized and authenticated later for rest_registration.api.views.change_password
+        #
+        # It is quite an ugly hack. But I cant find other way around. And security checks are anyway made by
+        # rest_registration.api.views.
+        request._dont_enforce_csrf_checks = True
+        return request
+
+    @extend_schema(
+        description="Marks the user password to be changed.",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    def create(self, request: Request) -> Response:
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+        profile_obj.admin_password_reset = True
+        profile_obj.save(update_fields=["admin_password_reset"])
+        return Response()
 
 
 class VerifyRegistrationSerializer(serializers.Serializer):
