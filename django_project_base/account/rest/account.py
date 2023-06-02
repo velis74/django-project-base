@@ -8,7 +8,7 @@ from dynamicforms import fields as df_fields, serializers as df_serializers, vie
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
@@ -160,17 +160,10 @@ class ResetPasswordAdminSerializer(df_serializers.Serializer):
 class ResetPasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ResetPasswordAdminSerializer
 
-    # permission_classes = (IsAuthenticated, IsAdminUser) # TODO: UNCOMMENT THIS
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
     def initialize_request(self, request, *args, **kwargs):
         request = super().initialize_request(request, *args, **kwargs)
-        # We need to set following flag (which is used while testing), because otherwise CSRF middleware
-        # (django/middleware/csrf.py -> process_view()) would execute request.POST, which would cause
-        # "django.http.request.RawPostDataException: You cannot access body after reading from request's data stream"
-        # when request will be initialized and authenticated later for rest_registration.api.views.change_password
-        #
-        # It is quite an ugly hack. But I cant find other way around. And security checks are anyway made by
-        # rest_registration.api.views.
         request._dont_enforce_csrf_checks = True
         return request
 
