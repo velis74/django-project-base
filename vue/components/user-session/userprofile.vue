@@ -51,9 +51,17 @@ export default defineComponent({
   methods: {
     async loadData(force: boolean = false) {
       new ProjectBaseData().getPermissions((p: any) => { this.permissions = p; });
-      if (this.userSession.loggedIn && !force) return;
-
+      if (this.userSession.loggedIn && !force) {
+        await this.checkResetPassword();
+        return;
+      }
       await this.userSession.checkLogin(false);
+      await this.checkResetPassword();
+    },
+    async checkResetPassword() {
+      if (this.userSession.adminResetPassword) {
+        await this.changePassword();
+      }
     },
     async showImpersonateLogin() {
       await new ConsumerLogicApi('/account/impersonate').dialogForm(null);
@@ -67,7 +75,7 @@ export default defineComponent({
       await new ConsumerLogicApi('/account/profile/current').dialogForm(null);
     },
     async changePassword() {
-      new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+      await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
   },
 });

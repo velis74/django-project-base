@@ -101,7 +101,12 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
         },
     )
     def create(self, request: Request) -> Response:
-        return change_password(request._request)
+        response = change_password(request._request)
+        if response.status_code == status.HTTP_200_OK:
+            profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+            profile_obj.admin_password_reset = False
+            profile_obj.save(update_fields=["admin_password_reset"])
+        return response
 
 
 class ResetPasswordSerializer(serializers.Serializer):
