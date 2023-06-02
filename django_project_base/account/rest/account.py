@@ -1,13 +1,14 @@
 import re
 
 import swapper
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
-from rest_framework.decorators import action, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
@@ -44,8 +45,8 @@ class LogoutViewSet(viewsets.ViewSet):
 
     @extend_schema(
         description="Logs out the user. Returns an error if the user is not authenticated. "
-        "If revoke_token is provided, revokes the given token for a given user. If the token is not  "
-        "provided, revoke all tokens for given user. ",
+                    "If revoke_token is provided, revokes the given token for a given user. If the token is not  "
+                    "provided, revoke all tokens for given user. ",
         responses={
             status.HTTP_200_OK: OpenApiResponse(description="OK"),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not authorised"),
@@ -138,7 +139,8 @@ class ResetPasswordViewSet(viewsets.ViewSet):
 
 
 class ResetPasswordAdminSerializer(df_serializers.Serializer):
-    template_context = dict(url_reverse="reset-password-admin", dialog_classes="modal-lg", dialog_header_classes="bg-info")
+    template_context = dict(url_reverse="reset-password-admin", dialog_classes="modal-lg",
+                            dialog_header_classes="bg-info")
     form_titles = {
         "table": "",
         "new": _("Reset password"),
@@ -149,8 +151,10 @@ class ResetPasswordAdminSerializer(df_serializers.Serializer):
 
     actions = Actions(add_form_buttons=True)
 
+
 class ResetPasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ResetPasswordAdminSerializer
+
     # permission_classes = (IsAuthenticated, IsAdminUser) # TODO: UNCOMMENT THIS
 
     def initialize_request(self, request, *args, **kwargs):
@@ -173,9 +177,9 @@ class ResetPasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
         },
     )
     def create(self, request: Request) -> Response:
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+        self.serializer_class(data=request.data).is_valid(raise_exception=True)
+        profile_obj = get_object_or_404(swapper.load_model("django_project_base", "Profile"),
+                                        user_ptr_id=request.data.get('user_id'))
         profile_obj.admin_password_reset = True
         profile_obj.save(update_fields=["admin_password_reset"])
         return Response()
@@ -192,7 +196,7 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
 
     @extend_schema(
         description="Verify registration with signature. The endpoint will generate an e-mail with a confirmation URL "
-        "which the user should GET to confirm the account.",
+                    "which the user should GET to confirm the account.",
         responses={
             status.HTTP_200_OK: OpenApiResponse(description="OK", response=ResetPasswordSerializer),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description="Bad request"),
@@ -244,7 +248,7 @@ class RegisterReturnSerializer(serializers.Serializer):
 
 @extend_schema(
     description="Register new user. The endpoint will generate an e-mail with a confirmation URL which the newly "
-    "registered user should GET to activate the newly created account.",
+                "registered user should GET to activate the newly created account.",
     responses={
         status.HTTP_200_OK: OpenApiResponse(description="OK", response=RegisterReturnSerializer),
         status.HTTP_400_BAD_REQUEST: OpenApiResponse(
