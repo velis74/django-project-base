@@ -8,7 +8,7 @@ from dynamicforms import fields as df_fields, serializers as df_serializers, vie
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
@@ -144,7 +144,7 @@ class ResetPasswordViewSet(viewsets.ViewSet):
 
 
 class ResetPasswordAdminSerializer(df_serializers.Serializer):
-    template_context = dict(url_reverse="reset-password-admin", dialog_classes="modal-lg",
+    template_context = dict(url_reverse="admin-reset-password", dialog_classes="modal-lg",
                             dialog_header_classes="bg-info")
     form_titles = {
         "table": "",
@@ -152,7 +152,7 @@ class ResetPasswordAdminSerializer(df_serializers.Serializer):
         "edit": "",
     }
 
-    user_id = fields.CharField(required=True)
+    user_id = df_fields.CharField(required=True)
 
     actions = Actions(add_form_buttons=True)
 
@@ -166,6 +166,9 @@ class ResetPasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
         request = super().initialize_request(request, *args, **kwargs)
         request._dont_enforce_csrf_checks = True
         return request
+
+    def new_object(self):
+        return dict(user_id="")
 
     @extend_schema(
         description="Marks the user password to be changed.",
@@ -219,7 +222,7 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
                 description="OK Reset link sent", response=SendResetPasswordLinkSerializer()
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description="Bad request"),
-            404: "Reset password verification disabled",
+            status.HTTP_404_NOT_FOUND: "Reset password verification disabled",
         },
     )
     @action(detail=False, methods=["post"], url_path="send-reset-password-link", url_name="send-reset-password-link")
@@ -227,13 +230,20 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
         return send_reset_password_link(request._request)
 
 
-class RegisterSerializer(serializers.Serializer):
-    username = fields.CharField(required=True)
-    email = fields.CharField(required=True)
-    password = fields.CharField(required=True)
-    password_confirm = fields.CharField(required=True)
-    first_name = fields.CharField(required=False)
-    last_name = fields.CharField(required=False)
+class AbstractRegisterSerializer(df_serializers.Serializer):
+    username = df_fields.CharField(required=True)
+    email = df_fields.CharField(required=True)
+    password = df_fields.CharField(required=True)
+    password_confirm = df_fields.CharField(required=True)
+    first_name = df_fields.CharField(required=False)
+    last_name = df_fields.CharField(required=False)
+
+    class Meta:
+        abstract = True
+
+
+class RegisterSerializer(AbstractRegisterSerializer):
+    pass
 
 
 class RegisterReturnSerializer(serializers.Serializer):
@@ -278,3 +288,33 @@ class RegisterViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="register", url_name="register")
     def register(self, request: Request) -> Response:
         return register(request._request)
+
+
+class AdminAddUserSerializer(AbstractRegisterSerializer):
+    template_context = dict(url_reverse="admin-add-user", dialog_classes="modal-lg", dialog_header_classes="bg-info")
+    form_titles = {
+        "table": "",
+        "new": _("Add new user"),
+        "edit": "",
+    }
+
+    actions = Actions(add_form_buttons=True)
+
+
+class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
+    serializer_class = AdminAddUserSerializer
+
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        request.csrf_processing_done = True
+        return request
+
+    def new_object(self):
+        return dict(username="", email="", password="", password_confirm="", first_name="", last_name="")
+
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        from rest_registration.api.views.register import RegisterView
+        view = RegisterView(request=request, serializer_class=self.serializer_class)
+        return view.post(request)
