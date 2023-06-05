@@ -154,7 +154,7 @@ class ResetPasswordAdminSerializer(df_serializers.Serializer):
         "edit": "",
     }
 
-    user_id = df_fields.CharField(required=True, help_text=_("Target user id"))
+    user_id = df_fields.IntegerField(required=True, help_text=_("Target user id"))
 
     actions = Actions()
 

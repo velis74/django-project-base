@@ -128,7 +128,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
-        exclude = ("user_permissions",)
+        exclude = ("user_permissions", "password_invalid")
         layout = Layout(
             Row(Column("username"), Column("password")),
             Row(Column("first_name"), Column("last_name")),
