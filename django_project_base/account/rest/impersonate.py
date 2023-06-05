@@ -2,7 +2,9 @@ from django.contrib.auth import get_user_model
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
+from drf_spectacular.utils import (
+    extend_schema, extend_schema_field, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
+)
 from dynamicforms import fields, serializers, viewsets
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
 from hijack.helpers import login_user, release_hijack
@@ -26,25 +28,20 @@ class ImpersonateRequestSerializer(serializers.Serializer):
     username = fields.CharField(required=False)
 
 
+@extend_schema_field(OpenApiTypes.NONE)
+class ImpersonateUserIdField(django_project_base.base.fields.UserRelatedField):
+    pass
+
+
 class ImpersonateUserDialogSerializer(serializers.Serializer):
     template_context = dict(
         url_reverse="profile-base-impersonate-user", url_reverse_kwargs=None, dialog_header_classes="bg-info"
     )
     form_titles = {"new": "Impersonate a user"}
 
-    # id = fields.PrimaryKeyRelatedField(
-    #     queryset=swapper.load_model("django_project_base", "Profile").objects.all(),
-    #     label=_("User"),
-    #     url_reverse="profile-base-project-list",
-    #     query_field="search",
-    #     placeholder=_("Select a user to impersonate"),
-    #     required=False,
-    #     allow_null=True,
-    # )
-
-    id = django_project_base.base.fields.UserRelatedField(
-        placeholder=_("Select a user to impersonate"), label=_("User"), required=False, allow_null=True
-    )
+    id = ImpersonateUserIdField(placeholder=_("Select a user to impersonate"), label=_("User"), required=False,
+                                allow_null=True
+                                )
 
     actions = Actions(
         FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Cancel")),
@@ -71,13 +68,16 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         ser.is_valid(raise_exception=True)
         return ser.validated_data
 
+    class ImpersonateUser(serializers.Serializer):
+        id = fields.IntegerField(required=True, help_text=_('Target user pk'))
+
     @extend_schema(
-        request=ImpersonateRequestSerializer,
+        request=ImpersonateUser,
         responses={
             status.HTTP_200_OK: OpenApiResponse(description="OK"),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(
                 description="Forbidden. You do not have permission to perform this action or "
-                "Impersonating self is not allowed"
+                            "Impersonating self is not allowed"
             ),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(description="User matching provided data not found"),
         },
@@ -85,7 +85,6 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
     )
     @permission_classes([IsAdminUser])
     def create(self, request: Request, *args, **kwargs) -> Response:
-        # def start(self, request: Request) -> Response:
         validated_data: dict = self.__validate(request.data)
         hijacked_user: Model = get_object_or_404(get_user_model(), **validated_data)
         if request.user == hijacked_user:

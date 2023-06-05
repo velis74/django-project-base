@@ -1,7 +1,7 @@
 from dynamicforms.routers import DFRouter
 
 from django_project_base.account.rest.account import (
-    AdminAddUserViewSet, ChangePasswordViewSet, LogoutViewSet, RegisterViewSet, ResetPasswordAdminViewSet,
+    AdminAddUserViewSet, ChangePasswordViewSet, InvalidatePasswordAdminViewSet, LogoutViewSet, RegisterViewSet,
     ResetPasswordViewSet, SendResetPasswordLinkViewSet, SocialAuthProvidersViewSet, VerifyRegistrationViewSet
 )
 from django_project_base.account.rest.impersonate import ImpersonateUserViewset
@@ -12,7 +12,9 @@ accounts_router = DFRouter(trailing_slash=True)
 
 accounts_router.register(r"", SocialAuthProvidersViewSet, basename="account")
 accounts_router.register(r"change-password", ChangePasswordViewSet, basename="change-password")
-accounts_router.register(r"admin-reset-password", ResetPasswordAdminViewSet, basename="admin-reset-password")
+accounts_router.register(
+    r"admin-invalidate-password", InvalidatePasswordAdminViewSet, basename="admin-invalidate-password"
+)
 accounts_router.register(r"admin-add-user", AdminAddUserViewSet, basename="admin-add-user")
 accounts_router.register(r"", ResetPasswordViewSet, basename="account")
 accounts_router.register(r"", RegisterViewSet, basename="account")

@@ -45,7 +45,7 @@ class BaseProfile(User):
     avatar = models.FileField(null=True, blank=True, verbose_name=_("Avatar"))
     reverse_full_name_order = models.BooleanField(null=True, blank=True, verbose_name=_("Reverse full name order"))
     delete_at = models.DateTimeField(null=True, blank=True, verbose_name=_("Delete profile at"))
-    admin_password_reset = models.BooleanField(default=False)
+    password_invalid = models.BooleanField(default=False)
 
     def get_full_name(self, reverse_order: bool = False):
         # First we establish the natural order for this user

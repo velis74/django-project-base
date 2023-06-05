@@ -223,7 +223,6 @@ class ProfileViewSet(ModelViewSet):
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
-        # return super().create(request, *args, **kwargs)
 
     @extend_schema(
         description="Get user profile by id",

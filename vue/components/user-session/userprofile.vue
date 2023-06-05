@@ -12,12 +12,21 @@
       <v-list>
         <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
         <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
+
         <v-list-item
           v-if="permissions['impersonate-user'] && !userSession.impersonated"
           @click="showImpersonateLogin"
         >
           {{ gettext('Impersonate user') }}
         </v-list-item>
+
+        <v-list-item v-if="permissions['is-staff-user']" @click="addUser">
+          {{ gettext('Add user') }}
+        </v-list-item>
+        <v-list-item v-if="permissions['is-staff-user']" @click="invalidateUserPassword">
+          {{ gettext('Invalidate user password') }}
+        </v-list-item>
+
         <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
           {{ gettext('Stop impersonation') }}
         </v-list-item>
@@ -59,7 +68,7 @@ export default defineComponent({
       await this.checkResetPassword();
     },
     async checkResetPassword() {
-      if (this.userSession.adminResetPassword) {
+      if (this.userSession.passwordInvalid) {
         await this.changePassword();
       }
     },
@@ -76,6 +85,12 @@ export default defineComponent({
     },
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+    },
+    async addUser() {
+      await new ConsumerLogicApi('/account/admin-add-user/').dialogForm('new');
+    },
+    async invalidateUserPassword() {
+      await new ConsumerLogicApi('/account/admin-invalidate-password/').dialogForm('new');
     },
   },
 });
