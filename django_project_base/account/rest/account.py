@@ -165,7 +165,7 @@ class ResetPasswordAdminSerializer(df_serializers.Serializer):
 class InvalidatePasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ResetPasswordAdminSerializer
 
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated, IsAdminUser)  # TODO: permission should be based on project role
 
     def initialize_request(self, request, *args, **kwargs):
         request = super().initialize_request(request, *args, **kwargs)
@@ -314,7 +314,7 @@ class AdminAddUserSerializer(AbstractRegisterSerializer):
 class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = AdminAddUserSerializer
 
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated, IsAdminUser)  # TODO: permission should be based on project role
 
     def initialize_request(self, request, *args, **kwargs):
         request = super().initialize_request(request, *args, **kwargs)
