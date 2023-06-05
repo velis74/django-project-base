@@ -152,7 +152,7 @@ class ResetPasswordAdminSerializer(df_serializers.Serializer):
         "edit": "",
     }
 
-    user_id = df_fields.CharField(required=True)
+    user_id = df_fields.CharField(required=True, allow_blank=False)
 
     actions = Actions(add_form_buttons=True)
 
