@@ -29,7 +29,7 @@ def get_parameter(request, value_name: str, url_part: str) -> Optional[object]:
     except StopIteration:
         project_info = None
     if project_info:
-        return project_info[len(url_part) :]
+        return project_info[len(url_part):]
 
     return None
 

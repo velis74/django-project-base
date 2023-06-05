@@ -1,8 +1,8 @@
+import swapper
 from django.core.validators import RegexValidator
 from django.db.models import fields
-from dynamicforms import fields as dffields
 from django.utils.translation import gettext_lazy as _
-import swapper
+from dynamicforms import fields as dffields
 
 
 class HexColorField(fields.CharField):

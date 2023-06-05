@@ -1,24 +1,19 @@
-import importlib
 import re
-from typing import Iterable, List
 
+import swapper
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import (
-    change_password,
-    logout,
-    register,
-    reset_password,
-    send_reset_password_link,
-    verify_email,
-    verify_registration,
+    change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
 )
 
 from django_project_base.account.social_auth.providers import get_social_providers
@@ -107,7 +102,12 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
         },
     )
     def create(self, request: Request) -> Response:
-        return change_password(request._request)
+        response = change_password(request._request)
+        if response.status_code == status.HTTP_200_OK:
+            profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+            profile_obj.password_invalid = False
+            profile_obj.save(update_fields=["password_invalid"])
+        return response
 
 
 class ResetPasswordSerializer(serializers.Serializer):
@@ -142,6 +142,55 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="verify-email", url_name="verify-email")
     def verify_email(self, request: Request) -> Response:
         return verify_email(request._request)
+
+
+class ResetPasswordAdminSerializer(df_serializers.Serializer):
+    template_context = dict(
+        url_reverse="admin-invalidate-password", dialog_classes="modal-lg", dialog_header_classes="bg-info"
+    )
+    form_titles = {
+        "table": "",
+        "new": _("Invalidate password"),
+        "edit": "",
+    }
+
+    user_id = df_fields.IntegerField(required=True, help_text=_("Target user id"))
+
+    actions = Actions()
+
+
+@extend_schema_view(
+    retrieve=extend_schema(parameters=[OpenApiParameter("id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"])]),
+)
+class InvalidatePasswordAdminViewSet(df_viewsets.SingleRecordViewSet):
+    serializer_class = ResetPasswordAdminSerializer
+
+    permission_classes = (IsAuthenticated, IsAdminUser)  # TODO: permission should be based on project role
+
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        request._dont_enforce_csrf_checks = True
+        return request
+
+    def new_object(self):
+        return dict(user_id="")
+
+    @extend_schema(
+        description="Marks the user password to be changed."
+        "When user logs to an app UI user is shown change password dialog.",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    def create(self, request: Request) -> Response:
+        self.serializer_class(data=request.data).is_valid(raise_exception=True)
+        profile_obj = get_object_or_404(
+            swapper.load_model("django_project_base", "Profile"), user_ptr_id=request.data.get("user_id")
+        )
+        profile_obj.password_invalid = True
+        profile_obj.save(update_fields=["password_invalid"])
+        return Response()
 
 
 class VerifyRegistrationSerializer(serializers.Serializer):
@@ -180,7 +229,7 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
                 description="OK Reset link sent", response=SendResetPasswordLinkSerializer()
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description="Bad request"),
-            404: "Reset password verification disabled",
+            status.HTTP_404_NOT_FOUND: "Reset password verification disabled",
         },
     )
     @action(detail=False, methods=["post"], url_path="send-reset-password-link", url_name="send-reset-password-link")
@@ -188,13 +237,20 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
         return send_reset_password_link(request._request)
 
 
-class RegisterSerializer(serializers.Serializer):
-    username = fields.CharField(required=True)
-    email = fields.CharField(required=True)
-    password = fields.CharField(required=True)
-    password_confirm = fields.CharField(required=True)
-    first_name = fields.CharField(required=False)
-    last_name = fields.CharField(required=False)
+class AbstractRegisterSerializer(df_serializers.Serializer):
+    username = df_fields.CharField(required=True)
+    email = df_fields.CharField(required=True)
+    password = df_fields.CharField(required=True)
+    password_confirm = df_fields.CharField(required=True)
+    first_name = df_fields.CharField(required=False)
+    last_name = df_fields.CharField(required=False)
+
+    class Meta:
+        abstract = True
+
+
+class RegisterSerializer(AbstractRegisterSerializer):
+    pass
 
 
 class RegisterReturnSerializer(serializers.Serializer):
@@ -239,3 +295,51 @@ class RegisterViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="register", url_name="register")
     def register(self, request: Request) -> Response:
         return register(request._request)
+
+
+class AdminAddUserSerializer(AbstractRegisterSerializer):
+    template_context = dict(url_reverse="admin-add-user", dialog_classes="modal-lg", dialog_header_classes="bg-info")
+    form_titles = {
+        "table": "",
+        "new": _("Add new user"),
+        "edit": "",
+    }
+
+    actions = Actions()
+
+
+@extend_schema_view(
+    retrieve=extend_schema(parameters=[OpenApiParameter("id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"])]),
+)
+class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
+    serializer_class = AdminAddUserSerializer
+
+    permission_classes = (IsAuthenticated, IsAdminUser)  # TODO: permission should be based on project role
+
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        request.csrf_processing_done = True
+        return request
+
+    def new_object(self):
+        return dict(username="", email="", password="", password_confirm="", first_name="", last_name="")
+
+    @extend_schema(
+        description="Add new user.",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        from rest_registration.api.views.register import RegisterView
+
+        view = RegisterView(request=request, serializer_class=self.serializer_class)
+        response = view.post(request)
+        if response.status_code == status.HTTP_201_CREATED:
+            profile_obj = swapper.load_model("django_project_base", "Profile").objects.get(
+                user_ptr_id=response.data[get_user_model()._meta.pk.name]
+            )
+            profile_obj.password_invalid = True
+            profile_obj.save(update_fields=["password_invalid"])
+        return response

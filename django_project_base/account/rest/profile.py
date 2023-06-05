@@ -15,9 +15,9 @@ from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
-from rest_framework.decorators import action, permission_classes as permission_classes_decorator
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -128,7 +128,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
-        exclude = ("user_permissions",)
+        exclude = ("user_permissions", "password_invalid")
         layout = Layout(
             Row(Column("username"), Column("password")),
             Row(Column("first_name"), Column("last_name")),
@@ -223,7 +223,6 @@ class ProfileViewSet(ModelViewSet):
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
-        # return super().create(request, *args, **kwargs)
 
     @extend_schema(
         description="Get user profile by id",
@@ -302,6 +301,7 @@ class ProfileViewSet(ModelViewSet):
             status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
         },
     )
-    @permission_classes_decorator([IsAdminUser])
     def destroy(self, request, *args, **kwargs):
-        return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
+        if self.request.user.is_superuser or self.request.user.is_staff:
+            return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
+        raise exceptions.PermissionDenied

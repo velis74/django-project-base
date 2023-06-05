@@ -44,7 +44,6 @@ class LoginSerializer(serializers.Serializer):
 
 
 @extend_schema_view(
-    # create=extend_schema(exclude=True),
     retrieve=extend_schema(
         description="Retrieves dialog definition for login dialog",
     ),

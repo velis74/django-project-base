@@ -12,12 +12,21 @@
       <v-list>
         <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
         <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
+
         <v-list-item
           v-if="permissions['impersonate-user'] && !userSession.impersonated"
           @click="showImpersonateLogin"
         >
           {{ gettext('Impersonate user') }}
         </v-list-item>
+
+        <v-list-item v-if="permissions['is-staff-user']" @click="addUser">
+          {{ gettext('Add user') }}
+        </v-list-item>
+        <v-list-item v-if="permissions['is-staff-user']" @click="invalidateUserPassword">
+          {{ gettext('Invalidate user password') }}
+        </v-list-item>
+
         <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
           {{ gettext('Stop impersonation') }}
         </v-list-item>
@@ -51,9 +60,17 @@ export default defineComponent({
   methods: {
     async loadData(force: boolean = false) {
       new ProjectBaseData().getPermissions((p: any) => { this.permissions = p; });
-      if (this.userSession.loggedIn && !force) return;
-
+      if (this.userSession.loggedIn && !force) {
+        await this.checkResetPassword();
+        return;
+      }
       await this.userSession.checkLogin(false);
+      await this.checkResetPassword();
+    },
+    async checkResetPassword() {
+      if (this.userSession.passwordInvalid) {
+        await this.changePassword();
+      }
     },
     async showImpersonateLogin() {
       await new ConsumerLogicApi('/account/impersonate').dialogForm(null);
@@ -67,7 +84,13 @@ export default defineComponent({
       await new ConsumerLogicApi('/account/profile/current').dialogForm(null);
     },
     async changePassword() {
-      new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+      await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+    },
+    async addUser() {
+      await new ConsumerLogicApi('/account/admin-add-user/').dialogForm('new');
+    },
+    async invalidateUserPassword() {
+      await new ConsumerLogicApi('/account/admin-invalidate-password/').dialogForm('new');
     },
   },
 });

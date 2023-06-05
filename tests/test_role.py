@@ -25,7 +25,7 @@ class TestRole(TestBase):
             slug="test-project-slug",
         )
         response = self.api_client.post(
-            "/account/login/",
+            "/account/login",
             {
                 "login": TEST_USER_ONE_DATA["username"],
                 "password": TEST_USER_ONE_DATA["password"],

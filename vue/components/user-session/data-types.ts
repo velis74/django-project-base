@@ -20,6 +20,7 @@ export interface UserDataJSON {
   username: string
   avatar: string
   is_impersonated: boolean
+  password_invalid: boolean
   is_superuser: boolean
   permissions: UserPermissionJSON[]
   groups: UserGroupJSON[]
@@ -52,5 +53,6 @@ export interface Project {
 export interface UserSessionData {
   userData: UserData;
   impersonated: boolean;
+  passwordInvalid: boolean;
   selectedProject: Project;
 }

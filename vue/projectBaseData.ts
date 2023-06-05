@@ -13,7 +13,7 @@ class ProjectBaseData {
     let _permissions = {} as any;
     const permissionPromise = new Promise((resolveCallback: Function) => {
       setTimeout(() => {
-        _permissions = { 'add-project': true, 'impersonate-user': true };
+        _permissions = { 'add-project': true, 'impersonate-user': true, 'is-staff-user': true };
         Store.set('user-permission', _permissions);
         resolveCallback();
       }, 100);
