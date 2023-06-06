@@ -4,7 +4,7 @@
       <APIConsumer :consumer="consumerLogic" :display-component="1"/>
     </div>
     <div style="width: 45%;">
-      <APIConsumer :consumer="consumerLogic" :display-component="1"/>
+      <APIConsumer :consumer="consumerLogicMerge" :display-component="1"/>
     </div>
     <ModalView/>
   </div>
@@ -32,17 +32,29 @@ export default defineComponent({
       pageHidden: false,
       checkInterval: null as any,
       consumerLogic: ref<ConsumerLogicApi>(new ConsumerLogicApi('/account/profile', false)),
+      consumerLogicMerge: ref<ConsumerLogicApi>(new ConsumerLogicApi('/account/profile-merge', false)),
+      mergeRefreshInterval: null as any,
     };
   },
   beforeDestroy() {
     this.clearCheck();
     this.pageHidden = false;
+    if (this.mergeRefreshInterval) {
+      clearInterval(this.mergeRefreshInterval);
+      this.mergeRefreshInterval = null;
+    }
   },
   mounted() {
     console.log(Math.random());
     (async () => {
       await this.consumerLogic.getFullDefinition();
     })();
+    (async () => {
+      await this.consumerLogicMerge.getFullDefinition();
+    })();
+    this.mergeRefreshInterval = setInterval(() => {
+      this.consumerLogicMerge.reload();
+    }, 1000);
     // browserUpdate({
     //   required: {
     //     e: -this.numberOfLastBrowserVersionsSupported,
@@ -75,6 +87,9 @@ export default defineComponent({
       //   clearInterval(this.checkInterval);
       //   this.checkInterval = null;
       // }
+    },
+    actionAddToGroup(t) {
+      console.log(Math.random(), t, 'fghfg');
     },
   },
 });

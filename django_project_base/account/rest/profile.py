@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
+from dynamicforms.action import TablePosition, TableAction
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
@@ -116,6 +117,16 @@ class ProfileSerializer(ModelSerializer):
         if not self._context.get("request").user.is_superuser:
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
+        if self._context.get("request").user.is_superuser or self._context.get("request").user.is_staff:
+            self.actions.actions.append(
+                TableAction(
+                    TablePosition.ROW_END,
+                    label=_("AAA"),
+                    title=_("AAA"),
+                    name="add-to-group",
+                    icon="airplane-sharp",
+                ),
+            )
 
     def get_is_impersonated(self, obj):
         try:
