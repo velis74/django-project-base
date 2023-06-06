@@ -1,12 +1,17 @@
 <template>
-  <div>
-    <APIConsumer :consumer="consumerLogic" :display-component="1"/>
+  <div style="display: flex; flex-direction: row;">
+    <div style="width: 45%; margin-right: 3%;">
+      <APIConsumer :consumer="consumerLogic" :display-component="1"/>
+    </div>
+    <div style="width: 45%;">
+      <APIConsumer :consumer="consumerLogic" :display-component="1"/>
+    </div>
+    <ModalView/>
   </div>
 </template>
 
 <script lang="ts">
 import { APIConsumer, ConsumerLogicApi } from '@velis/dynamicforms';
-// import browserUpdate from 'browser-update';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({

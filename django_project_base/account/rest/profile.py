@@ -145,7 +145,6 @@ class ProfileSerializer(ModelSerializer):
             layouts=[
                 ResponsiveTableLayout(auto_add_non_listed_columns=True),
                 ResponsiveTableLayout("full_name", "email", auto_add_non_listed_columns=False),
-                ResponsiveTableLayout(["full_name", "email"], auto_add_non_listed_columns=False),
             ],
         )
 

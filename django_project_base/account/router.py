@@ -7,6 +7,7 @@ from django_project_base.account.rest.account import (
 from django_project_base.account.rest.impersonate import ImpersonateUserViewset
 from django_project_base.account.rest.login import LoginViewset
 from django_project_base.account.rest.profile import ProfileViewSet
+from django_project_base.account.rest.profile_merge import ProfileMergeViewSet
 
 accounts_router = DFRouter(trailing_slash=True)
 
@@ -23,6 +24,7 @@ accounts_router.register(r"", VerifyRegistrationViewSet, basename="account")
 
 profile_router = DFRouter(trailing_slash=False)
 profile_router.register(r"profile", ProfileViewSet, basename="profile-base-project")
+profile_router.register(r"profile-merge", ProfileMergeViewSet, basename="profile-merge-base-project")
 profile_router.register_single_record(r"impersonate", ImpersonateUserViewset, basename="profile-base-impersonate-user")
 profile_router.register_single_record(r"login", LoginViewset, basename="profile-base-login")
 profile_router.register(r"", LogoutViewSet, basename="account")
