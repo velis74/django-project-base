@@ -3,6 +3,7 @@ from typing import List
 import svgwrite
 import swapper
 from django.conf import settings
+from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
@@ -163,3 +164,10 @@ class BaseMergeUserGroup(models.Model):
 
     class Meta:
         abstract = True
+
+
+@receiver(user_logged_in)
+def user_logged_in(*args, **kwargs):
+    from django_project_base.account.service.merge_users_service import MergeUsersService
+
+    MergeUsersService().handle(**kwargs)
