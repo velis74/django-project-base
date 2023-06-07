@@ -65,7 +65,7 @@ class ProfileMergeSerializer(ProfileSerializer):
 
 
 class MergeUsersRequest(Serializer):
-    users = ListField(child=IntegerField(min_value=1), required=True, allow_empty=False)
+    users = ListField(child=IntegerField(min_value=2), required=True, allow_empty=False)
 
     def validate(self, attrs):
         for user in attrs["users"]:
