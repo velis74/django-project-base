@@ -69,7 +69,7 @@ class MergeUsersRequest(Serializer):
 
     def validate(self, attrs):
         for user in attrs["users"]:
-            if MergeUserGroup.objects.filter(users__icontains=user).exists():
+            if str(user) in ",".join(MergeUserGroup.objects.values_list("users", flat=True)).split(","):
                 raise ValidationError(dict(users=f"Pk {user} is present in another group"))
         return super().validate(attrs)
 
