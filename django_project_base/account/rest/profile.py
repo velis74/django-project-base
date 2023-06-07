@@ -18,10 +18,13 @@ from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.fields import IntegerField
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 
+from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 
@@ -121,10 +124,10 @@ class ProfileSerializer(ModelSerializer):
             self.actions.actions.append(
                 TableAction(
                     TablePosition.ROW_END,
-                    label=_("AAA"),
-                    title=_("AAA"),
-                    name="add-to-group",
-                    icon="airplane-sharp",
+                    label=_("Merge"),
+                    title=_("Merge"),
+                    name="add-to-merge",
+                    icon="git-merge-outline",
                 ),
             )
 
@@ -136,6 +139,9 @@ class ProfileSerializer(ModelSerializer):
         except:
             pass
         return False
+
+    def get_row_css_style(self, obj):
+        return super().get_row_css_style(obj)
 
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
@@ -160,6 +166,10 @@ class ProfileSerializer(ModelSerializer):
         )
 
 
+class MergeUserRequest(Serializer):
+    user = IntegerField(min_value=1, required=True, allow_null=False)
+
+
 @extend_schema_view(
     create=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
@@ -170,6 +180,12 @@ class ProfileViewSet(ModelViewSet):
     search_fields = ["username", "email", "first_name", "last_name"]
     permission_classes = [IsAuthenticated]
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
+
+    # TODO: REMOVE THIS
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        request._dont_enforce_csrf_checks = True
+        return request
 
     def get_queryset(self):
         qs = swapper.load_model("django_project_base", "Profile").objects.annotate(
@@ -315,3 +331,26 @@ class ProfileViewSet(ModelViewSet):
         if self.request.user.is_superuser or self.request.user.is_staff:
             return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
+
+    @extend_schema(
+        description="Add user to merge group",
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(description="OK"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="merge",
+        url_name="merge",
+        permission_classes=[IsAuthenticated, IsAdminUser],
+    )
+    def merge(self, request: Request, **kwargs) -> Response:
+        ser = MergeUserRequest(data=request.data)
+        ser.is_valid(raise_exception=True)
+        ck = MERGE_USERS_QS_CK % self.request.user.pk
+        ck_val = cache.get(ck, [])
+        ck_val.append(ser.validated_data["user"])
+        cache.set(ck, list(set(ck_val)), timeout=None)
+        return Response(status=status.HTTP_201_CREATED)

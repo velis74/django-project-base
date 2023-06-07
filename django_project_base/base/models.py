@@ -4,6 +4,7 @@ import svgwrite
 import swapper
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -15,7 +16,7 @@ from django_project_base.base.fields import HexColorField
 
 class BaseProject(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Name"))
-    slug = models.SlugField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Slug"))
+    slug = models.SlugField(max_length=80, null=False, blank=False, verbose_name=_("Slug"))
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     logo = models.FileField(null=True, blank=True, verbose_name=_("Logo"))
     owner = parent = models.ForeignKey(
@@ -107,6 +108,7 @@ class BaseProjectMember(models.Model):
         verbose_name=_("Owner"),
         related_name="projects",  # the name is just reversed: you seek projects this member belongs to
     )
+
     # role = models.ForeignKey()  # TODO: we don't have role support yet
 
     class Meta:
@@ -153,4 +155,11 @@ class BaseTag(TagBase):
         return '<?xml version="1.0" encoding="utf-8" ?>\n' + dwg.tostring()
 
     class Meta(TagBase.Meta):
+        abstract = True
+
+
+class BaseMergeUserGroup(models.Model):
+    users = models.CharField(max_length=1024, null=False, validators=(validate_comma_separated_integer_list,))
+
+    class Meta:
         abstract = True

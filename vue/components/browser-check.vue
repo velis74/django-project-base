@@ -11,8 +11,10 @@
 </template>
 
 <script lang="ts">
-import { APIConsumer, ConsumerLogicApi } from '@velis/dynamicforms';
+import { apiClient, APIConsumer, ConsumerLogicApi } from '@velis/dynamicforms';
 import { defineComponent, ref } from 'vue';
+
+import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './user-session/data-types';
 
 export default defineComponent({
   name: 'BrowserCheck',
@@ -52,9 +54,9 @@ export default defineComponent({
     (async () => {
       await this.consumerLogicMerge.getFullDefinition();
     })();
-    this.mergeRefreshInterval = setInterval(() => {
-      this.consumerLogicMerge.reload();
-    }, 1000);
+    // this.mergeRefreshInterval = setInterval(() => {
+    //   this.consumerLogicMerge.reload();
+    // }, 1000);
     // browserUpdate({
     //   required: {
     //     e: -this.numberOfLastBrowserVersionsSupported,
@@ -88,8 +90,23 @@ export default defineComponent({
       //   this.checkInterval = null;
       // }
     },
-    actionAddToGroup(t) {
-      console.log(Math.random(), t, 'fghfg');
+    actionMergeUsers(payload) {
+      console.log(Math.random(), payload, 'merge users');
+      apiClient.post('account/profile-merge').then(() => {
+        this.consumerLogicMerge.reload();
+      });
+    },
+    actionClearMergeUsers(payload) {
+      console.log(Math.random(), payload, 'clear merge users');
+      apiClient.delete('account/profile-merge/clear').then(() => {
+        this.consumerLogicMerge.reload();
+      });
+    },
+    actionAddToMerge(action, payload) {
+      console.log(Math.random(), action, payload, 'add to merge users');
+      apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
+        this.consumerLogicMerge.reload();
+      });
     },
   },
 });
