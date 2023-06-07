@@ -8,7 +8,7 @@ from dynamicforms.action import Actions, TableAction, TablePosition
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException, ValidationError
-from rest_framework.fields import ListField, IntegerField
+from rest_framework.fields import IntegerField, ListField
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
