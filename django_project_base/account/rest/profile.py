@@ -1,4 +1,5 @@
 import datetime
+import distutils
 
 import swapper
 from django.contrib.auth.models import Group, Permission
@@ -27,6 +28,7 @@ from rest_framework.serializers import Serializer
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
+from example.demo_django_base.models import MergeUserGroup
 
 
 class ProfilePermissionsField(fields.ManyRelatedField):
@@ -219,6 +221,17 @@ class ProfileViewSet(ModelViewSet):
         elif not (self.request.user.is_staff or self.request.user.is_superuser):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
+
+        if bool(distutils.util.strtobool(self.request.query_params.get("remove-merge-users", "false"))):
+            exclude_qs = list(
+                map(
+                    str,
+                    list(MergeUserGroup.objects.filter(created_by=self.request.user.pk).values_list("users", flat=True))
+                    + cache.get(MERGE_USERS_QS_CK % self.request.user.pk, []),  # noqa: W503
+                )
+            )
+            if exclude_qs:
+                qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
 
         qs = qs.order_by("un", "id")
 

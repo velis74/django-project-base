@@ -48,6 +48,7 @@ export default defineComponent({
   },
   mounted() {
     console.log(Math.random());
+    this.consumerLogic.filterData = { 'remove-merge-users': true };
     (async () => {
       await this.consumerLogic.getFullDefinition();
     })();
@@ -100,12 +101,15 @@ export default defineComponent({
       console.log(Math.random(), payload, 'clear merge users');
       apiClient.delete('account/profile-merge/clear').then(() => {
         this.consumerLogicMerge.reload();
+        this.consumerLogic.reload();
       });
     },
     actionAddToMerge(action, payload) {
       console.log(Math.random(), action, payload, 'add to merge users');
       apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
         this.consumerLogicMerge.reload();
+        // noinspection ES6ShorthandObjectProperty
+        this.consumerLogic.reload();
       });
     },
   },

@@ -49,8 +49,8 @@ class ProfileMergeSerializer(ProfileSerializer):
             ),
             TableAction(
                 TablePosition.HEADER,
-                label=_("Clear"),
-                title=_("Clear"),
+                label=_("Clear all"),
+                title=_("Clear all"),
                 name="clear-merge-users",
                 icon="remove-circle-outline",
             ),
@@ -118,7 +118,9 @@ class ProfileMergeViewSet(ProfileViewSet):
         ck = MERGE_USERS_QS_CK % self.request.user.pk
         ser = MergeUsersRequest(data=dict(users=cache.get(ck, [])))
         ser.is_valid(raise_exception=True)
-        group, created = MergeUserGroup.objects.get_or_create(users=",".join(map(str, ser.validated_data["users"])))
+        group, created = MergeUserGroup.objects.get_or_create(
+            users=",".join(map(str, ser.validated_data["users"])), created_by=self.request.user.pk
+        )
         cache.set(ck, [])
         return Response({MergeUserGroup._meta.pk.name: group.pk})
 
@@ -163,4 +165,5 @@ class ProfileMergeViewSet(ProfileViewSet):
     )
     def clear(self, request: Request, **kwargs) -> Response:
         cache.set(MERGE_USERS_QS_CK % self.request.user.pk, [])
+        MergeUserGroup.objects.filter(created_by=self.request.user.pk).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

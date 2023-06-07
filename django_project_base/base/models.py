@@ -161,6 +161,7 @@ class BaseTag(TagBase):
 
 class BaseMergeUserGroup(models.Model):
     users = models.CharField(max_length=1024, null=False, validators=(validate_comma_separated_integer_list,))
+    created_by = models.PositiveIntegerField()
 
     class Meta:
         abstract = True

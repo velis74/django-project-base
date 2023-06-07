@@ -6,20 +6,36 @@ import re
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('demo_django_base', '0010_userprofile_admin_password_reset'),
+        ("demo_django_base", "0010_userprofile_admin_password_reset"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MergeUserGroup',
+            name="MergeUserGroup",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('users', models.CharField(max_length=1024, validators=[django.core.validators.RegexValidator(re.compile('^\\d+(?:,\\d+)*\\Z'), code='invalid', message='Enter only digits separated by commas.')])),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "users",
+                    models.CharField(
+                        max_length=1024,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                re.compile("^\\d+(?:,\\d+)*\\Z"),
+                                code="invalid",
+                                message="Enter only digits separated by commas.",
+                            )
+                        ],
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
+        ),
+        migrations.AddField(
+            model_name="mergeusergroup",
+            name="created_by",
+            field=models.PositiveIntegerField(),
         ),
     ]
