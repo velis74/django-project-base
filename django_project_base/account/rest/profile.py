@@ -122,7 +122,9 @@ class ProfileSerializer(ModelSerializer):
         if not self._context.get("request").user.is_superuser:
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
-        if self._context.get("request").user.is_superuser or self._context.get("request").user.is_staff:
+        if bool(distutils.util.strtobool(self.request.query_params.get("remove-merge-users", "false"))) and (
+            self._context.get("request").user.is_superuser or self._context.get("request").user.is_staff
+        ):
             self.actions.actions.append(
                 TableAction(
                     TablePosition.ROW_END,
