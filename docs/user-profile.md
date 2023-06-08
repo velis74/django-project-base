@@ -75,8 +75,10 @@ UI for merging users is composed from two tables
 |--|--|
 |<table> <tr><th>Column 1</th><th>Column 2</th></tr><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr> </table> | <table> <tr><th>Column 2</th><th>Column 1</th></tr><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr> </table>|
 
-We find user in User Profiles Table and with row action
-
+We find user in User Profiles Table and with row action(click on merge button) we add user to right-hand side table. When we 
+add all users we want to merge to one account we click on merge button in "Users To Be Merged Table" header and when 
+user logs in with one of the accounts in group we created then logic for merging users is executed. Function/logic for 
+merging users is set with MERGE_USERS_HANDLER setting.
 
 ## Settings
 
