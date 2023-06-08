@@ -56,7 +56,7 @@ class ProjectRoleViewSet(ModelViewSet):
             if project:
                 try:
                     return project_model.objects.prefetch_related("owner").get(slug=project)
-                except Model.DoesNotExist:
+                except project_model.DoesNotExist:
                     pass
 
         project = self.request.GET.get("project", "")
@@ -88,7 +88,7 @@ class ProjectRoleViewSet(ModelViewSet):
                 project: BaseProject = (
                     swapper.load_model("django_project_base", "Project").objects.filter(pk=project_pk).first()
                 )
-                if project and project.owner_id == self.request.user.userprofile:
+                if project and project.owner_id == self.request.user.userprofile.pk:
                     return self.serializer_class.Meta.model.objects.filter(
                         name__startswith=f"{project_pk}{ProjectRole.delimiter}"
                     )
