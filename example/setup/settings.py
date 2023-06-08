@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 
 from django_project_base import VERSION
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django_project_base.account.constants import ACCOUNT_APP_ID
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
@@ -112,15 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "*Client ID*"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "*Client secret*"
-
-SOCIAL_AUTH_GITHUB_KEY = "a1b2c3d4"
-SOCIAL_AUTH_GITHUB_SECRET = "e5f6g7h8i9"
-
-SOCIAL_AUTH_MICROSOFT_GRAPH_KEY = "..."
-SOCIAL_AUTH_MICROSOFT_GRAPH_SECRET = "..."
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -183,6 +175,7 @@ SPECTACULAR_SETTINGS = {
 
 AUTHENTICATION_BACKENDS = (
     "django_project_base.base.auth_backends.UsersCachingBackend",  # cache users for auth to gain performance
+    "social_core.backends.google.GoogleOAuth2",
 )
 
 PROFILER_LONG_RUNNING_TASK_THRESHOLD = 1000
@@ -207,3 +200,7 @@ DYNAMICFORMS = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "859674407764-3vvf4um88q64g606gtp9kcnk3jud5jpr.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
