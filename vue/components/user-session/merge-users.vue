@@ -19,7 +19,7 @@ import { defineComponent, ref } from 'vue';
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 
 export default defineComponent({
-  name: 'MergeUsersExample',
+  name: 'MergeUsers',
   components: { APIConsumer },
   data() {
     return {
@@ -52,7 +52,6 @@ export default defineComponent({
     actionAddToMerge(action, payload) {
       apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
         this.consumerLogicMerge.reload();
-        // noinspection ES6ShorthandObjectProperty
         this.consumerLogic.reload();
       });
     },

@@ -23,7 +23,7 @@ class ProfileMergeSerializer(ProfileSerializer):
     template_context = dict(url_reverse="profile-merge-base-project")
 
     form_titles = {
-        "table": "User Merge profiles",
+        "table": "Merge users",
         "new": "",
         "edit": "",
     }
@@ -65,22 +65,20 @@ class ProfileMergeSerializer(ProfileSerializer):
 
 
 class MergeUsersRequest(Serializer):
-    users = ListField(child=IntegerField(min_value=2), required=True, allow_empty=False)
+    users = ListField(child=IntegerField(min_value=1), required=True, allow_empty=False, min_length=2)
 
     def validate(self, attrs):
         for user in attrs["users"]:
             if str(user) in ",".join(MergeUserGroup.objects.values_list("users", flat=True)).split(","):
-                raise ValidationError(dict(users=f"Pk {user} is present in another group"))
+                raise ValidationError(dict(users=f"Pk {user} is present in another group of users to be merged"))
         return super().validate(attrs)
 
 
-@extend_schema_view(
-    create=extend_schema(exclude=True),
-    update=extend_schema(exclude=True),
-)
 class ProfileMergeViewSet(ProfileViewSet):
     serializer_class = ProfileMergeSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+
+    schema = None
 
     def get_queryset(self) -> List:
         ck_val = cache.get(MERGE_USERS_QS_CK % self.request.user.pk, [])
@@ -91,28 +89,6 @@ class ProfileMergeViewSet(ProfileViewSet):
     def get_serializer_class(self):
         return ProfileMergeSerializer
 
-    # TODO: REMOVE THIS
-    def initialize_request(self, request, *args, **kwargs):
-        request = super().initialize_request(request, *args, **kwargs)
-        request._dont_enforce_csrf_checks = True
-        return request
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "search", description="Search users by all of those fields: username, email, first_name, last_name"
-            )
-        ],
-        description="Get list of users",
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK", response=ProfileMergeSerializer),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    @extend_schema(exclude=True)
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
         ck = MERGE_USERS_QS_CK % self.request.user.pk
@@ -124,19 +100,12 @@ class ProfileMergeViewSet(ProfileViewSet):
         cache.set(ck, [])
         return Response({MergeUserGroup._meta.pk.name: group.pk})
 
-    @extend_schema(exclude=True)
-    def retrieve(self, request, *args, **kwargs):
-        raise super().retrieve(request, args, kwargs)
-
-    @extend_schema(exclude=True)
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
 
-    @extend_schema(exclude=True)
     def mark_current_profile_delete(self, request: Request, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
 
-    @extend_schema(exclude=True)
     def destroy(self, request, *args, **kwargs):
         pk = self.get_object().pk
         ck = MERGE_USERS_QS_CK % self.request.user.pk
@@ -145,17 +114,9 @@ class ProfileMergeViewSet(ProfileViewSet):
         cache.set(ck, list(set(ck_val)), timeout=None)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @extend_schema(exclude=True)
     def partial_update(self, request, *args, **kwargs):
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
 
-    @extend_schema(
-        description="Clear users to be merged",
-        responses={
-            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="OK"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
     @action(
         methods=["DELETE"],
         detail=False,

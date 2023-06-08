@@ -119,11 +119,12 @@ class ProfileSerializer(ModelSerializer):
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
-        if not self._context.get("request").user.is_superuser:
+        request = self._context["request"]
+        if not request.user.is_superuser:
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
-        if bool(distutils.util.strtobool(self.request.query_params.get("remove-merge-users", "false"))) and (
-            self._context.get("request").user.is_superuser or self._context.get("request").user.is_staff
+        if bool(distutils.util.strtobool(request.query_params.get("remove-merge-users", "false"))) and (
+            request.user.is_superuser or request.user.is_staff
         ):
             self.actions.actions.append(
                 TableAction(
@@ -143,9 +144,6 @@ class ProfileSerializer(ModelSerializer):
         except:
             pass
         return False
-
-    def get_row_css_style(self, obj):
-        return super().get_row_css_style(obj)
 
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
@@ -184,12 +182,6 @@ class ProfileViewSet(ModelViewSet):
     search_fields = ["username", "email", "first_name", "last_name"]
     permission_classes = [IsAuthenticated]
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
-
-    # TODO: REMOVE THIS
-    def initialize_request(self, request, *args, **kwargs):
-        request = super().initialize_request(request, *args, **kwargs)
-        request._dont_enforce_csrf_checks = True
-        return request
 
     def get_queryset(self):
         qs = swapper.load_model("django_project_base", "Profile").objects.annotate(
@@ -347,13 +339,7 @@ class ProfileViewSet(ModelViewSet):
             return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
 
-    @extend_schema(
-        description="Add user to merge group",
-        responses={
-            status.HTTP_201_CREATED: OpenApiResponse(description="OK"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
+    @extend_schema(exclude=True)
     @action(
         methods=["POST"],
         detail=False,
