@@ -3,7 +3,6 @@ from typing import List
 from django.core.cache import cache
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms.action import Actions, TableAction, TablePosition
 from rest_framework import status
 from rest_framework.decorators import action

@@ -13,7 +13,7 @@ class MergeUsersService:
                 import_string(handler_function)(user=user, all_users=group.users)
                 group.delete()
 
-    def _find_group(self, user: "UserModel") -> Optional["MergeUserGroup"]:
+    def _find_group(self, user: "UserModel") -> Optional["MergeUserGroup"]:  # noqa:  F821
         from example.demo_django_base.models import MergeUserGroup
 
         return next(
