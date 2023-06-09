@@ -91,19 +91,20 @@ export default defineComponent({
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
     async handleSocialConnection(e) {
-      console.log(
-        e,
-        e.target.id,
-        e.currentTarget,
-        e.currentTarget.id,
-      );
-      // document.getElementById(e.currentTarget.id).style = this.getSocialConnectionStyle(e.currentTarget.id);
       if (!this.isSocialConnectionEnabled(e.currentTarget.id)) {
-        console.log(`opening link for ${e.currentTarget.id}`);
         window.location.href = _.first(
           _.filter(this.availableSocialConnections, (conn) => conn.name === e.currentTarget.id),
         ).url;
       }
+    },
+    mergeUsers(e) {
+      e.preventDefault();
+      console.log('MERGING USERS');
+      const user: String | null = document.getElementById('merge-user-user').value;
+      const passwd: String | null = document.getElementById('merge-user-password').value;
+      const account: Boolean | null = document.getElementById('merge-user-account').checked;
+
+      console.log(user || 'user', passwd || 'passwd', account);
     },
     async editSocialConnections() {
       axios.all([
@@ -121,16 +122,47 @@ export default defineComponent({
               id: socAcc.name,
               'data-url': socAcc.url,
             })));
+          dfModal.message('', () => [
+            h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
+              h('h4', gettext('Social connections')),
+            ]),
+            h('div', {}, [
+              h('div', { class: 'sc-login-list' }, socAccConfig),
+              h('div', { class: 'merge-accounts' }, [
+                h('h4', gettext('Merge account with following credentials')),
+                h('div', { style: 'display: flex; flex-direction: column; align-items: center;' }, [
+                  h('div', { class: 'merge-accounts', style: 'display: flex; flex-direction: column;' }, [
+                    h('div', { class: 'div-input' }, [
+                      h('label', {}, gettext('Uporabniško ime ali naslov e-pošte')),
+                      h('input', { type: 'text', class: 'merge-user-input', id: 'merge-user-user' }, {}),
+                    ]),
+                    h('div', { class: 'div-input' }, [
+                      h('label', {}, gettext('Geslo')),
+                      h('input', { type: 'text', class: 'merge-user-input', id: 'merge-user-password' }, {}),
+                    ]),
+                    h('div', { style: '' }, [
+                      h('label', {}, gettext('Glavni up. račun bo trenutno prijavljen uporabnik')),
+                      h('input', { type: 'checkbox', class: 'merge-user-input', id: 'merge-user-account' }, {}),
+                    ]),
 
-          dfModal.message(gettext('Social connection settings'), () => [
-            h('div', { class: 'sc-login-list' }, socAccConfig),
+                  ]),
+
+                  h('button', {
+                    onClick: this.mergeUsers,
+                    style: 'margin-top: 0.3em; width: 20%; background-color: #ABEBC6;',
+                    class: 'merge-user-input',
+                  }, 'Merge'),
+
+                ]),
+              ]),
+            ]),
           ]);
+          return;
         }
+        dfModal.message(gettext('Social connections'), gettext('No social connections available'));
       }));
-      console.log('edit user social connections');
     },
     getSocialConnectionStyle(name: String) {
-      console.log(name, 'getSocialConnectionStyle');
       // TODO: enable disabled
       if (this.isSocialConnectionEnabled(name)) {
         return 'width: 2em; height: 2em; margin: 0 0.2em;';
@@ -138,17 +170,35 @@ export default defineComponent({
       return 'width: 2em; height: 2em; margin: 0 0.2em; opacity: 0.4;';
     },
     isSocialConnectionEnabled(name: String) {
-      console.log(name, 'isSocialConnectionEnabled');
       return _.includes(_.map(this.enabledSocialConnections, 'provider'), name);
     },
   },
 });
 </script>
 <style>
-  .sc-login-list {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
+.sc-login-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.merge-accounts {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2em;
+}
+
+.merge-user-input {
+  border: 1px black;
+  border-style: solid;
+  border-radius: 5px;
+}
+
+.div-input {
+  display: flex; flex-direction: row;
+  margin-bottom: 0.3em;
+}
+
+.div-input > * { flex: 1; }
 </style>
