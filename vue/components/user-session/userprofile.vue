@@ -24,6 +24,7 @@
           {{ gettext('Stop impersonation') }}
         </v-list-item>
         <v-divider/>
+        <v-list-item @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
         <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
       </v-list>
     </v-menu>
@@ -31,20 +32,25 @@
 </template>
 
 <script lang="ts">
-import { ConsumerLogicApi } from '@velis/dynamicforms';
-import { defineComponent } from 'vue';
+import { ConsumerLogicApi, dfModal, gettext } from '@velis/dynamicforms';
+import { defineComponent, h } from 'vue';
+import IonIcon from 'vue-ionicon';
 
 import { apiClient } from '../../apiClient';
 import ProjectBaseData from '../../projectBaseData';
 
+import icons from './icons';
 import useUserSessionStore from './state';
 
 export default defineComponent({
   name: 'UserProfile',
+  // eslint-disable-next-line vue/no-unused-components
+  components: { IonIcon },
   data() {
     return {
       permissions: {} as any,
       userSession: useUserSessionStore(),
+      socialConnectionModalVisible: false,
     };
   },
   mounted() {
@@ -52,7 +58,9 @@ export default defineComponent({
   },
   methods: {
     async loadData(force: boolean = false) {
-      new ProjectBaseData().getPermissions((p: any) => { this.permissions = p; });
+      new ProjectBaseData().getPermissions((p: any) => {
+        this.permissions = p;
+      });
       if (this.userSession.loggedIn && !force) {
         await this.checkResetPassword();
         return;
@@ -79,6 +87,36 @@ export default defineComponent({
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
+    async oAuth(e) {
+      console.log(e, e.target.id);
+    },
+    async editSocialConnections() {
+      console.log('edit user social connections');
+      this.socialConnectionModalVisible = true;
+      // type DialogSectionContent = string | Slot | RenderFunction | VNode;
+      dfModal.message(gettext('Social connection settings'), () => [
+        h('div', { class: 'sc-login-list' }, [
+          h(
+            'svg',
+            {
+              innerHTML: icons['google-oauth2'],
+              style: 'width: 2em; height: 2em; margin: 0 0.2em;',
+              onClick: this.oAuth,
+              id: 'google-oauth2',
+            },
+          ),
+          h('svg', { innerHTML: icons.facebook, style: 'width: 2em; height: 2em; margin: 0 0.2em;' }),
+        ]),
+      ]);
+    },
   },
 });
 </script>
+<style>
+  .sc-login-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+</style>
