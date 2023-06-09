@@ -146,7 +146,9 @@ export default defineComponent({
                     ]),
 
                   ]),
-
+                  // TODO: add check for added sc login
+                  // TODO: validate merge users
+                  // TODO: execute merge users
                   h('button', {
                     onClick: this.mergeUsers,
                     style: 'margin-top: 0.3em; width: 20%; background-color: #ABEBC6;',
