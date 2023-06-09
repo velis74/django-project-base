@@ -52,6 +52,8 @@ export default defineComponent({
     return {
       permissions: {} as any,
       userSession: useUserSessionStore(),
+      enabledSocialConnections: [],
+      availableSocialConnections: [],
     };
   },
   mounted() {
@@ -89,22 +91,35 @@ export default defineComponent({
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
     async handleSocialConnection(e) {
-      console.log(e, e.target.id);
+      console.log(
+        e,
+        e.target.id,
+        e.currentTarget,
+        e.currentTarget.id,
+      );
+      // document.getElementById(e.currentTarget.id).style = this.getSocialConnectionStyle(e.currentTarget.id);
+      if (!this.isSocialConnectionEnabled(e.currentTarget.id)) {
+        console.log(`opening link for ${e.currentTarget.id}`);
+        window.location.href = _.first(
+          _.filter(this.availableSocialConnections, (conn) => conn.name === e.currentTarget.id),
+        ).url;
+      }
     },
     async editSocialConnections() {
       axios.all([
         apiClient.get('account/social-auth-providers'),
         apiClient.get('account/social-auth-providers-user'),
       ]).then(axios.spread((available, used) => {
-        console.log(available.data);
-        console.log(used.data);
+        this.enabledSocialConnections = used.data;
+        this.availableSocialConnections = available.data;
         if (_.size(available.data)) {
-          const socAccConfig = _.map(available.data, (socAcc) => (
-            h('svg', {
+          const socAccConfig = _.map(this.availableSocialConnections, (socAcc) => (
+            h('div', {
               innerHTML: icons[socAcc.name],
-              style: 'width: 2em; height: 2em; margin: 0 0.2em;',
+              style: this.getSocialConnectionStyle(socAcc.name),
               onClick: this.handleSocialConnection,
               id: socAcc.name,
+              'data-url': socAcc.url,
             })));
 
           dfModal.message(gettext('Social connection settings'), () => [
@@ -113,6 +128,18 @@ export default defineComponent({
         }
       }));
       console.log('edit user social connections');
+    },
+    getSocialConnectionStyle(name: String) {
+      console.log(name, 'getSocialConnectionStyle');
+      // TODO: enable disabled
+      if (this.isSocialConnectionEnabled(name)) {
+        return 'width: 2em; height: 2em; margin: 0 0.2em;';
+      }
+      return 'width: 2em; height: 2em; margin: 0 0.2em; opacity: 0.4;';
+    },
+    isSocialConnectionEnabled(name: String) {
+      console.log(name, 'isSocialConnectionEnabled');
+      return _.includes(_.map(this.enabledSocialConnections, 'provider'), name);
     },
   },
 });
