@@ -78,6 +78,7 @@ export default defineComponent({
     },
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+      await this.userSession.checkLogin(false);
     },
   },
 });
