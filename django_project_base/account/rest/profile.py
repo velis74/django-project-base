@@ -81,7 +81,7 @@ class ProfileSerializer(ModelSerializer):
     full_name = fields.CharField(read_only=True, display_form=DisplayMode.HIDDEN)
     is_impersonated = fields.SerializerMethodField(display=DisplayMode.HIDDEN)
 
-    delete_at = fields.DateTimeField(write_only=True, display=DisplayMode.HIDDEN)
+    delete_at = fields.DateTimeField(read_only=True, display=DisplayMode.HIDDEN)
     permissions = ProfilePermissionsField(
         source="user_permissions",
         child_relation=fields.PrimaryKeyRelatedField(
