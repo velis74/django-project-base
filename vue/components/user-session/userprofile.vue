@@ -99,12 +99,9 @@ export default defineComponent({
     },
     mergeUsers(e) {
       e.preventDefault();
-      console.log('MERGING USERS');
       const user: String | null = document.getElementById('merge-user-user').value;
       const passwd: String | null = document.getElementById('merge-user-password').value;
       const account: Boolean | null = document.getElementById('merge-user-account').checked;
-
-      console.log(user || 'user', passwd || 'passwd', account);
       apiClient.post('/account/profile/merge-accounts', { login: user, password: passwd, account }).then((response) => {
         console.log(response.data);
       });
