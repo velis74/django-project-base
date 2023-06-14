@@ -18,14 +18,13 @@ class MergeUsersService:
             try:
                 with transaction.atomic():
                     self._change_user_pks(user, group)
+                    if handler_function := getattr(settings, "MERGE_USERS_HANDLER", ""):
+                        import_string(handler_function)(user=user, all_users=group.users)
+                    group.delete()
             except Exception as e:
                 import logging
 
                 logging.getLogger(__name__).critical(e)
-
-            if handler_function := getattr(settings, "MERGE_USERS_HANDLER", ""):
-                import_string(handler_function)(user=user, all_users=group.users)
-            group.delete()
 
     def _find_group(self, user: "UserModel") -> Optional["MergeUserGroup"]:  # noqa:  F821
         from example.demo_django_base.models import MergeUserGroup
