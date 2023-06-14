@@ -74,7 +74,8 @@ export default defineComponent({
       await this.userSession.checkLogin(false);
     },
     async userProfile() {
-      await new ConsumerLogicApi('/account/profile/current').dialogForm(null);
+      await new ConsumerLogicApi('/account/profile', false).dialogForm(this.userSession.userId);
+      await this.userSession.checkLogin(false);
     },
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
