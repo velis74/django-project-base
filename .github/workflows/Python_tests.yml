@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: [3.8.17]
+        python: [3.8.16]
       fail-fast: false
 
     env:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: [3.8.17]
+        python: [3.8.16]
 
     steps:
       - uses: actions/checkout@v1
