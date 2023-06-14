@@ -87,7 +87,7 @@ class ProfileSerializer(ModelSerializer):
     full_name = fields.CharField(read_only=True, display_form=DisplayMode.HIDDEN)
     is_impersonated = fields.SerializerMethodField(display=DisplayMode.HIDDEN)
 
-    delete_at = fields.DateTimeField(write_only=True, display=DisplayMode.HIDDEN)
+    delete_at = fields.DateTimeField(read_only=True, display=DisplayMode.HIDDEN)
     permissions = ProfilePermissionsField(
         source="user_permissions",
         child_relation=fields.PrimaryKeyRelatedField(
@@ -293,9 +293,7 @@ class ProfileViewSet(ModelViewSet):
     )
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
-        serializer = self.get_serializer(
-            getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
-        )
+        serializer = self.get_serializer(user)
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
             project_model: Model = swapper.load_model("django_project_base", "Project")
