@@ -20,6 +20,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_registration.exceptions import UserNotFound
 
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
@@ -258,7 +259,7 @@ class ProfileViewSet(ModelViewSet):
         url_name="profile-current",
         permission_classes=[IsAuthenticated],
     )
-    def get_current_profile(self, request: Request, **kwargs) -> Response:
+    def get_current_profile(self, request: Request) -> Response:
         user: Model = request.user
         serializer = self.get_serializer(
             getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
@@ -305,3 +306,30 @@ class ProfileViewSet(ModelViewSet):
         if self.request.user.is_superuser or self.request.user.is_staff:
             return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
+
+    # TODO: move to #149 Users editor: merge user accounts code when merged
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="merge-accounts",
+        url_name="merge-accounts",
+        permission_classes=[IsAuthenticated],
+    )
+    def merge_accounts(self, request, *args, **kwargs):
+        from rest_registration.settings import registration_settings
+
+        serializer = registration_settings.LOGIN_SERIALIZER_CLASS(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        auth_user = self.request.user
+        try:
+            user = registration_settings.LOGIN_AUTHENTICATOR(serializer.validated_data, serializer=serializer)
+            # TODO: #149 Users editor: merge user accounts
+            # from django_project_base.account.service.merge_users_service import MergeUsersService
+
+            # MergeUsersService().handle(**kwargs)
+            return Response()
+        except UserNotFound:
+            raise UserNotFound
+        except Exception:
+            raise APIException

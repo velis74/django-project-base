@@ -105,6 +105,9 @@ export default defineComponent({
       const account: Boolean | null = document.getElementById('merge-user-account').checked;
 
       console.log(user || 'user', passwd || 'passwd', account);
+      apiClient.post('/account/profile/merge-accounts', { login: user, password: passwd, account }).then((response) => {
+        console.log(response.data);
+      });
     },
     async editSocialConnections() {
       axios.all([
@@ -133,15 +136,15 @@ export default defineComponent({
                 h('div', { style: 'display: flex; flex-direction: column; align-items: center;' }, [
                   h('div', { class: 'merge-accounts', style: 'display: flex; flex-direction: column;' }, [
                     h('div', { class: 'div-input' }, [
-                      h('label', {}, gettext('Uporabniško ime ali naslov e-pošte')),
+                      h('label', {}, gettext('Username or email')),
                       h('input', { type: 'text', class: 'merge-user-input', id: 'merge-user-user' }, {}),
                     ]),
                     h('div', { class: 'div-input' }, [
-                      h('label', {}, gettext('Geslo')),
+                      h('label', {}, gettext('Password')),
                       h('input', { type: 'text', class: 'merge-user-input', id: 'merge-user-password' }, {}),
                     ]),
                     h('div', { style: '' }, [
-                      h('label', {}, gettext('Glavni up. račun bo trenutno prijavljen uporabnik')),
+                      h('label', {}, gettext('Currently logged in user account will be main account')),
                       h('input', { type: 'checkbox', class: 'merge-user-input', id: 'merge-user-account' }, {}),
                     ]),
 
