@@ -46,9 +46,12 @@ import { apiClient } from '../../apiClient';
 import { HTTP_401_UNAUTHORIZED } from '../../apiConfig';
 import { showGeneralErrorNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
+import { SocialAccItem } from '../../socialIntegrations';
 
 import icons from './icons';
 import useUserSessionStore from './state';
+
+type IconObjectKey = keyof typeof icons;
 
 export default defineComponent({
   name: 'UserProfile',
@@ -59,8 +62,8 @@ export default defineComponent({
       permissions: {} as any,
       userSession: useUserSessionStore(),
       enabledSocialConnections: [],
-      availableSocialConnections: [],
-      socialConnectionsModalPromise: null,
+      availableSocialConnections: [] as Array<SocialAccItem>,
+      socialConnectionsModalPromise: null as any,
     };
   },
   mounted() {
@@ -98,30 +101,31 @@ export default defineComponent({
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
-    async handleSocialConnection(e) {
-      if (!this.isSocialConnectionEnabled(e.currentTarget.id)) {
+    async handleSocialConnection(e: Event) {
+      const target = e.currentTarget as HTMLTextAreaElement;
+      if (!this.isSocialConnectionEnabled(target.id)) {
         window.location.href = _.first(
-          _.filter(this.availableSocialConnections, (conn) => conn.name === e.currentTarget.id),
-        ).url;
+          _.filter(this.availableSocialConnections, (conn) => conn.name as string === target.id),
+        )?.url!;
       }
     },
-    mergeUsers(e) {
+    mergeUsers(e: Event) {
       e.preventDefault();
-      const user: String | null = document.getElementById('merge-user-user').value;
-      const passwd: String | null = document.getElementById('merge-user-password').value;
-      const account: Boolean | null = document.getElementById('merge-user-account').checked;
+      const user: String | null = (<HTMLInputElement>document.getElementById('merge-user-user')).value;
+      const passwd: String | null = (<HTMLInputElement>document.getElementById('merge-user-password')).value;
+      const account: Boolean | null = (<HTMLInputElement>document.getElementById('merge-user-account')).checked;
       apiClient.post(
         '/account/profile/merge-accounts',
         { login: user, password: passwd, account },
         { hideErrorNotice: true },
       ).then(() => {
         if (this.socialConnectionsModalPromise) {
-          dfModal.getDialogDefinition(this.socialConnectionsModalPromise).close();
+          dfModal.getDialogDefinition(this.socialConnectionsModalPromise)?.close();
         }
       }).catch((err) => {
         if (err.response.status === HTTP_401_UNAUTHORIZED) {
           if (this.socialConnectionsModalPromise) {
-            dfModal.getDialogDefinition(this.socialConnectionsModalPromise).close();
+            dfModal.getDialogDefinition(this.socialConnectionsModalPromise)?.close();
           }
           window.location.reload();
           return;
@@ -139,7 +143,7 @@ export default defineComponent({
         if (_.size(available.data)) {
           const socAccConfig = _.map(this.availableSocialConnections, (socAcc) => (
             h('div', {
-              innerHTML: icons[socAcc.name],
+              innerHTML: icons[socAcc.name as IconObjectKey],
               style: this.getSocialConnectionStyle(socAcc.name),
               onClick: this.handleSocialConnection,
               id: socAcc.name,
@@ -187,7 +191,10 @@ export default defineComponent({
           return;
         }
         console.log('opening modal');
-        this.socialConnectionsModalPromise = dfModal.message(gettext('Social connections'), gettext('No social connections available'));
+        this.socialConnectionsModalPromise = dfModal.message(
+          gettext('Social connections'),
+          gettext('No social connections available'),
+        );
       }));
     },
     getSocialConnectionStyle(name: String) {

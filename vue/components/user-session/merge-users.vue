@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { apiClient, APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
+import { Action, apiClient, APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
 import { defineComponent, ref } from 'vue';
 
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
@@ -29,6 +29,7 @@ export default defineComponent({
     };
   },
   mounted() {
+    // @ts-ignore
     this.consumerLogic.filterData = { 'remove-merge-users': true };
     (async () => {
       await this.consumerLogic.getFullDefinition();
@@ -49,7 +50,7 @@ export default defineComponent({
         this.consumerLogic.reload();
       });
     },
-    actionAddToMerge(action, payload) {
+    actionAddToMerge(action: Action, payload: { [x: string]: any; }) {
       apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
         this.consumerLogicMerge.reload();
         this.consumerLogic.reload();
