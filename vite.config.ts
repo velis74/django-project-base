@@ -72,8 +72,7 @@ export default ({ mode }: ConfigEnv) => {
             port: 8080,
             fs: {
                 allow: ['..'],
-            },
-            host: 'django-project-base.org'
+            }
         },
         build: {
             target: 'es2015',

@@ -20,10 +20,6 @@
           {{ gettext('Impersonate user') }}
         </v-list-item>
 
-        <v-list-item v-if="permissions['is-staff-user']" @click="addUser">
-          {{ gettext('Add user') }}
-        </v-list-item>
-
         <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
           {{ gettext('Stop impersonation') }}
         </v-list-item>
@@ -149,7 +145,6 @@ export default defineComponent({
               id: socAcc.name,
               'data-url': socAcc.url,
             })));
-          console.log('opening modal');
           this.socialConnectionsModalPromise = dfModal.message('', () => [
             // eslint-disable-next-line vue/max-len
             h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
@@ -190,7 +185,6 @@ export default defineComponent({
           ]);
           return;
         }
-        console.log('opening modal');
         this.socialConnectionsModalPromise = dfModal.message(
           gettext('Social connections'),
           gettext('No social connections available'),
@@ -206,9 +200,6 @@ export default defineComponent({
     },
     isSocialConnectionEnabled(name: String) {
       return _.includes(_.map(this.enabledSocialConnections, 'provider'), name);
-    },
-    async addUser() {
-      await new ConsumerLogicApi('/account/admin-add-user/').dialogForm('new');
     },
   },
 });

@@ -48,7 +48,7 @@ class SocialAuthProvidersViewSet(viewsets.ViewSet):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_200_OK: OpenApiResponse(description="OK", response=SocialAuthSerializer),
         }
     )
     @action(
