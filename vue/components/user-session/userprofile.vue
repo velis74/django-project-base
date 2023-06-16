@@ -154,7 +154,7 @@ export default defineComponent({
             h('div', {}, [
               h('div', { class: 'sc-login-list' }, socAccConfig),
               h('div', { class: 'merge-accounts' }, [
-                h('h4', gettext('Merge account with following credentials')),
+                h('h4', { style: 'align-self: center;' }, gettext('Merge account with following credentials')),
                 h('div', { style: 'display: flex; flex-direction: column; align-items: center;' }, [
                   h('div', { class: 'merge-accounts', style: 'display: flex; flex-direction: column;' }, [
                     h('div', { class: 'div-input' }, [
@@ -195,7 +195,7 @@ export default defineComponent({
       if (this.isSocialConnectionEnabled(name)) {
         return 'width: 2em; height: 2em; margin: 0 0.2em;';
       }
-      return 'width: 2em; height: 2em; margin: 0 0.2em; opacity: 0.4;';
+      return 'width: 2em; height: 2em; margin: 0 0.2em; opacity: 0.2; cursor: grab;';
     },
     isSocialConnectionEnabled(name: String) {
       return _.includes(_.map(this.enabledSocialConnections, 'provider'), name);
@@ -229,6 +229,11 @@ export default defineComponent({
 .div-input {
   display: flex; flex-direction: row;
   margin-bottom: 0.3em;
+  padding: 0.1em;
+}
+
+.div-input input {
+  padding: 0.2em;
 }
 
 .div-input > * { flex: 1; }
