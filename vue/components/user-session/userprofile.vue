@@ -114,31 +114,18 @@ export default defineComponent({
         '/account/profile/merge-accounts',
         { login: user, password: passwd, account },
         { hideErrorNotice: true },
-      ).then((response) => {
-        console.log(response.data);
-        // close modal
-      }).catch((err) => {
+      ).then(() => {
         if (this.socialConnectionsModalPromise) {
-          console.log(this.socialConnectionsModalPromise);
-          this.socialConnectionsModalPromise.then(() => {
-            // eslint-disable-next-line no-debugger
-            console.log('inpromise');
-            this.close();
-            debugger;
-          });
-          this.socialConnectionsModalPromise.finally((e) => {
-            // eslint-disable-next-line no-debugger
-            console.log('inpromise g', e);
-            debugger;
-          });
+          dfModal.getDialogDefinition(this.socialConnectionsModalPromise).close();
         }
-        return;
+      }).catch((err) => {
         if (err.response.status === HTTP_401_UNAUTHORIZED) {
+          if (this.socialConnectionsModalPromise) {
+            dfModal.getDialogDefinition(this.socialConnectionsModalPromise).close();
+          }
           window.location.reload();
           return;
         }
-        // error && error.response && error.response.data &&
-        // error.response.data.detail ? error.response.data.detail : ''
         showGeneralErrorNotification(err.response.data.detail);
       });
     },
