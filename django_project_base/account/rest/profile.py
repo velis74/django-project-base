@@ -23,8 +23,8 @@ from rest_framework.fields import IntegerField
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_registration.exceptions import UserNotFound
 from rest_framework.serializers import Serializer
+from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
@@ -338,7 +338,6 @@ class ProfileViewSet(ModelViewSet):
             return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
 
-    # TODO: move to #149 Users editor: merge user accounts code when merged
     @extend_schema(exclude=True)
     @action(
         methods=["POST"],
@@ -353,19 +352,24 @@ class ProfileViewSet(ModelViewSet):
         serializer = registration_settings.LOGIN_SERIALIZER_CLASS(data=request.data)
         serializer.is_valid(raise_exception=True)
         auth_user = self.request.user
+        auth_user_is_main = bool(distutils.util.strtobool(str(self.request.data.get("account", "false"))))
         try:
             user = registration_settings.LOGIN_AUTHENTICATOR(serializer.validated_data, serializer=serializer)
-            # TODO: #149 Users editor: merge user accounts
-            # from django_project_base.account.service.merge_users_service import MergeUsersService
+            from django_project_base.account.service.merge_users_service import MergeUsersService
 
-            # MergeUsersService().handle(**kwargs)
-            return Response()
+            group, created = MergeUserGroup.objects.get_or_create(
+                users=f"{auth_user.pk},{user.pk}", created_by=self.request.user.pk
+            )
+            MergeUsersService().handle(user=auth_user if auth_user_is_main else user, group=group)
+            if not auth_user_is_main:
+                # logout current user and redirect to login
+                request.session.flush()
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
         except UserNotFound:
             raise UserNotFound
         except Exception:
             raise APIException
 
-    # TODO: move to #149 Users editor: merge user accounts code when merged
     @extend_schema(exclude=True)
     @action(
         methods=["POST"],
