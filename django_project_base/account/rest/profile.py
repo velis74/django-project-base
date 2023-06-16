@@ -1,4 +1,5 @@
 import datetime
+import distutils
 
 import swapper
 from django.contrib.auth.models import Group, Permission
@@ -9,6 +10,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
+from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
@@ -17,13 +19,17 @@ from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.fields import IntegerField
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.exceptions import UserNotFound
+from rest_framework.serializers import Serializer
 
+from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
+from example.demo_django_base.models import MergeUserGroup
 
 
 class ProfilePermissionsField(fields.ManyRelatedField):
@@ -82,7 +88,7 @@ class ProfileSerializer(ModelSerializer):
     full_name = fields.CharField(read_only=True, display_form=DisplayMode.HIDDEN)
     is_impersonated = fields.SerializerMethodField(display=DisplayMode.HIDDEN)
 
-    delete_at = fields.DateTimeField(write_only=True, display=DisplayMode.HIDDEN)
+    delete_at = fields.DateTimeField(read_only=True, display=DisplayMode.HIDDEN)
     permissions = ProfilePermissionsField(
         source="user_permissions",
         child_relation=fields.PrimaryKeyRelatedField(
@@ -114,9 +120,22 @@ class ProfileSerializer(ModelSerializer):
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
-        if not self._context.get("request").user.is_superuser:
+        request = self._context["request"]
+        if not request.user.is_superuser:
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
+        if bool(distutils.util.strtobool(request.query_params.get("remove-merge-users", "false"))) and (
+            request.user.is_superuser or request.user.is_staff
+        ):
+            self.actions.actions.append(
+                TableAction(
+                    TablePosition.ROW_END,
+                    label=_("Merge"),
+                    title=_("Merge"),
+                    name="add-to-merge",
+                    icon="git-merge-outline",
+                ),
+            )
 
     def get_is_impersonated(self, obj):
         try:
@@ -146,9 +165,12 @@ class ProfileSerializer(ModelSerializer):
             layouts=[
                 ResponsiveTableLayout(auto_add_non_listed_columns=True),
                 ResponsiveTableLayout("full_name", "email", auto_add_non_listed_columns=False),
-                ResponsiveTableLayout(["full_name", "email"], auto_add_non_listed_columns=False),
             ],
         )
+
+
+class MergeUserRequest(Serializer):
+    user = IntegerField(min_value=1, required=True, allow_null=False)
 
 
 @extend_schema_view(
@@ -194,6 +216,17 @@ class ProfileViewSet(ModelViewSet):
         elif not (self.request.user.is_staff or self.request.user.is_superuser):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
+
+        if bool(distutils.util.strtobool(self.request.query_params.get("remove-merge-users", "false"))):
+            exclude_qs = list(
+                map(
+                    str,
+                    list(MergeUserGroup.objects.filter(created_by=self.request.user.pk).values_list("users", flat=True))
+                    + cache.get(MERGE_USERS_QS_CK % self.request.user.pk, []),  # noqa: W503
+                )
+            )
+            if exclude_qs:
+                qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
 
         qs = qs.order_by("un", "id")
 
@@ -261,9 +294,7 @@ class ProfileViewSet(ModelViewSet):
     )
     def get_current_profile(self, request: Request) -> Response:
         user: Model = request.user
-        serializer = self.get_serializer(
-            getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
-        )
+        serializer = self.get_serializer(user)
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
             project_model: Model = swapper.load_model("django_project_base", "Project")
@@ -333,3 +364,21 @@ class ProfileViewSet(ModelViewSet):
             raise UserNotFound
         except Exception:
             raise APIException
+
+    # TODO: move to #149 Users editor: merge user accounts code when merged
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="merge",
+        url_name="merge",
+        permission_classes=[IsAuthenticated, IsAdminUser],
+    )
+    def merge(self, request: Request, **kwargs) -> Response:
+        ser = MergeUserRequest(data=request.data)
+        ser.is_valid(raise_exception=True)
+        ck = MERGE_USERS_QS_CK % self.request.user.pk
+        ck_val = cache.get(ck, [])
+        ck_val.append(ser.validated_data["user"])
+        cache.set(ck, list(set(ck_val)), timeout=None)
+        return Response(status=status.HTTP_201_CREATED)

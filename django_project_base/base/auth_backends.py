@@ -1,3 +1,4 @@
+import swapper
 from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.core.cache import cache
@@ -19,11 +20,24 @@ def invalidate_cache(sender, instance, **kwargs):
     user_cache_invalidate(instance)
 
 
-class UsersCachingBackend(ModelBackend):
+class UsersBackend(ModelBackend):
+    def get_user(self, user_id):
+        try:
+            user = swapper.load_model("django_project_base", "Profile").objects.get(pk=user_id)
+        except Exception:
+            return None
+        return user if self.user_can_authenticate(user) else None
+
+
+class UsersCachingBackend(UsersBackend):
     def __init__(self) -> None:
         super().__init__()
         post_save.connect(invalidate_cache, sender=get_user_model())
         post_delete.connect(invalidate_cache, sender=get_user_model())
+        # even though the password is changed in Django user model, it is still UserProfile model that is saved
+        #  and thus the signal for Django user model isn't firing
+        post_save.connect(invalidate_cache, sender=swapper.load_model("django_project_base", "Profile"))
+        post_delete.connect(invalidate_cache, sender=swapper.load_model("django_project_base", "Profile"))
 
     def get_user(self, user_id):
         user = cache.get(USER_CACHE_KEY.format(id=user_id or 0))

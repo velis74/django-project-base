@@ -62,6 +62,24 @@ user.
 
 Additionally, take a look at the DELETE_PROFILE_TIMEDELTA settings value.
 
+## Merging user profiles
+
+Sometimes users create multiple accounts. This is undesirable and Django Project Base offers solution for merging user 
+accounts.
+From Django Project Base Components library you can use \<merge-users\/\> Vue component which will provide a UI for merging 
+users.
+
+UI for merging users is composed from two tables 
+
+|User Profiles Table|Users To Be Merged Table|
+|--|--|
+|<table> <tr><th>Column 1</th><th>Column 2</th></tr><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr> </table> | <table> <tr><th>Column 2</th><th>Column 1</th></tr><tr><td>Row 1 Column 1</td><td>Row 1 Column 2</td></tr> </table>|
+
+We find user in User Profiles Table and with row action(click on merge button) we add user to right-hand side table. When we 
+add all users we want to merge to one account we click on merge button in "Users To Be Merged Table" header and when 
+user logs in with one of the accounts in group we created then logic for merging users is executed. Function/logic for 
+merging users is set with MERGE_USERS_HANDLER setting.
+
 ## Settings
 
 ### DJANGO_PROJECT_BASE_PROFILE_MODEL
@@ -147,7 +165,7 @@ model.objects.update(**{
    the database table name (`class Meta: db_table = 'module_model'`).
 5. If you decided not to rename everything back to original names, you will need to replace all the references
    throughout your code. If you're not into `DRY <https://en.wikipedia.org/wiki/Don%27t_repeat_yourself>`_, you might
-   consider renaming as a less painful option. Having tests wiull help A LOT here.
+   consider renaming as a less painful option. Having tests will help A LOT here.
 
 You will now end up with a new model that replaces your old one. Of course, the entire procedure is only worth it if you
 have code from project base you like and would like to take advantage of. Code such as user merging, maintenance,

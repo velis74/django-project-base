@@ -3,7 +3,7 @@ from django.db.models import fields
 from taggit.managers import TaggableManager
 from taggit.models import GenericTaggedItemBase
 
-from django_project_base.base.models import BaseProfile, BaseProject, BaseProjectMember, BaseTag
+from django_project_base.base.models import BaseMergeUserGroup, BaseProfile, BaseProject, BaseProjectMember, BaseTag
 
 
 class UserProfile(BaseProfile):
@@ -37,3 +37,7 @@ class TaggedItemThrough(GenericTaggedItemBase):
 class Apartment(models.Model):
     number = fields.IntegerField()
     tags = TaggableManager(blank=True, through=TaggedItemThrough, related_name="apartment_tags")
+
+
+class MergeUserGroup(BaseMergeUserGroup):
+    pass
