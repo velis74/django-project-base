@@ -36,7 +36,6 @@ import { ConsumerLogicApi, dfModal, gettext } from '@velis/dynamicforms';
 import axios from 'axios';
 import _ from 'lodash';
 import { defineComponent, h } from 'vue';
-import IonIcon from 'vue-ionicon';
 
 import { apiClient } from '../../apiClient';
 import { HTTP_401_UNAUTHORIZED } from '../../apiConfig';
@@ -51,8 +50,6 @@ type IconObjectKey = keyof typeof icons;
 
 export default defineComponent({
   name: 'UserProfile',
-  // eslint-disable-next-line vue/no-unused-components
-  components: { IonIcon },
   data() {
     return {
       permissions: {} as any,
@@ -170,9 +167,6 @@ export default defineComponent({
                     ]),
 
                   ]),
-                  // TODO: add check for added sc login
-                  // TODO: validate merge users
-                  // TODO: execute merge users
                   h('button', {
                     onClick: this.mergeUsers,
                     style: 'margin-top: 0.3em; width: 20%; background-color: #ABEBC6;',
@@ -192,7 +186,6 @@ export default defineComponent({
       }));
     },
     getSocialConnectionStyle(name: String) {
-      // TODO: enable disabled
       if (this.isSocialConnectionEnabled(name)) {
         return 'width: 2em; height: 2em; margin: 0 0.2em;';
       }
