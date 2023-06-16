@@ -20,6 +20,10 @@
           {{ gettext('Impersonate user') }}
         </v-list-item>
 
+        <v-list-item v-if="permissions['is-staff-user']" @click="addUser">
+          {{ gettext('Add user') }}
+        </v-list-item>
+
         <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
           {{ gettext('Stop impersonation') }}
         </v-list-item>
@@ -39,6 +43,8 @@ import { defineComponent, h } from 'vue';
 import IonIcon from 'vue-ionicon';
 
 import { apiClient } from '../../apiClient';
+import { HTTP_401_UNAUTHORIZED } from '../../apiConfig';
+import { showGeneralErrorNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
 
 import icons from './icons';
@@ -54,6 +60,7 @@ export default defineComponent({
       userSession: useUserSessionStore(),
       enabledSocialConnections: [],
       availableSocialConnections: [],
+      socialConnectionsModalPromise: null,
     };
   },
   mounted() {
@@ -103,8 +110,36 @@ export default defineComponent({
       const user: String | null = document.getElementById('merge-user-user').value;
       const passwd: String | null = document.getElementById('merge-user-password').value;
       const account: Boolean | null = document.getElementById('merge-user-account').checked;
-      apiClient.post('/account/profile/merge-accounts', { login: user, password: passwd, account }).then((response) => {
+      apiClient.post(
+        '/account/profile/merge-accounts',
+        { login: user, password: passwd, account },
+        { hideErrorNotice: true },
+      ).then((response) => {
         console.log(response.data);
+        // close modal
+      }).catch((err) => {
+        if (this.socialConnectionsModalPromise) {
+          console.log(this.socialConnectionsModalPromise);
+          this.socialConnectionsModalPromise.then(() => {
+            // eslint-disable-next-line no-debugger
+            console.log('inpromise');
+            this.close();
+            debugger;
+          });
+          this.socialConnectionsModalPromise.finally((e) => {
+            // eslint-disable-next-line no-debugger
+            console.log('inpromise g', e);
+            debugger;
+          });
+        }
+        return;
+        if (err.response.status === HTTP_401_UNAUTHORIZED) {
+          window.location.reload();
+          return;
+        }
+        // error && error.response && error.response.data &&
+        // error.response.data.detail ? error.response.data.detail : ''
+        showGeneralErrorNotification(err.response.data.detail);
       });
     },
     async editSocialConnections() {
@@ -123,7 +158,9 @@ export default defineComponent({
               id: socAcc.name,
               'data-url': socAcc.url,
             })));
-          dfModal.message('', () => [
+          console.log('opening modal');
+          this.socialConnectionsModalPromise = dfModal.message('', () => [
+            // eslint-disable-next-line vue/max-len
             h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
               h('h4', gettext('Social connections')),
             ]),
@@ -162,7 +199,8 @@ export default defineComponent({
           ]);
           return;
         }
-        dfModal.message(gettext('Social connections'), gettext('No social connections available'));
+        console.log('opening modal');
+        this.socialConnectionsModalPromise = dfModal.message(gettext('Social connections'), gettext('No social connections available'));
       }));
     },
     getSocialConnectionStyle(name: String) {
@@ -174,6 +212,9 @@ export default defineComponent({
     },
     isSocialConnectionEnabled(name: String) {
       return _.includes(_.map(this.enabledSocialConnections, 'provider'), name);
+    },
+    async addUser() {
+      await new ConsumerLogicApi('/account/admin-add-user/').dialogForm('new');
     },
   },
 });
