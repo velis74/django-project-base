@@ -3,6 +3,7 @@ import re
 import swapper
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
@@ -346,13 +347,12 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             profile_obj.save(update_fields=["password_invalid"])
 
             EMailNotification(
-                delay=None,
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
-                    body="render template",
+                    body=render_to_string(template="account_created.html", template_data={}),
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
-                ),
+                )
             ).send()
 
         return response

@@ -9,16 +9,14 @@ class MailChannel(Channel):
 
     @staticmethod
     def send(notification: "Notification") -> None:  # noqa: F821
-        # def send_mail(
-        #         subject,
-        #         message,
-        #         from_email,
-        #         recipient_list,
-        #         fail_silently=False,
-        #         auth_user=None,
-        #         auth_password=None,
-        #         connection=None,
-        #         html_message=None,
-        # ):
+        from django_project_base.notifications.models import DjangoProjectBaseMessage
 
-        send_mail()
+        send_mail(
+            subject=notification.message.subject,
+            message=notification.message.body,
+            from_email="",
+            recipient_list=notification._recipients,
+            html_message=notification.message.body
+            if notification.message.content_type == DjangoProjectBaseMessage.HTML
+            else None,
+        )
