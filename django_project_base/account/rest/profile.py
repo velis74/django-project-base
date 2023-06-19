@@ -184,29 +184,33 @@ class ProfileViewSet(ModelViewSet):
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):
-        qs = swapper.load_model("django_project_base", "Profile").objects.annotate(
-            un=Concat(
-                Coalesce(
-                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                    Value(""),
+        qs = (
+            swapper.load_model("django_project_base", "Profile")
+            .objects.prefetch_related("projects", "groups", "user_permissions")
+            .annotate(
+                un=Concat(
+                    Coalesce(
+                        Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                        Value(""),
+                    ),
+                    Value(" "),
+                    Coalesce(
+                        Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                        "username",
+                    ),
                 ),
-                Value(" "),
-                Coalesce(
-                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                    "username",
+                un_sort=Concat(
+                    Coalesce(
+                        Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                        "username",
+                    ),
+                    Value(" "),
+                    Coalesce(
+                        Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                        Value(""),
+                    ),
                 ),
-            ),
-            un_sort=Concat(
-                Coalesce(
-                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                    "username",
-                ),
-                Value(" "),
-                Coalesce(
-                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                    Value(""),
-                ),
-            ),
+            )
         )
 
         if getattr(self.request, "current_project_slug", None):
@@ -228,8 +232,7 @@ class ProfileViewSet(ModelViewSet):
                 qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
 
         qs = qs.order_by("un", "id")
-
-        return qs.all()
+        return qs.distinct()
 
     def get_serializer_class(self):
         return ProfileSerializer
