@@ -1,21 +1,26 @@
 from datetime import datetime
 from typing import List, Optional, Type
 
-from django.conf import settings
-
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.channels.mail_channel import MailChannel
-from django_project_base.notifications.base.enums import NotificationLevel
+from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.notification import Notification
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
-class EmailNotification(Notification):
-
-    def __init__(self, message, level: Optional[NotificationLevel] = None, locale: Optional[str] = None,
-                 delay: Optional[datetime] = None, recipients: List[settings.AUTH_USER_MODEL] = [], **kwargs) -> None:
+class EMailNotification(Notification):
+    def __init__(
+        self, delay: Optional[datetime], message: DjangoProjectBaseMessage, locale: Optional[str] = None
+    ) -> None:
         super().__init__(
-            message=message, persist=True, level=level, locale=locale, delay=delay, recipients=recipients, **kwargs)
+            message=message,
+            persist=True,
+            level=NotificationLevel.INFO.value,
+            locale=locale,
+            delay=delay,
+            type=NotificationType.STANDARD.value,
+        )
 
-        @property
-        def via_channels(self) -> List[Type[Channel]]:
-            return [MailChannel]
+    @property
+    def via_channels(self) -> List[Type[Channel]]:
+        return [MailChannel]

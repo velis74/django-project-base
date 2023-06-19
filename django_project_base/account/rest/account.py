@@ -17,6 +17,8 @@ from rest_registration.api.views import (
 )
 
 from django_project_base.account.social_auth.providers import get_social_providers
+from django_project_base.notifications.base.email_notification import EMailNotification
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
 class SocialAuthProvidersViewSet(viewsets.ViewSet):
@@ -342,4 +344,15 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             )
             profile_obj.password_invalid = True
             profile_obj.save(update_fields=["password_invalid"])
+
+            EMailNotification(
+                delay=None,
+                message=DjangoProjectBaseMessage(
+                    subject=_("Your account was created for you"),
+                    body="render template",
+                    footer="",
+                    content_type=DjangoProjectBaseMessage.HTML,
+                ),
+            ).send()
+
         return response
