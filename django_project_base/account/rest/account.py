@@ -1,7 +1,7 @@
 import re
 
 import swapper
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
@@ -12,11 +12,21 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.serializers import ModelSerializer
+# fmt: off
 from rest_registration.api.views import (
     change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
 )
+# fmt: on
+from social_django.models import UserSocialAuth
 
 from django_project_base.account.social_auth.providers import get_social_providers
+
+
+class SocialAuthSerializer(ModelSerializer):
+    class Meta:
+        model = UserSocialAuth
+        exclude = ("extra_data", "uid")
 
 
 class SocialAuthProvidersViewSet(viewsets.ViewSet):
@@ -35,6 +45,21 @@ class SocialAuthProvidersViewSet(viewsets.ViewSet):
     )
     def social_auth_providers(self, request: Request) -> Response:
         return Response(map(lambda item: item._asdict(), get_social_providers()))
+
+    @extend_schema(
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK", response=SocialAuthSerializer),
+        }
+    )
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path="social-auth-providers-user",
+        url_name="social-auth-providers-user",
+        permission_classes=[IsAuthenticated],
+    )
+    def social_auth_providers_user(self, request: Request) -> Response:
+        return Response(SocialAuthSerializer(UserSocialAuth.objects.filter(user=self.request.user), many=True).data)
 
 
 class LogoutSerializer(serializers.Serializer):
@@ -104,6 +129,7 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     def create(self, request: Request) -> Response:
         response = change_password(request._request)
         if response.status_code == status.HTTP_200_OK:
+            update_session_auth_hash(request, request.user)
             profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
             profile_obj.password_invalid = False
             profile_obj.save(update_fields=["password_invalid"])
