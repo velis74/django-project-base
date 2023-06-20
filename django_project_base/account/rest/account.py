@@ -1,7 +1,7 @@
 import re
 
 import swapper
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
@@ -104,6 +104,7 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     def create(self, request: Request) -> Response:
         response = change_password(request._request)
         if response.status_code == status.HTTP_200_OK:
+            update_session_auth_hash(request, request.user)
             profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
             profile_obj.password_invalid = False
             profile_obj.save(update_fields=["password_invalid"])
