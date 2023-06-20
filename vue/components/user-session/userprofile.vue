@@ -20,10 +20,17 @@
           {{ gettext('Impersonate user') }}
         </v-list-item>
 
+        <v-list-item v-if="permissions['is-staff-user']" @click="addUser">
+          {{ gettext('Add user') }}
+        </v-list-item>
+
         <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
           {{ gettext('Stop impersonation') }}
         </v-list-item>
         <v-divider/>
+        <v-list-item @click="removeMyAccount">
+          {{ gettext('Terminate my account') }}
+        </v-list-item>
         <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
       </v-list>
     </v-menu>
@@ -31,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { ConsumerLogicApi } from '@velis/dynamicforms';
+import { Action, ConsumerLogicApi, defaultActionHandler, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
 import { defineComponent } from 'vue';
 
 import { apiClient } from '../../apiClient';
@@ -52,7 +59,9 @@ export default defineComponent({
   },
   methods: {
     async loadData(force: boolean = false) {
-      new ProjectBaseData().getPermissions((p: any) => { this.permissions = p; });
+      new ProjectBaseData().getPermissions((p: any) => {
+        this.permissions = p;
+      });
       if (this.userSession.loggedIn && !force) {
         await this.checkResetPassword();
         return;
@@ -79,6 +88,33 @@ export default defineComponent({
     },
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+    },
+    async addUser() {
+      await new ConsumerLogicApi('/account/admin-add-user/').dialogForm('new');
+    },
+    async removeMyAccount() {
+      const modalM = await dfModal.message(
+        gettext('Title'),
+        gettext('Message'),
+        new FilteredActions({
+          confirm: new Action({
+            name: 'confirm',
+            label: gettext('Confirm'),
+            icon: 'thumbs-up-outline',
+            displayStyle: { asButton: true, showLabel: true, showIcon: true },
+            position: 'FORM_FOOTER',
+          }),
+          cancel: new Action({
+            name: 'cancel',
+            label: gettext('Cancel'),
+            icon: 'thumbs-down-outline',
+            displayStyle: { asButton: true, showLabel: true, showIcon: true },
+            position: 'FORM_FOOTER',
+          }),
+        }),
+      );
+      console.log(modalM);
+      await apiClient.delete(this.userSession.apiEndpointCurrentProfile);
     },
   },
 });

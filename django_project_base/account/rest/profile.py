@@ -314,6 +314,9 @@ class ProfileViewSet(ModelViewSet):
     )
     @get_current_profile.mapping.delete
     def mark_current_profile_delete(self, request: Request, **kwargs) -> Response:
+        return Response(
+            {"time": datetime.datetime.timestamp(datetime.datetime.now())}, status=status.HTTP_204_NO_CONTENT
+        )
         user: Model = getattr(request, "user", None)
         if not user:
             raise exceptions.AuthenticationFailed
