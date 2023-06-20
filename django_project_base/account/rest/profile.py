@@ -1,10 +1,13 @@
 import datetime
 import distutils
 
+import django
 import swapper
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
-from django.db.models import Case, CharField, Model, Value, When
+from django.db import transaction
+from django.db.models import Case, CharField, ForeignKey, Model, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -24,6 +27,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
@@ -184,30 +188,36 @@ class ProfileViewSet(ModelViewSet):
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):
-        qs = swapper.load_model("django_project_base", "Profile").objects.annotate(
-            un=Concat(
-                Coalesce(
-                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                    Value(""),
+        qs = (
+            swapper.load_model("django_project_base", "Profile")
+            .objects.prefetch_related("projects", "groups", "user_permissions")
+            .annotate(
+                un=Concat(
+                    Coalesce(
+                        Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                        Value(""),
+                    ),
+                    Value(" "),
+                    Coalesce(
+                        Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                        "username",
+                    ),
                 ),
-                Value(" "),
-                Coalesce(
-                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                    "username",
+                un_sort=Concat(
+                    Coalesce(
+                        Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                        "username",
+                    ),
+                    Value(" "),
+                    Coalesce(
+                        Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                        Value(""),
+                    ),
                 ),
-            ),
-            un_sort=Concat(
-                Coalesce(
-                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                    "username",
-                ),
-                Value(" "),
-                Coalesce(
-                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                    Value(""),
-                ),
-            ),
+            )
         )
+
+        qs = qs.exclude(delete_at__isnull=False, delete_at__lt=datetime.datetime.now())
 
         if getattr(self.request, "current_project_slug", None):
             # if current project was parsed from request, filter profiles to current project only
@@ -228,8 +238,7 @@ class ProfileViewSet(ModelViewSet):
                 qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
 
         qs = qs.order_by("un", "id")
-
-        return qs.all()
+        return qs.distinct()
 
     def get_serializer_class(self):
         return ProfileSerializer
@@ -291,7 +300,7 @@ class ProfileViewSet(ModelViewSet):
         url_name="profile-current",
         permission_classes=[IsAuthenticated],
     )
-    def get_current_profile(self, request: Request, **kwargs) -> Response:
+    def get_current_profile(self, request: Request) -> Response:
         user: Model = request.user
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
@@ -308,6 +317,22 @@ class ProfileViewSet(ModelViewSet):
     @extend_schema(
         description="Marks profile of calling user for deletion in future. Future date is determined " "by settings",
         responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    @get_current_profile.mapping.post
+    def update_current_profile(self, request: Request, **kwargs) -> Response:
+        user: Model = request.user
+        serializer = self.get_serializer(user, data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @extend_schema(
+        description="Marks profile of calling user for deletion in future. Future date is determined " "by settings",
+        responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
@@ -317,13 +342,14 @@ class ProfileViewSet(ModelViewSet):
         user: Model = getattr(request, "user", None)
         if not user:
             raise exceptions.AuthenticationFailed
-        user.is_active = False
+        # user.is_active = False // user must still be able to login
         profile_obj = getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
         profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
 
-        profile_obj.save()
-        user.save()
+        profile_obj.save(update_fields=["delete_at"])
+        # user.save(update_fields=["is_active"])
         cache.delete(USER_CACHE_KEY.format(id=user.id))
+        request.session.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
@@ -341,6 +367,38 @@ class ProfileViewSet(ModelViewSet):
     @action(
         methods=["POST"],
         detail=False,
+        url_path="merge-accounts",
+        url_name="merge-accounts",
+        permission_classes=[IsAuthenticated],
+    )
+    def merge_accounts(self, request, *args, **kwargs):
+        from rest_registration.settings import registration_settings
+
+        serializer = registration_settings.LOGIN_SERIALIZER_CLASS(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        auth_user = self.request.user
+        auth_user_is_main = bool(distutils.util.strtobool(str(self.request.data.get("account", "false"))))
+        try:
+            user = registration_settings.LOGIN_AUTHENTICATOR(serializer.validated_data, serializer=serializer)
+            from django_project_base.account.service.merge_users_service import MergeUsersService
+
+            group, created = MergeUserGroup.objects.get_or_create(
+                users=f"{auth_user.pk},{user.pk}", created_by=self.request.user.pk
+            )
+            MergeUsersService().handle(user=auth_user if auth_user_is_main else user, group=group)
+            if not auth_user_is_main:
+                # logout current user and redirect to login
+                request.session.flush()
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except UserNotFound:
+            raise UserNotFound
+        except Exception:
+            raise APIException
+
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
         url_path="merge",
         url_name="merge",
         permission_classes=[IsAuthenticated, IsAdminUser],
@@ -353,3 +411,29 @@ class ProfileViewSet(ModelViewSet):
         ck_val.append(ser.validated_data["user"])
         cache.set(ck, list(set(ck_val)), timeout=None)
         return Response(status=status.HTTP_201_CREATED)
+
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="reset-user-data",
+        url_name="reset-user-data",
+        permission_classes=[IsAuthenticated],
+    )
+    @transaction.atomic()
+    def reset_user_data(self, request: Request, **kwargs) -> Response:
+        profile_model = swapper.load_model("django_project_base", "Profile")
+        profile_obj = getattr(request.user, profile_model._meta.model_name)
+        if request.data.get("reset"):
+            base_user_models = (get_user_model(), profile_model)
+            for mdl in django.apps.apps.get_models(include_auto_created=True, include_swapped=True):
+                if mdl not in base_user_models and not mdl._meta.abstract and not mdl._meta.swapped:
+                    for fld in [
+                        f
+                        for f in mdl._meta.fields
+                        if isinstance(f, ForeignKey) and (f.related_model in base_user_models)
+                    ]:
+                        mdl.objects.filter(**{fld.attname: fld.to_python(profile_obj.pk)}).delete()
+        profile_obj.delete_at = None
+        profile_obj.save(update_fields=["delete_at"])
+        return Response(status=status.HTTP_204_NO_CONTENT)

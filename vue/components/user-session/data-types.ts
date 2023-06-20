@@ -23,7 +23,8 @@ export interface UserDataJSON {
   password_invalid: boolean
   is_superuser: boolean
   permissions: UserPermissionJSON[]
-  groups: UserGroupJSON[]
+  groups: UserGroupJSON[],
+  delete_at: string
 }
 
 export interface UserData {
@@ -55,4 +56,5 @@ export interface UserSessionData {
   impersonated: boolean;
   passwordInvalid: boolean;
   selectedProject: Project;
+  deleteAt: string,
 }
