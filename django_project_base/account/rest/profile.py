@@ -314,9 +314,6 @@ class ProfileViewSet(ModelViewSet):
     )
     @get_current_profile.mapping.delete
     def mark_current_profile_delete(self, request: Request, **kwargs) -> Response:
-        return Response(
-            {"time": datetime.datetime.timestamp(datetime.datetime.now())}, status=status.HTTP_204_NO_CONTENT
-        )
         user: Model = getattr(request, "user", None)
         if not user:
             raise exceptions.AuthenticationFailed
@@ -324,8 +321,8 @@ class ProfileViewSet(ModelViewSet):
         profile_obj = getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
         profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
 
-        profile_obj.save()
-        user.save()
+        profile_obj.save(update_fields=["delete_at"])
+        user.save(update_fields=["is_active"])
         cache.delete(USER_CACHE_KEY.format(id=user.id))
         return Response(status=status.HTTP_204_NO_CONTENT)
 

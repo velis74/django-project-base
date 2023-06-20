@@ -20,10 +20,6 @@
           {{ gettext('Impersonate user') }}
         </v-list-item>
 
-        <v-list-item v-if="permissions['is-staff-user']" @click="addUser">
-          {{ gettext('Add user') }}
-        </v-list-item>
-
         <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
           {{ gettext('Stop impersonation') }}
         </v-list-item>
@@ -38,8 +34,15 @@
 </template>
 
 <script lang="ts">
-import { Action, ConsumerLogicApi, defaultActionHandler, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
-import { defineComponent } from 'vue';
+import {
+  Action,
+  ConsumerLogicApi,
+  dfModal,
+  DialogSize,
+  FilteredActions,
+  gettext,
+} from '@velis/dynamicforms';
+import { defineComponent, h } from 'vue';
 
 import { apiClient } from '../../apiClient';
 import ProjectBaseData from '../../projectBaseData';
@@ -89,13 +92,19 @@ export default defineComponent({
     async changePassword() {
       await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
     },
-    async addUser() {
-      await new ConsumerLogicApi('/account/admin-add-user/').dialogForm('new');
-    },
     async removeMyAccount() {
-      const modalM = await dfModal.message(
-        gettext('Title'),
-        gettext('Message'),
+      const modalMessage = await dfModal.message(
+        gettext('Terminate account'),
+        () => [
+          h(
+            'h5',
+            {},
+            gettext('Your account will be suspended, and all of your data will be ' +
+                'permanently deleted after a period of 1 year. Once your account is suspended, you will ' +
+                'have the option to reactivate it. If you wish to delete your account ' +
+                'immediately, please contact us using the provided information in our contacts.'),
+          ),
+        ],
         new FilteredActions({
           confirm: new Action({
             name: 'confirm',
@@ -112,9 +121,13 @@ export default defineComponent({
             position: 'FORM_FOOTER',
           }),
         }),
+        { size: DialogSize.SMALL },
       );
-      console.log(modalM);
-      await apiClient.delete(this.userSession.apiEndpointCurrentProfile);
+      if (modalMessage.action.name === 'confirm') {
+        await apiClient.delete(this.userSession.apiEndpointCurrentProfile).then(() => {
+          window.location.reload();
+        });
+      }
     },
   },
 });
