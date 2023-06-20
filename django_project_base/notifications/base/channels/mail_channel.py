@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import send_mail
 
 from django_project_base.notifications.base.channels.channel import Channel
@@ -14,7 +15,7 @@ class MailChannel(Channel):
         send_mail(
             subject=notification.message.subject,
             message=notification.message.body,
-            from_email="",
+            from_email=getattr(settings, "EMAIL_HOST_USER", None),
             recipient_list=notification._recipients,
             html_message=notification.message.body
             if notification.message.content_type == DjangoProjectBaseMessage.HTML

@@ -21,7 +21,7 @@ class AbstractDjangoProjectBaseMessage(models.Model):
     subject = models.TextField(null=True, blank=True, verbose_name=_("Subject"))
     body = models.TextField(null=False, blank=False, verbose_name=_("Body"))
     footer = models.TextField(null=True, blank=True, verbose_name=_("Footer"))
-    content_type = models.CharField(null=False, choices=CONTENT_TYPE_CHOICES, default=PLAIN_TEXT)
+    content_type = models.CharField(null=False, choices=CONTENT_TYPE_CHOICES, default=PLAIN_TEXT, max_length=64)
 
     class Meta:
         abstract = True

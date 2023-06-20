@@ -2,6 +2,7 @@ import re
 
 import swapper
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
@@ -334,6 +335,7 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
     )
+    @transaction.atomic()
     def create(self, request: Request, *args, **kwargs) -> Response:
         from rest_registration.api.views.register import RegisterView
 
@@ -349,10 +351,17 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
-                    body=render_to_string(template="account_created.html", template_data={}),
+                    body=render_to_string(
+                        "account_created.html",
+                        {
+                            "username": f"{request.data['username']}/{request.data['email']}",
+                            "password": f"{request.data['password']}",
+                        },
+                    ),
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
-                )
+                ),
+                persist=True,
             ).send()
 
         return response
