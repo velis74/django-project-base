@@ -24,6 +24,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
@@ -294,7 +295,7 @@ class ProfileViewSet(ModelViewSet):
         url_name="profile-current",
         permission_classes=[IsAuthenticated],
     )
-    def get_current_profile(self, request: Request, **kwargs) -> Response:
+    def get_current_profile(self, request: Request) -> Response:
         user: Model = request.user
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
@@ -355,6 +356,38 @@ class ProfileViewSet(ModelViewSet):
         if self.request.user.is_superuser or self.request.user.is_staff:
             return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
+
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="merge-accounts",
+        url_name="merge-accounts",
+        permission_classes=[IsAuthenticated],
+    )
+    def merge_accounts(self, request, *args, **kwargs):
+        from rest_registration.settings import registration_settings
+
+        serializer = registration_settings.LOGIN_SERIALIZER_CLASS(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        auth_user = self.request.user
+        auth_user_is_main = bool(distutils.util.strtobool(str(self.request.data.get("account", "false"))))
+        try:
+            user = registration_settings.LOGIN_AUTHENTICATOR(serializer.validated_data, serializer=serializer)
+            from django_project_base.account.service.merge_users_service import MergeUsersService
+
+            group, created = MergeUserGroup.objects.get_or_create(
+                users=f"{auth_user.pk},{user.pk}", created_by=self.request.user.pk
+            )
+            MergeUsersService().handle(user=auth_user if auth_user_is_main else user, group=group)
+            if not auth_user_is_main:
+                # logout current user and redirect to login
+                request.session.flush()
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+        except UserNotFound:
+            raise UserNotFound
+        except Exception:
+            raise APIException
 
     @extend_schema(exclude=True)
     @action(
