@@ -79,9 +79,19 @@
 </template>
 
 <script setup lang="ts">
-import { ConsumerLogicApi, DialogSize, FormPayload, gettext, interpolate, DisplayMode } from '@velis/dynamicforms';
+import {
+  ConsumerLogicApi,
+  DialogSize,
+  FormPayload,
+  gettext,
+  interpolate,
+  DisplayMode,
+  dfModal, FilteredActions, Action,
+} from '@velis/dynamicforms';
 import _ from 'lodash';
-import { reactive, Ref, ref } from 'vue';
+import { h, reactive, Ref, ref } from 'vue';
+
+import { apiClient } from '../../apiClient';
 
 import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
@@ -105,18 +115,55 @@ async function getFormDefinition() {
   formDef.layout.fields.social_auth_providers.setVisibility(DisplayMode.SUPPRESS);
   formDef.actions.actions.cancel.actionCancel = () => { showLoginDialog.value = false; };
   formDef.actions.actions.submit.actionSubmit = () => { doLogin(); showLoginDialog.value = false; };
-  // console.log(formDef);
-  // console.log(loginConsumer.ux_def);
-  // console.log(payload);
   socialAuth.value = formDef.payload.social_auth_providers;
 }
 getFormDefinition();
+
+async function resetUserState() {
+  const modalMessageReset = await dfModal.message(
+    gettext('Account reactivation'),
+    () => [
+      h(
+        'h5',
+        {},
+        gettext('Your account will be restored. Do you want to keep all your previous data or do ' +
+            'you want to reset account state and begin as account was just ' +
+            'registered and your previous data is deleted?'),
+      ),
+    ],
+    new FilteredActions({
+      confirm: new Action({
+        name: 'confirm',
+        label: gettext('Reset account'),
+        icon: 'thumbs-down-outline',
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+      cancel: new Action({
+        name: 'cancel',
+        label: gettext('Cancel'),
+        icon: 'thumbs-up-outline',
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+    }),
+    { size: DialogSize.SMALL },
+  );
+  const payload = { reset: false };
+  if (modalMessageReset.action.name === 'confirm') {
+    payload.reset = true;
+  }
+  await apiClient.post('/account/profile/reset-user-data', payload);
+}
 
 async function doLogin() {
   if (payload.value?.login || payload.value?.password) {
     const result = await userSession.login(payload.value?.login, payload.value?.password);
     if (result?.status === 200) {
       // nothing to do: login was a success
+      if (userSession.deleteAt) {
+        await resetUserState();
+      }
       return;
     }
     if (result?.response?.status === 400) {

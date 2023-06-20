@@ -24,7 +24,7 @@
           {{ gettext('Stop impersonation') }}
         </v-list-item>
         <v-divider/>
-        <v-list-item @click="removeMyAccount">
+        <v-list-item v-if="!userSession.deleteAt" @click="removeMyAccount">
           {{ gettext('Terminate my account') }}
         </v-list-item>
         <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>

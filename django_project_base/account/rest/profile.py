@@ -1,10 +1,13 @@
 import datetime
 import distutils
 
+import django
 import swapper
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
-from django.db.models import Case, CharField, Model, Value, When
+from django.db import transaction
+from django.db.models import Case, CharField, ForeignKey, Model, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -209,6 +212,8 @@ class ProfileViewSet(ModelViewSet):
             ),
         )
 
+        qs = qs.exclude(delete_at__isnull=False, delete_at__lt=datetime.datetime.now())
+
         if getattr(self.request, "current_project_slug", None):
             # if current project was parsed from request, filter profiles to current project only
             qs = qs.filter(projects__project__slug=self.request.current_project_slug)
@@ -317,13 +322,14 @@ class ProfileViewSet(ModelViewSet):
         user: Model = getattr(request, "user", None)
         if not user:
             raise exceptions.AuthenticationFailed
-        user.is_active = False
+        # user.is_active = False // user must still be able to login
         profile_obj = getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
         profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
 
         profile_obj.save(update_fields=["delete_at"])
         user.save(update_fields=["is_active"])
         cache.delete(USER_CACHE_KEY.format(id=user.id))
+        request.session.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @extend_schema(
@@ -353,3 +359,29 @@ class ProfileViewSet(ModelViewSet):
         ck_val.append(ser.validated_data["user"])
         cache.set(ck, list(set(ck_val)), timeout=None)
         return Response(status=status.HTTP_201_CREATED)
+
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="reset-user-data",
+        url_name="reset-user-data",
+        permission_classes=[IsAuthenticated],
+    )
+    @transaction.atomic()
+    def reset_user_data(self, request: Request, **kwargs) -> Response:
+        profile_model = swapper.load_model("django_project_base", "Profile")
+        profile_obj = getattr(request.user, profile_model._meta.model_name)
+        if request.data.get("reset"):
+            base_user_models = (get_user_model(), profile_model)
+            for mdl in django.apps.apps.get_models(include_auto_created=True, include_swapped=True):
+                if mdl not in base_user_models and not mdl._meta.abstract and not mdl._meta.swapped:
+                    for fld in [
+                        f
+                        for f in mdl._meta.fields
+                        if isinstance(f, ForeignKey) and (f.related_model in base_user_models)
+                    ]:
+                        mdl.objects.filter(**{fld.attname: fld.to_python(profile_obj.pk)}).delete()
+        profile_obj.delete_at = None
+        profile_obj.save(update_fields=["delete_at"])
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -24,6 +24,7 @@ const useUserSessionStore = defineStore('user-session', {
     },
     impersonated: false,
     passwordInvalid: false,
+    deleteAt: '',
     selectedProject: {
       [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: '',
       logo: '',
@@ -89,6 +90,7 @@ const useUserSessionStore = defineStore('user-session', {
           permissions,
         },
         impersonated: data?.is_impersonated,
+        deleteAt: data?.delete_at,
         passwordInvalid: data?.password_invalid,
       });
     },
