@@ -12,6 +12,7 @@
       <v-list>
         <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
         <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
+        <v-list-item @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
 
         <v-list-item
           v-if="permissions['impersonate-user'] && !userSession.impersonated"
@@ -24,7 +25,9 @@
           {{ gettext('Stop impersonation') }}
         </v-list-item>
         <v-divider/>
-        <v-list-item @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
+        <v-list-item v-if="!userSession.deleteAt" @click="removeMyAccount">
+          {{ gettext('Terminate my account') }}
+        </v-list-item>
         <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
       </v-list>
     </v-menu>
@@ -32,7 +35,14 @@
 </template>
 
 <script lang="ts">
-import { ConsumerLogicApi, dfModal, gettext } from '@velis/dynamicforms';
+import {
+  Action,
+  ConsumerLogicApi,
+  dfModal,
+  DialogSize,
+  FilteredActions,
+  gettext,
+} from '@velis/dynamicforms';
 import axios from 'axios';
 import _ from 'lodash';
 import { defineComponent, h } from 'vue';
@@ -193,6 +203,43 @@ export default defineComponent({
     },
     isSocialConnectionEnabled(name: String) {
       return _.includes(_.map(this.enabledSocialConnections, 'provider'), name);
+    },
+    async removeMyAccount() {
+      const modalMessage = await dfModal.message(
+        gettext('Terminate account'),
+        () => [
+          h(
+            'h5',
+            {},
+            gettext('Your account will be suspended, and all of your data will be ' +
+                'permanently deleted after a period of 1 year. Once your account is suspended, you will ' +
+                'have the option to reactivate it. If you wish to delete your account ' +
+                'immediately, please contact us using the provided information in our contacts.'),
+          ),
+        ],
+        new FilteredActions({
+          confirm: new Action({
+            name: 'confirm',
+            label: gettext('Confirm'),
+            icon: 'thumbs-up-outline',
+            displayStyle: { asButton: true, showLabel: true, showIcon: true },
+            position: 'FORM_FOOTER',
+          }),
+          cancel: new Action({
+            name: 'cancel',
+            label: gettext('Cancel'),
+            icon: 'thumbs-down-outline',
+            displayStyle: { asButton: true, showLabel: true, showIcon: true },
+            position: 'FORM_FOOTER',
+          }),
+        }),
+        { size: DialogSize.SMALL },
+      );
+      if (modalMessage.action.name === 'confirm') {
+        await apiClient.delete(this.userSession.apiEndpointCurrentProfile).then(() => {
+          window.location.reload();
+        });
+      }
     },
   },
 });
