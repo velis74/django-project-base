@@ -153,7 +153,9 @@ async function resetUserState() {
   if (modalMessageReset.action.name === 'confirm') {
     payload.reset = true;
   }
-  await apiClient.post('/account/profile/reset-user-data', payload);
+  await apiClient.post('/account/profile/reset-user-data', payload).then(() => {
+    window.location.reload();
+  });
 }
 
 async function doLogin() {

@@ -327,7 +327,7 @@ class ProfileViewSet(ModelViewSet):
         profile_obj.delete_at = timezone.now() + datetime.timedelta(days=DELETE_PROFILE_TIMEDELTA)
 
         profile_obj.save(update_fields=["delete_at"])
-        user.save(update_fields=["is_active"])
+        # user.save(update_fields=["is_active"])
         cache.delete(USER_CACHE_KEY.format(id=user.id))
         request.session.flush()
         return Response(status=status.HTTP_204_NO_CONTENT)

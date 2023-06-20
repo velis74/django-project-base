@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for profile in swapper.load_model("django_project_base", "Profile").objects.filter(
-            delete_at__isnull=False, delete_at__lt=datetime.datetime.now(), is_active=False
+            delete_at__isnull=False, delete_at__lt=datetime.datetime.now()
         ):
             with transaction.atomic():
                 try:
