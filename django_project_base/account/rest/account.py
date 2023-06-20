@@ -3,6 +3,7 @@ import re
 import swapper
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
@@ -13,6 +14,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
+
 # fmt: off
 from rest_registration.api.views import (
     change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
@@ -21,6 +23,8 @@ from rest_registration.api.views import (
 from social_django.models import UserSocialAuth
 
 from django_project_base.account.social_auth.providers import get_social_providers
+from django_project_base.notifications.base.email_notification import EMailNotification
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
 class SocialAuthSerializer(ModelSerializer):
@@ -357,6 +361,7 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
     )
+    @transaction.atomic()
     def create(self, request: Request, *args, **kwargs) -> Response:
         from rest_registration.api.views.register import RegisterView
 
@@ -368,4 +373,21 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             )
             profile_obj.password_invalid = True
             profile_obj.save(update_fields=["password_invalid"])
+
+            EMailNotification(
+                message=DjangoProjectBaseMessage(
+                    subject=_("Your account was created for you"),
+                    body=render_to_string(
+                        "account_created.html",
+                        {
+                            "username": f"{request.data['username']}/{request.data['email']}",
+                            "password": f"{request.data['password']}",
+                        },
+                    ),
+                    footer="",
+                    content_type=DjangoProjectBaseMessage.HTML,
+                ),
+                persist=True,
+            ).send()
+
         return response
