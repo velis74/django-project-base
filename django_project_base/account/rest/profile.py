@@ -308,6 +308,22 @@ class ProfileViewSet(ModelViewSet):
     @extend_schema(
         description="Marks profile of calling user for deletion in future. Future date is determined " "by settings",
         responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    @get_current_profile.mapping.post
+    def update_current_profile(self, request: Request, **kwargs) -> Response:
+        user: Model = request.user
+        serializer = self.get_serializer(user, data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @extend_schema(
+        description="Marks profile of calling user for deletion in future. Future date is determined " "by settings",
+        responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
