@@ -86,7 +86,9 @@ import {
   gettext,
   interpolate,
   DisplayMode,
-  dfModal, FilteredActions, Action,
+  dfModal,
+  FilteredActions,
+  Action,
 } from '@velis/dynamicforms';
 import _ from 'lodash';
 import { h, reactive, Ref, ref } from 'vue';

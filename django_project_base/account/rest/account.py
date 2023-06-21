@@ -4,6 +4,7 @@ import swapper
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
