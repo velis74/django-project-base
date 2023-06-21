@@ -86,7 +86,7 @@ import {
   gettext,
   interpolate,
   DisplayMode,
-  dfModal,
+  dfModal as dfModalApi,
   FilteredActions,
   Action,
 } from '@velis/dynamicforms';
@@ -122,7 +122,7 @@ async function getFormDefinition() {
 getFormDefinition();
 
 async function resetUserState() {
-  const modalMessageReset = await dfModal.message(
+  const modalMessageReset = await dfModalApi.message(
     gettext('Account reactivation'),
     () => [
       h(
