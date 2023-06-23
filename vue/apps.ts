@@ -77,7 +77,6 @@ const createCoreApp = (
 
   // add translation function on a global scale
   app.config.globalProperties.gettext = (value: string) => value;
-  app.config.unwrapInjectedRef = true;
   app.provide<AppData>('data', data);
 
   // add components

@@ -183,7 +183,11 @@ async function doLogin() {
 }
 
 function focusPassword() { pwd.value.focus(); }
-function newAccount() { showLoginDialog.value = false; /* TODO show the create account dialog */ }
+const newAccount = async () => {
+  showLoginDialog.value = false;
+  /* TODO show the create account dialog */
+  await new ConsumerLogicApi('/account/profile/', false).dialogForm('new', null, false);
+};
 </script>
 
 <script lang="ts">
