@@ -34,7 +34,7 @@
         </v-row>
       </v-container>
     </v-form>
-    <df-modal v-model="showLoginDialog" :size="DialogSize.SMALL">
+    <df-dialog v-model="showLoginDialog" :size="DialogSize.SMALL">
       <template #title>
         <div>{{ formDef.title }}</div>
       </template>
@@ -74,7 +74,7 @@
           <df-actions :actions="formDef.actions.formFooter"/>
         </div>
       </template>
-    </df-modal>
+    </df-dialog>
   </div>
 </template>
 
