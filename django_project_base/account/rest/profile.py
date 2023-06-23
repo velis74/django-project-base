@@ -300,7 +300,7 @@ class ProfileViewSet(ModelViewSet):
         url_name="profile-current",
         permission_classes=[IsAuthenticated],
     )
-    def get_current_profile(self, request: Request) -> Response:
+    def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
