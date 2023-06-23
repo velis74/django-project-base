@@ -176,6 +176,16 @@ class MergeUserRequest(Serializer):
     user = IntegerField(min_value=1, required=True, allow_null=False)
 
 
+class ProfileViewPermissions(IsAuthenticated):
+    """
+    Allows users to have full permissions on get/post (retrieving and adding new users).
+    Other methods require authentication.
+    """
+    def has_permission(self, request, view):
+        if request.method in ('GET', 'POST',):
+            return True
+        return super().has_permission(request, view)
+
 @extend_schema_view(
     create=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
@@ -184,7 +194,7 @@ class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["username", "email", "first_name", "last_name"]
-    permission_classes = [IsAuthenticated]
+    permission_classes = (ProfileViewPermissions,)
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):

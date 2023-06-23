@@ -132,7 +132,7 @@ const useUserSessionStore = defineStore('user-session', {
         console.error(error);
       }
       this.$reset();
-      // window.location.href = '/';
+      window.location.href = '/';
     },
 
     async checkLogin(showNotAuthorizedNotice = true) {
