@@ -186,6 +186,7 @@ class ProfileViewPermissions(IsAuthenticated):
             return True
         return super().has_permission(request, view)
 
+
 @extend_schema_view(
     create=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
