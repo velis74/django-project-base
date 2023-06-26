@@ -340,12 +340,15 @@ class ProfileViewSet(ModelViewSet):
         },
     )
     @register_account.mapping.post
+    @transaction.atomic
     def create_new_account(self, request: Request, **kwargs):
         request.data['date_joined'] = datetime.datetime.now()
         serializer = self.get_serializer(None, data=request.data, many=False)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        user = serializer.save()
+        user.set_password(request.data['password'])
+        user.save()
+        return Response(serializer.validated_data)
 
     @extend_schema(
         description="Get user profile by id",
