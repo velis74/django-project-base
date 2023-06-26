@@ -191,13 +191,16 @@ class ProfileRegisterSerializer(ProfileSerializer):
         exclude = ProfileSerializer.Meta.exclude + ("avatar", "reverse_full_name_order")
 
     def validate(self, attrs):
+        super(ProfileRegisterSerializer, self).validate(attrs)
         errors = {}
-        errors.update(super(ProfileRegisterSerializer, self).validate(attrs))
+        password_repeat = attrs.pop('password_repeat')
         if not attrs['password']:
-            errors['password'] = _('Password field is required')
+            errors['password'] = _('Password is required')
+        if not attrs['password'] == password_repeat:
+            errors['password_repeat'] = _('Repeated value does not match inputted password')
 
-        if not attrs['password'] == attrs['password_repeat']:
-            errors['password_repeat'] = _('Repeated value does not match inputed password')
+        if not attrs['email']:
+            errors['email'] = _("Email is required")
 
         if errors:
             raise ValidationError(errors)
@@ -342,8 +345,12 @@ class ProfileViewSet(ModelViewSet):
     @register_account.mapping.post
     @transaction.atomic
     def create_new_account(self, request: Request, **kwargs):
+        # set default values
         request.data['date_joined'] = datetime.datetime.now()
-        serializer = self.get_serializer(None, data=request.data, many=False)
+        request.data['is_active'] = True
+
+        # call serializer to do the data processing drf way - hijack
+        serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context(), data=request.data, many=False)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         user.set_password(request.data['password'])
