@@ -12,7 +12,7 @@
       <v-list>
         <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
         <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
-        <v-list-item @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
+        <!--v-list-item @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item-->
 
         <v-list-item
           v-if="permissions['impersonate-user'] && !userSession.impersonated"
@@ -25,9 +25,9 @@
           {{ gettext('Stop impersonation') }}
         </v-list-item>
         <v-divider/>
-        <v-list-item v-if="!userSession.deleteAt" @click="removeMyAccount">
+        <!--v-list-item v-if="!userSession.deleteAt" @click="removeMyAccount">
           {{ gettext('Terminate my account') }}
-        </v-list-item>
+        </v-list-item-->
         <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
       </v-list>
     </v-menu>
