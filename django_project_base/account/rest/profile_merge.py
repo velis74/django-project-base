@@ -1,4 +1,5 @@
 from typing import List
+import swapper
 
 from django.core.cache import cache
 from django.db import transaction
@@ -15,7 +16,6 @@ from rest_framework.serializers import Serializer
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
-from example.demo_django_base.models import MergeUserGroup
 
 
 class ProfileMergeSerializer(ProfileSerializer):
@@ -67,6 +67,7 @@ class MergeUsersRequest(Serializer):
     users = ListField(child=IntegerField(min_value=1), required=True, allow_empty=False, min_length=2)
 
     def validate(self, attrs):
+        MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
         for user in attrs["users"]:
             if str(user) in ",".join(MergeUserGroup.objects.values_list("users", flat=True)).split(","):
                 raise ValidationError(dict(users=f"Pk {user} is present in another group of users to be merged"))
@@ -90,6 +91,7 @@ class ProfileMergeViewSet(ProfileViewSet):
 
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
+        MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
         ck = MERGE_USERS_QS_CK % self.request.user.pk
         ser = MergeUsersRequest(data=dict(users=cache.get(ck, [])))
         ser.is_valid(raise_exception=True)
@@ -124,6 +126,8 @@ class ProfileMergeViewSet(ProfileViewSet):
         permission_classes=[IsAuthenticated, IsAdminUser],
     )
     def clear(self, request: Request, **kwargs) -> Response:
+        MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
+
         cache.set(MERGE_USERS_QS_CK % self.request.user.pk, [])
         MergeUserGroup.objects.filter(created_by=self.request.user.pk).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

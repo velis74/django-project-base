@@ -167,6 +167,12 @@ class BaseMergeUserGroup(models.Model):
         abstract = True
 
 
+# TODO: not sure this is even needed? why would anyone want to override this particular table?
+class MergeUserGroup(BaseMergeUserGroup):
+    class Meta:
+        swappable = swapper.swappable_setting("django_project_base", "MergeUserGroup")
+
+
 @receiver(user_logged_in)
 def user_logged_in(*args, **kwargs):
     from django_project_base.account.service.merge_users_service import MergeUsersService

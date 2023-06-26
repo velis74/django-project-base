@@ -27,7 +27,7 @@ class MergeUsersService:
                 logging.getLogger(__name__).critical(e)
 
     def _find_group(self, user: "UserModel") -> Optional["MergeUserGroup"]:  # noqa:  F821
-        from example.demo_django_base.models import MergeUserGroup
+        MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
 
         return next(
             iter([group for group in MergeUserGroup.objects.all() if str(user.pk) in group.users.split(",")]), None

@@ -12,10 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-# fmt: off
 from django_project_base import VERSION
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# fmt: on
 from django_project_base.account.constants import ACCOUNT_APP_ID
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 
@@ -151,6 +150,7 @@ STATICFILES_DIRS = (
 DJANGO_PROJECT_BASE_PROJECT_MODEL = "demo_django_base.Project"
 DJANGO_PROJECT_BASE_PROFILE_MODEL = "demo_django_base.UserProfile"
 DJANGO_PROJECT_BASE_PROJECTMEMBER_MODEL = "demo_django_base.ProjectMember"
+DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
 
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,

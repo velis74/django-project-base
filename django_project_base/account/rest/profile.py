@@ -32,7 +32,6 @@ from rest_registration.exceptions import UserNotFound
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
-from example.demo_django_base.models import MergeUserGroup
 
 
 class ProfilePermissionsField(fields.ManyRelatedField):
@@ -227,6 +226,7 @@ class ProfileViewSet(ModelViewSet):
             qs = qs.filter(pk=self.request.user.pk)
 
         if bool(distutils.util.strtobool(self.request.query_params.get("remove-merge-users", "false"))):
+            MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
             exclude_qs = list(
                 map(
                     str,
@@ -379,8 +379,10 @@ class ProfileViewSet(ModelViewSet):
         auth_user = self.request.user
         auth_user_is_main = bool(distutils.util.strtobool(str(self.request.data.get("account", "false"))))
         try:
-            user = registration_settings.LOGIN_AUTHENTICATOR(serializer.validated_data, serializer=serializer)
             from django_project_base.account.service.merge_users_service import MergeUsersService
+
+            user = registration_settings.LOGIN_AUTHENTICATOR(serializer.validated_data, serializer=serializer)
+            MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
 
             group, created = MergeUserGroup.objects.get_or_create(
                 users=f"{auth_user.pk},{user.pk}", created_by=self.request.user.pk
