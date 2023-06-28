@@ -31,6 +31,9 @@
           <v-col>
             <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
           </v-col>
+          <v-col>
+            <v-btn color="primary" variant="tonal" @click.stop="openRegistration">{{ gettext('Register') }}</v-btn>
+          </v-col>
         </v-row>
       </v-container>
     </v-form>
@@ -183,7 +186,14 @@ async function doLogin() {
 }
 
 function focusPassword() { pwd.value.focus(); }
-function newAccount() { showLoginDialog.value = false; /* TODO show the create account dialog */ }
+const newAccount = async () => {
+  showLoginDialog.value = false;
+  /* TODO show the create account dialog */
+  await openRegistration();
+};
+const openRegistration = async () => {
+  await new ConsumerLogicApi('/account/profile/register/', true).dialogForm(null, null, false);
+};
 </script>
 
 <script lang="ts">
