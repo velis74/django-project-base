@@ -187,7 +187,7 @@ class ProfileRegisterSerializer(ProfileSerializer):
             columns=2,
             size="large",
         )
-        exclude = ProfileSerializer.Meta.exclude + ("avatar", "reverse_full_name_order")
+        exclude = ProfileSerializer.Meta.exclude + ("avatar", )
 
     def validate(self, attrs):
         super(ProfileRegisterSerializer, self).validate(attrs)

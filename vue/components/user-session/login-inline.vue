@@ -31,7 +31,7 @@
           <v-col>
             <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
           </v-col>
-          <v-col>
+          <v-col class="d-none d-md-flex">
             <v-btn color="primary" variant="tonal" @click.stop="openRegistration">{{ gettext('Register') }}</v-btn>
           </v-col>
         </v-row>
