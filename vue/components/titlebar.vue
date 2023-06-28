@@ -1,6 +1,6 @@
 <template>
   <v-toolbar :theme="darkOrLightMode">
-    <template v-if="userSession.selectedProject.logo" #prepend>
+    <template v-if="userSession.selectedProject?.logo" #prepend>
       <v-img :src="userSession.selectedProject.logo" @click="clickLogo"/>
     </template>
     <v-toolbar-title @click="(event) => $emit('title-click', event)">{{ computeTitle() }}</v-toolbar-title>
@@ -86,8 +86,8 @@ export default defineComponent({
 
       if (this.adjustDocumentTitle) {
         document.title = this.pageTitle ?
-          `${this.pageTitle} - ${this.userSession.selectedProject.name}` :
-          this.userSession.selectedProject.name;
+          `${this.pageTitle} - ${this.userSession.selectedProjectName || ''}` :
+          this.userSession.selectedProjectName;
       }
       return this.pageTitle || 'Project Base Demo';
     },

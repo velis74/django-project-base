@@ -71,7 +71,21 @@ const useUserSessionStore = defineStore('user-session', {
      * alias for getting primary key of currently selected project
      */
     selectedProjectId(state) {
-      return state.selectedProject[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+      return state.selectedProject?.[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+    },
+
+    /**
+     * alias for project name - if undefined return empty string
+     */
+    selectedProjectName(state) {
+      return state.selectedProject?.name ?? '';
+    },
+
+    /**
+     * is current user logged into any project
+     */
+    anyProjectSelected(state): boolean {
+      return !!state.selectedProject;
     },
   },
   actions: {
@@ -96,15 +110,19 @@ const useUserSessionStore = defineStore('user-session', {
     },
 
     setSelectedProject(data: Project | undefined) {
-      const input = data || {} as Project;
-      this.$patch({
-        selectedProject: {
-          [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: input[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] || '',
-          logo: input.logo || '',
-          name: input.name || '',
-        },
-      });
-      setCurrentProject(input[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] || '');
+      if (data === undefined) {
+        this.$patch({ selectedProject: undefined });
+      } else {
+        this.$patch({
+          selectedProject: {
+            [PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]: data[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME],
+            logo: data.logo,
+            name: data.name,
+          },
+        });
+      }
+
+      setCurrentProject(data?.[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
     },
 
     async login(username: string, password: string) {
