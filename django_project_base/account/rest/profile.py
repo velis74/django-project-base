@@ -21,7 +21,7 @@ from dynamicforms.template_render.responsive_table_layout import ResponsiveTable
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.fields import IntegerField
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
@@ -171,8 +171,56 @@ class ProfileSerializer(ModelSerializer):
         )
 
 
+class ProfileRegisterSerializer(ProfileSerializer):
+    password = fields.CharField(label=_("Password"), password_field=True)
+    password_repeat = fields.CharField(label=_("Repeat Password"), password_field=True)
+
+    class Meta(ProfileSerializer.Meta):
+        layout = Layout(
+            Row(Column("username")),
+            Row(Column("first_name"), Column("last_name")),
+            Row("password"),
+            Row("password_repeat"),
+            Row("email"),
+            Row("phone_number"),
+            Row("language"),
+            columns=2,
+            size="large",
+        )
+        exclude = ProfileSerializer.Meta.exclude + ("avatar", "reverse_full_name_order")
+
+    def validate(self, attrs):
+        super(ProfileRegisterSerializer, self).validate(attrs)
+        errors = {}
+        password_repeat = attrs.pop('password_repeat')
+        if not attrs['password']:
+            errors['password'] = _('Password is required')
+        if not attrs['password'] == password_repeat:
+            errors['password_repeat'] = _('Repeated value does not match inputted password')
+
+        if not attrs['email']:
+            errors['email'] = _("Email is required")
+
+        if errors:
+            raise ValidationError(errors)
+        return attrs
+
+
 class MergeUserRequest(Serializer):
     user = IntegerField(min_value=1, required=True, allow_null=False)
+
+
+class ProfileViewPermissions(IsAuthenticated):
+    """
+    Allows users to have full permissions on get/post (retrieving and adding new users).
+    Other methods require authentication.
+    """
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return True
+        if request.method == 'GET' and request.path.split('/')[-1].split('.')[0] == 'new':
+            return True
+        return super().has_permission(request, view)
 
 
 @extend_schema_view(
@@ -183,7 +231,7 @@ class ProfileViewSet(ModelViewSet):
     serializer_class = ProfileSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["username", "email", "first_name", "last_name"]
-    permission_classes = [IsAuthenticated]
+    permission_classes = (ProfileViewPermissions,)
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):
@@ -265,6 +313,49 @@ class ProfileViewSet(ModelViewSet):
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
+
+    @extend_schema(
+        description="Default parameters for user registration",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_path="register",
+        url_name="profile-register",
+        permission_classes=[],
+    )
+    def register_account(self, request: Request, **kwargs):
+        serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context())
+        response_data: dict = serializer.data
+        return Response(response_data)
+
+    @extend_schema(
+        description="Registering new account",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    @register_account.mapping.post
+    @transaction.atomic
+    def create_new_account(self, request: Request, **kwargs):
+        # set default values
+        request.data['date_joined'] = datetime.datetime.now()
+        request.data['is_active'] = True
+
+        # call serializer to do the data processing drf way - hijack
+        serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context(), data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        user.set_password(request.data['password'])
+        user.save()
+        return Response(serializer.validated_data)
 
     @extend_schema(
         description="Get user profile by id",
