@@ -55,6 +55,6 @@ export interface UserSessionData {
   userData: UserData;
   impersonated: boolean;
   passwordInvalid: boolean;
-  selectedProject: Project;
+  selectedProject?: Project;
   deleteAt: string,
 }

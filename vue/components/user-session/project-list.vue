@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import _ from 'lodash';
 import { onMounted, Ref, ref, watch } from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
@@ -45,10 +44,8 @@ function setPermissions(newPermissions: Permissions) {
 async function loadData() {
   if (!userSession.loggedIn) return;
   projectList.value = await getProjects();
-  // TODO: This is wrong: why would we select any project by default? we will display only the landing page,
-  //  which should provide available projects list as well to the user. THEN, when the user decides, wil we select
-  //  a project
-  if (!userSession.selectedProjectId) userSession.setSelectedProject(_.first(projectList.value));
+  // by default do not select any projects
+  userSession.setSelectedProject(undefined);
   dataStore.getPermissions(setPermissions);
 }
 
@@ -66,7 +63,7 @@ export default { name: 'ProjectList' };
 
 <template>
   <v-btn style="min-width: 0">
-    &#9776; {{ userSession.selectedProject.name }}
+    &#9776; {{ userSession.selectedProject?.name ?? 'NO Project' }}
     <v-menu activator="parent">
       <v-list>
         <v-list-item

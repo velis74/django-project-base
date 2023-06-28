@@ -98,7 +98,7 @@ export default defineComponent({
       await this.userSession.checkLogin(false);
     },
     async userProfile() {
-      await new ConsumerLogicApi(`/${this.userSession.selectedProject.slug ?? 'current'}/profile/current`, false)
+      await new ConsumerLogicApi(`/${this.userSession.selectedProject?.slug ?? 'account'}/profile/current`, false)
         .dialogForm(null, null, false);
       await this.userSession.checkLogin(false);
     },
