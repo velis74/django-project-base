@@ -62,10 +62,20 @@ const useUserSessionStore = defineStore('user-session', {
       return state.userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
     },
 
+    /**
+     * returns (a function that tells) whether user has the named permission or not
+     */
     userHasPermission: (state) => (permissionName: string): boolean => (
       state.userData.isSuperUser ||
         !!state.userData.permissions.find((permission: UserPermissionJSON) => permission.codename === permissionName)
     ),
+
+    /**
+     * returns whether this user is a SuperUser
+     */
+    userIsSuperUser(state) {
+      return state.userData.isSuperUser;
+    },
 
     /**
      * alias for getting primary key of currently selected project
