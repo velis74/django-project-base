@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-form @submit.prevent>
-      <v-container v-if="payload != null">
+      <v-container v-if="payload != null" class="pa-0 ma-0 mt-md-6">
         <v-row>
           <v-col class="d-none d-md-flex">
             <v-text-field
@@ -21,14 +21,12 @@
               @keyup.enter="doLogin"
             />
           </v-col>
-          <v-col>
-            <div :style="`margin-top: .5em; width: ${socialAuth.length * 1.5 * 1.2}em`" class="d-none d-md-flex">
-              <a v-for="(b, bidx) in socialAuth" :key="bidx" :href="b.url" :aria-label="b.title" class="d-inline-block">
-                <social-logos :social-provider="b.name" :title="b.title" :size-em="1.5"/>
-              </a>
-            </div>
+          <v-col class="d-none d-md-flex">
+            <a v-for="(b, no) in socialAuth" :key="no" :href="b.url" :aria-label="b.title" class="d-inline-block mt-2">
+              <social-logos :social-provider="b.name" :title="b.title" :size-em="1.5"/>
+            </a>
           </v-col>
-          <v-col>
+          <v-col class="d-flex">
             <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
           </v-col>
           <v-col class="d-none d-md-flex">
@@ -201,10 +199,6 @@ export default { name: 'LoginInline' };
 </script>
 
 <style scoped>
-.v-container {
-  margin-top: 1em;
-}
-
 .v-text-field {
   min-width: 10em;
 }
