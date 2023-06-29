@@ -3,7 +3,7 @@ djangorestframework
 dynamicforms >= 0.71.9
 swapper
 django-rest-registration
-drf-spectacular>=0.17.2<0.26.0
+drf-spectacular>=0.17.2, <0.26.0
 django-taggit
 svgwrite
 django-hijack < 3
