@@ -1,5 +1,4 @@
 import datetime
-import distutils
 
 import django
 import swapper
@@ -126,7 +125,7 @@ class ProfileSerializer(ModelSerializer):
         if not request.user.is_superuser:
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
-        if bool(distutils.util.strtobool(request.query_params.get("remove-merge-users", "false"))) and (
+        if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES and (
             request.user.is_superuser or request.user.is_staff
         ):
             self.actions.actions.append(
@@ -187,7 +186,7 @@ class ProfileRegisterSerializer(ProfileSerializer):
             columns=2,
             size="large",
         )
-        exclude = ProfileSerializer.Meta.exclude + ("avatar", )
+        exclude = ProfileSerializer.Meta.exclude + ("avatar",)
 
     def validate(self, attrs):
         super().validate(attrs)
@@ -274,7 +273,7 @@ class ProfileViewSet(ModelViewSet):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
 
-        if bool(distutils.util.strtobool(self.request.query_params.get("remove-merge-users", "false"))):
+        if self.request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES:
             MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
             exclude_qs = list(
                 map(
@@ -471,7 +470,7 @@ class ProfileViewSet(ModelViewSet):
         serializer = registration_settings.LOGIN_SERIALIZER_CLASS(data=request.data)
         serializer.is_valid(raise_exception=True)
         auth_user = self.request.user
-        auth_user_is_main = bool(distutils.util.strtobool(str(self.request.data.get("account", "false"))))
+        auth_user_is_main = str(self.request.data.get("account", "false")) in fields.BooleanField.TRUE_VALUES
         try:
             from django_project_base.account.service.merge_users_service import MergeUsersService
 
