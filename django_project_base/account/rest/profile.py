@@ -190,16 +190,16 @@ class ProfileRegisterSerializer(ProfileSerializer):
         exclude = ProfileSerializer.Meta.exclude + ("avatar", )
 
     def validate(self, attrs):
-        super(ProfileRegisterSerializer, self).validate(attrs)
+        super().validate(attrs)
         errors = {}
-        password_repeat = attrs.pop('password_repeat')
-        if not attrs['password']:
-            errors['password'] = _('Password is required')
-        if not attrs['password'] == password_repeat:
-            errors['password_repeat'] = _('Repeated value does not match inputted password')
+        password_repeat = attrs.pop("password_repeat")
+        if not attrs["password"]:
+            errors["password"] = _("Password is required")
+        if not attrs["password"] == password_repeat:
+            errors["password_repeat"] = _("Repeated value does not match inputted password")
 
-        if not attrs['email']:
-            errors['email'] = _("Email is required")
+        if not attrs["email"]:
+            errors["email"] = _("Email is required")
 
         if errors:
             raise ValidationError(errors)
@@ -215,10 +215,11 @@ class ProfileViewPermissions(IsAuthenticated):
     Allows users to have full permissions on get/post (retrieving and adding new users).
     Other methods require authentication.
     """
+
     def has_permission(self, request, view):
-        if request.method == 'POST':
+        if request.method == "POST":
             return True
-        if request.method == 'GET' and request.path.split('/')[-1].split('.')[0] == 'new':
+        if request.method == "GET" and request.path.split("/")[-1].split(".")[0] == "new":
             return True
         return super().has_permission(request, view)
 
@@ -309,7 +310,7 @@ class ProfileViewSet(ModelViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
-        return super(ProfileViewSet, self).list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
@@ -346,14 +347,16 @@ class ProfileViewSet(ModelViewSet):
     @transaction.atomic
     def create_new_account(self, request: Request, **kwargs):
         # set default values
-        request.data['date_joined'] = datetime.datetime.now()
-        request.data['is_active'] = True
+        request.data["date_joined"] = datetime.datetime.now()
+        request.data["is_active"] = True
 
         # call serializer to do the data processing drf way - hijack
-        serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context(), data=request.data, many=False)
+        serializer = ProfileRegisterSerializer(
+            None, context=self.get_serializer_context(), data=request.data, many=False
+        )
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        user.set_password(request.data['password'])
+        user.set_password(request.data["password"])
         user.save()
         return Response(serializer.validated_data)
 
@@ -365,7 +368,7 @@ class ProfileViewSet(ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
-        return super(ProfileViewSet, self).retrieve(request, *args, **kwargs)
+        return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(
         description="Update profile data (partially)",
@@ -375,7 +378,7 @@ class ProfileViewSet(ModelViewSet):
         },
     )
     def partial_update(self, request, *args, **kwargs):
-        return super(ProfileViewSet, self).partial_update(request, *args, **kwargs)
+        return super().partial_update(request, *args, **kwargs)
 
     @extend_schema(
         description="Get user profile of calling user.",
@@ -451,7 +454,7 @@ class ProfileViewSet(ModelViewSet):
     )
     def destroy(self, request, *args, **kwargs):
         if self.request.user.is_superuser or self.request.user.is_staff:
-            return super(ProfileViewSet, self).destroy(request, *args, **kwargs)
+            return super().destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
 
     @extend_schema(exclude=True)
