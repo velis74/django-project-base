@@ -69,6 +69,17 @@ export default defineComponent({
       socialConnectionsModalPromise: null as any,
     };
   },
+  computed: {
+    isImpersonated() {
+      // @ts-ignore
+      return this.userSession.impersonated;
+    },
+  },
+  watch: {
+    isImpersonated() {
+      window.location.reload();
+    },
+  },
   mounted() {
     this.loadData();
   },
