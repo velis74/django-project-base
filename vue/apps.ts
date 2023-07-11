@@ -69,7 +69,10 @@ const createCoreApp = (
   app.use(createPinia());
   Object.values(pluginsToRegister).map((plugin) => app.use(plugin));
 
-  const vuetify = createVuetify({ defaults: {}, theme: { defaultTheme: 'defaultTheme', themes: { defaultTheme } } });
+  const vuetify = createVuetify({
+    defaults: { global: {} },
+    theme: { defaultTheme: 'defaultTheme', themes: { defaultTheme } },
+  });
   app.use(vuetify);
 
   app.use(createDynamicForms({ ui: 'vuetify' }));

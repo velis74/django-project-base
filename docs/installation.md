@@ -157,6 +157,14 @@ OR:
 $ vite
 ```
 
+We're using a visualisation library called Vuetify. Make sure you load the icons and font in your project:
+
+index.html
+```HTML
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+```
+
 Go to http://localhost:8080/.
 
 To generate a build run:
