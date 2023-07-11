@@ -55,7 +55,6 @@
         }
       ],
       "indent": ["error", 2, { "MemberExpression": 1 }],
-      "es/no-destructuring": "error",
       "no-param-reassign": ["error", { "props": false }],
       "prefer-destructuring": [
         "warn",

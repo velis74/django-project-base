@@ -4,7 +4,9 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
+
 import axios from 'axios';
+
 import { Store } from './store';
 
 const apiClient = axios.create({

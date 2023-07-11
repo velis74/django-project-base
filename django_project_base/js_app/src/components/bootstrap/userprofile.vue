@@ -2,7 +2,9 @@
   <div class="nav-item left-spacing userprofile-component">
     <div class="card" data-toggle="dropdown">
       <div class="card-body">
-        <img v-if="componentData.avatar" v-bind:src="componentData.avatar"
+        <img
+v-if="componentData.avatar"
+v-bind:src="componentData.avatar"
              class="float-left rounded-circle">
         <div class="user-names" :style="componentData.avatar ? 'padding-left: 55px;' : ''">
           <h5 class="card-title" v-if="componentData.first_name && componentData.last_name">
@@ -22,10 +24,16 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="left: -7em;">
               <a class="dropdown-item" href="#" @click="userProfile">{{gettext('User profile')}}</a>
               <a class="dropdown-item" href="#" @click="changePassword">{{gettext('Change password')}}</a>
-              <a v-if="permissions['impersonate-user'] && !isImpersonated" class="dropdown-item"
-                 @click="showImpersonateLogin" href="#">{{ gettext('Impersonate user') }}</a>
-              <a v-else-if="isImpersonated" class="dropdown-item"
-                 @click="stopImpersonation" href="#">{{ gettext('Stop impersonation') }}</a>
+              <a
+v-if="permissions['impersonate-user'] && !isImpersonated"
+class="dropdown-item"
+                 @click="showImpersonateLogin"
+href="#">{{ gettext('Impersonate user') }}</a>
+              <a
+v-else-if="isImpersonated"
+class="dropdown-item"
+                 @click="stopImpersonation"
+href="#">{{ gettext('Stop impersonation') }}</a>
               <a class="dropdown-item" href="#" @click="makeLogout">{{
                   gettext('Logout')
                 }}</a>
@@ -42,7 +50,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import eventBus from 'dynamicforms/src/logic/eventBus';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import actionHandlerMixin from 'dynamicforms/src/mixins/actionHandlerMixin';
 import Vue from 'vue';
 
 import { apiClient as ApiClient } from '../../apiClient';
@@ -85,9 +92,9 @@ export default {
       new ProjectBaseData().getPermissions((p) => {
         this.permissions = p;
       });
-      this.isImpersonated = !!Store.get('impersonated-user');
       const cachedProfile = Store.get('current-user');
       if (cachedProfile && !force) {
+        this.isImpersonated = cachedProfile.impersonated;
         this.componentData = cachedProfile;
         return;
       }
@@ -95,6 +102,7 @@ export default {
       return new Promise((resolve, reject) => {
         ApiClient.get('/account/profile/current').then((profileResponse) => {
           this.componentData = profileResponse.data;
+          this.isImpersonated = profileResponse.data.impersonated;
           Store.set('current-user', this.componentData);
           resolve();
         }).catch((err) => {
@@ -129,7 +137,6 @@ export default {
       window.dynamicforms.dialog.fromURL('/account/change-password/new.componentdef', 'new', chgPassFakeUUID);
     },
     dialogBtnClick(payload) {
-      console.log(payload);
       let data;
       let params;
       if (payload.action.name !== 'cancel') {
@@ -153,13 +160,15 @@ export default {
             headers: undefined,
             then: (() => {
               this.impersonateModalVisible = false;
-              Store.set('impersonated-user', true);
               this.reloadAfterImpersonationChange();
             }),
           };
         }
       }
-      actionHandlerMixin.methods.executeTableAction(payload.action, data, payload.modal, params);
+      ApiClient[params.submitMethod](params.detailUrl, data).then(() => {
+        this.impersonateModalVisible = false;
+        window.location.reload();
+      });
     },
   },
 };
