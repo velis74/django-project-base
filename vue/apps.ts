@@ -76,7 +76,7 @@ const createCoreApp = (
   app.use(Notifications);
 
   // add translation function on a global scale
-  app.config.globalProperties.gettext = (value: string) => value;
+  app.config.globalProperties.gettext = (value: string) => (window.gettext ? window.gettext(value) : value);
   app.provide<AppData>('data', data);
 
   // add components
