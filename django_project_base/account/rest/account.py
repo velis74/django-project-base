@@ -15,6 +15,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
+from django.contrib.auth.models import AnonymousUser
 
 # fmt: off
 from rest_registration.api.views import (
@@ -132,6 +133,34 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
         },
     )
     def create(self, request: Request) -> Response:
+        session = getattr(getattr(getattr(request, "_request", object()), "session", object()), "_session", dict())
+        if (
+            session.get("is_hijacked_user", False)
+            and session.get("hijack_history", False)
+            and request.user
+            and request.user != AnonymousUser
+        ):
+            if user_pk := next(iter(session["hijack_history"]), None):
+                hijacker = get_user_model().objects.filter(pk=user_pk).first()
+                if hijacker and hijacker.is_superuser:
+
+                    class SuperUserChangePasswordSerializer(ChangePasswordSerializer):
+                        old_password = None
+
+                    serializer = SuperUserChangePasswordSerializer(
+                        data=request.data,
+                        context={"request": request},
+                    )
+                    serializer.is_valid(raise_exception=True)
+                    user = request.user
+                    user.set_password(serializer.validated_data["password"])
+                    user.save()
+                    update_session_auth_hash(request, request.user)
+                    profile_obj = getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+                    profile_obj.password_invalid = False
+                    profile_obj.save(update_fields=["password_invalid"])
+                    return Response()
+
         response = change_password(request._request)
         if response.status_code == status.HTTP_200_OK:
             update_session_auth_hash(request, request.user)
