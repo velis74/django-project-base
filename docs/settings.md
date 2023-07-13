@@ -27,5 +27,5 @@ MERGE_USERS_HANDLER = 'project.module.functions.function_to_execute'
 If you choose to merge user accounts which belong to same user and you have MERGE_USERS_HANDLER setting defined, then
 when user logs in with one of the account defined in accounts to merge group then function MERGE_USERS_HANDLER is executed 
 which runs your logic for merging users.
-Function is defined as def function(user, all_users). user argument is currently logged in user. all_users argument is 
+Function is defined as def function(user, all_users, project). user argument is currently logged in user. all_users argument is 
 a comma separated string of user pks which will be merged.

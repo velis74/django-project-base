@@ -57,9 +57,10 @@ class AbstractDjangoProjectBaseNotification(models.Model):
         default=NotificationType.STANDARD.value,
         verbose_name=_("Type"),
     )
-    recipients = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="notifications", verbose_name=_("Recipients")
-    )
+    # recipients = models.ManyToManyField(
+    #     settings.AUTH_USER_MODEL, blank=True, related_name="notifications", verbose_name=_("Recipients")
+    # )
+    recipients = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Required channels"))
     message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True, verbose_name=_("Message"))
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
