@@ -1,10 +1,12 @@
 import re
+from typing import Optional
 
 import swapper
 from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth.models import AnonymousUser
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
@@ -15,7 +17,6 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-from django.contrib.auth.models import AnonymousUser
 
 # fmt: off
 from rest_registration.api.views import (
@@ -27,6 +28,20 @@ from social_django.models import UserSocialAuth
 from django_project_base.account.social_auth.providers import get_social_providers
 from django_project_base.notifications.base.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+
+
+def get_hijacker(request: Request) -> Optional:
+    session = getattr(getattr(getattr(request, "_request", object()), "session", object()), "_session", dict())
+    if (
+        session.get("is_hijacked_user", False)
+        and session.get("hijack_history", False)  # noqa: W503
+        and request.user  # noqa: W503
+        and request.user != AnonymousUser  # noqa: W503
+    ):
+        if user_pk := next(iter(session["hijack_history"]), None):
+            if hijacker := get_user_model().objects.filter(pk=user_pk).first():
+                return hijacker
+    return None
 
 
 class SocialAuthSerializer(ModelSerializer):
@@ -133,40 +148,31 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
         },
     )
     def create(self, request: Request) -> Response:
-        session = getattr(getattr(getattr(request, "_request", object()), "session", object()), "_session", dict())
-        if (
-            session.get("is_hijacked_user", False)
-            and session.get("hijack_history", False)
-            and request.user
-            and request.user != AnonymousUser
-        ):
-            if user_pk := next(iter(session["hijack_history"]), None):
-                hijacker = get_user_model().objects.filter(pk=user_pk).first()
-                if hijacker and hijacker.is_superuser:
-
-                    class SuperUserChangePasswordSerializer(ChangePasswordSerializer):
-                        old_password = None
-
-                    serializer = SuperUserChangePasswordSerializer(
-                        data=request.data,
-                        context={"request": request},
-                    )
-                    serializer.is_valid(raise_exception=True)
-                    user = request.user
-                    user.set_password(serializer.validated_data["password"])
-                    user.save()
-                    update_session_auth_hash(request, request.user)
-                    profile_obj = getattr(user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
-                    profile_obj.password_invalid = False
-                    profile_obj.save(update_fields=["password_invalid"])
-                    return Response()
-
-        response = change_password(request._request)
-        if response.status_code == status.HTTP_200_OK:
+        def handle_password_changed(request):
             update_session_auth_hash(request, request.user)
             profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
             profile_obj.password_invalid = False
             profile_obj.save(update_fields=["password_invalid"])
+
+        if get_hijacker(request):
+
+            class SuperUserChangePasswordSerializer(ChangePasswordSerializer):
+                old_password = None
+
+            serializer = SuperUserChangePasswordSerializer(
+                data=request.data,
+                context={"request": request},
+            )
+            serializer.is_valid(raise_exception=True)
+            user = request.user
+            user.set_password(serializer.validated_data["password"])
+            user.save()
+            handle_password_changed(request)
+            return Response()
+
+        response = change_password(request._request)
+        if response.status_code == status.HTTP_200_OK:
+            handle_password_changed(request)
         return response
 
 
