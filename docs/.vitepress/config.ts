@@ -40,6 +40,7 @@ export default defineConfig({
           {text: 'Notifications', link: '/notifications'},
           {text: 'Swagger', link: '/swagger'},
           {text: 'Open API', link: '/open-api'},
+          {text: 'Browser support', link: '/browser-support'},
         ]
       }
     ],
