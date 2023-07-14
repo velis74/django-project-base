@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Case, CharField, ForeignKey, Model, Value, When
+from django.db.models import Case, CharField, ForeignKey, Model, QuerySet, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -88,6 +88,7 @@ class ProfileSerializer(ModelSerializer):
 
     full_name = fields.CharField(read_only=True, display_form=DisplayMode.HIDDEN)
     is_impersonated = fields.SerializerMethodField(display=DisplayMode.HIDDEN)
+    password_invalid = fields.BooleanField(display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN)
 
     delete_at = fields.DateTimeField(read_only=True, display=DisplayMode.HIDDEN)
     permissions = ProfilePermissionsField(
@@ -127,7 +128,7 @@ class ProfileSerializer(ModelSerializer):
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
 
-        if self.instance and self.instance.pk != request.user.pk:
+        if self.instance and not isinstance(self.instance, (list, QuerySet)) and self.instance.pk != request.user.pk:
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
@@ -155,7 +156,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
-        exclude = ("user_permissions", "password_invalid")
+        exclude = ("user_permissions",)
         layout = Layout(
             Row(Column("username"), Column("password")),
             Row(Column("first_name"), Column("last_name")),

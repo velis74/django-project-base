@@ -1,6 +1,6 @@
 from typing import List
-import swapper
 
+import swapper
 from django.core.cache import cache
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
