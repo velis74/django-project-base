@@ -1,8 +1,6 @@
 from datetime import datetime
 from typing import List, Optional, Type
 
-from django.conf import settings
-
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.channels.mail_channel import MailChannel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
@@ -19,9 +17,11 @@ class EMailNotification(Notification):
         locale: Optional[str] = None,
         delay: Optional[datetime] = None,
         type: Optional[NotificationType] = None,
-        recipients: List[settings.AUTH_USER_MODEL] = [],
+        recipients=None,
         **kwargs
     ) -> None:
+        if recipients is None:
+            recipients = []
         super().__init__(message, persist, level, locale, delay, type, recipients, **kwargs)
 
     @property

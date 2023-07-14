@@ -3,8 +3,6 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Optional, Type
 
-from django.conf import settings
-
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
@@ -30,7 +28,7 @@ class Notification(ABC, QueableNotificationMixin):
         locale: Optional[str] = None,
         delay: Optional[datetime] = None,
         type: Optional[NotificationType] = None,
-        recipients: List[settings.AUTH_USER_MODEL] = [],
+        recipients: List[int] = [],
         **kwargs
     ) -> None:
         super().__init__()
@@ -91,7 +89,7 @@ class Notification(ABC, QueableNotificationMixin):
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
             notification.save()
-            notification.recipients.add(*self._recipients)
+            notification.recipients = (notification.recipients or []) + self._recipients
             self.enqueue_notification(notification)
             return notification
 
@@ -123,5 +121,5 @@ class Notification(ABC, QueableNotificationMixin):
             )
             notification.sent_at = utc_now()
             notification.save(update_fields=["sent_at", "sent_channels", "failed_channels"])
-            notification.recipients.add(*self._recipients)
+            notification.recipients = (notification.recipients or []) + self._recipients
         return notification

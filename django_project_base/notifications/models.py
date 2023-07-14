@@ -1,7 +1,7 @@
 import datetime
 import uuid
 
-from django.conf import settings
+from django.core.validators import int_list_validator
 from django.db import models
 from django.db.models import SET_NULL
 from django.utils.translation import gettext_lazy as _
@@ -57,9 +57,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
         default=NotificationType.STANDARD.value,
         verbose_name=_("Type"),
     )
-    recipients = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="notifications", verbose_name=_("Recipients")
-    )
+    recipients = models.CharField(blank=False, null=True, max_length=2048, validators=[int_list_validator])
     message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True, verbose_name=_("Message"))
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
