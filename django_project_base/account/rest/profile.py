@@ -88,6 +88,7 @@ class ProfileSerializer(ModelSerializer):
 
     full_name = fields.CharField(read_only=True, display_form=DisplayMode.HIDDEN)
     is_impersonated = fields.SerializerMethodField(display=DisplayMode.HIDDEN)
+    password_invalid = fields.BooleanField(display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN)
 
     delete_at = fields.DateTimeField(read_only=True, display=DisplayMode.HIDDEN)
     permissions = ProfilePermissionsField(
@@ -155,7 +156,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model("django_project_base", "Profile")
-        exclude = ("user_permissions", "password_invalid")
+        exclude = ("user_permissions",)
         layout = Layout(
             Row(Column("username"), Column("password")),
             Row(Column("first_name"), Column("last_name")),

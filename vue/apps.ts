@@ -22,6 +22,8 @@ import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 export { default as useUserSessionStore } from './components/user-session/state';
 export { apiClient } from './apiClient';
 
+export { showNotification, showGeneralErrorNotification, showMaintenanceNotification } from './notifications';
+
 export const componentsConfig = {
   TitleBar,
   Breadcrumbs,
@@ -79,7 +81,6 @@ const createCoreApp = (
   app.use(Notifications);
 
   // add translation function on a global scale
-  app.config.globalProperties.gettext = (value: string) => value;
   app.provide<AppData>('data', data);
 
   // add components
