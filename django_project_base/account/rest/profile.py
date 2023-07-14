@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Case, CharField, ForeignKey, Model, Value, When
+from django.db.models import Case, CharField, ForeignKey, Model, QuerySet, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -127,7 +127,7 @@ class ProfileSerializer(ModelSerializer):
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
 
-        if self.instance and self.instance.pk != request.user.pk:
+        if self.instance and not isinstance(self.instance, (list, QuerySet)) and self.instance.pk != request.user.pk:
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 

@@ -2,9 +2,9 @@ import re
 
 import swapper
 from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
@@ -15,7 +15,6 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-
 # fmt: off
 from rest_registration.api.views import (
     change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
