@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.utils.crypto import get_random_string
+from django.utils.translation import gettext as __
 from rest_framework.request import Request
 from rest_registration.exceptions import UserNotFound
 from rest_registration.notifications import create_verification_notification
@@ -14,10 +15,8 @@ from rest_registration.verification_notifications import _get_email_template_con
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
 from django_project_base.notifications.base.email_notification import EMailNotification
-from django_project_base.notifications.base.enums import NotificationLevel
-from django_project_base.notifications.base.enums import NotificationType as NotificationTypeDPB
+from django_project_base.notifications.base.enums import NotificationLevel, NotificationType as NotificationTypeDPB
 from django_project_base.notifications.models import DjangoProjectBaseMessage
-from django.utils.translation import gettext as __
 
 
 def send_reset_password_verification_email(request: Request, user) -> None:
