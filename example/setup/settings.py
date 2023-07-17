@@ -214,5 +214,3 @@ DYNAMICFORMS = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-AWS_SES_REGION_NAME = "us-east-1"
-EMAIL_HOST_USER = "admin@easyset.eu"
