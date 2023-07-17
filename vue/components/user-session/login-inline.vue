@@ -300,7 +300,6 @@ async function enterResetPasswordData() {
       }),
     }));
     if (resetEmailPromise.action.name === 'reset') {
-      console.log(Math.random(), 'send email reset');
       const urlParams = new URLSearchParams(window.location.hash.slice(1).replace('reset-user-password/', ''));
       const password: String | null = (<HTMLInputElement>document.getElementById('password-reset-input')).value;
       const passwordConfirmation: String | null = (<HTMLInputElement>document.getElementById(
