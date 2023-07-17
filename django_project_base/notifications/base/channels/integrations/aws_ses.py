@@ -37,7 +37,6 @@ class AwsSes:
                 aws_access_key_id=self.key_id,
                 aws_secret_access_key=self.access_key,
                 region_name=self.region,
-                # todo: recipents
             ).client("ses").send_email(
                 Destination={
                     "ToAddresses": [get_user_model().objects.get(pk=u).email for u in notification._recipients],

@@ -18,10 +18,11 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "REST_REGISTRATION",
         "default": {
             "RESET_PASSWORD_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.reset_password_email_service.send_reset_password_verification_email",
-            "RESET_PASSWORD_VERIFICATION_URL": "reset-user-password/",
+            "RESET_PASSWORD_VERIFICATION_URL": "/#reset-user-password/",
             "VERIFICATION_FROM_EMAIL": "",
             "SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL": True,
             "RESET_PASSWORD_VERIFICATION_ENABLED": True,
+            "RESET_PASSWORD_SERIALIZER_PASSWORD_CONFIRM": True,
             "SEND_RESET_PASSWORD_LINK_USER_FINDER": "django_project_base.account.service.reset_password_email_service.find_user_by_send_reset_password_link_data",
         },
     },

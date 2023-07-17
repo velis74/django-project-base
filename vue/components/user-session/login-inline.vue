@@ -91,8 +91,9 @@ import {
   FilteredActions,
   Action, dfModal,
 } from '@velis/dynamicforms';
+import { AxiosError } from 'axios';
 import _ from 'lodash';
-import { h, reactive, Ref, ref } from 'vue';
+import { h, onMounted, reactive, Ref, ref } from 'vue';
 
 import { apiClient } from '../../apiClient';
 
@@ -107,6 +108,7 @@ const socialAuth = ref([]) as Ref<any[]>;
 const pwd = ref();
 const formDef = reactive({} as any); // as APIConsumer.FormDefinition
 const errors = reactive({} as { [key: string]: any[] });
+const resetPasswordErrors = reactive({} as { [key: string]: any[] });
 const showLoginDialog = ref(false);
 // TODO: needs to be moved to /rest/about or to some configuration. definitely needs to be app-specific
 const appname = gettext('Demo app');
@@ -159,11 +161,17 @@ async function getFormDefinition() {
   _.assignIn(formDef, await loginConsumer.getFormDefinition());
   payload.value = formDef.payload;
   formDef.layout.fields.social_auth_providers.setVisibility(DisplayMode.SUPPRESS);
-  formDef.actions.actions.cancel.actionCancel = () => { showLoginDialog.value = false; };
-  formDef.actions.actions.submit.actionSubmit = () => { doLogin(); showLoginDialog.value = false; };
+  formDef.actions.actions.cancel.actionCancel = () => {
+    showLoginDialog.value = false;
+  };
+  formDef.actions.actions.submit.actionSubmit = () => {
+    doLogin();
+    showLoginDialog.value = false;
+  };
   formDef.actions.actions['reset-password'].actionResetPassword = actionResetPassword;
   socialAuth.value = formDef.payload.social_auth_providers;
 }
+
 getFormDefinition();
 
 async function resetUserState() {
@@ -174,8 +182,8 @@ async function resetUserState() {
         'h5',
         {},
         gettext('Your account will be restored. Do you want to keep all your previous data or do ' +
-            'you want to reset account state and begin as account was just ' +
-            'registered and your previous data is deleted?'),
+                'you want to reset account state and begin as account was just ' +
+                'registered and your previous data is deleted?'),
       ),
     ],
     new FilteredActions({
@@ -205,6 +213,16 @@ async function resetUserState() {
   });
 }
 
+function parseErrors(apiErr: AxiosError, errsStore: { [key: string]: any[] }) {
+  Object.keys(errsStore).forEach((key: string) => {
+    delete errsStore[key];
+  });
+  // @ts-ignore
+  if (apiErr && apiErr.response.data.detail) errsStore.non_field_errors = [apiErr.response.data.detail];
+  // @ts-ignore
+  else Object.assign(errsStore, apiErr.response.data);
+}
+
 async function doLogin() {
   if (payload.value?.login || payload.value?.password) {
     const result = await userSession.login(payload.value?.login, payload.value?.password);
@@ -216,18 +234,21 @@ async function doLogin() {
       return;
     }
     if (result?.response?.status === 400) {
-      Object.keys(errors).forEach((key: string) => { delete errors[key]; });
-      if (result.response.data.detail) errors.non_field_errors = [result.response.data.detail];
-      else Object.assign(errors, result.response.data);
+      parseErrors(result, errors);
     } else {
-      Object.keys(errors).forEach((key: string) => { delete errors[key]; });
+      Object.keys(errors).forEach((key: string) => {
+        delete errors[key];
+      });
       errors.non_field_errors = [gettext('Unknown error trying to login')];
     }
   }
   showLoginDialog.value = true;
 }
 
-function focusPassword() { pwd.value.focus(); }
+function focusPassword() {
+  pwd.value.focus();
+}
+
 const newAccount = async () => {
   showLoginDialog.value = false;
   /* TODO show the create account dialog */
@@ -236,14 +257,103 @@ const newAccount = async () => {
 const openRegistration = async () => {
   await new ConsumerLogicApi('/account/profile/register/', true).dialogForm(null, null, false);
 };
+
+async function enterResetPasswordData() {
+  if (_.includes(window.location.hash, '#reset-user-password')) {
+    const resetEmailPromise = await dfModal.message('', () => [
+      // eslint-disable-next-line vue/max-len
+      h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
+        h('h4', gettext('Please provide new password')),
+      ]),
+      h('div', {}, [
+        h('input', {
+          type: 'text',
+          placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
+          id: 'password-reset-input',
+          class: 'password-reset-fields',
+        }, {}),
+        h('input', {
+          type: 'text',
+          placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
+            'New password confirmation',
+          ),
+          id: 'password-reset-input-confirmation',
+          class: 'password-reset-fields',
+        }, {}),
+        h('input', {
+          type: 'text',
+          placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
+          id: 'password-reset-input-code',
+          class: 'password-reset-fields',
+        }, {}),
+      ]),
+    ], new FilteredActions({
+      cancel: new Action({
+        name: 'cancel',
+        label: gettext('Cancel'),
+        icon: 'thumbs-down-outline',
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+      confirm: new Action({
+        name: 'reset',
+        label: gettext('Reset'),
+        icon: 'thumbs-up-outline',
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+    }));
+    if (resetEmailPromise.action.name === 'reset') {
+      console.log(Math.random(), 'send email reset');
+      const urlParams = new URLSearchParams(window.location.hash.slice(1).replace('reset-user-password/', ''));
+      const password: String | null = (<HTMLInputElement>document.getElementById('password-reset-input')).value;
+      const passwordConfirmation: String | null = (<HTMLInputElement>document.getElementById(
+        'password-reset-input-confirmation',
+      )).value;
+      apiClient.post('/account/reset-password/', {
+        user_id: urlParams.get('user_id'),
+        timestamp: urlParams.get('timestamp'),
+        signature: urlParams.get('signature'),
+        password,
+        password_confirm: passwordConfirmation,
+        code: (<HTMLInputElement>document.getElementById('password-reset-input-code')).value,
+      }).then((res) => {
+        window.location.hash = '';
+        dfModal.message('', gettext('Password was reset successfully'));
+      }).catch((err) => {
+        parseErrors(err, resetPasswordErrors);
+        enterResetPasswordData();
+      });
+      return;
+    }
+    window.location.hash = '';
+  }
+}
+
+onMounted(() => {
+  enterResetPasswordData();
+});
 </script>
 
 <script lang="ts">
 export default { name: 'LoginInline' };
 </script>
 
-<style scoped>
+<style>
 .v-text-field {
   min-width: 10em;
+}
+
+.password-reset-fields {
+  border: 1px black;
+  border-style: solid;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 0.3em;
+  padding: 0.1em;
+}
+
+input.password-reset-fields {
+  text-align: center;
 }
 </style>
