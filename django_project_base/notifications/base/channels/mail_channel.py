@@ -14,4 +14,4 @@ class MailChannel(Channel):
 
     @staticmethod
     def send(notification: "Notification") -> None:  # noqa: F821
-        MailChannel.provider().send()
+        MailChannel.provider().send(notification=notification)

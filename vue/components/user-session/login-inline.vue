@@ -145,7 +145,8 @@ async function actionResetPassword() {
   }));
   if (resetEmailPromise.action.name === 'confirm') {
     console.log(Math.random(), 'send email');
-    apiClient.post('/account/send-reset-password-link/', { email: 'sds' }).then((res) => {
+    const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
+    apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
       console.log(res.data);
     }).catch((err) => {
       console.log(err);

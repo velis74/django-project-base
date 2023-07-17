@@ -1,6 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 class AwsSes:
@@ -25,7 +26,7 @@ class AwsSes:
                 "Data": notification.message.subject,
             },
         }
-        msg["Body"]["Html" if notification.message.content_subtype.lower() == "html" else "Text"] = {
+        msg["Body"]["Html" if notification.message.content_type.lower() == "html" else "Text"] = {
             "Charset": "UTF-8",
             "Data": notification.message.body,
         }
@@ -38,7 +39,11 @@ class AwsSes:
                 region_name=self.region,
                 # todo: recipents
             ).client("ses").send_email(
-                Destination={"ToAddresses": notification._recipients, "CcAddresses": [], "BccAddresses": []},
+                Destination={
+                    "ToAddresses": [get_user_model().objects.get(pk=u).email for u in notification._recipients],
+                    "CcAddresses": [],
+                    "BccAddresses": [],
+                },
                 Message=msg,
                 Source=from_mail,
             )

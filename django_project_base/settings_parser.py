@@ -25,7 +25,7 @@ def parse_settings(input_settings: tuple) -> None:
             elif isinstance(_setting_existing_val, dict):
                 for s_name, s_value in setting_default_value.items():
                     if not _setting_existing_val.get(s_name, None):
-                        _setting_existing_val[s_name] = s_name
+                        _setting_existing_val[s_name] = s_value
                 setattr(settings, setting_name, _setting_existing_val)
             else:
                 pass
