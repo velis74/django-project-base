@@ -186,6 +186,13 @@ AUTHENTICATION_BACKENDS = (
     "django_project_base.base.auth_backends.UsersCachingBackend",  # cache users for auth to gain performance
 )
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    }
+}
+
 PROFILER_LONG_RUNNING_TASK_THRESHOLD = 1000
 
 # Settings for Mailhog

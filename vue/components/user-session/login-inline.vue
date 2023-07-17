@@ -114,7 +114,6 @@ const showLoginDialog = ref(false);
 const appname = gettext('Demo app');
 
 async function actionResetPassword() {
-  console.log(Math.random(), 'show reset password');
   showLoginDialog.value = false;
   const resetEmailPromise = await dfModal.message('', () => [
     // eslint-disable-next-line vue/max-len
@@ -146,12 +145,9 @@ async function actionResetPassword() {
     }),
   }));
   if (resetEmailPromise.action.name === 'confirm') {
-    console.log(Math.random(), 'send email');
     const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
     apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
-      console.log(res.data);
-    }).catch((err) => {
-      console.log(err);
+      dfModal.message('', gettext('Link for password reset was sent to provided e-mail address'));
     });
   }
 }
