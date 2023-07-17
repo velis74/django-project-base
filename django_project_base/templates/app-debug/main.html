@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>App Debug</title>
+</head>
+<body>
+<h5>Summary of most time consuming requests</h5>
+<h6>Long-running requests for the last {{ long_running_time }} seconds</h6>
+<table>
+  <thead>
+  <tr>
+    <th>path</th>
+    <th>count</th>
+    <th>total time</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for spender in spenders %}
+    <tr>
+      <td>{{ spender.path }}</td>
+      <td style="text-align: right">{{ spender.count }}</td>
+      <td style="text-align: right">{{ spender.time }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h5>Summary of all requests in the last hour</h5>
+<table>
+  <thead>
+  <tr>
+    <th>path</th>
+    <th>count</th>
+    <th>wall time</th>
+    <th>user time</th>
+    <th>sys time</th>
+    <th>cpu time</th>
+    <th>wall / req</th>
+    <th>cpu / req</th>
+    <th>CPU cores</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for spender in all_requests %}
+    <tr>
+      <td>{{ spender.path }}</td>
+      <td style="text-align: right">{{ spender.count }}</td>
+      <td style="text-align: right">{{ spender.wall_time }}</td>
+      <td style="text-align: right">{{ spender.user_time }}</td>
+      <td style="text-align: right">{{ spender.sys_time }}</td>
+      <td style="text-align: right">{{ spender.cpu_time }}</td>
+      <td style="text-align: right">{{ spender.wall_avg }}</td>
+      <td style="text-align: right">{{ spender.cpu_avg }}</td>
+      <td style="text-align: right">{{ spender.core_usage }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h5>Requests running over 1 second</h5>
+<h6>Requests are ordered by req. time desceding</h6>
+<div>
+  {% for rec in debug_data %}
+    <table style="background-color: {{ rec.color }}">
+      {% for prop_name, prop_value in rec.r_data.items %}
+        <tr>
+          <td>{{ prop_name }}</td>
+          <td>{{ prop_value }}</td>
+        </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="2">Queries:</td>
+      </tr>
+      {% for qry in rec.db_queries %}
+        <tr>
+          <td>{{ qry.time }}</td>
+          <td>{{ qry.sql }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <br/>
+    <hr><br/>
+  {% endfor %}
+</div>
+</body>
+</html>

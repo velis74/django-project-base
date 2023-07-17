@@ -1,0 +1,16 @@
+django
+djangorestframework
+dynamicforms >= 0.71.12
+swapper
+django-rest-registration
+drf-spectacular>=0.17.2, <0.26.0
+django-taggit
+svgwrite
+django-hijack < 3
+pytz
+tox
+social-auth-app-django
+django-permissions-policy
+django-csp
+requests
+boto3

@@ -1,0 +1,4 @@
+include requirements.txt
+recursive-include django_project_base *
+global-exclude __pycache__
+global-exclude *.py[co]
