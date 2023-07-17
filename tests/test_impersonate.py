@@ -14,6 +14,7 @@ class TestImpersonateUserViewset(TestBase):
     def test_impersonate(self):
         self.assertTrue(self._login_with_test_user_two(), "Not logged in")
 
+        # Janez is not superuser and is not allowed to impersonate
         response = self.api_client.post("/account/impersonate", {"email": "user1@user1.si"}, format="json")
         self.assertEqual(response.status_code, 403)
 

@@ -37,7 +37,7 @@ class Notification(ABC, QueableNotificationMixin):
         if level is not None:
             lvl = level.value if isinstance(level, NotificationLevel) else level
             assert lvl in [_level.value for _level in NotificationLevel], "Invalid notification level value"
-            self.level = level
+            self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
             assert isinstance(delay, datetime) and delay > utc_now(), "Invalid delay value"
@@ -45,7 +45,7 @@ class Notification(ABC, QueableNotificationMixin):
         if type is not None:
             typ = type.value if isinstance(type, NotificationType) else type
             assert typ in [t.value for t in NotificationType], "Invalid notification type value"
-            self.type = type
+            self.type = type if isinstance(type, NotificationType) else NotificationType(typ)
         assert isinstance(recipients, list), "Recipients must be a list"
         self._recipients = recipients
         self._extra_data = kwargs
