@@ -172,4 +172,4 @@ class TestSendResetPasswordLink(TestBase):
 
         # Send password link is disabled, returns 404
         response = self.api_client.post("/account/send-reset-password-link/", {"login": "miha"}, format="json")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
 
+from django_project_base.notifications.base.enums import NotificationLevel
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from tests.test_base import TestBase
 
@@ -20,6 +21,7 @@ class TestMaintenanceNotifications(TestBase):
         _payload: dict = {
             "delayed_to": (datetime.datetime.now() + datetime.timedelta(hours=1)).isoformat() + "Z",
             "message": {"body": "Planned maintenance"},
+            "level": NotificationLevel.INFO.value,
         }
         _payload.update(payload)
         return self.api_client.post(self.url, _payload, format="json")

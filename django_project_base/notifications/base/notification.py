@@ -35,18 +35,16 @@ class Notification(ABC, QueableNotificationMixin):
         assert isinstance(persist, bool), "Persist must be valid boolean value"
         self._persist = persist
         if level is not None:
-            assert isinstance(level, NotificationLevel) and level.value in [
-                _level.value for _level in NotificationLevel
-            ], "Invalid notification level value"
+            lvl = level.value if isinstance(level, NotificationLevel) else level
+            assert lvl in [_level.value for _level in NotificationLevel], "Invalid notification level value"
             self.level = level
         self.locale = locale
         if delay is not None:
             assert isinstance(delay, datetime) and delay > utc_now(), "Invalid delay value"
             self._delay = delay
         if type is not None:
-            assert isinstance(type, NotificationType) and type.value in [
-                t.value for t in NotificationType
-            ], "Invalid notification type value"
+            typ = type.value if isinstance(type, NotificationType) else type
+            assert typ in [t.value for t in NotificationType], "Invalid notification type value"
             self.type = type
         assert isinstance(recipients, list), "Recipients must be a list"
         self._recipients = recipients
