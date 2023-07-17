@@ -4,6 +4,7 @@ from typing import Optional
 import swapper
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import AnonymousUser
+from django.core.cache import cache
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -13,10 +14,12 @@ from dynamicforms import fields as df_fields, serializers as df_serializers, vie
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
+
 # fmt: off
 from rest_registration.api.views import (
     change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
@@ -24,6 +27,7 @@ from rest_registration.api.views import (
 # fmt: on
 from social_django.models import UserSocialAuth
 
+from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
 from django_project_base.account.social_auth.providers import get_social_providers
 from django_project_base.notifications.base.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
@@ -182,6 +186,16 @@ class ResetPasswordSerializer(serializers.Serializer):
     password = fields.CharField(required=True)
 
 
+class ResetPasswordCodeSerializer(serializers.Serializer):
+    user_id = fields.CharField(required=True)
+    code = fields.CharField(required=True)
+
+    def validate_code(self, value) -> str:
+        if value and value == cache.get(RESET_USER_PASSWORD_VERIFICATION_CODE + str(self.initial_data.get("user_id"))):
+            return value
+        raise ValidationError("Invalid code")
+
+
 class ResetPasswordViewSet(viewsets.ViewSet):
     serializer_class = ResetPasswordSerializer
 
@@ -195,7 +209,11 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=["post"], url_path="reset-password", url_name="reset-password")
     def reset_password(self, request: Request) -> Response:
-        return reset_password(request._request)
+        code_ser = ResetPasswordCodeSerializer(data=request.data, context=dict(request=request))
+        code_ser.is_valid(raise_exception=True)
+        response = reset_password(request._request)
+        cache.delete(RESET_USER_PASSWORD_VERIFICATION_CODE + str(code_ser["user_id"]))
+        return response
 
     @extend_schema(
         description="Verify email via signature.",

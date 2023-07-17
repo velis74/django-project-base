@@ -1,30 +1,28 @@
-import uuid
 from typing import Any, Dict
 
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.utils.crypto import get_random_string
 from rest_framework.request import Request
 from rest_registration.exceptions import UserNotFound
-from rest_registration.notifications import send_verification_notification, create_verification_notification
+from rest_registration.notifications import create_verification_notification
 from rest_registration.notifications.enums import NotificationType
 from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
 from rest_registration.verification_notifications import _get_email_template_config_data
 
-from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_ID
+from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
 from django_project_base.notifications.base.email_notification import EMailNotification
 from django_project_base.notifications.base.enums import NotificationLevel
 from django_project_base.notifications.base.enums import NotificationType as NotificationTypeDPB
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django.utils.translation import gettext as __
 
 
 def send_reset_password_verification_email(request: Request, user: "AbstractBaseUser") -> None:
-    user_verification_id = get_user_verification_id(user)
-    user_verification_uuid = uuid.uuid4()
-    cache.set(RESET_USER_PASSWORD_VERIFICATION_ID + user_verification_uuid, user_verification_id, timeout=24 * 60 * 60)
     signer = ResetPasswordSigner(
         {
-            "user_id": user_verification_uuid,
+            "user_id": get_user_verification_id(user),
         },
         request=request,
     )
@@ -38,10 +36,14 @@ def send_reset_password_verification_email(request: Request, user: "AbstractBase
         NotificationType.RESET_PASSWORD_VERIFICATION, user, user.email, notification_data, template_config_data
     )
 
+    code_ck = RESET_USER_PASSWORD_VERIFICATION_CODE + str(user.pk)
+    code = get_random_string(length=6)
+    cache.set(code_ck, code, timeout=8 * 60 * 60)
+
     EMailNotification(
         message=DjangoProjectBaseMessage(
             subject=notification.subject,
-            body=notification.body,
+            body=f"{notification.body}\n\n{__('Your verification code is')}: {code}",
             footer="",
             content_type=DjangoProjectBaseMessage.HTML
             if notification.content_subtype != "plain"
