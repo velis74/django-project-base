@@ -20,7 +20,6 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-
 # fmt: off
 from rest_registration.api.views import (
     change_password, logout, register, reset_password, send_reset_password_link, verify_email, verify_registration
@@ -381,72 +380,6 @@ class RegisterViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="register", url_name="register")
     def register(self, request: Request) -> Response:
         return register(request._request)
-
-
-class AdminAddUserSerializer(AbstractRegisterSerializer):
-    template_context = dict(url_reverse="admin-add-user", dialog_classes="modal-lg", dialog_header_classes="bg-info")
-    form_titles = {
-        "table": "",
-        "new": _("Add new user"),
-        "edit": "",
-    }
-
-    actions = Actions()
-
-
-@extend_schema_view(
-    retrieve=extend_schema(parameters=[OpenApiParameter("id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"])]),
-)
-class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
-    serializer_class = AdminAddUserSerializer
-
-    permission_classes = (IsAuthenticated, IsAdminUser)  # TODO: permission should be based on project role
-
-    def initialize_request(self, request, *args, **kwargs):
-        request = super().initialize_request(request, *args, **kwargs)
-        request.csrf_processing_done = True
-        return request
-
-    def new_object(self):
-        return dict(username="", email="", password="", password_confirm="", first_name="", last_name="")
-
-    @extend_schema(
-        description="Add new user.",
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
-    @transaction.atomic()
-    def create(self, request: Request, *args, **kwargs) -> Response:
-        from rest_registration.api.views.register import RegisterView
-
-        view = RegisterView(request=request, serializer_class=self.serializer_class)
-        response = view.post(request)
-        if response.status_code == status.HTTP_201_CREATED:
-            profile_obj = swapper.load_model("django_project_base", "Profile").objects.get(
-                user_ptr_id=response.data[get_user_model()._meta.pk.name]
-            )
-            profile_obj.password_invalid = True
-            profile_obj.save(update_fields=["password_invalid"])
-
-            EMailNotification(
-                message=DjangoProjectBaseMessage(
-                    subject=_("Your account was created for you"),
-                    body=render_to_string(
-                        "account_created.html",
-                        {
-                            "username": f"{request.data['username']}/{request.data['email']}",
-                            "password": f"{request.data['password']}",
-                        },
-                    ),
-                    footer="",
-                    content_type=DjangoProjectBaseMessage.HTML,
-                ),
-                persist=True,
-            ).send()
-
-        return response
 
 
 class AdminAddUserSerializer(AbstractRegisterSerializer):

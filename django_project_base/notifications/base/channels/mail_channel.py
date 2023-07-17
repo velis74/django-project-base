@@ -1,9 +1,7 @@
 from django.conf import settings
-from django.core.mail import send_mail
 from django.utils.module_loading import import_string
 
 from django_project_base.notifications.base.channels.channel import Channel
-from django_project_base.notifications.base.channels.integrations.aws_ses import AwsSes
 from django_project_base.notifications.base.enums import ChannelIdentifier
 
 

@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.utils.crypto import get_random_string
@@ -19,7 +20,7 @@ from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django.utils.translation import gettext as __
 
 
-def send_reset_password_verification_email(request: Request, user: "AbstractBaseUser") -> None:
+def send_reset_password_verification_email(request: Request, user) -> None:
     signer = ResetPasswordSigner(
         {
             "user_id": get_user_verification_id(user),
@@ -38,7 +39,7 @@ def send_reset_password_verification_email(request: Request, user: "AbstractBase
 
     code_ck = RESET_USER_PASSWORD_VERIFICATION_CODE + str(user.pk)
     code = get_random_string(length=6)
-    cache.set(code_ck, code, timeout=8 * 60 * 60)
+    cache.set(code_ck, code, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
 
     EMailNotification(
         message=DjangoProjectBaseMessage(
@@ -56,7 +57,7 @@ def send_reset_password_verification_email(request: Request, user: "AbstractBase
     ).send()
 
 
-def find_user_by_send_reset_password_link_data(data: Dict[str, Any], **kwargs: Any) -> "AbstractBaseUser":
+def find_user_by_send_reset_password_link_data(data: Dict[str, Any], **kwargs: Any):
     user = get_user_model().objects.filter(**kwargs["serializer"].validated_data).first()
     if user:
         return user

@@ -18,7 +18,7 @@ class AwsSes:
         self.region = getattr(settings, "AWS_SES_REGION_NAME", None)
         assert self.region, "AWS SES region required"
 
-    def send(self, notification: "Notification"):
+    def send(self, notification):
         msg = {
             "Body": {},
             "Subject": {
