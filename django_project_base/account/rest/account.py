@@ -1,3 +1,4 @@
+import json
 import re
 from typing import Optional
 
@@ -209,7 +210,9 @@ class ResetPasswordViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=["post"], url_path="reset-password", url_name="reset-password")
     def reset_password(self, request: Request) -> Response:
-        code_ser = ResetPasswordCodeSerializer(data=request.data, context=dict(request=request))
+        code_ser = ResetPasswordCodeSerializer(
+            data=json.loads(request._request.body.decode()), context=dict(request=request)
+        )
         code_ser.is_valid(raise_exception=True)
         response = reset_password(request._request)
         cache.delete(RESET_USER_PASSWORD_VERIFICATION_CODE + str(code_ser["user_id"]))
