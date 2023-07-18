@@ -10,7 +10,7 @@ from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 # fmt: off
@@ -41,6 +41,7 @@ class ResetPasswordCodeSerializer(serializers.Serializer):
 
 class ResetPasswordViewSet(viewsets.ViewSet):
     serializer_class = ResetPasswordSerializer
+    permission_classes = (AllowAny,)
 
     @extend_schema(
         description="Reset password through a link sent in email, given the signature and timestamp from the link.",
@@ -127,6 +128,7 @@ class SendResetPasswordLinkSerializer(serializers.Serializer):
 
 class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     serializer_class = SendResetPasswordLinkSerializer()
+    permission_classes = (AllowAny,)
 
     @extend_schema(
         description="Send email with reset password link.",
