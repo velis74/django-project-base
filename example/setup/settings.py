@@ -151,11 +151,13 @@ DJANGO_PROJECT_BASE_PROFILE_MODEL = "demo_django_base.UserProfile"
 DJANGO_PROJECT_BASE_PROJECTMEMBER_MODEL = "demo_django_base.ProjectMember"
 DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
 
+DEFAULT_FROM_EMAIL = "info@example.com"
+
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,
     "REGISTER_EMAIL_VERIFICATION_ENABLED": False,
-    "RESET_PASSWORD_VERIFICATION_ENABLED": False,
     "LOGIN_DEFAULT_SESSION_AUTHENTICATION_BACKEND": "django_project_base.base.auth_backends.UsersCachingBackend",
+    "VERIFICATION_FROM_EMAIL": DEFAULT_FROM_EMAIL,
 }
 
 REST_FRAMEWORK = {
@@ -198,13 +200,19 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 SERVER_EMAIL = ""
-DEFAULT_FROM_EMAIL = "info@example.com"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DYNAMICFORMS = {
     "allow_anonymous_user_to_preupload_files": True,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache",
+    }
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

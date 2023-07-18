@@ -35,19 +35,17 @@ class Notification(ABC, QueableNotificationMixin):
         assert isinstance(persist, bool), "Persist must be valid boolean value"
         self._persist = persist
         if level is not None:
-            assert isinstance(level, str) and level in [
-                _level.value for _level in NotificationLevel
-            ], "Invalid notification level value"
-            self.level = level
+            lvl = level.value if isinstance(level, NotificationLevel) else level
+            assert lvl in [_level.value for _level in NotificationLevel], "Invalid notification level value"
+            self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
             assert isinstance(delay, datetime) and delay > utc_now(), "Invalid delay value"
             self._delay = delay
         if type is not None:
-            assert isinstance(type, str) and type in [
-                t.value for t in NotificationType
-            ], "Invalid notification type value"
-            self.type = type
+            typ = type.value if isinstance(type, NotificationType) else type
+            assert typ in [t.value for t in NotificationType], "Invalid notification type value"
+            self.type = type if isinstance(type, NotificationType) else NotificationType(typ)
         assert isinstance(recipients, list), "Recipients must be a list"
         self._recipients = recipients
         self._extra_data = kwargs
@@ -78,10 +76,10 @@ class Notification(ABC, QueableNotificationMixin):
                 self.message.save()
             notification = DjangoProjectBaseNotification.objects.create(
                 locale=self.locale,
-                level=self.level or NotificationLevel.INFO.value,
+                level=self.level.value,
                 delayed_to=self.delay,
                 required_channels=",".join(required_channels) if required_channels else None,
-                type=self.type,
+                type=self.type.value,
                 message=self.message,
             )
 

@@ -14,6 +14,29 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "DJANGO_PROJECT_BASE_SLUG_FIELD_NAME",
         "default": "slug",
     },
+    {
+        "name": "REST_REGISTRATION",
+        "default": {
+            "RESET_PASSWORD_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.reset_password_email_service.send_reset_password_verification_email",  # noqa: E501
+            "RESET_PASSWORD_VERIFICATION_URL": "/#reset-user-password/",
+            "VERIFICATION_FROM_EMAIL": "",
+            "SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL": True,
+            "RESET_PASSWORD_VERIFICATION_ENABLED": True,
+            "RESET_PASSWORD_SERIALIZER_PASSWORD_CONFIRM": True,
+            "SEND_RESET_PASSWORD_LINK_USER_FINDER": "django_project_base.account.service.reset_password_email_service.find_user_by_send_reset_password_link_data",  # noqa: E501
+        },
+    },
+    {"name": "EMAIL_HOST_USER", "default": ""},
+    {
+        "name": "EMAIL_PROVIDER",
+        "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",
+    },
+    # this settings silences (rest_registration.E013) SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL
+    # is set but email field is not unique
+    # todo: TASK https://taiga.velis.si/project/velis-django-project-admin/us/637?no-milestone=1
+    {"name": "SILENCED_SYSTEM_CHECKS", "default": ["rest_registration.E013"]},
+    {"name": "CONFIRMATION_CODE_TIMEOUT", "default": 600},
+    {"name": "VERIFICATION_FROM_EMAIL", "default": ""},
 )
 
 USER_CACHE_KEY = "django-user-{id}"

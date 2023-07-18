@@ -19,6 +19,7 @@ class LoginSerializer(serializers.Serializer):
     actions = Actions(
         FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Back to site")),
         FormButtonAction(btn_type=FormButtonTypes.SUBMIT, name="submit", label=_("Login")),
+        FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="reset-password", label=_("Forgot password?")),
         add_form_buttons=False,
     )
 

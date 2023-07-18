@@ -13,3 +13,5 @@ social-auth-app-django
 django-permissions-policy
 django-csp
 requests
+boto3
+natural
