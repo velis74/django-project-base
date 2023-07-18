@@ -109,5 +109,10 @@ class MergeUsersService:
                 with connection.cursor() as cursor:
                     cursor.execute("delete from public.account_emailaddress where user_id = %s", (user,))
 
+            if "socialaccount_socialaccount" in db_tables:
+                with connection.cursor() as cursor:
+                    cursor.execute("truncate socialaccount_socialtoken;")
+                    cursor.execute("delete from public.socialaccount_socialaccount where user_id = %s", (user,))
+
             profile_model.objects.filter(pk=user_model._meta.pk.to_python(user)).delete()
             user_model.objects.filter(pk=user_model._meta.pk.to_python(user)).delete()
