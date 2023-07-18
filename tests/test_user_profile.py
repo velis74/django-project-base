@@ -43,7 +43,7 @@ class TestProfileViewSet(TestBase):
                    "user_permissions": None
                    },
         response = self.api_client.post('/account/profile', profile, format='json')
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_profile(self):
         self.assertTrue(self.api_client.login(username='miha', password='mihamiha'), 'Not logged in')
