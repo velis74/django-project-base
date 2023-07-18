@@ -259,12 +259,13 @@ const openRegistration = async () => {
 };
 
 async function enterResetPasswordData() {
-  if (_.includes(window.location.hash, '#reset-user-password')) {
+  // eslint-disable-next-line vue/max-len
+  if (_.includes(window.location.hash, '#reset-user-password') || _.includes(window.location.hash, '#/reset-user-password')) {
     const resetEmailPromise = await dfModal.message('', () => [
       // eslint-disable-next-line vue/max-len
       h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
-        h('h4', `${gettext('Please provide new password')}\n\n
-        ${gettext('\'Link for password reset was sent to provided e-mail address')}`),
+        h('h4', `${gettext('Please provide new password.')}\n\n
+        ${gettext('Link for password reset was sent to provided e-mail address')}`),
       ]),
       h('div', {}, [
         h('input', {
