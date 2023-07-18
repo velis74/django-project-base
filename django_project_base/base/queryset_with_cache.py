@@ -14,7 +14,6 @@ class QuerySetWithCache(models.query.QuerySet):
         else:
             # TODO: handle this !!!!!
             pass
-            # cache.clear()
 
     @property
     def cache_timeout(self) -> int:

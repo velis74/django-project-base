@@ -208,4 +208,11 @@ DYNAMICFORMS = {
     "allow_anonymous_user_to_preupload_files": True,
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache",
+    }
+}
+
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

@@ -120,7 +120,7 @@ async function actionResetPassword() {
   const resetEmailPromise = await dfModal.message('', () => [
     // eslint-disable-next-line vue/max-len
     h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
-      h('h4', gettext('Enter your email')),
+      h('h4', gettext('Enter your e-mail')),
     ]),
     h('div', {}, [
       h('input', {
