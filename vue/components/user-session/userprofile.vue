@@ -1,12 +1,12 @@
 <template>
   <v-btn>
     <v-img v-if="userSession.userData.avatar" :src="userSession.userData.avatar"/>
-    <h5 v-if="userSession.userDisplayName" class="d-inline-block">
+    <h4 v-if="userSession.userDisplayName" class="d-inline-block">
       {{ userSession.userDisplayName }}
       <span v-if="userSession.impersonated">
         ({{ gettext('Impersonated') }})
       </span>
-    </h5>
+    </h4>
 
     <v-menu activator="parent">
       <v-list>
