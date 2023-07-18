@@ -76,10 +76,10 @@ class Notification(ABC, QueableNotificationMixin):
                 self.message.save()
             notification = DjangoProjectBaseNotification.objects.create(
                 locale=self.locale,
-                level=self.level or NotificationLevel.INFO.value,
+                level=self.level.value,
                 delayed_to=self.delay,
                 required_channels=",".join(required_channels) if required_channels else None,
-                type=self.type,
+                type=self.type.value,
                 message=self.message,
             )
 
