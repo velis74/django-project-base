@@ -93,7 +93,7 @@ import {
 } from '@velis/dynamicforms';
 import { AxiosError } from 'axios';
 import _ from 'lodash';
-import { h, onMounted, reactive, Ref, ref } from 'vue';
+import { h, reactive, Ref, ref } from 'vue';
 
 import { apiClient } from '../../apiClient';
 

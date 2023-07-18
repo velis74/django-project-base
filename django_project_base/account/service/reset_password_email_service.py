@@ -46,7 +46,8 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
     EMailNotification(
         message=DjangoProjectBaseMessage(
             subject=notification.subject,
-            body=f"{__('Your verification code is')}: {code} \n\n {__('Code is valid for ')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}",
+            body=f"{__('Your verification code is')}: "
+            f"{code} \n\n {__('Code is valid for ')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}",
             footer="",
             content_type=DjangoProjectBaseMessage.HTML
             if notification.content_subtype != "plain"

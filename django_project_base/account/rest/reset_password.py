@@ -1,6 +1,5 @@
 import json
 
-import rest_registration
 import swapper
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
