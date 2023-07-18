@@ -14,3 +14,4 @@ django-permissions-policy
 django-csp
 requests
 boto3
+natural

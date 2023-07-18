@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext as __
+from natural.date import compress
 from rest_framework.request import Request
 from rest_registration.exceptions import UserNotFound
 from rest_registration.notifications import create_verification_notification
@@ -19,7 +20,9 @@ from django_project_base.notifications.base.enums import NotificationLevel, Noti
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
-def send_reset_password_verification_email(request: Request, user) -> None:
+def send_reset_password_verification_email(request: Request, user, send=False) -> Dict:
+    if not send:
+        return {}
     signer = ResetPasswordSigner(
         {
             "user_id": get_user_verification_id(user),
@@ -43,7 +46,7 @@ def send_reset_password_verification_email(request: Request, user) -> None:
     EMailNotification(
         message=DjangoProjectBaseMessage(
             subject=notification.subject,
-            body=f"{notification.body}\n\n{__('Your verification code is')}: {code}",
+            body=f"{__('Your verification code is')}: {code} \n\n {__('Code is valid for ')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}",
             footer="",
             content_type=DjangoProjectBaseMessage.HTML
             if notification.content_subtype != "plain"
@@ -55,9 +58,12 @@ def send_reset_password_verification_email(request: Request, user) -> None:
         recipients=[user.pk],
     ).send()
 
+    return signer.get_signed_data()
+
 
 def find_user_by_send_reset_password_link_data(data: Dict[str, Any], **kwargs: Any):
-    user = get_user_model().objects.filter(**kwargs["serializer"].validated_data).first()
+    query = kwargs["serializer"].validated_data if kwargs.get("serializer", None) else data
+    user = get_user_model().objects.filter(**query).first()
     if user:
         return user
     raise UserNotFound()

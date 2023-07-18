@@ -35,7 +35,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     # is set but email field is not unique
     # todo: TASK https://taiga.velis.si/project/velis-django-project-admin/us/637?no-milestone=1
     {"name": "SILENCED_SYSTEM_CHECKS", "default": ["rest_registration.E013"]},
-    {"name": "CONFIRMATION_CODE_TIMEOUT", "default": 28800},
+    {"name": "CONFIRMATION_CODE_TIMEOUT", "default": 600},
     {"name": "VERIFICATION_FROM_EMAIL", "default": ""},
 )
 

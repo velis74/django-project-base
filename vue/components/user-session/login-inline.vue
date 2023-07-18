@@ -113,6 +113,8 @@ const showLoginDialog = ref(false);
 // TODO: needs to be moved to /rest/about or to some configuration. definitely needs to be app-specific
 const appname = gettext('Demo app');
 
+let resetPasswordData = { user_id: 0, timestamp: 0, signature: '' };
+
 async function actionResetPassword() {
   showLoginDialog.value = false;
   const resetEmailPromise = await dfModal.message('', () => [
@@ -147,7 +149,9 @@ async function actionResetPassword() {
   if (resetEmailPromise.action.name === 'confirm') {
     const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
     apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
-      dfModal.message('', gettext('Link for password reset was sent to provided e-mail address'));
+      resetPasswordData = res.data;
+      window.location.hash = '#reset-user-password';
+      enterResetPasswordData();
     });
   }
 }
@@ -259,7 +263,8 @@ async function enterResetPasswordData() {
     const resetEmailPromise = await dfModal.message('', () => [
       // eslint-disable-next-line vue/max-len
       h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
-        h('h4', gettext('Please provide new password')),
+        h('h4', `${gettext('Please provide new password')}\n\n
+        ${gettext('\'Link for password reset was sent to provided e-mail address')}`),
       ]),
       h('div', {}, [
         h('input', {
@@ -300,19 +305,18 @@ async function enterResetPasswordData() {
       }),
     }));
     if (resetEmailPromise.action.name === 'reset') {
-      const urlParams = new URLSearchParams(window.location.hash.slice(1).replace('reset-user-password/', ''));
       const password: String | null = (<HTMLInputElement>document.getElementById('password-reset-input')).value;
       const passwordConfirmation: String | null = (<HTMLInputElement>document.getElementById(
         'password-reset-input-confirmation',
       )).value;
       apiClient.post('/account/reset-password/', {
-        user_id: urlParams.get('user_id'),
-        timestamp: urlParams.get('timestamp'),
-        signature: urlParams.get('signature'),
+        user_id: resetPasswordData.user_id,
+        timestamp: resetPasswordData.timestamp,
+        signature: resetPasswordData.signature,
         password,
         password_confirm: passwordConfirmation,
         code: (<HTMLInputElement>document.getElementById('password-reset-input-code')).value,
-      }).then((res) => {
+      }).then(() => {
         window.location.hash = '';
         dfModal.message('', gettext('Password was reset successfully'));
       }).catch((err) => {
@@ -324,10 +328,6 @@ async function enterResetPasswordData() {
     window.location.hash = '';
   }
 }
-
-onMounted(() => {
-  enterResetPasswordData();
-});
 </script>
 
 <script lang="ts">
