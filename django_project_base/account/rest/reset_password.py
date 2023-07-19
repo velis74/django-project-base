@@ -15,6 +15,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 # fmt: off
 from rest_registration.api.views import reset_password, send_reset_password_link, verify_email
+from rest_registration.exceptions import UserNotFound
 from rest_registration.settings import registration_settings
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
@@ -142,11 +143,16 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=["post"], url_path="send-reset-password-link", url_name="send-reset-password-link")
     def send_reset_password_link(self, request: Request) -> Response:
-        req_data = request._request.body
-        send_reset_password_link(request._request)
-        reset_data = registration_settings.RESET_PASSWORD_VERIFICATION_EMAIL_SENDER(
-            request=request,
-            user=registration_settings.SEND_RESET_PASSWORD_LINK_USER_FINDER(json.loads(req_data.decode())),
-            send=True,
-        )
-        return Response(reset_data)
+        try:
+            req_data = request._request.body
+            send_reset_password_link(request._request)
+            reset_data = registration_settings.RESET_PASSWORD_VERIFICATION_EMAIL_SENDER(
+                request=request,
+                user=registration_settings.SEND_RESET_PASSWORD_LINK_USER_FINDER(json.loads(req_data.decode())),
+                send=True,
+            )
+            return Response(reset_data)
+        except UserNotFound:
+            return Response()
+        except Exception as e:
+            raise e
