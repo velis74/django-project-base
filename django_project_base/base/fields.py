@@ -22,7 +22,7 @@ class UserRelatedField(dffields.PrimaryKeyRelatedField):
     def __init__(self, **kwargs):
         kwargs["query_field"] = "full_name"
         kwargs["additional_parameters"] = dict(select=1)
-        super(UserRelatedField, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def get_queryset(self):
         return swapper.load_model("django_project_base", "Profile").objects.all()
