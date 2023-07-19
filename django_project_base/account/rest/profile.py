@@ -29,6 +29,7 @@ from rest_framework.serializers import Serializer
 from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
+from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 
@@ -226,7 +227,7 @@ class MergeUserRequest(Serializer):
     user = IntegerField(min_value=1, required=True, allow_null=False)
 
 
-class ProfileViewPermissions(IsAuthenticated):
+class ProfileViewPermissions(BasePermissions):
     """
     Allows users to have full permissions on get/post (retrieving and adding new users).
     Other methods require authentication.
