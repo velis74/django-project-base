@@ -147,6 +147,17 @@ class ProfileSerializer(ModelSerializer):
                 ),
             )
 
+        if request.user.is_superuser or request.user.is_staff:
+            self.actions.actions.append(
+                TableAction(
+                    TablePosition.HEADER,
+                    label=_("Export"),
+                    title=_("Export"),
+                    name="export",
+                    icon="download-outline",
+                )
+            )
+
     def get_is_impersonated(self, obj):
         try:
             request = self.context["request"]
