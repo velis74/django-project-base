@@ -134,18 +134,26 @@ class ProfileSerializer(ModelSerializer):
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
-        if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES and (
-            request.user.is_superuser or request.user.is_staff
-        ):
+        if request.user.is_superuser or request.user.is_staff:
             self.actions.actions.append(
                 TableAction(
-                    TablePosition.ROW_END,
-                    label=_("Merge"),
-                    title=_("Merge"),
-                    name="add-to-merge",
-                    icon="git-merge-outline",
-                ),
+                    TablePosition.HEADER,
+                    label=_("Export"),
+                    title=_("Export"),
+                    name="export",
+                    icon="download-outline",
+                )
             )
+            if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES:
+                self.actions.actions.append(
+                    TableAction(
+                        TablePosition.ROW_END,
+                        label=_("Merge"),
+                        title=_("Merge"),
+                        name="add-to-merge",
+                        icon="git-merge-outline",
+                    ),
+                )
 
     def get_is_impersonated(self, obj):
         try:
