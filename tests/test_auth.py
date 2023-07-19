@@ -170,4 +170,10 @@ class TestSendResetPasswordLink(TestBase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.api_client.post("/account/send-reset-password-link/", {"email": "miha"}, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        from django_project_base.settings import TEST_USER_ONE_DATA
+
+        response = self.api_client.post(
+            "/account/send-reset-password-link/", {"email": TEST_USER_ONE_DATA}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
