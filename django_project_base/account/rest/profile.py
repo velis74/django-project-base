@@ -134,9 +134,9 @@ class ProfileSerializer(ModelSerializer):
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
-        if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES and (
-            request.user.is_superuser or request.user.is_staff
-        ):
+        if str(request.query_params.get("remove-merge-users", "false")) in tuple(
+            map(str, fields.BooleanField.TRUE_VALUES)
+        ) and (request.user.is_superuser or request.user.is_staff):
             self.actions.actions.append(
                 TableAction(
                     TablePosition.ROW_END,
@@ -281,7 +281,9 @@ class ProfileViewSet(ModelViewSet):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
 
-        if self.request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES:
+        if str(self.request.query_params.get("remove-merge-users", "false")) in tuple(
+            map(str, fields.BooleanField.TRUE_VALUES)
+        ):
             MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
             exclude_qs = list(
                 map(

@@ -19,6 +19,7 @@ from rest_framework.serializers import Serializer
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
+from django_project_base.base.permissions import IsSuperUser
 
 
 class ProfileMergeSerializer(ProfileSerializer):
@@ -89,7 +90,7 @@ class MergeUsersRequest(Serializer):
 
 class ProfileMergeViewSet(ProfileViewSet):
     serializer_class = ProfileMergeSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser | IsSuperUser]
 
     schema = None
 
