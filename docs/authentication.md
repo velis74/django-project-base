@@ -214,3 +214,32 @@ To enable Google OAuth login add folowing to settings:
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '*Client ID*'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '*Client secret*'
 ```
+
+### View Permissions
+
+We provide `BasePermissions` class that executes default permission classes. This way you can guarantee that your
+permission classes execute default permission handlers. If you have any permission rules that should be generally
+followed, we recommend you put them in default permission handlers, like you do in DRF.
+
+```python
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+```
+
+You can use `BasePermission` to define your own permission class like this: 
+
+```python
+from django_project_base.permissions import BasePermissions
+
+class CustomPermissions(BasePermissions):
+      def has_permission(self, request, view):
+        result = my_logic()
+        
+        return result or super().has_permission(request, view)
+```
+
+Calling `super().has_permission(request, view)` will automatically activate your default permission classes and resolve
+them as`AND` operated results.
