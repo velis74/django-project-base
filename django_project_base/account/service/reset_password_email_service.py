@@ -45,13 +45,12 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
 
     EMailNotification(
         message=DjangoProjectBaseMessage(
-            subject=notification.subject,
+            subject=f"{__('Password recovery for')} {request.META.get('HTTP_HOST', '')}",
             body=f"{__('Your verification code is')}: "
-            f"{code} \n\n {__('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}",
+            f"{code} \n\n {__('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n\n"
+            f"{__('If this was not you or it was unintentional, you may safely ignore this message.')}",
             footer="",
-            content_type=DjangoProjectBaseMessage.HTML
-            if notification.content_subtype != "plain"
-            else DjangoProjectBaseMessage.PLAIN_TEXT,
+            content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
         ),
         persist=True,
         level=NotificationLevel.INFO,
