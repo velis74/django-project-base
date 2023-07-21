@@ -4,7 +4,8 @@ from django.contrib.auth import models
 
 class BaseRole(models.Group):
     # Right now our role does not do anything more than Django's
-    pass
+    class Meta:
+        abstract = True
 
 
 class Role(BaseRole):
@@ -15,7 +16,8 @@ class Role(BaseRole):
 
 class BasePermission(models.Permission):
     # Right now our permission does not do anything more than Django's
-    pass
+    class Meta:
+        abstract = True
 
 
 class Permission(BasePermission):
