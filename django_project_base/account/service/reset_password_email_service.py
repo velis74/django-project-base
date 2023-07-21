@@ -45,8 +45,9 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
 
     EMailNotification(
         message=DjangoProjectBaseMessage(
-            subject=f"{__('Password recovery for')} {request.META.get('HTTP_HOST', '')}",
-            body=f"{__('Your verification code is')}: "
+            subject=f"{__('Password recovery for')} {request.META['HTTP_HOST']}",
+            body=f"{__('You or someone acting as you requested a password reset for your account at')} {request.META['HTTP_HOST']}. "
+            f"\n\n{__('Your verification code is')}: "
             f"{code} \n\n {__('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n\n"
             f"{__('If this was not you or it was unintentional, you may safely ignore this message.')}",
             footer="",

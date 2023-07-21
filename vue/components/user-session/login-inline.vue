@@ -291,20 +291,27 @@ async function enterResetPasswordData() {
         }, {}),
         h('br'),
         h('br'),
-        h('input', {
-          type: 'text',
-          placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
-          id: 'password-reset-input',
-          class: 'password-reset-fields',
-        }, {}),
-        h('input', {
-          type: 'text',
-          placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
-            'New password confirmation',
-          ),
-          id: 'password-reset-input-confirmation',
-          class: 'password-reset-fields',
-        }, {}),
+        h('div', { }, [
+          h('label', { class: 'password-reset-field-label' }, `${gettext('Please enter your new password')}:`),
+          h('input', {
+            type: 'text',
+            placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
+            id: 'password-reset-input',
+            class: 'password-reset-fields',
+          }, {}),
+        ]),
+        h('div', { }, [
+          h('label', { class: 'password-reset-field-label' }, gettext('New password confirmation')),
+          h('input', {
+            type: 'text',
+            placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
+              'New password confirmation',
+            ),
+            id: 'password-reset-input-confirmation',
+            class: 'password-reset-fields',
+          }, {}),
+        ]),
+
       ]),
     ], new FilteredActions({
       cancel: new Action({
@@ -355,6 +362,10 @@ export default { name: 'LoginInline' };
 <style>
 .v-text-field {
   min-width: 10em;
+}
+
+.password-reset-field-label {
+  max-width: 40%;
 }
 
 .password-reset-fields {
