@@ -12,7 +12,7 @@ class EMailNotification(Notification):
     def __init__(
         self,
         message: DjangoProjectBaseMessage,
-        persist: bool = False,
+        persist: bool = True,
         level: Optional[NotificationLevel] = None,
         locale: Optional[str] = None,
         delay: Optional[datetime] = None,

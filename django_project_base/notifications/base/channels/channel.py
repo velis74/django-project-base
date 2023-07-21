@@ -8,5 +8,5 @@ class Channel(ABC):
 
     @staticmethod
     @abstractmethod
-    def send(notification: "Notification", **kwargs) -> None:  # noqa: F821
+    def send(notification: "Notification", mail_content_entity_context: str = "", **kwargs) -> int:  # noqa: F821
         pass

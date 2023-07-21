@@ -1,4 +1,6 @@
 import logging
+import random
+import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Optional, Type
@@ -19,6 +21,7 @@ class Notification(ABC, QueableNotificationMixin):
     level = None
     locale = None
     message: DjangoProjectBaseMessage
+    content_entity_context = ""
 
     def __init__(
         self,
@@ -29,7 +32,8 @@ class Notification(ABC, QueableNotificationMixin):
         delay: Optional[datetime] = None,
         type: Optional[NotificationType] = None,
         recipients: List[int] = [],
-        **kwargs
+        content_entity_context="",
+        **kwargs,
     ) -> None:
         super().__init__()
         assert isinstance(persist, bool), "Persist must be valid boolean value"
@@ -51,6 +55,7 @@ class Notification(ABC, QueableNotificationMixin):
         self._extra_data = kwargs
         assert isinstance(message, DjangoProjectBaseMessage), "Invalid value for message"
         self.message = message
+        self.content_entity_context = content_entity_context
 
     @property
     @abstractmethod
@@ -81,6 +86,9 @@ class Notification(ABC, QueableNotificationMixin):
                 required_channels=",".join(required_channels) if required_channels else None,
                 type=self.type.value,
                 message=self.message,
+                content_entity_context=str(self.content_entity_context)
+                if self.content_entity_context
+                else str(uuid.uuid4()),
             )
 
         if self.delay:
@@ -93,7 +101,7 @@ class Notification(ABC, QueableNotificationMixin):
 
         sent_channels: list = []
         failed_channels: list = []
-
+        exceptions = ""
         for channel in self.via_channels:
             try:
                 channel.send(self, **self._extra_data)
@@ -101,6 +109,7 @@ class Notification(ABC, QueableNotificationMixin):
             except Exception as e:
                 logging.getLogger(__name__).error(e)
                 failed_channels.append(channel)
+                exceptions += f"{str(e)}\n\n"
 
         if self.persist:
             notification.sent_channels = (
@@ -118,6 +127,7 @@ class Notification(ABC, QueableNotificationMixin):
                 else None
             )
             notification.sent_at = utc_now()
-            notification.save(update_fields=["sent_at", "sent_channels", "failed_channels"])
+            notification.exceptions = exceptions if exceptions else None
+            notification.save(update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"])
             notification.recipients = (notification.recipients or []) + self._recipients
         return notification

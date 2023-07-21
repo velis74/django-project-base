@@ -59,6 +59,8 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     )
     recipients = models.CharField(blank=False, null=True, max_length=2048, validators=[int_list_validator])
     message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True, verbose_name=_("Message"))
+    exceptions = models.TextField(null=True)
+    content_entity_context = models.TextField()
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.delayed_to = (
