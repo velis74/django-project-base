@@ -68,6 +68,14 @@
             :actions="formDef.actions"
             :errors="errors"
           />
+          <p
+            style="cursor: pointer"
+            class="mt-n8 text-decoration-underline"
+            @keyup.enter="actionResetPassword"
+            @click.stop="actionResetPassword"
+          >
+            {{ gettext('Forgot password?') }}
+          </p>
         </div>
       </template>
       <template #actions>
@@ -118,36 +126,29 @@ let resetPasswordData = { user_id: 0, timestamp: 0, signature: '' };
 async function actionResetPassword() {
   showLoginDialog.value = false;
   const resetEmailPromise = await dfModal.message('', () => [
-    // eslint-disable-next-line vue/max-len
-    h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
-      h('h4', gettext('Enter your e-mail')),
-    ]),
-    h('div', {}, [
-      h('input', {
-        type: 'text',
-        id: 'input-reset-email',
-        style: 'border: 1px black; border-style: solid; border-radius: 5px; ' +
-            'width: 100%; margin-bottom: 0.3em; padding: 0.1em;',
-      }, {}),
-    ]),
+    h('h2', { class: 'mt-n6 mb-4' }, gettext('Password recovery')),
+    h('h4', { class: 'd-flex justify-center mb-1' }, gettext('Enter your e-mail')),
+    h('input', {
+      type: 'text',
+      id: 'input-reset-email',
+      class: 'w-100 mb-2 p-1 rounded border-lightgray',
+    }, {}),
   ], new FilteredActions({
     cancel: new Action({
       name: 'cancel',
       label: gettext('Cancel'),
-      icon: 'thumbs-down-outline',
       displayStyle: { asButton: true, showLabel: true, showIcon: true },
       position: 'FORM_FOOTER',
     }),
     confirm: new Action({
       name: 'confirm',
       label: gettext('Confirm'),
-      icon: 'thumbs-up-outline',
       displayStyle: { asButton: true, showLabel: true, showIcon: true },
       position: 'FORM_FOOTER',
     }),
   }));
   if (resetEmailPromise.action.name === 'confirm') {
-    const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
+    const email: String | null = (<HTMLInputElement> document.getElementById('input-reset-email')).value;
     apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
       resetPasswordData = res.data;
       window.location.hash = '#reset-user-password';
@@ -168,7 +169,6 @@ async function getFormDefinition() {
     doLogin();
     showLoginDialog.value = false;
   };
-  formDef.actions.actions['reset-password'].actionResetPassword = actionResetPassword;
   socialAuth.value = formDef.payload.social_auth_providers;
 }
 
@@ -182,22 +182,20 @@ async function resetUserState() {
         'h5',
         {},
         gettext('Your account will be restored. Do you want to keep all your previous data or do ' +
-                'you want to reset account state and begin as account was just ' +
-                'registered and your previous data is deleted?'),
+          'you want to reset account state and begin as account was just ' +
+          'registered and your previous data is deleted?'),
       ),
     ],
     new FilteredActions({
       confirm: new Action({
         name: 'confirm',
         label: gettext('Reset account'),
-        icon: 'thumbs-down-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
       cancel: new Action({
         name: 'cancel',
         label: gettext('Cancel'),
-        icon: 'thumbs-up-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
@@ -218,9 +216,11 @@ function parseErrors(apiErr: AxiosError, errsStore: { [key: string]: any[] }) {
     delete errsStore[key];
   });
   // @ts-ignore
-  if (apiErr && apiErr.response.data.detail) errsStore.non_field_errors = [apiErr.response.data.detail];
-  // @ts-ignore
-  else Object.assign(errsStore, apiErr.response.data);
+  if (apiErr && apiErr.response.data.detail) {
+    errsStore.non_field_errors = [apiErr.response.data.detail];
+  } else {
+    Object.assign(errsStore, apiErr.response.data);
+  }
 }
 
 async function doLogin() {
@@ -262,76 +262,53 @@ async function enterResetPasswordData() {
   // eslint-disable-next-line vue/max-len
   if (_.includes(window.location.hash, '#reset-user-password') || _.includes(window.location.hash, '#/reset-user-password')) {
     const resetEmailPromise = await dfModal.message('', () => [
-      // eslint-disable-next-line vue/max-len
+      h('h2', { class: 'mt-n6 mb-4' }, gettext('Password recovery')),
       h(
-        'div',
-        // eslint-disable-next-line vue/max-len
-        { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 0.1em; justify-content: space-around;' },
-        [
-          h(
-            'h4',
-            `${gettext('If an active account exists with the given email, we\'ve sent a message to it. ')}`,
-          ),
-        ],
-      ),
-      h(
-        'div',
-        // eslint-disable-next-line vue/max-len
-        { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' },
-        [
-          h('h4', `${gettext('Please enter the code from the message')}`),
-        ],
+        'h4',
+        { class: 'd-flex justify-center mb-4' },
+        [gettext('If an active account exists with the given email, we\'ve sent a message to it.')],
       ),
       h('div', {}, [
+        h('h4', { class: 'd-flex justify-center mb-1' }, [gettext('Please enter the code from the message:')]),
         h('input', {
           type: 'text',
           placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
           id: 'password-reset-input-code',
-          class: 'password-reset-fields',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
         }, {}),
-        h('br'),
-        h('br'),
-        h('div', { class: 'div-input' }, [
-          h('label', { class: 'password-reset-field-label' }, `${gettext('Please enter your new password')}:`),
-          h('input', {
-            type: 'text',
-            placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
-            id: 'password-reset-input',
-            class: 'password-reset-fields',
-          }, {}),
-        ]),
-        h('div', { class: 'div-input' }, [
-          h('label', { class: 'password-reset-field-label' }, gettext('New password confirmation')),
-          h('input', {
-            type: 'text',
-            placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
-              'New password confirmation',
-            ),
-            id: 'password-reset-input-confirmation',
-            class: 'password-reset-fields',
-          }, {}),
-        ]),
-
+        h('h4', { class: 'd-flex justify-center mt-2 mb-1' }, [gettext('Please enter your new password:')]),
+        h('input', {
+          type: 'text',
+          placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
+          id: 'password-reset-input',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
+        }, {}),
+        h('input', {
+          type: 'text',
+          placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
+            'Confirm password',
+          ),
+          id: 'password-reset-input-confirmation',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
+        }, {}),
       ]),
     ], new FilteredActions({
       cancel: new Action({
         name: 'cancel',
         label: gettext('Cancel'),
-        icon: 'thumbs-down-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
       confirm: new Action({
         name: 'reset',
         label: gettext('Reset'),
-        icon: 'thumbs-up-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
     }));
     if (resetEmailPromise.action.name === 'reset') {
-      const password: String | null = (<HTMLInputElement>document.getElementById('password-reset-input')).value;
-      const passwordConfirmation: String | null = (<HTMLInputElement>document.getElementById(
+      const password: String | null = (<HTMLInputElement> document.getElementById('password-reset-input')).value;
+      const passwordConfirmation: String | null = (<HTMLInputElement> document.getElementById(
         'password-reset-input-confirmation',
       )).value;
       apiClient.post('/account/reset-password/', {
@@ -340,7 +317,7 @@ async function enterResetPasswordData() {
         signature: resetPasswordData.signature,
         password,
         password_confirm: passwordConfirmation,
-        code: (<HTMLInputElement>document.getElementById('password-reset-input-code')).value,
+        code: (<HTMLInputElement> document.getElementById('password-reset-input-code')).value,
       }).then(() => {
         window.location.hash = '';
         dfModal.message('', gettext('Password was reset successfully'));
@@ -364,20 +341,7 @@ export default { name: 'LoginInline' };
   min-width: 10em;
 }
 
-.password-reset-field-label {
-  max-width: 40%;
-}
-
-.password-reset-fields {
-  border: 1px black;
-  border-style: solid;
-  border-radius: 5px;
-  width: 100%;
-  margin-bottom: 0.3em;
-  padding: 0.1em;
-}
-
-input.password-reset-fields {
-  text-align: center;
+.border-lightgray {
+  border: 1px solid lightgrey;
 }
 </style>
