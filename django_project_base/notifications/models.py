@@ -1,4 +1,3 @@
-import datetime
 import uuid
 
 from django.core.validators import int_list_validator
@@ -44,11 +43,11 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     required_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Required channels"))
     sent_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Sent channels"))
     failed_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Failed channels"))
-    created_at = models.DateTimeField(
-        default=utc_now, editable=False, blank=False, null=False, verbose_name=_("Created at")
+    created_at = models.BigIntegerField(
+        default=lambda: int(utc_now().timestamp()), editable=False, verbose_name=_("Created at")
     )
-    sent_at = models.DateTimeField(null=True, blank=True, verbose_name=_("Sent at"))
-    delayed_to = models.DateTimeField(null=True, blank=True, verbose_name=_("Delayed to"))
+    sent_at = models.BigIntegerField(null=True, blank=True, verbose_name=_("Sent at"))
+    delayed_to = models.BigIntegerField(null=True, blank=True, verbose_name=_("Delayed to"))
     type = models.CharField(
         null=False,
         blank=False,
@@ -61,26 +60,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True, verbose_name=_("Message"))
     exceptions = models.TextField(null=True)
     content_entity_context = models.TextField()
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.delayed_to = (
-            self.delayed_to.replace(tzinfo=datetime.timezone.utc)
-            if self.delayed_to and self.delayed_to.tzinfo != datetime.timezone.utc
-            else self.delayed_to
-        )
-        self.created_at = (
-            self.created_at.replace(tzinfo=datetime.timezone.utc)
-            if self.created_at and self.created_at.tzinfo != datetime.timezone.utc
-            else self.created_at
-        )
-
-        self.sent_at = (
-            self.sent_at.replace(tzinfo=datetime.timezone.utc)
-            if self.sent_at and self.sent_at.tzinfo != datetime.timezone.utc
-            else self.sent_at
-        )
-
-        super().save(force_insert, force_update, using, update_fields)
+    counter = models.SmallIntegerField(default=0)
 
     class Meta:
         abstract = True

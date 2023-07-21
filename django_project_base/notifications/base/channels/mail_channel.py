@@ -1,17 +1,13 @@
+import datetime
+import os
+import pathlib
+from typing import List
+
+from django.conf import settings
 from django.utils.module_loading import import_string
 
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.enums import ChannelIdentifier
-import datetime
-import os
-import pathlib
-import time
-from typing import Optional, List
-
-from django.core.cache import cache
-from django.utils import timezone
-
-from django.conf import settings
 
 email_service_blocked_ck: str = "email_service_blocked"
 
@@ -22,7 +18,7 @@ class MailChannel(Channel):
     provider = import_string(getattr(settings, "EMAIL_PROVIDER", ""))
 
     @staticmethod
-    def __make_send_mail(notification: "Notification") -> int:
+    def __make_send_mail(notification: "Notification") -> int:  # noqa: F821
         recipients: List[int] = notification._recipients
         res_count = len(recipients)
         if not settings.USE_REAL_MAIL_SERVICE:

@@ -1,18 +1,20 @@
 import logging
-import random
 import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Optional, Type
 
+from django.utils import timezone
+
 from django_project_base.notifications.base.channels.channel import Channel
+from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 from django_project_base.notifications.utils import utc_now
 
 
-class Notification(ABC, QueableNotificationMixin):
+class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
     _persist = False
     _delay = None
     _recipients = []
@@ -44,7 +46,7 @@ class Notification(ABC, QueableNotificationMixin):
             self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
-            assert isinstance(delay, datetime) and delay > utc_now(), "Invalid delay value"
+            assert delay > utc_now().timestamp(), "Invalid delay value"
             self._delay = delay
         if type is not None:
             typ = type.value if isinstance(type, NotificationType) else type
@@ -75,11 +77,9 @@ class Notification(ABC, QueableNotificationMixin):
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, self.via_channels)))
         )
         notification: Optional[DjangoProjectBaseNotification] = None
-
+        required_channels.sort()
         if self.persist:
-            if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
-                self.message.save()
-            notification = DjangoProjectBaseNotification.objects.create(
+            notification = DjangoProjectBaseNotification(
                 locale=self.locale,
                 level=self.level.value,
                 delayed_to=self.delay,
@@ -90,10 +90,17 @@ class Notification(ABC, QueableNotificationMixin):
                 if self.content_entity_context
                 else str(uuid.uuid4()),
             )
+            if self.handle_similar_notifications(notification=notification, message=self.message):
+                return notification
+
+            if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
+                self.message.save()
+            notification.save()
 
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
+            # TODO: queable notifications not implemented
             notification.save()
             notification.recipients = (notification.recipients or []) + self._recipients
             self.enqueue_notification(notification)
@@ -126,7 +133,7 @@ class Notification(ABC, QueableNotificationMixin):
                 if failed_channels
                 else None
             )
-            notification.sent_at = utc_now()
+            notification.sent_at = timezone.now().timestamp()
             notification.exceptions = exceptions if exceptions else None
             notification.save(update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"])
             notification.recipients = (notification.recipients or []) + self._recipients

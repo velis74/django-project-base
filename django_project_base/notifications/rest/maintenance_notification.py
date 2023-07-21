@@ -6,7 +6,6 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from dynamicforms.viewsets import ModelViewSet
-from pytz import UTC
 from rest_framework import fields, status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.decorators import action
@@ -46,11 +45,6 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
         pass
 
 
-class UTCDateTimeField(fields.DateTimeField):
-    def enforce_timezone(self, value):
-        return value
-
-
 class MessageSerializer(ModelSerializer):
     class Meta:
         model = DjangoProjectBaseMessage
@@ -58,18 +52,8 @@ class MessageSerializer(ModelSerializer):
 
 
 class MaintenanceNotificationSerializer(ModelSerializer):
-    delayed_to_timestamp = fields.SerializerMethodField()
     notification_acknowledged_data = fields.SerializerMethodField()
     message = MessageSerializer()
-    created_at = UTCDateTimeField(read_only=True, help_text=_("Time in UTC."))
-    delayed_to = UTCDateTimeField(
-        required=not _is_model_field_null(DjangoProjectBaseNotification, "delayed_to"),
-        allow_null=_is_model_field_null(DjangoProjectBaseNotification, "delayed_to"),
-        help_text=_("Time in UTC."),
-    )
-
-    def get_delayed_to_timestamp(self, notification: DjangoProjectBaseNotification) -> Optional[int]:
-        return int(notification.delayed_to.timestamp()) if notification and notification.delayed_to else None
 
     def get_notification_acknowledged_data(self, notification: DjangoProjectBaseNotification) -> list:
         request: Optional[Request] = self.context.get("request")
@@ -78,7 +62,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
     def create(self, validated_data) -> DjangoProjectBaseNotification:
         try:
             message: DjangoProjectBaseMessage = DjangoProjectBaseMessage.objects.create(**validated_data["message"])
-            return MaintenanceNotification(delay=validated_data["delayed_to"], message=message, locale=None).send()
+            return MaintenanceNotification(delay=validated_data["delayed_to"], message=message).send()
         except AssertionError as ae:
             raise ValidationError(str(ae))
         except Exception as e:
@@ -90,25 +74,14 @@ class MaintenanceNotificationSerializer(ModelSerializer):
         _type: Optional[str] = attrs.get("type")
         if _type and _type != NotificationType.MAINTENANCE.value:
             raise ValidationError({"type": "Only type %s allowed." % NotificationType.MAINTENANCE.value})
-        time_delta: datetime.timedelta = datetime.timedelta(
+        time_delta: float = datetime.timedelta(
             seconds=settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY
-        )
+        ).total_seconds()
         existing_maintenances: list = DjangoProjectBaseNotification.objects.filter(
             delayed_to__range=[attrs["delayed_to"] - time_delta, attrs["delayed_to"] + time_delta]
         )
         if bool(len(existing_maintenances)):
-            proposed_maintenance_time_utc: datetime = (
-                existing_maintenances[len(existing_maintenances) - 1].delayed_to + time_delta
-            )
-            raise ValidationError(
-                {
-                    "delayed_to": "Another maintenance is planned at this time. Plan maintenance after %s UTC"
-                    % str(proposed_maintenance_time_utc)
-                }
-            )
-        if attrs["delayed_to"].tzinfo != UTC:
-            raise ValidationError(dict(delayed_to="Delayed to must be in UTC timezone"))
-
+            raise ValidationError({"delayed_to": "Another maintenance is planned at this time"})
         return super().validate(attrs)
 
     class Meta:
@@ -121,6 +94,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
             "level",
             "sent_at",
             "type",
+            "content_entity_context",
         )
 
 
@@ -140,11 +114,11 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
         return MaintenanceNotificationSerializer
 
     def get_queryset(self):
-        now: datetime.datetime = utc_now()
+        now: int = utc_now().timestamp()
         return DjangoProjectBaseNotification.objects.filter(
             type=NotificationType.MAINTENANCE.value,
             delayed_to__gt=now,
-            delayed_to__lt=now + datetime.timedelta(hours=8),
+            delayed_to__lt=now + datetime.timedelta(hours=8).total_seconds(),
         )
 
     @extend_schema(request=MaintenanceNotificationSerializer(), description="Create maintenance notification.")
@@ -168,10 +142,8 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
     )
     def list(self, request: Request, *args, **kwargs) -> Response:
         if request.query_params.get("current", "False") in fields.BooleanField.TRUE_VALUES:
-            now: datetime.datetime = utc_now()
-            time_delta: datetime.timedelta = datetime.timedelta(
-                seconds=settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY
-            )
+            now: float = utc_now().timestamp()
+            time_delta: int = settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY
             current_maintenance: Optional[DjangoProjectBaseNotification] = next(
                 iter(
                     DjangoProjectBaseNotification.objects.filter(delayed_to__range=[now - time_delta, now + time_delta])

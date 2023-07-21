@@ -40,6 +40,8 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {"name": "USE_REAL_MAIL_SERVICE", "default": False},
     {"name": "EMAIL_BLOCKED_SMS_NOTIFICATION_RECIPIENT", "default": ""},
     {"name": "MAIL_TIMEOUT_AFTER_WSGI_RESTART", "default": 180},
+    {"name": "NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS", "default": 240},
+    {"name": "NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE", "default": 3},
 )
 
 USER_CACHE_KEY = "django-user-{id}"
