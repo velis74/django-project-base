@@ -265,13 +265,18 @@ async function enterResetPasswordData() {
       h('h2', { class: 'mt-n6 mb-4' }, gettext('Password recovery')),
       h(
         'h4',
-        { class: 'd-flex justify-center mb-1' },
-        [
-          gettext('Please provide new password.'),
-          gettext('Link for password reset was sent to provided e-mail address'),
-        ],
+        { class: 'd-flex justify-center mb-4' },
+        [gettext('If an active account exists with the given email, we\'ve sent a message to it.')],
       ),
       h('div', {}, [
+        h('h4', { class: 'd-flex justify-center mb-1' }, [gettext('Please enter the code from the message:')]),
+        h('input', {
+          type: 'text',
+          placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
+          id: 'password-reset-input-code',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
+        }, {}),
+        h('h4', { class: 'd-flex justify-center mt-2 mb-1' }, [gettext('Please enter your new password:')]),
         h('input', {
           type: 'text',
           placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
@@ -281,15 +286,9 @@ async function enterResetPasswordData() {
         h('input', {
           type: 'text',
           placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
-            'New password confirmation',
+            'Confirm password',
           ),
           id: 'password-reset-input-confirmation',
-          class: 'w-100 mb-2 p-1 rounded border-lightgray',
-        }, {}),
-        h('input', {
-          type: 'text',
-          placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
-          id: 'password-reset-input-code',
           class: 'w-100 mb-2 p-1 rounded border-lightgray',
         }, {}),
       ]),
