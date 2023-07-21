@@ -68,6 +68,16 @@
             :actions="formDef.actions"
             :errors="errors"
           />
+          <p style="margin-top: 0; margin-bottom: 8px;" class="text-center">
+            <span
+              style="text-decoration: underline; cursor: pointer"
+              tabindex="0"
+              @keyup.enter="actionResetPassword"
+              @click.stop="actionResetPassword"
+            >
+              {{ gettext('Forgot password') + '?' }}
+            </span>
+          </p>
         </div>
       </template>
       <template #actions>
@@ -168,7 +178,6 @@ async function getFormDefinition() {
     doLogin();
     showLoginDialog.value = false;
   };
-  formDef.actions.actions['reset-password'].actionResetPassword = actionResetPassword;
   socialAuth.value = formDef.payload.social_auth_providers;
 }
 
@@ -334,6 +343,12 @@ async function enterResetPasswordData() {
 <script lang="ts">
 export default { name: 'LoginInline' };
 </script>
+
+<style scoped>
+.my-4 {
+  margin-bottom: 8px !important;
+}
+</style>
 
 <style>
 .v-text-field {
