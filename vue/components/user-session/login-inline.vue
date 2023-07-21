@@ -126,18 +126,13 @@ let resetPasswordData = { user_id: 0, timestamp: 0, signature: '' };
 async function actionResetPassword() {
   showLoginDialog.value = false;
   const resetEmailPromise = await dfModal.message('', () => [
-    // eslint-disable-next-line vue/max-len
-    h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
-      h('h4', gettext('Enter your e-mail')),
-    ]),
-    h('div', {}, [
-      h('input', {
-        type: 'text',
-        id: 'input-reset-email',
-        style: 'border: 1px black; border-style: solid; border-radius: 5px; ' +
-          'width: 100%; margin-bottom: 0.3em; padding: 0.1em;',
-      }, {}),
-    ]),
+    h('h2', { class: 'mt-n6 mb-4' }, gettext('Password recovery')),
+    h('h4', { class: 'd-flex justify-center mb-1' }, gettext('Enter your e-mail')),
+    h('input', {
+      type: 'text',
+      id: 'input-reset-email',
+      class: 'w-100 mb-2 p-1 rounded border-lightgray',
+    }, {}),
   ], new FilteredActions({
     cancel: new Action({
       name: 'cancel',
@@ -223,8 +218,7 @@ function parseErrors(apiErr: AxiosError, errsStore: { [key: string]: any[] }) {
   // @ts-ignore
   if (apiErr && apiErr.response.data.detail) {
     errsStore.non_field_errors = [apiErr.response.data.detail];
-  }// @ts-ignore
-  else {
+  } else {
     Object.assign(errsStore, apiErr.response.data);
   }
 }
@@ -268,17 +262,21 @@ async function enterResetPasswordData() {
   // eslint-disable-next-line vue/max-len
   if (_.includes(window.location.hash, '#reset-user-password') || _.includes(window.location.hash, '#/reset-user-password')) {
     const resetEmailPromise = await dfModal.message('', () => [
-      // eslint-disable-next-line vue/max-len
-      h('div', { style: 'display: flex; flex-direction: row; padding-top: 0.3em; padding-bottom: 1em; justify-content: space-around;' }, [
-        h('h4', `${gettext('Please provide new password.')}\n\n
-        ${gettext('Link for password reset was sent to provided e-mail address')}`),
-      ]),
+      h('h2', { class: 'mt-n6 mb-4' }, gettext('Password recovery')),
+      h(
+        'h4',
+        { class: 'd-flex justify-center mb-1' },
+        [
+          gettext('Please provide new password.'),
+          gettext('Link for password reset was sent to provided e-mail address'),
+        ],
+      ),
       h('div', {}, [
         h('input', {
           type: 'text',
           placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
           id: 'password-reset-input',
-          class: 'password-reset-fields',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
         }, {}),
         h('input', {
           type: 'text',
@@ -286,13 +284,13 @@ async function enterResetPasswordData() {
             'New password confirmation',
           ),
           id: 'password-reset-input-confirmation',
-          class: 'password-reset-fields',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
         }, {}),
         h('input', {
           type: 'text',
           placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
           id: 'password-reset-input-code',
-          class: 'password-reset-fields',
+          class: 'w-100 mb-2 p-1 rounded border-lightgray',
         }, {}),
       ]),
     ], new FilteredActions({
@@ -344,16 +342,7 @@ export default { name: 'LoginInline' };
   min-width: 10em;
 }
 
-.password-reset-fields {
-  border:        1px black;
-  border-style:  solid;
-  border-radius: 5px;
-  width:         100%;
-  margin-bottom: 0.3em;
-  padding:       0.1em;
-}
-
-input.password-reset-fields {
-  text-align: center;
+.border-lightgray {
+  border: 1px solid lightgrey;
 }
 </style>
