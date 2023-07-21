@@ -68,15 +68,13 @@
             :actions="formDef.actions"
             :errors="errors"
           />
-          <p style="margin-top: 0; margin-bottom: 8px;" class="text-center">
-            <span
-              style="text-decoration: underline; cursor: pointer"
-              tabindex="0"
-              @keyup.enter="actionResetPassword"
-              @click.stop="actionResetPassword"
-            >
-              {{ gettext('Forgot password?') }}
-            </span>
+          <p
+            style="cursor: pointer"
+            class="mt-n8 text-decoration-underline"
+            @keyup.enter="actionResetPassword"
+            @click.stop="actionResetPassword"
+          >
+            {{ gettext('Forgot password?') }}
           </p>
         </div>
       </template>
@@ -137,27 +135,25 @@ async function actionResetPassword() {
         type: 'text',
         id: 'input-reset-email',
         style: 'border: 1px black; border-style: solid; border-radius: 5px; ' +
-            'width: 100%; margin-bottom: 0.3em; padding: 0.1em;',
+          'width: 100%; margin-bottom: 0.3em; padding: 0.1em;',
       }, {}),
     ]),
   ], new FilteredActions({
     cancel: new Action({
       name: 'cancel',
       label: gettext('Cancel'),
-      icon: 'thumbs-down-outline',
       displayStyle: { asButton: true, showLabel: true, showIcon: true },
       position: 'FORM_FOOTER',
     }),
     confirm: new Action({
       name: 'confirm',
       label: gettext('Confirm'),
-      icon: 'thumbs-up-outline',
       displayStyle: { asButton: true, showLabel: true, showIcon: true },
       position: 'FORM_FOOTER',
     }),
   }));
   if (resetEmailPromise.action.name === 'confirm') {
-    const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
+    const email: String | null = (<HTMLInputElement> document.getElementById('input-reset-email')).value;
     apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
       resetPasswordData = res.data;
       window.location.hash = '#reset-user-password';
@@ -191,22 +187,20 @@ async function resetUserState() {
         'h5',
         {},
         gettext('Your account will be restored. Do you want to keep all your previous data or do ' +
-                'you want to reset account state and begin as account was just ' +
-                'registered and your previous data is deleted?'),
+          'you want to reset account state and begin as account was just ' +
+          'registered and your previous data is deleted?'),
       ),
     ],
     new FilteredActions({
       confirm: new Action({
         name: 'confirm',
         label: gettext('Reset account'),
-        icon: 'thumbs-down-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
       cancel: new Action({
         name: 'cancel',
         label: gettext('Cancel'),
-        icon: 'thumbs-up-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
@@ -227,9 +221,12 @@ function parseErrors(apiErr: AxiosError, errsStore: { [key: string]: any[] }) {
     delete errsStore[key];
   });
   // @ts-ignore
-  if (apiErr && apiErr.response.data.detail) errsStore.non_field_errors = [apiErr.response.data.detail];
-  // @ts-ignore
-  else Object.assign(errsStore, apiErr.response.data);
+  if (apiErr && apiErr.response.data.detail) {
+    errsStore.non_field_errors = [apiErr.response.data.detail];
+  }// @ts-ignore
+  else {
+    Object.assign(errsStore, apiErr.response.data);
+  }
 }
 
 async function doLogin() {
@@ -302,21 +299,19 @@ async function enterResetPasswordData() {
       cancel: new Action({
         name: 'cancel',
         label: gettext('Cancel'),
-        icon: 'thumbs-down-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
       confirm: new Action({
         name: 'reset',
         label: gettext('Reset'),
-        icon: 'thumbs-up-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
     }));
     if (resetEmailPromise.action.name === 'reset') {
-      const password: String | null = (<HTMLInputElement>document.getElementById('password-reset-input')).value;
-      const passwordConfirmation: String | null = (<HTMLInputElement>document.getElementById(
+      const password: String | null = (<HTMLInputElement> document.getElementById('password-reset-input')).value;
+      const passwordConfirmation: String | null = (<HTMLInputElement> document.getElementById(
         'password-reset-input-confirmation',
       )).value;
       apiClient.post('/account/reset-password/', {
@@ -325,7 +320,7 @@ async function enterResetPasswordData() {
         signature: resetPasswordData.signature,
         password,
         password_confirm: passwordConfirmation,
-        code: (<HTMLInputElement>document.getElementById('password-reset-input-code')).value,
+        code: (<HTMLInputElement> document.getElementById('password-reset-input-code')).value,
       }).then(() => {
         window.location.hash = '';
         dfModal.message('', gettext('Password was reset successfully'));
@@ -344,24 +339,18 @@ async function enterResetPasswordData() {
 export default { name: 'LoginInline' };
 </script>
 
-<style scoped>
-.my-4 {
-  margin-bottom: 8px !important;
-}
-</style>
-
 <style>
 .v-text-field {
   min-width: 10em;
 }
 
 .password-reset-fields {
-  border: 1px black;
-  border-style: solid;
+  border:        1px black;
+  border-style:  solid;
   border-radius: 5px;
-  width: 100%;
+  width:         100%;
   margin-bottom: 0.3em;
-  padding: 0.1em;
+  padding:       0.1em;
 }
 
 input.password-reset-fields {
