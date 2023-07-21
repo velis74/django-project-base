@@ -291,7 +291,7 @@ async function enterResetPasswordData() {
         }, {}),
         h('br'),
         h('br'),
-        h('div', { }, [
+        h('div', { class: 'div-input' }, [
           h('label', { class: 'password-reset-field-label' }, `${gettext('Please enter your new password')}:`),
           h('input', {
             type: 'text',
@@ -300,7 +300,7 @@ async function enterResetPasswordData() {
             class: 'password-reset-fields',
           }, {}),
         ]),
-        h('div', { }, [
+        h('div', { class: 'div-input' }, [
           h('label', { class: 'password-reset-field-label' }, gettext('New password confirmation')),
           h('input', {
             type: 'text',
