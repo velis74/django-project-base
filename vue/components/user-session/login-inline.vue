@@ -75,7 +75,7 @@
               @keyup.enter="actionResetPassword"
               @click.stop="actionResetPassword"
             >
-              {{ gettext('Forgot password') + '?' }}
+              {{ gettext('Forgot password?') }}
             </span>
           </p>
         </div>
