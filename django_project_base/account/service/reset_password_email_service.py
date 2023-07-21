@@ -8,11 +8,8 @@ from django.utils.translation import gettext as __
 from natural.date import compress
 from rest_framework.request import Request
 from rest_registration.exceptions import UserNotFound
-from rest_registration.notifications import create_verification_notification
-from rest_registration.notifications.enums import NotificationType
 from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
-from rest_registration.verification_notifications import _get_email_template_config_data
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
 from django_project_base.notifications.base.email_notification import EMailNotification
@@ -30,14 +27,14 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
         request=request,
     )
 
-    template_config_data = _get_email_template_config_data(request, user, NotificationType.RESET_PASSWORD_VERIFICATION)
-    notification_data = {
-        "params_signer": signer,
-    }
-
-    notification = create_verification_notification(
-        NotificationType.RESET_PASSWORD_VERIFICATION, user, user.email, notification_data, template_config_data
-    )
+    # template_config_data = _get_email_template_config_data(
+    # request, user, NotificationType.RESET_PASSWORD_VERIFICATION)
+    # notification_data = {
+    #     "params_signer": signer,
+    # }
+    # notification = create_verification_notification(
+    #     NotificationType.RESET_PASSWORD_VERIFICATION, user, user.email, notification_data, template_config_data
+    # )
 
     code_ck = RESET_USER_PASSWORD_VERIFICATION_CODE + str(user.pk)
     code = get_random_string(length=6)
@@ -46,7 +43,8 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
     EMailNotification(
         message=DjangoProjectBaseMessage(
             subject=f"{__('Password recovery for')} {request.META['HTTP_HOST']}",
-            body=f"{__('You or someone acting as you requested a password reset for your account at')} {request.META['HTTP_HOST']}. "
+            body=f"{__('You or someone acting as you requested a password reset for your account at')} "
+                 f"{request.META['HTTP_HOST']}. "
             f"\n\n{__('Your verification code is')}: "
             f"{code} \n\n {__('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n\n"
             f"{__('If this was not you or it was unintentional, you may safely ignore this message.')}",
