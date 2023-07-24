@@ -1,11 +1,6 @@
-import os
-
 from celery import Celery
 from kombu import Queue, Exchange
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
-
-
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "celery.settings")
 
 import os
 
@@ -45,13 +40,7 @@ app = Celery(
         "django_project_base.celery.background_tasks.notification_tasks",
     ],
 )
-# app.config_from_object(CelerySettings(), namespace="CELERY")
-# app.conf.task_routes = {
-#     "background_tasks.notification_tasks.*": {
-#         "queue": NOTIFICATION_QUEUE_NAME,
-#         "routing_key": NOTIFICATION_QUEUE_NAME,
-#     },
-# }
+
 app.conf.task_queues = [
     Queue(
         NOTIFICATION_QUEUE_NAME,
@@ -63,14 +52,10 @@ app.conf.task_queues = [
 
 app.conf.task_ignore_result = True
 app.conf.worker_send_task_events = False
-# apps.populate(CelerySettings().INSTALLED_APPS)
-
-import django
 from django.apps import apps
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.settings")
 apps.populate(CelerySettings().INSTALLED_APPS)
-# django.setup()
 
 # RUN WORKER AS
 # celery -A django-project-base worker --loglevel=ERROR -E
