@@ -31,11 +31,17 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
         locale: Optional[str] = None,
         delay: Optional[int] = None,
         type: Optional[NotificationType] = None,
-        recipients: List[int] = [],
+        recipients=None,
         content_entity_context="",
         **kwargs,
     ) -> None:
         super().__init__()
+        if recipients is None:
+            recipients = []
+        if type is None:
+            type = NotificationType.STANDARD
+        if level is None:
+            level = NotificationLevel.INFO
         assert isinstance(persist, bool), "Persist must be valid boolean value"
         self._persist = persist
         if level is not None:
@@ -74,23 +80,21 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
         required_channels: list = list(
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, self.via_channels)))
         )
-        notification: Optional[DjangoProjectBaseNotification] = None
+        notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
+            locale=self.locale,
+            level=self.level.value,
+            delayed_to=self.delay,
+            required_channels=",".join(required_channels) if required_channels else None,
+            type=self.type.value,
+            message=self.message,
+            content_entity_context=str(self.content_entity_context)
+            if self.content_entity_context
+            else str(uuid.uuid4()),
+        )
         required_channels.sort()
         if self.persist:
-            notification = DjangoProjectBaseNotification(
-                locale=self.locale,
-                level=self.level.value,
-                delayed_to=self.delay,
-                required_channels=",".join(required_channels) if required_channels else None,
-                type=self.type.value,
-                message=self.message,
-                content_entity_context=str(self.content_entity_context)
-                if self.content_entity_context
-                else str(uuid.uuid4()),
-            )
-            if self.handle_similar_notifications(notification=notification, message=self.message):
+            if self.handle_similar_notifications(notification=notification):
                 return notification
-
             if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
                 self.message.save()
             notification.save()

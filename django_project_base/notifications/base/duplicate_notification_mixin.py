@@ -2,14 +2,12 @@ from django.conf import settings
 from django.db.models.functions import Length
 from django.utils import timezone
 
-from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
 class DuplicateNotificationMixin(object):
-    def handle_similar_notifications(
-        self, notification: DjangoProjectBaseNotification, message: DjangoProjectBaseMessage
-    ) -> bool:
-        message_length: int = len(message.body)
+    def handle_similar_notifications(self, notification: DjangoProjectBaseNotification) -> bool:
+        message_length: int = len(notification.message.body)
         sent_notifications = (
             DjangoProjectBaseNotification.objects.annotate(message_len=Length("message__body"))
             .filter(
@@ -21,7 +19,7 @@ class DuplicateNotificationMixin(object):
                 required_channels=notification.required_channels,
                 message_len__gte=message_length - settings.NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE,
                 message_len__lte=message_length + settings.NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE,
-                message__subject=message.subject,
+                message__subject=notification.message.subject,
                 locale=notification.locale,
             )
             .order_by("-created_at")

@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import fields, status
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer as RestFrameworkSerializer
 
 from django_project_base.notifications.base.enums import NotificationType
-from django_project_base.notifications.base.maintenance_notification import MaintenanceNotification
+from django_project_base.notifications.maintenance_notification import MaintenanceNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 from django_project_base.notifications.utils import utc_now
 
@@ -104,7 +104,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
     partial_update=extend_schema(exclude=True),
 )
 class UsersMaintenanceNotificationViewset(ModelViewSet):
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def handle_create_validation_exception(self, e, request, *args, **kwargs):

@@ -23,7 +23,7 @@ from social_django.models import UserSocialAuth
 
 from django_project_base.account.rest.reset_password import ResetPasswordSerializer
 from django_project_base.account.social_auth.providers import get_social_providers
-from django_project_base.notifications.base.email_notification import EMailNotification
+from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
