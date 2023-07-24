@@ -1,4 +1,8 @@
+import os
 from pathlib import Path
+
+from django.conf import settings
+from django.utils.crypto import get_random_string
 
 from django_project_base.settings_parser import parse_settings
 
@@ -61,6 +65,25 @@ TEST_USER_ONE_DATA = dict(
 TEST_USER_TWO_DATA = dict(
     username="janez", last_name="Novak", first_name="Janez", email="user2@user2.si", password="janezjanez"
 )
+
+SECRET_KEY = get_random_string(length=64)
+
+INSTALLED_APPS = ("celery",)
+
+REDIS_LOCATION = ""
+CELERY_REDIS_DB = "3"
+
+if os.path.exists("/var/run/redis/redis-server.sock"):
+    REDIS_LOCATION = "/var/run/redis/redis-server.sock"
+
+if REDIS_LOCATION:
+    redis_location_celery = f"redis+socket://{REDIS_LOCATION}"
+    CELERY_BROKER_URL = f"{redis_location_celery}{'?virtual_host=' + CELERY_REDIS_DB}"
+
+    CELERY_ACCEPT_CONTENT = ["application/json", "application/x-python-serialize"]
+    CELERY_TASK_SERIALIZER = "json"
+    CELERY_RESULT_SERIALIZER = "json"
+    CELERY_TIMEZONE = settings.TIME_ZONE
 
 
 def set_django_project_base_settings():

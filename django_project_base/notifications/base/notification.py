@@ -102,9 +102,8 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
-            # TODO: queable notifications not implemented
-            notification.save()
             notification.recipients = (notification.recipients or []) + self._recipients
+            notification.save()
             self.enqueue_notification(notification)
             return notification
 
