@@ -1,7 +1,6 @@
 import logging
 import uuid
 from abc import ABC, abstractmethod
-from datetime import datetime
 from typing import List, Optional, Type
 
 from django.utils import timezone
@@ -11,7 +10,6 @@ from django_project_base.notifications.base.duplicate_notification_mixin import 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
-from django_project_base.notifications.utils import utc_now
 
 
 class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
@@ -31,7 +29,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
         persist: bool = False,
         level: Optional[NotificationLevel] = None,
         locale: Optional[str] = None,
-        delay: Optional[datetime] = None,
+        delay: Optional[int] = None,
         type: Optional[NotificationType] = None,
         recipients: List[int] = [],
         content_entity_context="",
@@ -46,7 +44,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
             self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
-            assert delay > utc_now().timestamp(), "Invalid delay value"
+            assert delay > timezone.now().timestamp(), "Invalid delay value"
             self._delay = delay
         if type is not None:
             typ = type.value if isinstance(type, NotificationType) else type
@@ -65,7 +63,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
         return []
 
     @property
-    def delay(self) -> Optional[datetime]:
+    def delay(self) -> Optional[int]:
         return self._delay
 
     @property

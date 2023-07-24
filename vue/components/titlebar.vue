@@ -23,7 +23,6 @@ import { apiClient as ApiClient } from '../apiClient';
 import { API_CONFIG } from '../apiConfig';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from '../events';
 import { showMaintenanceNotification } from '../notifications';
-import { Store } from '../store';
 
 import Breadcrumbs from './breadcrumbs.vue';
 import AppNotification from './notification.vue';
@@ -94,14 +93,14 @@ export default defineComponent({
     monitorMaintenanceNotifications() {
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
         // TODO: this needs to be moved to a separate maintenance-notice import
-        if (Store.get('current-user')) {
+        if (useUserSessionStore().loggedIn) {
           ApiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url, { hideErrorNotice: true })
             .then((notificationResponse) => {
               // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
               const _notification: any = _.first(notificationResponse.data);
               if (_notification) {
                 const acknowledgeData = _notification.notification_acknowledged_data;
-                const delayed = _notification.delayed_to_timestamp;
+                const delayed = _notification.delayed_to;
                 const hours8Range = [delayed - 10 * 3600, (delayed - 2 * 3600) - 1];
                 const hours1Range = [delayed - 2 * 3600, (delayed - 10 * 60) - 1];
                 const minutes5Range = [delayed - 10 * 60, delayed];
