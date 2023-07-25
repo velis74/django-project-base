@@ -1,3 +1,4 @@
+import datetime
 import uuid
 from abc import ABC, abstractmethod
 from typing import List, Optional, Type
@@ -100,7 +101,10 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
                 return notification
             if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
                 self.message.save()
+            notification.created_at = int(datetime.datetime.now().timestamp())
             notification.save()
+        else:
+            notification.created_at = None
 
         if self.delay:
             if not self.persist:

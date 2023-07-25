@@ -1,8 +1,4 @@
-import os
 from pathlib import Path
-
-from django.conf import settings
-from django.utils.crypto import get_random_string
 
 from django_project_base.settings_parser import parse_settings
 

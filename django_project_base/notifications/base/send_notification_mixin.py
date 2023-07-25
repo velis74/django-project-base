@@ -28,7 +28,7 @@ class SendNotificationMixin(object):
                 failed_channels.append(channel)
                 exceptions += f"{str(e)}\n\n"
 
-        if notification.pk:
+        if notification.created_at:
             notification.sent_channels = (
                 ",".join(
                     list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, sent_channels))))

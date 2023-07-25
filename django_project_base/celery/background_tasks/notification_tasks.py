@@ -19,7 +19,7 @@ class SendNotificationTask(app.Task):
     soft_time_limit = 15
     default_retry_delay = 0
 
-    def run(self, notification: "DjangoProjectBaseNotification", extra_data):
+    def run(self, notification: "DjangoProjectBaseNotification", extra_data):  # noqa: F821
         try:
             last_sent: Optional[float] = cache.get(LAST_MAIL_SENT_CK)
             time_from_last_sent: float = time.time() - last_sent if last_sent else 0

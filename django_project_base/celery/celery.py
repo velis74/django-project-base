@@ -1,13 +1,12 @@
+import os
+
 from celery import Celery
-from kombu import Queue, Exchange
+from django.apps import apps
+from django.utils.crypto import get_random_string
+from kombu import Exchange, Queue
 from kombu.entity import TRANSIENT_DELIVERY_MODE
 
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
-
-import os
-
-from django.utils.crypto import get_random_string
-
 from django_project_base.notifications.constants import NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT
 
 REDIS_LOCATION = ""
@@ -57,7 +56,7 @@ app.conf.task_queues = [
 app.conf.task_ignore_result = True
 app.conf.worker_send_task_events = False
 app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
-from django.apps import apps
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.settings")
 apps.populate(CelerySettings().INSTALLED_APPS)
