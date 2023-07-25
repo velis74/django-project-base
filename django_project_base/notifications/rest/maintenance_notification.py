@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from dynamicforms.serializers import ModelSerializer as DFSerializer
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import fields, status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
@@ -45,7 +46,7 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
         pass
 
 
-class MessageSerializer(ModelSerializer):
+class MessageSerializer(DFSerializer):
     class Meta:
         model = DjangoProjectBaseMessage
         exclude = (DjangoProjectBaseMessage._meta.pk.name,)

@@ -15,6 +15,8 @@ email_service_blocked_ck: str = "email_service_blocked"
 class MailChannel(Channel):
     id = ChannelIdentifier.MAIL.value
 
+    name = "e-mail"
+
     provider = import_string(getattr(settings, "EMAIL_PROVIDER", ""))
 
     @staticmethod

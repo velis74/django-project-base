@@ -18,7 +18,7 @@ class AbstractDjangoProjectBaseMessage(models.Model):
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
     subject = models.TextField(null=True, blank=True, verbose_name=_("Subject"))
-    body = models.TextField(null=False, blank=False, verbose_name=_("Body"))
+    body = models.TextField(verbose_name=_("Body"))
     footer = models.TextField(null=True, blank=True, verbose_name=_("Footer"))
     content_type = models.CharField(null=False, choices=CONTENT_TYPE_CHOICES, default=PLAIN_TEXT, max_length=64)
 
