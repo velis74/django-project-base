@@ -5,7 +5,6 @@ from typing import List, Optional, Type
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
@@ -53,7 +52,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
             self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
-            assert delay > timezone.now().timestamp(), "Invalid delay value"
+            # assert delay > timezone.now().timestamp(), "Invalid delay value"
             self._delay = delay
         if type is not None:
             typ = type.value if isinstance(type, NotificationType) else type

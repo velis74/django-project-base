@@ -46,4 +46,4 @@ class TestListMails(NotificationsTransactionTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(1, len(response.data))
-        self.assertEqual(self.number_of_emails - 1, response.data[0]["counter"])
+        self.assertEqual(self.number_of_emails, response.data[0]["counter"])

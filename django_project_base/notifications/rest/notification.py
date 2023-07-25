@@ -4,9 +4,9 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
-from dynamicforms.action import Actions
+from dynamicforms.action import Actions, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
-from dynamicforms.serializers import ModelSerializer
+from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
@@ -14,11 +14,17 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.email_notification import EMailNotification
+from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
 
 class NotificationSerializer(ModelSerializer):
     template_context = dict(url_reverse="notification")
+
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        self.fields.fields["level"].display_form = DisplayMode.HIDDEN
+        self.fields.fields["type"].display_form = DisplayMode.HIDDEN
 
     subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
     recipients = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
@@ -32,25 +38,24 @@ class NotificationSerializer(ModelSerializer):
     exceptions = fields.CharField(display_form=DisplayMode.HIDDEN)
 
     message = fields.PrimaryKeyRelatedField(display_form=DisplayMode.HIDDEN, read_only=True)
-    level = fields.CharField(display_form=DisplayMode.HIDDEN)
-    type = fields.CharField(display_form=DisplayMode.HIDDEN)
 
-    actions = Actions(add_default_crud=True)
+    actions = Actions(
+        TableAction(TablePosition.HEADER, _("Add"), title=_("Add new record"), name="add", icon="add-circle-outline")
+    )
 
     users_write = fields.ManyRelatedField(
         child_relation=fields.PrimaryKeyRelatedField(
-            help_text=_("aaaa bbbbb."),
             queryset=get_user_model().objects.all(),
             required=True,
         ),
-        help_text=_("aaaaaaaa."),
         required=True,
         allow_null=False,
         write_only=True,
         display_table=DisplayMode.HIDDEN,
+        label=_("Recipients"),
     )
-    subject_write = fields.CharField(write_only=True, label=_("SubjectX"), display_table=DisplayMode.HIDDEN)
-    body_write = fields.CharField(write_only=True, label=_("BodyX"), display_table=DisplayMode.HIDDEN)
+    subject_write = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
+    body_write = fields.CharField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
 
     def get_sent_at(self, obj):
         if not obj or not obj.sent_at:
@@ -125,7 +130,30 @@ class NotificationViewset(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
+        if not self.detail and self.action == "create":
+
+            class NewMessageSerializer(Serializer):
+                body_write = NotificationSerializer().fields.fields["body_write"]
+                subject_write = NotificationSerializer().fields.fields["subject_write"]
+                users_write = NotificationSerializer().fields.fields["users_write"]
+
+            return NewMessageSerializer
         return NotificationSerializer
 
     def get_queryset(self):
-        return DjangoProjectBaseNotification.objects.all()
+        return DjangoProjectBaseNotification.objects.all().order_by("-sent_at")
+
+    def perform_create(self, serializer):
+        EMailNotification(
+            message=DjangoProjectBaseMessage(
+                subject=serializer.validated_data["subject_write"],
+                body=serializer.validated_data["body_write"],
+                footer="",
+                content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
+            ),
+            recipients=[u.pk for u in serializer.validated_data["users_write"]],
+            delay=int(datetime.datetime.now().timestamp()),
+        ).send()
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)

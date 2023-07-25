@@ -28,4 +28,4 @@ class TestRetrieveMail(NotificationsTransactionTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(response.data)
         self.assertIsNotNone(response.data[notification._meta.pk.name], str(notification.pk))
-        self.assertEqual(0, response.data["counter"])
+        self.assertEqual(1, response.data["counter"])

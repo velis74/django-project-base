@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from django.core.validators import int_list_validator
@@ -7,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
-from django_project_base.notifications.utils import utc_now
 
 
 class AbstractDjangoProjectBaseMessage(models.Model):
@@ -30,6 +30,10 @@ class DjangoProjectBaseMessage(AbstractDjangoProjectBaseMessage):
     pass
 
 
+def integer_ts():
+    return int(datetime.datetime.now().timestamp())
+
+
 class AbstractDjangoProjectBaseNotification(models.Model):
     locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_("Locale"))
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
@@ -44,7 +48,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     sent_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Sent channels"))
     failed_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Failed channels"))
     created_at = models.BigIntegerField(
-        default=lambda: int(utc_now().timestamp()), editable=False, verbose_name=_("Created at")
+        default=integer_ts, editable=False, verbose_name=_("Created at")
     )
     sent_at = models.BigIntegerField(null=True, blank=True, verbose_name=_("Sent at"))
     delayed_to = models.BigIntegerField(null=True, blank=True, verbose_name=_("Delayed to"))
@@ -60,7 +64,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     message = models.OneToOneField(DjangoProjectBaseMessage, on_delete=SET_NULL, null=True, verbose_name=_("Message"))
     exceptions = models.TextField(null=True)
     content_entity_context = models.TextField()
-    counter = models.SmallIntegerField(default=0)
+    counter = models.SmallIntegerField(default=1)
 
     class Meta:
         abstract = True
