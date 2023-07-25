@@ -27,7 +27,7 @@ class MailChannel(Channel):
         return res_count
 
     @staticmethod
-    def send(notification: "Notification", mail_content_entity_context="", **kwargs) -> int:  # noqa: F821
+    def send(notification: "DjangoProjectBaseNotification", extra_data, **kwargs) -> int:  # noqa: F821
         """
         Overrides default send email messages
 

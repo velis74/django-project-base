@@ -315,7 +315,7 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),
-                persist=True,
+                recipients=[response.data[get_user_model()._meta.pk.name]],
             ).send()
 
         return response

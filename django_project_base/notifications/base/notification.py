@@ -1,4 +1,3 @@
-import logging
 import uuid
 from abc import ABC, abstractmethod
 from typing import List, Optional, Type
@@ -9,10 +8,11 @@ from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
+from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
 
-class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
+class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, SendNotificationMixin):
     _persist = False
     _delay = None
     _recipients = []
@@ -90,6 +90,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
             content_entity_context=str(self.content_entity_context)
             if self.content_entity_context
             else str(uuid.uuid4()),
+            recipients=",".join(map(str, self._recipients)) if self._recipients else None,
         )
         required_channels.sort()
         if self.persist:
@@ -102,40 +103,9 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin):
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
-            notification.recipients = (notification.recipients or []) + self._recipients
-            notification.save()
-            self.enqueue_notification(notification)
+            self.enqueue_notification(notification, self._extra_data)
             return notification
 
-        sent_channels: list = []
-        failed_channels: list = []
-        exceptions = ""
-        for channel in self.via_channels:
-            try:
-                channel.send(self, **self._extra_data)
-                sent_channels.append(channel)
-            except Exception as e:
-                logging.getLogger(__name__).error(e)
-                failed_channels.append(channel)
-                exceptions += f"{str(e)}\n\n"
+        notification = self.make_send(notification, self._extra_data)
 
-        if self.persist:
-            notification.sent_channels = (
-                ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, sent_channels))))
-                )
-                if sent_channels
-                else None
-            )
-            notification.failed_channels = (
-                ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, failed_channels))))
-                )
-                if failed_channels
-                else None
-            )
-            notification.sent_at = timezone.now().timestamp()
-            notification.exceptions = exceptions if exceptions else None
-            notification.save(update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"])
-            notification.recipients = (notification.recipients or []) + self._recipients
         return notification

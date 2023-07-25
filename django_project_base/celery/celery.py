@@ -6,6 +6,8 @@ import os
 
 from django.utils.crypto import get_random_string
 
+from django_project_base.notifications.constants import NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT
+
 REDIS_LOCATION = ""
 CELERY_REDIS_DB = "3"
 redis_location_celery = ""
@@ -52,6 +54,7 @@ app.conf.task_queues = [
 
 app.conf.task_ignore_result = True
 app.conf.worker_send_task_events = False
+app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
 from django.apps import apps
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.settings")

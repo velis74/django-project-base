@@ -1,1 +1,5 @@
-NOTIFICATIONS_APP_ID = 'django_project_base.notifications'
+NOTIFICATIONS_APP_ID = "django_project_base.notifications"
+
+NOTIFICATION_QUEABLE_HARD_TIME_LIMIT = 10
+
+NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT = 86400

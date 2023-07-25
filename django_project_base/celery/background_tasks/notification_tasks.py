@@ -5,9 +5,10 @@ from typing import Optional
 from django.core.cache import cache
 
 from django_project_base.celery.celery import app
+from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
+from django_project_base.notifications.constants import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 
 LAST_MAIL_SENT_CK = "last-notification-was-sent-timestamp"
-NOTIFICATION_QUEABLE_HARD_TIME_LIMIT = 10
 
 
 class SendNotificationTask(app.Task):
@@ -18,13 +19,13 @@ class SendNotificationTask(app.Task):
     soft_time_limit = 15
     default_retry_delay = 0
 
-    def run(self, notification: "Notification"):
+    def run(self, notification: "DjangoProjectBaseNotification", extra_data):
         try:
             last_sent: Optional[float] = cache.get(LAST_MAIL_SENT_CK)
             time_from_last_sent: float = time.time() - last_sent if last_sent else 0
             if time_from_last_sent < NOTIFICATION_QUEABLE_HARD_TIME_LIMIT:
                 time.sleep(int(NOTIFICATION_QUEABLE_HARD_TIME_LIMIT - time_from_last_sent))
-            notification.send()
+            SendNotificationMixin().make_send(notification=notification, extra_data=extra_data)
         finally:
             cache.set(LAST_MAIL_SENT_CK, time.time(), timeout=NOTIFICATION_QUEABLE_HARD_TIME_LIMIT)
 

@@ -3,6 +3,8 @@ from botocore.exceptions import ClientError
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from django_project_base.notifications.models import DjangoProjectBaseMessage
+
 
 class AwsSes:
     key_id: str
@@ -23,12 +25,14 @@ class AwsSes:
             "Body": {},
             "Subject": {
                 "Charset": "UTF-8",
-                "Data": notification.message.subject,
+                "Data": str(notification.message.subject),
             },
         }
-        msg["Body"]["Html" if notification.message.content_type.lower() == "html" else "Text"] = {
+        msg["Body"][
+            "Html" if notification.message.content_type.lower() == DjangoProjectBaseMessage.HTML else "Text"
+        ] = {
             "Charset": "UTF-8",
-            "Data": notification.message.body,
+            "Data": str(notification.message.body),
         }
         from_mail = getattr(settings, "EMAIL_HOST_USER", None)
         assert from_mail, "EMAIL_HOST_USER setting is required"
