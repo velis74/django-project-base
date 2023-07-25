@@ -14,10 +14,12 @@ class QueableNotificationMixin(object):
         now_ts: int = int(datetime.datetime.now().timestamp())
         if notification.delayed_to - now_ts < NOTIFICATION_QUEABLE_HARD_TIME_LIMIT:
             send_notification_task.apply_async((notification, extra_data), queue=NOTIFICATION_QUEUE_NAME, serializer="pickle")  # type: ignore
+            print("sent waiyt")
             return
         delay: int = notification.delayed_to - now_ts
         if delay > NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT:
             raise Exception("Notification delay exceeds permitted delay")
+        print("send eta")
         send_notification_task.apply_async(
             (notification, extra_data),
             eta=datetime.datetime.utcnow() + datetime.timedelta(seconds=delay),

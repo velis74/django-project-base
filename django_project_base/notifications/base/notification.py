@@ -103,6 +103,17 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
+            from django.db import connection
+
+            sttgs = connection.settings_dict
+            from django.conf import settings
+
+            sttgs["TIME_ZONE"] = getattr(settings, "TIME_ZONE", None)
+            sttgs["USE_TZ"] = getattr(settings, "USE_TZ", False)
+            self._extra_data["DATABASE"] = {
+                "PARAMS": connection.get_connection_params(),
+                "SETTINGS": sttgs,
+            }
             self.enqueue_notification(notification, self._extra_data)
             return notification
 

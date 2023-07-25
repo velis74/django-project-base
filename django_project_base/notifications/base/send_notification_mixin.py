@@ -1,5 +1,8 @@
 import logging
 
+from django.db import connections
+from django.db.backends.base.base import BaseDatabaseWrapper
+from django.db.utils import load_backend
 from django.utils import timezone
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -42,5 +45,44 @@ class SendNotificationMixin(object):
             )
             notification.sent_at = timezone.now().timestamp()
             notification.exceptions = exceptions if exceptions else None
-            notification.save(update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"])
+            if db_settings := extra_data.get("DATABASE"):
+                # database_backend = BaseDatabaseWrapper(db_settings)
+                # database_backend.settings_dict = db_settings
+                print(db_settings)
+                # db_connection = connections[db_settings["ENGINE"]].get_new_connection(db_settings)
+
+                # db_settings = connections['default'].settings_dict
+
+                # Create a new database connection
+                # db_connection = BaseDatabaseWrapper(db_settings, alias="notify")
+                # db_connection.connect()
+
+                # db_settings = connections['default'].settings_dict
+
+                # Create a new database connection
+                # db_connection = BaseDatabaseWrapper(db_settings)
+                # db_connection.connect()
+
+                # Set a custom connection alias in DATABASES settings
+                # custom_db_alias = "custom_db"
+                # connections.databases[custom_db_alias] = db_connection
+
+                # db = connections.databases["default"]
+                backend = load_backend(db_settings["SETTINGS"]["ENGINE"])
+                db = backend.DatabaseWrapper(db_settings["SETTINGS"])
+                db.connect()
+                # conn = backend.DatabaseWrapper(db_settings).get_new_connection(db_settings["PARAMS"])
+
+                # setattr(self._connections, alias, conn)
+
+                # notification._state.db = db_wrapper.connection
+                connections["defaultx"] = db.connection
+                # print(db_wrapper)
+                # print(db_wrapper, db_wrapper.connection)
+                notification.save(
+                    update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"], using="defaultx"
+                )
+                db.connection.close()
+            else:
+                notification.save(update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"])
         return notification

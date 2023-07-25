@@ -1,5 +1,7 @@
 from celery import Celery
 from kombu import Queue, Exchange
+from kombu.entity import TRANSIENT_DELIVERY_MODE
+
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
 
 import os
@@ -37,7 +39,7 @@ class CelerySettings:
 
 app = Celery(
     "django_project_base",
-    config_source=CelerySettings(),
+    config_source=CelerySettings,
     include=[
         "django_project_base.celery.background_tasks.notification_tasks",
     ],
@@ -46,7 +48,7 @@ app = Celery(
 app.conf.task_queues = [
     Queue(
         NOTIFICATION_QUEUE_NAME,
-        Exchange("transient", delivery_mode=1),
+        Exchange("transient", delivery_mode=TRANSIENT_DELIVERY_MODE),
         routing_key=NOTIFICATION_QUEUE_NAME,
         durable=False,
     ),
@@ -61,4 +63,4 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.sett
 apps.populate(CelerySettings().INSTALLED_APPS)
 
 # RUN WORKER AS
-# celery -A django-project-base worker --loglevel=ERROR -E
+# celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1

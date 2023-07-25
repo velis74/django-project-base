@@ -34,5 +34,8 @@ class SendNotificationTask(app.Task):
             f"Exception: {exc} \n\nTask id: {task_id}\n\nArgs: {args}\n\nKwargs: {kwargs}\n\nEInfo: {einfo}"
         )
 
+    def on_success(self, retval, task_id, args, kwargs):
+        pass
+
 
 send_notification_task = app.register_task(SendNotificationTask())
