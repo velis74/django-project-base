@@ -2,6 +2,8 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import List, Optional, Type
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from django_project_base.notifications.base.channels.channel import Channel
@@ -106,14 +108,14 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
             from django.db import connection
 
             sttgs = connection.settings_dict
-            from django.conf import settings
 
-            sttgs["TIME_ZONE"] = getattr(settings, "TIME_ZONE", None)
-            sttgs["USE_TZ"] = getattr(settings, "USE_TZ", False)
+            sttgs["TIME_ZONE"] = None
             self._extra_data["DATABASE"] = {
                 "PARAMS": connection.get_connection_params(),
                 "SETTINGS": sttgs,
             }
+            self._extra_data["SETTINGS"] = settings
+            notification.recipients_list = [get_user_model().objects.get(pk=u).email for u in self._recipients]
             self.enqueue_notification(notification, self._extra_data)
             return notification
 

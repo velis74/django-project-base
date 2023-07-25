@@ -41,7 +41,6 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {"name": "SILENCED_SYSTEM_CHECKS", "default": ["rest_registration.E013"]},
     {"name": "CONFIRMATION_CODE_TIMEOUT", "default": 600},
     {"name": "VERIFICATION_FROM_EMAIL", "default": ""},
-    {"name": "USE_REAL_MAIL_SERVICE", "default": False},
     {"name": "EMAIL_BLOCKED_SMS_NOTIFICATION_RECIPIENT", "default": ""},
     {"name": "MAIL_TIMEOUT_AFTER_WSGI_RESTART", "default": 180},
     {"name": "NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS", "default": 240},

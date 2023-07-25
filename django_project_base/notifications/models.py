@@ -68,3 +68,13 @@ class AbstractDjangoProjectBaseNotification(models.Model):
 
 class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
     objects = NotificationQuerySet.as_manager()
+
+    _recipients_list = []
+
+    def _get_recipients(self):
+        return self._recipients_list
+
+    def _set_recipents(self, val):
+        self._recipients_list = val
+
+    recipients_list = property(_get_recipients, _set_recipents)
