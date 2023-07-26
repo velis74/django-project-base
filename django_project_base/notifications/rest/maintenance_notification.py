@@ -22,10 +22,6 @@ from django_project_base.notifications.models import DjangoProjectBaseMessage, D
 from django_project_base.notifications.utils import utc_now
 
 
-def _is_model_field_null(model: "Model", field_name: str) -> bool:  # noqa: F821
-    return next(filter(lambda c: c.name == field_name, model._meta.fields)).null
-
-
 class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
     def __new__(cls, *args, **kwargs):
         new: "NotificationAcknowledgedRequestSerializer" = super().__new__(cls, *args, **kwargs)
@@ -75,9 +71,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
         _type: Optional[str] = attrs.get("type")
         if _type and _type != NotificationType.MAINTENANCE.value:
             raise ValidationError({"type": "Only type %s allowed." % NotificationType.MAINTENANCE.value})
-        time_delta: float = datetime.timedelta(
-            seconds=settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY
-        ).total_seconds()
+        time_delta: int = settings.TIME_BUFFER_FOR_CURRENT_MAINTENANCE_API_QUERY
         existing_maintenances: list = DjangoProjectBaseNotification.objects.filter(
             delayed_to__range=[attrs["delayed_to"] - time_delta, attrs["delayed_to"] + time_delta]
         )
@@ -107,9 +101,6 @@ class MaintenanceNotificationSerializer(ModelSerializer):
 class UsersMaintenanceNotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
-
-    def handle_create_validation_exception(self, e, request, *args, **kwargs):
-        raise e
 
     def get_serializer_class(self):
         return MaintenanceNotificationSerializer
