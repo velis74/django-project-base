@@ -1,6 +1,3 @@
-import datetime
-import os
-import pathlib
 from typing import List
 
 from django.conf import settings
@@ -33,14 +30,6 @@ class MailChannel(Channel):
         :return: number of sent messages
         """
         recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []
-        res_count = len(recipients)
-        if os.path.exists("/tmp/uwsgi.socket"):
-            # check if server was restarted, if it was just discard messages
-            file_p: pathlib.Path = pathlib.Path("/tmp/uwsgi.socket")
-            mtime: float = datetime.datetime.fromtimestamp(file_p.stat().st_mtime, tz=datetime.timezone.utc).timestamp()
-            if datetime.datetime.now().timestamp() - mtime < settings.MAIL_TIMEOUT_AFTER_WSGI_RESTART:
-                return res_count
-
         if not recipients:
             return 0
 
