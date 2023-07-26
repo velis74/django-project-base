@@ -5,8 +5,8 @@ from typing import Optional
 from django.core.cache import cache
 
 from django_project_base.celery.celery import app
+from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT, NOTIFICATION_SEND_PAUSE_SECONDS
 from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
-from django_project_base.notifications.constants import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 
 LAST_MAIL_SENT_CK = "last-notification-was-sent-timestamp"
 
@@ -23,11 +23,11 @@ class SendNotificationTask(app.Task):
         try:
             last_sent: Optional[float] = cache.get(LAST_MAIL_SENT_CK)
             time_from_last_sent: float = time.time() - last_sent if last_sent else 0
-            if time_from_last_sent < NOTIFICATION_QUEABLE_HARD_TIME_LIMIT:
-                time.sleep(int(NOTIFICATION_QUEABLE_HARD_TIME_LIMIT - time_from_last_sent))
+            if time_from_last_sent < NOTIFICATION_SEND_PAUSE_SECONDS:
+                time.sleep(int(NOTIFICATION_SEND_PAUSE_SECONDS - time_from_last_sent))
             SendNotificationMixin().make_send(notification=notification, extra_data=extra_data)
         finally:
-            cache.set(LAST_MAIL_SENT_CK, time.time(), timeout=NOTIFICATION_QUEABLE_HARD_TIME_LIMIT)
+            cache.set(LAST_MAIL_SENT_CK, time.time(), timeout=NOTIFICATION_SEND_PAUSE_SECONDS + 1)
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         logging.getLogger(__name__).error(

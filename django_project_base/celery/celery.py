@@ -6,8 +6,8 @@ from django.utils.crypto import get_random_string
 from kombu import Exchange, Queue
 from kombu.entity import TRANSIENT_DELIVERY_MODE
 
+from django_project_base.celery.settings import NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
-from django_project_base.notifications.constants import NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT
 
 REDIS_LOCATION = ""
 CELERY_REDIS_DB = "3"

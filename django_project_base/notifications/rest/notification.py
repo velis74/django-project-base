@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.auth import get_user_model
-from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
@@ -25,6 +24,7 @@ class NotificationSerializer(ModelSerializer):
         super().__init__(*args, is_filter=is_filter, **kwds)
         self.fields.fields["level"].display_form = DisplayMode.HIDDEN
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
+        self.fields.fields["sent_at"].display_form = DisplayMode.HIDDEN
 
     subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
     recipients = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
@@ -32,7 +32,6 @@ class NotificationSerializer(ModelSerializer):
     required_channels = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
     sent_channels = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
     failed_channels = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
-    sent_at = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
 
     counter = fields.IntegerField(display_form=DisplayMode.HIDDEN)
     exceptions = fields.CharField(display_form=DisplayMode.HIDDEN)
@@ -56,11 +55,6 @@ class NotificationSerializer(ModelSerializer):
     )
     subject_write = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
     body_write = fields.CharField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
-
-    def get_sent_at(self, obj):
-        if not obj or not obj.sent_at:
-            return None
-        return make_aware(datetime.datetime.fromtimestamp(obj.sent_at))
 
     def get_subject(self, obj):
         if not obj or not obj.message:
