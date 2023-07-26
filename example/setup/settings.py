@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 from django_project_base import VERSION
@@ -27,6 +28,7 @@ SECRET_KEY = "w0o6y0rwef0zijgd7m91w0b!p-(#l1zpna1%c1vvr7f17)x&*-"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 ALLOWED_HOSTS = ["*"]
 

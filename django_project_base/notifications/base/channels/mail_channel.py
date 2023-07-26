@@ -18,6 +18,8 @@ class MailChannel(Channel):
     def __make_send_mail(notification: "DjangoProjectBaseNotification", extra_data) -> int:  # noqa: F821
         recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []
         res_count = len(recipients)
+        if settings.TESTING:
+            return res_count
         MailChannel.provider().send(notification=notification, extra_data=extra_data)
         return res_count
 
