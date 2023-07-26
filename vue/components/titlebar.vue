@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts">
+import { apiClient } from '@velis/dynamicforms';
 import _ from 'lodash';
 import { defineComponent } from 'vue';
 
-import { apiClient as ApiClient } from '../apiClient';
 import { API_CONFIG } from '../apiConfig';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from '../events';
 import { showMaintenanceNotification } from '../notifications';
@@ -95,7 +95,7 @@ export default defineComponent({
       this.maintenanceNoticesPeriodicApiCall = setInterval(() => {
         // TODO: this needs to be moved to a separate maintenance-notice import
         if (Store.get('current-user')) {
-          ApiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url, { hideErrorNotice: true })
+          apiClient.get(API_CONFIG.MAINTENANCE_NOTIFICATIONS_CONFIG.url, { hideErrorNotice: true })
             .then((notificationResponse) => {
               // eslint-disable-next-line no-underscore-dangle,@typescript-eslint/naming-convention
               const _notification: any = _.first(notificationResponse.data);
@@ -122,7 +122,7 @@ export default defineComponent({
                 if (!this.maintenanceNotificationItem && (hours8 || hours1 || minutes5)) {
                   this.maintenanceNotificationItem = _notification;
                   showMaintenanceNotification(this.maintenanceNotificationItem, rangeIdentifier, () => {
-                    ApiClient.post('/maintenance-notification/acknowledged/', {
+                    apiClient.post('/maintenance-notification/acknowledged/', {
                       id: this.maintenanceNotificationItem.id,
                       acknowledged_identifier: rangeIdentifier,
                     }).then(() => {
