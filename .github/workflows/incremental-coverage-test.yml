@@ -1,0 +1,36 @@
+name: Coverage check
+on: [pull_request]
+jobs:
+  lint:
+    name: Code coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: PIP install
+        run: |
+          pip3 install -r requirements.txt
+          pip3 install coverage django_coverage_plugin
+      - name: Python unittest
+        continue-on-error: true
+        run: |
+          coverage run -m unittest discover tests/
+      - name: Generate coverage report
+        continue-on-error: true
+        run: |
+          coverage report -m
+          coverage json
+      - uses: velis74/incremental-coverage-check@main
+        with:
+          clover_coverage_json: vue/dynamicforms/coverage/coverage-final.json
+          py_coverage_json: coverage.json
+          logging_level: INFO
+          base_ref: ${{ github.base_ref }}
+          head_ref: HEAD
+          rep_ref: clover-refactor
+
