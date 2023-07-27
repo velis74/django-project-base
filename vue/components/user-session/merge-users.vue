@@ -12,51 +12,44 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Action, apiClient, APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
-import { defineComponent, ref } from 'vue';
 
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 
-export default defineComponent({
-  name: 'MergeUsers',
-  components: { APIConsumer },
-  data() {
-    return {
-      consumerLogic: ref<ConsumerLogicApi>(new ConsumerLogicApi('/account/profile', false)),
-      consumerLogicMerge: ref<ConsumerLogicApi>(new ConsumerLogicApi('/account/profile-merge', false)),
-      displayComponent: ComponentDisplay.TABLE,
-    };
-  },
-  mounted() {
-    // @ts-ignore
-    this.consumerLogic.filterData = { 'remove-merge-users': true };
-    (async () => {
-      await this.consumerLogic.getFullDefinition();
-    })();
-    (async () => {
-      await this.consumerLogicMerge.getFullDefinition();
-    })();
-  },
-  methods: {
-    actionMergeUsers() {
-      apiClient.post('account/profile-merge').then(() => {
-        this.consumerLogicMerge.reload();
-      });
-    },
-    actionClearMergeUsers() {
-      apiClient.delete('account/profile-merge/clear').then(() => {
-        this.consumerLogicMerge.reload();
-        this.consumerLogic.reload();
-      });
-    },
-    actionAddToMerge(action: Action, payload: { [x: string]: any; }) {
-      apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
-        this.consumerLogicMerge.reload();
-        this.consumerLogic.reload();
-      });
-    },
-  },
+const consumerLogic = new ConsumerLogicApi('/account/profile', false);
+const consumerLogicMerge = new ConsumerLogicApi('/account/profile-merge', false);
+const displayComponent = ComponentDisplay.TABLE;
+
+consumerLogic.filterData = { 'remove-merge-users': true };
+
+consumerLogic.getFullDefinition();
+consumerLogicMerge.getFullDefinition();
+
+const actionMergeUsers = () => {
+  apiClient.post('account/profile-merge').then(() => {
+    consumerLogicMerge.reload();
+  });
+};
+
+const actionClearMergeUsers = () => {
+  apiClient.delete('account/profile-merge/clear').then(() => {
+    consumerLogicMerge.reload();
+    consumerLogic.reload();
+  });
+};
+
+const actionAddToMerge = (action: Action, payload: { [x: string]: any; }) => {
+  apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
+    consumerLogicMerge.reload();
+    consumerLogic.reload();
+  });
+};
+
+defineExpose({
+  actionMergeUsers,
+  actionClearMergeUsers,
+  actionAddToMerge,
 });
 </script>
 
