@@ -30,7 +30,3 @@ def get_holidays(country_alpha_2_code: str, year: int) -> List[dict]:
         return holidays_data
     except (AssertionError, Timeout) as e:
         raise RetrieveHolidaysException(_("Error retrieving holidays: {}".format(e))) from None
-
-
-def test_function():
-    return False
