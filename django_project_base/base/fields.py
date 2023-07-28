@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from django.db.models import fields
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields as df_fields
+from django_project_base.base.middleware import get_current_request
 
 
 class HexColorField(fields.CharField):
@@ -28,7 +29,12 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
         super().__init__(**kwargs)
 
     def get_queryset(self):
-        return swapper.load_model("django_project_base", "Profile").objects.all()
+        qs = swapper.load_model("django_project_base", "Profile").objects
+        request = get_current_request()
+        if request and getattr(request, "current_project_slug", None):
+            # if current project was parsed from request, filter profiles to current project only
+            qs = qs.filter(projects__project__slug=request.current_project_slug)
+        return qs.all()
 
     def display_value(self, instance):
         if not instance:
