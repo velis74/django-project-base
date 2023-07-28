@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 from django.db.models import fields
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields as df_fields
+
 from django_project_base.base.middleware import get_current_request
 
 
@@ -29,6 +30,8 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
         super().__init__(**kwargs)
 
     def get_queryset(self):
+        # TODO This needs to be amended together with members editor such that it will be possible to specify
+        #  in settings.py how to filter and sort project members
         qs = swapper.load_model("django_project_base", "Profile").objects
         request = get_current_request()
         if request and getattr(request, "current_project_slug", None):
