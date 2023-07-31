@@ -13,7 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import { Action, apiClient, APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
+import {
+  Action,
+  apiClient,
+  APIConsumer,
+  ComponentDisplay,
+  ConsumerLogicApi,
+  useActionHandler,
+} from '@velis/dynamicforms';
 
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 
@@ -26,31 +33,34 @@ consumerLogic.filterData = { 'remove-merge-users': true };
 consumerLogic.getFullDefinition();
 consumerLogicMerge.getFullDefinition();
 
-const actionMergeUsers = () => {
-  apiClient.post('account/profile-merge').then(() => {
+const actionMergeUsers = async () => {
+  await apiClient.post('account/profile-merge').then(() => {
     consumerLogicMerge.reload();
   });
+  return true;
 };
 
-const actionClearMergeUsers = () => {
-  apiClient.delete('account/profile-merge/clear').then(() => {
-    consumerLogicMerge.reload();
-    consumerLogic.reload();
-  });
-};
-
-const actionAddToMerge = (action: Action, payload: { [x: string]: any; }) => {
-  apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
+const actionClearMergeUsers = async () => {
+  await apiClient.delete('account/profile-merge/clear').then(() => {
     consumerLogicMerge.reload();
     consumerLogic.reload();
   });
+  return true;
 };
 
-defineExpose({
-  actionMergeUsers,
-  actionClearMergeUsers,
-  actionAddToMerge,
-});
+const actionAddToMerge = async (action: Action, payload: { [x: string]: any; }) => {
+  await apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
+    consumerLogicMerge.reload();
+    consumerLogic.reload();
+  });
+  return true;
+};
+
+const { handler } = useActionHandler();
+
+handler.register('merge-users', actionMergeUsers)
+  .register('clear-merge-users', actionClearMergeUsers)
+  .register('add-to-merge', actionAddToMerge);
 </script>
 
 <style scoped>
