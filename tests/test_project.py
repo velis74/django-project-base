@@ -15,6 +15,7 @@ class TestProject(TestBase):
     def setUp(self):
         super().setUp()
         self.api_client = APIClient()
+        self._login_with_test_user_one()
         self._create_project()
 
     def _create_project(self, payload: dict = {}) -> Response:
@@ -31,12 +32,12 @@ class TestProject(TestBase):
 
     def test_list_project(self):
         list_response: Response = self.api_client.get(self.url)
-        self.assertEqual(ProjectSerializer.Meta.model.objects.all().count(), len(list_response.data))
+        self.assertEqual(3, len(list_response.data))
 
     def test_retrieve_project(self):
         retrieve_project_pk: Response = self.api_client.get(f"{self.url}/1")
         self.assertEqual(status.HTTP_200_OK, retrieve_project_pk.status_code)
-        retrieve_project_slug: Response = self.api_client.get(f'{self.url}/{retrieve_project_pk.data["slug"]}')
+        retrieve_project_slug: Response = self.api_client.get(f'{self.url}/project-{retrieve_project_pk.data["slug"]}')
         self.assertEqual(
             retrieve_project_pk.data[ProjectSerializer.Meta.model._meta.pk.name],
             retrieve_project_slug.data[ProjectSerializer.Meta.model._meta.pk.name],
