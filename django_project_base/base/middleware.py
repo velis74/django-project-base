@@ -21,7 +21,7 @@ def get_parameter(request, value_name: str, url_part: str) -> Optional[object]:
         return value_from_header
 
     path_parts = request.path_info.split("/")
-    if isinstance(url_part, tuple) and isinstance(url_part[0], int) and isinstance(url_part[1], list):
+    if isinstance(url_part, (list, tuple)) and isinstance(url_part[0], int) and isinstance(url_part[1], (list, tuple)):
         parm = path_parts[url_part[0]] if len(path_parts) > url_part[0] else None
         return parm if parm not in url_part[1] else None
 
@@ -30,7 +30,7 @@ def get_parameter(request, value_name: str, url_part: str) -> Optional[object]:
     except StopIteration:
         project_info = None
     if project_info:
-        return project_info[len(url_part):]
+        return project_info[len(url_part) :]
 
     return None
 
