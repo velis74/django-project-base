@@ -1,11 +1,13 @@
 <template>
   <v-form @submit.prevent>
-    <v-container v-if="payload != null" class="pa-0 ma-0 mt-md-6">
+    <v-container v-if="payload != null" class="pa-0 ma-0 mt-md-0">
       <v-row>
         <v-col class="d-none d-md-flex">
           <v-text-field
             v-model="payload.login"
             density="compact"
+            single-line
+            hide-details
             placeholder="Username"
             @keyup.enter="focusPassword"
           />
@@ -15,6 +17,8 @@
             ref="pwd"
             v-model="payload.password"
             density="compact"
+            single-line
+            hide-details
             type="password"
             placeholder="Password"
             @keyup.enter="doLogin"
@@ -25,10 +29,10 @@
             <social-logos :social-provider="b.name" :title="b.title" :size-em="1.5"/>
           </a>
         </v-col>
-        <v-col class="d-flex">
+        <v-col class="d-flex mt-1">
           <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
         </v-col>
-        <v-col class="d-none d-md-flex">
+        <v-col class="d-none d-md-flex mt-1 mr-2">
           <v-btn color="primary" variant="tonal" @click.stop="openRegistration">{{ gettext('Register') }}</v-btn>
         </v-col>
       </v-row>
