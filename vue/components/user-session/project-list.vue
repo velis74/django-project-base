@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { apiClient } from '@velis/dynamicforms';
 import { onMounted, Ref, ref, watch } from 'vue';
 
-import { apiClient as ApiClient } from '../../apiClient';
 import { showNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
 
@@ -30,7 +30,7 @@ async function getProjects(): Promise<Project[]> {
   //  To be clear: what is wrong with the next line is requiring to be logged in before we check for projects
   if (!userSession.loggedIn) return [];
   try {
-    return (await ApiClient.get('/project')).data;
+    return (await apiClient.get('/project')).data;
   } catch (error: any) {
     console.error(error);
     return [];
