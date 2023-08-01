@@ -1,16 +1,20 @@
-import logging
+import datetime
+import uuid
 from abc import ABC, abstractmethod
-from datetime import datetime
 from typing import List, Optional, Type
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
 from django_project_base.notifications.base.channels.channel import Channel
+from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
+from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
-from django_project_base.notifications.utils import utc_now
 
 
-class Notification(ABC, QueableNotificationMixin):
+class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, SendNotificationMixin):
     _persist = False
     _delay = None
     _recipients = []
@@ -19,6 +23,7 @@ class Notification(ABC, QueableNotificationMixin):
     level = None
     locale = None
     message: DjangoProjectBaseMessage
+    content_entity_context = ""
 
     def __init__(
         self,
@@ -26,12 +31,19 @@ class Notification(ABC, QueableNotificationMixin):
         persist: bool = False,
         level: Optional[NotificationLevel] = None,
         locale: Optional[str] = None,
-        delay: Optional[datetime] = None,
+        delay: Optional[int] = None,
         type: Optional[NotificationType] = None,
-        recipients: List[int] = [],
-        **kwargs
+        recipients=None,
+        content_entity_context="",
+        **kwargs,
     ) -> None:
         super().__init__()
+        if recipients is None:
+            recipients = []
+        if type is None:
+            type = NotificationType.STANDARD
+        if level is None:
+            level = NotificationLevel.INFO
         assert isinstance(persist, bool), "Persist must be valid boolean value"
         self._persist = persist
         if level is not None:
@@ -40,7 +52,7 @@ class Notification(ABC, QueableNotificationMixin):
             self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
-            assert isinstance(delay, datetime) and delay > utc_now(), "Invalid delay value"
+            # assert delay > timezone.now().timestamp(), "Invalid delay value"
             self._delay = delay
         if type is not None:
             typ = type.value if isinstance(type, NotificationType) else type
@@ -51,6 +63,7 @@ class Notification(ABC, QueableNotificationMixin):
         self._extra_data = kwargs
         assert isinstance(message, DjangoProjectBaseMessage), "Invalid value for message"
         self.message = message
+        self.content_entity_context = content_entity_context
 
     @property
     @abstractmethod
@@ -58,7 +71,7 @@ class Notification(ABC, QueableNotificationMixin):
         return []
 
     @property
-    def delay(self) -> Optional[datetime]:
+    def delay(self) -> Optional[int]:
         return self._delay
 
     @property
@@ -69,55 +82,46 @@ class Notification(ABC, QueableNotificationMixin):
         required_channels: list = list(
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, self.via_channels)))
         )
-        notification: Optional[DjangoProjectBaseNotification] = None
-
+        notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
+            locale=self.locale,
+            level=self.level.value,
+            delayed_to=self.delay,
+            required_channels=",".join(required_channels) if required_channels else None,
+            type=self.type.value,
+            message=self.message,
+            content_entity_context=str(self.content_entity_context)
+            if self.content_entity_context
+            else str(uuid.uuid4()),
+            recipients=",".join(map(str, self._recipients)) if self._recipients else None,
+        )
+        required_channels.sort()
         if self.persist:
+            if self.handle_similar_notifications(notification=notification):
+                return notification
             if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
                 self.message.save()
-            notification = DjangoProjectBaseNotification.objects.create(
-                locale=self.locale,
-                level=self.level.value,
-                delayed_to=self.delay,
-                required_channels=",".join(required_channels) if required_channels else None,
-                type=self.type.value,
-                message=self.message,
-            )
+            notification.created_at = int(datetime.datetime.now().timestamp())
+            notification.save()
+        else:
+            notification.created_at = None
 
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
-            notification.save()
-            notification.recipients = (notification.recipients or []) + self._recipients
-            self.enqueue_notification(notification)
+            from django.db import connection
+
+            sttgs = connection.settings_dict
+
+            sttgs["TIME_ZONE"] = None
+            self._extra_data["DATABASE"] = {
+                "PARAMS": connection.get_connection_params(),
+                "SETTINGS": sttgs,
+            }
+            self._extra_data["SETTINGS"] = settings
+            notification.recipients_list = [get_user_model().objects.get(pk=u).email for u in self._recipients]
+            self.enqueue_notification(notification, self._extra_data)
             return notification
 
-        sent_channels: list = []
-        failed_channels: list = []
+        notification = self.make_send(notification, self._extra_data)
 
-        for channel in self.via_channels:
-            try:
-                channel.send(self, **self._extra_data)
-                sent_channels.append(channel)
-            except Exception as e:
-                logging.getLogger(__name__).error(e)
-                failed_channels.append(channel)
-
-        if self.persist:
-            notification.sent_channels = (
-                ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, sent_channels))))
-                )
-                if sent_channels
-                else None
-            )
-            notification.failed_channels = (
-                ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, failed_channels))))
-                )
-                if failed_channels
-                else None
-            )
-            notification.sent_at = utc_now()
-            notification.save(update_fields=["sent_at", "sent_channels", "failed_channels"])
-            notification.recipients = (notification.recipients or []) + self._recipients
         return notification

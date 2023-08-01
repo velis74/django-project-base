@@ -15,3 +15,5 @@ django-csp
 requests
 boto3
 natural
+celery==5.2.7
+django-redis-cache

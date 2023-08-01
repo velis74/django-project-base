@@ -18,7 +18,7 @@ class TestMaintenanceNotifications(TestBase):
     def _create_maintenance_notification(self, payload: dict) -> Response:
         self._login_with_test_user_one()
         _payload: dict = {
-            "delayed_to": (datetime.datetime.now() + datetime.timedelta(hours=1)).isoformat() + "Z",
+            "delayed_to": int((datetime.datetime.now() + datetime.timedelta(hours=1)).timestamp()),
             "message": {"body": "Planned maintenance"},
         }
         _payload.update(payload)
@@ -32,7 +32,7 @@ class TestMaintenanceNotifications(TestBase):
         )
         self.assertEqual(
             self._create_maintenance_notification(
-                dict(delayed_to=(datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat() + "Z")
+                dict(delayed_to=(datetime.datetime.now() - datetime.timedelta(hours=1)).timestamp())
             ).status_code,
             status.HTTP_400_BAD_REQUEST,
         )

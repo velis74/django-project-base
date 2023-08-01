@@ -5,7 +5,7 @@
 
 Notifications module will provide functionality to create and deliver notifications to users via channels like: email,
 websocket, push notification,..
-Currently only maintenance notifications are implemented.
+Currently only maintenance and email notifications are supported. For email Amazon SES provider is implemented.
 
 ## Maintenance notifications
 
@@ -60,8 +60,37 @@ $ python manage.py migrate
 
 ## Settings
 
-### MAINTENANCE_NOTIFICATIONS_CACHE_KEY
+#### MAINTENANCE_NOTIFICATIONS_CACHE_KEY
 
 ```python
+
+# Maintenance notifications cache key value. User acknowledged 
+# maintenance notifications are saved under this cache key value.
+
 MAINTENANCE_NOTIFICATIONS_CACHE_KEY = ""
+```
+
+#### NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS
+
+```python
+
+# Django Project Base system tries to detect duplicate notifications. For time interval in last
+# NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS value it tries to search for notification duplicate and if found
+# then notification is not sent, but found notification counter is incremented.
+
+NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS = 120
+```
+
+#### NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE
+
+```python
+
+# Django Project Base system tries to detect duplicate notifications. When comparing 
+# notifications it evaluates also notification body length. If notification duplicates candidates body 
+# length are within NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE (length difference is smaller than) 
+# NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE then notification body length condition is evaluated true.
+# If all other conditions (subject, recipients, channel ...) are evaluated true then notification 
+# is marked as a duplicate.
+
+NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE = 3
 ```
