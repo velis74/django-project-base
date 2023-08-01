@@ -109,8 +109,8 @@ export default defineComponent({
       await this.userSession.checkLogin(false);
     },
     async userProfile() {
-      await new ConsumerLogicApi(`/${this.userSession.selectedProject?.slug ?? 'account'}/profile/current`, false)
-        .dialogForm(null, null, false);
+      // eslint-disable-next-line vue/max-len
+      await new ConsumerLogicApi(`/${this.userSession.selectedProject?.slug ?? 'account'}/profile/current`, false).dialogForm(null, null, false);
       await this.userSession.checkLogin(false);
     },
     async changePassword() {
@@ -224,9 +224,9 @@ export default defineComponent({
             'h5',
             {},
             gettext('Your account will be suspended, and all of your data will be ' +
-                'permanently deleted after a period of 1 year. Once your account is suspended, you will ' +
-                'have the option to reactivate it. If you wish to delete your account ' +
-                'immediately, please contact us using the provided information in our contacts.'),
+                    'permanently deleted after a period of 1 year. Once your account is suspended, you will ' +
+                    'have the option to reactivate it. If you wish to delete your account ' +
+                    'immediately, please contact us using the provided information in our contacts.'),
           ),
         ],
         new FilteredActions({
@@ -277,7 +277,8 @@ export default defineComponent({
 }
 
 .div-input {
-  display: flex; flex-direction: row;
+  display: flex;
+  flex-direction: row;
   margin-bottom: 0.3em;
   padding: 0.1em;
 }
@@ -286,5 +287,7 @@ export default defineComponent({
   padding: 0.2em;
 }
 
-.div-input > * { flex: 1; }
+.div-input > * {
+  flex: 1;
+}
 </style>

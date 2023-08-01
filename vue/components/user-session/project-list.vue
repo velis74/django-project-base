@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { apiClient } from '@velis/dynamicforms';
+import { apiClient, ConsumerLogicApi, dfModal } from '@velis/dynamicforms';
 import { onMounted, Ref, ref, watch } from 'vue';
 
-import { showNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
 
 import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
@@ -22,6 +21,9 @@ function projectSelected(slug: string) {
   if (slug === userSession.selectedProjectId) return;
   const project = projectList.value.find((p: Project) => p[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] === slug);
   userSession.setSelectedProject(project);
+  if (project) {
+    window.location.href = `/#${project.slug}`;
+  }
 }
 
 async function getProjects(): Promise<Project[]> {
@@ -44,13 +46,13 @@ function setPermissions(newPermissions: Permissions) {
 async function loadData() {
   if (!userSession.loggedIn) return;
   projectList.value = await getProjects();
-  // by default do not select any projects
-  userSession.setSelectedProject(undefined);
   dataStore.getPermissions(setPermissions);
 }
 
-function addNewProject() {
-  showNotification('Make project', 'TODO');
+async function addNewProject() {
+  const addProjectModal = await new ConsumerLogicApi('/project').dialogForm('new');
+  await dfModal.getDialogDefinition(addProjectModal);
+  await loadData();
 }
 
 onMounted(() => { loadData(); });

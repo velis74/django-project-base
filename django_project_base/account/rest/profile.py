@@ -1,4 +1,5 @@
 import datetime
+from typing import Optional
 
 import django
 import swapper
@@ -30,7 +31,7 @@ from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.permissions import BasePermissions
-from django_project_base.rest.project import ProjectSerializer
+from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 
 
@@ -417,13 +418,11 @@ class ProfileViewSet(ModelViewSet):
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
-            project_model: Model = swapper.load_model("django_project_base", "Project")
-            response_data["default-project"] = None
-            if project_model:
-                ProjectSerializer.Meta.model = project_model
-                response_data["default-project"] = ProjectSerializer(
-                    project_model.objects.filter(owner=user).first()
-                ).data
+            response_data["default_project"] = None
+            project_pk = request.session.get("current-project-pk", None)
+            project_object = ProjectSerializer.Meta.model.objects.filter(pk=project_pk).first() if project_pk else None
+            if project_object:
+                response_data["default_project"] = ProjectSerializer(project_object).data
         return Response(response_data)
 
     @extend_schema(
@@ -551,3 +550,15 @@ class ProfileViewSet(ModelViewSet):
         profile_obj.delete_at = None
         profile_obj.save(update_fields=["delete_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @extend_schema(exclude=True)
+    @action(detail=False, methods=["post"], url_path="current-profile-set-project", url_name="current-profile-project")
+    def current_profile_set_project(self, request: Request) -> Response:
+        project: Optional[int] = request.data.get("project")
+        if not project:
+            raise ValidationError(dict(project=["required"]))
+        if not ProjectViewSet._get_queryset_for_request(request).filter(pk=project).exists():
+            raise ValidationError(dict(project=["invalid"]))
+        if getattr(request, "session", None):
+            request.session["current-project-pk"] = project
+        return Response()
