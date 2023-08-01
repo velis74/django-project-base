@@ -21,9 +21,6 @@ function projectSelected(slug: string) {
   if (slug === userSession.selectedProjectId) return;
   const project = projectList.value.find((p: Project) => p[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] === slug);
   userSession.setSelectedProject(project);
-  if (project) {
-    window.location.href = `/#${project.slug}`;
-  }
 }
 
 async function getProjects(): Promise<Project[]> {
