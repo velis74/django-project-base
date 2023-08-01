@@ -8,7 +8,7 @@ from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
 
-from django_project_base.base.middleware import get_current_request, get_parameter, has_current_request
+from django_project_base.base.middleware import get_parameter
 
 
 class ProjectSerializer(ModelSerializer):
@@ -33,17 +33,16 @@ class ProjectSerializer(ModelSerializer):
 class ProjectViewSet(ModelViewSet):
     def new_object(self: ModelViewSet):
         new_object = super().new_object()
-        request = get_current_request() if has_current_request() else None
-        if request and request.user and request.user.is_authenticated:
+        if self.request and self.request.user and self.request.user.is_authenticated:
             new_object.owner = getattr(
-                request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name
+                self.request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name
             )
 
         return new_object
 
-    def get_queryset(self):
+    @staticmethod
+    def _get_queryset_for_request(request):
         qs = swapper.load_model("django_project_base", "Project").objects
-        request = get_current_request() if has_current_request() else None
         # todo: request.user.is_authenticated this should be solved with permission class
         if not request or not request.user or not request.user.is_authenticated:
             return qs.none()
@@ -55,10 +54,10 @@ class ProjectViewSet(ModelViewSet):
 
         queryset = (owned_projects | member_projects).distinct()
 
-        if project_slug := getattr(request, "current_project_slug", None):
-            queryset = queryset.filter(slug=project_slug)
-
         return queryset
+
+    def get_queryset(self):
+        return ProjectViewSet._get_queryset_for_request(self.request)
 
     def get_serializer_class(self):
         return ProjectSerializer
@@ -69,9 +68,12 @@ class ProjectViewSet(ModelViewSet):
         lookup_field: str = self.lookup_field
         lookup_field_val: Union[str, int] = self.kwargs.get(self.lookup_field)
 
-        if value := getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {}).get("project", {}).get(
-                "url_part", "project-"):
-            if param := get_parameter(self.request, "project", value):
+        if (
+            value := getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
+            .get("project", {})
+            .get("url_part", "project-")
+        ):
+            if param := get_parameter(self.request, "project", value) and lookup_field_val != "new":
                 lookup_field_val = param
 
         def set_args(name: str) -> None:

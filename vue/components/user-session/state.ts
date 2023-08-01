@@ -35,7 +35,7 @@ const useUserSessionStore = defineStore('user-session', {
   getters: {
     apiEndpointLogin() { return '/account/login'; },
     apiEndpointLogout() { return '/account/logout'; },
-    apiEndpointCurrentProfile() { return '/account/profile/current'; },
+    apiEndpointCurrentProfile() { return '/account/profile/current?decorate=default-project'; },
 
     /**
      * indicates whether we are anonymous or logged in with a registered profile
@@ -118,6 +118,9 @@ const useUserSessionStore = defineStore('user-session', {
         deleteAt: data?.delete_at,
         passwordInvalid: data?.password_invalid,
       });
+      if (data?.default_project) {
+        this.setSelectedProject(data?.default_project);
+      }
     },
 
     setSelectedProject(data: Project | undefined) {
