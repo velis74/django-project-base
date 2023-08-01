@@ -12,8 +12,8 @@ from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
-from django_project_base.notifications.base.email_notification import EMailNotification
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType as NotificationTypeDPB
+from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
