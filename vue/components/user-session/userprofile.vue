@@ -101,7 +101,7 @@ export default defineComponent({
       }
     },
     async showImpersonateLogin() {
-      await new ConsumerLogicApi('/account/impersonate').dialogForm(null);
+      await new ConsumerLogicApi('/account/impersonate', false).dialogForm(null);
       await this.userSession.checkLogin(false);
     },
     async stopImpersonation() {

@@ -222,7 +222,7 @@ export default function useLogin() {
   }
 
   const openRegistration = async () => {
-    await new ConsumerLogicApi('/account/profile/register/', true).dialogForm(null, null, false);
+    await new ConsumerLogicApi('/account/profile/register/', false).dialogForm(null, null, false);
   };
 
   const newAccount = async () => {
