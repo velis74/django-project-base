@@ -47,7 +47,7 @@ async function loadData() {
 }
 
 async function addNewProject() {
-  const addProjectModal = await new ConsumerLogicApi('/project').dialogForm('new');
+  const addProjectModal = await new ConsumerLogicApi('/project', false).dialogForm('new');
   await dfModal.getDialogDefinition(addProjectModal);
   await loadData();
 }
