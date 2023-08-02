@@ -7,22 +7,27 @@ import setuptools
 
 from django_project_base import __version__
 
+publish_local = True
 
-def write_ver_to_init(version="''"):
-    replacement = "__version__ = '%s'\n" % (version)
-    filename = "django_project_base/__init__.py"
+
+def write_ver_to_init(file_name: str, version: str, search: str, replacement: str):
+    replacement = replacement % version
+    filename = file_name
     for line in fileinput.input([filename], inplace=True):
-        if line.strip().startswith("__version__"):
+        if line.strip().startswith(search):
             line = replacement
         sys.stdout.write(line)
 
 
 def get_version(version_arg):
+    from versio.version import Version
+    from versio.version_scheme import Simple3VersionScheme
+
     try:
         if version_arg == "publish":
             print("Missing version argument.")
             sys.exit(1)
-        all(map(int, version_arg.split(".", 2)))
+        Version(version_arg, scheme=Simple3VersionScheme)
     except Exception:
         print("Invalid version format. Should be x.y.z (all numbers)")
         sys.exit(1)
@@ -41,7 +46,7 @@ for lnum, line in enumerate(requirements):
 version = __version__
 
 if sys.argv[1] == "publish":
-    version = get_version(sys.argv[-1])
+    version_str = get_version(sys.argv[-1])
 
     if os.system("python -m wheel version"):
         print("wheel not installed.\nUse `pip install wheel`.\nExiting.")
@@ -49,15 +54,28 @@ if sys.argv[1] == "publish":
     if os.system("python -m twine --version"):
         print("twine not installed.\nUse `pip install twine`.\nExiting.")
         sys.exit()
-    if os.system("tox -e check"):
+    if os.system("tox -e check") or os.system("npm run test"):
         sys.exit()
 
-    write_ver_to_init(version)
-    os.system("python setup.py sdist bdist_wheel")
-    os.system("twine upload dist/*")
+    write_ver_to_init("django_project_base/__init__.py", version_str, "__version__", "__version__ = '%s'\n")
+    write_ver_to_init("package.json", version_str, '"version": ', '  "version": "%s",\n')
+
+    os.system("npm run build")
+    if publish_local:
+        os.system("npm pack")
+        os.system("cp django_project_base-*.tgz ~/velis_nextcloud")
+        os.system("mv django_project_base-*.tgz ~/Projects/alc/node_libs")
+    else:
+        os.system("cd vue/dynamicforms && npm publish && cd ../..")
+        os.system("python setup.py sdist bdist_wheel")
+        # if you don't like to enter username / pass for pypi every time, run this command:
+        #  keyring set https://upload.pypi.org/legacy/ username  (it will ask for password)
+        os.system("twine upload dist/*")
+
     os.system("rm -rf build && rm -rf dist && rm -rf django_project_base.egg-info")
     os.system("git checkout django_project_base/__init__.py")
-    os.system("git tag -a %s -m 'version %s'" % (version, version))
+    os.system("git checkout package.json")
+    os.system("git tag -a %s -m 'version %s'" % (version_str, version_str))
     os.system("git push --tags")
     sys.exit()
 

@@ -34,6 +34,7 @@ class CelerySettings:
         "django.contrib.contenttypes",
         "django.contrib.auth",
     )
+    TESTING = False
 
 
 app = Celery(

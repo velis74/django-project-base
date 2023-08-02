@@ -7,7 +7,7 @@
     <template v-if="breadcrumbsComponent && userSession.loggedIn" #extension>
       <component :is="breadcrumbsComponent"/>
     </template>
-    <v-spacer/>
+    <div class="flex-grow-0"/>
     <component :is="projectlistComponent" v-if="projectlistComponent && userSession.loggedIn"/>
     <component :is="userprofileComponent" v-if="userprofileComponent && userSession.loggedIn"/>
     <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>

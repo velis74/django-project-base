@@ -22,19 +22,29 @@ class Migration(migrations.Migration):
             name="counter",
             field=models.SmallIntegerField(default=0),
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name="djangoprojectbasenotification",
             name="created_at",
-            field=models.BigIntegerField(
-                default=django_project_base.notifications.utils.utc_now, editable=False, verbose_name="Created at"
-            ),
         ),
-        migrations.AlterField(
+        migrations.AddField(
+            model_name="djangoprojectbasenotification",
+            name="created_at",
+            field=models.BigIntegerField(editable=False, default=0, verbose_name="Created at"),
+        ),
+        migrations.RemoveField(
             model_name="djangoprojectbasenotification",
             name="delayed_to",
-            field=models.BigIntegerField(blank=True, null=True, verbose_name="Delayed to"),
         ),
-        migrations.AlterField(
+        migrations.AddField(
+            model_name="djangoprojectbasenotification",
+            name="delayed_to",
+            field=models.BigIntegerField(blank=True, null=True, verbose_name="Sent at"),
+        ),
+        migrations.RemoveField(
+            model_name="djangoprojectbasenotification",
+            name="sent_at",
+        ),
+        migrations.AddField(
             model_name="djangoprojectbasenotification",
             name="sent_at",
             field=models.BigIntegerField(blank=True, null=True, verbose_name="Sent at"),
