@@ -13,14 +13,11 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
-# fmt: off
 from rest_registration.api.views import reset_password, send_reset_password_link, verify_email
 from rest_registration.exceptions import UserNotFound
 from rest_registration.settings import registration_settings
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
-
-# fmt: on
 
 
 class ResetPasswordSerializer(serializers.Serializer):

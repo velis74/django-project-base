@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from django_project_base import VERSION
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django_project_base.account.constants import ACCOUNT_APP_ID
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
@@ -28,7 +29,7 @@ SECRET_KEY = "w0o6y0rwef0zijgd7m91w0b!p-(#l1zpna1%c1vvr7f17)x&*-"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 ALLOWED_HOSTS = ["*"]
 

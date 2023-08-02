@@ -1,6 +1,7 @@
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 from django_project_base.notifications.tests.notifications_transaction_test_case import (
-    NotificationsTransactionTestCase, TestNotificationViaEmail
+    NotificationsTransactionTestCase,
+    TestNotificationViaEmail,
 )
 
 
