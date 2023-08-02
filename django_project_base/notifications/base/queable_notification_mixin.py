@@ -10,14 +10,13 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 class QueableNotificationMixin(object):
     def enqueue_notification(self, notification: DjangoProjectBaseNotification, extra_data):
-        if settings.TESTING:
+        if getattr(settings, "TESTING", False):
             return
         now_ts: int = int(datetime.datetime.now().timestamp())
         if notification.delayed_to - now_ts < NOTIFICATION_SEND_PAUSE_SECONDS:
             send_notification_task.apply_async(
                 (notification, extra_data), queue=NOTIFICATION_QUEUE_NAME, serializer="pickle"
             )  # type: ignore
-            print("sent waiyt")
             return
         delay: int = notification.delayed_to - now_ts
         if delay > NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT:

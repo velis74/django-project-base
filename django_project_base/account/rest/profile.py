@@ -420,7 +420,12 @@ class ProfileViewSet(ModelViewSet):
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
             response_data["default_project"] = None
             project_pk = request.session.get("current-project-pk", None)
-            project_object = ProjectSerializer.Meta.model.objects.filter(pk=project_pk).first() if project_pk else None
+            if project_pk is None:
+                project_object = ProjectViewSet._get_queryset_for_request(request).first()
+            else:
+                project_object = (
+                    ProjectSerializer.Meta.model.objects.filter(pk=project_pk).first() if project_pk else None
+                )
             if project_object:
                 response_data["default_project"] = ProjectSerializer(project_object).data
         return Response(response_data)
