@@ -16,9 +16,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-# fmt: off
 from rest_registration.api.views import change_password, logout, register, verify_registration
-# fmt: on
 from social_django.models import UserSocialAuth
 
 from django_project_base.account.rest.reset_password import ResetPasswordSerializer

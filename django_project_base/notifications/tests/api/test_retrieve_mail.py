@@ -5,7 +5,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from django_project_base.notifications.tests.notifications_transaction_test_case import (
-    NotificationsTransactionTestCase, TestNotificationViaEmail
+    NotificationsTransactionTestCase,
+    TestNotificationViaEmail,
 )
 
 

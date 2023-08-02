@@ -3,7 +3,12 @@ from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import (
-    extend_schema, extend_schema_field, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
+    extend_schema,
+    extend_schema_field,
+    extend_schema_view,
+    OpenApiParameter,
+    OpenApiResponse,
+    OpenApiTypes,
 )
 from dynamicforms import fields, serializers, viewsets
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
