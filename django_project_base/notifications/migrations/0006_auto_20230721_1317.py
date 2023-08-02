@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="djangoprojectbasenotification",
             name="created_at",
-            field=models.BigIntegerField(editable=False, verbose_name="Created at"),
+            field=models.BigIntegerField(editable=False, default=0, verbose_name="Created at"),
         ),
         migrations.RemoveField(
             model_name="djangoprojectbasenotification",
