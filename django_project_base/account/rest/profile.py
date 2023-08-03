@@ -136,6 +136,12 @@ class ProfileSerializer(ModelSerializer):
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
+        is_record_view = len(args) == 1 and isinstance(args[0], swapper.load_model("django_project_base", "Profile"))
+        if not is_record_view:
+            # for table view, we remove permissions and groups to improve performance
+            self.fields.pop("permissions", None)
+            self.fields.pop("groups", None)
+
         if str(request.query_params.get("remove-merge-users", "false")) in tuple(
             map(str, fields.BooleanField.TRUE_VALUES)
         ) and (request.user.is_superuser or request.user.is_staff):
