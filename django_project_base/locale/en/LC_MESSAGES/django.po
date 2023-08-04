@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-04 10:01+0000\n"
+"POT-Creation-Date: 2023-08-04 13:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: django_project_base/account/rest/account.py:106
 msgid "Change password"
 msgstr ""
@@ -252,23 +253,23 @@ msgstr ""
 msgid "Failed channels"
 msgstr ""
 
-#: django_project_base/notifications/models.py:51
+#: django_project_base/notifications/models.py:50
 msgid "Created at"
 msgstr ""
 
-#: django_project_base/notifications/models.py:53
+#: django_project_base/notifications/models.py:51
 msgid "Sent at"
 msgstr ""
 
-#: django_project_base/notifications/models.py:54
+#: django_project_base/notifications/models.py:52
 msgid "Delayed to"
 msgstr ""
 
-#: django_project_base/notifications/models.py:61
+#: django_project_base/notifications/models.py:59
 msgid "Type"
 msgstr ""
 
-#: django_project_base/notifications/models.py:64
+#: django_project_base/notifications/models.py:62
 msgid "Message"
 msgstr ""
 
