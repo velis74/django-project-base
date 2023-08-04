@@ -1,6 +1,5 @@
 import datetime
 import uuid
-from abc import ABC, abstractmethod
 from typing import List, Optional, Type
 
 from django.conf import settings
@@ -14,7 +13,7 @@ from django_project_base.notifications.base.send_notification_mixin import SendN
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
 
-class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, SendNotificationMixin):
+class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNotificationMixin):
     _persist = False
     _delay = None
     _recipients = []
@@ -24,6 +23,8 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
     locale = None
     message: DjangoProjectBaseMessage
     content_entity_context = ""
+
+    _via_channels = List[Type[Channel]]
 
     def __init__(
         self,
@@ -35,6 +36,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
         type: Optional[NotificationType] = None,
         recipients=None,
         content_entity_context="",
+        channels=[],
         **kwargs,
     ) -> None:
         super().__init__()
@@ -64,11 +66,17 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
         assert isinstance(message, DjangoProjectBaseMessage), "Invalid value for message"
         self.message = message
         self.content_entity_context = content_entity_context
+        if channels:
+            # TODO: check for supported channels
+            self.via_channels = channels
 
-    @property
-    @abstractmethod
-    def via_channels(self) -> List[Type[Channel]]:
-        return []
+    def __set_via_channels(self, val):
+        self._via_channels = val
+
+    def __get_via_channels(self):
+        return self._via_channels
+
+    via_channels = property(__get_via_channels, __set_via_channels)
 
     @property
     def delay(self) -> Optional[int]:
@@ -80,7 +88,7 @@ class Notification(ABC, QueableNotificationMixin, DuplicateNotificationMixin, Se
 
     def send(self) -> DjangoProjectBaseNotification:
         required_channels: list = list(
-            map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, self.via_channels)))
+            map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
         )
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,

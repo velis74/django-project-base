@@ -1,4 +1,7 @@
 from enum import Enum
+from typing import Optional, Union
+
+from django_project_base.notifications.base.channels.channel import Channel
 
 
 class NotificationType(Enum):
@@ -19,9 +22,15 @@ class ChannelIdentifier(Enum):
     WEBSOCKET = 3
 
     @staticmethod
-    def channel(identifier: int):
-        if identifier == ChannelIdentifier.MAIL.value:
-            from django_project_base.notifications.base.channels.mail_channel import MailChannel
+    def supported_channels() -> tuple:
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
-            return MailChannel()
-        raise NotImplementedError
+        return MailChannel(), SmsChannel()
+
+    @staticmethod
+    def channel(identifier: Union[int, str]) -> Optional[Channel]:
+        return next(
+            iter(filter(lambda c: c.name == identifier or c.id == identifier, ChannelIdentifier.supported_channels())),
+            None,
+        )

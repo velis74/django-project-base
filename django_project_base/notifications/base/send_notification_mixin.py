@@ -31,14 +31,14 @@ class SendNotificationMixin(object):
         if notification.created_at:
             notification.sent_channels = (
                 ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, sent_channels))))
+                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, sent_channels))))
                 )
                 if sent_channels
                 else None
             )
             notification.failed_channels = (
                 ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, failed_channels))))
+                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, failed_channels))))
                 )
                 if failed_channels
                 else None
