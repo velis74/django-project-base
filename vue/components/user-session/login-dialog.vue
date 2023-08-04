@@ -11,7 +11,7 @@ import useLogin from './login';
 import SocialLogos from './social-logos.vue';
 import { showLoginDialog } from './use-login-dialog';
 // TODO: needs to be moved to /rest/about or to some configuration. definitely needs to be app-specific
-const appname = gettext('Demo app');
+const appname = gettext('{put application name here}');
 
 const showDialog = ref<boolean>(false);
 
@@ -44,15 +44,14 @@ watch(showLoginDialog, async (newValue) => {
     <template #body>
       <div>
         <p>
-          {{ gettext(`Please sign in with one of your existing third party accounts. Or, `) }}
+          {{ gettext('Please sign in with one of your existing third party accounts. Or, ') }}
           <span
-            style="text-decoration: underline;
-            cursor: pointer"
+            style="text-decoration: underline; cursor: pointer"
             tabindex="0"
             @keyup.enter="newAccount()"
             @click.stop="newAccount()"
           >
-            {{ gettext(`create a new account`) }}
+            {{ gettext('create a new account') }}
           </span>
           {{ interpolate(gettext(`for %(appname)s and sign in below:`), { appname }) }}
         </p>

@@ -35,7 +35,7 @@ def integer_ts():
 
 
 class AbstractDjangoProjectBaseNotification(models.Model):
-    locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_("Locale"))
+    locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_("Locale"))  # language
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
     level = models.CharField(
         null=False,
@@ -47,9 +47,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     required_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Required channels"))
     sent_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Sent channels"))
     failed_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Failed channels"))
-    created_at = models.BigIntegerField(
-        default=integer_ts, editable=False, verbose_name=_("Created at")
-    )
+    created_at = models.BigIntegerField(default=integer_ts, editable=False, verbose_name=_("Created at"))
     sent_at = models.BigIntegerField(null=True, blank=True, verbose_name=_("Sent at"))
     delayed_to = models.BigIntegerField(null=True, blank=True, verbose_name=_("Delayed to"))
     type = models.CharField(

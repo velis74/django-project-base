@@ -1,6 +1,6 @@
 # Tags
 
-Django project base supports tags usage. See example implementation bellow.
+Django project base supports tags usage. See example implementation below.
 
 
 ```python 

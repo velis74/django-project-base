@@ -26,7 +26,7 @@ class ProjectRoleSerializer(ModelSerializer):
             internal_value["name"] = f'{project}{ProjectRole.delimiter}{internal_value["name"]}'
         else:
             if not internal_value.get("project"):
-                raise ValidationError(dict(project=[_("required")]))
+                raise ValidationError(dict(project=[_("Project is required")]))
             internal_value["name"] = f'{internal_value["project"]}{ProjectRole.delimiter}{internal_value["name"]}'
         internal_value.pop("project", None)
         return internal_value

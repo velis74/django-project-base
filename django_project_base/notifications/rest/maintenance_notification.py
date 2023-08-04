@@ -31,7 +31,7 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
         new.fields["acknowledged_identifier"] = fields.IntegerField(
             required=True,
             allow_null=False,
-            help_text=_("Time interval identifying at what time notification was acknnowledged by user"),
+            help_text=_("Time interval identifying at what time notification was acknowledged by user"),
         )
         return new
 

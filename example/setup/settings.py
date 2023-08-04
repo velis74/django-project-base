@@ -19,6 +19,12 @@ from django_project_base import VERSION
 from django_project_base.account.constants import ACCOUNT_APP_ID
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
 
+try:
+    from . import env
+except:
+    env = dict()
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -53,6 +59,9 @@ INSTALLED_APPS = [
     ACCOUNT_APP_ID,
     "dynamicforms",
 ]
+
+if not getattr(env, "DEPLOY", True):
+    INSTALLED_APPS.append("vue")
 
 MIDDLEWARE = [
     "django_project_base.base.UrlVarsMiddleware",
@@ -129,16 +138,12 @@ SOCIAL_AUTH_MICROSOFT_GRAPH_SECRET = "..."
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-LOCALE_PATHS = [str(BASE_DIR).replace("example", "") + "django_project_base/locale/"]
+LOCALE_PATHS = [os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/locale/"))]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

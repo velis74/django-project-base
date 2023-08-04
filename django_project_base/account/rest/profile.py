@@ -223,7 +223,7 @@ class ProfileRegisterSerializer(ProfileSerializer):
         if not attrs["password"]:
             errors["password"] = _("Password is required")
         if not attrs["password"] == password_repeat:
-            errors["password_repeat"] = _("Repeated value does not match inputted password")
+            errors["password_repeat"] = _("Passwords do not match")
 
         if not attrs["email"]:
             errors["email"] = _("Email is required")
