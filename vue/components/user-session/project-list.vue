@@ -62,7 +62,7 @@ export default { name: 'ProjectList' };
 
 <template>
   <v-btn style="min-width: 0">
-    &#9776; {{ userSession.selectedProject?.name ?? 'NO Project' }}
+    &#9776; {{ userSession.selectedProject?.name ?? gettext('NO Project') }}
     <v-menu activator="parent">
       <v-list>
         <v-list-item

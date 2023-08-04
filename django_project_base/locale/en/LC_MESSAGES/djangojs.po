@@ -103,6 +103,10 @@ msgstr ""
 msgid "Unknown error trying to login"
 msgstr ""
 
+#: vue/components/user-session/project-list.vue:65
+msgid "NO Project"
+msgstr "Choose a project"
+
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.

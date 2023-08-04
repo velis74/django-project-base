@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-04 11:27+0000\n"
+"POT-Creation-Date: 2023-08-04 14:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3);\n"
+
 #: vue/components/user-session/login-dialog.vue:14
 msgid "{put application name here}"
 msgstr ""
@@ -113,8 +114,9 @@ msgid ""
 "Your account will be restored. Do you want to keep all your previous data or "
 "do you want to reset account state and begin as account was just registered "
 "and your previous data is deleted?"
-msgstr "Tvoj račun bo obnovljen. Ali želiš obdržati svoje stare podatke, ali "
-"bi raje ponastavil račun, zbrisal stare podatke in začel znova?"
+msgstr ""
+"Tvoj račun bo obnovljen. Ali želiš obdržati svoje stare podatke, ali bi raje "
+"ponastavil račun, zbrisal stare podatke in začel znova?"
 
 #: vue/components/user-session/login.ts:165
 msgid "Reset account"
@@ -123,6 +125,10 @@ msgstr "Ponastavi račun"
 #: vue/components/user-session/login.ts:203
 msgid "Unknown error trying to login"
 msgstr "Neznana napaka pri prijavljanju"
+
+#: vue/components/user-session/project-list.vue:65
+msgid "NO Project"
+msgstr "Izberi projekt"
 
 #: vue/components/user-session/project-list.vue:77
 msgid "Add new project"
@@ -189,9 +195,9 @@ msgid ""
 "immediately, please contact us using the provided information in our "
 "contacts."
 msgstr ""
-"Tvoj račun bo onemogočen in tvoji podatki bodo trajno izbrisani po enem letu. "
-"Po onemogočanju računa boš še vedno imel možnost obnove računa. Če želiš "
-"izbris podatkov takoj, nas prosim kontaktiraj."
+"Tvoj račun bo onemogočen in tvoji podatki bodo trajno izbrisani po enem "
+"letu. Po onemogočanju računa boš še vedno imel možnost obnove računa. Če "
+"želiš izbris podatkov takoj, nas prosim kontaktiraj."
 
 #: vue/notifications.ts:50
 msgid "Error"
