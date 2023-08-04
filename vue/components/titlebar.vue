@@ -49,6 +49,7 @@ export default defineComponent({
     userprofileComponent: { type: String, default: 'UserProfile' }, // specify your own globally registered component
     breadcrumbsComponent: { type: String, default: 'Breadcrumbs' }, // specify your own globally registered component
     loginVisible: { type: Boolean, default: true }, // if user is not logged in, should we show the login inputs
+    checkMaintenanceNotifications: { type: Boolean, default: false },
   },
   emits: ['title-click'],
   data() {
@@ -69,7 +70,7 @@ export default defineComponent({
   },
   async mounted() {
     const userSession = useUserSessionStore();
-    if (await userSession.checkLogin(false) === true) {
+    if (await userSession.checkLogin(false) === true && this.checkMaintenanceNotifications) {
       this.monitorMaintenanceNotifications();
     }
   },
