@@ -163,16 +163,17 @@ class MessageToListField(fields.ListField):
                             users += [cont_object.userprofile.pk]
                         elif user_related_fields := [
                             f
-                            for f in cont_object._meta.fields
-                            if isinstance(f, ForeignKey) and f.related_model in (user_model, profile_model)
+                            for f in profile_model._meta.fields
+                            if isinstance(f, ForeignKey) and f.related_model == cont_object._meta.model
+                        ] + [
+                            f
+                            for f in user_model._meta.fields
+                            if isinstance(f, ForeignKey) and f.related_model == cont_object._meta.model
                         ]:
-                            for user in user_related_fields:
-                                # todo: test and optimize this code
-                                for usr in user.all():
-                                    if isinstance(
-                                        usr, (get_user_model(), swapper.load_model("django_project_base", "Profile"))
-                                    ):
-                                        users += [usr.userprofile.pk]
+                            for field in user_related_fields:
+                                users += field.model.objects.filter(**{field.attname: cont_object.pk}).values_list(
+                                    field.model._meta.pk.name, flat=True
+                                )
         return list(set(map(str, users)))
 
 
