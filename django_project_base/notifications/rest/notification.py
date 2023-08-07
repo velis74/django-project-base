@@ -14,8 +14,11 @@ from rest_framework.permissions import IsAuthenticated
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
-from django_project_base.notifications.email_notification import EMailNotification
-from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.notifications.models import (
+    DjangoProjectBaseMessage,
+    DjangoProjectBaseNotification,
+    SearchItems,
+)
 
 
 class CommaSeparatedChannelField(fields.CharField):
@@ -30,6 +33,11 @@ class CommaSeparatedRecipientsField(fields.CharField):
         return ",".join(
             [getattr(get_user_model().objects.filter(pk=u).first() or object(), "email", "") for u in value.split(",")]
         )
+
+
+class MessageToFieldPkField(fields.PrimaryKeyRelatedField):
+    def to_representation(self, value, row_data=None):
+        return super().to_representation(value, row_data)
 
 
 class NotificationSerializer(ModelSerializer):
@@ -65,8 +73,8 @@ class NotificationSerializer(ModelSerializer):
     )
 
     message_to = fields.ManyRelatedField(
-        child_relation=fields.PrimaryKeyRelatedField(
-            queryset=get_user_model().objects.all(),
+        child_relation=MessageToFieldPkField(
+            queryset=SearchItems.objects.all(),
             required=True,
         ),
         required=True,

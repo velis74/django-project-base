@@ -16,9 +16,7 @@ class SendNotificationMixin(object):
         exceptions = ""
         if notification.required_channels is None:
             return notification
-        for channel_identifier in map(
-            int, filter(lambda i: not (i is None), notification.required_channels.split(","))
-        ):
+        for channel_identifier in filter(lambda i: not (i is None), notification.required_channels.split(",")):
             channel = ChannelIdentifier.channel(channel_identifier)
             try:
                 channel.send(notification, extra_data)
