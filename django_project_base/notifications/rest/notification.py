@@ -1,6 +1,9 @@
 import datetime
 
+import swapper
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
@@ -130,6 +133,49 @@ class NotificationSerializer(ModelSerializer):
         )
 
 
+class MessageToListField(fields.ListField):
+    def __init__(self, **kw):
+        super().__init__(child=fields.CharField(), required=True, display_table=DisplayMode.SUPPRESS, **kw)
+
+    def to_internal_value(self, data):
+        return super().to_internal_value(data)
+
+    def run_child_validation(self, data):
+        return super().run_child_validation(data)
+
+    def get_value(self, dictionary):
+        value = super().get_value(dictionary)
+        if not value:
+            return []
+        users = list(filter(lambda i: i and "-" not in i, value))
+        other_objects = list(filter(lambda i: i and "-" in i, value))  # string 'RECORDID-CONTENTTYPEID'
+        user_model = get_user_model()
+        profile_model = swapper.load_model("django_project_base", "Profile")
+        for obj in other_objects:
+            _data = obj.split("-")
+            instance = ContentType.objects.get(pk=_data[1]).model_class().objects.get(pk=_data[0])
+            if items_manager := next(filter(lambda i: "taggeditemthrough" in i, dir(instance)), None):
+                for item in getattr(instance, items_manager).all():
+                    if cont_object := getattr(item, "content_object", None):
+                        if isinstance(
+                            cont_object, (get_user_model(), swapper.load_model("django_project_base", "Profile"))
+                        ):
+                            users += [cont_object.userprofile.pk]
+                        elif user_related_fields := [
+                            f
+                            for f in cont_object._meta.fields
+                            if isinstance(f, ForeignKey) and f.related_model in (user_model, profile_model)
+                        ]:
+                            for user in user_related_fields:
+                                # todo: test and optimize this code
+                                for usr in user.all():
+                                    if isinstance(
+                                        usr, (get_user_model(), swapper.load_model("django_project_base", "Profile"))
+                                    ):
+                                        users += [usr.userprofile.pk]
+        return list(set(map(str, users)))
+
+
 class NotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -140,7 +186,7 @@ class NotificationViewset(ModelViewSet):
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
-                message_to = NotificationSerializer().fields.fields["message_to"]
+                message_to = MessageToListField()
                 send_on_channels = fields.ListField(
                     child=fields.CharField(required=True),
                     required=True,
@@ -162,7 +208,7 @@ class NotificationViewset(ModelViewSet):
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
-            recipients=[u.pk for u in serializer.validated_data["message_to"]],
+            recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
             persist=True,
