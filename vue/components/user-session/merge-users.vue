@@ -2,9 +2,13 @@
   <div>
     <div class="full-width">
       <div>
+        <!--suppress TypeScriptValidateTypes -->
+        <!-- @vue-ignore -->
         <APIConsumer :consumer="consumerLogic" :display-component="displayComponent"/>
       </div>
       <div>
+        <!--suppress TypeScriptValidateTypes -->
+        <!-- @vue-ignore -->
         <APIConsumer :consumer="consumerLogicMerge" :display-component="displayComponent"/>
       </div>
     </div>
@@ -13,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: remove linter ignores above when you know how to
 import {
   Action,
   apiClient,

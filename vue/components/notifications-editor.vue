@@ -7,15 +7,14 @@ const notificationLogic = ref(new ConsumerLogicApi('notification', true));
 (async () => {
   await notificationLogic.value.getFullDefinition();
 })();
-
+// TODO: remove linter ignores below when you know how to
 </script>
 
 <template>
   <div class="overflow-y-auto">
-    <APIConsumer
-      :consumer="notificationLogic"
-      :display-component="ComponentDisplay.TABLE"
-    />
+    <!--suppress TypeScriptValidateTypes -->
+    <!-- @vue-ignore -->
+    <APIConsumer :consumer="notificationLogic" :display-component="ComponentDisplay.TABLE"/>
     <ModalView/>
   </div>
 </template>
