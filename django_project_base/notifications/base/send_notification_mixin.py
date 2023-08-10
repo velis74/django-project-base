@@ -16,9 +16,7 @@ class SendNotificationMixin(object):
         exceptions = ""
         if notification.required_channels is None:
             return notification
-        for channel_identifier in map(
-            int, filter(lambda i: not (i is None), notification.required_channels.split(","))
-        ):
+        for channel_identifier in filter(lambda i: not (i is None), notification.required_channels.split(",")):
             channel = ChannelIdentifier.channel(channel_identifier)
             try:
                 channel.send(notification, extra_data)
@@ -31,14 +29,14 @@ class SendNotificationMixin(object):
         if notification.created_at:
             notification.sent_channels = (
                 ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, sent_channels))))
+                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, sent_channels))))
                 )
                 if sent_channels
                 else None
             )
             notification.failed_channels = (
                 ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.id, failed_channels))))
+                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, failed_channels))))
                 )
                 if failed_channels
                 else None

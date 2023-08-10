@@ -1,6 +1,9 @@
 import datetime
 
+import swapper
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
@@ -13,8 +16,26 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
-from django_project_base.notifications.email_notification import EMailNotification
-from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.notifications.base.notification import Notification
+from django_project_base.notifications.models import (
+    DjangoProjectBaseMessage,
+    DjangoProjectBaseNotification,
+    SearchItems,
+)
+
+
+class CommaSeparatedChannelField(fields.CharField):
+    def render_to_table(self, value, row_data):
+        return value
+
+
+class CommaSeparatedRecipientsField(fields.CharField):
+    def render_to_table(self, value, row_data):
+        if value is None:
+            return value
+        return ",".join(
+            [getattr(get_user_model().objects.filter(pk=u).first() or object(), "email", "") for u in value.split(",")]
+        )
 
 
 class NotificationSerializer(ModelSerializer):
@@ -26,25 +47,32 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
         self.fields.fields["sent_at"].display_form = DisplayMode.HIDDEN
 
-    subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
-    recipients = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
+    id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
-    required_channels = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
-    sent_channels = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
-    failed_channels = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
+    subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
+    recipients = CommaSeparatedRecipientsField(display_form=DisplayMode.HIDDEN)
+
+    required_channels = CommaSeparatedChannelField(display_form=DisplayMode.HIDDEN)
+    sent_channels = CommaSeparatedChannelField(display_form=DisplayMode.HIDDEN)
+    failed_channels = CommaSeparatedChannelField(display_form=DisplayMode.HIDDEN)
 
     counter = fields.IntegerField(display_form=DisplayMode.HIDDEN)
     exceptions = fields.CharField(display_form=DisplayMode.HIDDEN)
 
-    message = fields.PrimaryKeyRelatedField(display_form=DisplayMode.HIDDEN, read_only=True)
+    level = fields.CharField(display=DisplayMode.SUPPRESS)
+    type = fields.CharField(display=DisplayMode.SUPPRESS)
+
+    message = fields.PrimaryKeyRelatedField(
+        display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN, read_only=True
+    )
 
     actions = Actions(
         TableAction(TablePosition.HEADER, _("Add"), title=_("Add new record"), name="add", icon="add-circle-outline")
     )
 
-    users_write = fields.ManyRelatedField(
+    message_to = fields.ManyRelatedField(
         child_relation=fields.PrimaryKeyRelatedField(
-            queryset=get_user_model().objects.all(),
+            queryset=SearchItems.objects.all(),
             required=True,
         ),
         required=True,
@@ -53,60 +81,41 @@ class NotificationSerializer(ModelSerializer):
         display_table=DisplayMode.HIDDEN,
         label=_("Recipients"),
     )
-    subject_write = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
-    body_write = fields.CharField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
+
+    message_subject = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
+    message_body = fields.CharField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
+
+    send_on_channels = fields.MultipleChoiceField(
+        allow_empty=False,
+        display_table=DisplayMode.HIDDEN,
+        display_form=DisplayMode.FULL,
+        choices=[(c.name, c.name) for c in ChannelIdentifier.supported_channels()],
+        write_only=True,
+    )
 
     def get_subject(self, obj):
         if not obj or not obj.message:
             return None
         return obj.message.subject
 
-    def get_recipients(self, obj):
-        if not obj or not obj.recipients:
-            return None
-        return ",".join(
-            [
-                getattr(get_user_model().objects.filter(pk=u).first() or object(), "email", "")
-                for u in obj.recipients.split(",")
-            ]
-        )
-
-    def get_required_channels(self, obj):
-        if not obj or not obj.required_channels:
-            return None
-        return ",".join([ChannelIdentifier.channel(int(c)).name for c in obj.required_channels.split(",")])
-
-    def get_sent_channels(self, obj):
-        if not obj or not obj.sent_channels:
-            return None
-        return ",".join([ChannelIdentifier.channel(int(c)).name for c in obj.sent_channels.split(",")])
-
-    def get_failed_channels(self, obj):
-        if not obj or not obj.failed_channels:
-            return None
-        return ",".join([ChannelIdentifier.channel(int(c)).name for c in obj.failed_channels.split(",")])
-
     class Meta:
         model = DjangoProjectBaseNotification
         exclude = ("content_entity_context", "locale", "created_at", "delayed_to")
         layout = Layout(
-            Row(Column("users_write")),
             Row(
-                Column("subject_write"),
+                Column("message_subject"),
             ),
-            Row(Column("body_write")),
+            Row(Column("message_body")),
+            Row(Column("message_to")),
+            Row(Column("send_on_channels")),
             size="large",
         )
         responsive_columns = ResponsiveTableLayouts(
-            auto_generate_single_row_layout=True,
             layouts=[
-                ResponsiveTableLayout(auto_add_non_listed_columns=True),
+                ResponsiveTableLayout(),
                 ResponsiveTableLayout(
                     "recipients",
                     "subject",
-                    # "body",
-                    "level",
-                    "type",
                     "required_channels",
                     "sent_channels",
                     "failed_channels",
@@ -115,8 +124,46 @@ class NotificationSerializer(ModelSerializer):
                     "sent_at",
                     auto_add_non_listed_columns=False,
                 ),
-            ],
+            ]
         )
+
+
+class MessageToListField(fields.ListField):
+    def __init__(self, **kw):
+        super().__init__(child=fields.CharField(), required=True, display_table=DisplayMode.SUPPRESS, **kw)
+
+    def get_value(self, dictionary):
+        value = super().get_value(dictionary)
+        if not value:
+            return []
+        users = list(filter(lambda i: i and "-" not in i, value))
+        other_objects = list(filter(lambda i: i and "-" in i, value))  # string 'RECORDID-CONTENTTYPEID'
+        user_model = get_user_model()
+        profile_model = swapper.load_model("django_project_base", "Profile")
+        for obj in other_objects:
+            _data = obj.split("-")
+            instance = ContentType.objects.get(pk=_data[1]).model_class().objects.get(pk=_data[0])
+            if items_manager := next(filter(lambda i: "taggeditemthrough" in i, dir(instance)), None):
+                for item in getattr(instance, items_manager).all():
+                    if cont_object := getattr(item, "content_object", None):
+                        if isinstance(
+                            cont_object, (get_user_model(), swapper.load_model("django_project_base", "Profile"))
+                        ):
+                            users += [cont_object.userprofile.pk]
+                        elif user_related_fields := [
+                            f
+                            for f in profile_model._meta.fields
+                            if isinstance(f, ForeignKey) and f.related_model == cont_object._meta.model
+                        ] + [
+                            f
+                            for f in user_model._meta.fields
+                            if isinstance(f, ForeignKey) and f.related_model == cont_object._meta.model
+                        ]:
+                            for field in user_related_fields:
+                                users += field.model.objects.filter(**{field.attname: cont_object.pk}).values_list(
+                                    field.model._meta.pk.name, flat=True
+                                )
+        return list(set(map(str, users)))
 
 
 class NotificationViewset(ModelViewSet):
@@ -127,9 +174,15 @@ class NotificationViewset(ModelViewSet):
         if not self.detail and self.action == "create":
 
             class NewMessageSerializer(Serializer):
-                body_write = NotificationSerializer().fields.fields["body_write"]
-                subject_write = NotificationSerializer().fields.fields["subject_write"]
-                users_write = NotificationSerializer().fields.fields["users_write"]
+                message_body = NotificationSerializer().fields.fields["message_body"]
+                message_subject = NotificationSerializer().fields.fields["message_subject"]
+                message_to = MessageToListField()
+                send_on_channels = fields.ListField(
+                    child=fields.CharField(required=True),
+                    required=True,
+                    display_table=DisplayMode.SUPPRESS,
+                    display_form=DisplayMode.SUPPRESS,
+                )
 
             return NewMessageSerializer
         return NotificationSerializer
@@ -138,16 +191,16 @@ class NotificationViewset(ModelViewSet):
         return DjangoProjectBaseNotification.objects.all().order_by("-sent_at")
 
     def perform_create(self, serializer):
-        EMailNotification(
+        notification = Notification(
             message=DjangoProjectBaseMessage(
-                subject=serializer.validated_data["subject_write"],
-                body=serializer.validated_data["body_write"],
+                subject=serializer.validated_data["message_subject"],
+                body=serializer.validated_data["message_body"],
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
-            recipients=[u.pk for u in serializer.validated_data["users_write"]],
+            recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
-        ).send()
-
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+            channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
+            persist=True,
+        )
+        notification.send()

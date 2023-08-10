@@ -10,7 +10,7 @@ from django_project_base.notifications.base.enums import ChannelIdentifier
 class MailChannel(Channel):
     id = ChannelIdentifier.MAIL.value
 
-    name = "e-mail"
+    name = "E-Mail"
 
     provider = import_string(getattr(settings, "EMAIL_PROVIDER", ""))
 

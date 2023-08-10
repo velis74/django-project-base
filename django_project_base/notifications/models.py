@@ -1,9 +1,13 @@
 import datetime
 import uuid
 
+import swapper
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.core.validators import int_list_validator
 from django.db import models
-from django.db.models import SET_NULL
+from django.db.models import SET_NULL, Value
+from django.db.models.functions import Concat
 from django.utils.translation import gettext_lazy as _
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
@@ -80,3 +84,66 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
         self._recipients_list = val
 
     recipients_list = property(_get_recipients, _set_recipents)
+
+
+class SearchItemObject:
+    label = ""
+
+    def __init__(self, dict_val):
+        for key, value in dict_val.items():
+            setattr(self, key, value)
+        setattr(self, "pk", dict_val["ido"])
+        setattr(self, "id", dict_val["ido"])
+
+    def __str__(self) -> str:
+        return self.label
+
+
+class SearchItemsManager(models.Manager):
+    def get_queryset(self):
+        tag_model = swapper.load_model("django_project_base", "Tag")
+        tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
+        user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
+        qs = []
+        qs += [
+            SearchItemObject(o)
+            for o in get_user_model()  # qs users
+            .objects.annotate(ido=Concat(get_user_model()._meta.pk.name, Value("-"), Value(user_model_content_type_id)))
+            .extra(
+                select={
+                    "object_id": get_user_model()._meta.pk.name,
+                    "label": "username",
+                    "content_type_id": user_model_content_type_id,
+                }
+            )
+            .values("object_id", "label", "content_type_id", "ido")
+        ]
+        qs += [
+            SearchItemObject(o)
+            for o in tag_model.objects.annotate(  # qs tags
+                ido=Concat(tag_model._meta.pk.name, Value("-"), Value(tag_model_content_type_id))
+            )
+            .extra(
+                select={
+                    "object_id": tag_model._meta.pk.name,
+                    "label": "name",
+                    "content_type_id": tag_model_content_type_id,
+                }
+            )
+            .values("object_id", "label", "content_type_id", "ido")
+        ]
+        return qs
+
+
+class SearchItems(models.Model):
+    objects = SearchItemsManager()
+
+    content_type_id = models.PositiveIntegerField()
+    object_id = models.PositiveBigIntegerField()
+    name = models.CharField(max_length=256)
+    id = models.PositiveBigIntegerField(primary_key=True)
+
+    class Meta:
+        abstract = False
+        managed = False
+        db_table = "search-items-table"
