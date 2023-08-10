@@ -5,7 +5,7 @@ import swapper
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import int_list_validator
-from django.db import models
+from django.db import models, OperationalError
 from django.db.models import SET_NULL, Value
 from django.db.models.functions import Concat
 from django.utils.translation import gettext_lazy as _
@@ -102,8 +102,12 @@ class SearchItemObject:
 class SearchItemsManager(models.Manager):
     def get_queryset(self):
         tag_model = swapper.load_model("django_project_base", "Tag")
-        tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
-        user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
+        try:
+            tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
+            user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
+        except OperationalError:
+            # handle migrations
+            return []
         qs = []
         qs += [
             SearchItemObject(o)
