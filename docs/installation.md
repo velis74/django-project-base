@@ -27,7 +27,7 @@ class MyProfile(BaseProfile):
 :::
 
 Django Project Base utilizes Swapper (https://pypi.org/project/swapper/), an unofficial API for Django swappable models.
-Before you can use the library, you must override the Project and Profile models as there are no migrations included in
+Before you can use the library, you must override the Project, Profile and Tag models as there are no migrations included in
 the library. The library only declares the properties it supports, but you have the option to extend them as needed to
 fit your project's requirements.
 
