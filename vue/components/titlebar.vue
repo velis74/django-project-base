@@ -29,7 +29,7 @@ import AppNotification from './notification.vue';
 import LoginInline from './user-session/login-inline.vue';
 import ProjectList from './user-session/project-list.vue';
 import useUserSessionStore from './user-session/state';
-import UserProfile from './user-session/userprofile.vue';
+import UserProfile from './user-session/user-profile.vue';
 
 export default defineComponent({
   name: 'TitleBar',
