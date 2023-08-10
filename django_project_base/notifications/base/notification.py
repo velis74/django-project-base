@@ -54,7 +54,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             self.level = level if isinstance(level, NotificationLevel) else NotificationLevel(lvl)
         self.locale = locale
         if delay is not None:
-            # assert delay > timezone.now().timestamp(), "Invalid delay value"
             self._delay = delay
         if type is not None:
             typ = type.value if isinstance(type, NotificationType) else type

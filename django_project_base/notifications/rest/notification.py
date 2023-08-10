@@ -38,11 +38,6 @@ class CommaSeparatedRecipientsField(fields.CharField):
         )
 
 
-class MessageToFieldPkField(fields.PrimaryKeyRelatedField):
-    def to_representation(self, value, row_data=None):
-        return super().to_representation(value, row_data)
-
-
 class NotificationSerializer(ModelSerializer):
     template_context = dict(url_reverse="notification")
 
@@ -76,7 +71,7 @@ class NotificationSerializer(ModelSerializer):
     )
 
     message_to = fields.ManyRelatedField(
-        child_relation=MessageToFieldPkField(
+        child_relation=fields.PrimaryKeyRelatedField(
             queryset=SearchItems.objects.all(),
             required=True,
         ),
@@ -136,12 +131,6 @@ class NotificationSerializer(ModelSerializer):
 class MessageToListField(fields.ListField):
     def __init__(self, **kw):
         super().__init__(child=fields.CharField(), required=True, display_table=DisplayMode.SUPPRESS, **kw)
-
-    def to_internal_value(self, data):
-        return super().to_internal_value(data)
-
-    def run_child_validation(self, data):
-        return super().run_child_validation(data)
 
     def get_value(self, dictionary):
         value = super().get_value(dictionary)
