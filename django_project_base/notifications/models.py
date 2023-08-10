@@ -112,7 +112,14 @@ class SearchItemsManager(models.Manager):
         qs += [
             SearchItemObject(o)
             for o in get_user_model()  # qs users
-            .objects.annotate(ido=Concat(get_user_model()._meta.pk.name, Value("-"), Value(user_model_content_type_id)))
+            .objects.annotate(
+                ido=Concat(
+                    get_user_model()._meta.pk.name,
+                    Value("-"),
+                    Value(user_model_content_type_id),
+                    output_field=models.CharField(),
+                )
+            )
             .extra(
                 select={
                     "object_id": get_user_model()._meta.pk.name,
@@ -125,7 +132,12 @@ class SearchItemsManager(models.Manager):
         qs += [
             SearchItemObject(o)
             for o in tag_model.objects.annotate(  # qs tags
-                ido=Concat(tag_model._meta.pk.name, Value("-"), Value(tag_model_content_type_id))
+                ido=Concat(
+                    tag_model._meta.pk.name,
+                    Value("-"),
+                    Value(tag_model_content_type_id),
+                    output_field=models.CharField(),
+                )
             )
             .extra(
                 select={
