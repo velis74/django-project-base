@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from taggit.models import TagBase
+from taggit.models import GenericTaggedItemBase, TagBase
 
 from django_project_base.base.fields import HexColorField
 
@@ -156,6 +156,18 @@ class BaseTag(TagBase):
         return '<?xml version="1.0" encoding="utf-8" ?>\n' + dwg.tostring()
 
     class Meta(TagBase.Meta):
+        abstract = True
+
+
+class DpbTaggedItemThrough(GenericTaggedItemBase):
+    tag = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Tag"),
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items",
+    )
+    main_object = models.BooleanField(default=False)
+
+    class Meta(GenericTaggedItemBase.Meta):
         abstract = True
 
 

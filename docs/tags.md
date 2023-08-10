@@ -11,17 +11,12 @@ class DemoProjectTag(BaseTag):
        verbose_name = "Tag"
        verbose_name_plural = "Tags"
 
-class TaggedItemThrough(GenericTaggedItemBase):
-   tag = models.ForeignKey(
-       DemoProjectTag,
-       on_delete=models.CASCADE,
-       related_name="%(app_label)s_%(class)s_items",
-   )
+class DpbTaggedItemThroughDemo(DpbTaggedItemThrough):
+    pass
 
 class Apartment(models.Model):
-   number = fields.IntegerField()
-   tags = TaggableManager(blank=True, through=TaggedItemThrough,
-                          related_name="apartment_tags")
+    number = fields.IntegerField()
+    tags = TaggableManager(through=DpbTaggedItemThroughDemo, related_name="apartment_tags")
 
 # Example code
 from example.demo_django_base.models import DemoProjectTag

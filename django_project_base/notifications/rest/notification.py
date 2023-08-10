@@ -72,7 +72,7 @@ class NotificationSerializer(ModelSerializer):
 
     message_to = fields.ManyRelatedField(
         child_relation=fields.PrimaryKeyRelatedField(
-            queryset=SearchItems.objects.all(),
+            queryset=SearchItems.objects.get_queryset(),
             required=True,
         ),
         required=True,
