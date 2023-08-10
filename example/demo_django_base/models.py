@@ -12,12 +12,8 @@ from django_project_base.base.models import (
 )
 
 
-class UserGroup(models.Model):
-    name = models.CharField(max_length=64)
-
-
 class UserProfile(BaseProfile):
-    group = models.ForeignKey(UserGroup, null=True, on_delete=models.CASCADE)
+    pass
 
 
 class Project(BaseProject):
