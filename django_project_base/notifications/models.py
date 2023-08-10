@@ -100,23 +100,20 @@ class SearchItemObject:
 
 
 class SearchItemsManager(models.Manager):
-    user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
-
     def get_queryset(self):
         tag_model = swapper.load_model("django_project_base", "Tag")
         tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
+        user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
         qs = []
         qs += [
             SearchItemObject(o)
             for o in get_user_model()  # qs users
-            .objects.annotate(
-                ido=Concat(get_user_model()._meta.pk.name, Value("-"), Value(self.user_model_content_type_id))
-            )
+            .objects.annotate(ido=Concat(get_user_model()._meta.pk.name, Value("-"), Value(user_model_content_type_id)))
             .extra(
                 select={
                     "object_id": get_user_model()._meta.pk.name,
                     "label": "username",
-                    "content_type_id": self.user_model_content_type_id,
+                    "content_type_id": user_model_content_type_id,
                 }
             )
             .values("object_id", "label", "content_type_id", "ido")
