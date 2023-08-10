@@ -110,7 +110,7 @@ export default defineComponent({
     },
     async userProfile() {
       // eslint-disable-next-line vue/max-len
-      await new ConsumerLogicApi(`/${this.userSession.selectedProject?.slug ?? 'account'}/profile/current`, false).dialogForm(null, null, false);
+      await new ConsumerLogicApi(`/${this.userSession.selectedProject?.slug ?? 'account'}/profile/current`, false).dialogForm(null, null);
       await this.userSession.checkLogin(false);
     },
     async changePassword() {

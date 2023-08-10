@@ -6,13 +6,13 @@ import {
   FormConsumerApiOneShot,
   FormPayload,
 } from '@velis/dynamicforms';
+import slugify from 'slugify';
 import { onMounted, Ref, ref, watch } from 'vue';
 
 import ProjectBaseData from '../../projectBaseData';
 
 import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 import useUserSessionStore from './state';
-import slugify from 'slugify';
 
 interface Permissions {
   [key: string]: unknown;
