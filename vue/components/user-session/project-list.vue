@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { apiClient, ConsumerLogicApi, dfModal } from '@velis/dynamicforms';
+import {
+  Action,
+  apiClient,
+  dfModal,
+  FormConsumerApiOneShot,
+  FormPayload,
+} from '@velis/dynamicforms';
 import { onMounted, Ref, ref, watch } from 'vue';
 
 import ProjectBaseData from '../../projectBaseData';
 
 import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 import useUserSessionStore from './state';
+import slugify from 'slugify';
 
 interface Permissions {
   [key: string]: unknown;
@@ -47,8 +54,28 @@ async function loadData() {
 }
 
 async function addNewProject() {
-  const addProjectModal = await new ConsumerLogicApi('/project', false).dialogForm('new');
-  await dfModal.getDialogDefinition(addProjectModal);
+  // const addProjectModal = await new ConsumerLogicApi('/project', false).dialogForm('new');
+  let slugChanged = false;
+  let ignoreSlugChange = false;
+  const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {
+    if (context.field === 'name' && !slugChanged) {
+      payload.slug = slugify(payload.name);
+      ignoreSlugChange = true;
+    } else if (context.field === 'slug') {
+      if (!ignoreSlugChange) slugChanged = true;
+      ignoreSlugChange = false;
+      if (!payload.slug) slugChanged = false;
+    }
+    return false;
+  };
+  const addProjectModal = await FormConsumerApiOneShot(
+    '/project',
+    false,
+    'new',
+    undefined,
+    { value_changed: valueChangedHandler },
+  );
+  dfModal.getDialogDefinition(addProjectModal);
   await loadData();
 }
 

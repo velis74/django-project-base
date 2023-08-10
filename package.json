@@ -36,6 +36,7 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^2.8.0",
     "browser-update": "^3.3.37",
+    "slugify": "^1.6.6",
     "vanilla-cookieconsent": "^2.8.0"
   },
   "devDependencies": {
