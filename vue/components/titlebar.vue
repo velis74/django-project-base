@@ -108,11 +108,11 @@ export default defineComponent({
                 const now = Math.floor(Date.now() / 1000);
                 let rangeIdentifier = 8;
                 const hours8 = _.inRange(now, hours8Range[0], hours8Range[1]) &&
-                  !_.size(_.filter(acknowledgeData, (v) => v === 8));
+                      !_.size(_.filter(acknowledgeData, (v) => v === 8));
                 const hours1 = _.inRange(now, hours1Range[0], hours1Range[1]) &&
-                  !_.size(_.filter(acknowledgeData, (v) => v === 1));
+                      !_.size(_.filter(acknowledgeData, (v) => v === 1));
                 const minutes5 = _.inRange(now, minutes5Range[0], minutes5Range[1]) &&
-                  !_.size(_.filter(acknowledgeData, (v) => v === 5));
+                      !_.size(_.filter(acknowledgeData, (v) => v === 5));
                 if (hours1) {
                   rangeIdentifier = 1;
                 }
@@ -143,6 +143,6 @@ export default defineComponent({
 <style scoped>
 .logo-image {
   max-height: 60px;
-  max-width:  60px;
+  max-width: 60px;
 }
 </style>
