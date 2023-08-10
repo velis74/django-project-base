@@ -143,6 +143,9 @@ class MessageToListField(fields.ListField):
         for obj in other_objects:
             _data = obj.split("-")
             instance = ContentType.objects.get(pk=_data[1]).model_class().objects.get(pk=_data[0])
+            if isinstance(instance, (user_model, profile_model)):
+                users += [instance.pk]
+                continue
             if items_manager := next(filter(lambda i: "taggeditemthrough" in i, dir(instance)), None):
                 for item in getattr(instance, items_manager).all():
                     if cont_object := getattr(item, "content_object", None):
@@ -152,17 +155,34 @@ class MessageToListField(fields.ListField):
                             users += [cont_object.userprofile.pk]
                         elif user_related_fields := [
                             f
-                            for f in profile_model._meta.fields
-                            if isinstance(f, ForeignKey) and f.related_model == cont_object._meta.model
-                        ] + [
-                            f
-                            for f in user_model._meta.fields
-                            if isinstance(f, ForeignKey) and f.related_model == cont_object._meta.model
+                            for f in cont_object._meta.fields
+                            if isinstance(f, ForeignKey) and f.model in (profile_model, user_model)
                         ]:
                             for field in user_related_fields:
                                 users += field.model.objects.filter(**{field.attname: cont_object.pk}).values_list(
                                     field.model._meta.pk.name, flat=True
                                 )
+                        elif related_objects := [
+                            item
+                            for sub_list in [
+                                [o for o in getattr(cont_object, i.name, []).all()]
+                                for i in cont_object._meta.related_objects
+                            ]
+                            for item in sub_list
+                        ]:
+                            users += list(
+                                map(
+                                    lambda g: g.pk,
+                                    [
+                                        getattr(related_objects[0], f.name, object)
+                                        for f in related_objects[0]._meta.fields
+                                        if isinstance(f, ForeignKey)
+                                        and isinstance(  # noqa: W503
+                                            getattr(related_objects[0], f.name, object()), (profile_model, user_model)
+                                        )
+                                    ],
+                                )
+                            )
         return list(set(map(str, users)))
 
 
