@@ -67,6 +67,10 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     exceptions = models.TextField(null=True)
     content_entity_context = models.TextField()
     counter = models.SmallIntegerField(default=1)
+    recipients_original_payload = models.CharField(blank=False, null=False, max_length=2048)
+    project = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=True, blank=True
+    )
 
     class Meta:
         abstract = True

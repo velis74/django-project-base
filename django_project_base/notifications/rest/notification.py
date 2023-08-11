@@ -1,4 +1,5 @@
 import datetime
+import json
 
 import swapper
 from django.contrib.auth import get_user_model
@@ -52,6 +53,7 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["level"].display_form = DisplayMode.HIDDEN
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
         self.fields.fields["sent_at"].display_form = DisplayMode.HIDDEN
+        self.fields.fields["project"].display = DisplayMode.HIDDEN
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -106,7 +108,13 @@ class NotificationSerializer(ModelSerializer):
 
     class Meta:
         model = DjangoProjectBaseNotification
-        exclude = ("content_entity_context", "locale", "created_at", "delayed_to")
+        exclude = (
+            "content_entity_context",
+            "locale",
+            "created_at",
+            "delayed_to",
+            "recipients_original_payload",
+        )
         layout = Layout(
             Row(
                 Column("message_subject"),
@@ -142,7 +150,9 @@ class MessageToListField(fields.ListField):
         value = super().get_value(dictionary)
         if not value:
             return []
-        users = list(filter(lambda i: i and "-" not in i, value))
+        if isinstance(value[0], list):
+            value = [item for sublist in value for item in sublist]
+        users = list(filter(lambda i: i and "-" not in i and i.isnumeric(), value))
         other_objects = list(filter(lambda i: i and "-" in i, value))  # string 'RECORDID-CONTENTTYPEID'
         user_model = get_user_model()
         profile_model = swapper.load_model("django_project_base", "Profile")
@@ -204,7 +214,7 @@ class NotificationViewset(ModelViewSet):
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
                 message_to = MessageToListField()
                 send_on_channels = fields.ListField(
-                    child=fields.CharField(required=True),
+                    child=fields.ListField(child=fields.CharField()),
                     required=True,
                     display_table=DisplayMode.SUPPRESS,
                     display_form=DisplayMode.SUPPRESS,
@@ -224,9 +234,13 @@ class NotificationViewset(ModelViewSet):
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
+            raw_recipents=json.dumps(self.request.data["message_to"]),
+            project=swapper.load_model("django_project_base", "Project")
+            .objects.filter(slug=self.request.current_project_slug)
+            .first(),
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
-            channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
+            channels=[ChannelIdentifier.channel(c[0]).__class__ for c in serializer.validated_data["send_on_channels"]],
             persist=True,
         )
         notification.send()
