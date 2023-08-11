@@ -54,7 +54,7 @@ async function loadData() {
 }
 
 async function addNewProject() {
-  // const addProjectModal = await new ConsumerLogicApi('/project', false).dialogForm('new');
+  // const addProjectModal = await FormConsumerApiOneShot('/project', false, 'new');
   let slugChanged = false;
   let ignoreSlugChange = false;
   const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {

@@ -3,7 +3,7 @@ import {
   ConsumerLogicApi, dfModal as dfModalApi,
   dfModal, DialogSize,
   DisplayMode,
-  FilteredActions,
+  FilteredActions, FormConsumerApiOneShot,
   FormPayload,
   gettext,
 } from '@velis/dynamicforms';
@@ -222,7 +222,10 @@ export default function useLogin() {
   }
 
   const openRegistration = async () => {
-    await new ConsumerLogicApi('/account/profile/register/', false).dialogForm(null, null);
+    await FormConsumerApiOneShot(
+      '/account/profile/register/',
+      false,
+    );
   };
 
   const newAccount = async () => {

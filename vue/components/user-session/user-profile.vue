@@ -4,7 +4,7 @@ import {
   ConsumerLogicApi,
   dfModal,
   DialogSize,
-  FilteredActions,
+  FilteredActions, FormConsumerApiOneShot,
   gettext,
 } from '@velis/dynamicforms';
 import axios from 'axios';
@@ -29,7 +29,11 @@ let availableSocialConnections = [] as Array<SocialAccItem>;
 let socialConnectionsModalPromise = null as any;
 
 async function changePassword() {
-  await new ConsumerLogicApi('/account/change-password/').dialogForm('new');
+  await FormConsumerApiOneShot(
+    '/account/change-password/',
+    true,
+    'new',
+  );
 }
 
 async function checkResetPassword() {
@@ -52,7 +56,7 @@ watch(() => userSession.impersonated, () => window.location.reload());
 onMounted(() => loadData());
 
 async function showImpersonateLogin() {
-  await new ConsumerLogicApi('/account/impersonate', false).dialogForm(null);
+  await FormConsumerApiOneShot('/account/impersonate', false);
   await userSession.checkLogin(false);
 }
 
@@ -62,7 +66,7 @@ async function stopImpersonation() {
 }
 
 async function userProfile() {
-  await new ConsumerLogicApi('/account/profile/current', false).dialogForm(null, null);
+  await FormConsumerApiOneShot('/account/profile/current', false);
   await userSession.checkLogin(false);
 }
 
