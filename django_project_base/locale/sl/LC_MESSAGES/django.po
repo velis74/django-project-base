@@ -137,8 +137,8 @@ msgid "Target user id"
 msgstr "ID uporabnika"
 
 #: django_project_base/base/fields.py:18
-msgid "Value is not a hex color"
-msgstr "Vrednost ni heksadecimalna barva"
+msgid "Value is not a hex color (e.g #88f or #8080ff)"
+msgstr "Vrednost ni heksadecimalna barva (npr. #88f ali #8080ff)"
 
 #: django_project_base/base/models.py:19
 msgid "Name"
