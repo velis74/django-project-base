@@ -38,6 +38,12 @@ class CommaSeparatedRecipientsField(fields.CharField):
         )
 
 
+class MessageBodyField(fields.CharField):
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.render_params["form_component_name"] = "DTextArea"
+
+
 class NotificationSerializer(ModelSerializer):
     template_context = dict(url_reverse="notification")
 
@@ -83,7 +89,7 @@ class NotificationSerializer(ModelSerializer):
     )
 
     message_subject = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
-    message_body = fields.CharField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
+    message_body = MessageBodyField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
 
     send_on_channels = fields.MultipleChoiceField(
         allow_empty=False,
