@@ -22,8 +22,6 @@ import useUserSessionStore from './state';
 
 type IconObjectKey = keyof typeof icons;
 
-const selectedProjectIdFake = ref('alc-lesce');
-
 const permissions = ref({} as any);
 const userSession = useUserSessionStore();
 let enabledSocialConnections = [] as Array<SocialAccItem>;
@@ -64,9 +62,7 @@ async function stopImpersonation() {
 }
 
 async function userProfile() {
-  // eslint-disable-next-line vue/max-len
-  await new ConsumerLogicApi(`/${selectedProjectIdFake.value ?? 'account'}/profile/current`, false)
-    .dialogForm(null, null);
+  await new ConsumerLogicApi('/account/profile/current', false).dialogForm(null, null);
   await userSession.checkLogin(false);
 }
 
