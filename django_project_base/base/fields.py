@@ -15,7 +15,7 @@ class HexColorField(fields.CharField):
         self.validators.append(
             RegexValidator(
                 regex="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-                message=_("Value is not a hex color"),
+                message=_("Value is not a hex color (e.g #88f or #8080ff)"),
             )
         )
 

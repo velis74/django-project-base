@@ -134,7 +134,7 @@ msgid "Target user id"
 msgstr ""
 
 #: django_project_base/base/fields.py:18
-msgid "Value is not a hex color"
+msgid "Value is not a hex color (e.g #88f or #8080ff)"
 msgstr ""
 
 #: django_project_base/base/models.py:19
