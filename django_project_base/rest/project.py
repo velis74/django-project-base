@@ -46,15 +46,15 @@ class ProjectViewSet(ModelViewSet):
         # todo: request.user.is_authenticated this should be solved with permission class
         if not request or not request.user or not request.user.is_authenticated:
             return qs.none()
-        # user_profile = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+        user_profile = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
         # projects where current user is owner
-        # owned_projects = qs.filter(owner=user_profile)
+        owned_projects = qs.filter(owner=user_profile)
         # projects where user is member
-        # member_projects = qs.filter(members__member=user_profile)
+        member_projects = qs.filter(members__member=user_profile)
         # TODO: USE FILTER owned_projects AND member_projects
-        # queryset = (owned_projects | member_projects).distinct()
+        queryset = (owned_projects | member_projects).distinct()
 
-        return qs.all()
+        return queryset.all()
 
     def get_queryset(self):
         return ProjectViewSet._get_queryset_for_request(self.request)
