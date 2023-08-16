@@ -44,6 +44,13 @@ class T2:
 
         endpoint = self.endpoint_multi if len(to) > 1 else self.endpoint_one
 
+        message = f"{notification.message.subject or ''}"
+
+        if notification.message.subject:
+            message += "\n\n"
+
+        message += notification.message.body
+
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{endpoint}",
@@ -51,7 +58,7 @@ class T2:
             json={
                 "from_number": self.sms_from_number,
                 "to_number": to,
-                "message": str(notification.message.body),
+                "message": message,
             },
             verify=False,
             headers={"Content-Type": "application/json"},
