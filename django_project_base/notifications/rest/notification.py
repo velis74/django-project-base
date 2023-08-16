@@ -1,6 +1,7 @@
 import datetime
 import json
 
+import pytz
 import swapper
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -45,6 +46,13 @@ class MessageBodyField(fields.CharField):
         self.render_params["form_component_name"] = "DTextArea"
 
 
+class ReadOnlyDateTimeFieldFromTs(fields.DateTimeField):
+    def to_representation(self, value, row_data=None):
+        if value:
+            return datetime.datetime.fromtimestamp(value).astimezone(pytz.utc)
+        return value
+
+
 class NotificationSerializer(ModelSerializer):
     template_context = dict(url_reverse="notification")
 
@@ -52,7 +60,6 @@ class NotificationSerializer(ModelSerializer):
         super().__init__(*args, is_filter=is_filter, **kwds)
         self.fields.fields["level"].display_form = DisplayMode.HIDDEN
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
-        self.fields.fields["sent_at"].display_form = DisplayMode.HIDDEN
         self.fields.fields["project"].display = DisplayMode.HIDDEN
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
@@ -100,6 +107,8 @@ class NotificationSerializer(ModelSerializer):
         choices=[(c.name, c.name) for c in ChannelIdentifier.supported_channels()],
         write_only=True,
     )
+
+    sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
 
     def get_subject(self, obj):
         if not obj or not obj.message:
@@ -205,6 +214,13 @@ class MessageToListField(fields.ListField):
 class NotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def filter_queryset_field(self, queryset, field, value):
+        if field == "sent_at" and not value.isnumeric():
+            # TODO: search by user defined time range
+            value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
+            return queryset.filter(**{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800})
+        return super().filter_queryset_field(queryset, field, value)
 
     def get_serializer_class(self):
         if not self.detail and self.action == "create":
