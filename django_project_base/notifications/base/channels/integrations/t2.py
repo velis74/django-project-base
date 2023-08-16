@@ -69,7 +69,7 @@ class T2:
             import logging
 
             logger = logging.getLogger("django")
-            exc = Exception(f"Faild sms sending for notification {notification.pk}")
+            exc = Exception(f"Failed sms sending for notification {notification.pk}")
             logger.exception(exc)
             raise exc
 
