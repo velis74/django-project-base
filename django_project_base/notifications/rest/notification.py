@@ -28,20 +28,6 @@ from django_project_base.notifications.models import (
 )
 
 
-class CommaSeparatedChannelField(fields.CharField):
-    def render_to_table(self, value, row_data):
-        return value
-
-
-class CommaSeparatedRecipientsField(fields.CharField):
-    def render_to_table(self, value, row_data):
-        if value is None:
-            return value
-        return ",".join(
-            [getattr(get_user_model().objects.filter(pk=u).first() or object(), "email", "") for u in value.split(",")]
-        )
-
-
 class MessageBodyField(fields.RTFField):
     def __init__(self, *args, **kw):
         kw["write_only"] = True
@@ -50,6 +36,16 @@ class MessageBodyField(fields.RTFField):
         super().__init__(*args, **kw)
         # TODO: if field is write only and not present in model serializer table, field is not rendered
         self.render_params["form_component_name"] = "DCKEditor"
+
+
+class OrginalRecipientsField(fields.CharField):
+    def to_representation(self, value, row_data=None):
+        if value:
+            return ",".join(list(map(str, MessageToListField().parse(val=json.loads(value), return_instances=True))))
+        return super().to_representation(value, row_data)
+
+    def render_to_table(self, value, row_data):
+        return self.to_representation(value, row_data=row_data)
 
 
 class ReadOnlyDateTimeFieldFromTs(fields.DateTimeField):
@@ -71,11 +67,15 @@ class NotificationSerializer(ModelSerializer):
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
     subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
-    recipients = CommaSeparatedRecipientsField(display_form=DisplayMode.HIDDEN)
+    recipients = fields.CharField(display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN)
 
-    required_channels = CommaSeparatedChannelField(display_form=DisplayMode.HIDDEN)
-    sent_channels = CommaSeparatedChannelField(display_form=DisplayMode.HIDDEN)
-    failed_channels = CommaSeparatedChannelField(display_form=DisplayMode.HIDDEN)
+    recipients_original_payload = OrginalRecipientsField(
+        display_form=DisplayMode.HIDDEN, label=_("Recipients"), read_only=True
+    )
+
+    required_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
+    sent_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
+    failed_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
 
     counter = fields.IntegerField(display_form=DisplayMode.HIDDEN)
     exceptions = fields.CharField(display_form=DisplayMode.HIDDEN)
@@ -132,7 +132,6 @@ class NotificationSerializer(ModelSerializer):
             "locale",
             "created_at",
             "delayed_to",
-            "recipients_original_payload",
         )
         layout = Layout(
             Row(
@@ -147,7 +146,7 @@ class NotificationSerializer(ModelSerializer):
             layouts=[
                 ResponsiveTableLayout(),
                 ResponsiveTableLayout(
-                    "recipients",
+                    "recipients_original_payload",
                     "subject",
                     "required_channels",
                     "sent_channels",
@@ -165,19 +164,21 @@ class MessageToListField(fields.ListField):
     def __init__(self, **kw):
         super().__init__(child=fields.CharField(), required=True, display_table=DisplayMode.SUPPRESS, **kw)
 
-    def get_value(self, dictionary):
-        value = super().get_value(dictionary)
-        if not value:
-            return []
-        if isinstance(value[0], list):
-            value = [item for sublist in value for item in sublist]
-        users = list(filter(lambda i: i and "-" not in i and i.isnumeric(), value))
-        other_objects = list(filter(lambda i: i and "-" in i, value))  # string 'RECORDID-CONTENTTYPEID'
+    @staticmethod
+    def parse(val: list, return_instances=False):
+        users = list(filter(lambda i: i and "-" not in i and i.isnumeric(), map(str, val)))
+        other_objects = list(filter(lambda i: i and "-" in i, map(str, val)))  # string 'RECORDID-CONTENTTYPEID'
         user_model = get_user_model()
         profile_model = swapper.load_model("django_project_base", "Profile")
+        instances = []
+        if return_instances:
+            instances = list(filter(lambda f: f, [user_model.objects.filter(pk=u).first() for u in users]))
         for obj in other_objects:
             _data = obj.split("-")
             instance = ContentType.objects.get(pk=_data[1]).model_class().objects.get(pk=_data[0])
+            if return_instances:
+                instances += [instance]
+                continue
             if isinstance(instance, (user_model, profile_model)):
                 users += [instance.pk]
                 continue
@@ -218,7 +219,17 @@ class MessageToListField(fields.ListField):
                                     ],
                                 )
                             )
+        if return_instances:
+            return instances
         return list(set(map(str, users)))
+
+    def get_value(self, dictionary):
+        value = super().get_value(dictionary)
+        if not value:
+            return []
+        if isinstance(value[0], list):
+            value = [item for sublist in value for item in sublist]
+        return MessageToListField.parse(value)
 
 
 class NotificationViewset(ModelViewSet):
@@ -266,7 +277,7 @@ class NotificationViewset(ModelViewSet):
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
-            raw_recipents=json.dumps(self.request.data["message_to"]),
+            raw_recipents=self.request.data["message_to"],
             project=swapper.load_model("django_project_base", "Project")
             .objects.filter(slug=self.request.current_project_slug)
             .first(),

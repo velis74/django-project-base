@@ -32,8 +32,7 @@ class TestProject(TestBase):
 
     def test_list_project(self):
         list_response: Response = self.api_client.get(self.url)
-        # self.assertEqual(3, len(list_response.data)) # TODO: USE FILTER owned_projects AND member_projects
-        self.assertEqual(5, len(list_response.data))  # TODO: USE FILTER owned_projects AND member_projects
+        self.assertEqual(3, len(list_response.data))
 
     def test_retrieve_project(self):
         retrieve_project_pk: Response = self.api_client.get(f"{self.url}/1")

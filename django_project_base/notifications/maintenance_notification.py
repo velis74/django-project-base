@@ -11,6 +11,8 @@ class MaintenanceNotification(Notification):
     def __init__(self, delay: int, message: DjangoProjectBaseMessage, locale: Optional[str] = None) -> None:
         super().__init__(
             message=message,
+            raw_recipents=[],
+            project=None,
             persist=True,
             level=NotificationLevel.WARNING.value,
             locale=locale,

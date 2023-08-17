@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
@@ -44,13 +45,15 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
         message=DjangoProjectBaseMessage(
             subject=f"{__('Password recovery for')} {request.META['HTTP_HOST']}",
             body=f"{__('You or someone acting as you requested a password reset for your account at')} "
-                 f"{request.META['HTTP_HOST']}. "
+            f"{request.META['HTTP_HOST']}. "
             f"\n\n{__('Your verification code is')}: "
             f"{code} \n\n {__('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n\n"
             f"{__('If this was not you or it was unintentional, you may safely ignore this message.')}",
             footer="",
             content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
         ),
+        raw_recipents=[user.pk],
+        project=swapper.load_model("django_project_base", "Project").objects.get(slug=request.current_project_slug),
         persist=True,
         level=NotificationLevel.INFO,
         type=NotificationTypeDPB.STANDARD,

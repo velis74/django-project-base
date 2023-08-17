@@ -86,6 +86,7 @@ class MaintenanceNotificationSerializer(ModelSerializer):
             "sent_channels",
             "failed_channels",
             "recipients",
+            "recipients_original_payload",
             "level",
             "sent_at",
             "type",

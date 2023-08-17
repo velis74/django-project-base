@@ -39,7 +39,7 @@ class T2:
         to = (
             [get_user_model().objects.get(pk=u).phone_number for u in notification.recipients.split(",")]
             if not notification.recipients_list
-            else notification.recipients_list
+            else [u.phone_number for u in notification.recipients_list]
         )
 
         endpoint = self.endpoint_multi if len(to) > 1 else self.endpoint_one

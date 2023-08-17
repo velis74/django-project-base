@@ -1,4 +1,5 @@
 import datetime
+import json
 import uuid
 from typing import List, Optional, Type
 
@@ -31,7 +32,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     def __init__(
         self,
         message: DjangoProjectBaseMessage,
-        raw_recipents,
+        raw_recipents: List[str],
         project,
         persist: bool = False,
         level: Optional[NotificationLevel] = None,
@@ -51,8 +52,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         if level is None:
             level = NotificationLevel.INFO
         assert isinstance(persist, bool), "Persist must be valid boolean value"
-        assert raw_recipents, "Original recipients payload is required"
-        self._raw_recipents = raw_recipents
+        assert raw_recipents is not None, "Original recipients payload is required"
+        self._raw_recipents = json.dumps(raw_recipents)
         self._persist = persist
         if level is not None:
             lvl = level.value if isinstance(level, NotificationLevel) else level
@@ -134,7 +135,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                 "SETTINGS": sttgs,
             }
             self._extra_data["SETTINGS"] = settings
-            notification.recipients_list = [get_user_model().objects.get(pk=u).email for u in self._recipients]
+            notification.recipients_list = [get_user_model().objects.get(pk=u) for u in self._recipients]
             self.enqueue_notification(notification, self._extra_data)
             return notification
 
