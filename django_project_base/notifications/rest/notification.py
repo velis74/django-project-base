@@ -1,5 +1,7 @@
 import datetime
+import json
 
+import pytz
 import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -50,6 +52,13 @@ class MessageBodyField(fields.RTFField):
         self.render_params["form_component_name"] = "DCKEditor"
 
 
+class ReadOnlyDateTimeFieldFromTs(fields.DateTimeField):
+    def to_representation(self, value, row_data=None):
+        if value:
+            return datetime.datetime.fromtimestamp(value).astimezone(pytz.utc)
+        return value
+
+
 class NotificationSerializer(ModelSerializer):
     template_context = dict(url_reverse="notification")
 
@@ -57,7 +66,7 @@ class NotificationSerializer(ModelSerializer):
         super().__init__(*args, is_filter=is_filter, **kwds)
         self.fields.fields["level"].display_form = DisplayMode.HIDDEN
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
-        self.fields.fields["sent_at"].display_form = DisplayMode.HIDDEN
+        self.fields.fields["project"].display = DisplayMode.HIDDEN
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -105,6 +114,8 @@ class NotificationSerializer(ModelSerializer):
         write_only=True,
     )
 
+    sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
+
     def get_subject(self, obj):
         if not obj or not obj.message:
             return None
@@ -112,7 +123,13 @@ class NotificationSerializer(ModelSerializer):
 
     class Meta:
         model = DjangoProjectBaseNotification
-        exclude = ("content_entity_context", "locale", "created_at", "delayed_to")
+        exclude = (
+            "content_entity_context",
+            "locale",
+            "created_at",
+            "delayed_to",
+            "recipients_original_payload",
+        )
         layout = Layout(
             Row(
                 Column("message_subject"),
@@ -148,7 +165,9 @@ class MessageToListField(fields.ListField):
         value = super().get_value(dictionary)
         if not value:
             return []
-        users = list(filter(lambda i: i and "-" not in i, value))
+        if isinstance(value[0], list):
+            value = [item for sublist in value for item in sublist]
+        users = list(filter(lambda i: i and "-" not in i and i.isnumeric(), value))
         other_objects = list(filter(lambda i: i and "-" in i, value))  # string 'RECORDID-CONTENTTYPEID'
         user_model = get_user_model()
         profile_model = swapper.load_model("django_project_base", "Profile")
@@ -202,6 +221,13 @@ class NotificationViewset(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    def filter_queryset_field(self, queryset, field, value):
+        if field == "sent_at" and not value.isnumeric():
+            # TODO: search by user defined time range
+            value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
+            return queryset.filter(**{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800})
+        return super().filter_queryset_field(queryset, field, value)
+
     def get_serializer_class(self):
         if not self.detail and self.action == "create":
 
@@ -210,7 +236,7 @@ class NotificationViewset(ModelViewSet):
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
                 message_to = MessageToListField()
                 send_on_channels = fields.ListField(
-                    child=fields.CharField(required=True),
+                    child=fields.ListField(child=fields.CharField()),
                     required=True,
                     display_table=DisplayMode.SUPPRESS,
                     display_form=DisplayMode.SUPPRESS,
@@ -236,9 +262,13 @@ class NotificationViewset(ModelViewSet):
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
+            raw_recipents=json.dumps(self.request.data["message_to"]),
+            project=swapper.load_model("django_project_base", "Project")
+            .objects.filter(slug=self.request.current_project_slug)
+            .first(),
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
-            channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
+            channels=[ChannelIdentifier.channel(c[0]).__class__ for c in serializer.validated_data["send_on_channels"]],
             persist=True,
         )
         notification.send()

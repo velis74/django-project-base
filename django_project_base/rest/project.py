@@ -54,7 +54,6 @@ class ProjectViewSet(ModelViewSet):
 
         return (owned_projects | member_projects).distinct()
 
-
     def get_queryset(self):
         return ProjectViewSet._get_queryset_for_request(self.request)
 
