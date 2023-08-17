@@ -51,10 +51,8 @@ class ProjectViewSet(ModelViewSet):
         owned_projects = qs.filter(owner=user_profile)
         # projects where user is member
         member_projects = qs.filter(members__member=user_profile)
-        # TODO: USE FILTER owned_projects AND member_projects
-        queryset = (owned_projects | member_projects).distinct()
 
-        return queryset.all()
+        return (owned_projects | member_projects).distinct()
 
     def get_queryset(self):
         return ProjectViewSet._get_queryset_for_request(self.request)
