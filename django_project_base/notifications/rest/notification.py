@@ -87,6 +87,10 @@ class NotificationSerializer(ModelSerializer):
         display_form=DisplayMode.SUPPRESS, display_table=DisplayMode.SUPPRESS, read_only=True
     )
 
+    project = fields.PrimaryKeyRelatedField(
+        display_form=DisplayMode.SUPPRESS, display_table=DisplayMode.SUPPRESS, read_only=True
+    )
+
     actions = Actions(
         TableAction(TablePosition.HEADER, _("Add"), title=_("Add new record"), name="add", icon="add-circle-outline")
     )
@@ -236,7 +240,7 @@ class NotificationViewset(ModelViewSet):
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
                 message_to = MessageToListField()
                 send_on_channels = fields.ListField(
-                    child=fields.ListField(child=fields.CharField()),
+                    child=fields.CharField(),
                     required=True,
                     display_table=DisplayMode.SUPPRESS,
                     display_form=DisplayMode.SUPPRESS,
@@ -250,7 +254,7 @@ class NotificationViewset(ModelViewSet):
             project__slug=getattr(
                 self.request,
                 settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"],
-                get_random_string(length=32).decode(),
+                get_random_string(length=32),
             )
         ).order_by("-sent_at")
 
@@ -268,7 +272,7 @@ class NotificationViewset(ModelViewSet):
             .first(),
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
-            channels=[ChannelIdentifier.channel(c[0]).__class__ for c in serializer.validated_data["send_on_channels"]],
+            channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
             persist=True,
         )
         notification.send()
