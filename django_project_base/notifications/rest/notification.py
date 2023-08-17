@@ -297,9 +297,9 @@ class NotificationViewset(ModelViewSet):
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
             raw_recipents=self.request.data["message_to"],
-            project=swapper.load_model("django_project_base", "Project")
-            .objects.filter(slug=self.request.current_project_slug)
-            .first(),
+            project=swapper.load_model("django_project_base", "Project").objects.get(
+                slug=self.request.current_project_slug
+            ),
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
