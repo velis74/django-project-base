@@ -425,12 +425,12 @@ class ProfileViewSet(ModelViewSet):
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
             response_data["default_project"] = None
-            project_pk = request.session.get("current-project-pk", None)
-            if project_pk is None:
+            project_slug = request.session.get("current-project-slug", None)
+            if project_slug is None:
                 project_object = ProjectViewSet._get_queryset_for_request(request).first()
             else:
                 project_object = (
-                    ProjectSerializer.Meta.model.objects.filter(pk=project_pk).first() if project_pk else None
+                    ProjectSerializer.Meta.model.objects.filter(slug=project_slug).first() if project_slug else None
                 )
             if project_object:
                 response_data["default_project"] = ProjectSerializer(project_object).data
@@ -561,15 +561,3 @@ class ProfileViewSet(ModelViewSet):
         profile_obj.delete_at = None
         profile_obj.save(update_fields=["delete_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    @extend_schema(exclude=True)
-    @action(detail=False, methods=["post"], url_path="current-profile-set-project", url_name="current-profile-project")
-    def current_profile_set_project(self, request: Request) -> Response:
-        project: Optional[int] = request.data.get("project")
-        if not project:
-            raise ValidationError(dict(project=["required"]))
-        if not ProjectViewSet._get_queryset_for_request(request).filter(pk=project).exists():
-            raise ValidationError(dict(project=["invalid"]))
-        if getattr(request, "session", None):
-            request.session["current-project-pk"] = project
-        return Response()
