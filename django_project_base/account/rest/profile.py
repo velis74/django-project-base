@@ -1,5 +1,4 @@
 import datetime
-from typing import Optional
 
 import django
 import swapper
