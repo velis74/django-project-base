@@ -46,9 +46,9 @@ class OrginalRecipientsField(fields.CharField):
             )
             if (
                 self.parent
-                and self.parent.instance
-                and not isinstance(self.parent.instance, QuerySet)
-                and not self.parent.instance.recipients_original_payload_search
+                and self.parent.instance  # noqa: W503
+                and not isinstance(self.parent.instance, QuerySet)  # noqa: W503
+                and not self.parent.instance.recipients_original_payload_search  # noqa: W503
             ):
                 self.parent.instance.recipients_original_payload_search = search_str
                 self.parent.instance.save(update_fields=["recipients_original_payload_search"])
