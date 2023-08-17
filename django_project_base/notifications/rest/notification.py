@@ -6,7 +6,7 @@ import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import ForeignKey
+from django.db.models import ForeignKey, QuerySet
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
@@ -41,7 +41,22 @@ class MessageBodyField(fields.RTFField):
 class OrginalRecipientsField(fields.CharField):
     def to_representation(self, value, row_data=None):
         if value:
-            return ",".join(list(map(str, MessageToListField().parse(val=json.loads(value), return_instances=True))))
+            search_str = ",".join(
+                list(map(str, MessageToListField().parse(val=json.loads(value), return_instances=True)))
+            )
+            if (
+                self.parent
+                and self.parent.instance
+                and not isinstance(self.parent.instance, QuerySet)
+                and not self.parent.instance.recipients_original_payload_search
+            ):
+                self.parent.instance.recipients_original_payload_search = search_str
+                self.parent.instance.save(update_fields=["recipients_original_payload_search"])
+            # TODO: THIS SOLUTION FOR SEARCH IS BAD; BAD; -> MAKE BETTER ONE
+            if row_data and not row_data.recipients_original_payload_search:
+                row_data.recipients_original_payload_search = search_str
+                row_data.save(update_fields=["recipients_original_payload_search"])
+            return search_str
         return super().to_representation(value, row_data)
 
     def render_to_table(self, value, row_data):
@@ -132,6 +147,7 @@ class NotificationSerializer(ModelSerializer):
             "locale",
             "created_at",
             "delayed_to",
+            "recipients_original_payload_search",
         )
         layout = Layout(
             Row(
@@ -237,10 +253,13 @@ class NotificationViewset(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def filter_queryset_field(self, queryset, field, value):
-        if field == "sent_at" and not value.isnumeric():
+        if field == "sent_at" and value and not value.isnumeric():
             # TODO: search by user defined time range
             value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
             return queryset.filter(**{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800})
+
+        if field == "recipients_original_payload" and value:
+            return queryset.filter(**{"recipients_original_payload_search__icontains": value})
         return super().filter_queryset_field(queryset, field, value)
 
     def get_serializer_class(self):
