@@ -1,9 +1,11 @@
 import datetime
 
 import swapper
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ForeignKey
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
@@ -38,10 +40,14 @@ class CommaSeparatedRecipientsField(fields.CharField):
         )
 
 
-class MessageBodyField(fields.CharField):
+class MessageBodyField(fields.RTFField):
     def __init__(self, *args, **kw):
+        kw["write_only"] = True
+        kw["label"] = _("Body")
+        kw["display_table"] = DisplayMode.HIDDEN
         super().__init__(*args, **kw)
-        self.render_params["form_component_name"] = "DTextArea"
+        # TODO: if field is write only and not present in model serializer table, field is not rendered
+        self.render_params["form_component_name"] = "DCKEditor"
 
 
 class NotificationSerializer(ModelSerializer):
@@ -69,7 +75,7 @@ class NotificationSerializer(ModelSerializer):
     type = fields.CharField(display=DisplayMode.SUPPRESS)
 
     message = fields.PrimaryKeyRelatedField(
-        display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN, read_only=True
+        display_form=DisplayMode.SUPPRESS, display_table=DisplayMode.SUPPRESS, read_only=True
     )
 
     actions = Actions(
@@ -84,16 +90,16 @@ class NotificationSerializer(ModelSerializer):
         required=True,
         allow_null=False,
         write_only=True,
-        display_table=DisplayMode.HIDDEN,
+        display_table=DisplayMode.SUPPRESS,
         label=_("Recipients"),
     )
 
     message_subject = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
-    message_body = MessageBodyField(write_only=True, label=_("Body"), display_table=DisplayMode.HIDDEN)
+    message_body = MessageBodyField()
 
     send_on_channels = fields.MultipleChoiceField(
         allow_empty=False,
-        display_table=DisplayMode.HIDDEN,
+        display_table=DisplayMode.SUPPRESS,
         display_form=DisplayMode.FULL,
         choices=[(c.name, c.name) for c in ChannelIdentifier.supported_channels()],
         write_only=True,
@@ -214,7 +220,13 @@ class NotificationViewset(ModelViewSet):
         return NotificationSerializer
 
     def get_queryset(self):
-        return DjangoProjectBaseNotification.objects.all().order_by("-sent_at")
+        return DjangoProjectBaseNotification.objects.filter(
+            project__slug=getattr(
+                self.request,
+                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"],
+                get_random_string(length=32).decode(),
+            )
+        ).order_by("-sent_at")
 
     def perform_create(self, serializer):
         notification = Notification(
