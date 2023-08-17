@@ -3,6 +3,7 @@ from typing import Optional
 
 import django
 import swapper
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
@@ -425,7 +426,9 @@ class ProfileViewSet(ModelViewSet):
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
             response_data["default_project"] = None
-            project_slug = request.session.get("current-project-slug", None)
+            project_slug = request.session.get(
+                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"], None
+            )
             if project_slug is None:
                 project_object = ProjectViewSet._get_queryset_for_request(request).first()
             else:

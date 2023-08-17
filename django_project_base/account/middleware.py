@@ -25,8 +25,8 @@ class SessionMiddleware(SessionMiddleware):
 
         request.session = self.SessionStore(session_key)
         curr_project_setting_name = settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"]
-        request.session[curr_project_setting_name] = getattr(request, curr_project_setting_name, None)
-        a = 9
+        if curr_project_value := getattr(request, curr_project_setting_name, None):
+            request.session[curr_project_setting_name] = curr_project_value
 
     def process_response(self, request, response):
         if getattr(response, "returntype", None) == "json":
