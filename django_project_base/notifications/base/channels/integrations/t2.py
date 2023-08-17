@@ -65,6 +65,7 @@ class T2:
             timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
         )
         # todo: what is t2 response code 200 or 201
+        # todo: handle messages longer than 160 chars - same as on mars???
         if response.status_code != status.HTTP_200_OK:
             import logging
 
