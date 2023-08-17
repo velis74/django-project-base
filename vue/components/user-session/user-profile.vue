@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  Action,
-  ConsumerLogicApi,
-  dfModal,
-  DialogSize,
-  FilteredActions, FormConsumerApiOneShot,
-  gettext,
-} from '@velis/dynamicforms';
+import { Action, dfModal, DialogSize, FilteredActions, FormConsumerApiOneShot, gettext } from '@velis/dynamicforms';
 import axios from 'axios';
 import _ from 'lodash';
 import { h, onMounted, ref, watch } from 'vue';
