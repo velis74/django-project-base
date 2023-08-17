@@ -53,7 +53,7 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
             content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
         ),
         raw_recipents=[user.pk],
-        project=swapper.load_model("django_project_base", "Project").objects.get(slug=request.current_project_slug),
+        project=None,
         persist=True,
         level=NotificationLevel.INFO,
         type=NotificationTypeDPB.STANDARD,
