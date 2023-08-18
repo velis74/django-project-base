@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import fields
 from taggit.managers import TaggableManager
 
+from django_project_base.auth.models import BasePermission, BaseRole
 from django_project_base.base.models import (
     BaseMergeUserGroup,
     BaseProfile,
@@ -42,4 +43,12 @@ class Apartment(models.Model):
 
 
 class MergeUserGroup(BaseMergeUserGroup):
+    pass
+
+
+class Role(BaseRole):
+    pass
+
+
+class Permission(BasePermission):
     pass

@@ -55,9 +55,7 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
 
 
 def find_user_by_send_reset_password_link_data(data: Dict[str, Any], **kwargs: Any):
-    query = (
-        kwargs["serializer"].validated_data if kwargs.get("serializer", None) else data
-    )
+    query = kwargs["serializer"].validated_data if kwargs.get("serializer", None) else data
     user = get_user_model().objects.filter(**query).first()
     if user:
         return user

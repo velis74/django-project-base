@@ -162,6 +162,8 @@ DJANGO_PROJECT_BASE_TAG_MODEL = "demo_django_base.DemoProjectTag"
 DJANGO_PROJECT_BASE_PROFILE_MODEL = "demo_django_base.UserProfile"
 DJANGO_PROJECT_BASE_PROJECTMEMBER_MODEL = "demo_django_base.ProjectMember"
 DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
+DJANGO_PROJECT_BASE_ROLE_MODEL = "demo_django_base.Role"
+DJANGO_PROJECT_BASE_PERMISSION_MODEL = "demo_django_base.Permission"
 
 DEFAULT_FROM_EMAIL = "info@example.com"
 
