@@ -12,10 +12,7 @@ from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
-from django_project_base.notifications.base.enums import (
-    NotificationLevel,
-    NotificationType as NotificationTypeDPB,
-)
+from django_project_base.notifications.base.enums import NotificationLevel, NotificationType as NotificationTypeDPB
 from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
@@ -66,9 +63,7 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
 
 
 def find_user_by_send_reset_password_link_data(data: Dict[str, Any], **kwargs: Any):
-    query = (
-        kwargs["serializer"].validated_data if kwargs.get("serializer", None) else data
-    )
+    query = kwargs["serializer"].validated_data if kwargs.get("serializer", None) else data
     user = get_user_model().objects.filter(**query).first()
     if user:
         return user

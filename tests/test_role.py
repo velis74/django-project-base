@@ -55,8 +55,6 @@ class TestRole(TestBase):
         self.assertEqual(list_response.json()[0].get("name"), self.test_role_name)
 
     def test_retrieve_project_role(self):
-        role_class = swapper.load_model("django_project_base", "Role")
-
         role_pk: int = self.__create_role().json().get("id")
         retrieve_response: Response = self.api_client.get(f"{self.url}/{role_pk}")
         self.assertEqual(retrieve_response.status_code, status.HTTP_200_OK)
@@ -64,8 +62,6 @@ class TestRole(TestBase):
         self.assertEqual(retrieve_response.json().get("name"), self.test_role_name)
 
     def __test_update_role(self, action_method):
-        role_class = swapper.load_model("django_project_base", "Role")
-
         role_pk: int = self.__create_role().json().get("id")
         update_response: Response = getattr(self.api_client, action_method.lower())(
             f"{self.url}/{role_pk}", {"name": "new-role-name"}
@@ -81,8 +77,6 @@ class TestRole(TestBase):
         self.__test_update_role("patch")
 
     def test_delete_project_role(self):
-        role_class = swapper.load_model("django_project_base", "Role")
-
         role_pk: int = self.__create_role().json().get("id")
         delete_response: Response = self.api_client.delete(f"{self.url}/{role_pk}")
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
