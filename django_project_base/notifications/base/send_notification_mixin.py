@@ -27,9 +27,9 @@ class SendNotificationMixin(object):
             try:
                 # check license
                 LogAccessService().log(
-                    notification.user, channels=sent_channels, object_pk=notification.pk
+                    notification.user, channels=sent_channels, object_pk=notification.pk,
+                    on_sucess=lambda: channel.send(notification, extra_data)
                 )
-                channel.send(notification, extra_data)
                 sent_channels.append(channel)
             except Exception as e:
                 logging.getLogger(__name__).error(e)

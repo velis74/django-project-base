@@ -14,7 +14,7 @@ MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 5  # TODO: read from package
 
 
 class LogAccessService:
-    def log(self, user_profile, channels: List[str], object_pk: str):
+    def log(self, user_profile, channels: List[str], object_pk: str, on_sucess=None):
         # only notifications supported for now
         model_data = settings.LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL.split(".")
         content_type = ContentType.objects.get_for_model(
@@ -53,6 +53,9 @@ class LogAccessService:
             raise PermissionDenied(
                 gettext("Your license is consumed. Please contact support.")
             )
+
+        if on_sucess:
+            on_sucess()
 
         LicenseAccessUse.objects.create(
             type=LicenseAccessUse.USE,
