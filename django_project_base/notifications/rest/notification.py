@@ -45,9 +45,7 @@ class OrginalRecipientsField(fields.CharField):
                 list(
                     map(
                         str,
-                        MessageToListField().parse(
-                            val=json.loads(value), return_instances=True
-                        ),
+                        MessageToListField().parse(val=json.loads(value), return_instances=True),
                     )
                 )
             )
@@ -58,9 +56,7 @@ class OrginalRecipientsField(fields.CharField):
                 and not self.parent.instance.recipients_original_payload_search  # noqa: W503
             ):
                 self.parent.instance.recipients_original_payload_search = search_str
-                self.parent.instance.save(
-                    update_fields=["recipients_original_payload_search"]
-                )
+                self.parent.instance.save(update_fields=["recipients_original_payload_search"])
             # TODO: THIS SOLUTION FOR SEARCH IS BAD; BAD; -> MAKE BETTER ONE
             if row_data and not row_data.recipients_original_payload_search:
                 row_data.recipients_original_payload_search = search_str
@@ -87,13 +83,14 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["level"].display_form = DisplayMode.HIDDEN
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
         self.fields.fields["project"].display = DisplayMode.HIDDEN
+        self.fields.fields["message_to"].child_relation.queryset = SearchItems.objects.get_queryset(
+            request=self.request
+        )
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
     subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
-    recipients = fields.CharField(
-        display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN
-    )
+    recipients = fields.CharField(display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN)
 
     recipients_original_payload = OrginalRecipientsField(
         display_form=DisplayMode.HIDDEN, label=_("Recipients"), read_only=True
@@ -143,9 +140,7 @@ class NotificationSerializer(ModelSerializer):
         label=_("Recipients"),
     )
 
-    message_subject = fields.CharField(
-        write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN
-    )
+    message_subject = fields.CharField(write_only=True, label=_("Subject"), display_table=DisplayMode.HIDDEN)
     message_body = MessageBodyField()
 
     send_on_channels = fields.MultipleChoiceField(
@@ -156,9 +151,7 @@ class NotificationSerializer(ModelSerializer):
         write_only=True,
     )
 
-    sent_at = ReadOnlyDateTimeFieldFromTs(
-        display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True
-    )
+    sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
 
     def get_subject(self, obj):
         if not obj or not obj.message:
@@ -175,11 +168,11 @@ class NotificationSerializer(ModelSerializer):
             "recipients_original_payload_search",
         )
         layout = Layout(
+            Row(Column("message_to")),
             Row(
                 Column("message_subject"),
             ),
             Row(Column("message_body")),
-            Row(Column("message_to")),
             Row(Column("send_on_channels")),
             size="large",
         )
@@ -212,12 +205,8 @@ class MessageToListField(fields.ListField):
 
     @staticmethod
     def parse(val: list, return_instances=False):
-        users = list(
-            filter(lambda i: i and "-" not in i and i.isnumeric(), map(str, val))
-        )
-        other_objects = list(
-            filter(lambda i: i and "-" in i, map(str, val))
-        )  # string 'RECORDID-CONTENTTYPEID'
+        users = list(filter(lambda i: i and "-" not in i and i.isnumeric(), map(str, val)))
+        other_objects = list(filter(lambda i: i and "-" in i, map(str, val)))  # string 'RECORDID-CONTENTTYPEID'
         user_model = get_user_model()
         profile_model = swapper.load_model("django_project_base", "Profile")
         instances = []
@@ -230,20 +219,14 @@ class MessageToListField(fields.ListField):
             )
         for obj in other_objects:
             _data = obj.split("-")
-            instance = (
-                ContentType.objects.get(pk=_data[1])
-                .model_class()
-                .objects.get(pk=_data[0])
-            )
+            instance = ContentType.objects.get(pk=_data[1]).model_class().objects.get(pk=_data[0])
             if return_instances:
                 instances += [instance]
                 continue
             if isinstance(instance, (user_model, profile_model)):
                 users += [instance.pk]
                 continue
-            if items_manager := next(
-                filter(lambda i: "taggeditemthrough" in i, dir(instance)), None
-            ):
+            if items_manager := next(filter(lambda i: "taggeditemthrough" in i, dir(instance)), None):
                 for item in getattr(instance, items_manager).all():
                     if cont_object := getattr(item, "content_object", None):
                         if isinstance(
@@ -254,11 +237,15 @@ class MessageToListField(fields.ListField):
                             ),
                         ):
                             users += [cont_object.userprofile.pk]
-                        elif user_related_fields := [f for f in cont_object._meta.fields if isinstance(f, ForeignKey) and f.model in (profile_model, user_model)]:  # noqa: E501
+                        elif user_related_fields := [
+                            f
+                            for f in cont_object._meta.fields
+                            if isinstance(f, ForeignKey) and f.model in (profile_model, user_model)
+                        ]:  # noqa: E501
                             for field in user_related_fields:
-                                users += field.model.objects.filter(
-                                    **{field.attname: cont_object.pk}
-                                ).values_list(field.model._meta.pk.name, flat=True)
+                                users += field.model.objects.filter(**{field.attname: cont_object.pk}).values_list(
+                                    field.model._meta.pk.name, flat=True
+                                )
                         elif related_objects := [
                             item
                             for sub_list in [
@@ -275,9 +262,7 @@ class MessageToListField(fields.ListField):
                                         for f in related_objects[0]._meta.fields
                                         if isinstance(f, ForeignKey)
                                         and isinstance(  # noqa: W503
-                                            getattr(
-                                                related_objects[0], f.name, object()
-                                            ),
+                                            getattr(related_objects[0], f.name, object()),
                                             (profile_model, user_model),
                                         )
                                     ],
@@ -307,17 +292,11 @@ class NotificationViewset(ModelViewSet):
     def filter_queryset_field(self, queryset, field, value):
         if field == "sent_at" and value and not value.isnumeric():
             # TODO: search by user defined time range
-            value = int(
-                datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp()
-            )
-            return queryset.filter(
-                **{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800}
-            )
+            value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
+            return queryset.filter(**{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800})
 
         if field == "recipients_original_payload" and value:
-            return queryset.filter(
-                **{"recipients_original_payload_search__icontains": value}
-            )
+            return queryset.filter(**{"recipients_original_payload_search__icontains": value})
         return super().filter_queryset_field(queryset, field, value)
 
     def get_serializer_class(self):
@@ -325,9 +304,7 @@ class NotificationViewset(ModelViewSet):
 
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
-                message_subject = NotificationSerializer().fields.fields[
-                    "message_subject"
-                ]
+                message_subject = NotificationSerializer().fields.fields["message_subject"]
                 message_to = MessageToListField()
                 send_on_channels = fields.ListField(
                     child=fields.CharField(),
@@ -343,9 +320,7 @@ class NotificationViewset(ModelViewSet):
         return DjangoProjectBaseNotification.objects.filter(
             project__slug=getattr(
                 self.request,
-                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"][
-                    "value_name"
-                ],
+                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"],
                 get_random_string(length=32),
             )
         ).order_by("-sent_at")
@@ -364,10 +339,7 @@ class NotificationViewset(ModelViewSet):
             ),
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
-            channels=[
-                ChannelIdentifier.channel(c).__class__
-                for c in serializer.validated_data["send_on_channels"]
-            ],
+            channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
             persist=True,
             user=self.request.user,
         )

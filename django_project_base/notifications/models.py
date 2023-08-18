@@ -24,9 +24,7 @@ class AbstractDjangoProjectBaseMessage(models.Model):
     subject = models.TextField(null=True, blank=True, verbose_name=_("Subject"))
     body = models.TextField(verbose_name=_("Body"))
     footer = models.TextField(null=True, blank=True, verbose_name=_("Footer"))
-    content_type = models.CharField(
-        null=False, choices=CONTENT_TYPE_CHOICES, default=PLAIN_TEXT, max_length=64
-    )
+    content_type = models.CharField(null=False, choices=CONTENT_TYPE_CHOICES, default=PLAIN_TEXT, max_length=64)
 
     class Meta:
         abstract = True
@@ -41,9 +39,7 @@ def integer_ts():
 
 
 class AbstractDjangoProjectBaseNotification(models.Model):
-    locale = models.CharField(
-        null=True, blank=True, max_length=8, verbose_name=_("Locale")
-    )  # language
+    locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_("Locale"))  # language
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
     level = models.CharField(
         null=False,
@@ -52,22 +48,12 @@ class AbstractDjangoProjectBaseNotification(models.Model):
         choices=[(i.value, i.name.lower().title()) for i in NotificationLevel],
         verbose_name=_("Level"),
     )
-    required_channels = models.CharField(
-        null=True, blank=True, max_length=32, verbose_name=_("Required channels")
-    )
-    sent_channels = models.CharField(
-        null=True, blank=True, max_length=32, verbose_name=_("Sent channels")
-    )
-    failed_channels = models.CharField(
-        null=True, blank=True, max_length=32, verbose_name=_("Failed channels")
-    )
-    created_at = models.BigIntegerField(
-        default=integer_ts, editable=False, verbose_name=_("Created at")
-    )
+    required_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Required channels"))
+    sent_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Sent channels"))
+    failed_channels = models.CharField(null=True, blank=True, max_length=32, verbose_name=_("Failed channels"))
+    created_at = models.BigIntegerField(default=integer_ts, editable=False, verbose_name=_("Created at"))
     sent_at = models.BigIntegerField(null=True, blank=True, verbose_name=_("Sent at"))
-    delayed_to = models.BigIntegerField(
-        null=True, blank=True, verbose_name=_("Delayed to")
-    )
+    delayed_to = models.BigIntegerField(null=True, blank=True, verbose_name=_("Delayed to"))
     type = models.CharField(
         null=False,
         blank=False,
@@ -76,9 +62,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
         default=NotificationType.STANDARD.value,
         verbose_name=_("Type"),
     )
-    recipients = models.CharField(
-        blank=False, null=True, max_length=2048, validators=[int_list_validator]
-    )
+    recipients = models.CharField(blank=False, null=True, max_length=2048, validators=[int_list_validator])
     message = models.OneToOneField(
         DjangoProjectBaseMessage,
         on_delete=SET_NULL,
@@ -88,12 +72,8 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     exceptions = models.TextField(null=True)
     content_entity_context = models.TextField()
     counter = models.SmallIntegerField(default=1)
-    recipients_original_payload = models.CharField(
-        blank=False, null=False, max_length=2048
-    )
-    recipients_original_payload_search = models.TextField(
-        blank=False, null=True, db_index=True
-    )
+    recipients_original_payload = models.CharField(blank=False, null=False, max_length=2048)
+    recipients_original_payload_search = models.TextField(blank=False, null=True, db_index=True)
     project = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Project"),
         on_delete=models.CASCADE,
@@ -142,18 +122,36 @@ class SearchItemObject:
 
 
 class SearchItemsManager(models.Manager):
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         tag_model = swapper.load_model("django_project_base", "Tag")
+
+        slug = ""
+
+        if not kwargs.get("request"):
+            try:
+                from django_project_base.base.middleware import get_current_request
+
+                request = get_current_request()
+                if request and getattr(request, "current_project_slug", None):
+                    slug = request.current_project_slug
+            except Exception:
+                pass
+        else:
+            slug = getattr(kwargs["request"], "current_project_slug", "")
+
+        if not slug:
+            return []
+
         try:
             tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
-            user_model_content_type_id = ContentType.objects.get_for_model(
-                get_user_model()
-            ).pk
+            user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
             qs = []
             qs += [
                 SearchItemObject(o)
-                for o in get_user_model()  # qs users
-                .objects.annotate(
+                for o in get_user_model()
+                .objects.filter(userprofile__projects__project__slug=slug)
+                .distinct()
+                .annotate(  # qs users
                     ido=Concat(
                         get_user_model()._meta.pk.name,
                         Value("-"),
@@ -161,18 +159,21 @@ class SearchItemsManager(models.Manager):
                         output_field=models.CharField(),
                     )
                 )
+                .exclude(is_active=False)
                 .extra(
                     select={
-                        "object_id": get_user_model()._meta.pk.name,
+                        "object_id": f"{get_user_model()._meta.db_table}.{get_user_model()._meta.pk.name}",
                         "label": "username",
                         "content_type_id": user_model_content_type_id,
                     }
                 )
                 .values("object_id", "label", "content_type_id", "ido")
             ]
-            qs += [
+            tgs = [
                 SearchItemObject(o)
-                for o in tag_model.objects.annotate(  # qs tags
+                for o in tag_model.objects.filter(project__slug=slug)
+                .distinct()
+                .annotate(  # qs tags
                     ido=Concat(
                         tag_model._meta.pk.name,
                         Value("-"),
@@ -182,19 +183,18 @@ class SearchItemsManager(models.Manager):
                 )
                 .extra(
                     select={
-                        "object_id": tag_model._meta.pk.name,
-                        "label": "name",
+                        "object_id": f"{tag_model._meta.db_table}.{tag_model._meta.pk.name}",
+                        "label": f"{tag_model._meta.db_table}.name",
                         "content_type_id": tag_model_content_type_id,
                     }
                 )
                 .values("object_id", "label", "content_type_id", "ido")
             ]
+            qs += tgs
             return qs
         except OperationalError:
-            # handle migrations
             return []
         except ProgrammingError:
-            # handle migrations
             return []
 
 
