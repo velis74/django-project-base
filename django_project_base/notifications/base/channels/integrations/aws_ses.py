@@ -52,13 +52,13 @@ class AwsSes:
                 region_name=self.region,
             ).client("ses").send_email(
                 Destination={
-                    "ToAddresses": [
+                    "ToAddresses": [self.from_email],
+                    "CcAddresses": [],
+                    "BccAddresses": [
                         get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")
                     ]
                     if not notification.recipients_list
-                    else notification.recipients_list,
-                    "CcAddresses": [],
-                    "BccAddresses": [],
+                    else [u.email for u in notification.recipients_list],
                 },
                 Message=msg,
                 Source=self.from_email,

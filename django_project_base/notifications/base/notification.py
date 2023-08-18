@@ -1,4 +1,5 @@
 import datetime
+import json
 import uuid
 from typing import List, Optional, Type
 
@@ -23,12 +24,16 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     locale = None
     message: DjangoProjectBaseMessage
     content_entity_context = ""
+    _raw_recipents: str
+    _project: Optional[object]
 
     _via_channels = List[Type[Channel]]
 
     def __init__(
         self,
         message: DjangoProjectBaseMessage,
+        raw_recipents: List[str],
+        project,
         persist: bool = False,
         level: Optional[NotificationLevel] = None,
         locale: Optional[str] = None,
@@ -47,6 +52,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         if level is None:
             level = NotificationLevel.INFO
         assert isinstance(persist, bool), "Persist must be valid boolean value"
+        assert raw_recipents is not None, "Original recipients payload is required"
+        self._raw_recipents = json.dumps(raw_recipents)
         self._persist = persist
         if level is not None:
             lvl = level.value if isinstance(level, NotificationLevel) else level
@@ -68,6 +75,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         if channels:
             # TODO: check for supported channels
             self.via_channels = channels
+        self._project = project
 
     def __set_via_channels(self, val):
         self._via_channels = val
@@ -100,6 +108,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             if self.content_entity_context
             else str(uuid.uuid4()),
             recipients=",".join(map(str, self._recipients)) if self._recipients else None,
+            recipients_original_payload=self._raw_recipents,
+            project=self._project,
         )
         required_channels.sort()
         if self.persist:
@@ -125,7 +135,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                 "SETTINGS": sttgs,
             }
             self._extra_data["SETTINGS"] = settings
-            notification.recipients_list = [get_user_model().objects.get(pk=u).email for u in self._recipients]
+            notification.recipients_list = [get_user_model().objects.get(pk=u) for u in self._recipients]
             self.enqueue_notification(notification, self._extra_data)
             return notification
 

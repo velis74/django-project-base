@@ -11,6 +11,8 @@ class EMailNotification(Notification):
     def __init__(
         self,
         message: DjangoProjectBaseMessage,
+        raw_recipents,
+        project,
         persist: bool = True,
         level: Optional[NotificationLevel] = None,
         locale: Optional[str] = None,
@@ -19,7 +21,7 @@ class EMailNotification(Notification):
         recipients=None,
         **kwargs
     ) -> None:
-        super().__init__(message, persist, level, locale, delay, type, recipients, **kwargs)
+        super().__init__(message, raw_recipents, project, persist, level, locale, delay, type, recipients, **kwargs)
 
     @property
     def via_channels(self) -> List[Type[Channel]]:

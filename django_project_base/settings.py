@@ -31,6 +31,10 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "EMAIL_PROVIDER",
         "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",
     },
+    {
+        "name": "SMS_PROVIDER",
+        "default": "django_project_base.notifications.base.channels.integrations.t2.T2",
+    },
     # this settings silences (rest_registration.E013) SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL
     # is set but email field is not unique
     # todo: TASK https://taiga.velis.si/project/velis-django-project-admin/us/637?no-milestone=1

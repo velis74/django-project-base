@@ -299,7 +299,7 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             )
             profile_obj.password_invalid = True
             profile_obj.save(update_fields=["password_invalid"])
-
+            recipients = [response.data[get_user_model()._meta.pk.name]]
             EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
@@ -312,6 +312,10 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
                     ),
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
+                ),
+                raw_recipents=recipients,
+                project=swapper.load_model("django_project_base", "Project").objects.get(
+                    slug=self.request.current_project_slug
                 ),
                 recipients=[response.data[get_user_model()._meta.pk.name]],
             ).send()

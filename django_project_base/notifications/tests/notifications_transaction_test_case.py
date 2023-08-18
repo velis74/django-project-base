@@ -1,6 +1,7 @@
 import socket
 from typing import List, Type
 
+import swapper
 from django.contrib.auth import get_user_model
 from django.test import TransactionTestCase
 from rest_framework.authtoken.models import Token
@@ -49,6 +50,8 @@ class NotificationsTransactionTestCase(TransactionTestCase):
     def create_notification_email_object(self) -> TestNotificationViaEmail:
         return TestNotificationViaEmail(
             message=DjangoProjectBaseMessage.objects.create(subject="Test mail", body="content"),
+            raw_recipents=[self.test_user.pk],
+            project=swapper.load_model("django_project_base", "Project").objects.first(),
             recipients=[self.test_user.pk],
             persist=True,
         )

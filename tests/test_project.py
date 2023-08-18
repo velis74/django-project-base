@@ -37,6 +37,7 @@ class TestProject(TestBase):
     def test_retrieve_project(self):
         retrieve_project_pk: Response = self.api_client.get(f"{self.url}/1")
         self.assertEqual(status.HTTP_200_OK, retrieve_project_pk.status_code)
+        #  TODO
         # retrieve_project_slug: Response =
         # self.api_client.get(f'{self.url}/project-{retrieve_project_pk.data["slug"]}')
         # self.assertEqual(

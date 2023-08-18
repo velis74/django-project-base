@@ -1,5 +1,6 @@
 import socket
 
+import swapper
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
@@ -25,6 +26,10 @@ class TestListMails(NotificationsTransactionTestCase):
                 message=DjangoProjectBaseMessage(
                     subject=self.mail_data["title"], body=self.mail_data["message"], footer=""
                 ),
+                raw_recipents=[
+                    self.test_user.pk,
+                ],
+                project=swapper.load_model("django_project_base", "Project").objects.first(),
                 recipients=[
                     self.test_user.pk,
                 ],
