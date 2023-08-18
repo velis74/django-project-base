@@ -6,16 +6,21 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.DJANGO_PROJECT_BASE_PROJECT_MODEL),
-        ('notifications', '0011_djangoprojectbasenotification_project'),
+        ("notifications", "0011_djangoprojectbasenotification_project"),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='djangoprojectbasenotification',
-            name='project',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.DJANGO_PROJECT_BASE_PROJECT_MODEL),
+        migrations.AddField(
+            model_name="djangoprojectbasenotification",
+            name="project",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.DJANGO_PROJECT_BASE_PROJECT_MODEL,
+            ),
+            preserve_default=False,
         ),
     ]
