@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "social_django",
     ACCOUNT_APP_ID,
     "dynamicforms",
+    "django_project_base.licensing",
 ]
 
 if not getattr(env, "DEPLOY", True):
@@ -142,7 +143,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LOCALE_PATHS = [os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/locale/"))]
+LOCALE_PATHS = [
+    os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/locale/"))
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

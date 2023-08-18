@@ -28,6 +28,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     _project: Optional[object]
 
     _via_channels = List[Type[Channel]]
+    _user = None
 
     def __init__(
         self,
@@ -42,6 +43,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         recipients=None,
         content_entity_context="",
         channels=[],
+        user=None,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -76,6 +78,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             # TODO: check for supported channels
             self.via_channels = channels
         self._project = project
+        self._user = user
 
     def __set_via_channels(self, val):
         self._via_channels = val
@@ -95,7 +98,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
 
     def send(self) -> DjangoProjectBaseNotification:
         required_channels: list = list(
-            map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
+            map(
+                lambda f: str(f),
+                filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)),
+            )
         )
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,
@@ -111,6 +117,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             recipients_original_payload=self._raw_recipents,
             project=self._project,
         )
+        notification.user = self._user
         required_channels.sort()
         if self.persist:
             if self.handle_similar_notifications(notification=notification):

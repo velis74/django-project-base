@@ -14,6 +14,8 @@ class MailChannel(Channel):
 
     provider = import_string(getattr(settings, "EMAIL_PROVIDER", ""))
 
+    notification_price = 0.0002  # TODO get from settings
+
     @staticmethod
     def __make_send_mail(notification: "DjangoProjectBaseNotification", extra_data) -> int:  # noqa: F821
         recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []

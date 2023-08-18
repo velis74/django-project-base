@@ -54,4 +54,5 @@ class NotificationsTransactionTestCase(TransactionTestCase):
             project=swapper.load_model("django_project_base", "Project").objects.first(),
             recipients=[self.test_user.pk],
             persist=True,
+            user=self.test_user,
         )
