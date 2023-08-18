@@ -5,7 +5,7 @@ import swapper
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import int_list_validator
-from django.db import models, OperationalError
+from django.db import models, OperationalError, ProgrammingError
 from django.db.models import SET_NULL, Value
 from django.db.models.functions import Concat
 from django.utils.translation import gettext_lazy as _
@@ -105,50 +105,53 @@ class SearchItemsManager(models.Manager):
         try:
             tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
             user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
+            qs = []
+            qs += [
+                SearchItemObject(o)
+                for o in get_user_model()  # qs users
+                .objects.annotate(
+                    ido=Concat(
+                        get_user_model()._meta.pk.name,
+                        Value("-"),
+                        Value(user_model_content_type_id),
+                        output_field=models.CharField(),
+                    )
+                )
+                .extra(
+                    select={
+                        "object_id": get_user_model()._meta.pk.name,
+                        "label": "username",
+                        "content_type_id": user_model_content_type_id,
+                    }
+                )
+                .values("object_id", "label", "content_type_id", "ido")
+            ]
+            qs += [
+                SearchItemObject(o)
+                for o in tag_model.objects.annotate(  # qs tags
+                    ido=Concat(
+                        tag_model._meta.pk.name,
+                        Value("-"),
+                        Value(tag_model_content_type_id),
+                        output_field=models.CharField(),
+                    )
+                )
+                .extra(
+                    select={
+                        "object_id": tag_model._meta.pk.name,
+                        "label": "name",
+                        "content_type_id": tag_model_content_type_id,
+                    }
+                )
+                .values("object_id", "label", "content_type_id", "ido")
+            ]
+            return qs
         except OperationalError:
             # handle migrations
             return []
-        qs = []
-        qs += [
-            SearchItemObject(o)
-            for o in get_user_model()  # qs users
-            .objects.annotate(
-                ido=Concat(
-                    get_user_model()._meta.pk.name,
-                    Value("-"),
-                    Value(user_model_content_type_id),
-                    output_field=models.CharField(),
-                )
-            )
-            .extra(
-                select={
-                    "object_id": get_user_model()._meta.pk.name,
-                    "label": "username",
-                    "content_type_id": user_model_content_type_id,
-                }
-            )
-            .values("object_id", "label", "content_type_id", "ido")
-        ]
-        qs += [
-            SearchItemObject(o)
-            for o in tag_model.objects.annotate(  # qs tags
-                ido=Concat(
-                    tag_model._meta.pk.name,
-                    Value("-"),
-                    Value(tag_model_content_type_id),
-                    output_field=models.CharField(),
-                )
-            )
-            .extra(
-                select={
-                    "object_id": tag_model._meta.pk.name,
-                    "label": "name",
-                    "content_type_id": tag_model_content_type_id,
-                }
-            )
-            .values("object_id", "label", "content_type_id", "ido")
-        ]
-        return qs
+        except ProgrammingError:
+            # handle migrations
+            return []
 
 
 class SearchItems(models.Model):
