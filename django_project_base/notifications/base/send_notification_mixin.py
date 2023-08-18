@@ -10,16 +10,26 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 
 class SendNotificationMixin(object):
-    def make_send(self, notification: DjangoProjectBaseNotification, extra_data) -> DjangoProjectBaseNotification:
+    def make_send(
+        self, notification: DjangoProjectBaseNotification, extra_data
+    ) -> DjangoProjectBaseNotification:
         sent_channels: list = []
         failed_channels: list = []
         exceptions = ""
+        from django_project_base.licensing.logic import LogAccessService
+
         if notification.required_channels is None:
             return notification
-        for channel_identifier in filter(lambda i: not (i is None), notification.required_channels.split(",")):
+        for channel_identifier in filter(
+            lambda i: not (i is None), notification.required_channels.split(",")
+        ):
             channel = ChannelIdentifier.channel(channel_identifier)
             try:
-                channel.send(notification, extra_data)
+                # check license
+                LogAccessService().log(
+                    notification.user, channels=sent_channels, object_pk=notification.pk,
+                    on_sucess=lambda: channel.send(notification, extra_data)
+                )
                 sent_channels.append(channel)
             except Exception as e:
                 logging.getLogger(__name__).error(e)
@@ -29,14 +39,30 @@ class SendNotificationMixin(object):
         if notification.created_at:
             notification.sent_channels = (
                 ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, sent_channels))))
+                    list(
+                        map(
+                            lambda f: str(f),
+                            filter(
+                                lambda d: d is not None,
+                                map(lambda c: c.name, sent_channels),
+                            ),
+                        )
+                    )
                 )
                 if sent_channels
                 else None
             )
             notification.failed_channels = (
                 ",".join(
-                    list(map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, failed_channels))))
+                    list(
+                        map(
+                            lambda f: str(f),
+                            filter(
+                                lambda d: d is not None,
+                                map(lambda c: c.name, failed_channels),
+                            ),
+                        )
+                    )
                 )
                 if failed_channels
                 else None
@@ -48,12 +74,26 @@ class SendNotificationMixin(object):
                 backend = load_backend(db_settings["SETTINGS"]["ENGINE"])
                 dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
                 dw.connect()
-                connections.databases[f"notification-{notification.pk}"] = dw.settings_dict
+                connections.databases[
+                    f"notification-{notification.pk}"
+                ] = dw.settings_dict
                 notification.save(
-                    update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"],
+                    update_fields=[
+                        "sent_at",
+                        "sent_channels",
+                        "failed_channels",
+                        "exceptions",
+                    ],
                     using=f"notification-{notification.pk}",
                 )
                 db.connections.close_all()
             else:
-                notification.save(update_fields=["sent_at", "sent_channels", "failed_channels", "exceptions"])
+                notification.save(
+                    update_fields=[
+                        "sent_at",
+                        "sent_channels",
+                        "failed_channels",
+                        "exceptions",
+                    ]
+                )
         return notification

@@ -27,15 +27,6 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
         request=request,
     )
 
-    # template_config_data = _get_email_template_config_data(
-    # request, user, NotificationType.RESET_PASSWORD_VERIFICATION)
-    # notification_data = {
-    #     "params_signer": signer,
-    # }
-    # notification = create_verification_notification(
-    #     NotificationType.RESET_PASSWORD_VERIFICATION, user, user.email, notification_data, template_config_data
-    # )
-
     code_ck = RESET_USER_PASSWORD_VERIFICATION_CODE + str(user.pk)
     code = get_random_string(length=6)
     cache.set(code_ck, code, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
@@ -57,6 +48,7 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
         level=NotificationLevel.INFO,
         type=NotificationTypeDPB.STANDARD,
         recipients=[user.pk],
+        user=request.user,
     ).send()
 
     return signer.get_signed_data()

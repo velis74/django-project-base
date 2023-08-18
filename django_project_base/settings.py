@@ -43,6 +43,10 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {"name": "VERIFICATION_FROM_EMAIL", "default": ""},
     {"name": "NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS", "default": 120},
     {"name": "NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE", "default": 3},
+    {
+        "name": "LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL",
+        "default": "notifications.DjangoProjectBaseNotification",
+    },
 )
 
 USER_CACHE_KEY = "django-user-{id}"
@@ -57,10 +61,18 @@ DELETE_PROFILE_TIMEDELTA = 3
 DOCUMENTATION_DIRECTORY: str = str(Path().resolve()) + "/docs/build/"
 
 TEST_USER_ONE_DATA = dict(
-    username="miha", last_name="Novak", first_name="Miha", email="user1@user1.si", password="mihamiha"
+    username="miha",
+    last_name="Novak",
+    first_name="Miha",
+    email="user1@user1.si",
+    password="mihamiha",
 )
 TEST_USER_TWO_DATA = dict(
-    username="janez", last_name="Novak", first_name="Janez", email="user2@user2.si", password="janezjanez"
+    username="janez",
+    last_name="Novak",
+    first_name="Janez",
+    email="user2@user2.si",
+    password="janezjanez",
 )
 
 
