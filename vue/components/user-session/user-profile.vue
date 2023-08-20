@@ -22,11 +22,7 @@ let availableSocialConnections = [] as Array<SocialAccItem>;
 let socialConnectionsModalPromise = null as any;
 
 async function changePassword() {
-  await FormConsumerApiOneShot(
-    '/account/change-password/',
-    true,
-    'new',
-  );
+  await FormConsumerApiOneShot('/account/change-password/', true, 'new');
 }
 
 async function checkResetPassword() {
