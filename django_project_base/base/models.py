@@ -17,7 +17,7 @@ from django_project_base.base.fields import HexColorField
 
 class BaseProject(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Name"))
-    slug = models.SlugField(max_length=80, null=False, blank=False, verbose_name=_("Slug"))
+    slug = models.SlugField(max_length=80, null=False, blank=False, unique=True, verbose_name=_("Slug"))
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     logo = models.FileField(null=True, blank=True, verbose_name=_("Logo"))
     owner = parent = models.ForeignKey(
