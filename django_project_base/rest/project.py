@@ -99,6 +99,33 @@ class ProjectViewSet(ModelViewSet):
         serializer = self.get_serializer(current_project)
         return Response(serializer.data)
 
+    @extend_schema(
+        description="Marks profile of calling user for deletion in future. Future date is determined " "by settings",
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
+        },
+    )
+    @get_current_project.mapping.post
+    def update_current_profile(self, request: Request, **kwargs) -> Response:
+        current_project_attr = (
+            getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
+            .get("project", {})
+            .get("value_name", None)
+        )
+        if current_project_attr is None:
+            raise NotFound("Current project resolution not set up for project")
+        if (current_project_slug := getattr(request, current_project_attr, None)) is None:
+            raise NotFound("Current project not specified for request")
+
+        current_project = swapper.load_model("django_project_base", "Project").objects.get(slug=current_project_slug)
+
+        serializer = self.get_serializer(current_project, data=request.data, many=False)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
     def get_object(self):
         SLUG_FIELD_NAME: str = settings.DJANGO_PROJECT_BASE_SLUG_FIELD_NAME
 
