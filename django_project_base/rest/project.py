@@ -154,3 +154,9 @@ class ProjectViewSet(ModelViewSet):
                 set_args(SLUG_FIELD_NAME)
                 return super().get_object()
         return super().get_object()
+
+    def create(self, request, *args, **kwargs):
+        create_response = super().create(request, *args, **kwargs)
+        project = swapper.load_model("django_project_base", "Project").objects.get(slug=create_response.data["slug"])
+        swapper.load_model("django_project_base", "ProjectMember").objects.create(project=project, member=request.user)
+        return create_response
