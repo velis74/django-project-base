@@ -98,10 +98,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
 
     def send(self) -> DjangoProjectBaseNotification:
         required_channels: list = list(
-            map(
-                lambda f: str(f),
-                filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)),
-            )
+            map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
         )
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,
@@ -115,7 +112,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             else str(uuid.uuid4()),
             recipients=",".join(map(str, self._recipients)) if self._recipients else None,
             recipients_original_payload=self._raw_recipents,
-            project=self._project,
+            project_slug=self._project,
         )
         notification.user = self._user
         required_channels.sort()

@@ -1,4 +1,5 @@
 from django.db.models import Model
+from django.utils.crypto import get_random_string
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import APIClient
@@ -22,7 +23,7 @@ class TestProject(TestBase):
         _payload: dict = {
             "name": "test-project",
             "owner": UserProfile.objects.get(username=TEST_USER_ONE_DATA["username"]).pk,
-            "slug": "slug-test-project",
+            "slug": get_random_string(length=8),
         }
         _payload.update(payload)
         return self.api_client.post(self.url, _payload)

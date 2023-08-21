@@ -30,6 +30,7 @@ class CelerySettings:
     SECRET_KEY = get_random_string(length=64)
     INSTALLED_APPS = (
         "django_project_base",
+        "django_project_base.licensing",
         "django_project_base.notifications",
         "django.contrib.contenttypes",
         "django.contrib.auth",

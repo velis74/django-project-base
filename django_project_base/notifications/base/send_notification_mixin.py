@@ -10,9 +10,7 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 
 class SendNotificationMixin(object):
-    def make_send(
-        self, notification: DjangoProjectBaseNotification, extra_data
-    ) -> DjangoProjectBaseNotification:
+    def make_send(self, notification: DjangoProjectBaseNotification, extra_data) -> DjangoProjectBaseNotification:
         sent_channels: list = []
         failed_channels: list = []
         exceptions = ""
@@ -20,15 +18,26 @@ class SendNotificationMixin(object):
 
         if notification.required_channels is None:
             return notification
-        for channel_identifier in filter(
-            lambda i: not (i is None), notification.required_channels.split(",")
-        ):
+
+        db_connection = "default"
+        db_settings = extra_data.get("DATABASE")
+        if db_settings:
+            db_connection = f"notification-{notification.pk}"
+            backend = load_backend(db_settings["SETTINGS"]["ENGINE"])
+            dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
+            dw.connect()
+            connections.databases[db_connection] = dw.settings_dict
+
+        for channel_identifier in filter(lambda i: not (i is None), notification.required_channels.split(",")):
             channel = ChannelIdentifier.channel(channel_identifier)
             try:
                 # check license
                 LogAccessService().log(
-                    notification.user, channels=sent_channels, object_pk=notification.pk,
-                    on_sucess=lambda: channel.send(notification, extra_data)
+                    notification.user,
+                    channels=sent_channels,
+                    object_pk=notification.pk,
+                    on_sucess=lambda: channel.send(notification, extra_data),
+                    db=db_connection,
                 )
                 sent_channels.append(channel)
             except Exception as e:
@@ -70,30 +79,16 @@ class SendNotificationMixin(object):
             notification.sent_at = timezone.now().timestamp()
             notification.exceptions = exceptions if exceptions else None
 
-            if db_settings := extra_data.get("DATABASE"):
-                backend = load_backend(db_settings["SETTINGS"]["ENGINE"])
-                dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
-                dw.connect()
-                connections.databases[
-                    f"notification-{notification.pk}"
-                ] = dw.settings_dict
-                notification.save(
-                    update_fields=[
-                        "sent_at",
-                        "sent_channels",
-                        "failed_channels",
-                        "exceptions",
-                    ],
-                    using=f"notification-{notification.pk}",
-                )
+            notification.save(
+                update_fields=[
+                    "sent_at",
+                    "sent_channels",
+                    "failed_channels",
+                    "exceptions",
+                ],
+                using=db_connection,
+            )
+
+            if db_settings:
                 db.connections.close_all()
-            else:
-                notification.save(
-                    update_fields=[
-                        "sent_at",
-                        "sent_channels",
-                        "failed_channels",
-                        "exceptions",
-                    ]
-                )
         return notification

@@ -82,7 +82,7 @@ class NotificationSerializer(ModelSerializer):
         super().__init__(*args, is_filter=is_filter, **kwds)
         self.fields.fields["level"].display_form = DisplayMode.HIDDEN
         self.fields.fields["type"].display_form = DisplayMode.HIDDEN
-        self.fields.fields["project"].display = DisplayMode.HIDDEN
+        self.fields.fields["project_slug"].display = DisplayMode.HIDDEN
         self.fields.fields["message_to"].child_relation.queryset = SearchItems.objects.get_queryset(
             request=self.request
         )
@@ -107,12 +107,6 @@ class NotificationSerializer(ModelSerializer):
     type = fields.CharField(display=DisplayMode.SUPPRESS)
 
     message = fields.PrimaryKeyRelatedField(
-        display_form=DisplayMode.SUPPRESS,
-        display_table=DisplayMode.SUPPRESS,
-        read_only=True,
-    )
-
-    project = fields.PrimaryKeyRelatedField(
         display_form=DisplayMode.SUPPRESS,
         display_table=DisplayMode.SUPPRESS,
         read_only=True,
@@ -318,7 +312,7 @@ class NotificationViewset(ModelViewSet):
 
     def get_queryset(self):
         return DjangoProjectBaseNotification.objects.filter(
-            project__slug=getattr(
+            project_slug=getattr(
                 self.request,
                 settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"],
                 get_random_string(length=32),
@@ -331,16 +325,16 @@ class NotificationViewset(ModelViewSet):
                 subject=serializer.validated_data["message_subject"],
                 body=serializer.validated_data["message_body"],
                 footer="",
-                content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
+                content_type=DjangoProjectBaseMessage.HTML,
             ),
             raw_recipents=self.request.data["message_to"],
-            project=swapper.load_model("django_project_base", "Project").objects.get(
-                slug=self.request.current_project_slug
-            ),
+            project=swapper.load_model("django_project_base", "Project")
+            .objects.get(slug=self.request.current_project_slug)
+            .slug,
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
             persist=True,
-            user=self.request.user,
+            user=self.request.user.pk,
         )
         notification.send()
