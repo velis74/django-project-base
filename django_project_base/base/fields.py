@@ -37,7 +37,7 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
         if request and getattr(request, "current_project_slug", None):
             # if current project was parsed from request, filter profiles to current project only
             qs = qs.filter(projects__project__slug=request.current_project_slug)
-        return qs.all()
+        return qs.all().distinct()
 
     def display_value(self, instance):
         if not instance:
