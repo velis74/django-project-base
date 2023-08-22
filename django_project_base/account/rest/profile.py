@@ -104,7 +104,7 @@ class ProfileSerializer(ModelSerializer):
         required=False,
         allow_null=False,
         read_only=True,
-        display=DisplayMode.HIDDEN,
+        display=DisplayMode.SUPPRESS,
     )
 
     groups = ProfileGroupsField(
@@ -121,7 +121,7 @@ class ProfileSerializer(ModelSerializer):
         required=False,
         allow_null=False,
         read_only=True,
-        display=DisplayMode.HIDDEN,
+        display=DisplayMode.SUPPRESS,
     )
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
