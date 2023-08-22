@@ -139,7 +139,16 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                 "SETTINGS": sttgs,
             }
             self._extra_data["SETTINGS"] = settings
-            notification.recipients_list = [get_user_model().objects.get(pk=u) for u in self._recipients]
+            rec_list = []
+            for usr in self._recipients:
+                rec_list.append(
+                    {
+                        k: v
+                        for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
+                        if not k.startswith("_")
+                    }
+                )
+            notification.recipients_list = rec_list
             self.enqueue_notification(notification, self._extra_data)
             return notification
 

@@ -294,7 +294,7 @@ class T2:
         to = (
             [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
             if not notification.recipients_list
-            else [u.userprofile.phone_number for u in notification.recipients_list]
+            else [u["phone_number"] for u in notification.recipients_list]
         )
 
         multi = len(to) > 1

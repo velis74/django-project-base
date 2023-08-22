@@ -58,7 +58,7 @@ class AwsSes:
                         get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")
                     ]
                     if not notification.recipients_list
-                    else [u.email for u in notification.recipients_list],
+                    else [u["email"] for u in notification.recipients_list],
                 },
                 Message=msg,
                 Source=self.from_email,
