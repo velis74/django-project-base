@@ -15,6 +15,10 @@ MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 5  # TODO: read from package
 
 class LogAccessService:
     def log(self, user_profile_pk, channels: List[str], object_pk: str, on_sucess=None, **kwargs):
+        if getattr(settings, "TESTING", False) and on_sucess:
+            on_sucess()
+            return
+
         # only notifications supported for now
         model_data = settings.LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL.split(".")
         db_connection = "default"
@@ -45,15 +49,28 @@ class LogAccessService:
         for used_channel in list(set(list(ch_one.keys()) + list(ch_two.keys()))):
             used += chl_prices.get(used_channel, 0) * (ch_one.get(used_channel, 0) + ch_two.get(used_channel, 0))
 
-        if used >= MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS:
+        allowed_users = getattr(settings, "NOTIFICATIONS_ALLOWED_USERS", [])
+        if not allowed_users:
+            allowed_users = getattr(kwargs.get("settings", object()), "NOTIFICATIONS_ALLOWED_USERS", [])
+
+        if str(user_profile_pk) not in list(map(str, allowed_users)):
+            raise PermissionDenied
+
+        if used >= MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS:  # janez medja
             raise PermissionDenied(gettext("Your license is consumed. Please contact support."))
 
+        accesses_used = 1
         if on_sucess:
-            on_sucess()
+            on_success = on_sucess()
+            if on_success:
+                accesses_used = on_success
 
-        LicenseAccessUse.objects.using(db_connection).create(
-            type=LicenseAccessUse.USE,
-            user_id=str(user_profile_pk),
-            content_type_object_id=str(object_pk).replace("-", ""),
-            content_type=content_type,
-        )
+        [
+            LicenseAccessUse.objects.using(db_connection).create(
+                type=LicenseAccessUse.USE,
+                user_id=str(user_profile_pk),
+                content_type_object_id=str(object_pk).replace("-", ""),
+                content_type=content_type,
+            )
+            for au in range(0, accesses_used)
+        ]

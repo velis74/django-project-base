@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils.html import strip_tags
 from requests.auth import HTTPBasicAuth
 from rest_framework import status
+from smshelper import SMSHelper
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.notifications.models import DjangoProjectBaseNotification
@@ -19,7 +20,7 @@ class T2:
     endpoint_one = "send_sms"
     endpoint_multi = "send_multiple_sms"
 
-    url = "https://mbg.t-2.com/SMS/velis_doo/"
+    url = ""
 
     def __init__(self) -> None:
         super().__init__()
@@ -28,13 +29,16 @@ class T2:
         self.sms_from_number = getattr(settings, "SMS_SENDER", None)
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)
+        self.url = getattr(settings, "SMS_API_URL", None)
         if stgs := extra_data.get("SETTINGS"):
             self.sms_from_number = getattr(stgs, "SMS_SENDER", None)
             self.username = getattr(stgs, "T2_USERNAME", None)
             self.password = getattr(stgs, "T2_PASSWORD", None)
+            self.url = getattr(stgs, "SMS_API_URL", None)
         assert self.sms_from_number, "SMS_SENDER is required"
         assert self.username, "T2_USERNAME is required"
         assert self.password, "T2_PASSWORD is required"
+        assert len(self.url) > 0, "T2_PASSWORD is required"
 
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
@@ -58,7 +62,7 @@ class T2:
 
         text_only = re.sub("[ \t]+", " ", strip_tags(message))
         # Strip single spaces in the beginning of each line
-        message = text_only.replace("\n ", "\n").strip()
+        message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
 
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
@@ -92,3 +96,4 @@ class T2:
             exc = Exception(f"Faild sms sending for notification {notification.pk} \n\n {str(response_data)}")
             logger.exception(exc)
             raise exc
+        return SMSHelper(message).parts()

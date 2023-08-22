@@ -38,6 +38,7 @@ class SendNotificationMixin(object):
                     object_pk=notification.pk,
                     on_sucess=lambda: channel.send(notification, extra_data),
                     db=db_connection,
+                    settings=extra_data.get("SETTINGS", object()),
                 )
                 sent_channels.append(channel)
             except Exception as e:
