@@ -1,5 +1,5 @@
 __title__ = "django project base"
-__version__ = "0.3.28"
+__version__ = "0.3.42"
 __author__ = "Jure Erznožnik"
 __email__ = "jure.erznoznik@gmail.com"
 __license__ = "BSD 3-Clause"
