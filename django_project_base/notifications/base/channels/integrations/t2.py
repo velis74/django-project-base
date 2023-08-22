@@ -1,6 +1,9 @@
+import re
+
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.html import strip_tags
 from requests.auth import HTTPBasicAuth
 from rest_framework import status
 
@@ -16,7 +19,7 @@ class T2:
     endpoint_one = "send_sms"
     endpoint_multi = "send_multiple_sms"
 
-    url = "https://kdjfghs.com/"
+    url = "https://mbg.t-2.com/SMS/velis_doo/"
 
     def __init__(self) -> None:
         super().__init__()
@@ -24,11 +27,11 @@ class T2:
     def __ensure_credentials(self, extra_data):
         self.sms_from_number = getattr(settings, "SMS_SENDER", None)
         self.username = getattr(settings, "T2_USERNAME", None)
-        self.username = getattr(settings, "T2_PASSWORD", None)
+        self.password = getattr(settings, "T2_PASSWORD", None)
         if stgs := extra_data.get("SETTINGS"):
             self.sms_from_number = getattr(stgs, "SMS_SENDER", None)
             self.username = getattr(stgs, "T2_USERNAME", None)
-            self.username = getattr(stgs, "T2_PASSWORD", None)
+            self.password = getattr(stgs, "T2_PASSWORD", None)
         assert self.sms_from_number, "SMS_SENDER is required"
         assert self.username, "T2_USERNAME is required"
         assert self.password, "T2_PASSWORD is required"
@@ -37,12 +40,14 @@ class T2:
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
 
         to = (
-            [get_user_model().objects.get(pk=u).phone_number for u in notification.recipients.split(",")]
+            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
             if not notification.recipients_list
-            else [u.phone_number for u in notification.recipients_list]
+            else [u.userprofile.phone_number for u in notification.recipients_list]
         )
 
-        endpoint = self.endpoint_multi if len(to) > 1 else self.endpoint_one
+        multi = len(to) > 1
+
+        endpoint = self.endpoint_multi if multi else self.endpoint_one
 
         message = f"{notification.message.subject or ''}"
 
@@ -51,13 +56,17 @@ class T2:
 
         message += notification.message.body
 
+        text_only = re.sub("[ \t]+", " ", strip_tags(message))
+        # Strip single spaces in the beginning of each line
+        message = text_only.replace("\n ", "\n").strip()
+
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{endpoint}",
             auth=basic_auth,
             json={
                 "from_number": self.sms_from_number,
-                "to_number": to,
+                f"to_number{'s' if multi else ''}": to if multi else to[0],
                 "message": message,
             },
             verify=False,
@@ -74,12 +83,12 @@ class T2:
             logger.exception(exc)
             raise exc
 
-        respose_data = response.json()
+        response_data = response.json()
 
-        if str(respose_data.keys()[0]) != "0":
+        if str(response_data["error_code"]) != "0":
             import logging
 
             logger = logging.getLogger("django")
-            exc = Exception(f"Faild sms sending for notification {notification.pk} \n\n {str(respose_data)}")
+            exc = Exception(f"Faild sms sending for notification {notification.pk} \n\n {str(response_data)}")
             logger.exception(exc)
             raise exc
