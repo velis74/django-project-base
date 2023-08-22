@@ -34,6 +34,8 @@ from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 
+search_fields = ["username", "email", "first_name", "last_name"]
+
 
 class ProfilePermissionsField(fields.ManyRelatedField):
     @staticmethod
@@ -257,7 +259,7 @@ class ProfileViewPermissions(BasePermissions):
 )
 class ProfileViewSet(ModelViewSet):
     filter_backends = [filters.SearchFilter]
-    search_fields = ["username", "email", "first_name", "last_name"]
+    search_fields = search_fields
     permission_classes = (ProfileViewPermissions,)
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
@@ -315,9 +317,19 @@ class ProfileViewSet(ModelViewSet):
                 qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
 
         qs = qs.order_by("un", "id")
+
         return qs.distinct()
 
     def get_serializer_class(self):
+        if self.request.query_params.get("select", "") == "1":
+
+            class SearchProfileSerializer(ProfileSerializer):
+                class Meta(ProfileSerializer.Meta):
+                    fields = search_fields + [get_user_model()._meta.pk.name, "full_name"]
+                    exclude = None
+
+            return SearchProfileSerializer
+
         return ProfileSerializer
 
     def filter_queryset_field(self, queryset, field, value):
