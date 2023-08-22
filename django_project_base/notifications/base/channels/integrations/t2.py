@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.utils.html import strip_tags
 from requests.auth import HTTPBasicAuth
 from rest_framework import status
-from smshelper import SMSHelper
+from sms_counter import SMSCounter
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.notifications.models import DjangoProjectBaseNotification
@@ -96,4 +96,4 @@ class T2:
             exc = Exception(f"Faild sms sending for notification {notification.pk} \n\n {str(response_data)}")
             logger.exception(exc)
             raise exc
-        return SMSHelper(message).parts()
+        return SMSCounter.count(message)["messages"]

@@ -17,4 +17,4 @@ boto3
 natural
 celery==5.2.7
 django-redis-cache
-smshelper
+git+https://github.com/dedayoa/sms-counter-python.git#egg=sms_counter
