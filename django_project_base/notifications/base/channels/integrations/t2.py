@@ -324,7 +324,6 @@ class T2(ProviderIntegration):
         message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
 
         basic_auth = HTTPBasicAuth(self.username, self.password)
-        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
         # phone numbers can be invalid so for now we do not use bulk sending
         for recipient in to:
@@ -334,7 +333,7 @@ class T2(ProviderIntegration):
                 json={
                     "from_number": self.sender(notification.project_slug),
                     # f"to_number{'s' if multi else ''}": to if multi else to[0],
-                    f"to_number": recipient,
+                    "to_number": recipient,
                     "message": message,
                 },
                 verify=False,
