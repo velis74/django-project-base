@@ -62,6 +62,17 @@ class OrginalRecipientsField(fields.CharField):
             if row_data and not row_data.recipients_original_payload_search:
                 row_data.recipients_original_payload_search = search_str
                 row_data.save(update_fields=["recipients_original_payload_search"])
+
+            if row_data and row_data.recipients:
+                users = [
+                    get_user_model().objects.get(pk=u)
+                    for u in row_data.recipients.split(",")
+                    if u not in (None, "None", "")
+                ]
+                search_str = ", ".join([f"{u.first_name} {u.last_name}" for u in users])
+                if len(search_str) > 95:
+                    search_str = f"{search_str[:95]} ..."
+
             return search_str
         return super().to_representation(value, row_data)
 
