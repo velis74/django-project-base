@@ -23,6 +23,7 @@ from django_project_base.account.rest.reset_password import ResetPasswordSeriali
 from django_project_base.account.social_auth.providers import get_social_providers
 from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.utils import get_pk_name
 
 
 def get_hijacker(request: Request) -> Optional:
@@ -68,9 +69,7 @@ class SocialAuthProvidersViewSet(viewsets.ViewSet):
 
     @extend_schema(
         responses={
-            status.HTTP_200_OK: OpenApiResponse(
-                description="OK", response=SocialAuthSerializer
-            ),
+            status.HTTP_200_OK: OpenApiResponse(description="OK", response=SocialAuthSerializer),
         }
     )
     @action(
@@ -81,11 +80,7 @@ class SocialAuthProvidersViewSet(viewsets.ViewSet):
         permission_classes=[IsAuthenticated],
     )
     def social_auth_providers_user(self, request: Request) -> Response:
-        return Response(
-            SocialAuthSerializer(
-                UserSocialAuth.objects.filter(user=self.request.user), many=True
-            ).data
-        )
+        return Response(SocialAuthSerializer(UserSocialAuth.objects.filter(user=self.request.user), many=True).data)
 
 
 class LogoutSerializer(serializers.Serializer):
@@ -134,13 +129,7 @@ class ChangePasswordSerializer(df_serializers.Serializer):
 
 
 @extend_schema_view(
-    retrieve=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"]
-            )
-        ]
-    ),
+    retrieve=extend_schema(parameters=[OpenApiParameter("id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"])]),
 )
 class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ChangePasswordSerializer
@@ -212,9 +201,7 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
         description="Verify registration with signature. The endpoint will generate an e-mail with a confirmation URL "
         "which the user should GET to confirm the account.",
         responses={
-            status.HTTP_200_OK: OpenApiResponse(
-                description="OK", response=ResetPasswordSerializer
-            ),
+            status.HTTP_200_OK: OpenApiResponse(description="OK", response=ResetPasswordSerializer),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description="Bad request"),
         },
     )
@@ -256,9 +243,7 @@ class RegisterReturnSerializer(serializers.Serializer):
     description="Register new user. The endpoint will generate an e-mail with a confirmation URL which the newly "
     "registered user should GET to activate the newly created account.",
     responses={
-        status.HTTP_200_OK: OpenApiResponse(
-            description="OK", response=RegisterReturnSerializer
-        ),
+        status.HTTP_200_OK: OpenApiResponse(description="OK", response=RegisterReturnSerializer),
         status.HTTP_400_BAD_REQUEST: OpenApiResponse(
             description=re.sub(
                 r" +",
@@ -306,13 +291,7 @@ class AdminAddUserSerializer(AbstractRegisterSerializer):
 
 
 @extend_schema_view(
-    retrieve=extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"]
-            )
-        ]
-    ),
+    retrieve=extend_schema(parameters=[OpenApiParameter("id", OpenApiTypes.STR, OpenApiParameter.PATH, enum=["new"])]),
 )
 class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = AdminAddUserSerializer
@@ -351,12 +330,13 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
         view = RegisterView(request=request, serializer_class=self.serializer_class)
         response = view.post(request)
         if response.status_code == status.HTTP_201_CREATED:
-            profile_obj = swapper.load_model(
-                "django_project_base", "Profile"
-            ).objects.get(user_ptr_id=response.data[get_user_model()._meta.pk.name])
+            user_model_pk_name = get_pk_name(get_user_model())
+            profile_obj = swapper.load_model("django_project_base", "Profile").objects.get(
+                user_ptr_id=response.data[user_model_pk_name]
+            )
             profile_obj.password_invalid = True
             profile_obj.save(update_fields=["password_invalid"])
-            recipients = [response.data[get_user_model()._meta.pk.name]]
+            recipients = [response.data[user_model_pk_name]]
             EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
@@ -371,10 +351,10 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),
                 raw_recipents=recipients,
-                project=swapper.load_model(
-                    "django_project_base", "Project"
-                ).objects.get(slug=self.request.current_project_slug),
-                recipients=[response.data[get_user_model()._meta.pk.name]],
+                project=swapper.load_model("django_project_base", "Project").objects.get(
+                    slug=self.request.current_project_slug
+                ),
+                recipients=[response.data[user_model_pk_name]],
                 user=self.request.user,
             ).send()
 
