@@ -8,6 +8,7 @@ from requests.auth import HTTPBasicAuth
 from rest_framework import status
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
+from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
@@ -261,7 +262,7 @@ class SMSCounter(object):
 
 
 class T2:
-    sms_from_number: str
+    sms_from_number: dict
     username: str
     password: str
 
@@ -274,16 +275,16 @@ class T2:
         super().__init__()
 
     def __ensure_credentials(self, extra_data):
-        self.sms_from_number = getattr(settings, "SMS_SENDER", None)
+        self.sms_from_number = getattr(settings, "NOTIFICATION_SENDERS", None)
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)
         self.url = getattr(settings, "SMS_API_URL", None)
         if stgs := extra_data.get("SETTINGS"):
-            self.sms_from_number = getattr(stgs, "SMS_SENDER", None)
+            self.sms_from_number = getattr(stgs, "NOTIFICATION_SENDERS", None)
             self.username = getattr(stgs, "T2_USERNAME", None)
             self.password = getattr(stgs, "T2_PASSWORD", None)
             self.url = getattr(stgs, "SMS_API_URL", None)
-        assert self.sms_from_number, "SMS_SENDER is required"
+        assert self.sms_from_number, "NOTIFICATION_SENDERS is required"
         assert self.username, "T2_USERNAME is required"
         assert self.password, "T2_PASSWORD is required"
         assert len(self.url) > 0, "T2_PASSWORD is required"
@@ -291,13 +292,29 @@ class T2:
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
 
-        to = (
-            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
+        to = PhoneNumberParser.valid_phone_numbers(
+            list(
+                filter(
+                    lambda p: p and p not in ("", "None"),
+                    [
+                        get_user_model().objects.get(pk=u).userprofile.phone_number
+                        for u in notification.recipients.split(",")
+                    ],
+                )
+            )
             if not notification.recipients_list
-            else [u["phone_number"] for u in notification.recipients_list]
+            else [
+                u["phone_number"]
+                for u in notification.recipients_list
+                if u.get("phone_number") not in (None, "None", "")
+            ]
         )
 
-        multi = len(to) > 1
+        if not to:
+            raise ValueError("No valid phone numbers")
+
+        # multi = len(to) > 1
+        multi = False
 
         endpoint = self.endpoint_multi if multi else self.endpoint_one
 
@@ -313,35 +330,43 @@ class T2:
         message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
 
         basic_auth = HTTPBasicAuth(self.username, self.password)
-        response = requests.post(
-            f"{self.url}{endpoint}",
-            auth=basic_auth,
-            json={
-                "from_number": self.sms_from_number,
-                f"to_number{'s' if multi else ''}": to if multi else to[0],
-                "message": message,
-            },
-            verify=False,
-            headers={"Content-Type": "application/json"},
-            timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
-        )
-        # todo: what is t2 response code 200 or 201
-        # todo: handle messages longer than 160 chars - same as on mars???
-        if response.status_code != status.HTTP_200_OK:
-            import logging
+        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
-            logger = logging.getLogger("django")
-            exc = Exception(f"Failed sms sending for notification {notification.pk}")
-            logger.exception(exc)
-            raise exc
+        # phone numbers can be invalid so for now we do not use bulk sending
+        for recipient in to:
+            response = requests.post(
+                f"{self.url}{endpoint}",
+                auth=basic_auth,
+                json={
+                    "from_number": self.sms_from_number[notification.project_slug]["settings"][SmsChannel.name],
+                    # f"to_number{'s' if multi else ''}": to if multi else to[0],
+                    f"to_number": recipient,
+                    "message": message,
+                },
+                verify=False,
+                headers={"Content-Type": "application/json"},
+                timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
+            )
+            # todo: what is t2 response code 200 or 201
+            # todo: handle messages longer than 160 chars - same as on mars???
+            if response.status_code != status.HTTP_200_OK:
+                import logging
 
-        response_data = response.json()
+                logger = logging.getLogger("django")
+                # exc = Exception(f"Failed sms sending for notification {notification.pk}")
+                exc = Exception(f"Failed sms sending for notification {notification.pk} {recipient}")
+                logger.exception(exc)
+                raise exc
 
-        if str(response_data["error_code"]) != "0":
-            import logging
+            response_data = response.json()
 
-            logger = logging.getLogger("django")
-            exc = Exception(f"Faild sms sending for notification {notification.pk} \n\n {str(response_data)}")
-            logger.exception(exc)
-            raise exc
+            if str(response_data["error_code"]) != "0":
+                import logging
+
+                logger = logging.getLogger("django")
+                exc = Exception(
+                    f"Failed sms sending for notification {notification.pk} \n\n {str(response_data)} {recipient}"
+                )
+                logger.exception(exc)
+                raise exc
         return SMSCounter.count(message)["messages"]

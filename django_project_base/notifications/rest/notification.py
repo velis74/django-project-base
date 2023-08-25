@@ -102,7 +102,6 @@ class NotificationSerializer(ModelSerializer):
     failed_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
 
     counter = fields.IntegerField(display_form=DisplayMode.HIDDEN)
-    exceptions = fields.CharField(display_form=DisplayMode.HIDDEN)
 
     level = fields.CharField(display=DisplayMode.SUPPRESS)
     type = fields.CharField(display=DisplayMode.SUPPRESS)
@@ -161,6 +160,7 @@ class NotificationSerializer(ModelSerializer):
             "created_at",
             "delayed_to",
             "recipients_original_payload_search",
+            "exceptions",
         )
         layout = Layout(
             Row(Column("message_to")),
@@ -180,7 +180,6 @@ class NotificationSerializer(ModelSerializer):
                     "required_channels",
                     "sent_channels",
                     "failed_channels",
-                    "exceptions",
                     "counter",
                     "sent_at",
                     auto_add_non_listed_columns=False,

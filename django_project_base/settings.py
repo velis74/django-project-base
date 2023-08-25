@@ -38,7 +38,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
             "SEND_RESET_PASSWORD_LINK_USER_FINDER": "django_project_base.account.service.reset_password_email_service.find_user_by_send_reset_password_link_data",  # noqa: E501
         },
     },
-    {"name": "EMAIL_HOST_USER", "default": ""},
+    {"name": "NOTIFICATION_SENDERS", "default": {}},
     {
         "name": "EMAIL_PROVIDER",
         "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",
