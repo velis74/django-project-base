@@ -168,7 +168,7 @@ DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES = {
         "value_name": "current_project_slug",
         "url_part": (
             2,
-            ("project",),
+            ("project", "account", "profile"),
         ),
     }
 }

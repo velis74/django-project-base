@@ -17,9 +17,9 @@ class TestProfileViewSet(TestBase):
         response = self.api_client.get("/account/profile", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.api_client.get("/account/profile/1", {}, format="json")
-        self.assertEqual(response.data["full_name"], "Miha Novak")
+        response = self.api_client.get("/account/profile/current", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["full_name"], "Miha Novak")
 
     def test_insert_profile(self):
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
@@ -118,7 +118,6 @@ class TestProfileViewSet(TestBase):
         miha.is_superuser = True
         miha.save()
         user_cache_invalidate(miha)
-
         response = self.api_client.delete("/account/profile/2", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
