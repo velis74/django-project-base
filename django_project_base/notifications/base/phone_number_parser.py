@@ -11,4 +11,5 @@ class PhoneNumberParser:
             if number.startswith("00"):
                 valid.append(number.lstrip("00"))
                 continue
+            valid.append(number)
         return valid
