@@ -4,7 +4,10 @@ import swapper
 from django.core.cache import cache
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
+from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
+from dynamicforms.mixins import DisplayMode
+from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException, ValidationError
@@ -16,6 +19,7 @@ from rest_framework.serializers import Serializer
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
+from django_project_base.base.permissions import IsSuperUser
 
 
 class ProfileMergeSerializer(ProfileSerializer):
@@ -28,6 +32,10 @@ class ProfileMergeSerializer(ProfileSerializer):
     }
 
     actions = Actions(add_form_buttons=False)
+
+    phone_number = fields.CharField(display=DisplayMode.HIDDEN)
+    language = fields.CharField(display=DisplayMode.HIDDEN)
+    email = fields.CharField(display=DisplayMode.HIDDEN)
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -60,7 +68,13 @@ class ProfileMergeSerializer(ProfileSerializer):
         return None
 
     class Meta(ProfileSerializer.Meta):
-        pass
+        responsive_columns = ResponsiveTableLayouts(
+            auto_generate_single_row_layout=True,
+            layouts=[
+                ResponsiveTableLayout(auto_add_non_listed_columns=True),
+                ResponsiveTableLayout("full_name", auto_add_non_listed_columns=False),
+            ],
+        )
 
 
 class MergeUsersRequest(Serializer):
@@ -76,7 +90,7 @@ class MergeUsersRequest(Serializer):
 
 class ProfileMergeViewSet(ProfileViewSet):
     serializer_class = ProfileMergeSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser | IsSuperUser]
 
     schema = None
 
@@ -96,7 +110,9 @@ class ProfileMergeViewSet(ProfileViewSet):
         ser = MergeUsersRequest(data=dict(users=cache.get(ck, [])))
         ser.is_valid(raise_exception=True)
         group, created = MergeUserGroup.objects.get_or_create(
-            users=",".join(map(str, ser.validated_data["users"])), created_by=self.request.user.pk
+            users=",".join(map(str, ser.validated_data["users"])),
+            created_by=self.request.user.pk,
+            project=swapper.load_model("django_project_base", "Project").objects.get(slug=request.current_project_slug),
         )
         cache.set(ck, [])
         return Response({MergeUserGroup._meta.pk.name: group.pk})

@@ -1,1 +1,3 @@
-ACCOUNT_URL_PREFIX = 'account'
+ACCOUNT_URL_PREFIX = "account"
+
+NOTIFICATION_QUEUE_NAME = "notification"

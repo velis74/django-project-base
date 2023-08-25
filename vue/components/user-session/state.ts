@@ -1,7 +1,8 @@
+import { apiClient } from '@velis/dynamicforms';
 import { AxiosRequestConfig } from 'axios';
 import { defineStore } from 'pinia';
 
-import { apiClient, setCurrentProject } from '../../apiClient';
+import { setCurrentProject } from '../../apiClient';
 
 import {
   UserDataJSON,
@@ -34,7 +35,7 @@ const useUserSessionStore = defineStore('user-session', {
   getters: {
     apiEndpointLogin() { return '/account/login'; },
     apiEndpointLogout() { return '/account/logout'; },
-    apiEndpointCurrentProfile() { return '/account/profile/current'; },
+    apiEndpointCurrentProfile() { return '/account/profile/current?decorate=default-project'; },
 
     /**
      * indicates whether we are anonymous or logged in with a registered profile
@@ -117,6 +118,9 @@ const useUserSessionStore = defineStore('user-session', {
         deleteAt: data?.delete_at,
         passwordInvalid: data?.password_invalid,
       });
+      if (data?.default_project) {
+        this.setSelectedProject(data?.default_project);
+      }
     },
 
     setSelectedProject(data: Project | undefined) {
@@ -145,7 +149,7 @@ const useUserSessionStore = defineStore('user-session', {
         );
         await this.checkLogin(true);
         // TODO I don't think root is the way to go. Should be something like Django: next={url_to_go_to}
-        // window.location.href = '/';
+        window.location.reload();
         return result;
       } catch (err: any) {
         console.error(err);
@@ -167,7 +171,7 @@ const useUserSessionStore = defineStore('user-session', {
       try {
         const response = await apiClient.get(
           this.apiEndpointCurrentProfile,
-          { hideErrorNotice: !showNotAuthorizedNotice } as AxiosRequestConfig,
+          { hideErrorNotice: !showNotAuthorizedNotice },
         );
         if (this.userId !== response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
           this.$reset();
@@ -176,7 +180,7 @@ const useUserSessionStore = defineStore('user-session', {
         return true;
       } catch (error: any) {
         this.$reset();
-        if (error.response && error.response.status) return error.response.status;
+        if (error?.response?.status) return error.response.status;
         throw error;
       }
     },

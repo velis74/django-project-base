@@ -1,0 +1,316 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-04 13:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: django_project_base/account/rest/account.py:106
+msgid "Change password"
+msgstr ""
+
+#: django_project_base/account/rest/account.py:260
+msgid "Add new user"
+msgstr ""
+
+#: django_project_base/account/rest/account.py:305
+msgid "Your account was created for you"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:31
+msgid "User ID"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:32
+msgid "User email"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:48
+msgid "Select a user to impersonate"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:48
+msgid "User"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:52
+msgid "Cancel"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:53
+msgid "Impersonate"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:77
+msgid "Target user pk"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:96
+msgid "Impersonating self is not allowed"
+msgstr ""
+
+#: django_project_base/account/rest/login.py:18
+#: django_project_base/account/rest/login.py:21
+msgid "Login"
+msgstr ""
+
+#: django_project_base/account/rest/login.py:20
+msgid "Back to site"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:101
+#: django_project_base/account/rest/profile.py:103
+msgid "Specific permissions for this user"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:113
+#: django_project_base/account/rest/profile.py:119
+msgid ""
+"The groups this user belongs to. A user will get all permissions granted to "
+"each of their groups."
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:151
+#: django_project_base/account/rest/profile.py:152
+#: django_project_base/account/rest/profile_merge.py:52
+#: django_project_base/account/rest/profile_merge.py:53
+msgid "Merge"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:162
+#: django_project_base/account/rest/profile.py:163
+msgid "Export"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:202
+msgid "Password"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:203
+msgid "Repeat Password"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:224
+msgid "Password is required"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:226
+msgid "Passwords do not match"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:229
+msgid "Email is required"
+msgstr ""
+
+#: django_project_base/account/rest/profile_merge.py:45
+#: django_project_base/account/rest/profile_merge.py:46
+msgid "Remove"
+msgstr ""
+
+#: django_project_base/account/rest/profile_merge.py:59
+#: django_project_base/account/rest/profile_merge.py:60
+msgid "Clear all"
+msgstr ""
+
+#: django_project_base/account/rest/reset_password.py:80
+msgid "Invalidate password"
+msgstr ""
+
+#: django_project_base/account/rest/reset_password.py:84
+msgid "Target user id"
+msgstr ""
+
+#: django_project_base/base/fields.py:18
+msgid "Value is not a hex color (e.g #88f or #8080ff)"
+msgstr ""
+
+#: django_project_base/base/models.py:19
+msgid "Name"
+msgstr ""
+
+#: django_project_base/base/models.py:20
+msgid "Slug"
+msgstr ""
+
+#: django_project_base/base/models.py:21
+msgid "Description"
+msgstr ""
+
+#: django_project_base/base/models.py:22
+msgid "Logo"
+msgstr ""
+
+#: django_project_base/base/models.py:24 django_project_base/base/models.py:109
+msgid "Owner"
+msgstr ""
+
+#: django_project_base/base/models.py:41
+msgid "Bio"
+msgstr ""
+
+#: django_project_base/base/models.py:42
+msgid "Phone number"
+msgstr ""
+
+#: django_project_base/base/models.py:44
+msgid "Language"
+msgstr ""
+
+#: django_project_base/base/models.py:46
+msgid "Theme"
+msgstr ""
+
+#: django_project_base/base/models.py:47
+msgid "Avatar"
+msgstr ""
+
+#: django_project_base/base/models.py:48
+msgid "Reverse full name order"
+msgstr ""
+
+#: django_project_base/base/models.py:49
+msgid "Delete profile at"
+msgstr ""
+
+#: django_project_base/base/models.py:103
+#: django_project_base/base/models.py:133
+msgid "Project"
+msgstr ""
+
+#: django_project_base/base/models.py:125
+msgid "Color"
+msgstr ""
+
+#: django_project_base/base/models.py:127
+msgid "Icon"
+msgstr ""
+
+#: django_project_base/country_holidays.py:19
+msgid "Not valid country alpha 2 code"
+msgstr ""
+
+#: django_project_base/country_holidays.py:21
+msgid "Not a valid year"
+msgstr ""
+
+#: django_project_base/country_holidays.py:27
+msgid "Error retrieving data"
+msgstr ""
+
+#: django_project_base/country_holidays.py:32
+msgid "Error retrieving holidays: {}"
+msgstr ""
+
+#: django_project_base/notifications/models.py:19
+#: django_project_base/notifications/models.py:39
+msgid "Id"
+msgstr ""
+
+#: django_project_base/notifications/models.py:20
+#: django_project_base/notifications/rest/notification.py:56
+msgid "Subject"
+msgstr ""
+
+#: django_project_base/notifications/models.py:21
+#: django_project_base/notifications/rest/notification.py:57
+msgid "Body"
+msgstr ""
+
+#: django_project_base/notifications/models.py:22
+msgid "Footer"
+msgstr ""
+
+#: django_project_base/notifications/models.py:38
+msgid "Locale"
+msgstr ""
+
+#: django_project_base/notifications/models.py:45
+msgid "Level"
+msgstr ""
+
+#: django_project_base/notifications/models.py:47
+msgid "Required channels"
+msgstr ""
+
+#: django_project_base/notifications/models.py:48
+msgid "Sent channels"
+msgstr ""
+
+#: django_project_base/notifications/models.py:49
+msgid "Failed channels"
+msgstr ""
+
+#: django_project_base/notifications/models.py:50
+msgid "Created at"
+msgstr ""
+
+#: django_project_base/notifications/models.py:51
+msgid "Sent at"
+msgstr ""
+
+#: django_project_base/notifications/models.py:52
+msgid "Delayed to"
+msgstr ""
+
+#: django_project_base/notifications/models.py:59
+msgid "Type"
+msgstr ""
+
+#: django_project_base/notifications/models.py:62
+msgid "Message"
+msgstr ""
+
+#: django_project_base/notifications/rest/maintenance_notification.py:34
+msgid ""
+"Time interval identifying at what time notification was acknowledged by user"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:42
+msgid "Add"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:42
+msgid "Add new record"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:54
+msgid "Recipients"
+msgstr ""
+
+#: django_project_base/notifications/templates/account_created.html:5
+msgid ""
+"You have been invited to our application. Your credentials are listed below."
+msgstr ""
+
+#: django_project_base/notifications/templates/account_created.html:7
+msgid "On first login you will be prompted to change your password."
+msgstr ""
+
+#: django_project_base/notifications/templates/account_created.html:9
+msgid "Your username:"
+msgstr ""
+
+#: django_project_base/notifications/templates/account_created.html:10
+msgid "Your password:"
+msgstr ""
+
+#: django_project_base/notifications/templates/account_created.html:13
+msgid "Have a nice day."
+msgstr ""
+
+#: django_project_base/rest/project_role.py:29
+msgid "Project is required"
+msgstr ""

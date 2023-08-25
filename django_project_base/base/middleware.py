@@ -21,15 +21,17 @@ def get_parameter(request, value_name: str, url_part: str) -> Optional[object]:
         return value_from_header
 
     path_parts = request.path_info.split("/")
-    if isinstance(url_part, int):
-        return path_parts[url_part] if len(path_parts) > url_part else None
+    if isinstance(url_part, (list, tuple)) and isinstance(url_part[0], int) and isinstance(url_part[1], (list, tuple)):
+        parm = path_parts[url_part[0]] if len(path_parts) > url_part[0] else None
+        return parm if parm not in url_part[1] else None
 
     try:
         project_info = next(iter(filter(lambda f: f and url_part in f, path_parts)))
     except StopIteration:
         project_info = None
     if project_info:
-        return project_info[len(url_part):]
+        url_part_len = len(url_part)
+        return project_info[url_part_len:]
 
     return None
 

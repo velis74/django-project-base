@@ -1,6 +1,6 @@
 django
 djangorestframework
-dynamicforms >= 0.71.11
+dynamicforms >= 0.74.05
 swapper
 django-rest-registration
 drf-spectacular>=0.17.2, <0.26.0
@@ -13,3 +13,7 @@ social-auth-app-django
 django-permissions-policy
 django-csp
 requests
+boto3
+natural
+celery==5.2.7
+django-redis-cache

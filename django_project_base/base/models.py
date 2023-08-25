@@ -10,14 +10,14 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from taggit.models import TagBase
+from taggit.models import GenericTaggedItemBase, TagBase
 
 from django_project_base.base.fields import HexColorField
 
 
 class BaseProject(models.Model):
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Name"))
-    slug = models.SlugField(max_length=80, null=False, blank=False, verbose_name=_("Slug"))
+    slug = models.SlugField(max_length=80, null=False, blank=False, unique=True, verbose_name=_("Slug"))
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     logo = models.FileField(null=True, blank=True, verbose_name=_("Logo"))
     owner = parent = models.ForeignKey(
@@ -159,9 +159,29 @@ class BaseTag(TagBase):
         abstract = True
 
 
+class DpbTaggedItemThrough(GenericTaggedItemBase):
+    tag = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Tag"),
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items",
+    )
+    main_object = models.BooleanField(default=False)
+
+    class Meta(GenericTaggedItemBase.Meta):
+        abstract = True
+
+
+class Tag(BaseTag):
+    class Meta:
+        swappable = swapper.swappable_setting("django_project_base", "Tag")
+
+
 class BaseMergeUserGroup(models.Model):
     users = models.CharField(max_length=1024, null=False, validators=(validate_comma_separated_integer_list,))
     created_by = models.PositiveIntegerField()
+    project = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
+    )
 
     class Meta:
         abstract = True

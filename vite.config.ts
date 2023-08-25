@@ -85,6 +85,7 @@ export default ({ mode }: ConfigEnv) => {
             rollupOptions: {
                 external: ['@velis/dynamicforms', 'axios', 'lodash', 'pinia', 'vue', 'vue-ionicon', 'vuetify'],
                 output: {
+                    sourcemap: true,
                     exports: 'named',
                     globals: (id: string) => id, // all external modules are currently not aliased to anything but their own names
                 }

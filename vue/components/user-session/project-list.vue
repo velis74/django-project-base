@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import {
+  Action,
+  apiClient,
+  dfModal,
+  FormConsumerApiOneShot,
+  FormPayload,
+} from '@velis/dynamicforms';
+import slugify from 'slugify';
 import { onMounted, Ref, ref, watch } from 'vue';
 
-import { apiClient as ApiClient } from '../../apiClient';
-import { showNotification } from '../../notifications';
 import ProjectBaseData from '../../projectBaseData';
 
 import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
@@ -30,7 +36,7 @@ async function getProjects(): Promise<Project[]> {
   //  To be clear: what is wrong with the next line is requiring to be logged in before we check for projects
   if (!userSession.loggedIn) return [];
   try {
-    return (await ApiClient.get('/project')).data;
+    return (await apiClient.get('/project')).data;
   } catch (error: any) {
     console.error(error);
     return [];
@@ -44,13 +50,33 @@ function setPermissions(newPermissions: Permissions) {
 async function loadData() {
   if (!userSession.loggedIn) return;
   projectList.value = await getProjects();
-  // by default do not select any projects
-  userSession.setSelectedProject(undefined);
   dataStore.getPermissions(setPermissions);
 }
 
-function addNewProject() {
-  showNotification('Make project', 'TODO');
+async function addNewProject() {
+  // const addProjectModal = await FormConsumerApiOneShot('/project', false, 'new');
+  let slugChanged = false;
+  let ignoreSlugChange = false;
+  const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {
+    if (context.field === 'name' && !slugChanged) {
+      payload.slug = slugify(payload.name);
+      ignoreSlugChange = true;
+    } else if (context.field === 'slug') {
+      if (!ignoreSlugChange) slugChanged = true;
+      ignoreSlugChange = false;
+      if (!payload.slug) slugChanged = false;
+    }
+    return false;
+  };
+  const addProjectModal = await FormConsumerApiOneShot(
+    '/project',
+    false,
+    'new',
+    undefined,
+    { value_changed: valueChangedHandler },
+  );
+  dfModal.getDialogDefinition(addProjectModal);
+  await loadData();
 }
 
 onMounted(() => { loadData(); });
@@ -63,7 +89,7 @@ export default { name: 'ProjectList' };
 
 <template>
   <v-btn style="min-width: 0">
-    &#9776; {{ userSession.selectedProject?.name ?? 'NO Project' }}
+    &#9776; {{ userSession.selectedProject?.name ?? gettext('NO Project') }}
     <v-menu activator="parent">
       <v-list>
         <v-list-item

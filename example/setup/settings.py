@@ -10,12 +10,19 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 from django_project_base import VERSION
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from django_project_base.account.constants import ACCOUNT_APP_ID
 from django_project_base.notifications import NOTIFICATIONS_APP_ID
+
+try:
+    from . import env
+except:
+    env = dict()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,19 +34,21 @@ SECRET_KEY = "w0o6y0rwef0zijgd7m91w0b!p-(#l1zpna1%c1vvr7f17)x&*-"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.contenttypes",
     "django.contrib.admin",
     "django.contrib.auth",
-    "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
     "rest_registration",
     "django_project_base",
     "example.demo_django_base",
@@ -48,7 +57,11 @@ INSTALLED_APPS = [
     "social_django",
     ACCOUNT_APP_ID,
     "dynamicforms",
+    "django_project_base.licensing",
 ]
+
+if not getattr(env, "DEPLOY", True):
+    INSTALLED_APPS.append("vue")
 
 MIDDLEWARE = [
     "django_project_base.base.UrlVarsMiddleware",
@@ -125,16 +138,12 @@ SOCIAL_AUTH_MICROSOFT_GRAPH_SECRET = "..."
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-LOCALE_PATHS = [str(BASE_DIR).replace("example", "") + "django_project_base/locale/"]
+LOCALE_PATHS = [os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/locale/"))]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -147,15 +156,20 @@ STATICFILES_DIRS = (
 )
 
 DJANGO_PROJECT_BASE_PROJECT_MODEL = "demo_django_base.Project"
+DJANGO_PROJECT_BASE_TAG_MODEL = "demo_django_base.DemoProjectTag"
 DJANGO_PROJECT_BASE_PROFILE_MODEL = "demo_django_base.UserProfile"
 DJANGO_PROJECT_BASE_PROJECTMEMBER_MODEL = "demo_django_base.ProjectMember"
 DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
+DJANGO_PROJECT_BASE_ROLE_MODEL = "demo_django_base.Role"
+DJANGO_PROJECT_BASE_PERMISSION_MODEL = "demo_django_base.Permission"
+
+DEFAULT_FROM_EMAIL = "info@example.com"
 
 REST_REGISTRATION = {
     "REGISTER_VERIFICATION_ENABLED": False,
     "REGISTER_EMAIL_VERIFICATION_ENABLED": False,
-    "RESET_PASSWORD_VERIFICATION_ENABLED": False,
     "LOGIN_DEFAULT_SESSION_AUTHENTICATION_BACKEND": "django_project_base.base.auth_backends.UsersCachingBackend",
+    "VERIFICATION_FROM_EMAIL": DEFAULT_FROM_EMAIL,
 }
 
 REST_FRAMEWORK = {
@@ -198,13 +212,19 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 SERVER_EMAIL = ""
-DEFAULT_FROM_EMAIL = "info@example.com"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DYNAMICFORMS = {
     "allow_anonymous_user_to_preupload_files": True,
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "cache",
+    }
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

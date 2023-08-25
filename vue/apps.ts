@@ -13,16 +13,21 @@ import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
 import TitleBar from './components/titlebar.vue';
+import LoginDialog from './components/user-session/login-dialog.vue';
 import Login from './components/user-session/login-inline.vue';
 import ProjectList from './components/user-session/project-list.vue';
-import UserProfile from './components/user-session/userprofile.vue';
+import UserProfile from './components/user-session/user-profile.vue';
 import DefaultCookieOptions from './defaultCookieOptions';
 import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 
 export { default as useUserSessionStore } from './components/user-session/state';
-export { apiClient } from './apiClient';
+export { apiClient } from '@velis/dynamicforms';
 
-export const componentsConfig = {
+export { default as useLoginDialog } from './components/user-session/use-login-dialog';
+
+export { showNotification, showGeneralErrorNotification, showMaintenanceNotification } from './notifications';
+
+export const componentsConfig: { [key: string]: Component } = {
   TitleBar,
   Breadcrumbs,
   Login,
@@ -32,6 +37,7 @@ export const componentsConfig = {
   BrowserCheck,
   CookieNotice,
   TitlebarAppStandalone,
+  LoginDialog,
 };
 
 type AppData = Object;
@@ -79,11 +85,10 @@ const createCoreApp = (
   app.use(Notifications);
 
   // add translation function on a global scale
-  app.config.globalProperties.gettext = (value: string) => value;
   app.provide<AppData>('data', data);
 
   // add components
-  Object.values(componentsConfig).map((component: Component) => app.component(component.name as string, component));
+  Object.entries(componentsConfig).map(([name, component]) => app.component(name, component));
   Object.values(componentsToRegister).map((component: Component) => app.component(component.name as string, component));
 
   app.mount(`#${elementId}`);

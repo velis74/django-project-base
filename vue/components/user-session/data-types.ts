@@ -25,6 +25,7 @@ export interface UserDataJSON {
   permissions: UserPermissionJSON[]
   groups: UserGroupJSON[],
   delete_at: string
+  default_project?: Project
 }
 
 export interface UserData {

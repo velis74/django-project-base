@@ -11,6 +11,7 @@ const routeOrder = [
   '/modules.html',
   '/swagger.html',
   '/open-api.html',
+  '/browser-support.html',
 ]
 
 const headerTemplate = `<div style="width: 100%; display: flex; justify-content: center; align-items: center; color: lightgray; border-bottom: solid lightgray 1px; padding-bottom: 10px; font-size: 10px;">

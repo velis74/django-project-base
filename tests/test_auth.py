@@ -169,7 +169,11 @@ class TestSendResetPasswordLink(TestBase):
             os.path.join("/account/login"), {"login": "miha", "password": "mihamiha"}, format="json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.api_client.post("/account/send-reset-password-link/", {"email": "miha"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        from django_project_base.settings import TEST_USER_ONE_DATA
 
-        # Send password link is disabled, returns 404
-        response = self.api_client.post("/account/send-reset-password-link/", {"login": "miha"}, format="json")
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.api_client.post(
+            "/account/send-reset-password-link/", {"email": TEST_USER_ONE_DATA}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

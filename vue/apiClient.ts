@@ -23,7 +23,6 @@ apiClient.interceptors.request.use(
     if (_.includes(Store.get('ignored-apis') || [], config.url)) {
       new AbortController().abort('app-canceled-err');
     }
-    config.withCredentials = true;
     config.headers['Content-Type'] = 'application/json';
     if (currentProject && currentProject.length) {
       config.headers['Current-Project'] = currentProject;
@@ -47,7 +46,7 @@ apiClient.interceptors.response.use(
     const errMsg = error && error.response && error.response.data && error.response.data.detail ? error.response.data.detail : '';
     const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
     const noSession = status === HTTP_401_UNAUTHORIZED;
-    const hideErrorMsg = error.config && error.config.hideErrorNotice === true;
+    const hideErrorMsg = error.config?.hideErrorNotice === true;
 
     if (shouldUrlBeIgnoredAfterApiResponseNotFound(error)) {
       const ignoredApis = Store.get('ignored-apis') || [];

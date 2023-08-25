@@ -2,9 +2,13 @@
   <div>
     <div class="full-width">
       <div>
+        <!--suppress TypeScriptValidateTypes -->
+        <!-- @vue-ignore -->
         <APIConsumer :consumer="consumerLogic" :display-component="displayComponent"/>
       </div>
       <div>
+        <!--suppress TypeScriptValidateTypes -->
+        <!-- @vue-ignore -->
         <APIConsumer :consumer="consumerLogicMerge" :display-component="displayComponent"/>
       </div>
     </div>
@@ -12,52 +16,56 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Action, apiClient, APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
-import { defineComponent, ref } from 'vue';
+<script setup lang="ts">
+// TODO: remove linter ignores above when you know how to
+import {
+  Action,
+  apiClient,
+  APIConsumer,
+  ComponentDisplay,
+  ConsumerLogicApi,
+  useActionHandler,
+} from '@velis/dynamicforms';
 
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 
-export default defineComponent({
-  name: 'MergeUsers',
-  components: { APIConsumer },
-  data() {
-    return {
-      consumerLogic: ref<ConsumerLogicApi>(new ConsumerLogicApi('/account/profile', false)),
-      consumerLogicMerge: ref<ConsumerLogicApi>(new ConsumerLogicApi('/account/profile-merge', false)),
-      displayComponent: ComponentDisplay.TABLE,
-    };
-  },
-  mounted() {
-    // @ts-ignore
-    this.consumerLogic.filterData = { 'remove-merge-users': true };
-    (async () => {
-      await this.consumerLogic.getFullDefinition();
-    })();
-    (async () => {
-      await this.consumerLogicMerge.getFullDefinition();
-    })();
-  },
-  methods: {
-    actionMergeUsers() {
-      apiClient.post('account/profile-merge').then(() => {
-        this.consumerLogicMerge.reload();
-      });
-    },
-    actionClearMergeUsers() {
-      apiClient.delete('account/profile-merge/clear').then(() => {
-        this.consumerLogicMerge.reload();
-        this.consumerLogic.reload();
-      });
-    },
-    actionAddToMerge(action: Action, payload: { [x: string]: any; }) {
-      apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
-        this.consumerLogicMerge.reload();
-        this.consumerLogic.reload();
-      });
-    },
-  },
-});
+const consumerLogic = new ConsumerLogicApi('/account/profile', false);
+const consumerLogicMerge = new ConsumerLogicApi('/account/profile-merge', false);
+const displayComponent = ComponentDisplay.TABLE;
+
+consumerLogic.filterData = { 'remove-merge-users': true };
+
+consumerLogic.getFullDefinition();
+consumerLogicMerge.getFullDefinition();
+
+const actionMergeUsers = async () => {
+  await apiClient.post('account/profile-merge').then(() => {
+    consumerLogicMerge.reload();
+  });
+  return true;
+};
+
+const actionClearMergeUsers = async () => {
+  await apiClient.delete('account/profile-merge/clear').then(() => {
+    consumerLogicMerge.reload();
+    consumerLogic.reload();
+  });
+  return true;
+};
+
+const actionAddToMerge = async (action: Action, payload: { [x: string]: any; }) => {
+  await apiClient.post('account/profile/merge', { user: payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }).then(() => {
+    consumerLogicMerge.reload();
+    consumerLogic.reload();
+  });
+  return true;
+};
+
+const { handler } = useActionHandler();
+
+handler.register('merge-users', actionMergeUsers)
+  .register('clear-merge-users', actionClearMergeUsers)
+  .register('add-to-merge', actionAddToMerge);
 </script>
 
 <style scoped>
