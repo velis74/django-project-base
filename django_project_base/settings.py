@@ -6,8 +6,20 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {
         "name": "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES",
         "default": {
-            "project": {"value_name": "current_project_slug", "url_part": "project-"},
-            "language": {"value_name": "current_language", "url_part": "language-"},
+            "project": {
+                "value_name": "current_project_slug",
+                "url_part": (
+                    1,
+                    ("project",),
+                ),
+            },
+            "language": {
+                "value_name": "current_language",
+                "url_part": (
+                    1,
+                    ("language",),
+                ),
+            },
         },
     },
     {

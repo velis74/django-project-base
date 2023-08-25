@@ -163,6 +163,16 @@ DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
 DJANGO_PROJECT_BASE_ROLE_MODEL = "demo_django_base.Role"
 DJANGO_PROJECT_BASE_PERMISSION_MODEL = "demo_django_base.Permission"
 
+DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES = {
+    "project": {
+        "value_name": "current_project_slug",
+        "url_part": (
+            2,
+            ("project",),
+        ),
+    }
+}
+
 DEFAULT_FROM_EMAIL = "info@example.com"
 
 REST_REGISTRATION = {

@@ -29,7 +29,7 @@ class TestListMails(NotificationsTransactionTestCase):
                 raw_recipents=[
                     self.test_user.pk,
                 ],
-                project=swapper.load_model("django_project_base", "Project").objects.first(),
+                project=swapper.load_model("django_project_base", "Project").objects.first().slug,
                 recipients=[
                     self.test_user.pk,
                 ],
@@ -48,6 +48,7 @@ class TestListMails(NotificationsTransactionTestCase):
             reverse("notification-list"),
             format="json",
             HTTP_HOST=socket.gethostname().lower(),
+            HTTP_CURRENT_PROJECT=swapper.load_model("django_project_base", "Project").objects.first().slug,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(1, len(response.data))
