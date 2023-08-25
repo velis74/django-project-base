@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.test import APIClient
 
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.utils import get_pk_name
 from tests.test_base import TestBase
 
 
@@ -47,7 +48,7 @@ class TestMaintenanceNotifications(TestBase):
         acknowledged_response: Response = self.api_client.post(
             f"{self.url}acknowledged/",
             {
-                DjangoProjectBaseMessage._meta.pk.name: list_response.data[0][DjangoProjectBaseMessage._meta.pk.name],
+                get_pk_name(DjangoProjectBaseMessage): list_response.data[0][get_pk_name(DjangoProjectBaseMessage)],
                 "acknowledged_identifier": 5,
             },
         )

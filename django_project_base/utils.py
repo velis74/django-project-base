@@ -1,4 +1,9 @@
 from enum import IntEnum
+from typing import Dict, Union
+
+from django.db.models import Model, QuerySet
+from dynamicforms.serializers import Serializer
+from rest_framework.utils.model_meta import get_field_info
 
 
 def set_django_security(django_settings, deploy=True, swagger_version=None):
@@ -141,3 +146,11 @@ class IntDescribedEnum(IntEnum):
     @classmethod
     def has_value(cls, value):
         return value in cls.__members__.values()
+
+
+def get_pk_name(obj: Union[Model, QuerySet, Dict, Serializer], model: Model = None):
+    if isinstance(obj, QuerySet):
+        return obj.model._meta.pk.name
+    if isinstance(obj, Model):
+        return obj._meta.pk.name
+    return get_field_info(model if model else obj).pk.name
