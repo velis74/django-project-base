@@ -33,6 +33,7 @@ from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
+from django_project_base.utils import get_pk_name
 
 search_fields = ["username", "email", "first_name", "last_name"]
 
@@ -41,7 +42,7 @@ class ProfilePermissionsField(fields.ManyRelatedField):
     @staticmethod
     def to_dict(permission: Permission) -> dict:
         return {
-            Permission._meta.pk.name: permission.pk,
+            get_pk_name(Permission): permission.pk,
             "codename": permission.codename,
             "name": permission.name,
         }
@@ -57,7 +58,7 @@ class ProfileGroupsField(fields.ManyRelatedField):
         if row_data and row_data.pk:
             return [
                 {
-                    Group._meta.pk.name: g.pk,
+                    get_pk_name(Group): g.pk,
                     "permissions": [ProfilePermissionsField.to_dict(p) for p in g.permissions.all()],
                     "name": g.name,
                 }
@@ -325,7 +326,7 @@ class ProfileViewSet(ModelViewSet):
 
             class SearchProfileSerializer(ProfileSerializer):
                 class Meta(ProfileSerializer.Meta):
-                    fields = search_fields + [get_user_model()._meta.pk.name, "full_name"]
+                    fields = search_fields + [get_pk_name(get_user_model()), "full_name"]
                     exclude = None
 
             return SearchProfileSerializer

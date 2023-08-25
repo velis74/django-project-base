@@ -23,6 +23,7 @@ from django_project_base.account.rest.reset_password import ResetPasswordSeriali
 from django_project_base.account.social_auth.providers import get_social_providers
 from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.utils import get_pk_name
 
 
 def get_hijacker(request: Request) -> Optional:
@@ -325,12 +326,13 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
         view = RegisterView(request=request, serializer_class=self.serializer_class)
         response = view.post(request)
         if response.status_code == status.HTTP_201_CREATED:
+            user_model_pk_name = get_pk_name(get_user_model())
             profile_obj = swapper.load_model("django_project_base", "Profile").objects.get(
-                user_ptr_id=response.data[get_user_model()._meta.pk.name]
+                user_ptr_id=response.data[user_model_pk_name]
             )
             profile_obj.password_invalid = True
             profile_obj.save(update_fields=["password_invalid"])
-            recipients = [response.data[get_user_model()._meta.pk.name]]
+            recipients = [response.data[user_model_pk_name]]
             EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
@@ -348,7 +350,7 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
                 project=swapper.load_model("django_project_base", "Project").objects.get(
                     slug=self.request.current_project_slug
                 ),
-                recipients=[response.data[get_user_model()._meta.pk.name]],
+                recipients=[response.data[user_model_pk_name]],
                 user=self.request.user,
             ).send()
 

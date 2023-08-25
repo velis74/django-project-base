@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
+from django_project_base.utils import get_pk_name
 
 
 class AbstractDjangoProjectBaseMessage(models.Model):
@@ -140,15 +141,15 @@ class SearchItemsManager(models.Manager):
         try:
             tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
             user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
+            user_model = get_user_model()
             qs = []
             qs += [
                 SearchItemObject(o)
-                for o in get_user_model()
-                .objects.filter(userprofile__projects__project__slug=slug)
+                for o in user_model.objects.filter(userprofile__projects__project__slug=slug)
                 .distinct()
                 .annotate(  # qs users
                     ido=Concat(
-                        get_user_model()._meta.pk.name,
+                        get_pk_name(user_model),
                         Value("-"),
                         Value(user_model_content_type_id),
                         output_field=models.CharField(),
@@ -157,7 +158,7 @@ class SearchItemsManager(models.Manager):
                 .exclude(is_active=False)
                 .extra(
                     select={
-                        "object_id": f"{get_user_model()._meta.db_table}.{get_user_model()._meta.pk.name}",
+                        "object_id": f"{user_model._meta.db_table}.{get_pk_name(user_model)}",
                         "label": "username",
                         "content_type_id": user_model_content_type_id,
                     }
@@ -170,7 +171,7 @@ class SearchItemsManager(models.Manager):
                 .distinct()
                 .annotate(  # qs tags
                     ido=Concat(
-                        tag_model._meta.pk.name,
+                        get_pk_name(tag_model),
                         Value("-"),
                         Value(tag_model_content_type_id),
                         output_field=models.CharField(),
@@ -178,7 +179,7 @@ class SearchItemsManager(models.Manager):
                 )
                 .extra(
                     select={
-                        "object_id": f"{tag_model._meta.db_table}.{tag_model._meta.pk.name}",
+                        "object_id": f"{tag_model._meta.db_table}.{get_pk_name(tag_model)}",
                         "label": f"{tag_model._meta.db_table}.name",
                         "content_type_id": tag_model_content_type_id,
                     }

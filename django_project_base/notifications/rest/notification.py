@@ -26,6 +26,7 @@ from django_project_base.notifications.models import (
     DjangoProjectBaseNotification,
     SearchItems,
 )
+from django_project_base.utils import get_pk_name
 
 
 class MessageBodyField(fields.RTFField):
@@ -238,7 +239,7 @@ class MessageToListField(fields.ListField):
                         ]:  # noqa: E501
                             for field in user_related_fields:
                                 users += field.model.objects.filter(**{field.attname: cont_object.pk}).values_list(
-                                    field.model._meta.pk.name, flat=True
+                                    get_pk_name(field.model), flat=True
                                 )
                         elif related_objects := [
                             item

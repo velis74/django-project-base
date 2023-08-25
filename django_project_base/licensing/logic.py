@@ -9,6 +9,7 @@ from django.utils.translation import gettext
 from rest_framework.exceptions import PermissionDenied
 
 from django_project_base.licensing.models import LicenseAccessUse
+from django_project_base.utils import get_pk_name
 
 MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 5  # TODO: read from package
 
@@ -34,7 +35,7 @@ class LogAccessService:
 
         _channels = list(
             content_type_model.objects.annotate(
-                pkstr=Cast(content_type_model._meta.pk.name, output_field=models.CharField())
+                pkstr=Cast(get_pk_name(content_type_model), output_field=models.CharField())
             )
             .filter(pkstr__in=current_items.values_list("content_type_object_id", flat=True))
             .values_list("sent_channels", flat=True)

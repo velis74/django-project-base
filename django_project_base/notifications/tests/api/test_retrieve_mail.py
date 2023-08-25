@@ -9,6 +9,7 @@ from django_project_base.notifications.tests.notifications_transaction_test_case
     NotificationsTransactionTestCase,
     TestNotificationViaEmail,
 )
+from django_project_base.utils import get_pk_name
 
 
 class TestRetrieveMail(NotificationsTransactionTestCase):
@@ -30,5 +31,5 @@ class TestRetrieveMail(NotificationsTransactionTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(response.data)
-        self.assertIsNotNone(response.data[notification._meta.pk.name], str(notification.pk))
+        self.assertIsNotNone(response.data[get_pk_name(notification)], str(notification.pk))
         self.assertEqual(1, response.data["counter"])

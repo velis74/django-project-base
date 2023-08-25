@@ -15,6 +15,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from django_project_base.utils import get_pk_name
+
 
 class ProjectSerializer(ModelSerializer):
     template_context = dict(url_reverse="project-base-project")
@@ -139,7 +141,7 @@ class ProjectViewSet(ModelViewSet):
             self.kwargs[name] = lookup_field_val
             self.lookup_field = name
 
-        if lookup_field == "pk" or lookup_field == self.get_queryset().model._meta.pk.name:
+        if lookup_field == "pk" or lookup_field == get_pk_name(self.get_queryset()):
             is_pk_auto_field: bool = self.get_queryset().model._meta.pk.get_internal_type() == "AutoField"
             try:
                 int(lookup_field_val) if is_pk_auto_field and lookup_field_val else None

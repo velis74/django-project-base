@@ -20,12 +20,13 @@ from django_project_base.notifications.base.enums import NotificationType
 from django_project_base.notifications.maintenance_notification import MaintenanceNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 from django_project_base.notifications.utils import utc_now
+from django_project_base.utils import get_pk_name
 
 
 class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
     def __new__(cls, *args, **kwargs):
         new: "NotificationAcknowledgedRequestSerializer" = super().__new__(cls, *args, **kwargs)
-        new.fields[DjangoProjectBaseMessage._meta.pk.name] = fields.UUIDField(
+        new.fields[get_pk_name(DjangoProjectBaseMessage)] = fields.UUIDField(
             required=True, allow_null=False, help_text="Notification identifier"
         )
         new.fields["acknowledged_identifier"] = fields.IntegerField(
@@ -45,7 +46,7 @@ class NotificationAcknowledgedRequestSerializer(RestFrameworkSerializer):
 class MessageSerializer(DFSerializer):
     class Meta:
         model = DjangoProjectBaseMessage
-        exclude = (DjangoProjectBaseMessage._meta.pk.name,)
+        exclude = (get_pk_name(DjangoProjectBaseMessage),)
 
 
 class MaintenanceNotificationSerializer(ModelSerializer):
@@ -145,7 +146,7 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
             )
             return Response(self.get_serializer(current_maintenance, many=False).data)
         read_notifications: dict = request.session.get(settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY, {})
-        pk_name: str = DjangoProjectBaseMessage._meta.pk.name
+        pk_name: str = get_pk_name(DjangoProjectBaseMessage)
         return Response(
             self.get_serializer(
                 filter(lambda n: len(read_notifications.get(str(getattr(n, pk_name)), [])) < 3, self.get_queryset()),
@@ -185,7 +186,7 @@ class UsersMaintenanceNotificationViewset(ModelViewSet):
         if settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY not in request.session:
             request.session[settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY] = {}
         read_messages: dict = request.session[settings.MAINTENANCE_NOTIFICATIONS_CACHE_KEY]
-        notice_pk: str = ser.data[DjangoProjectBaseMessage._meta.pk.name]
+        notice_pk: str = ser.data[get_pk_name(DjangoProjectBaseMessage)]
         notice_diff: int = ser.data["acknowledged_identifier"]
         if notice_pk not in read_messages:
             read_messages[notice_pk] = []
