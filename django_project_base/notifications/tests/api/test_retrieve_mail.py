@@ -1,5 +1,6 @@
 import socket
 
+import swapper
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
@@ -26,6 +27,7 @@ class TestRetrieveMail(NotificationsTransactionTestCase):
             reverse("notification-detail", kwargs=dict(pk=notification.pk)),
             format="json",
             HTTP_HOST=socket.gethostname().lower(),
+            HTTP_CURRENT_PROJECT=swapper.load_model("django_project_base", "Project").objects.first().slug,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(response.data)

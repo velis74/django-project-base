@@ -29,6 +29,9 @@ class NotificationsTransactionTestCase(TransactionTestCase):
     def setUp(self) -> None:
         super().setUp()
         self.__createUser()
+        swapper.load_model("django_project_base", "Project").objects.create(
+            name="test", slug="test", owner=self.test_user.userprofile
+        )
         self.api_client = APIClient()
 
     def _login_to_api_client_with_test_user(self):
@@ -51,7 +54,7 @@ class NotificationsTransactionTestCase(TransactionTestCase):
         return TestNotificationViaEmail(
             message=DjangoProjectBaseMessage.objects.create(subject="Test mail", body="content"),
             raw_recipents=[self.test_user.pk],
-            project=swapper.load_model("django_project_base", "Project").objects.first(),
+            project=swapper.load_model("django_project_base", "Project").objects.first().slug,
             recipients=[self.test_user.pk],
             persist=True,
             user=self.test_user,

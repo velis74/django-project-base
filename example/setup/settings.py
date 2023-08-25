@@ -143,9 +143,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LOCALE_PATHS = [
-    os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/locale/"))
-]
+LOCALE_PATHS = [os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/locale/"))]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -164,6 +162,16 @@ DJANGO_PROJECT_BASE_PROJECTMEMBER_MODEL = "demo_django_base.ProjectMember"
 DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
 DJANGO_PROJECT_BASE_ROLE_MODEL = "demo_django_base.Role"
 DJANGO_PROJECT_BASE_PERMISSION_MODEL = "demo_django_base.Permission"
+
+DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES = {
+    "project": {
+        "value_name": "current_project_slug",
+        "url_part": (
+            2,
+            ("project", "account", "profile"),
+        ),
+    }
+}
 
 DEFAULT_FROM_EMAIL = "info@example.com"
 

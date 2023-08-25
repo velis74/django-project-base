@@ -27,11 +27,7 @@ from django_project_base.utils import get_pk_name
 
 
 def get_hijacker(request: Request) -> Optional:
-    session = getattr(
-        getattr(getattr(request, "_request", object()), "session", object()),
-        "_session",
-        dict(),
-    )
+    session = getattr(getattr(getattr(request, "_request", object()), "session", object()), "_session", dict())
     if (
         session.get("is_hijacked_user", False)
         and session.get("hijack_history", False)  # noqa: W503

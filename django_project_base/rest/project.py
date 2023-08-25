@@ -15,7 +15,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from django_project_base.base.middleware import get_parameter
 from django_project_base.utils import get_pk_name
 
 
@@ -133,13 +132,9 @@ class ProjectViewSet(ModelViewSet):
         lookup_field: str = self.lookup_field
         lookup_field_val: Union[str, int] = self.kwargs.get(self.lookup_field)
 
-        if (
-            value := getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
-            .get("project", {})
-            .get("url_part", "project-")
-        ):
-            if param := get_parameter(self.request, "project", value) and lookup_field_val != "new":
-                lookup_field_val = param
+        proj_value_name = settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"]
+        if getattr(self.request, proj_value_name, None) and lookup_field_val != "new":
+            lookup_field_val = getattr(self.request, proj_value_name)
 
         def set_args(name: str) -> None:
             self.kwargs.pop(lookup_field, None)
