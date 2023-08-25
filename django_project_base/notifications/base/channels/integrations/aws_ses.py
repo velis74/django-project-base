@@ -3,32 +3,33 @@ from botocore.exceptions import ClientError
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
 
-class AwsSes:
+class AwsSes(ProviderIntegration):
     key_id: str
     access_key: str
     region: str
-    from_email_config: dict
 
     def __init__(self) -> None:
-        super().__init__()
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+
+        super().__init__(channel=MailChannel, settings=object())
 
     def __ensure_credentials(self, extra_data):
         self.key_id = getattr(settings, "AWS_SES_ACCESS_KEY_ID", None)
         self.access_key = getattr(settings, "AWS_SES_SECRET_ACCESS_KEY", None)
         self.region = getattr(settings, "AWS_SES_REGION_NAME", None)
-        self.from_email_config = getattr(settings, "NOTIFICATION_SENDERS", None)
+        self.settings = settings
         if stgs := extra_data.get("SETTINGS"):
+            self.settings = stgs
             self.key_id = getattr(stgs, "AWS_SES_ACCESS_KEY_ID", None)
             self.access_key = getattr(stgs, "AWS_SES_SECRET_ACCESS_KEY", None)
             self.region = getattr(stgs, "AWS_SES_REGION_NAME", None)
-            self.from_email_config = getattr(stgs, "NOTIFICATION_SENDERS", None)
         assert self.key_id, "AWS SES key id required"
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
-        assert self.from_email_config, "NOTIFICATION_SENDERS setting is required"
 
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
@@ -46,9 +47,7 @@ class AwsSes:
             "Data": str(notification.message.body),
         }
         try:
-            from django_project_base.notifications.base.channels.mail_channel import MailChannel
-
-            sender = self.from_email_config[notification.project_slug]["settings"][MailChannel.name]
+            sender = self.sender(notification.project_slug)
 
             boto3.Session(
                 aws_access_key_id=self.key_id,
@@ -58,14 +57,11 @@ class AwsSes:
                 Destination={
                     "ToAddresses": [sender],
                     "CcAddresses": [],
-                    "BccAddresses": list(
-                        filter(
-                            lambda e: e and e not in ("", "None"),
-                            [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")],
-                        )
+                    "BccAddresses": self.clean_recipients(
+                        [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
                     )
                     if not notification.recipients_list
-                    else [u["email"] for u in notification.recipients_list if u.get("email") not in (None, "None", "")],
+                    else [u["email"] for u in notification.recipients_list if u.get("email")],
                 },
                 Message=msg,
                 Source=sender,

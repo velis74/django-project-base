@@ -8,6 +8,7 @@ from requests.auth import HTTPBasicAuth
 from rest_framework import status
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
+from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
@@ -261,7 +262,7 @@ class SMSCounter(object):
         return text
 
 
-class T2:
+class T2(ProviderIntegration):
     sms_from_number: dict
     username: str
     password: str
@@ -272,42 +273,35 @@ class T2:
     url = ""
 
     def __init__(self) -> None:
-        super().__init__()
+        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
+        super().__init__(channel=SmsChannel, settings=object())
 
     def __ensure_credentials(self, extra_data):
-        self.sms_from_number = getattr(settings, "NOTIFICATION_SENDERS", None)
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)
         self.url = getattr(settings, "SMS_API_URL", None)
+        self.settings = settings
         if stgs := extra_data.get("SETTINGS"):
-            self.sms_from_number = getattr(stgs, "NOTIFICATION_SENDERS", None)
+            self.settings = stgs
             self.username = getattr(stgs, "T2_USERNAME", None)
             self.password = getattr(stgs, "T2_PASSWORD", None)
             self.url = getattr(stgs, "SMS_API_URL", None)
-        assert self.sms_from_number, "NOTIFICATION_SENDERS is required"
         assert self.username, "T2_USERNAME is required"
         assert self.password, "T2_PASSWORD is required"
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
-
         to = PhoneNumberParser.valid_phone_numbers(
-            list(
-                filter(
-                    lambda p: p and p not in ("", "None"),
-                    [
-                        get_user_model().objects.get(pk=u).userprofile.phone_number
-                        for u in notification.recipients.split(",")
-                    ],
-                )
+            self.clean_recipients(
+                [
+                    get_user_model().objects.get(pk=u).userprofile.phone_number
+                    for u in notification.recipients.split(",")
+                ]
+                if not notification.recipients_list
+                else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
             )
-            if not notification.recipients_list
-            else [
-                u["phone_number"]
-                for u in notification.recipients_list
-                if u.get("phone_number") not in (None, "None", "")
-            ]
         )
 
         if not to:
@@ -338,7 +332,7 @@ class T2:
                 f"{self.url}{endpoint}",
                 auth=basic_auth,
                 json={
-                    "from_number": self.sms_from_number[notification.project_slug]["settings"][SmsChannel.name],
+                    "from_number": self.sender(notification.project_slug),
                     # f"to_number{'s' if multi else ''}": to if multi else to[0],
                     f"to_number": recipient,
                     "message": message,
