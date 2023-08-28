@@ -7,7 +7,7 @@ def forwards_func(apps, schema_editor):
     try:
         with connection.cursor() as cursor:
             cursor.execute("ALTER TABLE notifications_djangoprojectbasenotification drop column project_id;")
-    except OperationalError:
+    except Exception:
         pass
 
 
