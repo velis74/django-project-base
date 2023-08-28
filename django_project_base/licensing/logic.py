@@ -15,7 +15,16 @@ MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 5  # TODO: read from package
 
 
 class LogAccessService:
-    def log(self, user_profile_pk, channels: List[str], object_pk: str, on_sucess=None, **kwargs):
+    def log(
+        self,
+        user_profile_pk,
+        channels: List[str],
+        object_pk: str,
+        channel_price: float,
+        channel: str,
+        on_sucess=None,
+        **kwargs
+    ):
         if getattr(settings, "TESTING", False) and on_sucess:
             on_sucess()
             return
@@ -66,12 +75,11 @@ class LogAccessService:
             if on_success:
                 accesses_used = on_success
 
-        [
-            LicenseAccessUse.objects.using(db_connection).create(
-                type=LicenseAccessUse.USE,
-                user_id=str(user_profile_pk),
-                content_type_object_id=str(object_pk).replace("-", ""),
-                content_type=content_type,
-            )
-            for au in range(0, accesses_used)
-        ]
+        LicenseAccessUse.objects.using(db_connection).create(
+            type=LicenseAccessUse.USE,
+            user_id=str(user_profile_pk),
+            content_type_object_id=str(object_pk).replace("-", ""),
+            content_type=content_type,
+            amount=accesses_used * channel_price,
+            comment=dict(channel=channel, count=accesses_used),
+        )

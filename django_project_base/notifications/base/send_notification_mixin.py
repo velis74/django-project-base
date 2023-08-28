@@ -36,6 +36,8 @@ class SendNotificationMixin(object):
                     notification.user,
                     channels=sent_channels,
                     object_pk=notification.pk,
+                    channel_price=channel.notification_price,
+                    channel=str(channel),
                     on_sucess=lambda: channel.send(notification, extra_data),
                     db=db_connection,
                     settings=extra_data.get("SETTINGS", object()),
