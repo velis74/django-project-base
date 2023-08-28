@@ -8,8 +8,15 @@
       <component :is="breadcrumbsComponent"/>
     </template>
     <div class="flex-grow-0"/>
-    <component :is="projectlistComponent" v-if="projectlistComponent && userSession.loggedIn"/>
-    <component :is="userprofileComponent" v-if="userprofileComponent && userSession.loggedIn"/>
+    <component
+      :is="projectListComponent"
+      v-if="projectListComponent && userSession.loggedIn && !$vuetify.display.smAndDown"
+    />
+    <component
+      :is="userProfileComponent"
+      v-if="userProfileComponent && userSession.loggedIn"
+      :project-list-component="projectListComponent"
+    />
     <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>
     <app-notification/>
   </v-toolbar>
@@ -45,8 +52,8 @@ export default defineComponent({
     title: { type: String, default: null }, // set to override automatic title composition
     pageTitle: { type: String, default: null }, // set to add page title to currently selected project name
     adjustDocumentTitle: { type: Boolean, default: true }, // when true, will adjust document title based on page title
-    projectlistComponent: { type: String, default: 'ProjectList' }, // specify your own globally registered component
-    userprofileComponent: { type: String, default: 'UserProfile' }, // specify your own globally registered component
+    projectListComponent: { type: String, default: 'ProjectList' }, // specify your own globally registered component
+    userProfileComponent: { type: String, default: 'UserProfile' }, // specify your own globally registered component
     breadcrumbsComponent: { type: String, default: 'Breadcrumbs' }, // specify your own globally registered component
     loginVisible: { type: Boolean, default: true }, // if user is not logged in, should we show the login inputs
     checkMaintenanceNotifications: { type: Boolean, default: false },

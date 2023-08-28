@@ -9,20 +9,17 @@ import {
 import slugify from 'slugify';
 import { onMounted, Ref, ref, watch } from 'vue';
 
-import ProjectBaseData from '../../projectBaseData';
-
 import { Project, PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './data-types';
 import useUserSessionStore from './state';
 
-interface Permissions {
-  [key: string]: unknown;
+const userSession = useUserSessionStore();
+const projectList = ref([]) as Ref<Project[]>;
+
+interface ProjectListProps {
+  location: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end' | 'center';
 }
 
-const userSession = useUserSessionStore();
-
-const projectList = ref([]) as Ref<Project[]>;
-const permissions = ref({} as Permissions);
-const dataStore = new ProjectBaseData();
+const props = withDefaults(defineProps<ProjectListProps>(), { location: 'bottom' });
 
 function projectSelected(slug: string) {
   if (slug === userSession.selectedProjectId) return;
@@ -43,14 +40,9 @@ async function getProjects(): Promise<Project[]> {
   }
 }
 
-function setPermissions(newPermissions: Permissions) {
-  permissions.value = newPermissions;
-}
-
 async function loadData() {
   if (!userSession.loggedIn) return;
   projectList.value = await getProjects();
-  dataStore.getPermissions(setPermissions);
 }
 
 async function addNewProject() {
@@ -88,9 +80,9 @@ export default { name: 'ProjectList' };
 </script>
 
 <template>
-  <v-btn style="min-width: 0">
-    &#9776; {{ userSession.selectedProject?.name ?? gettext('NO Project') }}
-    <v-menu activator="parent">
+  <v-btn variant="text" style="min-width: 0">
+    &#9776; {{ userSession.selectedProject?.name ?? gettext('No Project') }}
+    <v-menu activator="parent" :location="props.location">
       <v-list>
         <v-list-item
           v-for="project in projectList"
@@ -100,7 +92,7 @@ export default { name: 'ProjectList' };
           <v-img :src="project.logo" class="project-link-image"/>{{ project.name }}
         </v-list-item>
         <v-divider/>
-        <v-list-item v-if="permissions['add-project']" @click="addNewProject">
+        <v-list-item v-if="userSession.userHasPermission('add-project')" @click="addNewProject">
           {{ gettext('Add new project') }}
         </v-list-item>
       </v-list>

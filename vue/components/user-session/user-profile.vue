@@ -2,24 +2,32 @@
 import { Action, dfModal, DialogSize, FilteredActions, FormConsumerApiOneShot, gettext } from '@velis/dynamicforms';
 import axios from 'axios';
 import _ from 'lodash';
-import { h, onMounted, ref, watch } from 'vue';
+import { computed, h, onMounted, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
 import { apiClient } from '../../apiClient';
 import { HTTP_401_UNAUTHORIZED } from '../../apiConfig';
 import { showGeneralErrorNotification } from '../../notifications';
-import ProjectBaseData from '../../projectBaseData';
 import { SocialAccItem } from '../../socialIntegrations';
 
 import icons from './icons';
+import ProjectList from './project-list.vue'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import useUserSessionStore from './state';
 
 type IconObjectKey = keyof typeof icons;
 
-const permissions = ref({} as any);
+interface UserProfileProps {
+  projectListComponent: string;
+}
+
+const props = withDefaults(defineProps<UserProfileProps>(), { projectListComponent: 'ProjectList' });
+const display = useDisplay();
 const userSession = useUserSessionStore();
 let enabledSocialConnections = [] as Array<SocialAccItem>;
 let availableSocialConnections = [] as Array<SocialAccItem>;
 let socialConnectionsModalPromise = null as any;
+
+const showProjectList = computed(() => (props.projectListComponent && userSession.loggedIn && display.smAndDown.value));
 
 async function changePassword() {
   await FormConsumerApiOneShot('/account/change-password/', true, 'new');
@@ -32,7 +40,6 @@ async function checkResetPassword() {
 }
 
 async function loadData(force: boolean = false) {
-  new ProjectBaseData().getPermissions((p: any) => { permissions.value = p; });
   if (userSession.loggedIn && !force) {
     await checkResetPassword();
     return;
@@ -219,12 +226,15 @@ async function removeMyAccount() {
 
     <v-menu activator="parent">
       <v-list>
+        <component :is="props.projectListComponent" v-if="showProjectList" location="start"/>
+        <v-divider v-if="showProjectList"/>
+
         <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
         <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
         <v-list-item v-if="false" @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
 
         <v-list-item
-          v-if="permissions['impersonate-user'] && !userSession.impersonated"
+          v-if="userSession.userHasPermission('impersonate-user') && !userSession.impersonated"
           @click="showImpersonateLogin"
         >
           {{ gettext('Impersonate user') }}
@@ -258,8 +268,7 @@ async function removeMyAccount() {
 }
 
 .merge-user-input {
-  border:        1px black;
-  border-style:  solid;
+  border:        1px solid black;
   border-radius: 5px;
 }
 
