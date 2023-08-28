@@ -35,11 +35,12 @@ The setting is composed of three parts for each individual parsed value. From th
    default, this means 'Current-Project'. If there is such a header its value will be used for current request.
 - value_name ('current_project_slug'): this parameter specifies attribute name into which to store the parsed
    information. In the 'project' default, this will be `session.current_project_slug`.
-- url_part ('project-'): This is a "fallback" in case a header is not found. The middleware then parses the URL path 
-for `url_part` and if found, the found value will be used. Example: `/project-test/api/v1/get_current_project` would 
+- url_part ('project-'): This is a "fallback" in case a header is not found. The middleware then parses the URL path
+  for `url_part` and if found, the found value will be used. Example: `/project-test/api/v1/get_current_project` would 
   match in the first path segment ('project-test') and `session.current_project_slug` would then be set to `test`.  
-  url_part parameter can also be an integer specifying the path segment that contains project slug. Specifying 1 
-  would  match `test` in `/test/api/v1/get_current_project`.
+  url_part parameter can also be a tuple (integer, List[string]) specifying the path segment that contains project slug
+  and segments that are "global" (t.i. not bound to projects). Specifying (1, ('account', 'project')) would  match 
+  `test` in `/test/api/v1/get_current_project`, but not `account` in `/account`.
 
 If middleware cannot detect the configured value from headers or path, the variable's `value_name` will be set to
 `None`.

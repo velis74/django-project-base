@@ -6,7 +6,11 @@ class Channel(ABC):
 
     provider = None
 
+    name = ""
+
+    notification_price = 0
+
     @staticmethod
     @abstractmethod
-    def send(notification: "Notification", **kwargs) -> None:  # noqa: F821
+    def send(notification: "DjangoProjectBaseNotification", extra_data, **kwargs) -> int:  # noqa: F821
         pass

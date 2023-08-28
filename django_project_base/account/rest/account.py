@@ -16,15 +16,14 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-# fmt: off
 from rest_registration.api.views import change_password, logout, register, verify_registration
-# fmt: on
 from social_django.models import UserSocialAuth
 
 from django_project_base.account.rest.reset_password import ResetPasswordSerializer
 from django_project_base.account.social_auth.providers import get_social_providers
-from django_project_base.notifications.base.email_notification import EMailNotification
+from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.utils import get_pk_name
 
 
 def get_hijacker(request: Request) -> Optional:
@@ -96,13 +95,22 @@ class LogoutViewSet(viewsets.ViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not authorised"),
         },
     )
-    @action(detail=False, methods=["post"], url_name="logout", permission_classes=[IsAuthenticated])
+    @action(
+        detail=False,
+        methods=["post"],
+        url_name="logout",
+        permission_classes=[IsAuthenticated],
+    )
     def logout(self, request: Request) -> Response:
         return logout(request._request)
 
 
 class ChangePasswordSerializer(df_serializers.Serializer):
-    template_context = dict(url_reverse="change-password", dialog_classes="modal-lg", dialog_header_classes="bg-info")
+    template_context = dict(
+        url_reverse="change-password",
+        dialog_classes="modal-lg",
+        dialog_header_classes="bg-info",
+    )
     form_titles = {
         "table": "",
         "new": _("Change password"),
@@ -147,7 +155,10 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     def create(self, request: Request) -> Response:
         def handle_password_changed(request):
             update_session_auth_hash(request, request.user)
-            profile_obj = getattr(request.user, swapper.load_model("django_project_base", "Profile")._meta.model_name)
+            profile_obj = getattr(
+                request.user,
+                swapper.load_model("django_project_base", "Profile")._meta.model_name,
+            )
             profile_obj.password_invalid = False
             profile_obj.save(update_fields=["password_invalid"])
 
@@ -190,7 +201,12 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(description="Bad request"),
         },
     )
-    @action(detail=False, methods=["post"], url_path="verify_registration", url_name="verify-registration")
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="verify_registration",
+        url_name="verify-registration",
+    )
     def verify_registration(self, request: Request) -> Response:
         return verify_registration(request._request)
 
@@ -256,7 +272,11 @@ class RegisterViewSet(viewsets.ViewSet):
 
 
 class AdminAddUserSerializer(AbstractRegisterSerializer):
-    template_context = dict(url_reverse="admin-add-user", dialog_classes="modal-lg", dialog_header_classes="bg-info")
+    template_context = dict(
+        url_reverse="admin-add-user",
+        dialog_classes="modal-lg",
+        dialog_header_classes="bg-info",
+    )
     form_titles = {
         "table": "",
         "new": _("Add new user"),
@@ -272,7 +292,10 @@ class AdminAddUserSerializer(AbstractRegisterSerializer):
 class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = AdminAddUserSerializer
 
-    permission_classes = (IsAuthenticated, IsAdminUser)  # TODO: permission should be based on project role
+    permission_classes = (
+        IsAuthenticated,
+        IsAdminUser,
+    )  # TODO: permission should be based on project role
 
     def initialize_request(self, request, *args, **kwargs):
         request = super().initialize_request(request, *args, **kwargs)
@@ -280,7 +303,14 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
         return request
 
     def new_object(self):
-        return dict(username="", email="", password="", password_confirm="", first_name="", last_name="")
+        return dict(
+            username="",
+            email="",
+            password="",
+            password_confirm="",
+            first_name="",
+            last_name="",
+        )
 
     @extend_schema(
         description="Add new user.",
@@ -296,12 +326,13 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
         view = RegisterView(request=request, serializer_class=self.serializer_class)
         response = view.post(request)
         if response.status_code == status.HTTP_201_CREATED:
+            user_model_pk_name = get_pk_name(get_user_model())
             profile_obj = swapper.load_model("django_project_base", "Profile").objects.get(
-                user_ptr_id=response.data[get_user_model()._meta.pk.name]
+                user_ptr_id=response.data[user_model_pk_name]
             )
             profile_obj.password_invalid = True
             profile_obj.save(update_fields=["password_invalid"])
-
+            recipients = [response.data[user_model_pk_name]]
             EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
@@ -315,7 +346,12 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),
-                persist=True,
+                raw_recipents=recipients,
+                project=swapper.load_model("django_project_base", "Project").objects.get(
+                    slug=self.request.current_project_slug
+                ),
+                recipients=[response.data[user_model_pk_name]],
+                user=self.request.user,
             ).send()
 
         return response

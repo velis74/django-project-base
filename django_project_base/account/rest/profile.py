@@ -2,6 +2,7 @@ import datetime
 
 import django
 import swapper
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
@@ -29,15 +30,19 @@ from rest_framework.serializers import Serializer
 from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
-from django_project_base.rest.project import ProjectSerializer
+from django_project_base.permissions import BasePermissions
+from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
+from django_project_base.utils import get_pk_name
+
+search_fields = ["username", "email", "first_name", "last_name"]
 
 
 class ProfilePermissionsField(fields.ManyRelatedField):
     @staticmethod
     def to_dict(permission: Permission) -> dict:
         return {
-            Permission._meta.pk.name: permission.pk,
+            get_pk_name(Permission): permission.pk,
             "codename": permission.codename,
             "name": permission.name,
         }
@@ -53,7 +58,7 @@ class ProfileGroupsField(fields.ManyRelatedField):
         if row_data and row_data.pk:
             return [
                 {
-                    Group._meta.pk.name: g.pk,
+                    get_pk_name(Group): g.pk,
                     "permissions": [ProfilePermissionsField.to_dict(p) for p in g.permissions.all()],
                     "name": g.name,
                 }
@@ -102,7 +107,7 @@ class ProfileSerializer(ModelSerializer):
         required=False,
         allow_null=False,
         read_only=True,
-        display=DisplayMode.HIDDEN,
+        display=DisplayMode.SUPPRESS,
     )
 
     groups = ProfileGroupsField(
@@ -119,7 +124,7 @@ class ProfileSerializer(ModelSerializer):
         required=False,
         allow_null=False,
         read_only=True,
-        display=DisplayMode.HIDDEN,
+        display=DisplayMode.SUPPRESS,
     )
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
@@ -134,9 +139,15 @@ class ProfileSerializer(ModelSerializer):
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
-        if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES and (
-            request.user.is_superuser or request.user.is_staff
-        ):
+        is_record_view = len(args) == 1 and isinstance(args[0], swapper.load_model("django_project_base", "Profile"))
+        if not is_record_view:
+            # for table view, we remove permissions and groups to improve performance
+            self.fields.pop("permissions", None)
+            self.fields.pop("groups", None)
+
+        if str(request.query_params.get("remove-merge-users", "false")) in tuple(
+            map(str, fields.BooleanField.TRUE_VALUES)
+        ) and (request.user.is_superuser or request.user.is_staff):
             self.actions.actions.append(
                 TableAction(
                     TablePosition.ROW_END,
@@ -145,6 +156,17 @@ class ProfileSerializer(ModelSerializer):
                     name="add-to-merge",
                     icon="git-merge-outline",
                 ),
+            )
+
+        if request.user.is_superuser or request.user.is_staff:
+            self.actions.actions.append(
+                TableAction(
+                    TablePosition.HEADER,
+                    label=_("Export"),
+                    title=_("Export"),
+                    name="export",
+                    icon="download-outline",
+                )
             )
 
     def get_is_impersonated(self, obj):
@@ -204,7 +226,7 @@ class ProfileRegisterSerializer(ProfileSerializer):
         if not attrs["password"]:
             errors["password"] = _("Password is required")
         if not attrs["password"] == password_repeat:
-            errors["password_repeat"] = _("Repeated value does not match inputted password")
+            errors["password_repeat"] = _("Passwords do not match")
 
         if not attrs["email"]:
             errors["email"] = _("Email is required")
@@ -218,7 +240,7 @@ class MergeUserRequest(Serializer):
     user = IntegerField(min_value=1, required=True, allow_null=False)
 
 
-class ProfileViewPermissions(IsAuthenticated):
+class ProfileViewPermissions(BasePermissions):
     """
     Allows users to have full permissions on get/post (retrieving and adding new users).
     Other methods require authentication.
@@ -238,7 +260,7 @@ class ProfileViewPermissions(IsAuthenticated):
 )
 class ProfileViewSet(ModelViewSet):
     filter_backends = [filters.SearchFilter]
-    search_fields = ["username", "email", "first_name", "last_name"]
+    search_fields = search_fields
     permission_classes = (ProfileViewPermissions,)
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
@@ -281,7 +303,9 @@ class ProfileViewSet(ModelViewSet):
             # but if user is not an admin, and the project is not known, only return this user's project
             qs = qs.filter(pk=self.request.user.pk)
 
-        if self.request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES:
+        if str(self.request.query_params.get("remove-merge-users", "false")) in tuple(
+            map(str, fields.BooleanField.TRUE_VALUES)
+        ):
             MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
             exclude_qs = list(
                 map(
@@ -294,9 +318,19 @@ class ProfileViewSet(ModelViewSet):
                 qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
 
         qs = qs.order_by("un", "id")
+
         return qs.distinct()
 
     def get_serializer_class(self):
+        if self.request.query_params.get("select", "") == "1":
+
+            class SearchProfileSerializer(ProfileSerializer):
+                class Meta(ProfileSerializer.Meta):
+                    fields = search_fields + [get_pk_name(get_user_model()), "full_name"]
+                    exclude = None
+
+            return SearchProfileSerializer
+
         return ProfileSerializer
 
     def filter_queryset_field(self, queryset, field, value):
@@ -403,13 +437,18 @@ class ProfileViewSet(ModelViewSet):
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
-            project_model: Model = swapper.load_model("django_project_base", "Project")
-            response_data["default-project"] = None
-            if project_model:
-                ProjectSerializer.Meta.model = project_model
-                response_data["default-project"] = ProjectSerializer(
-                    project_model.objects.filter(owner=user).first()
-                ).data
+            response_data["default_project"] = None
+            project_slug = request.session.get(
+                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"], None
+            )
+            if project_slug is None:
+                project_object = ProjectViewSet._get_queryset_for_request(request).first()
+            else:
+                project_object = (
+                    ProjectSerializer.Meta.model.objects.filter(slug=project_slug).first() if project_slug else None
+                )
+            if project_object:
+                response_data["default_project"] = ProjectSerializer(project_object).data
         return Response(response_data)
 
     @extend_schema(

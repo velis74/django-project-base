@@ -1,5 +1,4 @@
 import swapper
-from django.contrib.auth.models import Group
 from django.db.models import Model
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,7 +18,9 @@ class TestRole(TestBase):
     def setUp(self):
         super().setUp()
         self.api_client = APIClient()
-        self.project: Model = swapper.load_model("django_project_base", "Project").objects.create(
+        self.project: Model = swapper.load_model(
+            "django_project_base", "Project"
+        ).objects.create(
             name="test-project",
             owner=UserProfile.objects.get(username=TEST_USER_ONE_DATA["username"]),
             slug="test-project-slug",
@@ -33,41 +34,56 @@ class TestRole(TestBase):
             },
             format="json",
         )
-        self.api_client.credentials(HTTP_AUTHORIZATION="sessionid " + response.data.get("sessionid", None))
+        self.api_client.credentials(
+            HTTP_AUTHORIZATION="sessionid " + response.data.get("sessionid", None)
+        )
 
     def __create_role(self, payload: dict = {}) -> Response:
-        return self.api_client.post(self.url, {**{"name": self.test_role_name, "project": self.project.pk}, **payload})
+        return self.api_client.post(
+            self.url,
+            {**{"name": self.test_role_name, "project": self.project.pk}, **payload},
+        )
 
     def test_create_project_role(self):
+        role_class = swapper.load_model("django_project_base", "Role")
+
         response: Response = self.__create_role()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         project_role: dict = response.json()
         self.assertEqual(project_role.get("name"), self.test_role_name)
-        group: Group = Group.objects.get(pk=project_role.get(Group._meta.pk.name))
-        self.assertEqual(group.name, f'{self.project.pk}{ProjectRole.delimiter}{project_role.get("name")}')
+        group = role_class.objects.get(pk=project_role["id"])
+        self.assertEqual(
+            group.name,
+            f'{self.project.pk}{ProjectRole.delimiter}{project_role.get("name")}',
+        )
 
     def test_list_project_role(self):
         self.__create_role()
-        list_response: Response = self.api_client.get(f"{self.url}?project={self.project.pk}")
+        list_response: Response = self.api_client.get(
+            f"{self.url}?project={self.project.pk}"
+        )
         self.assertEqual(list_response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(list_response.json()), 1)
         self.assertEqual(list_response.json()[0].get("name"), self.test_role_name)
 
     def test_retrieve_project_role(self):
-        role_pk: int = self.__create_role().json().get(Group._meta.pk.name)
+        role_pk: int = self.__create_role().json().get("id")
         retrieve_response: Response = self.api_client.get(f"{self.url}/{role_pk}")
         self.assertEqual(retrieve_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(retrieve_response.json().get(Group._meta.pk.name), role_pk)
+        self.assertEqual(retrieve_response.json().get("id"), role_pk)
         self.assertEqual(retrieve_response.json().get("name"), self.test_role_name)
 
     def __test_update_role(self, action_method):
-        role_pk: int = self.__create_role().json().get(Group._meta.pk.name)
+        role_pk: int = self.__create_role().json().get("id")
         update_response: Response = getattr(self.api_client, action_method.lower())(
             f"{self.url}/{role_pk}", {"name": "new-role-name"}
         )
         self.assertEqual(update_response.status_code, status.HTTP_200_OK)
         self.assertEqual(update_response.json().get("name"), "new-role-name")
-        self.assertEqual(self.api_client.get(f"{self.url}/{role_pk}").json().get("name"), "new-role-name")
+        self.assertEqual(
+            self.api_client.get(f"{self.url}/{role_pk}").json().get("name"),
+            "new-role-name",
+        )
 
     def test_update_project_role(self):
         self.__test_update_role("put")
@@ -76,7 +92,9 @@ class TestRole(TestBase):
         self.__test_update_role("patch")
 
     def test_delete_project_role(self):
-        role_pk: int = self.__create_role().json().get(Group._meta.pk.name)
+        role_pk: int = self.__create_role().json().get("id")
         delete_response: Response = self.api_client.delete(f"{self.url}/{role_pk}")
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(0, len(self.api_client.get(f"{self.url}?project={self.project.pk}").json()))
+        self.assertEqual(
+            0, len(self.api_client.get(f"{self.url}?project={self.project.pk}").json())
+        )

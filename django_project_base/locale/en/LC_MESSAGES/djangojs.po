@@ -1,30 +1,183 @@
+#: vue/components/user-session/login-dialog.vue:14
+msgid "{put application name here}"
+msgstr ""
+
+#: vue/components/user-session/login-dialog.vue:47
+msgid "Please sign in with one of your existing third party accounts. Or, "
+msgstr ""
+
+#: vue/components/user-session/login-dialog.vue:54
+msgid "create a new account"
+msgstr ""
+
+#: vue/components/user-session/login-dialog.vue:56
+msgid "for %(appname)s and sign in below:"
+msgstr ""
+
+#: vue/components/user-session/login-dialog.vue:63
+msgid "or"
+msgstr ""
+
+#: vue/components/user-session/login-dialog.vue:78
+msgid "Forgot password?"
+msgstr ""
+
+#: vue/components/user-session/login-inline.vue:33
+msgid "Login"
+msgstr ""
+
+#: vue/components/user-session/login-inline.vue:36
+msgid "Register"
+msgstr ""
+
+#: vue/components/user-session/login.ts:47
+#: vue/components/user-session/login.ts:119
+msgid "Password recovery"
+msgstr ""
+
+#: vue/components/user-session/login.ts:51
+msgid ""
+"If an active account exists with the given email, we've sent a message to it."
+msgstr ""
+
+#: vue/components/user-session/login.ts:54
+msgid "Please enter the code from the message:"
+msgstr ""
+
+#: vue/components/user-session/login.ts:57
+msgid "Email code"
+msgstr ""
+
+#: vue/components/user-session/login.ts:61
+msgid "Please enter your new password:"
+msgstr ""
+
+#: vue/components/user-session/login.ts:64
+msgid "New password"
+msgstr ""
+
+#: vue/components/user-session/login.ts:71
+msgid "Confirm password"
+msgstr ""
+
+#: vue/components/user-session/login.ts:80
+#: vue/components/user-session/login.ts:129
+#: vue/components/user-session/login.ts:171
+#: vue/components/user-session/userprofile.vue:242
+msgid "Cancel"
+msgstr ""
+
+#: vue/components/user-session/login.ts:86
+msgid "Reset"
+msgstr ""
+
+#: vue/components/user-session/login.ts:105
+msgid "Password was reset successfully"
+msgstr ""
+
+#: vue/components/user-session/login.ts:120
+msgid "Enter your e-mail"
+msgstr ""
+
+#: vue/components/user-session/login.ts:135
+#: vue/components/user-session/userprofile.vue:235
+msgid "Confirm"
+msgstr ""
+
+#: vue/components/user-session/login.ts:152
+msgid "Account reactivation"
+msgstr ""
+
+#: vue/components/user-session/login.ts:157
+msgid ""
+"Your account will be restored. Do you want to keep all your previous data or "
+"do you want to reset account state and begin as account was just registered "
+"and your previous data is deleted?"
+msgstr ""
+
+#: vue/components/user-session/login.ts:165
+msgid "Reset account"
+msgstr ""
+
+#: vue/components/user-session/login.ts:203
+msgid "Unknown error trying to login"
+msgstr ""
+
+#: vue/components/user-session/project-list.vue:65
+msgid "NO Project"
+msgstr "Choose a project"
+
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-
+#: vue/components/user-session/project-list.vue:77
 msgid "Add new project"
-msgstr "Add new project"
+msgstr ""
 
-msgid "Login"
-msgstr "Login"
+#: vue/components/user-session/userprofile.vue:7
+msgid "Impersonated"
+msgstr ""
 
-msgid "Logout"
-msgstr "Logout"
-
-msgid "Invalid login credentials"
-msgstr "Invalid login credentials"
-
-msgid "Error"
-msgstr "Error"
-
+#: vue/components/user-session/userprofile.vue:13
 msgid "User profile"
-msgstr "User profile"
+msgstr ""
 
-msgid "User settings"
-msgstr "User settings"
-
+#: vue/components/user-session/userprofile.vue:14
 msgid "Change password"
-msgstr "Change password"
+msgstr ""
 
+#: vue/components/user-session/userprofile.vue:21
+msgid "Impersonate user"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:25
+msgid "Stop impersonation"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:31
+msgid "Logout"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:170
+#: vue/components/user-session/userprofile.vue:205
+msgid "Social connections"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:175
+msgid "Merge account with following credentials"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:179
+msgid "Username or email"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:183
+msgid "Password"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:187
+msgid "Currently logged in user account will be main account"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:206
+msgid "No social connections available"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:221
+msgid "Terminate account"
+msgstr ""
+
+#: vue/components/user-session/userprofile.vue:226
+msgid ""
+"Your account will be suspended, and all of your data will be permanently "
+"deleted after a period of 1 year. Once your account is suspended, you will "
+"have the option to reactivate it. If you wish to delete your account "
+"immediately, please contact us using the provided information in our "
+"contacts."
+msgstr ""
+
+#: vue/notifications.ts:50
+msgid "Error"
+msgstr ""

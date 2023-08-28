@@ -2,5 +2,9 @@
   "extends": "./tsconfig.json",
   "exclude": [
     "main.ts"
-  ]
+  ],
+  "compilerOptions": {
+    "declarationMap": true,
+    "sourceMap": true
+  }
 }

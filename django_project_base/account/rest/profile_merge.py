@@ -19,6 +19,8 @@ from rest_framework.serializers import Serializer
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
+from django_project_base.base.permissions import IsSuperUser
+from django_project_base.utils import get_pk_name
 
 
 class ProfileMergeSerializer(ProfileSerializer):
@@ -89,7 +91,7 @@ class MergeUsersRequest(Serializer):
 
 class ProfileMergeViewSet(ProfileViewSet):
     serializer_class = ProfileMergeSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAdminUser | IsSuperUser]
 
     schema = None
 
@@ -114,7 +116,7 @@ class ProfileMergeViewSet(ProfileViewSet):
             project=swapper.load_model("django_project_base", "Project").objects.get(slug=request.current_project_slug),
         )
         cache.set(ck, [])
-        return Response({MergeUserGroup._meta.pk.name: group.pk})
+        return Response({get_pk_name(MergeUserGroup): group.pk})
 
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)

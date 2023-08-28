@@ -18,7 +18,7 @@
             style="display: inline-block; float: right; vertical-align: middle;"
           >
             <button type="button" class="close" @click="item.data.onNotificationClose(item, close)">
-              <i class="fas fa-times fa-xs"/>
+              <v-icon icon="mdi-window-close"/>
             </button>
           </div>
         </div>

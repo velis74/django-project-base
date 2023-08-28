@@ -1,4 +1,5 @@
 import { NotificationsOptions, notify } from '@kyvg/vue3-notification';
+import { gettext } from '@velis/dynamicforms';
 
 const showNotification = (title: string, text: string, type = 'info') => {
   notify({
@@ -15,7 +16,7 @@ const showNotification = (title: string, text: string, type = 'info') => {
 
 const showMaintenanceNotification = (noticeItem: any, rangeId: any, closeCallback:any = null) => {
   const duration = -1;
-  const delayed = new Date(noticeItem.delayed_to_timestamp * 1000);
+  const delayed = new Date(noticeItem.delayed_to * 1000);
   notify({
     title: noticeItem.message.subject,
     text: `
@@ -46,8 +47,7 @@ const showMaintenanceNotification = (noticeItem: any, rangeId: any, closeCallbac
 
 const showGeneralErrorNotification = (text: string) => {
   const options: NotificationsOptions = {
-    // title: window.gettext('Error'), // jshint ignore:line
-    title: 'Error',
+    title: gettext('Error'),
     type: 'error',
     data: {
       onNotificationClose: (item: any, closeFunction: Function) => {

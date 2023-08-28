@@ -3,7 +3,12 @@ from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import (
-    extend_schema, extend_schema_field, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
+    extend_schema,
+    extend_schema_field,
+    extend_schema_view,
+    OpenApiParameter,
+    OpenApiResponse,
+    OpenApiTypes,
 )
 from dynamicforms import fields, serializers, viewsets
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
@@ -39,9 +44,9 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
     )
     form_titles = {"new": "Impersonate a user"}
 
-    id = ImpersonateUserIdField(placeholder=_("Select a user to impersonate"), label=_("User"), required=False,
-                                allow_null=True
-                                )
+    id = ImpersonateUserIdField(
+        placeholder=_("Select a user to impersonate"), label=_("User"), required=False, allow_null=True
+    )
 
     actions = Actions(
         FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Cancel")),
@@ -69,7 +74,7 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         return ser.validated_data
 
     class ImpersonateUser(serializers.Serializer):
-        id = fields.IntegerField(required=True, help_text=_('Target user pk'))
+        id = fields.IntegerField(required=True, help_text=_("Target user pk"))
 
     @extend_schema(
         request=ImpersonateUser,
@@ -77,7 +82,7 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
             status.HTTP_200_OK: OpenApiResponse(description="OK"),
             status.HTTP_403_FORBIDDEN: OpenApiResponse(
                 description="Forbidden. You do not have permission to perform this action or "
-                            "Impersonating self is not allowed"
+                "Impersonating self is not allowed"
             ),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(description="User matching provided data not found"),
         },

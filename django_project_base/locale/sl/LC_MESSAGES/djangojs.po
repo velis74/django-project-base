@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-04 14:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3);\n"
+
+#: vue/components/user-session/login-dialog.vue:14
+msgid "{put application name here}"
+msgstr ""
+
+#: vue/components/user-session/login-dialog.vue:47
+msgid "Please sign in with one of your existing third party accounts. Or, "
+msgstr "Prijavi se s katerim od svojih socialnih omrežij, ali pa"
+
+#: vue/components/user-session/login-dialog.vue:54
+msgid "create a new account"
+msgstr "ustvari nov račun"
+
+#: vue/components/user-session/login-dialog.vue:56
+msgid "for %(appname)s and sign in below:"
+msgstr "na %(appname)s in se prijavi spodaj:"
+
+#: vue/components/user-session/login-dialog.vue:63
+msgid "or"
+msgstr "ali"
+
+#: vue/components/user-session/login-dialog.vue:78
+msgid "Forgot password?"
+msgstr "Pozabljeno geslo?"
+
+#: vue/components/user-session/login-inline.vue:33
+msgid "Login"
+msgstr "Prijava"
+
+#: vue/components/user-session/login-inline.vue:36
+msgid "Register"
+msgstr "Registracija"
+
+#: vue/components/user-session/login.ts:47
+#: vue/components/user-session/login.ts:119
+msgid "Password recovery"
+msgstr "Obnova gesla"
+
+#: vue/components/user-session/login.ts:51
+msgid ""
+"If an active account exists with the given email, we've sent a message to it."
+msgstr "Če račun s podano e-pošto obstaja, samo poslali sporočilo."
+
+#: vue/components/user-session/login.ts:54
+msgid "Please enter the code from the message:"
+msgstr "Prosim, vnesi kodo iz sporočila:"
+
+#: vue/components/user-session/login.ts:57
+msgid "Email code"
+msgstr "Koda iz e-pošte"
+
+#: vue/components/user-session/login.ts:61
+msgid "Please enter your new password:"
+msgstr "Vnesi svoje novo geslo:"
+
+#: vue/components/user-session/login.ts:64
+msgid "New password"
+msgstr "Novo geslo"
+
+#: vue/components/user-session/login.ts:71
+msgid "Confirm password"
+msgstr "Potrdi geslo"
+
+#: vue/components/user-session/login.ts:80
+#: vue/components/user-session/login.ts:129
+#: vue/components/user-session/login.ts:171
+#: vue/components/user-session/userprofile.vue:242
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: vue/components/user-session/login.ts:86
+msgid "Reset"
+msgstr "Obnovi"
+
+#: vue/components/user-session/login.ts:105
+msgid "Password was reset successfully"
+msgstr "Geslo je bilo uspešno obnovljeno"
+
+#: vue/components/user-session/login.ts:120
+msgid "Enter your e-mail"
+msgstr "Vpiši naslov svoje e-pošte"
+
+#: vue/components/user-session/login.ts:135
+#: vue/components/user-session/userprofile.vue:235
+msgid "Confirm"
+msgstr "Potrdi"
+
+#: vue/components/user-session/login.ts:152
+msgid "Account reactivation"
+msgstr "Obnova računa"
+
+#: vue/components/user-session/login.ts:157
+msgid ""
+"Your account will be restored. Do you want to keep all your previous data or "
+"do you want to reset account state and begin as account was just registered "
+"and your previous data is deleted?"
+msgstr ""
+"Tvoj račun bo obnovljen. Ali želiš obdržati svoje stare podatke, ali bi raje "
+"ponastavil račun, zbrisal stare podatke in začel znova?"
+
+#: vue/components/user-session/login.ts:165
+msgid "Reset account"
+msgstr "Ponastavi račun"
+
+#: vue/components/user-session/login.ts:203
+msgid "Unknown error trying to login"
+msgstr "Neznana napaka pri prijavljanju"
+
+#: vue/components/user-session/project-list.vue:65
+msgid "NO Project"
+msgstr "Izberi projekt"
+
+#: vue/components/user-session/project-list.vue:77
+msgid "Add new project"
+msgstr "Dodaj nov projekt"
+
+#: vue/components/user-session/userprofile.vue:7
+msgid "Impersonated"
+msgstr "Poosebljen"
+
+#: vue/components/user-session/userprofile.vue:13
+msgid "User profile"
+msgstr "Uporabniški profil"
+
+#: vue/components/user-session/userprofile.vue:14
+msgid "Change password"
+msgstr "Spremeni geslo"
+
+#: vue/components/user-session/userprofile.vue:21
+msgid "Impersonate user"
+msgstr "Poosebi uporabnika"
+
+#: vue/components/user-session/userprofile.vue:25
+msgid "Stop impersonation"
+msgstr "Prekini poosebljenje"
+
+#: vue/components/user-session/userprofile.vue:31
+msgid "Logout"
+msgstr "Odjava"
+
+#: vue/components/user-session/userprofile.vue:170
+#: vue/components/user-session/userprofile.vue:205
+msgid "Social connections"
+msgstr "Socialne povezave"
+
+#: vue/components/user-session/userprofile.vue:175
+msgid "Merge account with following credentials"
+msgstr "Poveži račun s sledečimi poverilnicami"
+
+#: vue/components/user-session/userprofile.vue:179
+msgid "Username or email"
+msgstr "Uporabniško ime ali e-pošta"
+
+#: vue/components/user-session/userprofile.vue:183
+msgid "Password"
+msgstr "Geslo"
+
+#: vue/components/user-session/userprofile.vue:187
+msgid "Currently logged in user account will be main account"
+msgstr "Trenutno prijavljen račun bo glavni račun"
+
+#: vue/components/user-session/userprofile.vue:206
+msgid "No social connections available"
+msgstr "Ni socialnih povezav"
+
+#: vue/components/user-session/userprofile.vue:221
+msgid "Terminate account"
+msgstr "Ukini račun"
+
+#: vue/components/user-session/userprofile.vue:226
+msgid ""
+"Your account will be suspended, and all of your data will be permanently "
+"deleted after a period of 1 year. Once your account is suspended, you will "
+"have the option to reactivate it. If you wish to delete your account "
+"immediately, please contact us using the provided information in our "
+"contacts."
+msgstr ""
+"Tvoj račun bo onemogočen in tvoji podatki bodo trajno izbrisani po enem "
+"letu. Po onemogočanju računa boš še vedno imel možnost obnove računa. Če "
+"želiš izbris podatkov takoj, nas prosim kontaktiraj."
+
+#: vue/notifications.ts:50
+msgid "Error"
+msgstr "Napaka"
