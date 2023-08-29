@@ -3,7 +3,7 @@ from typing import List
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
-from django.db.models import Sum, Model
+from django.db.models import Model, Sum
 from django.utils.translation import gettext
 from rest_framework.exceptions import PermissionDenied
 
@@ -27,8 +27,6 @@ class LogAccessService:
             on_sucess()
             return
 
-        # only notifications supported for now
-        model_data = settings.LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL.split(".")
         db_connection = "default"
         if kwargs.get("db") and kwargs["db"] != "default":
             db_connection = kwargs["db"]
@@ -36,8 +34,10 @@ class LogAccessService:
 
         content_type = ContentType.objects.get_for_model(model=record._meta.model)
 
-        used = LicenseAccessUse.objects.filter(user_id=str(user_profile_pk), content_type=content_type).aggregate(
-            Sum("amount")
+        used = (
+            LicenseAccessUse.objects.filter(user_id=str(user_profile_pk), content_type=content_type)
+            .aggregate(Sum("amount"))
+            .get("amount__sum", None) or 0
         )
         if notifications_channels_state:
             items = {i: notifications_channels_state.count(i) for i in notifications_channels_state}

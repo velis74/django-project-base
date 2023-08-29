@@ -22,4 +22,4 @@ class LicenseAccessUse(models.Model):
 
     comment = models.JSONField(verbose_name=_("Comment"), null=True, blank=False)
 
-    amount = models.IntegerField(default=0)
+    amount = models.FloatField(default=0)
