@@ -41,6 +41,8 @@ class MessageBodyField(fields.RTFField):
 
 class OrginalRecipientsField(fields.CharField):
     def to_representation(self, value, row_data=None):
+        if row_data and row_data.recipients_original_payload_search:
+            return row_data.recipients_original_payload_search
         if value:
             search_str = ",".join(
                 list(
@@ -62,22 +64,14 @@ class OrginalRecipientsField(fields.CharField):
             if row_data and not row_data.recipients_original_payload_search:
                 row_data.recipients_original_payload_search = search_str
                 row_data.save(update_fields=["recipients_original_payload_search"])
-
-            if row_data and row_data.recipients:
-                users = [
-                    get_user_model().objects.get(pk=u)
-                    for u in row_data.recipients.split(",")
-                    if u not in (None, "None", "")
-                ]
-                search_str = ", ".join([f"{u.first_name} {u.last_name}" for u in users])
-                if len(search_str) > 95:
-                    search_str = f"{search_str[:95]} ..."
-
             return search_str
         return super().to_representation(value, row_data)
 
     def render_to_table(self, value, row_data):
-        return self.to_representation(value, row_data=row_data)
+        val = super().render_to_table(value=value, row_data=row_data)
+        if len(val) > 95:
+            val = f"{val[:95]} ..."
+        return val
 
 
 class ReadOnlyDateTimeFieldFromTs(fields.DateTimeField):
@@ -224,7 +218,9 @@ class MessageToListField(fields.ListField):
             )
         for obj in other_objects:
             _data = obj.split("-")
-            instance = ContentType.objects.get(pk=_data[1]).model_class().objects.get(pk=_data[0])
+            instance = ContentType.objects.get(pk=_data[1]).model_class().objects.filter(pk=_data[0]).first()
+            if not instance:
+                continue
             if return_instances:
                 instances += [instance]
                 continue
