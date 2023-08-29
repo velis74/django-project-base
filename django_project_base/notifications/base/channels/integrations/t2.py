@@ -331,7 +331,7 @@ class T2(ProviderIntegration):
                 f"{self.url}{endpoint}",
                 auth=basic_auth,
                 json={
-                    "from_number": self.sender(notification.project_slug),
+                    "from_number": self.sender(notification),
                     # f"to_number{'s' if multi else ''}": to if multi else to[0],
                     "to_number": recipient,
                     "message": message,

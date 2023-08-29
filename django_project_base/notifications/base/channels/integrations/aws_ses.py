@@ -47,7 +47,7 @@ class AwsSes(ProviderIntegration):
             "Data": str(notification.message.body),
         }
         try:
-            sender = self.sender(notification.project_slug)
+            sender = self.sender(notification)
 
             boto3.Session(
                 aws_access_key_id=self.key_id,
