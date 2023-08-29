@@ -64,14 +64,14 @@ class OrginalRecipientsField(fields.CharField):
             if row_data and not row_data.recipients_original_payload_search:
                 row_data.recipients_original_payload_search = search_str
                 row_data.save(update_fields=["recipients_original_payload_search"])
-
-            if len(search_str) > 95:
-                search_str = f"{search_str[:95]} ..."
             return search_str
         return super().to_representation(value, row_data)
 
     def render_to_table(self, value, row_data):
-        return self.to_representation(value, row_data=row_data)
+        val = super().render_to_table(value=value, row_data=row_data)
+        if len(val) > 95:
+            val = f"{val[:95]} ..."
+        return val
 
 
 class ReadOnlyDateTimeFieldFromTs(fields.DateTimeField):
