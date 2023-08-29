@@ -28,16 +28,16 @@ class SendNotificationMixin(object):
             dw.connect()
             connections.databases[db_connection] = dw.settings_dict
 
-        for channel_identifier in filter(lambda i: not (i is None), notification.required_channels.split(",")):
+        for channel_identifier in set(filter(lambda i: not (i is None), notification.required_channels.split(","))):
             channel = ChannelIdentifier.channel(channel_identifier)
             try:
                 # check license
                 LogAccessService().log(
-                    notification.user,
-                    channels=sent_channels,
-                    object_pk=notification.pk,
-                    channel_price=channel.notification_price,
-                    channel=str(channel),
+                    user_profile_pk=notification.user,
+                    notifications_channels_state=sent_channels,
+                    record=notification,
+                    item_price=channel.notification_price,
+                    comment=str(channel),
                     on_sucess=lambda: channel.send(notification, extra_data),
                     db=db_connection,
                     settings=extra_data.get("SETTINGS", object()),
