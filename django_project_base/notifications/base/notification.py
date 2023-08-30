@@ -3,8 +3,10 @@ import json
 import uuid
 from typing import List, Optional, Type
 
+import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.utils.crypto import get_random_string
 
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
@@ -115,6 +117,15 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             project_slug=self._project,
         )
         notification.user = self._user
+        if (
+            project := swapper.load_model("django_project_base", "Project")
+            .objects.filter(slug=self._project or get_random_string(length=32))
+            .first()
+        ):
+            from django_project_base.notifications.base.channels.mail_channel import MailChannel
+            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
+            notification.sender = {MailChannel.name: project.email_sender_id, SmsChannel.name: project.sms_sender_id}
         required_channels.sort()
         if self.persist:
             if self.handle_similar_notifications(notification=notification):
