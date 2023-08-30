@@ -5,14 +5,43 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.models import Model, Sum
 from django.utils.translation import gettext
+from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.serializers import Serializer
 
 from django_project_base.licensing.models import LicenseAccessUse
 
 MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 86.97  # TODO: read from package
 
 
+class LicenseUsageReport(Serializer):
+    item = serializers.CharField(read_only=True)
+    price = serializers.FloatField(read_only=True)
+
+
+class LicenseReportSerializer(Serializer):
+    available_credit = serializers.FloatField(read_only=True)
+    used_credit = serializers.FloatField(read_only=True)
+
+    usage_report = serializers.ListField(child=LicenseUsageReport(), allow_empty=True, read_only=True)
+
+
 class LogAccessService:
+    def report(self, user: Model) -> dict:
+        used = (
+            LicenseAccessUse.objects.filter(user_id=str(user.pk), amount__isnull=False, amount__gt=0)
+            .values("content_type")
+            .order_by("amount")
+            .annotate(count=Sum("amount"))
+        )
+        usage_report = []
+        for agg in used:
+            if content_type := ContentType.objects.get(pk=agg["content_type"]):
+                usage_report.append({"item": content_type.model_class()._meta.verbose_name, "price": agg["count"]})
+        return LicenseReportSerializer(
+            {"available_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS, "used_credit": 3, "usage_report": usage_report}
+        ).data
+
     def log(
         self,
         user_profile_pk,
@@ -21,7 +50,7 @@ class LogAccessService:
         item_price: float,
         comment: str,
         on_sucess=None,
-        **kwargs
+        **kwargs,
     ):
         if getattr(settings, "TESTING", False) and on_sucess:
             on_sucess()
@@ -37,7 +66,8 @@ class LogAccessService:
         used = (
             LicenseAccessUse.objects.filter(user_id=str(user_profile_pk), content_type=content_type)
             .aggregate(Sum("amount"))
-            .get("amount__sum", None) or 0
+            .get("amount__sum", None)
+            or 0
         )
         if notifications_channels_state:
             items = {i: notifications_channels_state.count(i) for i in notifications_channels_state}
