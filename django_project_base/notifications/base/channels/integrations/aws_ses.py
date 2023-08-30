@@ -56,7 +56,7 @@ class AwsSes(ProviderIntegration):
                 else [u["email"] for u in notification.recipients_list if u.get("email")]
             )
 
-            for group in [recipients[i : i + 49] for i in range(0, len(recipients), 49)]:
+            for group in [recipients[i : i + 49] for i in range(0, len(recipients), 49)]:  # noqa: E203
                 boto3.Session(
                     aws_access_key_id=self.key_id,
                     aws_secret_access_key=self.access_key,
