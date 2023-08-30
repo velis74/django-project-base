@@ -17,6 +17,7 @@ from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
+from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -42,6 +43,8 @@ class MessageBodyField(fields.RTFField):
 class OrginalRecipientsField(fields.CharField):
     def to_representation(self, value, row_data=None):
         if row_data and row_data.recipients_original_payload_search:
+            if len(row_data.recipients_original_payload_search) > 95:
+                return f"{row_data.recipients_original_payload_search[:95]} ..."
             return row_data.recipients_original_payload_search
         if value:
             search_str = ",".join(
@@ -64,6 +67,9 @@ class OrginalRecipientsField(fields.CharField):
             if row_data and not row_data.recipients_original_payload_search:
                 row_data.recipients_original_payload_search = search_str
                 row_data.save(update_fields=["recipients_original_payload_search"])
+            if len(search_str) > 95:
+                # TODO: INITIAL ROWS IN TABLE RENDER AND NOT HANDLED BY RENDER TO TABLE
+                search_str = f"{search_str[:95]} ..."
             return search_str
         return super().to_representation(value, row_data)
 
@@ -197,7 +203,6 @@ class MessageToListField(fields.ListField):
     def __init__(self, **kw):
         super().__init__(
             child=fields.CharField(),
-            required=True,
             display_table=DisplayMode.SUPPRESS,
             **kw,
         )
@@ -277,6 +282,8 @@ class MessageToListField(fields.ListField):
         value = super().get_value(dictionary)
         if not value:
             return []
+        if value == empty:
+            return MessageToListField.parse([])
         if isinstance(value[0], list):
             value = [item for sublist in value for item in sublist]
         return MessageToListField.parse(value)
@@ -306,7 +313,7 @@ class NotificationViewset(ModelViewSet):
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
-                message_to = MessageToListField()
+                message_to = MessageToListField(allow_null=False, allow_empty=False)
                 send_on_channels = fields.ListField(
                     child=fields.CharField(),
                     required=True,

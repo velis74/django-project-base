@@ -72,9 +72,7 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "locale",
-                    models.CharField(
-                        blank=True, max_length=8, null=True, verbose_name="Locale"
-                    ),
+                    models.CharField(blank=True, max_length=8, null=True, verbose_name="Locale"),
                 ),
                 (
                     "id",
@@ -135,15 +133,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "sent_at",
-                    models.BigIntegerField(
-                        blank=True, null=True, verbose_name="Sent at"
-                    ),
+                    models.BigIntegerField(blank=True, null=True, verbose_name="Sent at"),
                 ),
                 (
                     "delayed_to",
-                    models.BigIntegerField(
-                        blank=True, null=True, verbose_name="Delayed to"
-                    ),
+                    models.BigIntegerField(blank=True, null=True, verbose_name="Delayed to"),
                 ),
                 (
                     "type",
@@ -180,15 +174,6 @@ class Migration(migrations.Migration):
                         on_delete=django.db.models.deletion.SET_NULL,
                         to="notifications.djangoprojectbasemessage",
                         verbose_name="Message",
-                    ),
-                ),
-                (
-                    "project",
-                    models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to=settings.DJANGO_PROJECT_BASE_PROJECT_MODEL,
                     ),
                 ),
             ],

@@ -11,7 +11,7 @@ from rest_framework.exceptions import PermissionDenied
 from django_project_base.licensing.models import LicenseAccessUse
 from django_project_base.utils import get_pk_name
 
-MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 5  # TODO: read from package
+MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 86.97  # TODO: read from package
 
 
 class LogAccessService:
