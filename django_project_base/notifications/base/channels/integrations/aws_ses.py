@@ -46,26 +46,30 @@ class AwsSes(ProviderIntegration):
             "Charset": "UTF-8",
             "Data": str(notification.message.body),
         }
+
         try:
             sender = self.sender(notification)
 
-            boto3.Session(
-                aws_access_key_id=self.key_id,
-                aws_secret_access_key=self.access_key,
-                region_name=self.region,
-            ).client("ses").send_email(
-                Destination={
-                    "ToAddresses": [sender],
-                    "CcAddresses": [],
-                    "BccAddresses": self.clean_recipients(
-                        [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
-                    )
-                    if not notification.recipients_list
-                    else [u["email"] for u in notification.recipients_list if u.get("email")],
-                },
-                Message=msg,
-                Source=sender,
+            recipients = self.clean_recipients(
+                [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
+                if not notification.recipients_list
+                else [u["email"] for u in notification.recipients_list if u.get("email")]
             )
+
+            for group in [recipients[i : i + 49] for i in range(0, len(recipients), 49)]:
+                boto3.Session(
+                    aws_access_key_id=self.key_id,
+                    aws_secret_access_key=self.access_key,
+                    region_name=self.region,
+                ).client("ses").send_email(
+                    Destination={
+                        "ToAddresses": [sender],
+                        "CcAddresses": [],
+                        "BccAddresses": group,
+                    },
+                    Message=msg,
+                    Source=sender,
+                )
         except ClientError as e:
             import logging
 

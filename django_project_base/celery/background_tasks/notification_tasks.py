@@ -16,7 +16,7 @@ class SendNotificationTask(app.Task):
 
     max_retries = 0
     time_limit = NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
-    soft_time_limit = 15
+    soft_time_limit = NOTIFICATION_QUEABLE_HARD_TIME_LIMIT - 3
     default_retry_delay = 0
 
     def run(self, notification: "DjangoProjectBaseNotification", extra_data):  # noqa: F821
