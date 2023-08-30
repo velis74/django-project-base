@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Case, CharField, ForeignKey, Model, QuerySet, Value, When
+from django.db.models import Case, CharField, ForeignKey, Model, Prefetch, QuerySet, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -265,9 +265,12 @@ class ProfileViewSet(ModelViewSet):
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):
+        project_slug = getattr(self.request, "current_project_slug", None)
+        project = swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+        project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
         qs = (
             swapper.load_model("django_project_base", "Profile")
-            .objects.prefetch_related("projects", "groups", "user_permissions")
+            .objects.prefetch_related(Prefetch("projects", queryset=project_members), "groups", "user_permissions")
             .annotate(
                 un=Concat(
                     Coalesce(

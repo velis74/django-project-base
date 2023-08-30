@@ -86,6 +86,7 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
 
     _recipients_list = []
     _user = None
+    _sender = {}
 
     def _get_recipients(self):
         return self._recipients_list
@@ -99,9 +100,17 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
     def _set_user(self, val):
         self._user = val
 
+    def _get_sender(self):
+        return self._sender
+
+    def _set_sender(self, val):
+        self._sender = val
+
     recipients_list = property(_get_recipients, _set_recipents)
 
     user = property(_get_user, _set_user)
+
+    sender = property(_get_sender, _set_sender)
 
 
 class SearchItemObject:

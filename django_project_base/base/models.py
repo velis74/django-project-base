@@ -24,6 +24,9 @@ class BaseProject(models.Model):
         swapper.get_model_name("django_project_base", "Profile"), on_delete=models.CASCADE, verbose_name=_("Owner")
     )
 
+    sms_sender_id = models.CharField(max_length=11, null=True, blank=False)
+    email_sender_id = models.CharField(max_length=320, null=True, blank=False)
+
     class Meta:
         abstract = True
 

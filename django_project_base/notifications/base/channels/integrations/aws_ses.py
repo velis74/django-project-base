@@ -1,5 +1,7 @@
+import logging
+from typing import List
+
 import boto3
-from botocore.exceptions import ClientError
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
@@ -31,6 +33,21 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
+    def _client_send(self, sender: str, recipients: List[str], msg: dict):
+        boto3.Session(
+            aws_access_key_id=self.key_id,
+            aws_secret_access_key=self.access_key,
+            region_name=self.region,
+        ).client("ses").send_email(
+            Destination={
+                "ToAddresses": [sender],
+                "CcAddresses": [],
+                "BccAddresses": recipients,
+            },
+            Message=msg,
+            Source=sender,
+        )
+
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
         msg = {
@@ -46,29 +63,26 @@ class AwsSes(ProviderIntegration):
             "Charset": "UTF-8",
             "Data": str(notification.message.body),
         }
+        logger = logging.getLogger("django")
         try:
-            sender = self.sender(notification.project_slug)
+            sender = self.sender(notification)
 
-            boto3.Session(
-                aws_access_key_id=self.key_id,
-                aws_secret_access_key=self.access_key,
-                region_name=self.region,
-            ).client("ses").send_email(
-                Destination={
-                    "ToAddresses": [sender],
-                    "CcAddresses": [],
-                    "BccAddresses": self.clean_recipients(
-                        [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
-                    )
-                    if not notification.recipients_list
-                    else [u["email"] for u in notification.recipients_list if u.get("email")],
-                },
-                Message=msg,
-                Source=sender,
+            recipients = self.clean_email_recipients(
+                [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
+                if not notification.recipients_list
+                else [u["email"] for u in notification.recipients_list if u.get("email")]
             )
-        except ClientError as e:
-            import logging
 
-            logger = logging.getLogger("django")
+            for group in [recipients[i : i + 49] for i in range(0, len(recipients), 49)]:  # noqa: E203
+                try:
+                    self._client_send(sender, group, msg)
+                except Exception as ge:
+                    logger.exception(ge)
+                    for single_item in group:
+                        try:
+                            self._client_send(sender, [single_item], msg)
+                        except Exception as se:
+                            logger.exception(se)
+        except Exception as e:
             logger.exception(e)
             raise e

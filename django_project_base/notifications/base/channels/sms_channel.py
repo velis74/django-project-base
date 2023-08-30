@@ -14,7 +14,7 @@ class SmsChannel(Channel):
 
     provider = import_string(getattr(settings, "SMS_PROVIDER", ""))
 
-    notification_price = 0.04  # TODO get from settings
+    notification_price = 0.1  # TODO get from settings
 
     @staticmethod
     def send(notification: "DjangoProjectBaseNotification", extra_data, **kwargs) -> int:  # noqa: F821
