@@ -23,7 +23,7 @@ class ProviderIntegration:
         return _sender
 
     def clean_recipients(self, recipients: List[str]) -> List[str]:
-        return [r for r in recipients if r not in ("", "None", None)]
+        return list(set([r for r in recipients if r not in ("", "None", None)]))
 
     def clean_email_recipients(self, recipients: List[str]) -> List[str]:
         valid = []
