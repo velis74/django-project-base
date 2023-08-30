@@ -6,7 +6,7 @@ SECRET_KEY = get_random_string(length=64)
 NOTIFICATION_SEND_PAUSE_SECONDS = 4
 
 # todo: read this setting from env
-NOTIFICATION_QUEABLE_HARD_TIME_LIMIT = 10
+NOTIFICATION_QUEABLE_HARD_TIME_LIMIT = 180
 
 # todo: read this setting from env
 NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT = 86400
