@@ -17,6 +17,7 @@ from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
+from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -202,7 +203,6 @@ class MessageToListField(fields.ListField):
     def __init__(self, **kw):
         super().__init__(
             child=fields.CharField(),
-            required=True,
             display_table=DisplayMode.SUPPRESS,
             **kw,
         )
@@ -282,6 +282,8 @@ class MessageToListField(fields.ListField):
         value = super().get_value(dictionary)
         if not value:
             return []
+        if value == empty:
+            return MessageToListField.parse([])
         if isinstance(value[0], list):
             value = [item for sublist in value for item in sublist]
         return MessageToListField.parse(value)
@@ -311,7 +313,7 @@ class NotificationViewset(ModelViewSet):
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
-                message_to = MessageToListField()
+                message_to = MessageToListField(allow_null=False, allow_empty=False)
                 send_on_channels = fields.ListField(
                     child=fields.CharField(),
                     required=True,
