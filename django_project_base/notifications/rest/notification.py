@@ -42,6 +42,8 @@ class MessageBodyField(fields.RTFField):
 class OrginalRecipientsField(fields.CharField):
     def to_representation(self, value, row_data=None):
         if row_data and row_data.recipients_original_payload_search:
+            if len(row_data.recipients_original_payload_search) > 95:
+                return f"{row_data.recipients_original_payload_search[:95]} ..."
             return row_data.recipients_original_payload_search
         if value:
             search_str = ",".join(
