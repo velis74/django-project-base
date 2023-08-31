@@ -7,6 +7,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
+from dynamicforms.template_render.layout import Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
@@ -36,6 +37,7 @@ class ProjectSerializer(ModelSerializer):
     class Meta:
         model = swapper.load_model("django_project_base", "Project")
         exclude = ("logo",)  # TODO we currently don't support logos well. see DPB #3
+        layout = Layout(Row("name"), Row("slug"), Row("description"), Row("sms_sender_id", "email_sender_id"))
 
 
 class ProjectViewSet(ModelViewSet):
