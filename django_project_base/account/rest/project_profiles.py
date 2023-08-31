@@ -1,15 +1,13 @@
 import re
 from io import BytesIO
 
-import swapper
 import pandas as pd
+import swapper
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
-from django_project_base.account.rest.profile import ProfileViewSet, ProfileSerializer
-from dynamicforms import fields
-from dynamicforms import serializers
+from dynamicforms import fields, serializers
 from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.viewsets import SingleRecordViewSet
 from rest_framework.exceptions import NotFound
@@ -17,6 +15,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.utils import model_meta
 
+from django_project_base.account.rest.profile import ProfileViewSet, ProfileSerializer
 from .project_profiles_utils import get_project_members, filter_project_members_fields
 
 

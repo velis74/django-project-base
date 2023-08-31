@@ -2,11 +2,10 @@ from datetime import datetime, timedelta
 
 import pytz
 import swapper
-
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
-from django.db.models import Case, CharField, QuerySet, Prefetch, Value, When
+from django.db.models import Case, CharField, Prefetch, QuerySet, Value, When
 from django.db.models.functions import Coalesce, Concat
 from django.utils.dateparse import (
     datetime_re,
@@ -17,12 +16,10 @@ from django.utils.dateparse import (
     standard_duration_re,
     time_re,
 )
+from dynamicforms import fields
+from rest_framework.request import Request
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
-
-from dynamicforms import fields
-
-from rest_framework.request import Request
 
 
 def get_project_members(request: Request) -> QuerySet:
