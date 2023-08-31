@@ -7,8 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Case, CharField, ForeignKey, Model, QuerySet, Prefetch, Value, When
-from django.db.models.functions import Coalesce, Concat
+from django.db.models import ForeignKey, Model, QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
