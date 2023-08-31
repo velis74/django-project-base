@@ -1,5 +1,6 @@
 import datetime
 import json
+import re
 
 import pytz
 import swapper
@@ -9,17 +10,23 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import ForeignKey, QuerySet
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular import serializers
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
-from dynamicforms.viewsets import ModelViewSet
+from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
+from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
+from rest_framework.decorators import action
 from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
 
+from django_project_base.licensing.logic import LogAccessService, LicenseReportSerializer
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import (
@@ -352,3 +359,83 @@ class NotificationViewset(ModelViewSet):
             user=self.request.user.pk,
         )
         notification.send()
+
+    @action(detail=False, methods=["GET"], url_path="license", url_name="license")
+    def license(self, request: Request) -> Response:
+        license = LogAccessService().report(user=request.user)
+        usage = 0
+        if notifications_usage := next(
+            filter(
+                lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
+                license["usage_report"],
+            ),
+            None,
+        ):
+            usage = notifications_usage["usage_sum"]
+
+        class NotificationsLicenseSerializer(LicenseReportSerializer):
+            usage_report = None
+
+        license = NotificationsLicenseSerializer(license).data
+
+        license["used_credit"] = usage
+        license["channels"] = {}
+
+        for channel in ChannelIdentifier.supported_channels():
+            license["channels"][channel.name] = {}
+            license["channels"][channel.name]["available"] = int(
+                max([license["credit"] / channel.notification_price, 0])
+            )
+
+        return Response(license)
+
+
+class ChannelSerializer(Serializer):
+    available = fields.IntegerField()
+
+
+class ChannelsSerializer(Serializer):
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        for channel in ChannelIdentifier.supported_channels():
+            self.fields[channel.name] = ChannelSerializer()
+
+
+class NotificationsLicenseSerializer(LicenseReportSerializer):
+    usage_report = None
+    channels = ChannelsSerializer()
+
+
+class NotificationsLicenseViewSet(SingleRecordViewSet):
+    serializer_class = NotificationsLicenseSerializer
+
+    permission_classes = (IsAuthenticated,)
+    """
+    {"available_credit":86.97,"credit":86.81,"used_credit":0.16,"channels":{"E-Mail":{"available":434050},"SMS":{"available":868}}}
+    """
+
+    def new_object(self):
+        license = LogAccessService().report(user=self.request.user)
+        usage = 0
+        if notifications_usage := next(
+            filter(
+                lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
+                license["usage_report"],
+            ),
+            None,
+        ):
+            usage = notifications_usage["usage_sum"]
+        license["used_credit"] = usage
+
+        license["channels"] = {}
+
+        for channel in ChannelIdentifier.supported_channels():
+            license["channels"][channel.name] = {}
+            license["channels"][channel.name]["available"] = int(
+                max([license["credit"] / channel.notification_price, 0])
+            )
+
+        return NotificationsLicenseSerializer(license).data
+
+    def create(self, request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)

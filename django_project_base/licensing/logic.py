@@ -16,11 +16,12 @@ MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 86.97  # TODO: read from package
 
 class LicenseUsageReport(Serializer):
     item = serializers.CharField(read_only=True)
-    price = serializers.FloatField(read_only=True)
+    usage_sum = serializers.FloatField(read_only=True)
 
 
 class LicenseReportSerializer(Serializer):
     available_credit = serializers.FloatField(read_only=True)
+    credit = serializers.FloatField(read_only=True)
     used_credit = serializers.FloatField(read_only=True)
 
     usage_report = serializers.ListField(child=LicenseUsageReport(), allow_empty=True, read_only=True)
@@ -37,9 +38,15 @@ class LogAccessService:
         usage_report = []
         for agg in used:
             if content_type := ContentType.objects.get(pk=agg["content_type"]):
-                usage_report.append({"item": content_type.model_class()._meta.verbose_name, "price": agg["count"]})
+                usage_report.append({"item": content_type.model_class()._meta.verbose_name, "usage_sum": agg["count"]})
+        used_credit = used.first()["count"]
         return LicenseReportSerializer(
-            {"available_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS, "used_credit": 3, "usage_report": usage_report}
+            {
+                "available_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS,
+                "used_credit": used.first()["count"],
+                "usage_report": usage_report,
+                "credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS - used_credit,
+            }
         ).data
 
     def log(
