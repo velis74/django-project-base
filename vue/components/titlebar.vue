@@ -18,7 +18,6 @@
       :project-list-component="projectListComponent"
     />
     <LoginInline v-else-if="!userSession.loggedIn && loginVisible"/>
-    <app-notification/>
   </v-toolbar>
 </template>
 

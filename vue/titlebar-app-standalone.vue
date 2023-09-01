@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppNotification from './components/notification.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
 </script>
 
@@ -12,4 +13,5 @@ import LoginDialog from './components/user-session/login-dialog.vue';
       </v-main>
     </v-app>
   </BrowserCheck>
+  <app-notification/>
 </template>

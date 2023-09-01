@@ -5,9 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.models import Model, Sum
 from django.utils.translation import gettext
-from rest_framework import serializers
+from dynamicforms import fields
+from dynamicforms.serializers import Serializer
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.serializers import Serializer
 
 from django_project_base.licensing.models import LicenseAccessUse
 
@@ -15,15 +15,16 @@ MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 86.97  # TODO: read from package
 
 
 class LicenseUsageReport(Serializer):
-    item = serializers.CharField(read_only=True)
-    price = serializers.FloatField(read_only=True)
+    item = fields.CharField(read_only=True)
+    usage_sum = fields.FloatField(read_only=True)
 
 
 class LicenseReportSerializer(Serializer):
-    available_credit = serializers.FloatField(read_only=True)
-    used_credit = serializers.FloatField(read_only=True)
+    credit = fields.FloatField(read_only=True)
+    used_credit = fields.FloatField(read_only=True)
+    remaining_credit = fields.FloatField(read_only=True)
 
-    usage_report = serializers.ListField(child=LicenseUsageReport(), allow_empty=True, read_only=True)
+    usage_report = fields.ListField(child=LicenseUsageReport(), allow_empty=True, read_only=True)
 
 
 class LogAccessService:
@@ -37,9 +38,15 @@ class LogAccessService:
         usage_report = []
         for agg in used:
             if content_type := ContentType.objects.get(pk=agg["content_type"]):
-                usage_report.append({"item": content_type.model_class()._meta.verbose_name, "price": agg["count"]})
+                usage_report.append({"item": content_type.model_class()._meta.verbose_name, "usage_sum": agg["count"]})
+        used_credit = used.first()["count"]
         return LicenseReportSerializer(
-            {"available_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS, "used_credit": 3, "usage_report": usage_report}
+            {
+                "credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS,
+                "used_credit": used.first()["count"],
+                "usage_report": usage_report,
+                "remaining_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS - used_credit,
+            }
         ).data
 
     def log(

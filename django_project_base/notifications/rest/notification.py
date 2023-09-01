@@ -10,16 +10,19 @@ from django.db.models import ForeignKey, QuerySet
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
-from dynamicforms.action import Actions, TableAction, TablePosition
+from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
-from dynamicforms.viewsets import ModelViewSet
+from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
+from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
+from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import (
@@ -130,7 +133,14 @@ class NotificationSerializer(ModelSerializer):
             title=_("Add new record"),
             name="add",
             icon="add-circle-outline",
-        )
+        ),
+        TableAction(
+            TablePosition.HEADER,
+            _("View license"),
+            title=_("View license"),
+            name="view-license",
+            icon="card-outline",
+        ),
     )
 
     message_to = fields.ManyRelatedField(
@@ -352,3 +362,70 @@ class NotificationViewset(ModelViewSet):
             user=self.request.user.pk,
         )
         notification.send()
+
+
+class ChannelSerializer(Serializer):
+    available = fields.FloatField(read_only=True, display_table=DisplayMode.HIDDEN)
+
+
+class ChannelsSerializer(Serializer):
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        for channel in ChannelIdentifier.supported_channels():
+            self.fields[channel.name] = ChannelSerializer()
+
+
+class NotificationsLicenseSerializer(LicenseReportSerializer):
+    template_context = dict(url_reverse="notification-license")
+
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        if (request := self.context.get("request")) and not fields.BooleanField().to_internal_value(
+            request.query_params.get("decorate-max-price", "0")
+        ):
+            self.fields.pop("max_notification_price", None)
+
+    usage_report = None
+    channels = ChannelsSerializer()
+    max_notification_price = fields.FloatField(read_only=True, display_table=DisplayMode.HIDDEN)
+    actions = Actions(
+        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel"),
+        add_default_crud=False,
+        add_default_filter=False,
+        add_form_buttons=False,
+    )
+
+
+class NotificationsLicenseViewSet(SingleRecordViewSet):
+    serializer_class = NotificationsLicenseSerializer
+
+    permission_classes = (IsAuthenticated,)
+
+    def new_object(self):
+        license = LogAccessService().report(user=self.request.user)
+        usage = 0
+        if notifications_usage := next(
+            filter(
+                lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
+                license["usage_report"],
+            ),
+            None,
+        ):
+            usage = notifications_usage["usage_sum"]
+        license["used_credit"] = usage
+
+        license["channels"] = {}
+        max_price = 0
+        for channel in ChannelIdentifier.supported_channels():
+            price = channel.notification_price
+            if price > max_price:
+                max_price = price
+            license["channels"][channel.name] = {}
+            license["channels"][channel.name]["available"] = int(max([license["credit"] / price, 0]))
+        if fields.BooleanField().to_internal_value(self.request.query_params.get("decorate-max-price", "0")):
+            license["max_notification_price"] = max_price
+
+        return NotificationsLicenseSerializer(license).data
+
+    def create(self, request, *args, **kwargs) -> Response:
+        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
