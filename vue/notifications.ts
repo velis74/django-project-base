@@ -1,10 +1,18 @@
 import { NotificationsOptions, notify } from '@kyvg/vue3-notification';
 import { gettext } from '@velis/dynamicforms';
 
-const showNotification = (title: string, text: string, type = 'info') => {
+const showNotification = (
+  title: string,
+  text: string,
+  type = 'info',
+  duration: number | undefined = undefined,
+  id: number | undefined = undefined,
+) => {
   notify({
     title,
     text,
+    duration,
+    id,
     type,
     data: {
       onNotificationClose: (item: any, closeFunction: any) => {
@@ -14,7 +22,7 @@ const showNotification = (title: string, text: string, type = 'info') => {
   });
 };
 
-const showMaintenanceNotification = (noticeItem: any, rangeId: any, closeCallback:any = null) => {
+const showMaintenanceNotification = (noticeItem: any, rangeId: any, closeCallback: any = null) => {
   const duration = -1;
   const delayed = new Date(noticeItem.delayed_to * 1000);
   notify({
@@ -61,4 +69,8 @@ const showGeneralErrorNotification = (text: string) => {
   notify(options);
 };
 
-export { showNotification, showGeneralErrorNotification, showMaintenanceNotification };
+const closeNotification = (id: number) => {
+  notify.close(id);
+};
+
+export { showNotification, showGeneralErrorNotification, showMaintenanceNotification, closeNotification };
