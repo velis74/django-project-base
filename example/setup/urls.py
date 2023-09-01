@@ -27,18 +27,26 @@ from django_project_base.views import documentation_view
 from example.demo_django_base.views import index_view, page1_view
 
 urlpatterns = [
-    path('', index_view, name='index'),
-    path('page1/', page1_view, name='page1'),
-    path('dpb_admin/', admin.site.urls),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema', ), name='swagger-ui'),
-    path('account/', include('django_project_base.account.urls')),
-    path('', include(notifications_router.urls)),
-    path('', include('django_project_base.urls')),
-    path('app-debug/', app_debug_view, name='app-debug'),
-    re_path(r'^docs-files/(?P<path>.*)$', documentation_view, {'document_root': DOCUMENTATION_DIRECTORY},
-            name='docs-files'),
-    path('account/social/', include('social_django.urls', namespace="social")),
-    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-    re_path(r'^dynamicforms/', include('dynamicforms.urls')),
+    path("", index_view, name="index"),
+    path("page1/", page1_view, name="page1"),
+    path("dpb_admin/", admin.site.urls),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "schema/swagger-ui/",
+        SpectacularSwaggerView.as_view(
+            url_name="schema",
+        ),
+        name="swagger-ui",
+    ),
+    path("account/", include("django_project_base.account.urls")),
+    path("", include("django_project_base.licensing.urls")),
+    path("", include(notifications_router.urls)),
+    path("", include("django_project_base.urls")),
+    path("app-debug/", app_debug_view, name="app-debug"),
+    re_path(
+        r"^docs-files/(?P<path>.*)$", documentation_view, {"document_root": DOCUMENTATION_DIRECTORY}, name="docs-files"
+    ),
+    path("account/social/", include("social_django.urls", namespace="social")),
+    path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
+    re_path(r"^dynamicforms/", include("dynamicforms.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

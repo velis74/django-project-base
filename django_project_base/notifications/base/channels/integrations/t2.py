@@ -9,7 +9,6 @@ from rest_framework import status
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
-from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
@@ -293,15 +292,10 @@ class T2(ProviderIntegration):
 
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
         self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
-        to = PhoneNumberParser.valid_phone_numbers(
-            self.clean_recipients(
-                [
-                    get_user_model().objects.get(pk=u).userprofile.phone_number
-                    for u in notification.recipients.split(",")
-                ]
-                if not notification.recipients_list
-                else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
-            )
+        to = self.clean_sms_recipients(
+            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
+            if not notification.recipients_list
+            else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
         )
 
         if not to:
@@ -331,7 +325,7 @@ class T2(ProviderIntegration):
                 f"{self.url}{endpoint}",
                 auth=basic_auth,
                 json={
-                    "from_number": self.sender(notification.project_slug),
+                    "from_number": self.sender(notification),
                     # f"to_number{'s' if multi else ''}": to if multi else to[0],
                     "to_number": recipient,
                     "message": message,

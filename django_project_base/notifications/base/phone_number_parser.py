@@ -8,6 +8,7 @@ class PhoneNumberParser:
         for number in candidates:
             if number.startswith("+"):
                 valid.append(number.lstrip("+"))
+                continue
             if number.startswith("00"):
                 valid.append(number.lstrip("00"))
                 continue
