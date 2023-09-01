@@ -45,7 +45,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     },
     {
         "name": "SMS_PROVIDER",
-        "default": "django_project_base.notifications.base.channels.integrations.t2.T2",
+        "default": "django_project_base.notifications.base.channels.integrations.nexmo_sms.NexmoSMS",
     },
     # this settings silences (rest_registration.E013) SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL
     # is set but email field is not unique
