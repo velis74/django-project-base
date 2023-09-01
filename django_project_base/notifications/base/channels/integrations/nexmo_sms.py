@@ -9,6 +9,7 @@ from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.channels.integrations.t2 import SMSCounter
+from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
@@ -63,13 +64,16 @@ class NexmoSMS(ProviderIntegration):
             message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
             sender = self.sender(notification)
 
-            recipients = self.clean_sms_recipients(
-                [
-                    get_user_model().objects.get(pk=u).userprofile.phone_number
-                    for u in notification.recipients.split(",")
-                ]
-                if not notification.recipients_list
-                else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
+            # TODO: SLOVENIA????????
+            recipients = PhoneNumberParser.ensure_country_code_slovenia(
+                self.clean_recipients(
+                    [
+                        get_user_model().objects.get(pk=u).userprofile.phone_number
+                        for u in notification.recipients.split(",")
+                    ]
+                    if not notification.recipients_list
+                    else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
+                )
             )
 
             if not recipients:
