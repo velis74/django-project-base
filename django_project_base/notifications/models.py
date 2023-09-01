@@ -29,7 +29,7 @@ class AbstractDjangoProjectBaseMessage(models.Model):
 
     class Meta:
         abstract = True
-        verbose_name = "Notification Message"
+        verbose_name = "Message"
 
 
 class DjangoProjectBaseMessage(AbstractDjangoProjectBaseMessage):
