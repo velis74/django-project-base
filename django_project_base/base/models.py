@@ -136,6 +136,9 @@ class BaseTag(TagBase):
         verbose_name=_("Project"),
     )
     name = models.CharField(verbose_name=pgettext_lazy("A tag name", "name"), unique=False, max_length=100)
+    slug = models.SlugField(
+        verbose_name=pgettext_lazy("A tag slug", "slug"), unique=False, max_length=100, allow_unicode=True
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -163,6 +166,7 @@ class BaseTag(TagBase):
         abstract = True
         unique_together = [
             ["project", "name"],
+            ["project", "slug"],
         ]
 
 
