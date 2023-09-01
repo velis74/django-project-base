@@ -5,16 +5,12 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("notifications", "0002_remove_djangoprojectbasenotification_project_and_more"),
+        ("notifications", "0003_alter_djangoprojectbasemessage_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
             name="djangoprojectbasemessage",
-            options={"verbose_name": "Notification Message"},
-        ),
-        migrations.AlterModelOptions(
-            name="djangoprojectbasenotification",
-            options={"verbose_name": "Notification"},
+            options={"verbose_name": "Message"},
         ),
     ]
