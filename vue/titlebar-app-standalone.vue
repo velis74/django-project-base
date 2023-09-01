@@ -8,7 +8,6 @@ import LoginDialog from './components/user-session/login-dialog.vue';
   <BrowserCheck :hide-page-if-un-supported-browser="false">
     <v-app>
       <v-app-bar><TitleBar :breadcrumbs-component="null"/></v-app-bar>
-
       <v-main>
         <notifications-editor/>
         <ModalView/>
