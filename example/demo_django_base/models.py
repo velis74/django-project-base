@@ -28,7 +28,7 @@ class ProjectMember(BaseProjectMember):
 class DemoProjectTag(BaseTag):
     content = models.CharField(max_length=20, null=True, blank=True)
 
-    class Meta:
+    class Meta(BaseTag.Meta):
         verbose_name = "Tag"
         verbose_name_plural = "Tags"
 
