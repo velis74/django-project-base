@@ -9,7 +9,7 @@ from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from taggit.models import GenericTaggedItemBase, TagBase
 
 from django_project_base.base.fields import HexColorField
@@ -135,6 +135,10 @@ class BaseTag(TagBase):
         blank=True,
         verbose_name=_("Project"),
     )
+    name = models.CharField(verbose_name=pgettext_lazy("A tag name", "name"), unique=False, max_length=100)
+    slug = models.SlugField(
+        verbose_name=pgettext_lazy("A tag slug", "slug"), unique=False, max_length=100, allow_unicode=True
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -160,6 +164,10 @@ class BaseTag(TagBase):
 
     class Meta(TagBase.Meta):
         abstract = True
+        unique_together = [
+            ["project", "name"],
+            ["project", "slug"],
+        ]
 
 
 class DpbTaggedItemThrough(GenericTaggedItemBase):

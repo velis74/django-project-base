@@ -169,7 +169,7 @@ class SearchItemsManager(models.Manager):
                 .extra(
                     select={
                         "object_id": f"{user_model._meta.db_table}.{get_pk_name(user_model)}",
-                        "label": "username",
+                        "label": "first_name || ' ' || last_name",
                         "content_type_id": user_model_content_type_id,
                     }
                 )
