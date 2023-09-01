@@ -39,11 +39,13 @@ class LogAccessService:
         for agg in used:
             if content_type := ContentType.objects.get(pk=agg["content_type"]):
                 usage_report.append({"item": content_type.model_class()._meta.verbose_name, "usage_sum": agg["count"]})
-        used_credit = used.first()["count"]
+        used_credit = 0
+        if cnt := used.first():
+            used_credit = cnt["count"]
         return LicenseReportSerializer(
             {
                 "credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS,
-                "used_credit": used.first()["count"],
+                "used_credit": used_credit,
                 "usage_report": usage_report,
                 "remaining_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS - used_credit,
             }
