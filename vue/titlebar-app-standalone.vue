@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppNotification from './components/notification.vue';
-import NotificationsEditor from './components/notifications-editor.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
 </script>
 
@@ -9,7 +8,6 @@ import LoginDialog from './components/user-session/login-dialog.vue';
     <v-app>
       <v-app-bar><TitleBar :breadcrumbs-component="null"/></v-app-bar>
       <v-main>
-        <notifications-editor/>
         <ModalView/>
         <LoginDialog/>
       </v-main>
