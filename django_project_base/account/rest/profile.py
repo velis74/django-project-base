@@ -7,8 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Case, CharField, ForeignKey, Model, Prefetch, QuerySet, Value, When
-from django.db.models.functions import Coalesce, Concat
+from django.db.models import ForeignKey, Model, QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
@@ -30,6 +29,7 @@ from rest_framework.serializers import Serializer
 from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
+from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
@@ -265,64 +265,7 @@ class ProfileViewSet(ModelViewSet):
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
     def get_queryset(self):
-        project_slug = getattr(self.request, "current_project_slug", None)
-        project = swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
-        project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
-        qs = (
-            swapper.load_model("django_project_base", "Profile")
-            .objects.prefetch_related(Prefetch("projects", queryset=project_members), "groups", "user_permissions")
-            .annotate(
-                un=Concat(
-                    Coalesce(
-                        Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                        Value(""),
-                    ),
-                    Value(" "),
-                    Coalesce(
-                        Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                        "username",
-                    ),
-                ),
-                un_sort=Concat(
-                    Coalesce(
-                        Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                        "username",
-                    ),
-                    Value(" "),
-                    Coalesce(
-                        Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                        Value(""),
-                    ),
-                ),
-            )
-        )
-
-        qs = qs.exclude(delete_at__isnull=False, delete_at__lt=datetime.datetime.now())
-
-        if getattr(self.request, "current_project_slug", None):
-            # if current project was parsed from request, filter profiles to current project only
-            qs = qs.filter(projects__project__slug=self.request.current_project_slug)
-        elif not (self.request.user.is_staff or self.request.user.is_superuser):
-            # but if user is not an admin, and the project is not known, only return this user's project
-            qs = qs.filter(pk=self.request.user.pk)
-
-        if str(self.request.query_params.get("remove-merge-users", "false")) in tuple(
-            map(str, fields.BooleanField.TRUE_VALUES)
-        ):
-            MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
-            exclude_qs = list(
-                map(
-                    str,
-                    list(MergeUserGroup.objects.filter(created_by=self.request.user.pk).values_list("users", flat=True))
-                    + cache.get(MERGE_USERS_QS_CK % self.request.user.pk, []),  # noqa: W503
-                )
-            )
-            if exclude_qs:
-                qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
-
-        qs = qs.order_by("un", "id")
-
-        return qs.distinct()
+        return get_project_members(self.request)
 
     def get_serializer_class(self):
         if self.request.query_params.get("select", "") == "1":
