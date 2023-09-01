@@ -6,9 +6,8 @@ from django.db import connections
 from django.db.models import Model, Sum
 from django.utils.translation import gettext
 from dynamicforms import fields
-from rest_framework import serializers
-from rest_framework.exceptions import PermissionDenied
 from dynamicforms.serializers import Serializer
+from rest_framework.exceptions import PermissionDenied
 
 from django_project_base.licensing.models import LicenseAccessUse
 

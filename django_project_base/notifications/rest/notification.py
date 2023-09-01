@@ -10,7 +10,7 @@ from django.db.models import ForeignKey, QuerySet
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
-from dynamicforms.action import Actions, TableAction, TablePosition, FormButtonAction, FormButtonTypes
+from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
@@ -22,7 +22,7 @@ from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from django_project_base.licensing.logic import LogAccessService, LicenseReportSerializer
+from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import (
