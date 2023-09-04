@@ -1,13 +1,9 @@
-import logging
-import re
 from typing import Union, List
 
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.html import strip_tags
 from requests.auth import HTTPBasicAuth
-from rest_framework import status
 from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
@@ -319,40 +315,6 @@ class T2(ProviderIntegration):
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return self._get_sms_message(notification)
-
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs):
-        self.ensure_credentials(extra_data=kwargs.get("extra_data"))
-        to = self.clean_sms_recipients(
-            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
-            if not notification.recipients_list
-            else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
-        )
-
-        if not to:
-            raise ValueError("No valid phone numbers")
-
-        message = f"{notification.message.subject or ''}"
-
-        if notification.message.subject:
-            message += "\n\n"
-
-        message += notification.message.body
-
-        text_only = re.sub("[ \t]+", " ", strip_tags(message))
-        # Strip single spaces in the beginning of each line
-        message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
-
-        basic_auth = HTTPBasicAuth(self.username, self.password)
-
-        # phone numbers can be invalid so for now we do not use bulk sending
-        for recipient in to:
-            try:
-                self.client_send(self.sender(notification), recipient, message)
-
-            except Exception as e:
-                logger = logging.getLogger("django")
-                logger.exception(e)
-        return SMSCounter.count(message)["messages"]
 
     def validate_send(self, response: object):
         assert response

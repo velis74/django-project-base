@@ -16,6 +16,8 @@ class ProviderIntegration(ABC):
     channel: Type[Channel]
     settings: object
 
+    is_sms_provider = True
+
     def __init__(self, channel: Type[Channel], settings: object) -> None:
         super().__init__()
         self.channel = channel
@@ -42,8 +44,7 @@ class ProviderIntegration(ABC):
     def clean_sms_recipients(self, recipients: List[str]) -> List[str]:
         return PhoneNumberParser.valid_phone_numbers(self.clean_recipients(recipients))
 
-    @abstractmethod
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs):
+    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
         self.ensure_credentials(extra_data=kwargs.get("extra_data"))
         logger = logging.getLogger("django")
         try:
@@ -58,9 +59,15 @@ class ProviderIntegration(ABC):
             for recipient in recipients:  # noqa: E203
                 try:
                     self.client_send(self.sender(notification), recipient, message)
-                    sent_no += 1
+                    sent_no += 1 if isinstance(recipient, str) else len(recipient)
                 except Exception as ge:
                     logger.exception(ge)
+
+            if self.is_sms_provider:
+                from django_project_base.notifications.base.channels.integrations.t2 import SMSCounter
+
+                sent_no = sent_no * SMSCounter.count(message)["messages"]
+            return sent_no
         except Exception as e:
             logger.exception(e)
             raise e

@@ -1,15 +1,11 @@
-import logging
-import re
 from typing import Union
 
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.html import strip_tags
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
-from django_project_base.notifications.base.channels.integrations.t2 import SMSCounter
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
@@ -69,45 +65,3 @@ class NexmoSMS(ProviderIntegration):
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return self._get_sms_message(notification)
-
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs):
-        logger = logging.getLogger("django")
-        self.ensure_credentials(extra_data=kwargs.get("extra_data"))
-        try:
-            message = f"{notification.message.subject or ''}"
-
-            if notification.message.subject:
-                message += "\n\n"
-
-            message += notification.message.body
-
-            text_only = re.sub("[ \t]+", " ", strip_tags(message))
-            # Strip single spaces in the beginning of each line
-            message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
-            sender = self.sender(notification)
-
-            recipients = PhoneNumberParser.ensure_country_code_slovenia(
-                self.clean_recipients(
-                    [
-                        get_user_model().objects.get(pk=u).userprofile.phone_number
-                        for u in notification.recipients.split(",")
-                    ]
-                    if not notification.recipients_list
-                    else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
-                )
-            )
-
-            if not recipients:
-                raise ValueError("No valid phone numbers")
-
-            sent_no = 0
-            for recipient in recipients:  # noqa: E203
-                try:
-                    self.client_send(sender, recipient, message)
-                    sent_no += 1
-                except Exception as ge:
-                    logger.exception(ge)
-            return SMSCounter.count(message)["messages"] * sent_no
-        except Exception as e:
-            logger.exception(e)
-            raise e

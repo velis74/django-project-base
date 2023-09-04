@@ -1,5 +1,4 @@
-import logging
-from typing import List, Union
+from typing import List
 
 import boto3
 from django.conf import settings
@@ -14,6 +13,8 @@ class AwsSes(ProviderIntegration):
     key_id: str
     access_key: str
     region: str
+
+    is_sms_provider = False
 
     def __init__(self) -> None:
         from django_project_base.notifications.base.channels.mail_channel import MailChannel
@@ -81,30 +82,3 @@ class AwsSes(ProviderIntegration):
             "Data": str(notification.message.body),
         }
         return msg
-
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs):
-        self.ensure_credentials(extra_data=kwargs.get("extra_data"))
-
-        logger = logging.getLogger("django")
-        try:
-            sender = self.sender(notification)
-
-            recipients = self.clean_email_recipients(
-                [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
-                if not notification.recipients_list
-                else [u["email"] for u in notification.recipients_list if u.get("email")]
-            )
-
-            for group in [recipients[i : i + 49] for i in range(0, len(recipients), 49)]:  # noqa: E203
-                try:
-                    self.client_send(sender, group, msg)
-                except Exception as ge:
-                    logger.exception(ge)
-                    for single_item in group:
-                        try:
-                            self.client_send(sender, [single_item], msg)
-                        except Exception as se:
-                            logger.exception(se)
-        except Exception as e:
-            logger.exception(e)
-            raise e
