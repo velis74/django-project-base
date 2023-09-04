@@ -1,7 +1,7 @@
 import logging
 import re
 from abc import ABC, abstractmethod
-from typing import List, Type, Union, Any
+from typing import Any, List, Type, Union
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
