@@ -32,13 +32,17 @@ class LogAccessService:
         used = (
             LicenseAccessUse.objects.filter(user_id=str(user.pk), amount__isnull=False, amount__gt=0)
             .values("content_type")
-            .order_by("amount")
             .annotate(count=Sum("amount"))
+            .order_by("-amount")
         )
         usage_report = []
+        added_types = []
         for agg in used:
-            if content_type := ContentType.objects.get(pk=agg["content_type"]):
+            if (
+                content_type := ContentType.objects.get(pk=agg["content_type"])
+            ) and content_type.model_class()._meta.verbose_name not in added_types:
                 usage_report.append({"item": content_type.model_class()._meta.verbose_name, "usage_sum": agg["count"]})
+                added_types.append(content_type.model_class()._meta.verbose_name)
         used_credit = 0
         if cnt := used.first():
             used_credit = cnt["count"]
