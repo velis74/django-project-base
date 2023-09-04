@@ -12,6 +12,7 @@ import Breadcrumbs from './components/breadcrumbs.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
+import NotificationsEditor from './components/notifications-editor.vue';
 import TitleBar from './components/titlebar.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
 import Login from './components/user-session/login-inline.vue';
@@ -38,6 +39,7 @@ export const componentsConfig: { [key: string]: Component } = {
   CookieNotice,
   TitlebarAppStandalone,
   LoginDialog,
+  NotificationsEditor,
 };
 
 type AppData = Object;
