@@ -113,6 +113,19 @@ class BaseProjectMember(models.Model):
         related_name="projects",  # the name is just reversed: you seek projects this member belongs to
     )
 
+    @property
+    def project_members_excluded_fields(self):
+        return "id", "member", "project"
+
+    @property
+    def project_members_fields(self):
+        fields_club = swapper.load_model("django_project_base", "ProjectMember")._meta.fields
+        return [field for field in fields_club if field.name not in self.project_members_excluded_fields]
+
+    @property
+    def project_members_fields_names(self):
+        return [field.name for field in self.project_members_fields]
+
     # role = models.ForeignKey()  # TODO: we don't have role support yet
 
     class Meta:
