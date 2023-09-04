@@ -114,8 +114,8 @@ class ProjectProfilesViewSet(ProfileViewSet):
         project_slug = getattr(request, "current_project_slug", None)
         project = None
         club_member = None
-        ProjectMember = swapper.swappable_setting("django_project_base", "ProjectMember")
-        Project = swapper.swappable_setting("django_project_base", "Project")
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+        Project = swapper.load_model("django_project_base", "Project")
         if project_slug:
             project = Project.objects.filter(slug=project_slug).first()
 
@@ -130,8 +130,8 @@ class ProjectProfilesViewSet(ProfileViewSet):
 
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
-        ProjectMember = swapper.swappable_setting("django_project_base", "ProjectMember")
-        Profile = swapper.swappable_setting("django_project_base", "Profile")
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+        Profile = swapper.load_model("django_project_base", "Profile")
         data = {
             name: request.data.pop(name, None)
             for name in ProjectMember().project_members_fields_names
@@ -151,7 +151,7 @@ class ProjectProfilesViewSet(ProfileViewSet):
 
     @transaction.atomic
     def update(self, request: Request, *args, **kwargs) -> Response:
-        ProjectMember = swapper.swappable_setting("django_project_base", "ProjectMember")
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
         data = {
             name: request.data.pop(name, None)
             for name in ProjectMember().project_members_fields_names
