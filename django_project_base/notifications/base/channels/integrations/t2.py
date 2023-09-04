@@ -1,4 +1,6 @@
+import logging
 import re
+from typing import Union, List
 
 import requests
 from django.conf import settings
@@ -6,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.utils.html import strip_tags
 from requests.auth import HTTPBasicAuth
 from rest_framework import status
+from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
@@ -276,7 +279,7 @@ class T2(ProviderIntegration):
 
         super().__init__(channel=SmsChannel, settings=object())
 
-    def __ensure_credentials(self, extra_data):
+    def ensure_credentials(self, extra_data):
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)
         self.url = getattr(settings, "SMS_API_URL", None)
@@ -290,8 +293,35 @@ class T2(ProviderIntegration):
         assert self.password, "T2_PASSWORD is required"
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
+    def get_recipients(self, notification: DjangoProjectBaseNotification):
+        return self.clean_sms_recipients(
+            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
+            if not notification.recipients_list
+            else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
+        )
+
+    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str):
+        basic_auth = HTTPBasicAuth(self.username, self.password)
+        response = requests.post(
+            f"{self.url}{self.endpoint_one}",
+            auth=basic_auth,
+            json={
+                "from_number": sender,
+                "to_number": recipient,
+                "message": msg,
+            },
+            verify=False,
+            headers={"Content-Type": "application/json"},
+            timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
+        )
+
+        self.validate_send(response)
+
+    def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return self._get_sms_message(notification)
+
     def send(self, notification: DjangoProjectBaseNotification, **kwargs):
-        self.__ensure_credentials(extra_data=kwargs.get("extra_data"))
+        self.ensure_credentials(extra_data=kwargs.get("extra_data"))
         to = self.clean_sms_recipients(
             [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
             if not notification.recipients_list
@@ -300,11 +330,6 @@ class T2(ProviderIntegration):
 
         if not to:
             raise ValueError("No valid phone numbers")
-
-        # multi = len(to) > 1
-        multi = False
-
-        endpoint = self.endpoint_multi if multi else self.endpoint_one
 
         message = f"{notification.message.subject or ''}"
 
@@ -321,39 +346,16 @@ class T2(ProviderIntegration):
 
         # phone numbers can be invalid so for now we do not use bulk sending
         for recipient in to:
-            response = requests.post(
-                f"{self.url}{endpoint}",
-                auth=basic_auth,
-                json={
-                    "from_number": self.sender(notification),
-                    # f"to_number{'s' if multi else ''}": to if multi else to[0],
-                    "to_number": recipient,
-                    "message": message,
-                },
-                verify=False,
-                headers={"Content-Type": "application/json"},
-                timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
-            )
-            # todo: what is t2 response code 200 or 201
-            # todo: handle messages longer than 160 chars - same as on mars???
-            if response.status_code != status.HTTP_200_OK:
-                import logging
+            try:
+                self.client_send(self.sender(notification), recipient, message)
 
+            except Exception as e:
                 logger = logging.getLogger("django")
-                # exc = Exception(f"Failed sms sending for notification {notification.pk}")
-                exc = Exception(f"Failed sms sending for notification {notification.pk} {recipient}")
-                logger.exception(exc)
-                raise exc
-
-            response_data = response.json()
-
-            if str(response_data["error_code"]) != "0":
-                import logging
-
-                logger = logging.getLogger("django")
-                exc = Exception(
-                    f"Failed sms sending for notification {notification.pk} \n\n {str(response_data)} {recipient}"
-                )
-                logger.exception(exc)
-                raise exc
+                logger.exception(e)
         return SMSCounter.count(message)["messages"]
+
+    def validate_send(self, response: object):
+        assert response
+        is_success(response.status_code)
+        response_data = response.json()
+        assert str(response_data["error_code"]) == "0"
