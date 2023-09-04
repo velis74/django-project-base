@@ -62,9 +62,9 @@ class ProjectProfilesSerializer(ProfileSerializer):
             )
 
     def get_fields(self):
-        ProjectMember = swapper.swappable_setting("django_project_base", "ProjectMember")
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
         info = model_meta.get_field_info(ProjectMember)
-        for field in ProjectMember().club_members_fields:
+        for field in ProjectMember().project_members_fields:
             source = f"projects.first.{field.name}"
             extra_kwargs = dict(source=source, required=False, read_only=self.member_fields_read_only)
             field_class, field_kwargs = self.build_field(field.name, info, ProjectMember, source)
@@ -134,7 +134,7 @@ class ProjectProfilesViewSet(ProfileViewSet):
         Profile = swapper.swappable_setting("django_project_base", "Profile")
         data = {
             name: request.data.pop(name, None)
-            for name in ProjectMember().club_members_fields_names
+            for name in ProjectMember().project_members_fields_names
             if name in request.data
         }
         # hash password if it exists
@@ -154,7 +154,7 @@ class ProjectProfilesViewSet(ProfileViewSet):
         ProjectMember = swapper.swappable_setting("django_project_base", "ProjectMember")
         data = {
             name: request.data.pop(name, None)
-            for name in ProjectMember().club_members_fields_names
+            for name in ProjectMember().project_members_fields_names
             if name in request.data
         }
         self.save_club_member_data(request, self.get_object(), **data)
