@@ -5,14 +5,14 @@ import swapper
 from django.conf import settings
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from rest_framework.exceptions import PermissionDenied, ErrorDetail
+from rest_framework.exceptions import ErrorDetail, PermissionDenied
 from taggit.models import GenericTaggedItemBase, TagBase
-from django.core.exceptions import ValidationError
 
 from django_project_base.base.fields import HexColorField
 
@@ -243,11 +243,14 @@ class BaseProjectSettings(models.Model):
         VALUE_TYPE_CHAR: lambda val: models.TextField().to_python(val),
     }
 
+    @property
+    def python_value(self):
+        return self.value_validators[self.value_type](self.value)
+
     def clean(self):
         validator = self.value_validators[self.value_type]
         try:
             validator(self.value)
-            validator(self.default_value)
         except ValidationError as ve:
             from rest_framework.serializers import ValidationError as DrfValidationError
 
@@ -261,7 +264,6 @@ class BaseProjectSettings(models.Model):
     description = models.CharField(max_length=120, null=False, blank=False, verbose_name=_("Description"))
     value = models.CharField(max_length=320, null=False, blank=False, verbose_name=_("Value"))
     value_type = models.CharField(choices=VALUE_TYPE_CHOICES, null=False, blank=False, max_length=10)
-    default_value = models.CharField(max_length=32, null=False, blank=False, verbose_name=_("Default value"))
 
     project = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
@@ -271,7 +273,6 @@ class BaseProjectSettings(models.Model):
         self.full_clean()
         validator = self.value_validators[self.value_type]
         self.value = validator(self.value)
-        self.default_value = validator(self.default_value)
         super().save(force_insert, force_update, using, update_fields)
 
     def delete(self, using=None, keep_parents=False):

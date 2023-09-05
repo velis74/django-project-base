@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import OperandHolder
 from rest_framework.routers import DefaultRouter
 
-from django_project_base.rest.project import ProjectViewSet, ProjectSettingsViewSet
+from django_project_base.rest.project import ProjectSettingsViewSet, ProjectViewSet
 from django_project_base.rest.project_role import ProjectRoleViewSet
 
 

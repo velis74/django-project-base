@@ -4,10 +4,8 @@
 <div style="width: 45em">
     <h3>{% trans "You have been invited to our application. Your credentials are listed below." %}</h3>
     <div>
-        <p>{% trans "On first login you will be prompted to change your password." %}</p>
         <br/>
-        <p>{% trans "Your username:" %} AAAA</p>
-        <p>{% trans "Your password:" %} BBBBBB</p>
+        <p>{% trans "Your username:" %} {{ username }}</p>
     </div>
     <br/>
     <h4>{% trans "Have a nice day." %}</h4>

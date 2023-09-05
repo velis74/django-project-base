@@ -4,6 +4,12 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
+from django_project_base.constants import (
+    EMAIL_SENDER_ID_SETTING_NAME,
+    SMS_SENDER_ID_SETTING_NAME,
+    NOTIFY_NEW_USER_SETTING_NAME,
+)
+
 
 def forwards_func(apps, schema_editor):
     ProjectModel = apps.get_model("demo_django_base", "Project")
@@ -13,30 +19,27 @@ def forwards_func(apps, schema_editor):
         sms_sender = project.sms_sender_id
 
         ProjectModelSettings.objects.create(
-            name="email-sender-id",
+            name=EMAIL_SENDER_ID_SETTING_NAME,
             project=project,
             description="From email address for notifications",
             value=email_sender or "",
             value_type="char",
-            default_value="",
         )
 
         ProjectModelSettings.objects.create(
             project=project,
-            name="sms-sender-id",
+            name=SMS_SENDER_ID_SETTING_NAME,
             description="Sms sender name for notifications",
             value=sms_sender or "",
             value_type="char",
-            default_value="",
         )
 
         ProjectModelSettings.objects.create(
             project=project,
-            name="notify-new-user-via-email-account-created",
+            name=NOTIFY_NEW_USER_SETTING_NAME,
             description="Notify new user account was created for him",
             value=True,
             value_type="bool",
-            default_value=True,
         )
 
 
@@ -85,10 +88,6 @@ class Migration(migrations.Migration):
                         ],
                         max_length=10,
                     ),
-                ),
-                (
-                    "default_value",
-                    models.CharField(max_length=32, verbose_name="Value"),
                 ),
                 (
                     "project",

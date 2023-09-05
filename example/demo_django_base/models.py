@@ -8,9 +8,9 @@ from django_project_base.base.models import (
     BaseProfile,
     BaseProject,
     BaseProjectMember,
+    BaseProjectSettings,
     BaseTag,
     DpbTaggedItemThrough,
-    BaseProjectSettings,
 )
 
 
