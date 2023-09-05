@@ -185,7 +185,11 @@ class ProjectSettingsViewSet(ModelViewSet):
         req = super().initialize_request(request, *args, **kwargs)
         if req.method.upper() not in SAFE_METHODS:
             req.data["project"] = (
-                swapper.load_model("django_project_base", "Project").objects.get(slug=req.current_project_slug).pk
+                swapper.load_model("django_project_base", "Project")
+                .objects.get(
+                    slug=getattr(req, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
+                )
+                .pk
             )
         return req
 
@@ -193,8 +197,6 @@ class ProjectSettingsViewSet(ModelViewSet):
         project_attr = getattr(
             self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"], ""
         )
-
-        project_attr = "project-two"
 
         if not project_attr:
             return self.get_serializer().Meta.model.objects.none()

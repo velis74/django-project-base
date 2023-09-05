@@ -531,7 +531,7 @@ class ProfileViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         project = swapper.load_model("django_project_base", "Project").objects.get(
-            slug=self.request.current_project_slug
+            slug=getattr(self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
         )
         if (
             sett := swapper.load_model("django_project_base", "ProjectSettings")
