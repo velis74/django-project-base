@@ -24,9 +24,6 @@ class BaseProject(models.Model):
         swapper.get_model_name("django_project_base", "Profile"), on_delete=models.CASCADE, verbose_name=_("Owner")
     )
 
-    sms_sender_id = models.CharField(max_length=11, null=True, blank=False)
-    email_sender_id = models.CharField(max_length=320, null=True, blank=False)
-
     class Meta:
         abstract = True
 
@@ -215,6 +212,65 @@ class BaseMergeUserGroup(models.Model):
 class MergeUserGroup(BaseMergeUserGroup):
     class Meta:
         swappable = swapper.swappable_setting("django_project_base", "MergeUserGroup")
+
+
+class ProjectSettingsQs(models.query.QuerySet):
+    def delete(self):
+        raise NotImplemented
+
+
+class BaseProjectSettings(models.Model):
+    VALUE_TYPE_INTEGER = "integer"
+    VALUE_TYPE_FLOAT = "float"
+    VALUE_TYPE_BOOL = "bool"
+    VALUE_TYPE_CHAR = "char"
+
+    VALUE_TYPE_CHOICES = (
+        (VALUE_TYPE_INTEGER, _("Whole number")),
+        (VALUE_TYPE_FLOAT, _("Decimal number")),
+        (VALUE_TYPE_BOOL, _("true/false")),
+        (VALUE_TYPE_CHAR, _("String")),
+    )
+
+    objects = ProjectSettingsQs.as_manager()
+
+    value_validators = {
+        VALUE_TYPE_INTEGER: lambda val: models.IntegerField().to_python(val),
+        VALUE_TYPE_FLOAT: lambda val: models.FloatField().to_python(val),
+        VALUE_TYPE_BOOL: lambda val: models.BooleanField().to_python(val),
+        VALUE_TYPE_CHAR: lambda val: models.TextField().to_python(val),
+    }
+
+    def clean(self):
+        validator = self.value_validators[self.value_type]
+        validator(self.value)
+        validator(self.default_value)
+        super().clean()
+
+    name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Name"))
+    description = models.CharField(max_length=120, null=False, blank=False, verbose_name=_("Description"))
+    value = models.CharField(max_length=320, null=False, blank=False, verbose_name=_("Value"))
+    value_type = models.CharField(choices=VALUE_TYPE_CHOICES, null=False, blank=False, max_length=10)
+    default_value = models.CharField(max_length=32, null=False, blank=False, verbose_name=_("Value"))
+
+    project = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
+    )
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.full_clean()
+        super().save(force_insert, force_update, using, update_fields)
+
+    class Meta:
+        unique_together = [
+            ["project", "name"],
+        ]
+        abstract = True
+
+
+class ProjectSettings(BaseProjectSettings):
+    class Meta:
+        swappable = swapper.swappable_setting("django_project_base", "ProjectSettings")
 
 
 @receiver(user_logged_in)

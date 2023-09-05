@@ -37,7 +37,7 @@ class ProjectSerializer(ModelSerializer):
     class Meta:
         model = swapper.load_model("django_project_base", "Project")
         exclude = ("logo",)  # TODO we currently don't support logos well. see DPB #3
-        layout = Layout(Row("name"), Row("slug"), Row("description"), Row("sms_sender_id", "email_sender_id"))
+        layout = Layout(Row("name"), Row("slug"), Row("description"))
 
 
 class ProjectViewSet(ModelViewSet):

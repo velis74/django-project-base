@@ -122,7 +122,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             from django_project_base.notifications.base.channels.mail_channel import MailChannel
             from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
-            notification.sender = {MailChannel.name: project.email_sender_id, SmsChannel.name: project.sms_sender_id}
+            notification.sender = {
+                MailChannel.name: project.project_settings.filter(name="email-sender-id").value,
+                SmsChannel.name: project.sms_sender_id,
+            }
         required_channels.sort()
         if self.persist:
             if self.handle_similar_notifications(notification=notification):
