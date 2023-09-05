@@ -245,19 +245,13 @@ class MessageToListField(fields.ListField):
             if items_manager := next(filter(lambda i: "taggeditemthrough" in i, dir(instance)), None):
                 for item in getattr(instance, items_manager).all():
                     if cont_object := getattr(item, "content_object", None):
-                        if isinstance(
-                            cont_object,
-                            (
-                                get_user_model(),
-                                swapper.load_model("django_project_base", "Profile"),
-                            ),
-                        ):
+                        if isinstance(cont_object, (user_model, profile_model)):
                             users += [cont_object.userprofile.pk]
                         elif user_related_fields := [
                             f
                             for f in cont_object._meta.fields
                             if isinstance(f, ForeignKey) and f.model in (profile_model, user_model)
-                        ]:  # noqa: E501
+                        ]:
                             for field in user_related_fields:
                                 users += field.model.objects.filter(**{field.attname: cont_object.pk}).values_list(
                                     get_pk_name(field.model), flat=True
@@ -274,13 +268,11 @@ class MessageToListField(fields.ListField):
                                 map(
                                     lambda g: g.pk,
                                     [
-                                        getattr(related_objects[0], f.name, object)
-                                        for f in related_objects[0]._meta.fields
+                                        getattr(obj, f.name, object)
+                                        for obj in related_objects
+                                        for f in obj._meta.fields
                                         if isinstance(f, ForeignKey)
-                                        and isinstance(  # noqa: W503
-                                            getattr(related_objects[0], f.name, object()),
-                                            (profile_model, user_model),
-                                        )
+                                        and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
                                     ],
                                 )
                             )
