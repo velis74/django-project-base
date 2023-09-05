@@ -30,6 +30,15 @@ def forwards_func(apps, schema_editor):
             default_value="",
         )
 
+        ProjectModelSettings.objects.create(
+            project=project,
+            name="notify-new-user-via-email-account-created",
+            description="Notify new user account was created for him",
+            value=True,
+            value_type="bool",
+            default_value=True,
+        )
+
 
 def reverse_func(apps, schema_editor):
     pass
@@ -101,5 +110,9 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name="project",
             name="sms_sender_id",
+        ),
+        migrations.AlterUniqueTogether(
+            name="projectsettings",
+            unique_together={("project", "name")},
         ),
     ]

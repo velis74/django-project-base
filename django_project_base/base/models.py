@@ -10,7 +10,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from rest_framework.exceptions import PermissionDenied, ErrorDetail
 from taggit.models import GenericTaggedItemBase, TagBase
+from django.core.exceptions import ValidationError
 
 from django_project_base.base.fields import HexColorField
 
@@ -216,7 +218,7 @@ class MergeUserGroup(BaseMergeUserGroup):
 
 class ProjectSettingsQs(models.query.QuerySet):
     def delete(self):
-        raise NotImplemented
+        raise PermissionDenied
 
 
 class BaseProjectSettings(models.Model):
@@ -228,7 +230,7 @@ class BaseProjectSettings(models.Model):
     VALUE_TYPE_CHOICES = (
         (VALUE_TYPE_INTEGER, _("Whole number")),
         (VALUE_TYPE_FLOAT, _("Decimal number")),
-        (VALUE_TYPE_BOOL, _("true/false")),
+        (VALUE_TYPE_BOOL, _("True/False")),
         (VALUE_TYPE_CHAR, _("String")),
     )
 
@@ -243,15 +245,23 @@ class BaseProjectSettings(models.Model):
 
     def clean(self):
         validator = self.value_validators[self.value_type]
-        validator(self.value)
-        validator(self.default_value)
+        try:
+            validator(self.value)
+            validator(self.default_value)
+        except ValidationError as ve:
+            from rest_framework.serializers import ValidationError as DrfValidationError
+
+            exc = DrfValidationError()
+            setattr(exc, "detail", ErrorDetail(next(iter(list(ve.params.keys()))), ve.messages))
+            setattr(exc, "model-validation", True)
+            raise exc
         super().clean()
 
     name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Name"))
     description = models.CharField(max_length=120, null=False, blank=False, verbose_name=_("Description"))
     value = models.CharField(max_length=320, null=False, blank=False, verbose_name=_("Value"))
     value_type = models.CharField(choices=VALUE_TYPE_CHOICES, null=False, blank=False, max_length=10)
-    default_value = models.CharField(max_length=32, null=False, blank=False, verbose_name=_("Value"))
+    default_value = models.CharField(max_length=32, null=False, blank=False, verbose_name=_("Default value"))
 
     project = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
@@ -259,7 +269,13 @@ class BaseProjectSettings(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean()
+        validator = self.value_validators[self.value_type]
+        self.value = validator(self.value)
+        self.default_value = validator(self.default_value)
         super().save(force_insert, force_update, using, update_fields)
+
+    def delete(self, using=None, keep_parents=False):
+        raise PermissionDenied
 
     class Meta:
         unique_together = [

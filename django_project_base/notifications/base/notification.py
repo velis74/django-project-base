@@ -123,8 +123,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
             notification.sender = {
-                MailChannel.name: project.project_settings.filter(name="email-sender-id").value,
-                SmsChannel.name: project.sms_sender_id,
+                MailChannel.name: project.project_settings.filter(name="email-sender-id").first().value,
+                SmsChannel.name: project.project_settings.filter(name="sms-sender-id").first().value,
             }
         required_channels.sort()
         if self.persist:
