@@ -82,6 +82,18 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         self._project = project
         self._user = user
 
+    @staticmethod
+    def resend(notification: DjangoProjectBaseNotification, user_pk: str):
+        notification.user = user_pk
+        from django_project_base.notifications.rest.notification import MessageToListField
+
+        recipients: List[str] = MessageToListField.parse(json.loads(notification.recipients_original_payload))
+        notification.recipients = ",".join(map(str, recipients)) if recipients else None
+        notification.recipients_original_payload_search = None
+        notification.sender = Notification._get_sender_config(notification.project_slug)
+        notification.save(update_fields=["recipients", "recipients_original_payload_search"])
+        SendNotificationMixin().make_send(notification, {})
+
     def __set_via_channels(self, val):
         self._via_channels = val
 
@@ -97,6 +109,27 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     @property
     def persist(self) -> bool:
         return bool(self._persist)
+
+    @staticmethod
+    def _get_sender_config(project_slug: Optional[str]) -> dict:
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
+        if project_slug and (
+            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+        ):
+            mail_settings = project.projectsettings_set.filter(
+                name=EMAIL_SENDER_ID_SETTING_NAME, project=project
+            ).first()
+            sms_settings = project.projectsettings_set.filter(name=SMS_SENDER_ID_SETTING_NAME, project=project).first()
+            return {
+                MailChannel.name: mail_settings.python_value if mail_settings else "",
+                SmsChannel.name: sms_settings.python_value if sms_settings else "",
+            }
+        return {
+            MailChannel.name: "",
+            SmsChannel.name: "",
+        }
 
     def send(self) -> DjangoProjectBaseNotification:
         required_channels: list = list(
@@ -117,20 +150,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             project_slug=self._project,
         )
         notification.user = self._user
-        if self._project and (
-            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=self._project).first()
-        ):
-            from django_project_base.notifications.base.channels.mail_channel import MailChannel
-            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
-            mail_settings = project.projectsettings_set.filter(
-                name=EMAIL_SENDER_ID_SETTING_NAME, project=project
-            ).first()
-            sms_settings = project.projectsettings_set.filter(name=SMS_SENDER_ID_SETTING_NAME, project=project).first()
-            notification.sender = {
-                MailChannel.name: mail_settings.value if mail_settings else "",
-                SmsChannel.name: sms_settings.value if sms_settings else "",
-            }
+        notification.sender = Notification._get_sender_config(self._project)
+
         required_channels.sort()
         if self.persist:
             if self.handle_similar_notifications(notification=notification):
