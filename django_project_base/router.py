@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.permissions import OperandHolder
 from rest_framework.routers import DefaultRouter
 
-from django_project_base.rest.project import ProjectViewSet
+from django_project_base.rest.project import ProjectSettingsViewSet, ProjectViewSet
 from django_project_base.rest.project_role import ProjectRoleViewSet
 
 
@@ -88,3 +88,4 @@ class RestRouter(DefaultRouter):
 django_project_base_router = RestRouter(trailing_slash=False)
 django_project_base_router.register(r"project", ProjectViewSet, basename="project-base-project")
 django_project_base_router.register(r"project-role", ProjectRoleViewSet, basename="project-role")
+django_project_base_router.register(r"project-settings", ProjectSettingsViewSet, basename="project-settings")

@@ -11,8 +11,8 @@ from dynamicforms.template_render.layout import Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -37,7 +37,7 @@ class ProjectSerializer(ModelSerializer):
     class Meta:
         model = swapper.load_model("django_project_base", "Project")
         exclude = ("logo",)  # TODO we currently don't support logos well. see DPB #3
-        layout = Layout(Row("name"), Row("slug"), Row("description"), Row("sms_sender_id", "email_sender_id"))
+        layout = Layout(Row("name"), Row("slug"), Row("description"))
 
 
 class ProjectViewSet(ModelViewSet):
@@ -158,3 +158,51 @@ class ProjectViewSet(ModelViewSet):
         project = swapper.load_model("django_project_base", "Project").objects.get(slug=create_response.data["slug"])
         swapper.load_model("django_project_base", "ProjectMember").objects.create(project=project, member=request.user)
         return create_response
+
+
+class ProjectSettingsSerializer(ModelSerializer):
+    template_context = dict(url_reverse="project-settings")
+
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        self.actions.actions = [a for a in self.actions.actions if a.name != "delete"]
+
+    project = fields.PrimaryKeyRelatedField(
+        display=DisplayMode.SUPPRESS, queryset=swapper.load_model("django_project_base", "Project").objects.all()
+    )
+
+    class Meta:
+        model = swapper.load_model("django_project_base", "ProjectSettings")
+        exclude = ()
+
+
+class ProjectSettingsViewSet(ModelViewSet):
+    serializer_class = ProjectSettingsSerializer
+
+    permission_classes = [IsAuthenticated]
+
+    def initialize_request(self, request, *args, **kwargs):
+        req = super().initialize_request(request, *args, **kwargs)
+        if req.method.upper() not in SAFE_METHODS:
+            req.data["project"] = (
+                swapper.load_model("django_project_base", "Project")
+                .objects.get(
+                    slug=getattr(req, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
+                )
+                .pk
+            )
+        return req
+
+    def get_queryset(self):
+        project_attr = getattr(
+            self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"], ""
+        )
+
+        if not project_attr:
+            return self.get_serializer().Meta.model.objects.none()
+        return self.get_serializer().Meta.model.objects.filter(project__slug=project_attr)
+
+    def handle_create_validation_exception(self, e, request, *args, **kwargs):
+        if getattr(e, "model-validation", False):
+            raise ValidationError({e.detail: e.default_code})
+        return super().handle_create_validation_exception(e, request, *args, **kwargs)

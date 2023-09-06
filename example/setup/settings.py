@@ -162,6 +162,7 @@ DJANGO_PROJECT_BASE_PROJECTMEMBER_MODEL = "demo_django_base.ProjectMember"
 DJANGO_PROJECT_BASE_MERGEUSERGROUP_MODEL = "demo_django_base.MergeUserGroup"
 DJANGO_PROJECT_BASE_ROLE_MODEL = "demo_django_base.Role"
 DJANGO_PROJECT_BASE_PERMISSION_MODEL = "demo_django_base.Permission"
+DJANGO_PROJECT_BASE_PROJECTSETTINGS_MODEL = "demo_django_base.ProjectSettings"
 
 DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES = {
     "project": {

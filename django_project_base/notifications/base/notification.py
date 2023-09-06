@@ -7,6 +7,7 @@ import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
@@ -122,7 +123,14 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             from django_project_base.notifications.base.channels.mail_channel import MailChannel
             from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
-            notification.sender = {MailChannel.name: project.email_sender_id, SmsChannel.name: project.sms_sender_id}
+            mail_settings = project.projectsettings_set.filter(
+                name=EMAIL_SENDER_ID_SETTING_NAME, project=project
+            ).first()
+            sms_settings = project.projectsettings_set.filter(name=SMS_SENDER_ID_SETTING_NAME, project=project).first()
+            notification.sender = {
+                MailChannel.name: mail_settings.value if mail_settings else "",
+                SmsChannel.name: sms_settings.value if sms_settings else "",
+            }
         required_channels.sort()
         if self.persist:
             if self.handle_similar_notifications(notification=notification):
