@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import ForeignKey, Model, QuerySet
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
@@ -30,6 +31,9 @@ from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.rest.project_profiles_utils import get_project_members
+from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
+from django_project_base.notifications.email_notification import EMailNotification
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
@@ -522,3 +526,35 @@ class ProfileViewSet(ModelViewSet):
         profile_obj.delete_at = None
         profile_obj.save(update_fields=["delete_at"])
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @transaction.atomic()
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        project = swapper.load_model("django_project_base", "Project").objects.get(
+            slug=getattr(self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
+        )
+        if (
+            sett := swapper.load_model("django_project_base", "ProjectSettings")
+            .objects.filter(name=NOTIFY_NEW_USER_SETTING_NAME, project=project)
+            .first()
+        ) and sett.python_value:
+            recipients = [response.data[get_pk_name(get_user_model())]]
+            EMailNotification(
+                message=DjangoProjectBaseMessage(
+                    subject=_("Your account was created for you"),
+                    body=render_to_string(
+                        "account_created.html",
+                        {
+                            "username": f"{response.data['username']}/{response.data['email']}",
+                        },
+                    ),
+                    footer="",
+                    content_type=DjangoProjectBaseMessage.HTML,
+                ),
+                raw_recipents=recipients,
+                project=project.slug,
+                recipients=recipients,
+                user=self.request.user.pk,
+            ).send()
+
+        return response

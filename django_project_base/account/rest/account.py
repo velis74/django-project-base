@@ -4,8 +4,6 @@ from typing import Optional
 import swapper
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import AnonymousUser
-from django.db import transaction
-from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
@@ -21,9 +19,6 @@ from social_django.models import UserSocialAuth
 
 from django_project_base.account.rest.reset_password import ResetPasswordSerializer
 from django_project_base.account.social_auth.providers import get_social_providers
-from django_project_base.notifications.email_notification import EMailNotification
-from django_project_base.notifications.models import DjangoProjectBaseMessage
-from django_project_base.utils import get_pk_name
 
 
 def get_hijacker(request: Request) -> Optional:
@@ -311,47 +306,3 @@ class AdminAddUserViewSet(df_viewsets.SingleRecordViewSet):
             first_name="",
             last_name="",
         )
-
-    @extend_schema(
-        description="Add new user.",
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
-    @transaction.atomic()
-    def create(self, request: Request, *args, **kwargs) -> Response:
-        from rest_registration.api.views.register import RegisterView
-
-        view = RegisterView(request=request, serializer_class=self.serializer_class)
-        response = view.post(request)
-        if response.status_code == status.HTTP_201_CREATED:
-            user_model_pk_name = get_pk_name(get_user_model())
-            profile_obj = swapper.load_model("django_project_base", "Profile").objects.get(
-                user_ptr_id=response.data[user_model_pk_name]
-            )
-            profile_obj.password_invalid = True
-            profile_obj.save(update_fields=["password_invalid"])
-            recipients = [response.data[user_model_pk_name]]
-            EMailNotification(
-                message=DjangoProjectBaseMessage(
-                    subject=_("Your account was created for you"),
-                    body=render_to_string(
-                        "account_created.html",
-                        {
-                            "username": f"{request.data['username']}/{request.data['email']}",
-                            "password": f"{request.data['password']}",
-                        },
-                    ),
-                    footer="",
-                    content_type=DjangoProjectBaseMessage.HTML,
-                ),
-                raw_recipents=recipients,
-                project=swapper.load_model("django_project_base", "Project").objects.get(
-                    slug=self.request.current_project_slug
-                ),
-                recipients=[response.data[user_model_pk_name]],
-                user=self.request.user,
-            ).send()
-
-        return response

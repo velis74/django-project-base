@@ -5,11 +5,13 @@ import swapper
 from django.conf import settings
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from rest_framework.exceptions import ErrorDetail, PermissionDenied
 from taggit.models import GenericTaggedItemBase, TagBase
 
 from django_project_base.base.fields import HexColorField
@@ -23,9 +25,6 @@ class BaseProject(models.Model):
     owner = parent = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Profile"), on_delete=models.CASCADE, verbose_name=_("Owner")
     )
-
-    sms_sender_id = models.CharField(max_length=11, null=True, blank=False)
-    email_sender_id = models.CharField(max_length=320, null=True, blank=False)
 
     class Meta:
         abstract = True
@@ -215,6 +214,80 @@ class BaseMergeUserGroup(models.Model):
 class MergeUserGroup(BaseMergeUserGroup):
     class Meta:
         swappable = swapper.swappable_setting("django_project_base", "MergeUserGroup")
+
+
+class ProjectSettingsQs(models.query.QuerySet):
+    def delete(self):
+        raise PermissionDenied
+
+
+class BaseProjectSettings(models.Model):
+    VALUE_TYPE_INTEGER = "integer"
+    VALUE_TYPE_FLOAT = "float"
+    VALUE_TYPE_BOOL = "bool"
+    VALUE_TYPE_CHAR = "char"
+
+    VALUE_TYPE_CHOICES = (
+        (VALUE_TYPE_INTEGER, _("Whole number")),
+        (VALUE_TYPE_FLOAT, _("Decimal number")),
+        (VALUE_TYPE_BOOL, _("True/False")),
+        (VALUE_TYPE_CHAR, _("String")),
+    )
+
+    objects = ProjectSettingsQs.as_manager()
+
+    value_validators = {
+        VALUE_TYPE_INTEGER: lambda val: models.IntegerField().to_python(val),
+        VALUE_TYPE_FLOAT: lambda val: models.FloatField().to_python(val),
+        VALUE_TYPE_BOOL: lambda val: models.BooleanField().to_python(val),
+        VALUE_TYPE_CHAR: lambda val: models.TextField().to_python(val),
+    }
+
+    @property
+    def python_value(self):
+        return self.value_validators[self.value_type](self.value)
+
+    def clean(self):
+        validator = self.value_validators[self.value_type]
+        try:
+            validator(self.value)
+        except ValidationError as ve:
+            from rest_framework.serializers import ValidationError as DrfValidationError
+
+            exc = DrfValidationError()
+            setattr(exc, "detail", ErrorDetail(next(iter(list(ve.params.keys()))), ve.messages))
+            setattr(exc, "model-validation", True)
+            raise exc
+        super().clean()
+
+    name = models.CharField(max_length=80, null=False, blank=False, db_index=True, verbose_name=_("Name"))
+    description = models.CharField(max_length=120, null=False, blank=False, verbose_name=_("Description"))
+    value = models.CharField(max_length=320, null=False, blank=False, verbose_name=_("Value"))
+    value_type = models.CharField(choices=VALUE_TYPE_CHOICES, null=False, blank=False, max_length=10)
+
+    project = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
+    )
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.full_clean()
+        validator = self.value_validators[self.value_type]
+        self.value = validator(self.value)
+        super().save(force_insert, force_update, using, update_fields)
+
+    def delete(self, using=None, keep_parents=False):
+        raise PermissionDenied
+
+    class Meta:
+        unique_together = [
+            ["project", "name"],
+        ]
+        abstract = True
+
+
+class ProjectSettings(BaseProjectSettings):
+    class Meta:
+        swappable = swapper.swappable_setting("django_project_base", "ProjectSettings")
 
 
 @receiver(user_logged_in)
