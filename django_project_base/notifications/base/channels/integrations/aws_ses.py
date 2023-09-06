@@ -6,7 +6,11 @@ from django.contrib.auth import get_user_model
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
-from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.notifications.models import (
+    DeliveryReport,
+    DjangoProjectBaseMessage,
+    DjangoProjectBaseNotification,
+)
 
 
 class AwsSes(ProviderIntegration):
@@ -82,3 +86,6 @@ class AwsSes(ProviderIntegration):
             "Data": str(notification.message.body),
         }
         return msg
+
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        pass

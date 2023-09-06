@@ -7,7 +7,7 @@ from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 
 class NexmoSMS(ProviderIntegration):
@@ -65,3 +65,6 @@ class NexmoSMS(ProviderIntegration):
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return self._get_sms_message(notification)
+
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        pass

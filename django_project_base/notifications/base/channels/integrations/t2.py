@@ -1,3 +1,4 @@
+import json
 from typing import List, Union
 
 import requests
@@ -8,7 +9,7 @@ from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
 """
@@ -317,3 +318,12 @@ class T2(ProviderIntegration):
         is_success(response.status_code)
         response_data = response.json()
         assert str(response_data["error_code"]) == "0"
+
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        payload = json.loads(getattr(dlr, "payload", "{}"))
+        dlr.status = (
+            DeliveryReport.Status.DELIVERED
+            if str(payload.get("status", "-1")) == str(DeliveryReport.Status.DELIVERED.value)
+            else DeliveryReport.Status.NOT_DELIVERED
+        )
+        dlr.save(update_fields=["status"])

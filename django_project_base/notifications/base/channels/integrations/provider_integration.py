@@ -9,7 +9,7 @@ from django.utils.html import strip_tags
 
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
-from django_project_base.notifications.models import DjangoProjectBaseNotification, DeliveryReport
+from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 
 class ProviderIntegration(ABC):
@@ -114,3 +114,7 @@ class ProviderIntegration(ABC):
             provider=f"{self.__module__}.{self.__class__.__name__}",
         )
         return report
+
+    @abstractmethod
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        pass
