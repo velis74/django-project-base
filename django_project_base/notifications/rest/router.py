@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
+from django_project_base.notifications.rest.delivery_report import DeliveryReportViewSet
 from django_project_base.notifications.rest.maintenance_notification import UsersMaintenanceNotificationViewset
 from django_project_base.notifications.rest.notification import NotificationsLicenseViewSet, NotificationViewset
 
@@ -25,4 +26,10 @@ notifications_router.register(
     r"notification-license",
     NotificationsLicenseViewSet,
     basename="notification-license",
+)
+
+notifications_router.register(
+    r"notification-dlr",
+    DeliveryReportViewSet,
+    basename="notification-dlr",
 )

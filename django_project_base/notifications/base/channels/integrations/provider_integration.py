@@ -9,7 +9,7 @@ from django.utils.html import strip_tags
 
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.models import DjangoProjectBaseNotification, DeliveryReport
 
 
 class ProviderIntegration(ABC):
@@ -57,8 +57,9 @@ class ProviderIntegration(ABC):
 
             sent_no = 0
             for recipient in recipients:  # noqa: E203
+                dlr = self.create_delivery_report(notification)
                 try:
-                    self.client_send(self.sender(notification), recipient, message)
+                    self.client_send(self.sender(notification), recipient, message, str(dlr.pk))
                     sent_no += 1 if isinstance(recipient, str) else len(recipient)
                 except Exception as ge:
                     logger.exception(ge)
@@ -77,7 +78,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str):
+    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str, dlr_id: str):
         pass
 
     @abstractmethod
@@ -104,3 +105,12 @@ class ProviderIntegration(ABC):
         # Strip single spaces in the beginning of each line
         message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
         return message
+
+    def create_delivery_report(self, notification: DjangoProjectBaseNotification) -> DeliveryReport:
+        report = DeliveryReport.objects.create(
+            notification=notification,
+            user_id=notification.user,
+            channel=f"{self.channel.__module__}.{self.channel.__name__}",
+            provider=f"{self.__module__}.{self.__class__.__name__}",
+        )
+        return report

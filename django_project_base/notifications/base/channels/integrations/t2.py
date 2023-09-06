@@ -296,16 +296,12 @@ class T2(ProviderIntegration):
             else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
         )
 
-    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str):
+    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str, dlr_id: str):
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{self.endpoint_one}",
             auth=basic_auth,
-            json={
-                "from_number": sender,
-                "to_number": recipient,
-                "message": msg,
-            },
+            json={"from_number": sender, "to_number": recipient, "message": msg, "guid": dlr_id},
             verify=False,
             headers={"Content-Type": "application/json"},
             timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),

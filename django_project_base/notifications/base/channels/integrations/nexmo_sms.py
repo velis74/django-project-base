@@ -34,7 +34,7 @@ class NexmoSMS(ProviderIntegration):
         assert response
         assert is_success(response.status_code)
 
-    def client_send(self, sender: str, recipient: str, msg: str):
+    def client_send(self, sender: str, recipient: str, msg: str, dlr_id: str):
         params: dict = {
             "api_key": self.api_key,
             "api_secret": self.api_secret,

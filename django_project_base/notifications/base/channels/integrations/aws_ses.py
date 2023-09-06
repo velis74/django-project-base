@@ -39,7 +39,7 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
-    def client_send(self, sender: str, recipients: List[str], msg: dict):
+    def client_send(self, sender: str, recipients: List[str], msg: dict, dlr_id: str):
         res = (
             boto3.Session(
                 aws_access_key_id=self.key_id,

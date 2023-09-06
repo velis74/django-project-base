@@ -44,7 +44,7 @@ class AwsSnsSingleSMS(ProviderIntegration):
             else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
         )
 
-    def client_send(self, sender: str, recipient: str, msg: str):
+    def client_send(self, sender: str, recipient: str, msg: str, dlr_id: str):
         smsattrs = {
             "AWS.SNS.SMS.SenderID": {"DataType": "String", "StringValue": sender.replace(" ", "-")},
             "AWS.SNS.SMS.SMSType": {"DataType": "String", "StringValue": "Promotional"},
