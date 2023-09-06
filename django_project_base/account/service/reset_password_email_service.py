@@ -48,7 +48,7 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
         level=NotificationLevel.INFO,
         type=NotificationTypeDPB.STANDARD,
         recipients=[user.pk],
-        user=request.user,
+        user=request.user.pk,
     ).send()
 
     return signer.get_signed_data()

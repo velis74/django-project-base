@@ -8,6 +8,7 @@ from django_project_base.base.models import (
     BaseProfile,
     BaseProject,
     BaseProjectMember,
+    BaseProjectSettings,
     BaseTag,
     DpbTaggedItemThrough,
 )
@@ -51,4 +52,8 @@ class Role(BaseRole):
 
 
 class Permission(BasePermission):
+    pass
+
+
+class ProjectSettings(BaseProjectSettings):
     pass
