@@ -81,6 +81,18 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         self._project = project
         self._user = user
 
+    @staticmethod
+    def resend(notification: DjangoProjectBaseNotification, user_pk: str):
+        notification.user = user_pk
+        from django_project_base.notifications.rest.notification import MessageToListField
+
+        recipients: List[str] = MessageToListField.parse(json.loads(notification.recipients_original_payload))
+        notification.recipients = ",".join(map(str, recipients)) if recipients else None
+        notification.recipients_original_payload_search = None
+        notification.sender = Notification._get_sender_config(notification.project_slug)
+        notification.save(update_fields=["recipients", "recipients_original_payload_search"])
+        SendNotificationMixin().make_send(notification, {})
+
     def __set_via_channels(self, val):
         self._via_channels = val
 
@@ -96,6 +108,18 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     @property
     def persist(self) -> bool:
         return bool(self._persist)
+
+    @staticmethod
+    def _get_sender_config(project_slug: Optional[str]) -> dict:
+        if project_slug and (
+            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+        ):
+            from django_project_base.notifications.base.channels.mail_channel import MailChannel
+            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
+            # TODO: REFACTOR TO SETTINGS WHEN MERGED
+            return {MailChannel.name: project.email_sender_id, SmsChannel.name: project.sms_sender_id}
+        return {}
 
     def send(self) -> DjangoProjectBaseNotification:
         required_channels: list = list(
@@ -116,13 +140,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             project_slug=self._project,
         )
         notification.user = self._user
-        if self._project and (
-            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=self._project).first()
-        ):
-            from django_project_base.notifications.base.channels.mail_channel import MailChannel
-            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
-            notification.sender = {MailChannel.name: project.email_sender_id, SmsChannel.name: project.sms_sender_id}
+        notification.sender = Notification._get_sender_config(self._project)
+
         required_channels.sort()
         if self.persist:
             if self.handle_similar_notifications(notification=notification):
