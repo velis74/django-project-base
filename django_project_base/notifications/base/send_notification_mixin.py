@@ -13,6 +13,7 @@ class SendNotificationMixin(object):
     def make_send(self, notification: DjangoProjectBaseNotification, extra_data) -> DjangoProjectBaseNotification:
         sent_channels: list = []
         failed_channels: list = []
+
         exceptions = ""
         from django_project_base.licensing.logic import LogAccessService
 
@@ -28,11 +29,22 @@ class SendNotificationMixin(object):
             dw.connect()
             connections.databases[db_connection] = dw.settings_dict
 
-        for channel_identifier in set(filter(lambda i: not (i is None), notification.required_channels.split(","))):
+        already_sent_channels = set(
+            filter(
+                lambda i: not (i is None), notification.sent_channels.split(",") if notification.sent_channels else []
+            )
+        )
+        required_channels = (
+            set(filter(lambda i: not (i is None), notification.required_channels.split(","))) - already_sent_channels
+        )
+
+        sent_to_channels = required_channels - already_sent_channels
+
+        for channel_identifier in sent_to_channels:
             channel = ChannelIdentifier.channel(channel_identifier)
             try:
                 # check license
-                LogAccessService().log(
+                any_sent = LogAccessService().log(
                     user_profile_pk=notification.user,
                     notifications_channels_state=sent_channels,
                     record=notification,
@@ -42,28 +54,30 @@ class SendNotificationMixin(object):
                     db=db_connection,
                     settings=extra_data.get("SETTINGS", object()),
                 )
-                sent_channels.append(channel)
+                if any_sent > 0:
+                    sent_channels.append(channel)
             except Exception as e:
                 logging.getLogger(__name__).error(e)
                 failed_channels.append(channel)
                 exceptions += f"{str(e)}\n\n"
 
         if notification.created_at:
-            notification.sent_channels = (
-                ",".join(
-                    list(
-                        map(
-                            lambda f: str(f),
-                            filter(
-                                lambda d: d is not None,
-                                map(lambda c: c.name, sent_channels),
-                            ),
+            if sent_to_channels:
+                notification.sent_channels = (
+                    ",".join(
+                        list(
+                            map(
+                                lambda f: str(f),
+                                filter(
+                                    lambda d: d is not None,
+                                    map(lambda c: c.name, sent_channels),
+                                ),
+                            )
                         )
                     )
+                    if sent_channels
+                    else None
                 )
-                if sent_channels
-                else None
-            )
             notification.failed_channels = (
                 ",".join(
                     list(

@@ -29,29 +29,27 @@ class LicenseReportSerializer(Serializer):
 
 class LogAccessService:
     def report(self, user: Model) -> dict:
-        used = (
-            LicenseAccessUse.objects.filter(user_id=str(user.pk), amount__isnull=False, amount__gt=0)
-            .values("content_type")
-            .annotate(count=Sum("amount"))
-            .order_by("-amount")
-        )
+        user_query = LicenseAccessUse.objects.filter(user_id=str(user.pk), amount__isnull=False, amount__gt=0)
+
         usage_report = []
         added_types = []
-        for agg in used:
+        for agg in user_query.values("content_type").annotate(count=Sum("amount")):
             if (
                 content_type := ContentType.objects.get(pk=agg["content_type"])
             ) and content_type.model_class()._meta.verbose_name not in added_types:
-                usage_report.append({"item": content_type.model_class()._meta.verbose_name, "usage_sum": agg["count"]})
+                usage_report.append(
+                    {"item": content_type.model_class()._meta.verbose_name, "usage_sum": round(agg.get("count", 0), 2)}
+                )
                 added_types.append(content_type.model_class()._meta.verbose_name)
-        used_credit = 0
-        if cnt := used.first():
-            used_credit = cnt["count"]
+
+        used_credit = round(user_query.aggregate(count=Sum("amount")).get("count", 0), 2)
+
         return LicenseReportSerializer(
             {
-                "credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS,
+                "credit": round(MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS, 2),
                 "used_credit": used_credit,
                 "usage_report": usage_report,
-                "remaining_credit": MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS - used_credit,
+                "remaining_credit": round(MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS - used_credit, 2),
             }
         ).data
 
@@ -64,10 +62,10 @@ class LogAccessService:
         comment: str,
         on_sucess=None,
         **kwargs,
-    ):
+    ) -> int:
         if getattr(settings, "TESTING", False) and on_sucess:
             on_sucess()
-            return
+            return 1
 
         db_connection = "default"
         if kwargs.get("db") and kwargs["db"] != "default":
@@ -102,15 +100,17 @@ class LogAccessService:
 
         accesses_used = 1
         if on_sucess:
-            on_success = on_sucess()
-            if on_success:
-                accesses_used = on_success
+            accesses_used = on_sucess()
+
+        amount = accesses_used * item_price
 
         LicenseAccessUse.objects.using(db_connection).create(
             type=LicenseAccessUse.UseType.USE,
             user_id=str(user_profile_pk),
             content_type_object_id=str(record.pk).replace("-", ""),
             content_type=content_type,
-            amount=accesses_used * item_price,
+            amount=amount,
             comment=dict(comment=comment, count=accesses_used, item_price=item_price),
         )
+
+        return accesses_used
