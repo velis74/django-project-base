@@ -46,6 +46,7 @@ class ProviderIntegration(ABC):
 
     def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
         self.ensure_credentials(extra_data=kwargs.get("extra_data"))
+        self.ensure_dlr_user(notification.project_slug)
         logger = logging.getLogger("django")
         try:
             message = self.get_message(notification)
@@ -117,4 +118,18 @@ class ProviderIntegration(ABC):
 
     @abstractmethod
     def parse_delivery_report(self, dlr: DeliveryReport):
+        pass
+
+    @abstractmethod
+    @property
+    def delivery_report_username_setting_name(self) -> str:
+        pass
+
+    @abstractmethod
+    @property
+    def delivery_report_password_setting_name(self) -> str:
+        pass
+
+    @abstractmethod
+    def ensure_dlr_user(self, project_slug: str):
         pass

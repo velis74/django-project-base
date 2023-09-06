@@ -66,3 +66,14 @@ class AwsSnsSingleSMS(ProviderIntegration):
 
     def parse_delivery_report(self, dlr: DeliveryReport):
         pass
+
+    @property
+    def delivery_report_username_setting_name(self) -> str:
+        return "aws-sns-sms-dlr-user"
+
+    @property
+    def delivery_report_password_setting_name(self) -> str:
+        return "aws-sns-sms-dlr-password"
+
+    def ensure_dlr_user(self, project_slug: str):
+        pass

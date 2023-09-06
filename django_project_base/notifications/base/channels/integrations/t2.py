@@ -2,6 +2,7 @@ import json
 from typing import List, Union
 
 import requests
+import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
@@ -327,3 +328,17 @@ class T2(ProviderIntegration):
             else DeliveryReport.Status.NOT_DELIVERED
         )
         dlr.save(update_fields=["status"])
+
+    @property
+    def delivery_report_username_setting_name(self) -> str:
+        return "t2-sms-dlr-user"
+
+    @property
+    def delivery_report_password_setting_name(self) -> str:
+        return "t2-sms-dlr-password"
+
+    def ensure_dlr_user(self, project_slug: str):
+        if project_slug and (
+            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+        ):
+            a = 9
