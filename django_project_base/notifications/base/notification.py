@@ -7,6 +7,7 @@ import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
@@ -111,15 +112,24 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
 
     @staticmethod
     def _get_sender_config(project_slug: Optional[str]) -> dict:
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
         if project_slug and (
             project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
         ):
-            from django_project_base.notifications.base.channels.mail_channel import MailChannel
-            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
-
-            # TODO: REFACTOR TO SETTINGS WHEN MERGED
-            return {MailChannel.name: project.email_sender_id, SmsChannel.name: project.sms_sender_id}
-        return {}
+            mail_settings = project.projectsettings_set.filter(
+                name=EMAIL_SENDER_ID_SETTING_NAME, project=project
+            ).first()
+            sms_settings = project.projectsettings_set.filter(name=SMS_SENDER_ID_SETTING_NAME, project=project).first()
+            return {
+                MailChannel.name: mail_settings.python_value if mail_settings else "",
+                SmsChannel.name: sms_settings.python_value if sms_settings else "",
+            }
+        return {
+            MailChannel.name: "",
+            SmsChannel.name: "",
+        }
 
     def send(self) -> DjangoProjectBaseNotification:
         required_channels: list = list(

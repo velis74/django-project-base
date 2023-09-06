@@ -13,6 +13,7 @@ import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
 import NotificationsEditor from './components/notifications-editor.vue';
+import ProjectSettings from './components/project-settings.vue';
 import TitleBar from './components/titlebar.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
 import Login from './components/user-session/login-inline.vue';
@@ -40,6 +41,7 @@ export const componentsConfig: { [key: string]: Component } = {
   TitlebarAppStandalone,
   LoginDialog,
   NotificationsEditor,
+  ProjectSettings,
 };
 
 type AppData = Object;
