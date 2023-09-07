@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.notification_queryset import NotificationQuerySet
-from django_project_base.utils import get_pk_name
+from django_project_base.utils import get_pk_name, IntDescribedEnum
 
 
 class AbstractDjangoProjectBaseMessage(models.Model):
@@ -217,3 +217,20 @@ class SearchItems(models.Model):
         abstract = False
         managed = False
         db_table = "search-items-table"
+
+
+class DeliveryReport(models.Model):
+    class Status(IntDescribedEnum):
+        DELIVERED = 1, _("Delivered")
+        NOT_DELIVERED = 2, _("Not Delivered")
+        PENDING_DELIVERY = 3, _("Pending delivery")
+
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"), db_index=True)
+    notification = models.ForeignKey(DjangoProjectBaseNotification, on_delete=models.CASCADE)
+    user_id = models.CharField(max_length=1024, db_index=True, null=False, blank=False)
+    channel = models.CharField(max_length=1024, null=False, blank=False)
+    provider = models.CharField(max_length=1024, db_index=True, null=False, blank=False)
+    payload = models.JSONField(null=True, blank=False)
+    status = models.IntegerField(
+        default=Status.PENDING_DELIVERY, choices=Status.get_choices_tuple(), db_index=True, null=False
+    )
