@@ -42,29 +42,8 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
-    def client_send(self, sender: str, recipients: List[dict], msg: dict, dlr_id: str):
-        res = (
-            boto3.Session(
-                aws_access_key_id=self.key_id,
-                aws_secret_access_key=self.access_key,
-                region_name=self.region,
-            )
-            .client("ses")
-            .send_email(
-                Destination={
-                    "ToAddresses": [sender],
-                    "CcAddresses": [],
-                    "BccAddresses": self.clean_email_recipients(list(map(lambda e: e.get("email"), recipients))),
-                },
-                Message=msg,
-                Source=sender,
-            )
-        )
-        self.validate_send(res)
-
     def get_recipients(self, notification: DjangoProjectBaseNotification):
-        rec = super().get_recipients(notification)
-        return [rec[i : i + 49] for i in range(0, len(rec), 49)]
+        return super().get_recipients(notification)
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> dict:
         msg = {
@@ -104,3 +83,27 @@ class AwsSes(ProviderIntegration):
             self.enqueue_dlr_request()
             return cnt
         return 0
+
+    def client_send(self, sender: str, recipient: dict, msg: dict, dlr_id: str):
+        rec = self.clean_email_recipients([recipient.get("email")])
+        if not rec:
+            return
+
+        res = (
+            boto3.Session(
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.access_key,
+                region_name=self.region,
+            )
+            .client("ses")
+            .send_email(
+                Destination={
+                    "ToAddresses": [sender],
+                    "CcAddresses": [],
+                    "BccAddresses": rec,
+                },
+                Message=msg,
+                Source=sender,
+            )
+        )
+        self.validate_send(res)
