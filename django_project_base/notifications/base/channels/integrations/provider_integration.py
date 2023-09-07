@@ -1,8 +1,9 @@
 import logging
 import re
 from abc import ABC, abstractmethod
-from typing import Any, List, Type, Union
+from typing import Any, Dict, List, Type, Union
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.html import strip_tags
@@ -10,6 +11,7 @@ from django.utils.html import strip_tags
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
+from django_project_base.utils import get_pk_name
 
 
 class ProviderIntegration(ABC):
@@ -54,14 +56,14 @@ class ProviderIntegration(ABC):
             recipients = self.get_recipients(notification)
 
             if not recipients:
-                raise ValueError("No valid recipientsc")
+                raise ValueError("No valid recipients")
 
             sent_no = 0
             for recipient in recipients:  # noqa: E203
-                dlr = self.create_delivery_report(notification)
+                dlr = self.create_delivery_report(notification, recipient)
                 try:
                     self.client_send(self.sender(notification), recipient, message, str(dlr.pk))
-                    sent_no += 1 if isinstance(recipient, str) else len(recipient)
+                    sent_no += 1 if isinstance(recipient, dict) else len(recipient)
                 except Exception as ge:
                     logger.exception(ge)
 
@@ -79,7 +81,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str, dlr_id: str):
+    def client_send(self, sender: str, recipient: Union[Dict, List[Dict]], msg: str, dlr_id: str):
         pass
 
     @abstractmethod
@@ -87,8 +89,16 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def get_recipients(self, notification: DjangoProjectBaseNotification) -> Union[List[str], List[List[str]]]:
-        pass
+    def get_recipients(self, notification: DjangoProjectBaseNotification) -> Union[List[Dict], List[List[Dict]]]:
+        rec_obj = notification.recipients_list
+        if not rec_obj:
+            rec_obj = [
+                {k: v for k, v in profile.__dict__.items() if not k.startswith("_") and k in ("email", "phone_number")}
+                for profile in [
+                    get_user_model().objects.get(pk=u).userprofile for u in notification.recipients.split(",")
+                ]
+            ]
+        return rec_obj
 
     @abstractmethod
     def ensure_credentials(self, extra_data: dict):
@@ -107,29 +117,36 @@ class ProviderIntegration(ABC):
         message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
         return message
 
-    def create_delivery_report(self, notification: DjangoProjectBaseNotification) -> DeliveryReport:
-        report = DeliveryReport.objects.create(
-            notification=notification,
-            user_id=notification.user,
-            channel=f"{self.channel.__module__}.{self.channel.__name__}",
-            provider=f"{self.__module__}.{self.__class__.__name__}",
-        )
-        return report
+    def create_delivery_report(
+            self, notification: DjangoProjectBaseNotification, recipient: Union[dict, List[dict]]) -> DeliveryReport:
+        recs = recipient if isinstance(recipient, list) else [recipient]
+        for user in recs:
+            report = DeliveryReport.objects.create(
+                notification=notification,
+                user_id=user[get_pk_name(get_user_model())],
+                channel=f"{self.channel.__module__}.{self.channel.__name__}",
+                provider=f"{self.__module__}.{self.__class__.__name__}",
+            )
+            return report
 
     @abstractmethod
     def parse_delivery_report(self, dlr: DeliveryReport):
         pass
 
-    @abstractmethod
     @property
+    @abstractmethod
     def delivery_report_username_setting_name(self) -> str:
         pass
 
-    @abstractmethod
     @property
+    @abstractmethod
     def delivery_report_password_setting_name(self) -> str:
         pass
 
     @abstractmethod
     def ensure_dlr_user(self, project_slug: str):
+        pass
+
+    @abstractmethod
+    def enqueue_dlr_request(self):
         pass

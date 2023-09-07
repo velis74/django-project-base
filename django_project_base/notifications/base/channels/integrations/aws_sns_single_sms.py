@@ -2,7 +2,6 @@ from typing import Union
 
 import boto3
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
@@ -38,13 +37,13 @@ class AwsSnsSingleSMS(ProviderIntegration):
         assert is_success(response.get("ResponseMetadata", {}).get("HTTPStatusCode", 500))
 
     def get_recipients(self, notification: DjangoProjectBaseNotification):
-        return self.clean_sms_recipients(
-            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
-            if not notification.recipients_list
-            else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
-        )
+        return super().get_recipients(notification)
 
-    def client_send(self, sender: str, recipient: str, msg: str, dlr_id: str):
+    def client_send(self, sender: str, recipient: dict, msg: str, dlr_id: str):
+        rec = self.clean_sms_recipients([recipient["phone_number"]])
+        if not rec:
+            return
+
         smsattrs = {
             "AWS.SNS.SMS.SenderID": {"DataType": "String", "StringValue": sender.replace(" ", "-")},
             "AWS.SNS.SMS.SMSType": {"DataType": "String", "StringValue": "Promotional"},
@@ -57,7 +56,7 @@ class AwsSnsSingleSMS(ProviderIntegration):
                 region_name=self.region,
             )
             .client("sns")
-            .publish(PhoneNumber=recipient, Message=msg, MessageAttributes=smsattrs)
+            .publish(PhoneNumber=rec[0], Message=msg, MessageAttributes=smsattrs)
         )
         self.validate_send(res)
 
@@ -77,3 +76,12 @@ class AwsSnsSingleSMS(ProviderIntegration):
 
     def ensure_dlr_user(self, project_slug: str):
         pass
+
+    def enqueue_dlr_request(self):
+        pass
+
+    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
+        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
+            self.enqueue_dlr_request()
+            return cnt
+        return 0

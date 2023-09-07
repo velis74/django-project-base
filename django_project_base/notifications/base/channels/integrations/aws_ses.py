@@ -2,7 +2,6 @@ from typing import List
 
 import boto3
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
@@ -43,7 +42,7 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
-    def client_send(self, sender: str, recipients: List[str], msg: dict, dlr_id: str):
+    def client_send(self, sender: str, recipients: List[dict], msg: dict, dlr_id: str):
         res = (
             boto3.Session(
                 aws_access_key_id=self.key_id,
@@ -55,7 +54,7 @@ class AwsSes(ProviderIntegration):
                 Destination={
                     "ToAddresses": [sender],
                     "CcAddresses": [],
-                    "BccAddresses": recipients,
+                    "BccAddresses": self.clean_email_recipients(list(map(lambda e: e.get("email"), recipients))),
                 },
                 Message=msg,
                 Source=sender,
@@ -64,11 +63,7 @@ class AwsSes(ProviderIntegration):
         self.validate_send(res)
 
     def get_recipients(self, notification: DjangoProjectBaseNotification):
-        rec = self.clean_email_recipients(
-            [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
-            if not notification.recipients_list
-            else [u["email"] for u in notification.recipients_list if u.get("email")]
-        )
+        rec = super().get_recipients(notification)
         return [rec[i : i + 49] for i in range(0, len(rec), 49)]
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> dict:
@@ -100,3 +95,12 @@ class AwsSes(ProviderIntegration):
 
     def ensure_dlr_user(self, project_slug: str):
         pass
+
+    def enqueue_dlr_request(self):
+        pass
+
+    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
+        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
+            self.enqueue_dlr_request()
+            return cnt
+        return 0
