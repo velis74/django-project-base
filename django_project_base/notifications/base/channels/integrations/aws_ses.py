@@ -1,5 +1,3 @@
-from typing import List
-
 import boto3
 from django.conf import settings
 from rest_framework.status import is_success
