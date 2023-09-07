@@ -2,12 +2,11 @@ from typing import Union
 
 import requests
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 
 class NexmoSMS(ProviderIntegration):
@@ -34,12 +33,17 @@ class NexmoSMS(ProviderIntegration):
         assert response
         assert is_success(response.status_code)
 
-    def client_send(self, sender: str, recipient: str, msg: str):
+    def client_send(self, sender: str, recipient: dict, msg: str, dlr_id: str):
+        # TODO: SLOVENIA????????
+        rec = PhoneNumberParser.ensure_country_code_slovenia(self.clean_sms_recipients([recipient["phone_number"]]))
+        if not rec:
+            return
+
         params: dict = {
             "api_key": self.api_key,
             "api_secret": self.api_secret,
             "from": sender,
-            "to": recipient,
+            "to": rec[0],
             "text": msg,
         }
         response = requests.get(
@@ -51,17 +55,30 @@ class NexmoSMS(ProviderIntegration):
         self.validate_send(response)
 
     def get_recipients(self, notification: DjangoProjectBaseNotification):
-        # TODO: SLOVENIA????????
-        return PhoneNumberParser.ensure_country_code_slovenia(
-            self.clean_recipients(
-                [
-                    get_user_model().objects.get(pk=u).userprofile.phone_number
-                    for u in notification.recipients.split(",")
-                ]
-                if not notification.recipients_list
-                else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
-            )
-        )
+        return super().get_recipients(notification)
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return self._get_sms_message(notification)
+
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        pass
+
+    @property
+    def delivery_report_username_setting_name(self) -> str:
+        return "nexmo-sms-dlr-user"
+
+    @property
+    def delivery_report_password_setting_name(self) -> str:
+        return "nexmo-sms-dlr-password"
+
+    def ensure_dlr_user(self, project_slug: str):
+        pass
+
+    def enqueue_dlr_request(self):
+        pass
+
+    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
+        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
+            self.enqueue_dlr_request()
+            return cnt
+        return 0

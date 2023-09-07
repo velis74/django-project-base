@@ -1,12 +1,13 @@
-from typing import List
-
 import boto3
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
-from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.notifications.models import (
+    DeliveryReport,
+    DjangoProjectBaseMessage,
+    DjangoProjectBaseNotification,
+)
 
 
 class AwsSes(ProviderIntegration):
@@ -39,33 +40,8 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
-    def client_send(self, sender: str, recipients: List[str], msg: dict):
-        res = (
-            boto3.Session(
-                aws_access_key_id=self.key_id,
-                aws_secret_access_key=self.access_key,
-                region_name=self.region,
-            )
-            .client("ses")
-            .send_email(
-                Destination={
-                    "ToAddresses": [sender],
-                    "CcAddresses": [],
-                    "BccAddresses": recipients,
-                },
-                Message=msg,
-                Source=sender,
-            )
-        )
-        self.validate_send(res)
-
     def get_recipients(self, notification: DjangoProjectBaseNotification):
-        rec = self.clean_email_recipients(
-            [get_user_model().objects.get(pk=u).email for u in notification.recipients.split(",")]
-            if not notification.recipients_list
-            else [u["email"] for u in notification.recipients_list if u.get("email")]
-        )
-        return [rec[i : i + 49] for i in range(0, len(rec), 49)]
+        return super().get_recipients(notification)
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> dict:
         msg = {
@@ -82,3 +58,50 @@ class AwsSes(ProviderIntegration):
             "Data": str(notification.message.body),
         }
         return msg
+
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        pass
+
+    @property
+    def delivery_report_username_setting_name(self) -> str:
+        return "aws-ses-email-dlr-user"
+
+    @property
+    def delivery_report_password_setting_name(self) -> str:
+        return "aws-ses-email-dlr-password"
+
+    def ensure_dlr_user(self, project_slug: str):
+        pass
+
+    def enqueue_dlr_request(self):
+        pass
+
+    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
+        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
+            self.enqueue_dlr_request()
+            return cnt
+        return 0
+
+    def client_send(self, sender: str, recipient: dict, msg: dict, dlr_id: str):
+        rec = self.clean_email_recipients([recipient.get("email")])
+        if not rec:
+            return
+
+        res = (
+            boto3.Session(
+                aws_access_key_id=self.key_id,
+                aws_secret_access_key=self.access_key,
+                region_name=self.region,
+            )
+            .client("ses")
+            .send_email(
+                Destination={
+                    "ToAddresses": [sender],
+                    "CcAddresses": [],
+                    "BccAddresses": rec,
+                },
+                Message=msg,
+                Source=sender,
+            )
+        )
+        self.validate_send(res)

@@ -13,13 +13,15 @@ class MailChannel(Channel):
 
     notification_price = 0.0002  # TODO get from settings
 
+    provider_setting_name = "EMAIL_PROVIDER"
+
     @staticmethod
     def __make_send_mail(notification: "DjangoProjectBaseNotification", extra_data) -> int:  # noqa: F821
         recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []
         res_count = len(recipients)
         if getattr(settings, "TESTING", False):
             return res_count
-        MailChannel.provider(extra_settings=extra_data, setting_name="EMAIL_PROVIDER").send(
+        MailChannel.provider(extra_settings=extra_data, setting_name=MailChannel.provider_setting_name).send(
             notification=notification, extra_data=extra_data
         )
         return res_count

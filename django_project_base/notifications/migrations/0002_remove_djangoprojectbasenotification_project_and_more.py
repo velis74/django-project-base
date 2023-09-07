@@ -6,7 +6,12 @@ from django.db import migrations, models, connection
 def forwards_func(apps, schema_editor):
     from django_project_base.notifications.models import DjangoProjectBaseNotification
 
-    if list(filter(lambda g: g.column in ("project", "project_id"), DjangoProjectBaseNotification._meta.get_fields())):
+    if list(
+        filter(
+            lambda g: getattr(g, "column", "") in ("project", "project_id"),
+            DjangoProjectBaseNotification._meta.get_fields(),
+        )
+    ):
         try:
             with connection.cursor() as cursor:
                 cursor.execute("ALTER TABLE notifications_djangoprojectbasenotification drop column project_id;")

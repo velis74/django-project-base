@@ -1,6 +1,8 @@
-from typing import List, Union
+import json
+from typing import Union
 
 import requests
+import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
@@ -8,7 +10,7 @@ from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
-from django_project_base.notifications.models import DjangoProjectBaseNotification
+from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
 """
@@ -290,22 +292,17 @@ class T2(ProviderIntegration):
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
     def get_recipients(self, notification: DjangoProjectBaseNotification):
-        return self.clean_sms_recipients(
-            [get_user_model().objects.get(pk=u).userprofile.phone_number for u in notification.recipients.split(",")]
-            if not notification.recipients_list
-            else [u["phone_number"] for u in notification.recipients_list if u.get("phone_number")]
-        )
+        return super().get_recipients(notification)
 
-    def client_send(self, sender: str, recipient: Union[str, List[str]], msg: str):
+    def client_send(self, sender: str, recipient: dict, msg: str, dlr_id: str):
+        rec = self.clean_sms_recipients([recipient["phone_number"]])
+        if not rec:
+            return
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{self.endpoint_one}",
             auth=basic_auth,
-            json={
-                "from_number": sender,
-                "to_number": recipient,
-                "message": msg,
-            },
+            json={"from_number": sender, "to_number": rec[0], "message": msg, "guid": dlr_id},
             verify=False,
             headers={"Content-Type": "application/json"},
             timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
@@ -321,3 +318,51 @@ class T2(ProviderIntegration):
         is_success(response.status_code)
         response_data = response.json()
         assert str(response_data["error_code"]) == "0"
+
+    def parse_delivery_report(self, dlr: DeliveryReport):
+        payload = json.loads(getattr(dlr, "payload", "{}"))
+        dlr.status = (
+            DeliveryReport.Status.DELIVERED
+            if str(payload.get("status", "-1")) == str(DeliveryReport.Status.DELIVERED.value)
+            else DeliveryReport.Status.NOT_DELIVERED
+        )
+        dlr.save(update_fields=["status"])
+
+    @property
+    def delivery_report_username_setting_name(self) -> str:
+        return "t2-sms-dlr-user"
+
+    @property
+    def delivery_report_password_setting_name(self) -> str:
+        return "t2-sms-dlr-password"
+
+    def ensure_dlr_user(self, project_slug: str):
+        if project_slug and (
+            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+        ):
+            username_setting = project.projectsettings_set.filter(
+                name=self.delivery_report_username_setting_name, project=project
+            ).first()
+
+            password_setting = project.projectsettings_set.filter(
+                name=self.delivery_report_password_setting_name, project=project
+            ).first()
+
+            assert username_setting
+            assert password_setting
+
+            user, user_created = get_user_model().objects.get_or_create(
+                username=username_setting.python_value,
+                email="klemen.spruk@velis.si",
+                first_name=username_setting.python_value,
+                last_name=username_setting.python_value,
+            )
+            if user_created:
+                user.set_password(password_setting.python_value)
+                user.save()
+
+            ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+            ProjectMember.objects.get_or_create(member=user.userprofile, project=project)
+
+    def enqueue_dlr_request(self):
+        pass

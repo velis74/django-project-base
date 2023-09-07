@@ -12,6 +12,8 @@ class Channel(ABC):
 
     notification_price = 0
 
+    provider_setting_name = ""
+
     @staticmethod
     def provider(extra_settings: Optional[dict], setting_name: str) -> "ProviderIntegration":  # noqa F821
         def get_first_provider(val: Union[str, List]) -> "ProviderIntegration":  # noqa F821

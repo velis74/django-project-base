@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
-from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
+from django_project_base.notifications.base.enums import ChannelIdentifier, NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
 from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
@@ -116,7 +116,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
         if project_slug and (
-            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+                project := swapper.load_model("django_project_base", "Project").objects.filter(
+                    slug=project_slug).first()
         ):
             mail_settings = project.projectsettings_set.filter(
                 name=EMAIL_SENDER_ID_SETTING_NAME, project=project
@@ -163,6 +164,11 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             notification.save()
         else:
             notification.created_at = None
+
+        for channel_name in required_channels:
+            channel = ChannelIdentifier.channel(channel_name)
+            channel.provider(extra_settings={}, setting_name=channel.provider_setting_name).ensure_dlr_user(
+                self._project)
 
         if self.delay:
             if not self.persist:
