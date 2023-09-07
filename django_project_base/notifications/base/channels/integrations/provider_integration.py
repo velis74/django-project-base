@@ -48,7 +48,6 @@ class ProviderIntegration(ABC):
 
     def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
         self.ensure_credentials(extra_data=kwargs.get("extra_data"))
-        self.ensure_dlr_user(notification.project_slug)
         logger = logging.getLogger("django")
         try:
             message = self.get_message(notification)
@@ -92,8 +91,9 @@ class ProviderIntegration(ABC):
     def get_recipients(self, notification: DjangoProjectBaseNotification) -> Union[List[Dict], List[List[Dict]]]:
         rec_obj = notification.recipients_list
         if not rec_obj:
+            att = ("email", "phone_number", get_pk_name(get_user_model()))
             rec_obj = [
-                {k: v for k, v in profile.__dict__.items() if not k.startswith("_") and k in ("email", "phone_number")}
+                {k: v for k, v in profile.__dict__.items() if not k.startswith("_") and k in att}
                 for profile in [
                     get_user_model().objects.get(pk=u).userprofile for u in notification.recipients.split(",")
                 ]

@@ -13,11 +13,13 @@ class SmsChannel(Channel):
 
     notification_price = 0.1  # TODO get from settings
 
+    provider_setting_name = "SMS_PROVIDER"
+
     @staticmethod
     def send(notification: "DjangoProjectBaseNotification", extra_data, **kwargs) -> int:  # noqa: F821
         recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []
         if not recipients or getattr(settings, "TESTING", False):
             return len(recipients)
-        return SmsChannel.provider(extra_settings=extra_data, setting_name="SMS_PROVIDER").send(
+        return SmsChannel.provider(extra_settings=extra_data, setting_name=SmsChannel.provider_setting_name).send(
             notification=notification, extra_data=extra_data
         )
