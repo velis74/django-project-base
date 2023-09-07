@@ -99,9 +99,10 @@ class LogAccessService:
         if used >= MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS:  # janez medja
             raise PermissionDenied(gettext("Your license is consumed. Please contact support."))
 
-        accesses_used = 1
         if on_sucess:
             accesses_used = on_sucess()
+        else:
+            accesses_used = 1
 
         amount = accesses_used * item_price
 

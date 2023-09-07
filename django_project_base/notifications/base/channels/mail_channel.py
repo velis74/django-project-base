@@ -17,14 +17,14 @@ class MailChannel(Channel):
 
     @staticmethod
     def __make_send_mail(notification: "DjangoProjectBaseNotification", extra_data) -> int:  # noqa: F821
-        recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []
-        res_count = len(recipients)
         if getattr(settings, "TESTING", False):
-            return res_count
-        MailChannel.provider(extra_settings=extra_data, setting_name=MailChannel.provider_setting_name).send(
+            recipients: List[int] = (
+                list(map(int, notification.recipients.split(","))) if notification.recipients else []
+            )
+            return len(recipients)
+        return MailChannel.provider(extra_settings=extra_data, setting_name=MailChannel.provider_setting_name).send(
             notification=notification, extra_data=extra_data
         )
-        return res_count
 
     @staticmethod
     def send(notification: "DjangoProjectBaseNotification", extra_data, **kwargs) -> int:  # noqa: F821
@@ -34,8 +34,4 @@ class MailChannel(Channel):
         :param fail_silently:
         :return: number of sent messages
         """
-        recipients: List[int] = list(map(int, notification.recipients.split(","))) if notification.recipients else []
-        if not recipients:
-            return 0
-
         return MailChannel.__make_send_mail(notification, extra_data)
