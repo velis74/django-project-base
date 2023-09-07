@@ -340,11 +340,13 @@ class T2(ProviderIntegration):
         if project_slug and (
             project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
         ):
-            username_setting = project.projectsettings_set.filter(
+            project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
+
+            username_setting = project_settings_model.objects.filter(
                 name=self.delivery_report_username_setting_name, project=project
             ).first()
 
-            password_setting = project.projectsettings_set.filter(
+            password_setting = project_settings_model.objects.filter(
                 name=self.delivery_report_password_setting_name, project=project
             ).first()
 

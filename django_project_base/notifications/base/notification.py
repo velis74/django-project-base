@@ -116,13 +116,15 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
         if project_slug and (
-                project := swapper.load_model("django_project_base", "Project").objects.filter(
-                    slug=project_slug).first()
+            project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
         ):
-            mail_settings = project.projectsettings_set.filter(
+            project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
+            mail_settings = project_settings_model.objects.filter(
                 name=EMAIL_SENDER_ID_SETTING_NAME, project=project
             ).first()
-            sms_settings = project.projectsettings_set.filter(name=SMS_SENDER_ID_SETTING_NAME, project=project).first()
+            sms_settings = project_settings_model.objects.filter(
+                name=SMS_SENDER_ID_SETTING_NAME, project=project
+            ).first()
             return {
                 MailChannel.name: mail_settings.python_value if mail_settings else "",
                 SmsChannel.name: sms_settings.python_value if sms_settings else "",
@@ -168,7 +170,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         for channel_name in required_channels:
             channel = ChannelIdentifier.channel(channel_name)
             channel.provider(extra_settings={}, setting_name=channel.provider_setting_name).ensure_dlr_user(
-                self._project)
+                self._project
+            )
 
         if self.delay:
             if not self.persist:
