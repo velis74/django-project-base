@@ -41,8 +41,9 @@ class LogAccessService:
                     {"item": content_type.model_class()._meta.verbose_name, "usage_sum": round(agg.get("count", 0), 2)}
                 )
                 added_types.append(content_type.model_class()._meta.verbose_name)
-
-        used_credit = round(user_query.aggregate(count=Sum("amount")).get("count", 0), 2)
+        used_credit = 0
+        if user_query.exists():
+            used_credit = round(user_query.aggregate(count=Sum("amount")).get("count", 0), 2)
 
         return LicenseReportSerializer(
             {
