@@ -9,7 +9,10 @@ from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
-from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
+from django_project_base.notifications.base.channels.integrations.provider_integration import (
+    ProviderIntegration,
+    Recipient,
+)
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
@@ -294,8 +297,8 @@ class T2(ProviderIntegration):
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
         return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
 
-    def client_send(self, sender: str, recipient: dict, msg: str, dlr_id: str):
-        rec = self.clean_sms_recipients([recipient["phone_number"]])
+    def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
+        rec = self.clean_sms_recipients([recipient.phone_number])
         if not rec:
             return
         basic_auth = HTTPBasicAuth(self.username, self.password)

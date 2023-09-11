@@ -33,6 +33,9 @@ class Recipient:
     def __eq__(self, __o: "Recipient") -> bool:
         return str(getattr(self, self.unique_attribute)) == str(getattr(__o, self.unique_attribute))
 
+    def __hash__(self) -> int:
+        return getattr(self, self.unique_attribute).__hash__()
+
 
 class ProviderIntegration(ABC):
     channel: Type[Channel]
@@ -82,7 +85,7 @@ class ProviderIntegration(ABC):
                 dlr = self.create_delivery_report(notification, recipient)
                 try:
                     self.client_send(self.sender(notification), recipient, message, str(dlr.pk))
-                    sent_no += 1 if isinstance(recipient, dict) else len(recipient)
+                    sent_no += 1
                 except Exception as ge:
                     logger.exception(ge)
 
@@ -100,7 +103,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def client_send(self, sender: str, recipient: Union[Dict, List[Dict]], msg: str, dlr_id: str):
+    def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         pass
 
     @abstractmethod
