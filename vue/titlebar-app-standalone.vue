@@ -11,7 +11,7 @@ import LoginDialog from './components/user-session/login-dialog.vue';
         <ModalView/>
         <LoginDialog/>
       </v-main>
+      <app-notification/>
     </v-app>
   </BrowserCheck>
-  <app-notification/>
 </template>

@@ -30,6 +30,7 @@ from rest_framework.serializers import Serializer
 from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
+from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import EMailNotification
@@ -387,18 +388,13 @@ class ProfileViewSet(ModelViewSet):
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
         if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
-            response_data["default_project"] = None
-            project_slug = request.session.get(
-                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"], None
-            )
-            if project_slug is None:
-                project_object = ProjectViewSet._get_queryset_for_request(request).first()
-            else:
-                project_object = (
-                    ProjectSerializer.Meta.model.objects.filter(slug=project_slug).first() if project_slug else None
-                )
-            if project_object:
-                response_data["default_project"] = ProjectSerializer(project_object).data
+            try:
+                response_data["default_project"] = ProjectSerializer(request.selected_project).data
+            except ProjectNotSelectedError:
+                if project_object := ProjectViewSet._get_queryset_for_request(request).first():
+                    response_data["default_project"] = ProjectSerializer(project_object).data
+                else:
+                    response_data["default_project"] = None
         return Response(response_data)
 
     @extend_schema(

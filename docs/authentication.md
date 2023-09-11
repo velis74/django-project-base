@@ -41,6 +41,9 @@ MIDDLEWARE = [
 ]
 ```
 
+Session middleware also provides information about currently selected project for every request. See
+[project](./project#selected-project)
+
 ## Use of json session id in subsequent requests
 
 When using the Authorisation header, use returned session api as token with token type "sessionid" and returned

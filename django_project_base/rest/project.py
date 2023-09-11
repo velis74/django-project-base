@@ -16,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.utils import get_pk_name
 
 
@@ -87,18 +88,11 @@ class ProjectViewSet(ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def get_current_project(self, request: Request, **kwargs) -> Response:
-        current_project_attr = (
-            getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
-            .get("project", {})
-            .get("value_name", None)
-        )
-        if current_project_attr is None:
-            raise NotFound("Current project resolution not set up for project")
-        if (current_project_slug := getattr(request, current_project_attr, None)) is None:
-            raise NotFound("Current project not specified for request")
-
-        current_project = swapper.load_model("django_project_base", "Project").objects.get(slug=current_project_slug)
-        serializer = self.get_serializer(current_project)
+        try:
+            request.selected_project.get_deferred_fields()  # force immediate LazyObject evaluation
+            serializer = self.get_serializer(request.selected_project)
+        except ProjectNotSelectedError as e:
+            raise NotFound(e.message)
         return Response(serializer.data)
 
     @extend_schema(
@@ -111,21 +105,13 @@ class ProjectViewSet(ModelViewSet):
     )
     @get_current_project.mapping.post
     def update_current_profile(self, request: Request, **kwargs) -> Response:
-        current_project_attr = (
-            getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
-            .get("project", {})
-            .get("value_name", None)
-        )
-        if current_project_attr is None:
-            raise NotFound("Current project resolution not set up for project")
-        if (current_project_slug := getattr(request, current_project_attr, None)) is None:
-            raise NotFound("Current project not specified for request")
+        try:
+            serializer = self.get_serializer(request.selected_project, data=request.data, many=False)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except ProjectNotSelectedError as e:
+            raise NotFound(e.message)
 
-        current_project = swapper.load_model("django_project_base", "Project").objects.get(slug=current_project_slug)
-
-        serializer = self.get_serializer(current_project, data=request.data, many=False)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
         return Response(serializer.data)
 
     def get_object(self):

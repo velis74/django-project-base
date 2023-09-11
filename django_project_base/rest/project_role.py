@@ -12,6 +12,7 @@ from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework.exceptions import ValidationError
 
+from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.auth.models import BaseRole
 from django_project_base.base.models import BaseProject
 
@@ -50,22 +51,16 @@ class ProjectRoleViewSet(ModelViewSet):
     serializer_class = ProjectRoleSerializer
 
     def __get_project(self) -> Optional[BaseProject]:
-        request_project_attr: str = settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES.get("project", {}).get(
-            "value_name"
-        )
-        project_model = swapper.load_model("django_project_base", "Project")
-        if request_project_attr:
-            project = getattr(self.request, request_project_attr, None)
-            if project:
-                try:
-                    return project_model.objects.prefetch_related("owner").get(slug=project)
-                except project_model.DoesNotExist:
-                    pass
+        try:
+            self.request.selected_project.get_deferred_fields()  # force immediate LazyObject evaluation
+            return self.request.selected_project
+        except ProjectNotSelectedError:
+            pass
 
-        project = self.request.GET.get("project", "")
-        if project:
+        if project := self.request.GET.get("project", ""):
             try:
-                return project_model.objects.prefetch_related("owner").get(pk=project)
+                ProjectModel = swapper.load_model("django_project_base", "Profile")
+                return ProjectModel.objects.prefetch_related("owner").get(pk=project)
             except Model.DoesNotExist:
                 pass
 

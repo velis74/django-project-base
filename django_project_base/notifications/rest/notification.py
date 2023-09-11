@@ -21,7 +21,9 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 
+from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
@@ -327,13 +329,12 @@ class NotificationViewset(ModelViewSet):
         return NotificationSerializer
 
     def get_queryset(self):
-        return DjangoProjectBaseNotification.objects.filter(
-            project_slug=getattr(
-                self.request,
-                settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"],
-                get_random_string(length=32),
-            )
-        ).order_by("-sent_at")
+        try:
+            return DjangoProjectBaseNotification.objects.filter(
+                project_slug=self.request.selected_project_slug
+            ).order_by("-sent_at")
+        except ProjectNotSelectedError as e:
+            raise NotFound(e.message)
 
     def perform_create(self, serializer):
         notification = Notification(
