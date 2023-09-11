@@ -42,7 +42,7 @@ MIDDLEWARE = [
 ```
 
 Session middleware also provides information about currently selected project for every request. See
-[project](./project#selected-project)
+[project](./project#currently-selected-project)
 
 ## Use of json session id in subsequent requests
 
