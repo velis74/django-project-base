@@ -36,8 +36,8 @@ class AwsSnsSingleSMS(ProviderIntegration):
         assert response
         assert is_success(response.get("ResponseMetadata", {}).get("HTTPStatusCode", 500))
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification):
-        return super().get_recipients(notification)
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
+        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
 
     def client_send(self, sender: str, recipient: dict, msg: str, dlr_id: str):
         rec = self.clean_sms_recipients([recipient["phone_number"]])

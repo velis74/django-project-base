@@ -54,8 +54,8 @@ class NexmoSMS(ProviderIntegration):
         )
         self.validate_send(response)
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification):
-        return super().get_recipients(notification)
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
+        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return self._get_sms_message(notification)

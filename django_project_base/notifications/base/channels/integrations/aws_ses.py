@@ -40,8 +40,8 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification):
-        return super().get_recipients(notification)
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
+        return list(set(super().get_recipients(notification, unique_identifier="email")))
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> dict:
         msg = {

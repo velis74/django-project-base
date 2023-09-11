@@ -14,6 +14,26 @@ from django_project_base.notifications.models import DeliveryReport, DjangoProje
 from django_project_base.utils import get_pk_name
 
 
+class Recipient:
+    identifier: str
+    phone_number: str
+    email: str
+    unique_attribute: str
+
+    def __init__(self, identifier: str, phone_number: str, email: str, unique_attribute: str = "identifier") -> None:
+        super().__init__()
+        assert identifier
+        assert phone_number
+        assert email
+        self.identifier = identifier
+        self.phone_number = phone_number
+        self.email = email
+        self.unique_attribute = unique_attribute
+
+    def __eq__(self, __o: "Recipient") -> bool:
+        return str(getattr(self, self.unique_attribute)) == str(getattr(__o, self.unique_attribute))
+
+
 class ProviderIntegration(ABC):
     channel: Type[Channel]
     settings: object
@@ -88,7 +108,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def get_recipients(self, notification: DjangoProjectBaseNotification) -> Union[List[Dict], List[List[Dict]]]:
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
         rec_obj = notification.recipients_list
         if not rec_obj:
             att = ("email", "phone_number", get_pk_name(get_user_model()))
@@ -98,7 +118,12 @@ class ProviderIntegration(ABC):
                     get_user_model().objects.get(pk=u).userprofile for u in notification.recipients.split(",")
                 ]
             ]
-        return rec_obj
+        return [
+            Recipient(
+                identifier=u["id"], email=u["email"], phone_number=u["phone_number"], unique_attribute=unique_identifier
+            )
+            for u in rec_obj
+        ]
 
     @abstractmethod
     def ensure_credentials(self, extra_data: dict):
@@ -118,12 +143,13 @@ class ProviderIntegration(ABC):
         return message
 
     def create_delivery_report(
-            self, notification: DjangoProjectBaseNotification, recipient: Union[dict, List[dict]]) -> DeliveryReport:
+        self, notification: DjangoProjectBaseNotification, recipient: Union[Recipient, List[Recipient]]
+    ) -> DeliveryReport:
         recs = recipient if isinstance(recipient, list) else [recipient]
         for user in recs:
             report = DeliveryReport.objects.create(
                 notification=notification,
-                user_id=user[get_pk_name(get_user_model())],
+                user_id=user.identifier,
                 channel=f"{self.channel.__module__}.{self.channel.__name__}",
                 provider=f"{self.__module__}.{self.__class__.__name__}",
             )

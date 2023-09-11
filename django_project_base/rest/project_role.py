@@ -58,7 +58,7 @@ class ProjectRoleViewSet(ModelViewSet):
 
         if project := self.request.GET.get("project", ""):
             try:
-                ProjectModel = swapper.load_model("django_project_base", "Profile")
+                ProjectModel = swapper.load_model("django_project_base", "Project")
                 return ProjectModel.objects.prefetch_related("owner").get(pk=project)
             except Model.DoesNotExist:
                 pass
