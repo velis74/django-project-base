@@ -3,7 +3,7 @@ import { APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicf
 import { storeToRefs } from 'pinia';
 import { ref, watch } from 'vue';
 
-import { useUserSessionStore } from '../apps';
+import useUserSessionStore from './user-session/state';
 
 const userSession = useUserSessionStore();
 const settingsLogic = ref(new ConsumerLogicApi('/project-settings', false));
