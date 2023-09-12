@@ -10,13 +10,14 @@ from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields, serializers
 from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.viewsets import SingleRecordViewSet
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.utils import model_meta
 
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
 from .project_profiles_utils import filter_project_members_fields, get_project_members
+from ..middleware import ProjectNotSelectedError
 
 
 class ProjectProfilesSerializer(ProfileSerializer):
@@ -108,19 +109,16 @@ class ProjectProfilesViewSet(ProfileViewSet):
             return queryset.filter(projects__state=value)
         return super().filter_queryset_field(queryset, field, value)
 
-    def save_club_member_data(self, request: Request, instance, **kwargs):
-        if instance is None:
+    def save_club_member_data(self, request: Request, user, **kwargs):
+        if user is None:
             return
-        project_slug = getattr(request, "current_project_slug", None)
-        project = None
+        project = request.selected_project
+
         club_member = None
         ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
-        Project = swapper.load_model("django_project_base", "Project")
-        if project_slug:
-            project = Project.objects.filter(slug=project_slug).first()
 
         if project:
-            club_member = ProjectMember.objects.filter(member=instance).filter(project=project).first()
+            club_member = ProjectMember.objects.filter(member=user).filter(project=project).first()
 
         # if club member data cant be retrieved, we can't save anything
         if club_member:
@@ -141,12 +139,13 @@ class ProjectProfilesViewSet(ProfileViewSet):
         if "password" in request.data:
             request.data["password"] = make_password(request.data["password"])
         response = super().create(request, *args, **kwargs)
+        user = Profile.objects.get(pk=response.data["id"])
+        try:
+            ProjectMember.objects.create(project=request.selected_project, member=user)
+        except ProjectNotSelectedError as e:
+            raise PermissionDenied(e.message)
 
-        username = request.data.get("username", None)
-        instance = None
-        if username:
-            instance = Profile.objects.filter(username=username).first()
-        self.save_club_member_data(request, instance, **data)
+        self.save_club_member_data(request, user, **data)
         return response
 
     @transaction.atomic
