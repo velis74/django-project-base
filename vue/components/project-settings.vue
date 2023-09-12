@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
+import { APIConsumer as AC } from '@velis/dynamicforms/dist/components/api_consumer/namespace.d';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue';
 
 import { useUserSessionStore } from '../apps';
 
 const userSession = useUserSessionStore();
-const settingsLogic = ref(new ConsumerLogicApi('/project-settings', false));
+const settingsLogic = <Ref<AC.ConsumerLogicBaseInterface>><unknown>
+  ref(new ConsumerLogicApi('/project-settings', false));
 
 const { selectedProjectId } = storeToRefs(userSession);
 
@@ -23,7 +25,6 @@ watch(selectedProjectId, refreshSettingsLogic);
 
 <template>
   <div class="overflow-y-auto">
-    <!--suppress TypeScriptValidateTypes -->
     <APIConsumer
       :consumer="settingsLogic"
       :display-component="ComponentDisplay.TABLE"
