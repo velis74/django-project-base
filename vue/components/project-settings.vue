@@ -23,6 +23,7 @@ watch(selectedProjectId, refreshSettingsLogic);
 
 <template>
   <div class="overflow-y-auto">
+    <!--suppress TypeScriptValidateTypes -->
     <APIConsumer
       :consumer="settingsLogic"
       :display-component="ComponentDisplay.TABLE"
