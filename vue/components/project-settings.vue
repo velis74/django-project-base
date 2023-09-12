@@ -7,8 +7,8 @@ import { Ref, ref, watch } from 'vue';
 import useUserSessionStore from './user-session/state';
 
 const userSession = useUserSessionStore();
-const settingsLogic = <Ref<AC.ConsumerLogicBaseInterface>><unknown>
-  ref(new ConsumerLogicApi('/project-settings', false));
+const settingsLogic = ref(new ConsumerLogicApi('/project-settings', false));
+const settingsLogicTC = <Ref<AC.ConsumerLogicBaseInterface>><unknown> settingsLogic;
 
 const { selectedProjectId } = storeToRefs(userSession);
 
@@ -26,7 +26,7 @@ watch(selectedProjectId, refreshSettingsLogic);
 <template>
   <div class="overflow-y-auto">
     <APIConsumer
-      :consumer="settingsLogic"
+      :consumer="settingsLogicTC"
       :display-component="ComponentDisplay.TABLE"
     />
   </div>
