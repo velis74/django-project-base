@@ -2,7 +2,10 @@ import boto3
 from django.conf import settings
 from rest_framework.status import is_success
 
-from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
+from django_project_base.notifications.base.channels.integrations.provider_integration import (
+    ProviderIntegration,
+    Recipient,
+)
 from django_project_base.notifications.models import (
     DeliveryReport,
     DjangoProjectBaseMessage,
@@ -40,8 +43,8 @@ class AwsSes(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification):
-        return super().get_recipients(notification)
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
+        return list(set(super().get_recipients(notification, unique_identifier="email")))
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> dict:
         msg = {
@@ -82,8 +85,8 @@ class AwsSes(ProviderIntegration):
             return cnt
         return 0
 
-    def client_send(self, sender: str, recipient: dict, msg: dict, dlr_id: str):
-        rec = self.clean_email_recipients([recipient.get("email")])
+    def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
+        rec = self.clean_email_recipients([recipient.email])
         if not rec:
             return
 
