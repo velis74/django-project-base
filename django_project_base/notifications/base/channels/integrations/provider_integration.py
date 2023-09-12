@@ -1,7 +1,7 @@
 import logging
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Type, Union
+from typing import Any, List, Type, Union
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -12,6 +12,29 @@ from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 from django_project_base.utils import get_pk_name
+
+
+class Recipient:
+    identifier: str
+    phone_number: str
+    email: str
+    unique_attribute: str
+
+    def __init__(self, identifier: str, phone_number: str, email: str, unique_attribute: str = "identifier") -> None:
+        super().__init__()
+        assert identifier
+        assert phone_number
+        assert email
+        self.identifier = identifier
+        self.phone_number = phone_number
+        self.email = email
+        self.unique_attribute = unique_attribute
+
+    def __eq__(self, __o: "Recipient") -> bool:
+        return str(getattr(self, self.unique_attribute)) == str(getattr(__o, self.unique_attribute))
+
+    def __hash__(self) -> int:
+        return getattr(self, self.unique_attribute).__hash__()
 
 
 class ProviderIntegration(ABC):
@@ -62,7 +85,7 @@ class ProviderIntegration(ABC):
                 dlr = self.create_delivery_report(notification, recipient)
                 try:
                     self.client_send(self.sender(notification), recipient, message, str(dlr.pk))
-                    sent_no += 1 if isinstance(recipient, dict) else len(recipient)
+                    sent_no += 1
                 except Exception as ge:
                     logger.exception(ge)
 
@@ -80,7 +103,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def client_send(self, sender: str, recipient: Union[Dict, List[Dict]], msg: str, dlr_id: str):
+    def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         pass
 
     @abstractmethod
@@ -88,7 +111,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def get_recipients(self, notification: DjangoProjectBaseNotification) -> Union[List[Dict], List[List[Dict]]]:
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
         rec_obj = notification.recipients_list
         if not rec_obj:
             att = ("email", "phone_number", get_pk_name(get_user_model()))
@@ -98,7 +121,12 @@ class ProviderIntegration(ABC):
                     get_user_model().objects.get(pk=u).userprofile for u in notification.recipients.split(",")
                 ]
             ]
-        return rec_obj
+        return [
+            Recipient(
+                identifier=u["id"], email=u["email"], phone_number=u["phone_number"], unique_attribute=unique_identifier
+            )
+            for u in rec_obj
+        ]
 
     @abstractmethod
     def ensure_credentials(self, extra_data: dict):
@@ -118,12 +146,13 @@ class ProviderIntegration(ABC):
         return message
 
     def create_delivery_report(
-            self, notification: DjangoProjectBaseNotification, recipient: Union[dict, List[dict]]) -> DeliveryReport:
+        self, notification: DjangoProjectBaseNotification, recipient: Union[Recipient, List[Recipient]]
+    ) -> DeliveryReport:
         recs = recipient if isinstance(recipient, list) else [recipient]
         for user in recs:
             report = DeliveryReport.objects.create(
                 notification=notification,
-                user_id=user[get_pk_name(get_user_model())],
+                user_id=user.identifier,
                 channel=f"{self.channel.__module__}.{self.channel.__name__}",
                 provider=f"{self.__module__}.{self.__class__.__name__}",
             )
