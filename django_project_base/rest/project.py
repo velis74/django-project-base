@@ -17,6 +17,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django_project_base.account.middleware import ProjectNotSelectedError
+from django_project_base.base.models import BaseProjectSettings
 from django_project_base.utils import get_pk_name
 
 
@@ -170,23 +171,22 @@ class ProjectSettingsViewSet(ModelViewSet):
     def initialize_request(self, request, *args, **kwargs):
         req = super().initialize_request(request, *args, **kwargs)
         if req.method.upper() not in SAFE_METHODS:
-            req.data["project"] = (
-                swapper.load_model("django_project_base", "Project")
-                .objects.get(
-                    slug=getattr(req, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
-                )
-                .pk
-            )
+            try:
+                req.data["project"] = self.request.selected_project.pk
+            except ProjectNotSelectedError as e:
+                raise NotFound(e.message)
         return req
 
     def get_queryset(self):
-        project_attr = getattr(
-            self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"], ""
-        )
-
-        if not project_attr:
+        try:
+            return (
+                self.get_serializer()
+                .Meta.model.objects.filter(project__slug=self.request.selected_project.slug)
+                .exclude(value_type=BaseProjectSettings.VALUE_TYPE_CUSTOM)
+                .order_by("name")
+            )
+        except ProjectNotSelectedError:
             return self.get_serializer().Meta.model.objects.none()
-        return self.get_serializer().Meta.model.objects.filter(project__slug=project_attr)
 
     def handle_create_validation_exception(self, e, request, *args, **kwargs):
         if getattr(e, "model-validation", False):

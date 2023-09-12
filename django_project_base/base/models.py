@@ -226,12 +226,15 @@ class BaseProjectSettings(models.Model):
     VALUE_TYPE_FLOAT = "float"
     VALUE_TYPE_BOOL = "bool"
     VALUE_TYPE_CHAR = "char"
+    # custom means that there's a custom editor for this setting, so it needs to be hidden from the general editor
+    VALUE_TYPE_CUSTOM = "custom"
 
     VALUE_TYPE_CHOICES = (
         (VALUE_TYPE_INTEGER, _("Whole number")),
         (VALUE_TYPE_FLOAT, _("Decimal number")),
         (VALUE_TYPE_BOOL, _("True/False")),
         (VALUE_TYPE_CHAR, _("String")),
+        (VALUE_TYPE_CUSTOM, _("Custom")),
     )
 
     objects = ProjectSettingsQs.as_manager()
@@ -241,6 +244,7 @@ class BaseProjectSettings(models.Model):
         VALUE_TYPE_FLOAT: lambda val: models.FloatField().to_python(val),
         VALUE_TYPE_BOOL: lambda val: models.BooleanField().to_python(val),
         VALUE_TYPE_CHAR: lambda val: models.TextField().to_python(val),
+        VALUE_TYPE_CUSTOM: lambda val: val,
     }
 
     @property
