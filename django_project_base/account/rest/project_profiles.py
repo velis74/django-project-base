@@ -10,8 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields, serializers
 from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.viewsets import SingleRecordViewSet
-from rest_framework import status
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.utils import model_meta
@@ -143,8 +142,8 @@ class ProjectProfilesViewSet(ProfileViewSet):
         user = Profile.objects.get(pk=response.data["id"])
         try:
             ProjectMember.objects.create(project=request.selected_project, member=user)
-        except ProjectNotSelectedError:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        except ProjectNotSelectedError as e:
+            raise PermissionDenied(e.message)
 
         self.save_club_member_data(request, user, **data)
         return response
