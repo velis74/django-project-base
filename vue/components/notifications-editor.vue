@@ -16,9 +16,7 @@ import {
 
 const notificationLogic = ref(new ConsumerLogicApi('notification', true));
 
-(async () => {
-  await notificationLogic.value.getFullDefinition();
-})();
+notificationLogic.value.getFullDefinition();
 
 const actionViewLicense = async (): Promise<boolean> => {
   await FormConsumerApiOneShot('notification-license', true, 'new');

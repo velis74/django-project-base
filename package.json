@@ -1,6 +1,6 @@
 {
   "name": "django_project_base",
-  "version": "0.3.28",
+  "version": "0.3.85",
   "private": true,
   "files": [
     "dist/*"
@@ -48,7 +48,6 @@
     "eslint-config-velis": "^1.1.13",
     "http-proxy-middleware": "^2.0.6",
     "vite": "^4.0.4",
-    "vite-plugin-css-injected-by-js": "^3.0.0",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-vuetify": "^1.0.0",
     "vitepress": "^1.0.0-alpha.65",
