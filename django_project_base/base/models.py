@@ -269,6 +269,8 @@ class BaseProjectSettings(models.Model):
     value = models.CharField(max_length=320, null=False, blank=False, verbose_name=_("Value"))
     value_type = models.CharField(choices=VALUE_TYPE_CHOICES, null=False, blank=False, max_length=10)
 
+    reserved = models.BooleanField(null=False, default=False)
+
     project = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
     )
