@@ -54,8 +54,7 @@ class SendNotificationMixin(object):
                     db=db_connection,
                     settings=extra_data.get("SETTINGS", object()),
                 )
-                if any_sent > 0:
-                    sent_channels.append(channel)
+                sent_channels.append(channel) if any_sent > 0 else failed_channels.append(channel)
             except Exception as e:
                 logging.getLogger(__name__).error(e)
                 failed_channels.append(channel)

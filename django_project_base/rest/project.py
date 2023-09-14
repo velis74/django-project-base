@@ -188,15 +188,18 @@ class ProjectSettingsViewSet(ModelViewSet):
                     super().__init__(*args, is_filter=is_filter, **kwds)
                     if (
                         (view := kwds.get("context", {}).get("view"))
-                        and view.action == "retrieve"
                         and view.detail is True
                         and str(view.kwargs.get("pk", "")) != "new"
                         and (sett := ProjectSettingsSerializer.Meta.model.objects.filter(pk=view.kwargs["pk"]).first())
                         and sett.reserved is True
                     ):
-                        self.fields.fields["reserved"].read_only = True
-                        self.fields.fields["name"].read_only = True
-                        self.fields.fields["value_type"].read_only = True
+                        if view.action == "retrieve":
+                            self.fields.fields["reserved"].read_only = True
+                            self.fields.fields["name"].read_only = True
+                            self.fields.fields["value_type"].read_only = True
+                        else:
+                            self.fields.fields["name"].required = False
+                            self.fields.fields["value_type"].required = False
 
                 def validate(self, attrs):
                     validated = super().validate(attrs)

@@ -28,4 +28,9 @@ class Migration(migrations.Migration):
                 max_length=10,
             ),
         ),
+        migrations.AddField(
+            model_name="projectsettings",
+            name="confirmed",
+            field=models.BooleanField(default=False),
+        ),
     ]

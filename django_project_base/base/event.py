@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from django_project_base.aws.ses import AwsSes
 from django_project_base.base.models import BaseProjectSettings
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME
 
@@ -40,12 +41,11 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
         super().trigger_changed(old_state, new_state, payload, **kwargs)
 
         if new_state.name == EMAIL_SENDER_ID_SETTING_NAME:
+            # TODO: THIS IS NOLY FOR AWS FOR NOW
             if not old_state:
-                # publish new sender to aws
+                AwsSes.add_sender_email(new_state.python_value)
                 return
             if old_state.python_value != new_state.python_value:
-                # list existing
-                # remove old one
-                # add new one
-
+                AwsSes.remove_sender_email(old_state.python_value) if old_state.python_value else None
+                AwsSes.add_sender_email(new_state.python_value)
                 return
