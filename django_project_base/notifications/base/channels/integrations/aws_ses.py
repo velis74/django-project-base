@@ -79,11 +79,11 @@ class AwsSes(ProviderIntegration):
     def enqueue_dlr_request(self):
         pass
 
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
-        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
-            self.enqueue_dlr_request()
-            return cnt
-        return 0
+    # def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
+    #     if (cnt := super().send(notification, **kwargs)) and cnt > 0:
+    #         self.enqueue_dlr_request()
+    #         return cnt
+    #     return 0
 
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
         rec = self.clean_email_recipients([recipient.email])

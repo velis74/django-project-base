@@ -294,9 +294,6 @@ class T2(ProviderIntegration):
         assert self.password, "T2_PASSWORD is required"
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
-
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         rec = self.clean_sms_recipients([recipient.phone_number])
         if not rec:
@@ -312,9 +309,6 @@ class T2(ProviderIntegration):
         )
 
         self.validate_send(response)
-
-    def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
-        return self._get_sms_message(notification)
 
     def validate_send(self, response: object):
         assert response
