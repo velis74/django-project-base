@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 from django_project_base.aws.ses import AwsSes
-from django_project_base.base.models import BaseProjectSettings
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME
 
 
