@@ -45,7 +45,7 @@ class ProfileMergeSerializer(ProfileSerializer):
                 TablePosition.ROW_END,
                 label=_("Remove"),
                 title=_("Remove"),
-                name="delete",
+                name="delete-user",
                 icon="person-remove-outline",
             ),
             TableAction(
