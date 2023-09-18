@@ -276,9 +276,7 @@ class T2(ProviderIntegration):
     url = ""
 
     def __init__(self) -> None:
-        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
-
-        super().__init__(channel=SmsChannel, settings=object())
+        super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
         self.username = getattr(settings, "T2_USERNAME", None)
@@ -295,14 +293,11 @@ class T2(ProviderIntegration):
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
-        rec = self.clean_sms_recipients([recipient.phone_number])
-        if not rec:
-            return
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{self.endpoint_one}",
             auth=basic_auth,
-            json={"from_number": sender, "to_number": rec[0], "message": msg, "guid": dlr_id},
+            json={"from_number": sender, "to_number": recipient.phone_number, "message": msg, "guid": dlr_id},
             verify=False,
             headers={"Content-Type": "application/json"},
             timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
@@ -365,3 +360,9 @@ class T2(ProviderIntegration):
 
     def enqueue_dlr_request(self):
         pass
+
+    def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return self._get_sms_message(notification)
+
+    def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return super()._get_sms_message(notification)

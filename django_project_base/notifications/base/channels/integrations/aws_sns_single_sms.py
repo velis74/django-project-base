@@ -17,9 +17,7 @@ class AwsSnsSingleSMS(ProviderIntegration):
     region: str
 
     def __init__(self) -> None:
-        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
-
-        super().__init__(channel=SmsChannel, settings=object())
+        super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
         self.key_id = getattr(settings, "AWS_SES_ACCESS_KEY_ID", None)
@@ -35,18 +33,14 @@ class AwsSnsSingleSMS(ProviderIntegration):
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
 
+    def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return super()._get_sms_message(notification)
+
     def validate_send(self, response: dict):
         assert response
         assert is_success(response.get("ResponseMetadata", {}).get("HTTPStatusCode", 500))
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
-
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
-        rec = self.clean_sms_recipients([recipient.phone_number])
-        if not rec:
-            return
-
         smsattrs = {
             "AWS.SNS.SMS.SenderID": {"DataType": "String", "StringValue": sender.replace(" ", "-")},
             "AWS.SNS.SMS.SMSType": {"DataType": "String", "StringValue": "Promotional"},
@@ -59,7 +53,7 @@ class AwsSnsSingleSMS(ProviderIntegration):
                 region_name=self.region,
             )
             .client("sns")
-            .publish(PhoneNumber=rec[0], Message=msg, MessageAttributes=smsattrs)
+            .publish(PhoneNumber=recipient.phone_number, Message=msg, MessageAttributes=smsattrs)
         )
         self.validate_send(res)
 
@@ -82,9 +76,3 @@ class AwsSnsSingleSMS(ProviderIntegration):
 
     def enqueue_dlr_request(self):
         pass
-
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
-        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
-            self.enqueue_dlr_request()
-            return cnt
-        return 0

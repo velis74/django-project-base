@@ -2,8 +2,9 @@ from typing import List, Union
 
 from django.conf import settings
 
-from django_project_base.notifications.base.channels.channel import Channel
+from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
+from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
@@ -27,3 +28,6 @@ class SmsChannel(Channel):
         if not recipients or getattr(settings, "TESTING", False):
             return len(recipients)
         return super().send(notification=notification, extra_data=extra_data)
+
+    def clean_sms_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
+        return list(filter(lambda r: r.phone_number and len(r.phone_number), self.clean_recipients(recipients)))

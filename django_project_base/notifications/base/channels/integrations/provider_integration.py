@@ -1,20 +1,25 @@
+import re
 from abc import ABC, abstractmethod
-from typing import Type, Union
+from typing import Union
 
-from django_project_base.notifications.base.channels.channel import Channel, Recipient
+from django.utils.html import strip_tags
+
+from django_project_base.notifications.base.channels.channel import Recipient
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 
 class ProviderIntegration(ABC):
-    channel: Type[Channel]
     settings: object
 
     is_sms_provider = True
 
-    def __init__(self, channel: Type[Channel], settings: object) -> None:
+    def __init__(self, settings: object) -> None:
         super().__init__()
-        self.channel = channel
         self.settings = settings
+
+    @abstractmethod
+    def validate_send(self, response: dict):
+        pass
 
     @abstractmethod
     def ensure_credentials(self, extra_data: dict):
@@ -49,3 +54,17 @@ class ProviderIntegration(ABC):
     @abstractmethod
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         pass
+
+    @abstractmethod
+    def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        message = f"{notification.message.subject or ''}"
+
+        if notification.message.subject:
+            message += "\n\n"
+
+        message += notification.message.body
+
+        text_only = re.sub("[ \t]+", " ", strip_tags(message))
+        # Strip single spaces in the beginning of each line
+        message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
+        return message

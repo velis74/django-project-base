@@ -1,8 +1,10 @@
 from typing import List
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
-from django_project_base.notifications.base.channels.channel import Channel
+from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
@@ -23,3 +25,16 @@ class MailChannel(Channel):
             )
             return len(recipients)
         return super().send(notification=notification, extra_data=extra_data)
+
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
+        return list(set(super().get_recipients(notification, unique_identifier="email")))
+
+    def clean_email_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
+        valid = []
+        for email in self.clean_recipients(recipients):
+            try:
+                validate_email(email.email)
+                valid.append(email)
+            except ValidationError:
+                pass
+        return valid

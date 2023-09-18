@@ -1,3 +1,5 @@
+from typing import Union
+
 import boto3
 from django.conf import settings
 from rest_framework.status import is_success
@@ -21,13 +23,14 @@ class AwsSes(ProviderIntegration):
     is_sms_provider = False
 
     def __init__(self) -> None:
-        from django_project_base.notifications.base.channels.mail_channel import MailChannel
-
-        super().__init__(channel=MailChannel, settings=object())
+        super().__init__(settings=object())
 
     def validate_send(self, response: dict):
         assert response
         assert is_success(response.get("ResponseMetadata", {}).get("HTTPStatusCode", 500))
+
+    def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return super()._get_sms_message(notification)
 
     def ensure_credentials(self, extra_data):
         self.key_id = getattr(settings, "AWS_SES_ACCESS_KEY_ID", None)
@@ -42,9 +45,6 @@ class AwsSes(ProviderIntegration):
         assert self.key_id, "AWS SES key id required"
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"
-
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="email")))
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> dict:
         msg = {
@@ -79,17 +79,7 @@ class AwsSes(ProviderIntegration):
     def enqueue_dlr_request(self):
         pass
 
-    # def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
-    #     if (cnt := super().send(notification, **kwargs)) and cnt > 0:
-    #         self.enqueue_dlr_request()
-    #         return cnt
-    #     return 0
-
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
-        rec = self.clean_email_recipients([recipient.email])
-        if not rec:
-            return
-
         res = (
             boto3.Session(
                 aws_access_key_id=self.key_id,
@@ -101,7 +91,7 @@ class AwsSes(ProviderIntegration):
                 Destination={
                     "ToAddresses": [sender],
                     "CcAddresses": [],
-                    "BccAddresses": rec,
+                    "BccAddresses": [recipient.email],
                 },
                 Message=msg,
                 Source=sender,
