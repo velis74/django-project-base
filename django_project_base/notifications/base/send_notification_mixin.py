@@ -31,11 +31,24 @@ class SendNotificationMixin(object):
 
         already_sent_channels = set(
             filter(
-                lambda i: not (i is None), notification.sent_channels.split(",") if notification.sent_channels else []
+                lambda i: i not in (None, "") and i,
+                notification.sent_channels.split(",") if notification.sent_channels else [],
             )
         )
         required_channels = (
-            set(filter(lambda i: not (i is None), notification.required_channels.split(","))) - already_sent_channels
+            set(
+                filter(
+                    lambda i: i not in (None, "") and i,
+                    notification.required_channels.split(",") if notification.required_channels else [],
+                )
+            )
+            - already_sent_channels
+        )
+        already_failed_channels = set(
+            filter(
+                lambda i: i not in (None, "") and i,
+                notification.failed_channels.split(",") if notification.failed_channels else [],
+            )
         )
 
         sent_to_channels = required_channels - already_sent_channels
@@ -65,35 +78,41 @@ class SendNotificationMixin(object):
             if sent_to_channels:
                 notification.sent_channels = (
                     ",".join(
+                        set(
+                            list(
+                                map(
+                                    lambda f: str(f),
+                                    filter(
+                                        lambda d: d is not None,
+                                        map(lambda c: c.name, sent_channels),
+                                    ),
+                                )
+                            )
+                            + list(already_sent_channels)
+                        )
+                    )
+                    if sent_channels
+                    else ",".join(already_sent_channels)
+                )
+            notification.failed_channels = (
+                ",".join(
+                    set(
                         list(
                             map(
                                 lambda f: str(f),
                                 filter(
                                     lambda d: d is not None,
-                                    map(lambda c: c.name, sent_channels),
+                                    map(lambda c: c.name, failed_channels),
                                 ),
                             )
                         )
-                    )
-                    if sent_channels
-                    else None
-                )
-            notification.failed_channels = (
-                ",".join(
-                    list(
-                        map(
-                            lambda f: str(f),
-                            filter(
-                                lambda d: d is not None,
-                                map(lambda c: c.name, failed_channels),
-                            ),
-                        )
+                        + list(already_failed_channels)
                     )
                 )
                 if failed_channels
-                else None
+                else ",".join(already_failed_channels)
             )
-            notification.sent_at = timezone.now().timestamp()
+            notification.sent_at = timezone.now().timestamp() if notification.sent_channels else None
             notification.exceptions = exceptions if exceptions else None
 
             notification.save(
