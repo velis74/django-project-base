@@ -4,10 +4,8 @@ import requests
 from django.conf import settings
 from rest_framework.status import is_success
 
-from django_project_base.notifications.base.channels.integrations.provider_integration import (
-    ProviderIntegration,
-    Recipient,
-)
+from django_project_base.notifications.base.channels.channel import Recipient
+from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 

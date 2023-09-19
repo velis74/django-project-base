@@ -9,10 +9,8 @@ from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
-from django_project_base.notifications.base.channels.integrations.provider_integration import (
-    ProviderIntegration,
-    Recipient,
-)
+from django_project_base.notifications.base.channels.channel import Recipient
+from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
@@ -279,11 +277,13 @@ class T2(ProviderIntegration):
         super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
+        if settings and settings.TESTING:
+            return
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)
         self.url = getattr(settings, "SMS_API_URL", None)
         self.settings = settings
-        if stgs := extra_data.get("SETTINGS"):
+        if extra_data and (stgs := extra_data.get("SETTINGS")):
             self.settings = stgs
             self.username = getattr(stgs, "T2_USERNAME", None)
             self.password = getattr(stgs, "T2_PASSWORD", None)

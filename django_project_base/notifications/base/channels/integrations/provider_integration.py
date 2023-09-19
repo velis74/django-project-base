@@ -4,7 +4,6 @@ from typing import Union
 
 from django.utils.html import strip_tags
 
-from django_project_base.notifications.base.channels.channel import Recipient
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 
@@ -26,7 +25,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
+    def client_send(self, sender: str, recipient: "Recipient", msg: str, dlr_id: str):  # noqa: F821
         pass
 
     @property

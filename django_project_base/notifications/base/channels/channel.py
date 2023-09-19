@@ -1,16 +1,15 @@
 import logging
-import re
+import uuid
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union, Any
+from typing import List, Optional, Union
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.html import strip_tags
 from django.utils.module_loading import import_string
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
-from django_project_base.notifications.models import DjangoProjectBaseNotification, DeliveryReport
+from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 from django_project_base.utils import get_pk_name
 
 
@@ -24,7 +23,13 @@ class Recipient:
         super().__init__()
         self.identifier = identifier
         self.phone_number = (
-            PhoneNumberParser.valid_phone_numbers([phone_number]) if phone_number and len(phone_number) else ""
+            next(
+                iter(
+                    PhoneNumberParser.valid_phone_numbers([phone_number]) if phone_number and len(phone_number) else ""
+                ),
+                None,
+            )
+            or ""
         )
         self.email = email
         self.unique_attribute = unique_attribute
@@ -60,32 +65,33 @@ class Channel(ABC):
         assert _sender, "Notification sender is required"
         return _sender
 
-    def set_provider(self, extra_settings: Optional[dict], setting_name: str):
+    def _find_provider(
+        self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
+    ) -> Optional[ProviderIntegration]:
         def get_first_provider(val: Union[str, List]):
             if val and isinstance(val, list):
-                self.provider = import_string(val[0])()
-                return
+                return import_string(val[0])()
 
-            self.provider = import_string(val)()
+            return import_string(val)()
 
         if extra_settings and getattr(extra_settings.get("SETTINGS", object()), setting_name, None):
-            get_first_provider(getattr(extra_settings["SETTINGS"], setting_name))
-            return
-        get_first_provider(getattr(settings, setting_name, ""))
+            return get_first_provider(getattr(extra_settings["SETTINGS"], setting_name))
+        return get_first_provider(getattr(settings, setting_name, ""))
 
     def clean_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
         return list(set(recipients))
 
     def create_delivery_report(
-        self, notification: DjangoProjectBaseNotification, recipient: Union[Recipient, List[Recipient]]
+        self, notification: DjangoProjectBaseNotification, recipient: Union[Recipient, List[Recipient]], pk: str
     ) -> DeliveryReport:
         recs = recipient if isinstance(recipient, list) else [recipient]
         for user in recs:
             report = DeliveryReport.objects.create(
                 notification=notification,
                 user_id=user.identifier,
-                channel=f"{self.__module__}.{self.__name__}",
-                provider=f"{self.__module__}.{self.__class__.__name__}",
+                channel=f"{self.__module__}.{self.__class__.__name__}",
+                provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+                pk=pk,
             )
             return report
 
@@ -111,8 +117,6 @@ class Channel(ABC):
         ]
 
     def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
-        self.set_provider(extra_settings=extra_data, setting_name=self.provider_setting_name)
-        self.provider.ensure_credentials(extra_data=kwargs.get("extra_data"))
         logger = logging.getLogger("django")
         try:
             message = self.provider.get_message(notification)
@@ -122,16 +126,44 @@ class Channel(ABC):
             if not recipients:
                 raise ValueError("No valid recipients")
 
+            exclude_providers: List[str] = []
             sent_no = 0
-            for recipient in recipients:  # noqa: E203
-                dlr = self.create_delivery_report(notification, recipient)
-                try:
-                    # test if provider is online
-                    # if not switch to secondary provider
 
-                    self.provider.client_send(self.sender(notification), recipient, message, str(dlr.pk))
-                    self.provider.enqueue_dlr_request()
-                    sent_no += 1
+            def make_send(notification_obj, rec_obj, message_str) -> Optional[DeliveryReport]:
+                dlr__uuid = str(uuid.uuid4())
+                try:
+                    self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr__uuid)
+                    sent = True
+                except Exception as te:
+                    logger.exception(te)
+                    sent = False
+                try:
+                    dlr = self.create_delivery_report(notification, recipient, dlr__uuid)
+                    return dlr if sent else None
+                except Exception as te:
+                    logger.exception(te)
+                    return None
+
+            for recipient in recipients:  # noqa: E203
+                try:
+                    while (
+                        dlr := make_send(
+                            notification_obj=notification,
+                            message_str=message,
+                            rec_obj=recipient,
+                        )
+                    ) and dlr is None:
+                        exclude_providers.append(str(self.provider.__module__))
+                        next_provider = self._find_provider(
+                            extra_settings=extra_data,
+                            setting_name=self.provider_setting_name,
+                            exclude=exclude_providers,
+                        )
+                        if next_provider:
+                            self.provider = next_provider
+                    if dlr:
+                        self.provider.enqueue_dlr_request()
+                        sent_no += 1
                 except Exception as ge:
                     logger.exception(ge)
 

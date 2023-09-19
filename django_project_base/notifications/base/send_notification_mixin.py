@@ -54,7 +54,9 @@ class SendNotificationMixin(object):
         sent_to_channels = required_channels - already_sent_channels
 
         for channel_identifier in sent_to_channels:
-            channel = ChannelIdentifier.channel(channel_identifier)
+            channel = ChannelIdentifier.channel(
+                channel_identifier, extra_data=extra_data, project_slug=notification.project_slug
+            )
             try:
                 # check license
                 any_sent = LogAccessService().log(
