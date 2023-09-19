@@ -18,10 +18,12 @@ class NexmoSMS(ProviderIntegration):
         super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
+        if settings and getattr(settings, "TESTING", False):
+            return
         self.api_key = getattr(settings, "NEXMO_API_KEY", None)
         self.api_secret = getattr(settings, "NEXMO_API_SECRET", None)
         self.settings = settings
-        if stgs := extra_data.get("SETTINGS"):
+        if extra_data and (stgs := extra_data.get("SETTINGS")):
             self.settings = stgs
             self.api_key = getattr(stgs, "NEXMO_API_KEY", None)
             self.api_secret = getattr(stgs, "NEXMO_API_SECRET", None)

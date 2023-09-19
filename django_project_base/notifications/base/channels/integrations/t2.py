@@ -277,7 +277,7 @@ class T2(ProviderIntegration):
         super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
-        if settings and settings.TESTING:
+        if settings and getattr(settings, "TESTING", False):
             return
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)

@@ -18,13 +18,13 @@ class AwsSnsSingleSMS(ProviderIntegration):
         super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
-        if settings and settings.TESTING:
+        if settings and getattr(settings, "TESTING", False):
             return
         self.key_id = getattr(settings, "AWS_SES_ACCESS_KEY_ID", None)
         self.access_key = getattr(settings, "AWS_SES_SECRET_ACCESS_KEY", None)
         self.region = getattr(settings, "AWS_SES_REGION_NAME", None)
         self.settings = settings
-        if stgs := extra_data.get("SETTINGS"):
+        if extra_data and (stgs := extra_data.get("SETTINGS")):
             self.settings = stgs
             self.key_id = getattr(stgs, "AWS_SES_ACCESS_KEY_ID", None)
             self.access_key = getattr(stgs, "AWS_SES_SECRET_ACCESS_KEY", None)

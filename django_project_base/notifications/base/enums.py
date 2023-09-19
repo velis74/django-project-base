@@ -28,7 +28,10 @@ class ChannelIdentifier(Enum):
 
     @staticmethod
     def channel(
-        identifier: Union[int, str], extra_data: Optional[dict] = None, project_slug: Optional[str] = None
+        identifier: Union[int, str],
+        extra_data: Optional[dict] = None,
+        project_slug: Optional[str] = None,
+        ensure_dlr_user=True,
     ) -> Optional["Channel"]:  # noqa: F821
         channel = next(
             iter(filter(lambda c: c.name == identifier or c.id == identifier, ChannelIdentifier.supported_channels())),
@@ -39,7 +42,7 @@ class ChannelIdentifier(Enum):
                 extra_settings=extra_data, setting_name=channel.provider_setting_name
             )
             channel.provider.ensure_credentials(extra_data=extra_data)
-            channel.provider.ensure_dlr_user(project_slug)
+            channel.provider.ensure_dlr_user(project_slug) if ensure_dlr_user else False
 
             return channel
         return None
