@@ -4,12 +4,14 @@ import json
 import pytz
 import swapper
 from django.contrib.auth import get_user_model
+from dynamicforms.mixins import F
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ForeignKey, QuerySet
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
+from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
@@ -131,7 +133,7 @@ class NotificationSerializer(ModelSerializer):
             TablePosition.HEADER,
             _("Add"),
             title=_("Add new record"),
-            name="add",
+            name="add-notification",
             icon="add-circle-outline",
         ),
         TableAction(
@@ -166,7 +168,27 @@ class NotificationSerializer(ModelSerializer):
         write_only=True,
     )
 
+    send_notification_sms = fields.BooleanField(
+        conditional_visibility=Statement(
+            # todo: make this programatic
+            F("send_on_channels").not_includes(lambda: ("SMS")),
+            Operators.AND,
+            F("send_on_channels").includes(lambda: ("EMail")),
+        ),
+        write_only=True,
+        label=_("Send notification SMS"),
+        display_table=DisplayMode.HIDDEN,
+    )
+
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
+
+    def to_representation(self, instance, row_data=None):
+        repr = super().to_representation(instance, row_data)
+        kw = getattr(self.context.get("view", object()), "kwargs", dict())
+        if kw.get("pk") == "new" and kw.get("format") == "componentdef":
+            # enable conditional field render in DF
+            repr["send_on_channels"] = []
+        return repr
 
     def get_subject(self, obj):
         if not obj or not obj.message:

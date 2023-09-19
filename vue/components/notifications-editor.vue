@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {
+  Action,
   APIConsumer,
   ComponentDisplay,
   ConsumerLogicApi,
-  FormConsumerApiOneShot, gettext,
+  FormConsumerApiOneShot, FormPayload, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
+import _ from 'lodash';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import { apiClient } from '../apiClient';
@@ -20,6 +22,27 @@ notificationLogic.value.getFullDefinition();
 
 const actionViewLicense = async (): Promise<boolean> => {
   await FormConsumerApiOneShot('notification-license', true, 'new');
+  return true;
+};
+
+const actionAddNotification = async (): Promise<boolean> => {
+  const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {
+    if (_.includes(payload.send_on_channels, 'SMS') && payload.send_notification_sms === true) {
+      console.log('length', _.size(payload.message_body));
+    }
+    // console.log(action, payload, context);
+    // console.log(payload.setmessage_subjectValue);
+    // payload.setmessage_subjectValue(`klemens${Math.random() * 100}`);
+    return false;
+  };
+  await FormConsumerApiOneShot(
+    'notification',
+    true,
+    'new',
+    undefined,
+    { value_changed: valueChangedHandler },
+  );
+  console.log('awaited consumer');
   return true;
 };
 
@@ -57,7 +80,7 @@ onUnmounted(() => clearInterval(intervalCheckLicense));
 
 const { handler } = useActionHandler();
 
-handler.register('view-license', actionViewLicense);
+handler.register('view-license', actionViewLicense).register('add-notification', actionAddNotification);
 
 // TODO: remove linter ignores below when you know how to
 </script>
