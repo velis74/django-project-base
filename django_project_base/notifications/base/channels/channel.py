@@ -72,7 +72,7 @@ class Channel(ABC):
             exclude = []
 
         def get_first_provider(val: Union[str, List]):
-            if val and isinstance(val, list):
+            if val and isinstance(val, (list, tuple)):
                 prov = next(filter(lambda i: i not in exclude, val), None)
 
                 return import_string(prov)() if prov else None
@@ -134,7 +134,7 @@ class Channel(ABC):
             exclude_providers: List[str] = []
             sent_no = 0
 
-            def make_send(notification_obj, rec_obj, message_str) -> Optional[DeliveryReport]:
+            def make_send(notification_obj, rec_obj, message_str) -> bool:
                 dlr__uuid = str(uuid.uuid4())
                 try:
                     self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr__uuid)
@@ -143,23 +143,19 @@ class Channel(ABC):
                     logger.exception(te)
                     sent = False
                 try:
-                    dlr = self.create_delivery_report(notification, recipient, dlr__uuid)
-                    return dlr if sent else None
+                    self.create_delivery_report(notification, recipient, dlr__uuid) if sent else None
+                    return sent
                 except Exception as de:
                     logger.exception(de)
-                    return object() if sent else None
+                    return sent
 
             for recipient in recipients:  # noqa: E203
                 try:
-                    exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
-
-                    while (
-                        dlr := make_send(
-                            notification_obj=notification,
-                            message_str=message,
-                            rec_obj=recipient,
-                        )
-                    ) and dlr is None:
+                    while dlr := not make_send(
+                        notification_obj=notification,
+                        message_str=message,
+                        rec_obj=recipient,
+                    ):
                         exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
                         if next_provider := self._find_provider(
                             extra_settings=extra_data,
@@ -167,7 +163,9 @@ class Channel(ABC):
                             exclude=exclude_providers,
                         ):
                             self.provider = next_provider
-                    if dlr:
+                        else:
+                            break
+                    if not dlr:
                         self.provider.enqueue_dlr_request()
                         sent_no += 1
                 except Exception as ge:
