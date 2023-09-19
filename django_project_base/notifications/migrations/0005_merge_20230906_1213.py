@@ -4,10 +4,10 @@ import random
 import string
 from django.db import migrations
 
-from django_project_base.notifications.base.channels.integrations.t2 import T2
-
 
 def forwards_func(apps, schema_editor):
+    from django_project_base.notifications.base.channels.integrations.t2 import T2
+
     ProjectModel = swapper.load_model("django_project_base", "Project")
     ProjectModelSettings = swapper.load_model("django_project_base", "ProjectSettings")
     t2 = T2()

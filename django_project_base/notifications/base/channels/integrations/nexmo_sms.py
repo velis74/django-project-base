@@ -4,10 +4,8 @@ import requests
 from django.conf import settings
 from rest_framework.status import is_success
 
-from django_project_base.notifications.base.channels.integrations.provider_integration import (
-    ProviderIntegration,
-    Recipient,
-)
+from django_project_base.notifications.base.channels.channel import Recipient
+from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
@@ -17,20 +15,23 @@ class NexmoSMS(ProviderIntegration):
     api_secret: str
 
     def __init__(self) -> None:
-        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
-
-        super().__init__(channel=SmsChannel, settings=object())
+        super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
+        if settings and getattr(settings, "TESTING", False):
+            return
         self.api_key = getattr(settings, "NEXMO_API_KEY", None)
         self.api_secret = getattr(settings, "NEXMO_API_SECRET", None)
         self.settings = settings
-        if stgs := extra_data.get("SETTINGS"):
+        if extra_data and (stgs := extra_data.get("SETTINGS")):
             self.settings = stgs
             self.api_key = getattr(stgs, "NEXMO_API_KEY", None)
             self.api_secret = getattr(stgs, "NEXMO_API_SECRET", None)
         assert self.api_key, "NEXMO_API_KEY required"
         assert self.api_secret, "NEXMO_API_SECRET required"
+
+    def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return super()._get_sms_message(notification)
 
     def validate_send(self, response: object):
         assert response
@@ -38,7 +39,7 @@ class NexmoSMS(ProviderIntegration):
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         # TODO: SLOVENIA????????
-        rec = PhoneNumberParser.ensure_country_code_slovenia(self.clean_sms_recipients([recipient.phone_number]))
+        rec = PhoneNumberParser.ensure_country_code_slovenia([recipient.phone_number])
         if not rec:
             return
 
@@ -56,9 +57,6 @@ class NexmoSMS(ProviderIntegration):
             timeout=4,
         )
         self.validate_send(response)
-
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return self._get_sms_message(notification)
@@ -79,9 +77,3 @@ class NexmoSMS(ProviderIntegration):
 
     def enqueue_dlr_request(self):
         pass
-
-    def send(self, notification: DjangoProjectBaseNotification, **kwargs) -> int:
-        if (cnt := super().send(notification, **kwargs)) and cnt > 0:
-            self.enqueue_dlr_request()
-            return cnt
-        return 0

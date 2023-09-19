@@ -168,10 +168,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             notification.created_at = None
 
         for channel_name in required_channels:
-            channel = ChannelIdentifier.channel(channel_name)
-            channel.provider(extra_settings={}, setting_name=channel.provider_setting_name).ensure_dlr_user(
-                self._project
-            )
+            # ensure dlr user and check providers
+            assert ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
 
         if self.delay:
             if not self.persist:

@@ -348,7 +348,10 @@ class NotificationViewset(ModelViewSet):
             .slug,
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
-            channels=[ChannelIdentifier.channel(c).__class__ for c in serializer.validated_data["send_on_channels"]],
+            channels=[
+                ChannelIdentifier.channel(c, extra_data=None, project_slug=None).__class__
+                for c in serializer.validated_data["send_on_channels"]
+            ],
             persist=True,
             user=self.request.user.pk,
         )

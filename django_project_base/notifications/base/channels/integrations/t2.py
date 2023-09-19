@@ -9,10 +9,8 @@ from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
-from django_project_base.notifications.base.channels.integrations.provider_integration import (
-    ProviderIntegration,
-    Recipient,
-)
+from django_project_base.notifications.base.channels.channel import Recipient
+from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 # -*- coding: utf8 -*-
@@ -276,16 +274,16 @@ class T2(ProviderIntegration):
     url = ""
 
     def __init__(self) -> None:
-        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
-
-        super().__init__(channel=SmsChannel, settings=object())
+        super().__init__(settings=object())
 
     def ensure_credentials(self, extra_data):
+        if settings and getattr(settings, "TESTING", False):
+            return
         self.username = getattr(settings, "T2_USERNAME", None)
         self.password = getattr(settings, "T2_PASSWORD", None)
         self.url = getattr(settings, "SMS_API_URL", None)
         self.settings = settings
-        if stgs := extra_data.get("SETTINGS"):
+        if extra_data and (stgs := extra_data.get("SETTINGS")):
             self.settings = stgs
             self.username = getattr(stgs, "T2_USERNAME", None)
             self.password = getattr(stgs, "T2_PASSWORD", None)
@@ -294,27 +292,18 @@ class T2(ProviderIntegration):
         assert self.password, "T2_PASSWORD is required"
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
-
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
-        rec = self.clean_sms_recipients([recipient.phone_number])
-        if not rec:
-            return
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{self.endpoint_one}",
             auth=basic_auth,
-            json={"from_number": sender, "to_number": rec[0], "message": msg, "guid": dlr_id},
+            json={"from_number": sender, "to_number": recipient.phone_number, "message": msg, "guid": dlr_id},
             verify=False,
             headers={"Content-Type": "application/json"},
             timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
         )
 
         self.validate_send(response)
-
-    def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
-        return self._get_sms_message(notification)
 
     def validate_send(self, response: object):
         assert response
@@ -371,3 +360,9 @@ class T2(ProviderIntegration):
 
     def enqueue_dlr_request(self):
         pass
+
+    def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return self._get_sms_message(notification)
+
+    def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return super()._get_sms_message(notification)

@@ -1,9 +1,12 @@
 from typing import List
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
-from django_project_base.notifications.base.channels.channel import Channel
+from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
+from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
 class MailChannel(Channel):
@@ -15,23 +18,23 @@ class MailChannel(Channel):
 
     provider_setting_name = "EMAIL_PROVIDER"
 
-    @staticmethod
-    def __make_send_mail(notification: "DjangoProjectBaseNotification", extra_data) -> int:  # noqa: F821
+    def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
         if getattr(settings, "TESTING", False):
             recipients: List[int] = (
                 list(map(int, notification.recipients.split(","))) if notification.recipients else []
             )
             return len(recipients)
-        return MailChannel.provider(extra_settings=extra_data, setting_name=MailChannel.provider_setting_name).send(
-            notification=notification, extra_data=extra_data
-        )
+        return super().send(notification=notification, extra_data=extra_data)
 
-    @staticmethod
-    def send(notification: "DjangoProjectBaseNotification", extra_data, **kwargs) -> int:  # noqa: F821
-        """
-        Overrides default send email messages
+    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
+        return list(set(super().get_recipients(notification, unique_identifier="email")))
 
-        :param fail_silently:
-        :return: number of sent messages
-        """
-        return MailChannel.__make_send_mail(notification, extra_data)
+    def clean_email_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
+        valid = []
+        for email in self.clean_recipients(recipients):
+            try:
+                validate_email(email.email)
+                valid.append(email)
+            except ValidationError:
+                pass
+        return valid

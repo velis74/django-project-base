@@ -16,7 +16,7 @@ def parse_settings(input_settings: tuple) -> None:
                     _setting_existing_val: list = list(_setting_existing_val)
                     for v in setting_value:
                         _setting_existing_val.append(v)
-                    _setting_existing_val: tuple = tuple(set(_setting_existing_val))
+                    _setting_existing_val: tuple = tuple(sorted(_setting_existing_val, key=_setting_existing_val.index))
                 else:
                     _setting_existing_val: list = list(_setting_existing_val)
                     _setting_existing_val.append(setting_value)
