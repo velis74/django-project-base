@@ -68,11 +68,16 @@ class Channel(ABC):
     def _find_provider(
         self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
     ) -> Optional[ProviderIntegration]:
+        if exclude is None:
+            exclude = []
+
         def get_first_provider(val: Union[str, List]):
             if val and isinstance(val, list):
-                return import_string(val[0])()
+                prov = next(filter(lambda i: i not in exclude, val), None)
 
-            return import_string(val)()
+                return import_string(prov)() if prov else None
+
+            return import_string(val)() if val not in exclude else None
 
         if extra_settings and getattr(extra_settings.get("SETTINGS", object()), setting_name, None):
             return get_first_provider(getattr(extra_settings["SETTINGS"], setting_name))
@@ -140,12 +145,14 @@ class Channel(ABC):
                 try:
                     dlr = self.create_delivery_report(notification, recipient, dlr__uuid)
                     return dlr if sent else None
-                except Exception as te:
-                    logger.exception(te)
-                    return None
+                except Exception as de:
+                    logger.exception(de)
+                    return object() if sent else None
 
             for recipient in recipients:  # noqa: E203
                 try:
+                    exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
+
                     while (
                         dlr := make_send(
                             notification_obj=notification,
@@ -153,13 +160,12 @@ class Channel(ABC):
                             rec_obj=recipient,
                         )
                     ) and dlr is None:
-                        exclude_providers.append(str(self.provider.__module__))
-                        next_provider = self._find_provider(
+                        exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
+                        if next_provider := self._find_provider(
                             extra_settings=extra_data,
                             setting_name=self.provider_setting_name,
                             exclude=exclude_providers,
-                        )
-                        if next_provider:
+                        ):
                             self.provider = next_provider
                     if dlr:
                         self.provider.enqueue_dlr_request()
