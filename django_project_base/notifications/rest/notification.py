@@ -18,6 +18,7 @@ from dynamicforms.template_render.responsive_table_layout import ResponsiveTable
 from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
@@ -25,6 +26,7 @@ from rest_framework.response import Response
 
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
+from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import (
@@ -170,15 +172,44 @@ class NotificationSerializer(ModelSerializer):
 
     send_notification_sms = fields.BooleanField(
         conditional_visibility=Statement(
-            # todo: make this programatic
-            F("send_on_channels").not_includes(lambda: ("SMS")),
+            F("send_on_channels").not_includes(lambda: (SmsChannel.name)),
             Operators.AND,
-            F("send_on_channels").includes(lambda: ("EMail")),
+            F("send_on_channels").includes(
+                lambda: (
+                    list(filter(lambda c: c.name != SmsChannel.name, ChannelIdentifier.supported_channels()))[0].name
+                ),
+            ),
         ),
-        write_only=True,
         label=_("Send notification SMS"),
         display_table=DisplayMode.HIDDEN,
     )
+
+    """
+    CODE BELLOW IS NOT USED, ITS KEPT COMMENTED ONLY FOR EXAMPLE PURPOSES
+    """
+    # number_sms_consumed = fields.IntegerField(
+    #     conditional_visibility=Statement(
+    #         F("send_notification_sms").is_in((True,)),
+    #         Operators.OR,
+    #         F("send_on_channels").includes(lambda: (SmsChannel.name)),
+    #     ),
+    #     write_only=True,
+    #     required=False,
+    #     label=_("No. SMS consumed"),
+    #     display_table=DisplayMode.HIDDEN,
+    # )
+
+    # number_char_remaining = fields.IntegerField(
+    #     conditional_visibility=Statement(
+    #         F("send_notification_sms").is_in((True,)),
+    #         Operators.OR,
+    #         F("send_on_channels").includes(lambda: (SmsChannel.name)),
+    #     ),
+    #     write_only=True,
+    #     required=False,
+    #     label=_("No. char. remaining"),
+    #     display_table=DisplayMode.HIDDEN,
+    # )
 
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
 
@@ -321,6 +352,10 @@ class NotificationViewset(ModelViewSet):
     ]
     permission_classes = [IsAuthenticated]
 
+    @action(detail=True, methods=["GET"], name="view-notification", url_path="info")
+    def view_notification(self, request, pk=None) -> Response:
+        return Response(pk)
+
     def filter_queryset_field(self, queryset, field, value):
         if field == "sent_at" and value and not value.isnumeric():
             # TODO: search by user defined time range
@@ -344,6 +379,7 @@ class NotificationViewset(ModelViewSet):
                     display_table=DisplayMode.SUPPRESS,
                     display_form=DisplayMode.SUPPRESS,
                 )
+                send_notification_sms = fields.BooleanField(default=False, allow_null=False)
 
             return NewMessageSerializer
         return NotificationSerializer
@@ -357,6 +393,9 @@ class NotificationViewset(ModelViewSet):
             raise NotFound(e.message)
 
     def perform_create(self, serializer):
+        host_url = "%s://%s" % ("https" if self.request.is_secure() else "http", self.request.META["HTTP_HOST"])
+        if not host_url.endswith("/"):
+            host_url += "/"
         notification = Notification(
             message=DjangoProjectBaseMessage(
                 subject=serializer.validated_data["message_subject"],
@@ -376,6 +415,8 @@ class NotificationViewset(ModelViewSet):
             ],
             persist=True,
             user=self.request.user.pk,
+            send_notification_sms=serializer.validated_data["send_notification_sms"],
+            host_url=host_url,
         )
         notification.send()
 

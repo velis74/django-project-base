@@ -52,10 +52,15 @@ class ProviderIntegration(ABC):
 
     @abstractmethod
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
-        pass
+        if notification.send_notification_sms:
+            return f"{notification.host_url}notification/{str(notification.pk)}/gt{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}"
+        return ""
 
     @abstractmethod
     def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        if notification.send_notification_sms:
+            return self.get_message(notification)
+
         message = f"{notification.message.subject or ''}"
 
         if notification.message.subject:

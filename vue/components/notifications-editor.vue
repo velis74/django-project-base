@@ -7,7 +7,12 @@ import {
   FormConsumerApiOneShot, FormPayload, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
-import _ from 'lodash';
+// import _ from 'lodash';
+// @ts-ignore
+// eslint-disable-next-line import/no-extraneous-dependencies
+// import SmsCounter from 'sms-counter';
+// eslint-disable-next-line import/no-extraneous-dependencies
+// import { stripHtml } from 'string-strip-html';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import { apiClient } from '../apiClient';
@@ -26,15 +31,17 @@ const actionViewLicense = async (): Promise<boolean> => {
 };
 
 const actionAddNotification = async (): Promise<boolean> => {
-  const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {
-    if (_.includes(payload.send_on_channels, 'SMS') && payload.send_notification_sms === true) {
-      console.log('length', _.size(payload.message_body));
-    }
-    // console.log(action, payload, context);
-    // console.log(payload.setmessage_subjectValue);
-    // payload.setmessage_subjectValue(`klemens${Math.random() * 100}`);
-    return false;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const valueChangedHandler = (action: Action, payload: FormPayload) => false;
+  // let smsCounter = SmsCounter.count('');
+  // payload.number_sms_consumed = smsCounter.messages;
+  // payload.number_char_remaining = smsCounter.remaining;
+  // if (_.includes(payload.send_on_channels, 'SMS')) {
+  //   smsCounter = SmsCounter.count(stripHtml(payload.message_body).result);
+  //   payload.number_sms_consumed = smsCounter.messages;
+  //   payload.number_char_remaining = smsCounter.remaining;
+  // }
+  // false;
   await FormConsumerApiOneShot(
     'notification',
     true,
@@ -42,7 +49,6 @@ const actionAddNotification = async (): Promise<boolean> => {
     undefined,
     { value_changed: valueChangedHandler },
   );
-  console.log('awaited consumer');
   return true;
 };
 
