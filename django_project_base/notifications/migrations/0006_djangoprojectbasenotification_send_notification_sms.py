@@ -36,8 +36,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="djangoprojectbasenotification",
-            name="host_url",
-            field=models.CharField(blank=False, null=True, max_length=512),
+            name="send_notification_sms_text",
+            field=models.TextField(blank=False, null=True),
         ),
         migrations.RunPython(forwards_func, reverse_func),
     ]

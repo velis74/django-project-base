@@ -2,8 +2,10 @@ import re
 from abc import ABC, abstractmethod
 from typing import Union
 
+import swapper
 from django.utils.html import strip_tags
 
+from django_project_base.constants import SEND_NOTIFICATION_SMS
 from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
 
 
@@ -52,14 +54,20 @@ class ProviderIntegration(ABC):
 
     @abstractmethod
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+        return ""
+
+    def get_send_notification_sms_text(self, notification: DjangoProjectBaseNotification, host_url: str) -> str:
         if notification.send_notification_sms:
-            return f"{notification.host_url}notification/{str(notification.pk)}/gt{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}"
+            template: str = swapper.load_model("django_project_base", "ProjectSettings").objects.get(
+                name=SEND_NOTIFICATION_SMS, project__slug=notification.project_slug).python_value
+            return template.replace("__LINK__", f"{host_url}notification/{str(notification.pk)}/info{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}")
         return ""
 
     @abstractmethod
     def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
+
         if notification.send_notification_sms:
-            return self.get_message(notification)
+            return notification.send_notification_sms_text
 
         message = f"{notification.message.subject or ''}"
 

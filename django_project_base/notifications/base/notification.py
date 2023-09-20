@@ -141,6 +141,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         required_channels: list = list(
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
         )
+
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,
             level=self.level.value,
@@ -155,8 +158,23 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             recipients_original_payload=self._raw_recipents,
             project_slug=self._project,
             send_notification_sms=self.send_notification_sms,
-            host_url=self._extra_data.get("host_url", None),
+            send_notification_sms_text=None,
         )
+
+        for channel_name in required_channels:
+            # ensure dlr user and check providers
+            channel = ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
+            assert channel
+
+            if self.send_notification_sms and channel.name == MailChannel.name:
+                notification.send_notification_sms_text = (
+                    channel.provider.get_send_notification_sms_text(
+                        notification=notification, host_url=self._extra_data.get("host_url", "")
+                    )
+                    if self.send_notification_sms
+                    else None
+                )
+
         notification.user = self._user
 
         notification.sender = Notification._get_sender_config(self._project)
@@ -171,10 +189,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             notification.save()
         else:
             notification.created_at = None
-
-        for channel_name in required_channels:
-            # ensure dlr user and check providers
-            assert ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
 
         if self.delay:
             if not self.persist:

@@ -78,7 +78,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     recipients_original_payload_search = models.TextField(blank=False, null=True, db_index=True)
     project_slug = models.CharField(null=True, blank=True, max_length=1024)
     send_notification_sms = models.BooleanField(null=False, blank=False, default=False)
-    host_url = models.CharField(blank=False, null=True, max_length=512)
+    send_notification_sms_text = models.TextField(blank=False, null=True)
 
     class Meta:
         abstract = True

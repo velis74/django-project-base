@@ -1,9 +1,16 @@
 import datetime
 import json
+import time
+from typing import Optional, List
 
 import pytz
 import swapper
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from django.core.cache import cache
+from django.conf import settings
+from drf_spectacular.utils import extend_schema
 from dynamicforms.mixins import F
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ForeignKey, QuerySet
@@ -19,9 +26,10 @@ from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django_project_base.account.middleware import ProjectNotSelectedError
@@ -63,10 +71,10 @@ class OrginalRecipientsField(fields.CharField):
                 )
             )
             if (
-                self.parent
-                and self.parent.instance  # noqa: W503
-                and not isinstance(self.parent.instance, QuerySet)  # noqa: W503
-                and not self.parent.instance.recipients_original_payload_search  # noqa: W503
+                    self.parent
+                    and self.parent.instance  # noqa: W503
+                    and not isinstance(self.parent.instance, QuerySet)  # noqa: W503
+                    and not self.parent.instance.recipients_original_payload_search  # noqa: W503
             ):
                 self.parent.instance.recipients_original_payload_search = search_str
                 self.parent.instance.save(update_fields=["recipients_original_payload_search"])
@@ -105,6 +113,7 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["message_to"].child_relation.queryset = SearchItems.objects.get_queryset(
             request=self.request
         )
+        self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -325,7 +334,7 @@ class MessageToListField(fields.ListField):
                                         for obj in related_objects
                                         for f in obj._meta.fields
                                         if isinstance(f, ForeignKey)
-                                        and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
+                                           and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
                                     ],
                                 )
                             )
@@ -352,9 +361,47 @@ class NotificationViewset(ModelViewSet):
     ]
     permission_classes = [IsAuthenticated]
 
-    @action(detail=True, methods=["GET"], name="view-notification", url_path="info")
-    def view_notification(self, request, pk=None) -> Response:
-        return Response(pk)
+    @extend_schema(exclude=True)
+    @action(detail=True, methods=["GET"], url_name="notification-login", url_path="info", permission_classes=[],
+            authentication_classes=[])
+    def notification_login(self, request, pk=None) -> HttpResponse:
+        if not pk:
+            raise PermissionDenied
+        return render(
+            request,
+            'notification_login.html',
+            dict(identifier=pk, url=f"/notification/info-view{'/' if getattr(settings, 'APPEND_SLASH', False) else ''}",
+                 title=swapper.load_model("django_project_base", "Project").objects.get(
+                     slug=DjangoProjectBaseNotification.objects.get(pk=pk).project_slug).name))
+
+    @extend_schema(exclude=True)
+    @action(methods=['POST'], detail=False, url_name="notification-view", permission_classes=[],
+            authentication_classes=[],
+            url_path='info-view')
+    def notification_view(self, request: Request, *args, **kwargs) -> HttpResponse:
+        number: Optional[str] = request.data.get('number')
+        identifier: Optional[str] = request.data.get('identifier')
+        guest_accesses: List[float] = cache.get(identifier, [])
+        now: float = time.time()
+        if len(list(filter(lambda t: now - t < 60, guest_accesses))) > 4:
+            # basic throttling
+            raise PermissionDenied()
+        guest_accesses.append(now)
+        cache.set(identifier, guest_accesses, timeout=120)
+        if not number or not identifier or len(number) < 4:
+            raise ValidationError()
+        notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification.objects.filter(
+            pk=identifier).first()
+        if not notification:
+            raise Http404()
+
+        phone_number_check = get_user_model().objects.filter(pk__in=notification.recipients.split(",")).filter(
+            userprofile__phone_number__endswith=number).exists()
+        if not phone_number_check:
+            raise ValidationError()
+        return render(request, 'notification.html', dict(
+            message=notification.message.subject + "</br></br></br>" + notification.message.body
+        ))
 
     def filter_queryset_field(self, queryset, field, value):
         if field == "sent_at" and value and not value.isnumeric():
@@ -368,7 +415,6 @@ class NotificationViewset(ModelViewSet):
 
     def get_serializer_class(self):
         if not self.detail and self.action == "create":
-
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
@@ -438,7 +484,7 @@ class NotificationsLicenseSerializer(LicenseReportSerializer):
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
         if (request := self.context.get("request")) and not fields.BooleanField().to_internal_value(
-            request.query_params.get("decorate-max-price", "0")
+                request.query_params.get("decorate-max-price", "0")
         ):
             self.fields.pop("max_notification_price", None)
 
@@ -462,11 +508,11 @@ class NotificationsLicenseViewSet(SingleRecordViewSet):
         license = LogAccessService().report(user=self.request.user)
         usage = 0
         if notifications_usage := next(
-            filter(
-                lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
-                license["usage_report"],
-            ),
-            None,
+                filter(
+                    lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
+                    license["usage_report"],
+                ),
+                None,
         ):
             usage = notifications_usage["usage_sum"]
         license["used_credit"] = usage

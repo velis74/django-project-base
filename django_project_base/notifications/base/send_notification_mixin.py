@@ -52,10 +52,13 @@ class SendNotificationMixin(object):
         )
 
         sent_to_channels = required_channels - already_sent_channels
+        from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
         for channel_identifier in sent_to_channels:
+            chl_identifier = channel_identifier if not notification.send_notification_sms else SmsChannel.name
+
             channel = ChannelIdentifier.channel(
-                channel_identifier, extra_data=extra_data, project_slug=notification.project_slug, ensure_dlr_user=False
+                chl_identifier, extra_data=extra_data, project_slug=notification.project_slug, ensure_dlr_user=False
             )
             try:
                 # check license
