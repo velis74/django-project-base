@@ -1,23 +1,22 @@
 import datetime
 import json
 import time
-from typing import Optional, List
+from typing import List, Optional
 
 import pytz
 import swapper
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse, Http404
-from django.shortcuts import render
-from django.core.cache import cache
 from django.conf import settings
-from drf_spectacular.utils import extend_schema
-from dynamicforms.mixins import F
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.db.models import ForeignKey, QuerySet
+from django.http import Http404, HttpResponse
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
-from dynamicforms.mixins import DisplayMode
+from dynamicforms.mixins import DisplayMode, F
 from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
@@ -333,8 +332,8 @@ class MessageToListField(fields.ListField):
                                         getattr(obj, f.name, object)
                                         for obj in related_objects
                                         for f in obj._meta.fields
-                                        if isinstance(f, ForeignKey)
-                                           and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
+                                        if isinstance(f, ForeignKey) and isinstance(
+                                            getattr(obj, f.name, object()), (profile_model, user_model))
                                     ],
                                 )
                             )

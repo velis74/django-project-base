@@ -60,7 +60,10 @@ class ProviderIntegration(ABC):
         if notification.send_notification_sms:
             template: str = swapper.load_model("django_project_base", "ProjectSettings").objects.get(
                 name=SEND_NOTIFICATION_SMS, project__slug=notification.project_slug).python_value
-            return template.replace("__LINK__", f"{host_url}notification/{str(notification.pk)}/info{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}")
+            return template.replace(
+                "__LINK__",
+                f"{host_url}notification/{str(notification.pk)}/info"
+                f"{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}")
         return ""
 
     @abstractmethod
