@@ -23,8 +23,7 @@ from django_project_base.account.constants import MERGE_USERS_QS_CK
 
 
 def get_project_members(request: Request) -> QuerySet:
-    project_slug = getattr(request, "current_project_slug", None)
-    project = swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
+    project = request.selected_project
     project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
     qs = (
         swapper.load_model("django_project_base", "Profile")
@@ -59,7 +58,7 @@ def get_project_members(request: Request) -> QuerySet:
 
     if getattr(request, "current_project_slug", None):
         # if current project was parsed from request, filter profiles to current project only
-        qs = qs.filter(projects__project__slug=request.current_project_slug)
+        qs = qs.filter(projects__project=project)
     elif not (request.user.is_staff or request.user.is_superuser):
         # but if user is not an admin, and the project is not known, only return this user's project
         qs = qs.filter(pk=request.user.pk)
@@ -74,7 +73,7 @@ def get_project_members(request: Request) -> QuerySet:
             )
         )
         if exclude_qs:
-            qs = qs.exclude(pk__in=map(int, ",".join(exclude_qs).split(",")))
+            qs = qs.exclude(pk__in=map(int, exclude_qs))
 
     qs = qs.order_by("un", "id")
     return qs.distinct()
