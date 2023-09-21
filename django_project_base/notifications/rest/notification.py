@@ -192,33 +192,6 @@ class NotificationSerializer(ModelSerializer):
         display_table=DisplayMode.HIDDEN,
     )
 
-    """
-    CODE BELLOW IS NOT USED, ITS KEPT COMMENTED ONLY FOR EXAMPLE PURPOSES
-    """
-    # number_sms_consumed = fields.IntegerField(
-    #     conditional_visibility=Statement(
-    #         F("send_notification_sms").is_in((True,)),
-    #         Operators.OR,
-    #         F("send_on_channels").includes(lambda: (SmsChannel.name)),
-    #     ),
-    #     write_only=True,
-    #     required=False,
-    #     label=_("No. SMS consumed"),
-    #     display_table=DisplayMode.HIDDEN,
-    # )
-
-    # number_char_remaining = fields.IntegerField(
-    #     conditional_visibility=Statement(
-    #         F("send_notification_sms").is_in((True,)),
-    #         Operators.OR,
-    #         F("send_on_channels").includes(lambda: (SmsChannel.name)),
-    #     ),
-    #     write_only=True,
-    #     required=False,
-    #     label=_("No. char. remaining"),
-    #     display_table=DisplayMode.HIDDEN,
-    # )
-
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
 
     def to_representation(self, instance, row_data=None):
