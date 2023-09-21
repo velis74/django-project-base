@@ -26,6 +26,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     locale = None
     message: DjangoProjectBaseMessage
     content_entity_context = ""
+    send_notification_sms = False
     _raw_recipents: str
     _project: Optional[object]
 
@@ -46,6 +47,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         content_entity_context="",
         channels=[],
         user=None,
+        send_notification_sms=False,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -55,6 +57,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             type = NotificationType.STANDARD
         if level is None:
             level = NotificationLevel.INFO
+        self.send_notification_sms = send_notification_sms
         assert isinstance(persist, bool), "Persist must be valid boolean value"
         assert raw_recipents is not None, "Original recipients payload is required"
         self._raw_recipents = json.dumps(raw_recipents)
@@ -138,6 +141,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         required_channels: list = list(
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
         )
+
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,
             level=self.level.value,
@@ -151,7 +157,20 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             recipients=",".join(map(str, self._recipients)) if self._recipients else None,
             recipients_original_payload=self._raw_recipents,
             project_slug=self._project,
+            send_notification_sms=self.send_notification_sms,
+            send_notification_sms_text=None,
         )
+
+        for channel_name in required_channels:
+            # ensure dlr user and check providers
+            channel = ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
+            assert channel
+
+            if self.send_notification_sms and channel.name == MailChannel.name:
+                notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
+                        notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
+                )
+
         notification.user = self._user
 
         notification.sender = Notification._get_sender_config(self._project)
@@ -166,10 +185,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             notification.save()
         else:
             notification.created_at = None
-
-        for channel_name in required_channels:
-            # ensure dlr user and check providers
-            assert ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
 
         if self.delay:
             if not self.persist:

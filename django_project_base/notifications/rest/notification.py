@@ -1,28 +1,39 @@
 import datetime
 import json
+import time
+from typing import List, Optional
 
 import pytz
 import swapper
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.db.models import ForeignKey, QuerySet
+from django.http import Http404, HttpResponse
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
-from dynamicforms.mixins import DisplayMode
+from dynamicforms.mixins import DisplayMode, F
+from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
-from rest_framework.exceptions import NotFound
+from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.fields import empty
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
+from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import (
@@ -59,10 +70,10 @@ class OrginalRecipientsField(fields.CharField):
                 )
             )
             if (
-                self.parent
-                and self.parent.instance  # noqa: W503
-                and not isinstance(self.parent.instance, QuerySet)  # noqa: W503
-                and not self.parent.instance.recipients_original_payload_search  # noqa: W503
+                    self.parent
+                    and self.parent.instance  # noqa: W503
+                    and not isinstance(self.parent.instance, QuerySet)  # noqa: W503
+                    and not self.parent.instance.recipients_original_payload_search  # noqa: W503
             ):
                 self.parent.instance.recipients_original_payload_search = search_str
                 self.parent.instance.save(update_fields=["recipients_original_payload_search"])
@@ -101,6 +112,7 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["message_to"].child_relation.queryset = SearchItems.objects.get_queryset(
             request=self.request
         )
+        self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -131,7 +143,7 @@ class NotificationSerializer(ModelSerializer):
             TablePosition.HEADER,
             _("Add"),
             title=_("Add new record"),
-            name="add",
+            name="add-notification",
             icon="add-circle-outline",
         ),
         TableAction(
@@ -166,7 +178,29 @@ class NotificationSerializer(ModelSerializer):
         write_only=True,
     )
 
+    send_notification_sms = fields.BooleanField(
+        conditional_visibility=Statement(
+            F("send_on_channels").not_includes(lambda: (SmsChannel.name)),
+            Operators.AND,
+            F("send_on_channels").includes(
+                lambda: (
+                    list(filter(lambda c: c.name != SmsChannel.name, ChannelIdentifier.supported_channels()))[0].name
+                ),
+            ),
+        ),
+        label=_("Send notification SMS"),
+        display_table=DisplayMode.HIDDEN,
+    )
+
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
+
+    def to_representation(self, instance, row_data=None):
+        repr = super().to_representation(instance, row_data)
+        kw = getattr(self.context.get("view", object()), "kwargs", dict())
+        if kw.get("pk") == "new" and kw.get("format") == "componentdef":
+            # enable conditional field render in DF
+            repr["send_on_channels"] = []
+        return repr
 
     def get_subject(self, obj):
         if not obj or not obj.message:
@@ -271,8 +305,8 @@ class MessageToListField(fields.ListField):
                                         getattr(obj, f.name, object)
                                         for obj in related_objects
                                         for f in obj._meta.fields
-                                        if isinstance(f, ForeignKey)
-                                        and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
+                                        if isinstance(f, ForeignKey) and isinstance(
+                                            getattr(obj, f.name, object()), (profile_model, user_model))
                                     ],
                                 )
                             )
@@ -299,6 +333,48 @@ class NotificationViewset(ModelViewSet):
     ]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(exclude=True)
+    @action(detail=True, methods=["GET"], url_name="notification-login", url_path="info", permission_classes=[],
+            authentication_classes=[])
+    def notification_login(self, request, pk=None) -> HttpResponse:
+        if not pk:
+            raise PermissionDenied
+        return render(
+            request,
+            'notification_login.html',
+            dict(identifier=pk, url=f"/notification/info-view{'/' if getattr(settings, 'APPEND_SLASH', False) else ''}",
+                 title=swapper.load_model("django_project_base", "Project").objects.get(
+                     slug=DjangoProjectBaseNotification.objects.get(pk=pk).project_slug).name))
+
+    @extend_schema(exclude=True)
+    @action(methods=['POST'], detail=False, url_name="notification-view", permission_classes=[],
+            authentication_classes=[],
+            url_path='info-view')
+    def notification_view(self, request: Request, *args, **kwargs) -> HttpResponse:
+        number: Optional[str] = request.data.get('number')
+        identifier: Optional[str] = request.data.get('identifier')
+        guest_accesses: List[float] = cache.get(identifier, [])
+        now: float = time.time()
+        if len(list(filter(lambda t: now - t < 60, guest_accesses))) > 4:
+            # basic throttling
+            raise PermissionDenied()
+        guest_accesses.append(now)
+        cache.set(identifier, guest_accesses, timeout=120)
+        if not number or not identifier or len(number) < 4:
+            raise ValidationError()
+        notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification.objects.filter(
+            pk=identifier).first()
+        if not notification:
+            raise Http404()
+
+        phone_number_check = get_user_model().objects.filter(pk__in=notification.recipients.split(",")).filter(
+            userprofile__phone_number__endswith=number).exists()
+        if not phone_number_check:
+            raise ValidationError()
+        return render(request, 'notification.html', dict(
+            message=notification.message.subject + "</br></br></br>" + notification.message.body
+        ))
+
     def filter_queryset_field(self, queryset, field, value):
         if field == "sent_at" and value and not value.isnumeric():
             # TODO: search by user defined time range
@@ -311,7 +387,6 @@ class NotificationViewset(ModelViewSet):
 
     def get_serializer_class(self):
         if not self.detail and self.action == "create":
-
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
@@ -322,6 +397,7 @@ class NotificationViewset(ModelViewSet):
                     display_table=DisplayMode.SUPPRESS,
                     display_form=DisplayMode.SUPPRESS,
                 )
+                send_notification_sms = fields.BooleanField(default=False, allow_null=False)
 
             return NewMessageSerializer
         return NotificationSerializer
@@ -335,6 +411,9 @@ class NotificationViewset(ModelViewSet):
             raise NotFound(e.message)
 
     def perform_create(self, serializer):
+        host_url = "%s://%s" % ("https" if self.request.is_secure() else "http", self.request.META["HTTP_HOST"])
+        if not host_url.endswith("/"):
+            host_url += "/"
         notification = Notification(
             message=DjangoProjectBaseMessage(
                 subject=serializer.validated_data["message_subject"],
@@ -354,6 +433,8 @@ class NotificationViewset(ModelViewSet):
             ],
             persist=True,
             user=self.request.user.pk,
+            send_notification_sms=serializer.validated_data["send_notification_sms"],
+            host_url=host_url,
         )
         notification.send()
 
@@ -375,7 +456,7 @@ class NotificationsLicenseSerializer(LicenseReportSerializer):
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
         if (request := self.context.get("request")) and not fields.BooleanField().to_internal_value(
-            request.query_params.get("decorate-max-price", "0")
+                request.query_params.get("decorate-max-price", "0")
         ):
             self.fields.pop("max_notification_price", None)
 
@@ -399,11 +480,11 @@ class NotificationsLicenseViewSet(SingleRecordViewSet):
         license = LogAccessService().report(user=self.request.user)
         usage = 0
         if notifications_usage := next(
-            filter(
-                lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
-                license["usage_report"],
-            ),
-            None,
+                filter(
+                    lambda u: u.get("item", "") == DjangoProjectBaseNotification._meta.verbose_name,
+                    license["usage_report"],
+                ),
+                None,
         ):
             usage = notifications_usage["usage_sum"]
         license["used_credit"] = usage

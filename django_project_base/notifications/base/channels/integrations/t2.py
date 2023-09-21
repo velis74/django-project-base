@@ -270,6 +270,7 @@ class T2(ProviderIntegration):
 
     endpoint_one = "send_sms"
     endpoint_multi = "send_multiple_sms"
+    settings: object
 
     url = ""
 

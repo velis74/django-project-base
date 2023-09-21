@@ -23,6 +23,16 @@ const actionViewLicense = async (): Promise<boolean> => {
   return true;
 };
 
+const actionAddNotification = async (): Promise<boolean> => {
+  await FormConsumerApiOneShot(
+    'notification',
+    true,
+    'new',
+    undefined,
+  );
+  return true;
+};
+
 const licenseConsumedShown = ref(false);
 const notificationId = ref(Date.now());
 
@@ -57,7 +67,7 @@ onUnmounted(() => clearInterval(intervalCheckLicense));
 
 const { handler } = useActionHandler();
 
-handler.register('view-license', actionViewLicense);
+handler.register('view-license', actionViewLicense).register('add-notification', actionAddNotification);
 
 // TODO: remove linter ignores below when you know how to
 </script>
