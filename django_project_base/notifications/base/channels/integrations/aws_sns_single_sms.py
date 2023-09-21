@@ -75,4 +75,4 @@ class AwsSnsSingleSMS(ProviderIntegration):
         pass
 
     def enqueue_dlr_request(self, pk: str):
-        DeliveryReport.objects.filter(pk=pk).update(status=DeliveryReport.Status.DELIVERED)
+        pass

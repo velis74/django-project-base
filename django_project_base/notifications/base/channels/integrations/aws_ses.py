@@ -77,7 +77,7 @@ class AwsSes(ProviderIntegration):
         pass
 
     def enqueue_dlr_request(self, pk: str):
-        pass
+        DeliveryReport.objects.filter(pk=pk).update(status=DeliveryReport.Status.DELIVERED)
 
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
         res = (
