@@ -76,7 +76,7 @@ class AwsSes(ProviderIntegration):
     def ensure_dlr_user(self, project_slug: str):
         pass
 
-    def enqueue_dlr_request(self):
+    def enqueue_dlr_request(self, pk: str):
         pass
 
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):

@@ -74,5 +74,5 @@ class AwsSnsSingleSMS(ProviderIntegration):
     def ensure_dlr_user(self, project_slug: str):
         pass
 
-    def enqueue_dlr_request(self):
-        pass
+    def enqueue_dlr_request(self, pk: str):
+        DeliveryReport.objects.filter(pk=pk).update(status=DeliveryReport.Status.DELIVERED)
