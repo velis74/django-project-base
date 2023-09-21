@@ -222,7 +222,7 @@ export default function useLogin() {
   }
 
   const openRegistration = async () => {
-    await FormConsumerApiOneShot('/account/profile/register', true);
+    await FormConsumerApiOneShot('/account/profile/register', false);
   };
 
   const newAccount = async () => {
