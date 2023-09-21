@@ -167,12 +167,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             assert channel
 
             if self.send_notification_sms and channel.name == MailChannel.name:
-                notification.send_notification_sms_text = (
-                    channel.provider.get_send_notification_sms_text(
-                        notification=notification, host_url=self._extra_data.get("host_url", "")
-                    )
-                    if self.send_notification_sms
-                    else None
+                notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
+                        notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
                 )
 
         notification.user = self._user

@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import {
-  Action,
   APIConsumer,
   ComponentDisplay,
   ConsumerLogicApi,
-  FormConsumerApiOneShot, FormPayload, gettext,
+  FormConsumerApiOneShot, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
-// import _ from 'lodash';
-// @ts-ignore
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import SmsCounter from 'sms-counter';
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import { stripHtml } from 'string-strip-html';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import { apiClient } from '../apiClient';
@@ -31,23 +24,11 @@ const actionViewLicense = async (): Promise<boolean> => {
 };
 
 const actionAddNotification = async (): Promise<boolean> => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const valueChangedHandler = (action: Action, payload: FormPayload) => false;
-  // let smsCounter = SmsCounter.count('');
-  // payload.number_sms_consumed = smsCounter.messages;
-  // payload.number_char_remaining = smsCounter.remaining;
-  // if (_.includes(payload.send_on_channels, 'SMS')) {
-  //   smsCounter = SmsCounter.count(stripHtml(payload.message_body).result);
-  //   payload.number_sms_consumed = smsCounter.messages;
-  //   payload.number_char_remaining = smsCounter.remaining;
-  // }
-  // false;
   await FormConsumerApiOneShot(
     'notification',
     true,
     'new',
     undefined,
-    { value_changed: valueChangedHandler },
   );
   return true;
 };
