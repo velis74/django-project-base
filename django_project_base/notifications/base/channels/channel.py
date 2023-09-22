@@ -104,7 +104,7 @@ class Channel(ABC):
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
         rec_obj = notification.recipients_list
         if not rec_obj:
-            att = ("email", "phone_number", get_pk_name(get_user_model()))
+            att = ("email", "phone_number", get_pk_name(get_user_model()), "is_active")
             rec_obj = [
                 {k: v for k, v in profile.__dict__.items() if not k.startswith("_") and k in att}
                 for profile in [
@@ -118,7 +118,7 @@ class Channel(ABC):
                 phone_number=u.get("phone_number", "") or "",
                 unique_attribute=unique_identifier,
             )
-            for u in rec_obj
+            for u in rec_obj if u.get("is_active", False)
         ]
 
     def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
