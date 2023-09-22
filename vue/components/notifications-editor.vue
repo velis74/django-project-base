@@ -16,13 +16,16 @@ import {
 
 const props = defineProps<{
   consumerUrl?: string
-  consumerUrlTrailingSlash: {
-    type: boolean,
-    default: true
-  }
+  consumerUrlTrailingSlash?: boolean
 }>();
 
-const notificationLogic = ref(new ConsumerLogicApi(props.consumerUrl || 'notification', props.consumerUrlTrailingSlash));
+const consumerUrl = props.consumerUrl || 'notification';
+const consumerTrailingSlash = props.consumerUrlTrailingSlash || true;
+
+const notificationLogic = ref(new ConsumerLogicApi(
+  consumerUrl,
+  consumerTrailingSlash,
+));
 
 notificationLogic.value.getFullDefinition();
 
@@ -33,8 +36,8 @@ const actionViewLicense = async (): Promise<boolean> => {
 
 const actionAddNotification = async (): Promise<boolean> => {
   await FormConsumerApiOneShot(
-    'notification',
-    true,
+    consumerUrl,
+    consumerTrailingSlash,
     'new',
     undefined,
   );
