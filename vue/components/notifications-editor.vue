@@ -14,7 +14,15 @@ import {
   showNotification,
 } from '../notifications';
 
-const notificationLogic = ref(new ConsumerLogicApi('notification', true));
+const props = defineProps<{
+  consumerUrl?: string
+  consumerUrlTrailingSlash: {
+    type: boolean,
+    default: true
+  }
+}>();
+
+const notificationLogic = ref(new ConsumerLogicApi(props.consumerUrl || 'notification', props.consumerUrlTrailingSlash));
 
 notificationLogic.value.getFullDefinition();
 
