@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
-import { APIConsumer as AC } from '@velis/dynamicforms/dist/components/api_consumer/namespace.d';
 import { storeToRefs } from 'pinia';
 import { Ref, ref, watch } from 'vue';
 
@@ -8,7 +7,7 @@ import useUserSessionStore from './user-session/state';
 
 const userSession = useUserSessionStore();
 const settingsLogic = ref(new ConsumerLogicApi('/project-settings', false));
-const settingsLogicTC = <Ref<AC.ConsumerLogicBaseInterface>><unknown> settingsLogic;
+const settingsLogicTC = <Ref><unknown> settingsLogic;
 
 const { selectedProjectId } = storeToRefs(userSession);
 
