@@ -19,17 +19,16 @@ const notificationLogic = ref(new ConsumerLogicApi('notification', true));
 notificationLogic.value.getFullDefinition();
 
 const actionViewLicense = async (): Promise<boolean> => {
-  await FormConsumerApiOneShot('notification-license', true, 'new');
+  await FormConsumerApiOneShot({ url: 'notification-license', trailingSlash: true, pk: 'new' });
   return true;
 };
 
 const actionAddNotification = async (): Promise<boolean> => {
-  await FormConsumerApiOneShot(
-    'notification',
-    true,
-    'new',
-    undefined,
-  );
+  await FormConsumerApiOneShot({
+    url: 'notification',
+    trailingSlash: true,
+    pk: 'new',
+  });
   return true;
 };
 
