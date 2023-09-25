@@ -359,7 +359,7 @@ class T2(ProviderIntegration):
             ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
             ProjectMember.objects.get_or_create(member=user.userprofile, project=project)
 
-    def enqueue_dlr_request(self):
+    def enqueue_dlr_request(self, pk: str):
         pass
 
     def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
