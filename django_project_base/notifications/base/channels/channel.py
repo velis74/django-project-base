@@ -66,7 +66,7 @@ class Channel(ABC):
         return _sender
 
     def _find_provider(
-        self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
+            self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
     ) -> Optional[ProviderIntegration]:
         if exclude is None:
             exclude = []
@@ -87,18 +87,15 @@ class Channel(ABC):
         return list(set(recipients))
 
     def create_delivery_report(
-        self, notification: DjangoProjectBaseNotification, recipient: Union[Recipient, List[Recipient]], pk: str
+            self, notification: DjangoProjectBaseNotification, recipient: Recipient, pk: str
     ) -> DeliveryReport:
-        recs = recipient if isinstance(recipient, list) else [recipient]
-        for user in recs:
-            report = DeliveryReport.objects.create(
-                notification=notification,
-                user_id=user.identifier,
-                channel=f"{self.__module__}.{self.__class__.__name__}",
-                provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
-                pk=pk,
-            )
-            return report
+        return DeliveryReport.objects.create(
+            notification=notification,
+            user_id=recipient.identifier,
+            channel=f"{self.__module__}.{self.__class__.__name__}",
+            provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+            pk=pk,
+        )
 
     @abstractmethod
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
@@ -134,39 +131,42 @@ class Channel(ABC):
             exclude_providers: List[str] = []
             sent_no = 0
 
-            def make_send(notification_obj, rec_obj, message_str) -> bool:
-                dlr__uuid = str(uuid.uuid4())
+            def make_send(notification_obj, rec_obj, message_str, dlr_pk) -> Optional[DeliveryReport]:
                 try:
-                    self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr__uuid)
+                    self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr_pk)
                     sent = True
                 except Exception as te:
                     logger.exception(te)
                     sent = False
+                dlr_obj = None
                 try:
-                    self.create_delivery_report(notification, recipient, dlr__uuid) if sent else None
-                    return sent
+                    if sent:
+                        dlr_obj = self.create_delivery_report(notification, recipient, dlr_pk)
+                    return dlr_obj
                 except Exception as de:
                     logger.exception(de)
-                    return sent
+                    return dlr_obj
 
             for recipient in recipients:  # noqa: E203
+                dlr__uuid = str(uuid.uuid4())
                 try:
                     while dlr := not make_send(
-                        notification_obj=notification,
-                        message_str=message,
-                        rec_obj=recipient,
+                            notification_obj=notification,
+                            message_str=message,
+                            rec_obj=recipient,
+                            dlr_pk=dlr__uuid
                     ):
                         exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
                         if next_provider := self._find_provider(
-                            extra_settings=extra_data,
-                            setting_name=self.provider_setting_name,
-                            exclude=exclude_providers,
+                                extra_settings=extra_data,
+                                setting_name=self.provider_setting_name,
+                                exclude=exclude_providers,
                         ):
                             self.provider = next_provider
                         else:
                             break
                     if not dlr:
-                        self.provider.enqueue_dlr_request()
+                        self.provider.enqueue_dlr_request(pk=dlr__uuid)
                         sent_no += 1
                 except Exception as ge:
                     logger.exception(ge)

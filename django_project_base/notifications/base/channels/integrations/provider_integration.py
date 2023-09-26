@@ -49,7 +49,7 @@ class ProviderIntegration(ABC):
         pass
 
     @abstractmethod
-    def enqueue_dlr_request(self):
+    def enqueue_dlr_request(self, pk: str):
         pass
 
     @abstractmethod
