@@ -11,7 +11,7 @@ from dynamicforms.template_render.layout import Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -158,15 +158,66 @@ class ProjectSettingsSerializer(ModelSerializer):
         display=DisplayMode.SUPPRESS, queryset=swapper.load_model("django_project_base", "Project").objects.all()
     )
 
+    def save(self, **kwargs):
+        instance = self.instance
+        saved = super().save(**kwargs)
+
+        from django_project_base.base.event import EmailSenderChangedEvent
+
+        EmailSenderChangedEvent(self.context["request"].user).trigger_changed(
+            old_state=instance, new_state=saved, payload=None
+        )
+
+        return saved
+
     class Meta:
         model = swapper.load_model("django_project_base", "ProjectSettings")
         exclude = ()
 
 
 class ProjectSettingsViewSet(ModelViewSet):
-    serializer_class = ProjectSettingsSerializer
-
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if (
+            self.action == "retrieve" and self.detail is True and str(self.kwargs.get("pk", "")) != "new"
+        ) or self.action in ("list", "update", "partial_update"):
+
+            class AttrsReadOnlySer(ProjectSettingsSerializer):
+                def __init__(self, *args, is_filter: bool = False, **kwds):
+                    super().__init__(*args, is_filter=is_filter, **kwds)
+                    if (
+                        (view := kwds.get("context", {}).get("view"))
+                        and view.detail is True
+                        and str(view.kwargs.get("pk", "")) != "new"
+                        and (sett := ProjectSettingsSerializer.Meta.model.objects.filter(pk=view.kwargs["pk"]).first())
+                        and sett.reserved is True
+                    ):
+                        if view.action == "retrieve":
+                            self.fields.fields["reserved"].read_only = True
+                            self.fields.fields["name"].read_only = True
+                            self.fields.fields["value_type"].read_only = True
+                        else:
+                            self.fields.fields["name"].required = False
+                            self.fields.fields["value_type"].required = False
+
+                def validate(self, attrs):
+                    validated = super().validate(attrs)
+                    if self.instance.reserved:
+                        if "reserved" in validated and not validated["reserved"]:
+                            raise PermissionDenied
+                        if "name" in validated and validated["name"] != self.instance.name:
+                            raise PermissionDenied
+                        if "value_type" in validated and validated["value_type"] != self.instance.value_type:
+                            raise PermissionDenied
+                    return validated
+
+                class Meta(ProjectSettingsSerializer.Meta):
+                    pass
+
+            return AttrsReadOnlySer
+
+        return ProjectSettingsSerializer
 
     def initialize_request(self, request, *args, **kwargs):
         req = super().initialize_request(request, *args, **kwargs)

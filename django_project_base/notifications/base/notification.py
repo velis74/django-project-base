@@ -123,10 +123,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         ):
             project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
             mail_settings = project_settings_model.objects.filter(
-                name=EMAIL_SENDER_ID_SETTING_NAME, project=project
+                name=EMAIL_SENDER_ID_SETTING_NAME, project=project, confirmed=True
             ).first()
             sms_settings = project_settings_model.objects.filter(
-                name=SMS_SENDER_ID_SETTING_NAME, project=project
+                name=SMS_SENDER_ID_SETTING_NAME, project=project, confirmed=True
             ).first()
             return {
                 MailChannel.name: mail_settings.python_value if mail_settings else "",
