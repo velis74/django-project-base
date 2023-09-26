@@ -16,8 +16,13 @@ jobs:
         run: |
           pip3 install -r requirements.txt
           pip3 install coverage django_coverage_plugin
+      - name: Debug ps
+        run: |
+          pwd
+          ls -lah
       - name: Python unittest
         continue-on-error: true
+#        working-directory: ./app
         run: |
           coverage run -m manage.py test
       - name: Generate coverage report
