@@ -20,11 +20,16 @@ from dynamicforms import fields
 from rest_framework.request import Request
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
+from django_project_base.account.middleware import ProjectNotSelectedError
 
 
 def get_project_members(request: Request) -> QuerySet:
     project = request.selected_project
-    project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
+    try:
+        project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
+    except ProjectNotSelectedError:
+        project = None
+        project_members = swapper.load_model("django_project_base", "ProjectMember").objects.all()
     qs = (
         swapper.load_model("django_project_base", "Profile")
         .objects.prefetch_related(Prefetch("projects", queryset=project_members), "groups", "user_permissions")
@@ -56,7 +61,7 @@ def get_project_members(request: Request) -> QuerySet:
 
     qs = qs.exclude(delete_at__isnull=False, delete_at__lt=datetime.now())
 
-    if getattr(request, "current_project_slug", None):
+    if project is not None:
         # if current project was parsed from request, filter profiles to current project only
         qs = qs.filter(projects__project=project)
     elif not (request.user.is_staff or request.user.is_superuser):
