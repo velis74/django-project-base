@@ -46,7 +46,7 @@ async function loadData() {
 }
 
 async function addNewProject() {
-  // const addProjectModal = await FormConsumerApiOneShot('/project', false, 'new');
+  // const addProjectModal = await FormConsumerApiOneShot({ url: '/project', trailingSlash: false, pk: 'new' });
   let slugChanged = false;
   let ignoreSlugChange = false;
   const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {
@@ -60,11 +60,11 @@ async function addNewProject() {
     }
     return false;
   };
-  const addProjectModal = await FormConsumerApiOneShot(
-    '/project',
-    false,
-    'new',
-    undefined,
+  const addProjectModal = await FormConsumerApiOneShot({
+      url: '/project',
+      trailingSlash: false,
+      pk: 'new',
+    },
     { value_changed: valueChangedHandler },
   );
   dfModal.getDialogDefinition(addProjectModal);
