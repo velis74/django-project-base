@@ -24,7 +24,7 @@ jobs:
         continue-on-error: true
 #        working-directory: ./app
         run: |
-          coverage run -m manage.py test
+          coverage run -m manage test
       - name: Generate coverage report
         continue-on-error: true
         run: |
