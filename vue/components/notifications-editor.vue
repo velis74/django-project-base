@@ -14,19 +14,50 @@ import {
   showNotification,
 } from '../notifications';
 
-const notificationLogic = ref(new ConsumerLogicApi('notification', true));
+const props = defineProps<{
+  consumerUrl: {
+    type: String,
+    required: false,
+  },
+  consumerUrlTrailingSlash: {
+    type: Boolean,
+    required: false,
+  },
+  licenseConsumerUrl: {
+    type: String,
+    required: false,
+  },
+  licenseConsumerUrlTrailingSlash:{
+    type: Boolean,
+    required: false,
+  },
+}>();
+
+const consumerUrl: string = (props.consumerUrl !== undefined ? props.consumerUrl : 'notification') as string;
+const consumerTrailingSlash = (
+    props.consumerUrlTrailingSlash !== undefined ? props.consumerUrlTrailingSlash : true) as boolean;
+
+const licenseConsumerUrl = (
+    props.licenseConsumerUrl !== undefined ? props.licenseConsumerUrl : 'notification-license') as string;
+const licenseConsumerUrlTrailingSlash = (
+    props.licenseConsumerUrlTrailingSlash !== undefined ? props.licenseConsumerUrlTrailingSlash : true) as boolean;
+
+const notificationLogic = ref(new ConsumerLogicApi(
+  consumerUrl,
+  consumerTrailingSlash,
+));
 
 notificationLogic.value.getFullDefinition();
 
 const actionViewLicense = async (): Promise<boolean> => {
-  await FormConsumerApiOneShot({ url: 'notification-license', trailingSlash: true, pk: 'new' });
+  await FormConsumerApiOneShot({ url: licenseConsumerUrl, trailingSlash: licenseConsumerUrlTrailingSlash, pk: 'new' });
   return true;
 };
 
 const actionAddNotification = async (): Promise<boolean> => {
   await FormConsumerApiOneShot({
-    url: 'notification',
-    trailingSlash: true,
+    url: consumerUrl,
+    trailingSlash: consumerTrailingSlash,
     pk: 'new',
   });
   return true;
@@ -52,13 +83,17 @@ const showLicenseConsumed = () => {
 let intervalCheckLicense: NodeJS.Timeout | undefined;
 onMounted(() => {
   intervalCheckLicense = setInterval(() => {
-    apiClient.get('notification-license/new/?format=json&decorate-max-price=1').then((licenseResponse) => {
-      if (licenseResponse.data.remaining_credit < licenseResponse.data.max_notification_price) {
-        showLicenseConsumed();
-        return;
-      }
-      closeNotification(notificationId.value);
-    });
+    apiClient.get(
+      `${licenseConsumerUrl}/new${licenseConsumerUrlTrailingSlash ? '/' : ''}?format=json&decorate-max-price=1`,
+    ).then(
+      (licenseResponse) => {
+        if (licenseResponse.data.remaining_credit < licenseResponse.data.max_notification_price) {
+          showLicenseConsumed();
+          return;
+        }
+        closeNotification(notificationId.value);
+      },
+    );
   }, 15000);
 });
 
