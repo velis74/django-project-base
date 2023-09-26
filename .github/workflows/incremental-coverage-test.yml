@@ -19,7 +19,7 @@ jobs:
       - name: Python unittest
         continue-on-error: true
         run: |
-          coverage run -m unittest discover tests/
+          coverage run -m manage.py test
       - name: Generate coverage report
         continue-on-error: true
         run: |
