@@ -60,7 +60,8 @@ async function addNewProject() {
     }
     return false;
   };
-  const addProjectModal = await FormConsumerApiOneShot({
+  const addProjectModal = await FormConsumerApiOneShot(
+    {
       url: '/project',
       trailingSlash: false,
       pk: 'new',
