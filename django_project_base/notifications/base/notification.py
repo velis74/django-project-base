@@ -123,10 +123,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         ):
             project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
             mail_settings = project_settings_model.objects.filter(
-                name=EMAIL_SENDER_ID_SETTING_NAME, project=project, confirmed=True
+                name=EMAIL_SENDER_ID_SETTING_NAME, project=project
             ).first()
             sms_settings = project_settings_model.objects.filter(
-                name=SMS_SENDER_ID_SETTING_NAME, project=project, confirmed=True
+                name=SMS_SENDER_ID_SETTING_NAME, project=project
             ).first()
             return {
                 MailChannel.name: mail_settings.python_value if mail_settings else "",
@@ -168,7 +168,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
 
             if self.send_notification_sms and channel.name == MailChannel.name:
                 notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
-                        notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
+                    notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
                 )
 
         notification.user = self._user
