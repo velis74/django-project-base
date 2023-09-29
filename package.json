@@ -25,7 +25,7 @@
     "export-pdf": "press-export-pdf --debug export docs"
   },
   "peerDependencies": {
-    "@velis/dynamicforms": "^0.74.14",
+    "@velis/dynamicforms": "^0.74.16",
     "axios": "^1.2.0",
     "lodash": "^4.17.15",
     "pinia": "^2.0.33",

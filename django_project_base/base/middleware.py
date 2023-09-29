@@ -42,7 +42,8 @@ class UrlVarsMiddleware:
 
     def __call__(self, request):
         for value, config in settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES.items():
-            setattr(request, config["value_name"], get_parameter(request, value, config["url_part"]))
+            if param := get_parameter(request, value, config["url_part"]):
+                setattr(request, config["value_name"], param)
 
         _threadmap[threading.get_ident()] = request
 
