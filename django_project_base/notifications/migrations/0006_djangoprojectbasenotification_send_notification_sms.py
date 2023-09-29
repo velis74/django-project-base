@@ -11,11 +11,13 @@ def forwards_func(apps, schema_editor):
     project_sett = swapper.load_model("django_project_base", "ProjectSettings")
     for project in swapper.load_model("django_project_base", "Project").objects.all():
         project_sett.objects.get_or_create(
-            name=SEND_NOTIFICATION_SMS,
-            description="Text for notification detail view. __LINK__ is url placeholder.",
-            value=gettext("You received a notification. Clik link to view it: __LINK__"),
             project=project,
-            value_type="char",
+            name=SEND_NOTIFICATION_SMS,
+            defaults=dict(
+                jadescription="Text for notification detail view. __LINK__ is url placeholder.",
+                value=gettext("You received a notification. Clik link to view it: __LINK__"),
+                value_type="char",
+            ),
         )
 
 
