@@ -1,3 +1,4 @@
+import copy
 from typing import Union
 
 import swapper
@@ -159,9 +160,8 @@ class ProjectSettingsSerializer(ModelSerializer):
     )
 
     def save(self, **kwargs):
-        instance = self.instance
+        instance = copy.copy(self.instance)
         saved = super().save(**kwargs)
-
         from django_project_base.base.event import EmailSenderChangedEvent
 
         EmailSenderChangedEvent(self.context["request"].user).trigger_changed(
