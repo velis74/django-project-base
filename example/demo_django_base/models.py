@@ -11,6 +11,7 @@ from django_project_base.base.models import (
     BaseProjectSettings,
     BaseTag,
     DpbTaggedItemThrough,
+    BaseInvite,
 )
 
 
@@ -56,4 +57,8 @@ class Permission(BasePermission):
 
 
 class ProjectSettings(BaseProjectSettings):
+    pass
+
+
+class ProjectInvite(BaseInvite):
     pass

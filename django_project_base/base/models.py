@@ -301,3 +301,33 @@ def user_logged_in(*args, **kwargs):
     from django_project_base.account.service.merge_users_service import MergeUsersService
 
     MergeUsersService().handle(**kwargs)
+
+
+class BaseInvite(models.Model):
+    email = models.CharField(max_length=255, verbose_name=_("eMail"))
+
+    # text = models.TextField(verbose_name=_('Invitation message'))  # TODO: READ TEXT FROM INVITE SETTINGS
+
+    # role = models.ForeignKey()  # TODO: we don't have role support yet
+
+    send_by = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Profile"),
+        on_delete=models.CASCADE,
+        related_name="project_user_invites",
+    )
+    accepted = models.DateTimeField(auto_now=False, null=True, blank=True)
+
+    # project_user = models.OneToOneField(swapper.get_model_name("django_project_base", "Profile"), on_delete=models.CASCADE,
+    #                                     related_name='project_invite', blank=True, null=True)  # TODO: DO WE NEED PROJECT USER REFERENCE
+
+    project = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
+    )
+
+    class Meta:
+        abstract = True
+
+
+class Invite(BaseProject):
+    class Meta:
+        swappable = swapper.swappable_setting("django_project_base", "Invite")
