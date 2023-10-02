@@ -38,4 +38,4 @@ profile_router.register(r"profile-merge", ProfileMergeViewSet, basename="profile
 profile_router.register_single_record(r"impersonate", ImpersonateUserViewset, basename="profile-base-impersonate-user")
 profile_router.register_single_record(r"login", LoginViewset, basename="profile-base-login")
 profile_router.register(r"", LogoutViewSet, basename="account")
-profile_router.register(r"", ProjectUserInviteViewSet, basename="project-user-invite")
+profile_router.register(r"project-user-invite", ProjectUserInviteViewSet, basename="project-user-invite")

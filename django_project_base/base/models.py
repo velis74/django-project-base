@@ -317,8 +317,9 @@ class BaseInvite(models.Model):
     )
     accepted = models.DateTimeField(auto_now=False, null=True, blank=True)
 
-    # project_user = models.OneToOneField(swapper.get_model_name("django_project_base", "Profile"), on_delete=models.CASCADE,
-    #                                     related_name='project_invite', blank=True, null=True)  # TODO: DO WE NEED PROJECT USER REFERENCE
+    # project_user = models.OneToOneField(swapper.get_model_name(
+    # "django_project_base", "Profile"), on_delete=models.CASCADE,
+    #  related_name='project_invite', blank=True, null=True)  # TODO: DO WE NEED PROJECT USER REFERENCE
 
     project = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
