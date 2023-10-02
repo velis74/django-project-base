@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 
 import svgwrite
@@ -304,6 +305,7 @@ def user_logged_in(*args, **kwargs):
 
 
 class BaseInvite(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
     email = models.CharField(max_length=255, verbose_name=_("eMail"))
 
     # text = models.TextField(verbose_name=_('Invitation message'))  # TODO: READ TEXT FROM INVITE SETTINGS

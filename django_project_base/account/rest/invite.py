@@ -1,6 +1,8 @@
 import swapper
 from django.db import transaction
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
@@ -8,7 +10,9 @@ from dynamicforms.serializers import ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.exceptions import InviteActionNotImplementedException
@@ -154,3 +158,16 @@ class ProjectUserInviteViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
+    @extend_schema(exclude=True)
+    @action(
+        methods=["GET"],
+        detail=False,
+        url_name="accept",
+        url_path="accept/(?P<pk>[0-9a-f-]+)'",
+    )
+    def accept(self, request: Request, pk: str, *args, **kwargs) -> HttpResponse:
+        # check if exists
+
+        # ...
+        return HttpResponse()
