@@ -322,6 +322,13 @@ class ProfileViewSet(ModelViewSet):
     def register_account(self, request: Request, **kwargs):
         serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context())
         response_data: dict = serializer.data
+        if (
+            "invite_pk" in request.query_params
+            and request.query_params.get("invite_pk")
+            and request.COOKIES.get("invite_pk") == request.query_params.get("invite_pk")
+        ):
+            response_data["email"] = "aa@ff.si"
+            # TODO: USE MODEL SERIALIZER NEW OBJECT TO PREFIL FORM DATA ON CREATE
         return Response(response_data)
 
     @extend_schema(

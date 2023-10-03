@@ -221,9 +221,9 @@ export default function useLogin() {
     socialAuth.value = formDef.payload.social_auth_providers;
   }
 
-  const openRegistration = async () => {
-    await FormConsumerApiOneShot({ url: '/account/profile/register', trailingSlash: false });
-  };
+  const openRegistration = async (query = {}) => FormConsumerApiOneShot(
+    { url: '/account/profile/register', trailingSlash: false, query },
+  );
 
   const newAccount = async () => {
     showLoginDialog.value = false;

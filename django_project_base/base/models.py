@@ -331,6 +331,9 @@ class BaseInvite(models.Model):
 
     class Meta:
         abstract = True
+        unique_together = [
+            ["project", "email"],
+        ]
 
 
 class Invite(BaseProject):

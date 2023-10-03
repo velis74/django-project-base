@@ -1,6 +1,7 @@
 import swapper
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
@@ -16,9 +17,10 @@ from rest_framework.request import Request
 
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.exceptions import InviteActionNotImplementedException
+from django_project_base.constants import INVITE_NOTIFICATION_TEXT
 from django_project_base.notifications.email_notification import EMailNotificationWithListOfEmails
 from django_project_base.notifications.models import DjangoProjectBaseMessage
-from django_project_base.utils import get_host_url
+from django_project_base.utils import get_host_url, get_pk_name
 
 
 class AcceptedField(fields.BooleanField):
@@ -54,7 +56,7 @@ class ProjectUserInviteSerializer(ModelSerializer):
         queryset=swapper.load_model("django_project_base", "Project").objects.all(),
     )
     accepted = AcceptedField(display_form=DisplayMode.HIDDEN)
-    host_url = fields.CharField(read_only=True, display=DisplayMode.SUPPRESS)
+    host_url = fields.CharField(display=DisplayMode.SUPPRESS)
 
     # def confirm_create_text(self):
     #     owner_change_data = get_owner_change_data(self.context)
@@ -129,12 +131,20 @@ class ProjectUserInviteViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         self.request.data["project"] = self.request.selected_project.pk
         self.request.data["send_by"] = self.request.user.userprofile
-        self.request.data["host_url"] = get_host_url(request)
+        host_url = get_host_url(request)
+        self.request.data["host_url"] = host_url
         created = super().create(request, *args, **kwargs)
+        invite_url = f"{host_url}account/project-user-invite/{created.data[get_pk_name(self.get_serializer_class().Meta.model)]}/accept"
+        invite_template = (
+            swapper.load_model("django_project_base", "ProjectSettings")
+            .objects.get(project=self.request.selected_project, name=INVITE_NOTIFICATION_TEXT)
+            .python_value.replace("__LINK__", invite_url)
+        )
+
         EMailNotificationWithListOfEmails(
             message=DjangoProjectBaseMessage(
                 subject=_("You are invited to project") + f" {self.request.selected_project.name}",
-                body="sdfsdfsdf  asdfadfaf",
+                body=invite_template,
                 footer="",
                 content_type=DjangoProjectBaseMessage.HTML,
             ),
@@ -162,12 +172,14 @@ class ProjectUserInviteViewSet(ModelViewSet):
     @extend_schema(exclude=True)
     @action(
         methods=["GET"],
-        detail=False,
+        detail=True,
+        permission_classes=[],
+        authentication_classes=[],
         url_name="accept",
-        url_path="accept/(?P<pk>[0-9a-f-]+)'",
+        url_path="accept",
     )
     def accept(self, request: Request, pk: str, *args, **kwargs) -> HttpResponse:
-        # check if exists
-
-        # ...
-        return HttpResponse()
+        invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=pk)
+        response = HttpResponseRedirect(invite.host_url)
+        response.set_cookie("invite_pk", pk)
+        return response

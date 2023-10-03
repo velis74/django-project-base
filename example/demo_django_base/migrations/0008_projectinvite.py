@@ -72,4 +72,8 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.RunPython(forwards_func, reverse_func),
+        migrations.AlterUniqueTogether(
+            name="projectinvite",
+            unique_together={("project", "email")},
+        ),
     ]
