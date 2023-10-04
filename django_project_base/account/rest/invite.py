@@ -37,7 +37,7 @@ class AcceptedField(fields.BooleanField):
 class ProjectUserInviteSerializer(ModelSerializer):
     template_context = dict(url_reverse="project-user-invite")
     form_titles = {
-        "table": "",
+        "table": _("Project invites"),
         "new": _("Inviting project member"),
         "edit": "",
     }
@@ -81,13 +81,14 @@ class ProjectUserInviteSerializer(ModelSerializer):
 
 
 class ProjectUserInviteViewSet(ModelViewSet):
+    # TODO: ADD INVITE SHOULD BE PERMISSION BASED ON ROLE
     permission_classes = (IsAuthenticated,)
     serializer_class = ProjectUserInviteSerializer
 
     def get_queryset(self):
         project = self.request.selected_project
         try:
-            return swapper.load_model("django_project_base", "Invite").objects.filter(project_id=project)
+            return swapper.load_model("django_project_base", "Invite").objects.filter(project=project)
         except ProjectNotSelectedError:
             return swapper.load_model("django_project_base", "ProjectMember").objects.none()
 
@@ -96,9 +97,6 @@ class ProjectUserInviteViewSet(ModelViewSet):
         if project := self.request.selected_project:
             new_object.project = project
         return new_object
-
-    def retrieve(self: ModelViewSet, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

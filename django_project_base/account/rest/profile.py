@@ -328,6 +328,8 @@ class ProfileViewSet(ModelViewSet):
     def register_account(self, request: Request, **kwargs):
         if (qs_pk := request.query_params.get("invite-pk")) and request.COOKIES.get("invite-pk") == qs_pk:
             invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=qs_pk)
+            if invite.accepted:
+                return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
             return Response(
                 ProfileRegisterSerializer(
                     dict(
