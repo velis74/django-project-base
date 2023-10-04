@@ -6,6 +6,12 @@ from rest_framework import status
 
 
 def get_aws_session():
+    if settings.TESTING:
+
+        class FakeSession:
+            client = lambda t, i: object()  # noqa: E731
+
+        return FakeSession()
     return boto3.Session(
         aws_access_key_id=getattr(settings, "AWS_SES_ACCESS_KEY_ID", None),
         aws_secret_access_key=getattr(settings, "AWS_SES_SECRET_ACCESS_KEY", None),
