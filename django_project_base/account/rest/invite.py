@@ -58,33 +58,6 @@ class ProjectUserInviteSerializer(ModelSerializer):
     accepted = AcceptedField(display_form=DisplayMode.HIDDEN)
     host_url = fields.CharField(display=DisplayMode.SUPPRESS)
 
-    # def confirm_create_text(self):
-    #     owner_change_data = get_owner_change_data(self.context)
-    #     if owner_change_data:
-    #         return change_owner_warning(owner_change_data.get("free_projects_number"))
-    #     return False
-    #
-    # def confirm_create_title(self):
-    #     return _("Create project user invite confirmation")
-
-    # def create(self, validated_data):
-    # languages = validated_data.pop("languages")
-    # validated_data["send_by"] = self.context["request"].user
-    # invite = ProjectUserInvite.objects.create(**validated_data)
-    # invite.languages.set(languages)
-    #
-    # # send email/generate url
-    # invite_url = (
-    #     ("https" if not settings.DEBUG else "http")
-    #     + "://"
-    #     + self.context["request"].get_host()
-    #     + reverse("signup")
-    #     + "%sinvitation_id=%s" % ("/?", str(invite.guid))
-    # )
-    # user_invite_created.send(sender=ProjectUserInvite, user_invite=invite, user_invite_url=invite_url)
-
-    # return super().create()
-
     class Meta:
         model = swapper.load_model("django_project_base", "Invite")
         exclude = ()
@@ -184,5 +157,6 @@ class ProjectUserInviteViewSet(ModelViewSet):
     def accept(self, request: Request, pk: str, *args, **kwargs) -> HttpResponse:
         invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=pk)
         response = HttpResponseRedirect(invite.host_url)
-        response.set_cookie("invite-pk", pk)
+        if not invite.accepted:
+            response.set_cookie("invite-pk", pk)
         return response

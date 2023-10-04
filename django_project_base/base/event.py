@@ -1,3 +1,4 @@
+import datetime
 from abc import ABC, abstractmethod
 
 import swapper
@@ -63,6 +64,9 @@ class UserRegisteredEvent(BaseEvent):
             return
         invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=payload.COOKIES["invite-pk"])
 
+        if invite.accepted:
+            return
+
         swapper.load_model("django_project_base", "ProjectMember").objects.create(
             project=invite.project, member=kwargs["user"]
         )
@@ -70,3 +74,5 @@ class UserRegisteredEvent(BaseEvent):
 
         setattr(payload, "selected_project", invite.project)
         ProjectProfilesViewSet().save_club_member_data(payload, kwargs["user"])
+        invite.accepted = datetime.datetime.now()
+        invite.save(update_fields=["accepted"])
