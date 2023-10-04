@@ -1,8 +1,10 @@
 import re
 from abc import ABC, abstractmethod
+from html import unescape
 from typing import Union
 
 import swapper
+from django.urls import reverse
 from django.utils.html import strip_tags
 
 from django_project_base.constants import SEND_NOTIFICATION_SMS
@@ -65,8 +67,8 @@ class ProviderIntegration(ABC):
             )
             return template.replace(
                 "__LINK__",
-                f"{host_url}notification/{str(notification.pk)}/info"
-                f"{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}",
+                f"{host_url.rstrip('/')}"
+                f"{reverse('notification-notification-login', kwargs=dict(pk=str(notification.pk)))}",
             )
         return ""
 
@@ -89,4 +91,5 @@ class ProviderIntegration(ABC):
         text_only = re.sub("[ \t]+", " ", strip_tags(message))
         # Strip single spaces in the beginning of each line
         message = text_only.replace("\n ", "\n")
-        return message
+        message = message.replace("\n", "\r\n")
+        return unescape(message)
