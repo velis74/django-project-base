@@ -184,5 +184,5 @@ class ProjectUserInviteViewSet(ModelViewSet):
     def accept(self, request: Request, pk: str, *args, **kwargs) -> HttpResponse:
         invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=pk)
         response = HttpResponseRedirect(invite.host_url)
-        response.set_cookie("invite_pk", pk)
+        response.set_cookie("invite-pk", pk)
         return response

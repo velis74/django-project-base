@@ -8,6 +8,7 @@ from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import ForeignKey, Model, QuerySet
+from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -32,6 +33,7 @@ from rest_registration.exceptions import UserNotFound
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
+from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
@@ -324,14 +326,13 @@ class ProfileViewSet(ModelViewSet):
         permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
-        if (
-            "invite_pk" in request.query_params
-            and request.query_params.get("invite_pk")
-            and request.COOKIES.get("invite_pk") == request.query_params.get("invite_pk")
-        ):
+        if (qs_pk := request.query_params.get("invite-pk")) and request.COOKIES.get("invite-pk") == qs_pk:
+            invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=qs_pk)
             return Response(
                 ProfileRegisterSerializer(
-                    dict(email="ee@ww.si", password_invalid=False, password=None, password_repeat=None, username=None),
+                    dict(
+                        email=invite.email, password_invalid=False, password=None, password_repeat=None, username=None
+                    ),
                     context=self.get_serializer_context(),
                 ).data
             )
@@ -360,6 +361,7 @@ class ProfileViewSet(ModelViewSet):
         user = serializer.save()
         user.set_password(request.data["password"])
         user.save()
+        UserRegisteredEvent(user=request.user).trigger(payload=request, user=user)
         return Response(serializer.validated_data)
 
     @extend_schema(

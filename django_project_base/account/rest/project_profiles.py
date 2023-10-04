@@ -109,54 +109,52 @@ class ProjectProfilesViewSet(ProfileViewSet):
             return queryset.filter(projects__state=value)
         return super().filter_queryset_field(queryset, field, value)
 
-    def save_club_member_data(self, request: Request, user, **kwargs):
+    def save_club_member_data(self, request: Request, user):
         if user is None:
             return
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+
+        data = {
+            name: request.data.pop(name, None)
+            for name in ProjectMember().project_members_fields_names
+            if name in request.data
+        }
+
         project = request.selected_project
 
         club_member = None
-        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
 
         if project:
             club_member = ProjectMember.objects.filter(member=user).filter(project=project).first()
 
         # if club member data cant be retrieved, we can't save anything
         if club_member:
-            for name, value in kwargs.items():
+            for name, value in data.items():
                 setattr(club_member, name, value)
             club_member.save()
 
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
-        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
-        Profile = swapper.load_model("django_project_base", "Profile")
-        data = {
-            name: request.data.pop(name, None)
-            for name in ProjectMember().project_members_fields_names
-            if name in request.data
-        }
         # hash password if it exists
         if "password" in request.data:
             request.data["password"] = make_password(request.data["password"])
         response = super().create(request, *args, **kwargs)
+
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+        Profile = swapper.load_model("django_project_base", "Profile")
+
         user = Profile.objects.get(pk=response.data["id"])
         try:
             ProjectMember.objects.create(project=request.selected_project, member=user)
         except ProjectNotSelectedError as e:
             raise PermissionDenied(e.message)
 
-        self.save_club_member_data(request, user, **data)
+        self.save_club_member_data(request, user)
         return response
 
     @transaction.atomic
     def update(self, request: Request, *args, **kwargs) -> Response:
-        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
-        data = {
-            name: request.data.pop(name, None)
-            for name in ProjectMember().project_members_fields_names
-            if name in request.data
-        }
-        self.save_club_member_data(request, self.get_object(), **data)
+        self.save_club_member_data(request, self.get_object())
         # hash password if it exists
         if "password" in request.data:
             request.data["password"] = make_password(request.data["password"])

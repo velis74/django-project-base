@@ -70,13 +70,11 @@ function checkInvite() {
   const { cookies } = useCookies();
 
   if (!userSession.loggedIn) {
-    console.log('invite check');
-    const xc = cookies.get('invite_pk');
-    console.log(xc);
-    if (_.size(cookies.get('invite_pk'))) {
-      console.log('dfgdfg', cookies.get('invite_pk'));
-      const registerForm = openRegistration({ invite_pk: cookies.get('invite_pk') });
-      console.log(registerForm);
+    if (_.size(cookies.get('invite-pk'))) {
+      const registerForm = openRegistration({ 'invite-pk': cookies.get('invite-pk') });
+      registerForm.then(() => {
+        cookies.remove('invite-pk');
+      });
     }
   }
 }
