@@ -134,7 +134,10 @@ class ProjectUserInviteViewSet(ModelViewSet):
         host_url = get_host_url(request)
         self.request.data["host_url"] = host_url
         created = super().create(request, *args, **kwargs)
-        invite_url = f"{host_url}account/project-user-invite/{created.data[get_pk_name(self.get_serializer_class().Meta.model)]}/accept"
+        invite_url = (
+            f"{host_url}account/project-user-invite/"
+            f"{created.data[get_pk_name(self.get_serializer_class().Meta.model)]}/accept"
+        )
         invite_template = (
             swapper.load_model("django_project_base", "ProjectSettings")
             .objects.get(project=self.request.selected_project, name=INVITE_NOTIFICATION_TEXT)

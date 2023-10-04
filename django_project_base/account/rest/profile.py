@@ -140,7 +140,11 @@ class ProfileSerializer(ModelSerializer):
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
 
-        if self.instance and not isinstance(self.instance, (list, QuerySet)) and self.instance.pk != request.user.pk:
+        if (
+            self.instance
+            and not isinstance(self.instance, (list, QuerySet, dict))
+            and self.instance.pk != request.user.pk
+        ):
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
@@ -320,16 +324,18 @@ class ProfileViewSet(ModelViewSet):
         permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
-        serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context())
-        response_data: dict = serializer.data
         if (
             "invite_pk" in request.query_params
             and request.query_params.get("invite_pk")
             and request.COOKIES.get("invite_pk") == request.query_params.get("invite_pk")
         ):
-            response_data["email"] = "aa@ff.si"
-            # TODO: USE MODEL SERIALIZER NEW OBJECT TO PREFIL FORM DATA ON CREATE
-        return Response(response_data)
+            return Response(
+                ProfileRegisterSerializer(
+                    dict(email="ee@ww.si", password_invalid=False, password=None, password_repeat=None, username=None),
+                    context=self.get_serializer_context(),
+                ).data
+            )
+        return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
 
     @extend_schema(
         description="Registering new account",
