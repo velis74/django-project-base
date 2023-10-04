@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from django.conf import settings
 
@@ -15,9 +15,6 @@ class SmsChannel(Channel):
     notification_price = 0.1  # TODO get from settings
 
     provider_setting_name = "SMS_PROVIDER"
-
-    def get_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
-        return self._get_sms_message(notification)
 
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
         return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
