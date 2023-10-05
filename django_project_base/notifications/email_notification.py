@@ -69,7 +69,7 @@ class EMailNotificationWithListOfEmails(EMailNotification):
             project_slug=self._project,
         )
 
-        self._ensure_channels([MailChannel.name], notification)
+        notification = self._ensure_channels([MailChannel.name], notification)
 
         if self.handle_similar_notifications(notification=notification):
             return notification

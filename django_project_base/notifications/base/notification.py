@@ -159,7 +159,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             send_notification_sms_text=None,
         )
 
-        self._ensure_channels(required_channels, notification)
+        notification = self._ensure_channels(required_channels, notification)
 
         required_channels.sort()
         if self.persist:
@@ -205,7 +205,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         }
         self._extra_data["SETTINGS"] = settings
 
-    def _ensure_channels(self, channels: List[str], notification: DjangoProjectBaseNotification):
+    def _ensure_channels(
+        self, channels: List[str], notification: DjangoProjectBaseNotification
+    ) -> DjangoProjectBaseNotification:
         from django_project_base.notifications.base.channels.mail_channel import MailChannel
 
         for channel_name in channels:
@@ -221,3 +223,4 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         notification.user = self._user
 
         notification.sender = Notification._get_sender_config(self._project)
+        return notification

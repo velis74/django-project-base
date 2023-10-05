@@ -66,12 +66,12 @@ class UserInviteFoundEvent(BaseEvent):
             return
 
         swapper.load_model("django_project_base", "ProjectMember").objects.get_or_create(
-            project=payload.project, member=self.user
+            project=payload.project, member=self.user.userprofile
         )
         from django_project_base.account.rest.project_profiles import ProjectProfilesViewSet
 
         setattr(kwargs["request"], "selected_project", payload.project)
-        ProjectProfilesViewSet().save_club_member_data(kwargs["request"], self.user)
+        ProjectProfilesViewSet().save_club_member_data(kwargs["request"], self.user.userprofile)
         payload.accepted = datetime.datetime.now()
         payload.save(update_fields=["accepted"])
 

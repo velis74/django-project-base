@@ -347,6 +347,11 @@ class ProfileViewSet(ModelViewSet):
             None, context=self.get_serializer_context(), data=request.data, many=False
         )
         serializer.is_valid(raise_exception=True)
+
+        if get_user_model().objects.filter(email=serializer.validated_data["email"]).exists():
+            # TODO: https://taiga.velis.si/project/velis-django-project-admin/issue/711
+            raise ValidationError()
+
         user = serializer.save()
         user.set_password(request.data["password"])
         user.save()

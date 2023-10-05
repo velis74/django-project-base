@@ -11,6 +11,7 @@ from dynamicforms.serializers import ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -41,7 +42,7 @@ class InviteTextField(MessageBodyField):
         super().__init__(*args, **kw)
         self.label = _("Invitation text")
         self.help_text = _(
-            "Use __LINK__ as a placeholder for invite link. I invite text is empty, value from settings will be used"
+            "Use %LINK% or  as a placeholder for invite link. I invite text is empty, value from settings will be used"
         )
         self.allow_blank = True
 
@@ -121,14 +122,15 @@ class ProjectUserInviteViewSet(ModelViewSet):
             f"{created.data[get_pk_name(self.get_serializer_class().Meta.model)]}/accept"
         )
         invite_text = request.data.get("text")
-        if not invite_text or "__LINK__" not in invite_text:
+        if not invite_text or "%LINK%" not in invite_text:
             invite_text = (
                 swapper.load_model("django_project_base", "ProjectSettings")
                 .objects.get(project=self.request.selected_project, name=INVITE_NOTIFICATION_TEXT)
                 .python_value
             )
-
-        invite_text = invite_text.replace("__LINK__", invite_url)
+            invite_text = invite_text.replace("__LINK__", invite_url)
+        else:
+            invite_text = invite_text.replace("%LINK%", invite_url)
 
         EMailNotificationWithListOfEmails(
             message=DjangoProjectBaseMessage(
@@ -163,7 +165,7 @@ class ProjectUserInviteViewSet(ModelViewSet):
         methods=["GET"],
         detail=True,
         permission_classes=[],
-        authentication_classes=[],
+        authentication_classes=[SessionAuthentication],
         url_name="accept",
         url_path="accept",
     )
