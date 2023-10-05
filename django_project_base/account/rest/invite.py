@@ -8,8 +8,6 @@ from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
-from dynamicforms.template_render.layout import Column, Layout, Row
-from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
