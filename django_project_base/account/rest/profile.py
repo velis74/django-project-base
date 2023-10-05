@@ -8,7 +8,6 @@ from django.contrib.auth.models import Group, Permission
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import ForeignKey, Model, QuerySet
-from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -326,18 +325,6 @@ class ProfileViewSet(ModelViewSet):
         permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
-        if (qs_pk := request.query_params.get("invite-pk")) and request.COOKIES.get("invite-pk") == qs_pk:
-            invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=qs_pk)
-            if invite.accepted:
-                return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
-            return Response(
-                ProfileRegisterSerializer(
-                    dict(
-                        email=invite.email, password_invalid=False, password=None, password_repeat=None, username=None
-                    ),
-                    context=self.get_serializer_context(),
-                ).data
-            )
         return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
 
     @extend_schema(
@@ -363,7 +350,7 @@ class ProfileViewSet(ModelViewSet):
         user = serializer.save()
         user.set_password(request.data["password"])
         user.save()
-        UserRegisteredEvent(user=request.user).trigger(payload=request, user=user)
+        UserRegisteredEvent(user=user).trigger(payload=request)
         return Response(serializer.validated_data)
 
     @extend_schema(

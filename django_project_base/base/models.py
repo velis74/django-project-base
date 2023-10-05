@@ -308,16 +308,18 @@ class BaseInvite(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
     email = models.CharField(max_length=255, verbose_name=_("eMail"))
 
-    # role = models.ForeignKey()  # TODO: we don't have role support yet
+    role = models.ForeignKey(
+        swapper.get_model_name("django_project_base", "Role"), null=True, on_delete=models.SET_NULL
+    )
 
-    send_by = models.ForeignKey(
+    text = models.TextField(verbose_name=_("Invitation message"), null=True, blank=False)
+
+    invited_by = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Profile"),
         on_delete=models.CASCADE,
         related_name="project_user_invites",
     )
     accepted = models.DateTimeField(auto_now=False, null=True, blank=True)
-
-    host_url = models.CharField(max_length=1024, null=False, blank=False)
 
     project = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False

@@ -2,9 +2,9 @@ import datetime
 from abc import ABC, abstractmethod
 
 import swapper
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 
-from django_project_base.aws.ses import AwsSes
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME
 
 
@@ -45,6 +45,8 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
 
         if new_state.name == EMAIL_SENDER_ID_SETTING_NAME:
             # TODO: THIS IS NOLY FOR AWS FOR NOW
+            from django_project_base.aws.ses import AwsSes
+
             if not old_state:
                 AwsSes.add_sender_email(new_state.python_value)
                 return
@@ -54,25 +56,61 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
                 return
 
 
+class UserInviteFoundEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload=payload)
+        if not payload or payload.accepted or not kwargs.get("request"):
+            return
+
+        swapper.load_model("django_project_base", "ProjectMember").objects.get_or_create(
+            project=payload.project, member=self.user
+        )
+        from django_project_base.account.rest.project_profiles import ProjectProfilesViewSet
+
+        setattr(kwargs["request"], "selected_project", payload.project)
+        ProjectProfilesViewSet().save_club_member_data(kwargs["request"], self.user)
+        payload.accepted = datetime.datetime.now()
+        payload.save(update_fields=["accepted"])
+
+        if current_project_attr := (
+            getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
+            .get("project", {})
+            .get("value_name", None)
+        ):
+            kwargs["request"].session[current_project_attr] = payload.project.slug
+        kwargs["request"].session.pop("invite-pk", None)
+
+
 class UserRegisteredEvent(BaseEvent):
     def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
         super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
 
     def trigger(self, payload=None, **kwargs):
         super().trigger(payload, **kwargs)
-        if not kwargs.get("user") or not payload or not payload.COOKIES.get("invite-pk"):
-            return
-        invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=payload.COOKIES["invite-pk"])
-
-        if invite.accepted:
+        if not payload:
             return
 
-        swapper.load_model("django_project_base", "ProjectMember").objects.create(
-            project=invite.project, member=kwargs["user"]
-        )
-        from django_project_base.account.rest.project_profiles import ProjectProfilesViewSet
+        if invite_pk := payload.session.get("invite-pk"):
+            invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=invite_pk)
+            UserInviteFoundEvent(self.user).trigger(payload=invite, request=payload)
+            return
+        payload.session.pop("invite-pk", None)
 
-        setattr(payload, "selected_project", invite.project)
-        ProjectProfilesViewSet().save_club_member_data(payload, kwargs["user"])
-        invite.accepted = datetime.datetime.now()
-        invite.save(update_fields=["accepted"])
+
+class UserLoginEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+
+        if invite_pk := payload.session.get("invite-pk"):
+            invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=invite_pk)
+            UserInviteFoundEvent(self.user).trigger(payload=invite, request=payload)
+            return
+        payload.session.pop("invite-pk", None)

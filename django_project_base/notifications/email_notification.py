@@ -2,12 +2,9 @@ import datetime
 import uuid
 from typing import List, Optional, Type
 
-from django.conf import settings
-from django.db import connection
-
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.channels.mail_channel import MailChannel
-from django_project_base.notifications.base.enums import ChannelIdentifier, NotificationLevel, NotificationType
+from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
@@ -71,11 +68,8 @@ class EMailNotificationWithListOfEmails(EMailNotification):
             recipients_original_payload=self._raw_recipents,
             project_slug=self._project,
         )
-        channel = ChannelIdentifier.channel(MailChannel.name, extra_data=self._extra_data, project_slug=self._project)
-        assert channel
 
-        notification.user = self._user
-        notification.sender = Notification._get_sender_config(self._project)
+        self._ensure_channels([MailChannel.name], notification)
 
         if self.handle_similar_notifications(notification=notification):
             return notification
@@ -83,15 +77,7 @@ class EMailNotificationWithListOfEmails(EMailNotification):
             self.message.save()
         notification.created_at = int(datetime.datetime.now().timestamp())
         notification.save()
-
-        sttgs = connection.settings_dict
-
-        sttgs["TIME_ZONE"] = None
-        self._extra_data["DATABASE"] = {
-            "PARAMS": connection.get_connection_params(),
-            "SETTINGS": sttgs,
-        }
-        self._extra_data["SETTINGS"] = settings
+        self._set_db()
         uuid_val = str(uuid.uuid4())
         notification.email_list = [
             dict(

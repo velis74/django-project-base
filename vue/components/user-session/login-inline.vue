@@ -67,14 +67,11 @@ function focusPassword() {
 }
 
 function checkInvite() {
-  const { cookies } = useCookies();
-
   if (!userSession.loggedIn) {
+    const { cookies } = useCookies();
     if (_.size(cookies.get('invite-pk'))) {
-      const registerForm = openRegistration({ 'invite-pk': cookies.get('invite-pk') });
-      registerForm.then(() => {
-        cookies.remove('invite-pk');
-      });
+      doLogin();
+      cookies.remove('invite-pk');
     }
   }
 }
