@@ -42,7 +42,7 @@ class InviteTextField(MessageBodyField):
         super().__init__(*args, **kw)
         self.label = _("Invitation text")
         self.help_text = _(
-            "Use %LINK% or  as a placeholder for invite link. I invite text is empty, value from settings will be used"
+            "Use %LINK% as a placeholder for invite link. If invite text is empty, value from settings will be used"
         )
         self.allow_blank = True
 
