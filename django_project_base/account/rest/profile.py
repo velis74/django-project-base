@@ -563,3 +563,16 @@ class ProfileViewSet(ModelViewSet):
             ).send()
 
         return response
+
+
+class ProjectsProfileSearchViewSet(ProfileViewSet):
+    def get_queryset(self):
+        projects = set(map(lambda pm: pm.project, self.request.user.projects.all()))
+        first_project = next(iter(projects), None)
+        if not first_project:
+            return swapper.load_model("django_project_base", "Profile").objects.none()
+        qs = get_project_members(self.request, project=first_project)
+        projects = projects - {first_project}
+        for project in projects:
+            qs = qs | get_project_members(self.request, project=project)
+        return qs.distinct()
