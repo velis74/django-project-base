@@ -2,6 +2,7 @@ from enum import IntEnum
 from typing import Dict, Union
 
 from django.db.models import Model, QuerySet
+from django.http import HttpRequest
 from dynamicforms.serializers import Serializer
 from rest_framework.utils.model_meta import get_field_info
 
@@ -154,3 +155,10 @@ def get_pk_name(obj: Union[Model, QuerySet, Dict, Serializer], model: Model = No
     if isinstance(obj, Model):
         return obj._meta.pk.name
     return get_field_info(model if model else obj).pk.name
+
+
+def get_host_url(request: HttpRequest) -> str:
+    host_url = "%s://%s" % ("https" if request.is_secure() else "http", request.META["HTTP_HOST"])
+    if not host_url.endswith("/"):
+        host_url += "/"
+    return host_url

@@ -41,7 +41,7 @@ from django_project_base.notifications.models import (
     DjangoProjectBaseNotification,
     SearchItems,
 )
-from django_project_base.utils import get_pk_name
+from django_project_base.utils import get_host_url, get_pk_name
 
 
 class MessageBodyField(fields.RTFField):
@@ -435,9 +435,7 @@ class NotificationViewset(ModelViewSet):
             raise NotFound(e.message)
 
     def perform_create(self, serializer):
-        host_url = "%s://%s" % ("https" if self.request.is_secure() else "http", self.request.META["HTTP_HOST"])
-        if not host_url.endswith("/"):
-            host_url += "/"
+        host_url = get_host_url(self.request)
         notification = Notification(
             message=DjangoProjectBaseMessage(
                 subject=serializer.validated_data["message_subject"],

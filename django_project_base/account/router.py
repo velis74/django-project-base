@@ -9,8 +9,9 @@ from django_project_base.account.rest.account import (
     VerifyRegistrationViewSet,
 )
 from django_project_base.account.rest.impersonate import ImpersonateUserViewset
+from django_project_base.account.rest.invite import ProjectUserInviteViewSet
 from django_project_base.account.rest.login import LoginViewset
-from django_project_base.account.rest.profile import ProfileViewSet
+from django_project_base.account.rest.profile import ProfileViewSet, ProjectsProfileSearchViewSet
 from django_project_base.account.rest.profile_merge import ProfileMergeViewSet
 from django_project_base.account.rest.reset_password import (
     InvalidatePasswordAdminViewSet,
@@ -37,3 +38,5 @@ profile_router.register(r"profile-merge", ProfileMergeViewSet, basename="profile
 profile_router.register_single_record(r"impersonate", ImpersonateUserViewset, basename="profile-base-impersonate-user")
 profile_router.register_single_record(r"login", LoginViewset, basename="profile-base-login")
 profile_router.register(r"", LogoutViewSet, basename="account")
+profile_router.register(r"project-user-invite", ProjectUserInviteViewSet, basename="project-user-invite")
+profile_router.register(r"projects-profile-search", ProjectsProfileSearchViewSet, basename="projects-profile-search")

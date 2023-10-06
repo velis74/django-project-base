@@ -23,8 +23,8 @@ from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 
 
-def get_project_members(request: Request) -> QuerySet:
-    project = request.selected_project
+def get_project_members(request: Request, project=None) -> QuerySet:
+    project = project or request.selected_project
     try:
         project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
     except ProjectNotSelectedError:

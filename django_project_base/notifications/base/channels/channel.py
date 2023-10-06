@@ -66,7 +66,7 @@ class Channel(ABC):
         return _sender
 
     def _find_provider(
-            self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
+        self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
     ) -> Optional[ProviderIntegration]:
         if exclude is None:
             exclude = []
@@ -87,7 +87,7 @@ class Channel(ABC):
         return list(set(recipients))
 
     def create_delivery_report(
-            self, notification: DjangoProjectBaseNotification, recipient: Recipient, pk: str
+        self, notification: DjangoProjectBaseNotification, recipient: Recipient, pk: str
     ) -> DeliveryReport:
         return DeliveryReport.objects.create(
             notification=notification,
@@ -99,7 +99,9 @@ class Channel(ABC):
 
     @abstractmethod
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
-        rec_obj = notification.recipients_list
+        rec_obj = notification.email_list
+        if not rec_obj:
+            rec_obj = notification.recipients_list
         if not rec_obj:
             att = ("email", "phone_number", get_pk_name(get_user_model()))
             rec_obj = [
@@ -151,16 +153,13 @@ class Channel(ABC):
                 dlr__uuid = str(uuid.uuid4())
                 try:
                     while dlr := not make_send(
-                            notification_obj=notification,
-                            message_str=message,
-                            rec_obj=recipient,
-                            dlr_pk=dlr__uuid
+                        notification_obj=notification, message_str=message, rec_obj=recipient, dlr_pk=dlr__uuid
                     ):
                         exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
                         if next_provider := self._find_provider(
-                                extra_settings=extra_data,
-                                setting_name=self.provider_setting_name,
-                                exclude=exclude_providers,
+                            extra_settings=extra_data,
+                            setting_name=self.provider_setting_name,
+                            exclude=exclude_providers,
                         ):
                             self.provider = next_provider
                         else:

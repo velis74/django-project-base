@@ -4,6 +4,7 @@ from taggit.managers import TaggableManager
 
 from django_project_base.auth.models import BasePermission, BaseRole
 from django_project_base.base.models import (
+    BaseInvite,
     BaseMergeUserGroup,
     BaseProfile,
     BaseProject,
@@ -56,4 +57,8 @@ class Permission(BasePermission):
 
 
 class ProjectSettings(BaseProjectSettings):
+    pass
+
+
+class ProjectInvite(BaseInvite):
     pass

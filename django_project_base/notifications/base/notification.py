@@ -142,8 +142,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
         )
 
-        from django_project_base.notifications.base.channels.mail_channel import MailChannel
-
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,
             level=self.level.value,
@@ -161,19 +159,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             send_notification_sms_text=None,
         )
 
-        for channel_name in required_channels:
-            # ensure dlr user and check providers
-            channel = ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
-            assert channel
-
-            if self.send_notification_sms and channel.name == MailChannel.name:
-                notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
-                    notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
-                )
-
-        notification.user = self._user
-
-        notification.sender = Notification._get_sender_config(self._project)
+        notification = self._ensure_channels(required_channels, notification)
 
         required_channels.sort()
         if self.persist:
@@ -189,16 +175,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
-            from django.db import connection
-
-            sttgs = connection.settings_dict
-
-            sttgs["TIME_ZONE"] = None
-            self._extra_data["DATABASE"] = {
-                "PARAMS": connection.get_connection_params(),
-                "SETTINGS": sttgs,
-            }
-            self._extra_data["SETTINGS"] = settings
+            self._set_db()
             rec_list = []
             for usr in self._recipients:
                 rec_list.append(
@@ -214,4 +191,36 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
 
         notification = self.make_send(notification, self._extra_data)
 
+        return notification
+
+    def _set_db(self):
+        from django.db import connection
+
+        sttgs = connection.settings_dict
+
+        sttgs["TIME_ZONE"] = None
+        self._extra_data["DATABASE"] = {
+            "PARAMS": connection.get_connection_params(),
+            "SETTINGS": sttgs,
+        }
+        self._extra_data["SETTINGS"] = settings
+
+    def _ensure_channels(
+        self, channels: List[str], notification: DjangoProjectBaseNotification
+    ) -> DjangoProjectBaseNotification:
+        from django_project_base.notifications.base.channels.mail_channel import MailChannel
+
+        for channel_name in channels:
+            # ensure dlr user and check providers
+            channel = ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
+            assert channel
+
+            if self.send_notification_sms and channel.name == MailChannel.name:
+                notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
+                    notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
+                )
+
+        notification.user = self._user
+
+        notification.sender = Notification._get_sender_config(self._project)
         return notification
