@@ -1,44 +1,43 @@
-<script setup lang="ts">
 import { Action, dfModal, DialogSize, FilteredActions, gettext } from '@velis/dynamicforms';
-import { storeToRefs } from 'pinia';
-import { h, watch } from 'vue';
+import { h } from 'vue';
 
-import ProfileSearch from './profile-search.vue';
+import ProfileSearch from './components/profile-search.vue';
+import { UserDataJSON } from './components/user-session/data-types';
 
-const { selectedProjectId } = storeToRefs(userSession);
+let selectedUser: UserDataJSON | undefined;
 
-if (selectedProjectId.value) refreshSettingsLogic();
-
-watch(selectedProjectId, refreshSettingsLogic);
-
-function selected(val) {
-  console.log('EEEERRRRR', val);
+function selected(profile: UserDataJSON) {
+  selectedUser = profile;
 }
 
-async function showAddProfileModal() {
-  const modal = await dfModal.message('TTIEL', () => [h('div', [h(ProfileSearch, { onSelected: selected })])], new FilteredActions({
-    cancel: new Action({
-      name: 'cancel',
-      label: gettext('Cancel'),
-      displayStyle: { asButton: true, showLabel: true, showIcon: true },
-      position: 'FORM_FOOTER',
+async function showAddProfileModal(addCallback: (profile: UserDataJSON | undefined) => any) {
+  const modal = await dfModal.message(
+    gettext('Add new user'),
+    () => [h('div', [h(ProfileSearch, { onSelected: selected })])],
+    new FilteredActions({
+      cancel: new Action({
+        name: 'cancel',
+        label: gettext('Cancel'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+      confirm: new Action({
+        name: 'add',
+        label: gettext('Add'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
     }),
-    confirm: new Action({
-      name: 'add',
-      label: gettext('Add'),
-      displayStyle: { asButton: true, showLabel: true, showIcon: true },
-      position: 'FORM_FOOTER',
-    }),
-  }), { size: DialogSize.LARGE });
+    { size: DialogSize.LARGE },
+  );
 
   if (modal.action.name === 'add') {
-    console.log('ADDDD ');
+    if (selectedUser) {
+      addCallback(selectedUser);
+      return;
+    }
+    await dfModal.message('', gettext('No user selected'));
   }
 }
 
-</script>
-
-<template>
-  <button @click="showAddProfileModal">sdfsdf</button>
-  </div>
-</template>
+export default showAddProfileModal;

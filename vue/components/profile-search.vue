@@ -2,10 +2,11 @@
 
 import { apiClient, gettext } from '@velis/dynamicforms';
 import { computed, ref } from 'vue';
+import { Ref } from 'vue/dist/vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Multiselect from 'vue-multiselect';
 
-import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './user-session/data-types';
+import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME, UserDataJSON } from './user-session/data-types';
 
 const inputProps = defineProps<{
   searchUrl: {
@@ -18,11 +19,11 @@ const emit = defineEmits(['selected']);
 
 const searchUrl: string = (inputProps.searchUrl !== undefined ? inputProps.searchUrl : '/account/profile') as string;
 
-const selected = ref(null);
+const selected: Ref<UserDataJSON | null> = ref(null);
 
 const searching = ref(false);
 
-const options = ref([]);
+const options: Ref<UserDataJSON[]> = ref([]);
 
 const selectOptions = computed(() => options.value);
 
@@ -31,27 +32,35 @@ function asyncSearch(query: string) {
   apiClient.get(`${searchUrl}?search=${query}`).then((response) => {
     options.value = response.data;
     searching.value = false;
-    console.log(options.value);
   });
 }
 
-function addProfile(newProfile) {
-  console.log(newProfile);
-  const profile = { email: newProfile };
-  profile[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = null;
+function addProfile(newProfile: string) {
+  const profile: UserDataJSON = {
+    email: newProfile,
+    full_name: '',
+    username: '',
+    avatar: '',
+    is_impersonated: false,
+    password_invalid: false,
+    is_superuser: false,
+    permissions: [],
+    groups: [],
+    delete_at: '',
+    [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: '',
+  };
   options.value.push(profile);
   selected.value = profile;
 }
 
-function onSelect(newVal) {
+function onSelect(newVal: UserDataJSON) {
   selected.value = newVal;
-  console.log('emitting vall ....');
   emit('selected', newVal);
 }
 
-function customLabel(profile) {
+function customLabel(profile: UserDataJSON) {
   return `${profile.email ? profile.email : ''}
-  ${profile.first_name ? profile.first_name : ''} ${profile.last_name ? profile.last_name : ''}`;
+  ${profile.full_name ? profile.full_name : ''}`;
 }
 
 </script>
