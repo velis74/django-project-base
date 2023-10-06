@@ -10,10 +10,10 @@ function selected(profile: UserDataJSON) {
   selectedUser = profile;
 }
 
-async function showAddProfileModal(addCallback: (profile: UserDataJSON | undefined) => any) {
+async function showAddProfileModal(addCallback: (profile: UserDataJSON | undefined) => any, searchUrl: string) {
   const modal = await dfModal.message(
     gettext('Add new user'),
-    () => [h('div', [h(ProfileSearch, { onSelected: selected })])],
+    () => [h('div', [h(ProfileSearch, { onSelected: selected, searchUrl })])],
     new FilteredActions({
       cancel: new Action({
         name: 'cancel',
