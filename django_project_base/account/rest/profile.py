@@ -32,6 +32,7 @@ from rest_registration.exceptions import UserNotFound
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
+from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
@@ -354,6 +355,7 @@ class ProfileViewSet(ModelViewSet):
         user = serializer.save()
         user.set_password(request.data["password"])
         user.save()
+        UserRegisteredEvent(user=user).trigger(payload=request)
         return Response(serializer.validated_data)
 
     @extend_schema(
