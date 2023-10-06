@@ -35,6 +35,11 @@ function asyncSearch(query: string) {
   });
 }
 
+function onSelect(newVal: UserDataJSON) {
+  selected.value = newVal;
+  emit('selected', newVal);
+}
+
 function addProfile(newProfile: string) {
   const profile: UserDataJSON = {
     email: newProfile,
@@ -51,11 +56,7 @@ function addProfile(newProfile: string) {
   };
   options.value.push(profile);
   selected.value = profile;
-}
-
-function onSelect(newVal: UserDataJSON) {
-  selected.value = newVal;
-  emit('selected', newVal);
+  onSelect(profile);
 }
 
 function customLabel(profile: UserDataJSON) {
@@ -72,7 +73,7 @@ function customLabel(profile: UserDataJSON) {
       v-model="selected"
       :options="selectOptions"
       :close-on-select="true"
-      :clear-on-select="true"
+      :clear-on-select="false"
       :internal-search="false"
       :hide-selected="false"
       :preserve-search="true"
