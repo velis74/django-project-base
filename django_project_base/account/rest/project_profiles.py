@@ -91,7 +91,6 @@ class ProjectProfilesSerializer(ProfileSerializer):
 
     def translate_relation_fields(self, field_name: str) -> str:
         ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
-        res = super().get_fields()
         if field_name in ProjectMember().project_members_fields_names:
             return f"projects__{field_name}"
         else:
