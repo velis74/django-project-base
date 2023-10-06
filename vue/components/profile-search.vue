@@ -67,8 +67,6 @@ function customLabel(profile: UserDataJSON) {
 
 <template>
   <div>
-    {{ selected }}
-
     <multiselect
       id="profile-selection"
       v-model="selected"
