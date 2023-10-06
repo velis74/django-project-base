@@ -1,3 +1,4 @@
+import json
 import re
 from io import BytesIO
 
@@ -10,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields, serializers
 from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.viewsets import SingleRecordViewSet
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -88,11 +90,12 @@ class ProjectProfilesSerializer(ProfileSerializer):
         return res
 
     def translate_relation_fields(self, field_name: str) -> str:
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
         res = super().get_fields()
-        if field_name in res:
-            return field_name
-        else:
+        if field_name in ProjectMember().project_members_fields_names:
             return f"projects__{field_name}"
+        else:
+            return field_name
 
     def get_visible_fields(self):
         return [(name, field) for (name, field) in self.fields.items() if field.display == fields.DisplayMode.FULL]
@@ -109,52 +112,54 @@ class ProjectProfilesViewSet(ProfileViewSet):
             return queryset.filter(projects__state=value)
         return super().filter_queryset_field(queryset, field, value)
 
-    def save_club_member_data(self, request: Request, user):
+    def save_club_member_data(self, request: Request, user, **kwargs):
         if user is None:
             return
-        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
-
-        data = {
-            name: request.data.pop(name, None)
-            for name in ProjectMember().project_members_fields_names
-            if name in request.data
-        }
-
         project = request.selected_project
 
         club_member = None
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
 
         if project:
             club_member = ProjectMember.objects.filter(member=user).filter(project=project).first()
 
         # if club member data cant be retrieved, we can't save anything
         if club_member:
-            for name, value in data.items():
+            for name, value in kwargs.items():
                 setattr(club_member, name, value)
             club_member.save()
 
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+        Profile = swapper.load_model("django_project_base", "Profile")
+        data = {
+            name: request.data.pop(name, None)
+            for name in ProjectMember().project_members_fields_names
+            if name in request.data
+        }
         # hash password if it exists
         if "password" in request.data:
             request.data["password"] = make_password(request.data["password"])
         response = super().create(request, *args, **kwargs)
-
-        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
-        Profile = swapper.load_model("django_project_base", "Profile")
-
         user = Profile.objects.get(pk=response.data["id"])
         try:
             ProjectMember.objects.create(project=request.selected_project, member=user)
         except ProjectNotSelectedError as e:
             raise PermissionDenied(e.message)
 
-        self.save_club_member_data(request, user)
+        self.save_club_member_data(request, user, **data)
         return response
 
     @transaction.atomic
     def update(self, request: Request, *args, **kwargs) -> Response:
-        self.save_club_member_data(request, self.get_object())
+        ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
+        data = {
+            name: request.data.pop(name, None)
+            for name in ProjectMember().project_members_fields_names
+            if name in request.data
+        }
+        self.save_club_member_data(request, self.get_object(), **data)
         # hash password if it exists
         if "password" in request.data:
             request.data["password"] = make_password(request.data["password"])
@@ -196,9 +201,38 @@ class ProfileExportViewSet(SingleRecordViewSet):
     serializer_class = ProfileExportSerializer
 
     def new_object(self):
-        return dict(template=None, profile_fields=None, print_filter=True, filter_data=None)
+        filter_data = self.request.query_params.get("filter_data", None)
+        if filter_data:
+            filter_data = json.loads(filter_data)
+        return dict(template=None, profile_fields=None, print_filter=True, filter_data=filter_data)
 
     def create(self, request, *args, **kwargs):
+        ser = self.get_serializer(data=request.data)  # type: ProfileExportSerializer
+        ser.is_valid(raise_exception=True)
+
+        filter_data = ser.data.get("filter_data", None)
+        print_filter = ser.data.get("print_filter", False)
+
+        file_name = "members"
+
+        if filter_data:
+            active_filters = {name: value for name, value in filter_data.items() if value is not None}
+            if print_filter and len(active_filters) in [1, 2]:
+                file_name += "-" + ",".join(["-".join([name, str(value)]) for name, value in active_filters.items()])
+
+        data = dict(ser.data)
+        data["file_name"] = file_name
+
+        return Response(data)
+
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="download",
+        url_name="profile-export-download",
+        permission_classes=[],
+    )
+    def download(self, request: Request, **kwargs):
         profile_serializer = ProjectProfilesSerializer(None, context=self.get_serializer_context(), data=request.data)
         visible_profile_fields = {
             name: profile_serializer.translate_relation_fields(name)
@@ -214,18 +248,11 @@ class ProfileExportViewSet(SingleRecordViewSet):
         profile_fields = ser.data.get("profile_fields", None)
         template = ser.data.get("template", None)
         filter_data = ser.data.get("filter_data", None)
-        print_filter = ser.data.get("print_filter", False)
+        file_name = ser.data.get("file_name", "members")
 
         profile_items_q = get_project_members(self.request)
 
-        file_name = "members"
-
         if filter_data:
-            active_filters = {name: value for name, value in filter_data.items() if value is not None}
-            print(len(active_filters), print_filter)
-            if print_filter and len(active_filters) in [1, 2]:
-                file_name += "-" + ",".join(["-".join([name, str(value)]) for name, value in active_filters.items()])
-                pass
             for field_name, value in filter_data.items():
                 profile_items_q = filter_project_members_fields(profile_items_q, field_name, value)
 
