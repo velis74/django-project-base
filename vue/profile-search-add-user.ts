@@ -6,6 +6,7 @@ import { UserDataJSON } from './components/user-session/data-types';
 
 let selectedUser: UserDataJSON | undefined;
 
+// todo: https://taiga.velis.si/project/velis74-dynamic-forms/us/836?no-milestone=1
 function selected(profile: UserDataJSON) {
   selectedUser = profile;
 }
