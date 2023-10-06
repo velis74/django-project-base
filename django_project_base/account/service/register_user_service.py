@@ -32,6 +32,6 @@ def send_register_verification_email_notification(
         raw_recipents=[user.pk],
         persist=True,
         recipients=[user.pk],
-        user=request.user.pk,
+        user=user.pk,
         project=None,
     ).send()
