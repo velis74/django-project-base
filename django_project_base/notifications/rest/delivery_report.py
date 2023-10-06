@@ -8,7 +8,7 @@ from django.utils.module_loading import import_string
 from rest_framework import viewsets
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.exceptions import ErrorDetail, ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.response import Response
 
 from django_project_base.base.exceptions import LicenseActionNotImplementedException
@@ -50,16 +50,22 @@ class DeliveryReportViewSet(viewsets.ViewSet):
         provider.parse_delivery_report(dlr)
 
     def list(self, request) -> Response:
-        if dlr := self.__update_dlr(request.query_params):
-            self.__parse_delivery_report_payload(dlr)
-            return Response()
-        return Response()
+        return self._handle_request(request)
 
     def create(self, request) -> Response:
-        if dlr := self.__update_dlr(request.data):
-            self.__parse_delivery_report_payload(dlr)
-            return Response()
-        return Response()
+        return self._handle_request(request)
+
+    def _handle_request(self, request) -> Response:
+        try:
+            payload = request.data if request.method.upper() not in SAFE_METHODS else request.query_params
+            if dlr := self.__update_dlr(payload):
+                self.__parse_delivery_report_payload(dlr)
+                return Response({0: "NO_ERROR"})
+            return Response({400: "Invalid"})
+        except Exception as e:
+            logger = logging.getLogger("django")
+            logger.exception(e)
+            return Response({400: "Invalid"})
 
     def retrieve(self, request, pk=None):
         raise LicenseActionNotImplementedException()
