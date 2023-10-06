@@ -14,7 +14,7 @@ def forwards_func(apps, schema_editor):
             project=project,
             name=SEND_NOTIFICATION_SMS,
             defaults=dict(
-                jadescription="Text for notification detail view. __LINK__ is url placeholder.",
+                description="Text for notification detail view. __LINK__ is url placeholder.",
                 value=gettext("You received a notification. Clik link to view it: __LINK__"),
                 value_type="char",
             ),
