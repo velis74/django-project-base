@@ -11,7 +11,7 @@ from rest_framework.exceptions import ErrorDetail, ValidationError
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.response import Response
 
-from django_project_base.licensing.rest.rest import LicenseActionNotImplementedException
+from django_project_base.base.exceptions import LicenseActionNotImplementedException
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.models import DeliveryReport
 

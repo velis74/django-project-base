@@ -1,13 +1,9 @@
-from rest_framework import status, viewsets
-from rest_framework.exceptions import APIException
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from django_project_base.base.exceptions import LicenseActionNotImplementedException
 from django_project_base.licensing.logic import LogAccessService
-
-
-class LicenseActionNotImplementedException(APIException):
-    status_code = status.HTTP_501_NOT_IMPLEMENTED
 
 
 class LicenseViewSet(viewsets.ViewSet):

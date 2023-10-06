@@ -32,6 +32,7 @@ from rest_registration.exceptions import UserNotFound
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
+from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import EMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
@@ -140,7 +141,11 @@ class ProfileSerializer(ModelSerializer):
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
 
-        if self.instance and not isinstance(self.instance, (list, QuerySet)) and self.instance.pk != request.user.pk:
+        if (
+            self.instance
+            and not isinstance(self.instance, (list, QuerySet, dict))
+            and self.instance.pk != request.user.pk
+        ):
             # only show this field to the user for their account. admins don't see this field
             self.fields.pop("reverse_full_name_order", None)
 
@@ -320,9 +325,7 @@ class ProfileViewSet(ModelViewSet):
         permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
-        serializer = ProfileRegisterSerializer(None, context=self.get_serializer_context())
-        response_data: dict = serializer.data
-        return Response(response_data)
+        return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
 
     @extend_schema(
         description="Registering new account",
@@ -344,9 +347,15 @@ class ProfileViewSet(ModelViewSet):
             None, context=self.get_serializer_context(), data=request.data, many=False
         )
         serializer.is_valid(raise_exception=True)
+
+        if get_user_model().objects.filter(email=serializer.validated_data["email"]).exists():
+            # TODO: https://taiga.velis.si/project/velis-django-project-admin/issue/711
+            raise ValidationError()
+
         user = serializer.save()
         user.set_password(request.data["password"])
         user.save()
+        UserRegisteredEvent(user=user).trigger(payload=request)
         return Response(serializer.validated_data)
 
     @extend_schema(
@@ -554,3 +563,16 @@ class ProfileViewSet(ModelViewSet):
             ).send()
 
         return response
+
+
+class ProjectsProfileSearchViewSet(ProfileViewSet):
+    def get_queryset(self):
+        projects = set(map(lambda pm: pm.project, self.request.user.projects.all()))
+        first_project = next(iter(projects), None)
+        if not first_project:
+            return swapper.load_model("django_project_base", "Profile").objects.none()
+        qs = get_project_members(self.request, project=first_project)
+        projects = projects - {first_project}
+        for project in projects:
+            qs = qs | get_project_members(self.request, project=project)
+        return qs.distinct()

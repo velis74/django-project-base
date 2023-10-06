@@ -43,7 +43,9 @@
 <script setup lang="ts">
 import { Action, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
 import _ from 'lodash';
-import { h } from 'vue';
+import { h, onMounted } from 'vue';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useCookies } from 'vue3-cookies';
 
 import useLogin from './login';
 import SocialLogos from './social-logos.vue';
@@ -142,6 +144,17 @@ async function openRegistrationForm() {
   }
 }
 
+function checkInvite() {
+  if (!userSession.loggedIn) {
+    const { cookies } = useCookies();
+    if (_.size(cookies.get('invite-pk'))) {
+      doLogin();
+      cookies.remove('invite-pk');
+    }
+  }
+}
+
+onMounted(() => checkInvite());
 </script>
 
 <script lang="ts">

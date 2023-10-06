@@ -224,6 +224,7 @@ export default function useLogin() {
   const openRegistration = async () => FormConsumerApiOneShot(
     { url: '/account/profile/register', trailingSlash: false },
   );
+
   const newAccount = async () => {
     showLoginDialog.value = false;
     await openRegistration();
