@@ -1,6 +1,5 @@
 from typing import Iterable
 
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 from dynamicforms import fields, serializers, viewsets
@@ -13,7 +12,6 @@ from rest_framework.response import Response
 from rest_registration.api.views import login
 
 from django_project_base.account.social_auth.providers import get_social_providers, SocialProviderItem
-from django_project_base.base.event import UserLoginEvent
 
 
 class LoginSerializer(serializers.Serializer):
@@ -98,10 +96,4 @@ class LoginViewset(viewsets.SingleRecordViewSet):
         if response.renderer_context["request"].data.get("return-type", None) == "json":
             response.data.update({"sessionid": request.session.session_key})
             response.returntype = "json"
-        if (
-            response.status_code == status.HTTP_200_OK
-            and (user_id := request.session.get("_auth_user_id"))
-            and (user := get_user_model().objects.filter(pk=user_id).first())
-        ):
-            UserLoginEvent(user=user).trigger(payload=request)
         return response

@@ -1,4 +1,3 @@
-import uuid
 from typing import List
 
 import svgwrite
@@ -302,36 +301,3 @@ def user_logged_in(*args, **kwargs):
     from django_project_base.account.service.merge_users_service import MergeUsersService
 
     MergeUsersService().handle(**kwargs)
-
-
-class BaseInvite(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
-    email = models.CharField(max_length=255, verbose_name=_("eMail"))
-
-    role = models.ForeignKey(
-        swapper.get_model_name("django_project_base", "Role"), null=True, on_delete=models.SET_NULL
-    )
-
-    text = models.TextField(verbose_name=_("Invitation message"), null=True, blank=False)
-
-    invited_by = models.ForeignKey(
-        swapper.get_model_name("django_project_base", "Profile"),
-        on_delete=models.CASCADE,
-        related_name="project_user_invites",
-    )
-    accepted = models.DateTimeField(auto_now=False, null=True, blank=True)
-
-    project = models.ForeignKey(
-        swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
-    )
-
-    class Meta:
-        abstract = True
-        unique_together = [
-            ["project", "email"],
-        ]
-
-
-class Invite(BaseProject):
-    class Meta:
-        swappable = swapper.swappable_setting("django_project_base", "Invite")
