@@ -42,9 +42,13 @@
 
 <script setup lang="ts">
 import { gettext } from '@velis/dynamicforms';
+import _ from 'lodash';
+import { onMounted } from 'vue';
+import { useCookies } from 'vue3-cookies';
 
 import useLogin from './login';
 import SocialLogos from './social-logos.vue';
+import useUserSessionStore from './state';
 
 const {
   payload,
@@ -56,10 +60,23 @@ const {
 } = useLogin();
 
 getFormDefinition();
+const userSession = useUserSessionStore();
 
 function focusPassword() {
   pwd.value.focus();
 }
+
+function checkInvite() {
+  if (!userSession.loggedIn) {
+    const { cookies } = useCookies();
+    if (_.size(cookies.get('invite-pk'))) {
+      doLogin();
+      cookies.remove('invite-pk');
+    }
+  }
+}
+
+onMounted(() => checkInvite());
 </script>
 
 <script lang="ts">
