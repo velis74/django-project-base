@@ -1,8 +1,10 @@
 import re
 from abc import ABC, abstractmethod
+from html import unescape
 from typing import Union
 
 import swapper
+from django.urls import reverse
 from django.utils.html import strip_tags
 
 from django_project_base.constants import SEND_NOTIFICATION_SMS
@@ -58,17 +60,20 @@ class ProviderIntegration(ABC):
 
     def get_send_notification_sms_text(self, notification: DjangoProjectBaseNotification, host_url: str) -> str:
         if notification.send_notification_sms:
-            template: str = swapper.load_model("django_project_base", "ProjectSettings").objects.get(
-                name=SEND_NOTIFICATION_SMS, project__slug=notification.project_slug).python_value
+            template: str = (
+                swapper.load_model("django_project_base", "ProjectSettings")
+                .objects.get(name=SEND_NOTIFICATION_SMS, project__slug=notification.project_slug)
+                .python_value
+            )
             return template.replace(
                 "__LINK__",
-                f"{host_url}notification/{str(notification.pk)}/info"
-                f"{'/' if getattr(self.settings, 'APPEND_SLASH', False) else ''}")
+                f"{host_url.rstrip('/')}"
+                f"{reverse('notification-notification-login', kwargs=dict(pk=str(notification.pk)))}",
+            )
         return ""
 
     @abstractmethod
     def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
-
         if notification.send_notification_sms:
             return notification.send_notification_sms_text
 
@@ -77,9 +82,14 @@ class ProviderIntegration(ABC):
         if notification.message.subject:
             message += "\n\n"
 
-        message += notification.message.body
-
+        message += (
+            notification.message.body.replace("&nbsp;</p>", "\n")
+            .replace("</p>", "\n")
+            .replace("\n&nbsp;", "\n")
+            .replace("&nbsp;", "\n")
+        )
         text_only = re.sub("[ \t]+", " ", strip_tags(message))
         # Strip single spaces in the beginning of each line
-        message = text_only.replace("\n ", "\n").replace("\n", "\r\n").strip()
-        return message
+        message = text_only.replace("\n ", "\n")
+        message = message.replace("\n", "\r\n")
+        return unescape(message)

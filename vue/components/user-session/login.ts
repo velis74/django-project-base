@@ -3,7 +3,7 @@ import {
   ConsumerLogicApi, dfModal as dfModalApi,
   dfModal, DialogSize,
   DisplayMode,
-  FilteredActions, FormConsumerApiOneShot,
+  FilteredActions, FormConsumerOneShotApi,
   FormPayload,
   gettext,
 } from '@velis/dynamicforms';
@@ -221,7 +221,7 @@ function useLogin() {
     socialAuth.value = formDef.payload.social_auth_providers;
   }
 
-  const openRegistration = async () => FormConsumerApiOneShot(
+  const openRegistration = async () => FormConsumerOneShotApi(
     { url: '/account/profile/register', trailingSlash: false },
   );
 
