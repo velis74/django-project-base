@@ -230,5 +230,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
 
         if self._extra_data.get("is_system_notification"):
             notification.sender[MailChannel.name] = getattr(settings, "SYSTEM_EMAIL_SENDER_ID", "")
+            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
+            notification.sender[SmsChannel.name] = getattr(settings, "SYSTEM_SMS_SENDER_ID", "")
 
         return notification
