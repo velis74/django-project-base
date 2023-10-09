@@ -7,7 +7,7 @@ import {
 } from '@velis/dynamicforms';
 import { ref, watch } from 'vue';
 
-import useLogin from './login';
+import { useLogin } from './login';
 import SocialLogos from './social-logos.vue';
 import { showLoginDialog } from './use-login-dialog';
 // TODO: needs to be moved to /rest/about or to some configuration. definitely needs to be app-specific

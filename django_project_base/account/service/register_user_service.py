@@ -2,7 +2,6 @@ from django.conf import settings
 from django.core.cache import cache
 from django.utils.translation import gettext as __
 from natural.date import compress
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 
 from django_project_base.notifications.email_notification import SystemEMailNotification
@@ -30,4 +29,3 @@ def send_register_verification_email_notification(
         ).send()
         cache.set(code, user, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
         return
-    raise PermissionDenied

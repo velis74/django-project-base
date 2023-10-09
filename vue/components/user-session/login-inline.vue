@@ -43,15 +43,13 @@
 <script setup lang="ts">
 import { Action, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
 import _ from 'lodash';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { v4 as uuidv4 } from 'uuid';
-import { h, onMounted } from 'vue';
+import { h, onMounted, reactive } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useCookies } from 'vue3-cookies';
 
 import { apiClient } from '../../apiClient';
 
-import useLogin from './login';
+import { parseErrors, useLogin } from './login';
 import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
 
@@ -72,19 +70,124 @@ function focusPassword() {
 
 const userSession = useUserSessionStore();
 
+const registerWorkflowErrors = reactive({} as { [key: string]: any[] });
+
+async function validateEmailCode() {
+  const userEmailChoice = await dfModal.message('', () => [
+    h(
+      'h3',
+      { class: 'd-flex justify-center mb-4' },
+      [gettext('New account')],
+    ),
+    h(
+      'h4',
+      { class: 'd-flex justify-center mb-4' },
+      [`${gettext('We have sent an email to the email address you provided.')}`],
+    ),
+    h(
+      'h4',
+      { class: 'd-flex justify-center mb-4' },
+      [`${gettext('Please enter the code from the message')}:`],
+    ),
+    h('div', { class: 'd-flex justify-center mb-4' }, [
+      h('input', {
+        type: 'text',
+        id: 'new-account-confirmation-code',
+        class: 'w-20 mb-2 p-1 justify-center rounded border-lightgray',
+        placeholder: registerWorkflowErrors.code ? registerWorkflowErrors.code : null,
+      }, {}),
+    ]),
+  ], new FilteredActions({
+    cancel: new Action({
+      name: 'different-email',
+      label: gettext('Different email'),
+      displayStyle: { asButton: true, showLabel: true, showIcon: true },
+      position: 'FORM_FOOTER',
+    }),
+    confirm: new Action({
+      name: 'proceed',
+      label: gettext('Proceed'),
+      displayStyle: { asButton: true, showLabel: true, showIcon: true },
+      position: 'FORM_FOOTER',
+    }),
+  }));
+
+  const pageName = userSession.selectedProjectName || '';
+  if (userEmailChoice.action.name === 'proceed') {
+    apiClient.post(
+      '/account/verify-registration/',
+      { code: (<HTMLInputElement>document.getElementById('new-account-confirmation-code'))?.value },
+    ).then(() => {
+      registerWorkflowErrors.value = [];
+      dfModal.message(
+        gettext('New account'),
+        gettext('Your account is now active and you are logged in.') + (
+          _.size(pageName) ? gettext('Welcome to') + pageName : ''),
+      );
+      userSession.checkLogin(false);
+    }).catch((err) => {
+      parseErrors(err, registerWorkflowErrors);
+      validateEmailCode();
+    });
+  }
+}
+
+async function changeRegisterMail() {
+  const userEmail = await dfModal.message('', () => [
+    h(
+      'h3',
+      { class: 'd-flex justify-center mb-4' },
+      [`${gettext('New account')} - ${gettext('different email')}`],
+    ),
+
+    h(
+      'h4',
+      { class: 'd-flex justify-center mb-4' },
+      [`${gettext('Please enter new email')}:`],
+    ),
+    h('div', { class: 'd-flex justify-center mb-4' }, [
+      h('input', {
+        type: 'text',
+        id: 'new-account-different-email',
+        placeholder: registerWorkflowErrors.email ? registerWorkflowErrors.email : null,
+        class: 'w-80 mb-2 p-1 justify-center rounded border-lightgray',
+      }, {}),
+    ]),
+  ], new FilteredActions({
+    cancel: new Action({
+      name: 'cancel',
+      label: gettext('Cancel'),
+      displayStyle: { asButton: true, showLabel: true, showIcon: true },
+      position: 'FORM_FOOTER',
+    }),
+    confirm: new Action({
+      name: 'proceed-different-email',
+      label: gettext('Proceed'),
+      displayStyle: { asButton: true, showLabel: true, showIcon: true },
+      position: 'FORM_FOOTER',
+    }),
+  }));
+  if (userEmail.action.name === 'proceed-different-email') {
+    apiClient.post(
+      '/account/verify-registration-email-change/',
+      { email: (<HTMLInputElement>document.getElementById('new-account-different-email'))?.value },
+    ).then(() => {
+      validateEmailCode();
+      registerWorkflowErrors.value = [];
+    }).catch((err) => {
+      parseErrors(err, registerWorkflowErrors);
+      changeRegisterMail();
+    });
+  }
+}
+
 async function openRegistrationForm() {
-  const flowIdentifier = uuidv4();
-  const { cookies } = useCookies();
-  cookies.set('register-flow', flowIdentifier);
-  let registration = await openRegistration();
-  console.log('registerd', registration);
-  cookies.remove('register-flow');
-  registration = true;
+  const registration = await openRegistration();
   if (registration) {
     const okDialog = await dfModal.message(
       '',
       gettext('New account registration dialog is filled out and confirmed successfully. ' +
-        'the account itself is made inactive with delete_at set to +24 hours.'),
+            'the account itself is made inactive with delete_at set to +24 hours.'),
       new FilteredActions({
         confirm: new Action({
           name: 'confitm',
@@ -94,63 +197,8 @@ async function openRegistrationForm() {
         }),
       }),
     );
-
-    console.log('ok ko', okDialog);
-
-    const userEmailChoice = await dfModal.message('', () => [
-      h(
-        'h3',
-        { class: 'd-flex justify-center mb-4' },
-        [gettext('New account')],
-      ),
-      h(
-        'h4',
-        { class: 'd-flex justify-center mb-4' },
-        [`${gettext('We have sent an email to the email address you provided.')}`],
-      ),
-      h(
-        'h4',
-        { class: 'd-flex justify-center mb-4' },
-        [`${gettext('Please enter the code from the message')}:`],
-      ),
-      h('div', { class: 'd-flex justify-center mb-4' }, [
-        h('input', {
-          type: 'text',
-          // placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
-          id: 'new-account-confirmation-code',
-          class: 'w-20 mb-2 p-1 justify-center rounded border-lightgray',
-        }, {}),
-      ]),
-    ], new FilteredActions({
-      cancel: new Action({
-        name: 'different-email',
-        label: gettext('Different email'),
-        displayStyle: { asButton: true, showLabel: true, showIcon: true },
-        position: 'FORM_FOOTER',
-      }),
-      confirm: new Action({
-        name: 'proceed',
-        label: gettext('Proceed'),
-        displayStyle: { asButton: true, showLabel: true, showIcon: true },
-        position: 'FORM_FOOTER',
-      }),
-    }));
-    console.log('user email choice', userEmailChoice);
-    const pageName = userSession.selectedProjectName || '';
-    if (userEmailChoice.action.name === 'proceed') {
-      apiClient.post(
-        '/account/verify-registration',
-        { code: document.getElementById('new-account-confirmation-code')?.value || '' },
-      ).then(() => {
-        dfModal.message(
-          gettext('New account'),
-          gettext('Your account is now active and you are logged in.') + (
-            _.size(pageName) ? gettext('Welcome to') + pageName : ''),
-        );
-      });
-      return;
-    }
-    console.log('DIFFERENT EMAIL');
+    await validateEmailCode();
+    await changeRegisterMail();
   }
 }
 
