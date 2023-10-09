@@ -2,7 +2,8 @@ import re
 from typing import Optional
 
 import swapper
-from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.core.cache import cache
+from django.contrib.auth import get_user_model, update_session_auth_hash, login
 from django.contrib.auth.models import AnonymousUser
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
@@ -10,6 +11,7 @@ from dynamicforms import fields as df_fields, serializers as df_serializers, vie
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -203,7 +205,18 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
         url_name="verify-registration",
     )
     def verify_registration(self, request: Request) -> Response:
-        return verify_registration(request._request)
+        if (
+            (flow_id := request.COOKIES.get("register-flow"))
+            and (code := cache.get(flow_id))
+            and (req_code := request.data.get("code"))
+            and code == req_code
+            and len(code)
+            and len(req_code)
+            and (user := cache.get(code))
+        ):
+            login(request, user)
+            return Response()
+        raise PermissionDenied
 
 
 class AbstractRegisterSerializer(df_serializers.Serializer):

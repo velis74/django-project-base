@@ -1,4 +1,5 @@
 import datetime
+import uuid
 
 import django
 import swapper
@@ -10,6 +11,7 @@ from django.db import transaction
 from django.db.models import ForeignKey, Model, QuerySet
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
@@ -325,7 +327,17 @@ class ProfileViewSet(ModelViewSet):
         permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
-        return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
+        register_flow_identifier = str(uuid.uuid4())
+        response = Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
+        response.set_cookie(
+            "register-flow",
+            register_flow_identifier,
+            max_age=settings.CONFIRMATION_CODE_TIMEOUT,
+            httponly=True,
+            samesite="Strict",
+        )
+        cache.set(register_flow_identifier, get_random_string(length=6), timeout=settings.CONFIRMATION_CODE_TIMEOUT)
+        return response
 
     @extend_schema(
         description="Registering new account",
@@ -340,7 +352,7 @@ class ProfileViewSet(ModelViewSet):
     def create_new_account(self, request: Request, **kwargs):
         # set default values
         request.data["date_joined"] = datetime.datetime.now()
-        request.data["is_active"] = True
+        request.data["is_active"] = False
 
         # call serializer to do the data processing drf way - hijack
         serializer = ProfileRegisterSerializer(

@@ -43,9 +43,13 @@
 <script setup lang="ts">
 import { Action, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
 import _ from 'lodash';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { v4 as uuidv4 } from 'uuid';
 import { h, onMounted } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useCookies } from 'vue3-cookies';
+
+import { apiClient } from '../../apiClient';
 
 import useLogin from './login';
 import SocialLogos from './social-logos.vue';
@@ -69,8 +73,12 @@ function focusPassword() {
 const userSession = useUserSessionStore();
 
 async function openRegistrationForm() {
+  const flowIdentifier = uuidv4();
+  const { cookies } = useCookies();
+  cookies.set('register-flow', flowIdentifier);
   let registration = await openRegistration();
   console.log('registerd', registration);
+  cookies.remove('register-flow');
   registration = true;
   if (registration) {
     const okDialog = await dfModal.message(
@@ -128,16 +136,18 @@ async function openRegistrationForm() {
       }),
     }));
     console.log('user email choice', userEmailChoice);
+    const pageName = userSession.selectedProjectName || '';
     if (userEmailChoice.action.name === 'proceed') {
-      console.log(userEmailChoice);
-      // send code for verification
-      const pageName = userSession.selectedProjectName || '';
-      dfModal.message(
-        gettext('New account'),
-        gettext('Your account is now active and you are logged in.') + (
-          _.size(pageName) ? gettext('Welcome to') + pageName : ''),
-      );
-
+      apiClient.post(
+        '/account/verify-registration',
+        { code: document.getElementById('new-account-confirmation-code')?.value || '' },
+      ).then(() => {
+        dfModal.message(
+          gettext('New account'),
+          gettext('Your account is now active and you are logged in.') + (
+            _.size(pageName) ? gettext('Welcome to') + pageName : ''),
+        );
+      });
       return;
     }
     console.log('DIFFERENT EMAIL');
