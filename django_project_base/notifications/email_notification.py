@@ -89,3 +89,25 @@ class EMailNotificationWithListOfEmails(EMailNotification):
         ]
         self.enqueue_notification(notification, self._extra_data)
         return notification
+
+
+class SystemEMailNotification(EMailNotification):
+    def __init__(
+        self,
+        message: DjangoProjectBaseMessage,
+        recipients,
+        **kwargs,
+    ) -> None:
+        super().__init__(
+            message,
+            raw_recipents=recipients,
+            project=None,
+            persist=True,
+            level=None,
+            locale=None,
+            delay=int(datetime.datetime.now().timestamp()),
+            type=None,
+            recipients=recipients,
+            is_system_notification=True,
+            **kwargs,
+        )

@@ -6,7 +6,7 @@ from natural.date import compress
 from rest_framework.request import Request
 
 from django_project_base.account.constants import REGISTER_USER_ACCOUNT_VERIFICATION_CODE
-from django_project_base.notifications.email_notification import EMailNotification
+from django_project_base.notifications.email_notification import SystemEMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
@@ -17,8 +17,7 @@ def send_register_verification_email_notification(
     code_ck = REGISTER_USER_ACCOUNT_VERIFICATION_CODE + "SESSION NEKAJ"
     code = get_random_string(length=6)
     cache.set(code_ck, code, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
-
-    EMailNotification(
+    SystemEMailNotification(
         message=DjangoProjectBaseMessage(
             subject=f"{__('Account confirmation for')} {request.META['HTTP_HOST']}",
             body=f"{__('You or someone acting as you registered an account at')} "
@@ -29,9 +28,6 @@ def send_register_verification_email_notification(
             footer="",
             content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
         ),
-        raw_recipents=[user.pk],
-        persist=True,
         recipients=[user.pk],
         user=user.pk,
-        project=None,
     ).send()

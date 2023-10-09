@@ -93,10 +93,12 @@ class LogAccessService:
         if not allowed_users:
             allowed_users = getattr(kwargs.get("settings", object()), "NOTIFICATIONS_ALLOWED_USERS", [])
 
-        if str(user_profile_pk) not in list(map(str, allowed_users)):
+        is_system_notification = kwargs.get("is_system_notification")
+
+        if not is_system_notification and str(user_profile_pk) not in list(map(str, allowed_users)):
             raise PermissionDenied
 
-        if used >= MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS:  # janez medja
+        if not is_system_notification and used >= MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS:  # janez medja
             raise PermissionDenied(gettext("Your license is consumed. Please contact support."))
 
         if on_sucess:
@@ -112,7 +114,7 @@ class LogAccessService:
             content_type_object_id=str(record.pk).replace("-", ""),
             content_type=content_type,
             amount=amount,
-            comment=dict(comment=comment, count=accesses_used, item_price=item_price),
+            comment=dict(comment=comment, count=accesses_used, item_price=item_price, sender=kwargs.get("sender", "")),
         )
 
         return accesses_used
