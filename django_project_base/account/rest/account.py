@@ -184,15 +184,7 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
         return response
 
 
-class VerifyRegistrationSerializer(serializers.Serializer):
-    user_id = fields.CharField(required=True)
-    timestamp = fields.IntegerField(required=True)
-    signature = fields.CharField(required=True)
-
-
 class VerifyRegistrationViewSet(viewsets.ViewSet):
-    serializer_class = VerifyRegistrationSerializer()
-
     @extend_schema(
         description="Verify registration with signature. The endpoint will generate an e-mail with a confirmation URL "
         "which the user should GET to confirm the account.",
@@ -245,7 +237,8 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
                 validate_email(email)
             except DjangoValidationError:
                 raise ValidationError(dict(email=[_("Email invalid")]))
-            get_user_model().objects.filter(pk=user.pk).update(email=email)
+            user.email = email
+            user.save(update_fields=["email"])
             if registration_settings.REGISTER_VERIFICATION_ENABLED:
                 registration_settings.REGISTER_VERIFICATION_EMAIL_SENDER(request=request, user=user)
             return Response()

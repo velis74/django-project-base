@@ -28,4 +28,3 @@ def send_register_verification_email_notification(
             user=user.pk,
         ).send()
         cache.set(code, user, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
-        return

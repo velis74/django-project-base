@@ -94,6 +94,7 @@ async function validateEmailCode() {
         type: 'text',
         id: 'new-account-confirmation-code',
         class: 'w-20 mb-2 p-1 justify-center rounded border-lightgray',
+        style: 'padding: 0.1em;',
         placeholder: registerWorkflowErrors.code ? registerWorkflowErrors.code : null,
       }, {}),
     ]),
@@ -129,7 +130,9 @@ async function validateEmailCode() {
       parseErrors(err, registerWorkflowErrors);
       validateEmailCode();
     });
+    return true;
   }
+  return false;
 }
 
 async function changeRegisterMail() {
@@ -150,7 +153,8 @@ async function changeRegisterMail() {
         type: 'text',
         id: 'new-account-different-email',
         placeholder: registerWorkflowErrors.email ? registerWorkflowErrors.email : null,
-        class: 'w-80 mb-2 p-1 justify-center rounded border-lightgray',
+        class: 'w-100 mb-2 p-1 justify-center rounded border-lightgray',
+        style: 'padding: 0.1em;',
       }, {}),
     ]),
   ], new FilteredActions({
@@ -197,8 +201,9 @@ async function openRegistrationForm() {
         }),
       }),
     );
-    await validateEmailCode();
-    await changeRegisterMail();
+    if (!await validateEmailCode()) {
+      await changeRegisterMail();
+    }
   }
 }
 
