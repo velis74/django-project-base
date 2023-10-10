@@ -1,18 +1,17 @@
 import copy
 from gettext import gettext
-from typing import Union, Optional, Dict
-from uuid import UUID
+from typing import Union
 
 import swapper
 from django.conf import settings
+from django.db import transaction
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields
-from dynamicforms.action import Actions
-from dynamicforms.mixins import DisplayMode, FieldAlignment
+from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
-from dynamicforms.template_render.layout import Layout, Row, Column
-from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayouts, ResponsiveTableLayout
+from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.decorators import action
@@ -22,7 +21,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django_project_base.account.middleware import ProjectNotSelectedError
-from django_project_base.base.event import SmsSenderChangedEvent
+from django_project_base.base.event import ProjectSettingConfirmedEvent, SmsSenderChangedEvent
 from django_project_base.base.models import BaseProjectSettings
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.utils import get_pk_name
@@ -226,7 +225,7 @@ class ProjectSettingsSerializer(ModelSerializer):
 
     class Meta:
         model = swapper.load_model("django_project_base", "ProjectSettings")
-        fields = get_pk_name(model), "name", "table_value", "description", "value_type", "reserved", "value"
+        fields = get_pk_name(model), "name", "table_value", "description", "value_type", "reserved", "value", "project"
         layout = Layout(
             Row(Column("name")),
             Row(Column("value")),
@@ -315,12 +314,30 @@ class ProjectSettingsViewSet(ModelViewSet):
             .order_by(f"-{get_pk_name(self.get_serializer_class().Meta.model)}")
         )
         if pending_settings.exists():
+            pk_name = get_pk_name(self.get_serializer_class().Meta.model)
             list_response.set_cookie(
                 "setting-verification",
-                f"{','.join(list(map(str, pending_settings.values_list(get_pk_name(self.get_serializer_class().Meta.model), flat=True))))}",
+                f"{','.join(list(map(str, pending_settings.values_list(pk_name, flat=True))))}",
                 expires=24 * 60 * 60,
                 samesite="Lax",
             )
             return list_response
         list_response.delete_cookie("setting-verification")
         return list_response
+
+    @extend_schema(exclude=True)
+    @transaction.atomic()
+    @action(
+        detail=False,
+        methods=["POST"],
+        url_name="confirm-setting",
+        url_path="confirm-setting",
+    )
+    def confirm_pending_setting(self, request) -> Response:
+        model = self.get_serializer_class().Meta.model
+        pk_name = get_pk_name(model)
+        pk = request.data.get(pk_name)
+        if not pk:
+            raise ValidationError({pk_name: [gettext("required")]})
+        ProjectSettingConfirmedEvent(user=request.user).trigger(payload=get_object_or_404(model, pk=pk))
+        return Response()

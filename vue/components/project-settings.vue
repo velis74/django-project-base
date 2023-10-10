@@ -1,8 +1,16 @@
 <script setup lang="ts">
-import { APIConsumer, ComponentDisplay, ConsumerLogicApi } from '@velis/dynamicforms';
+import {
+  Action,
+  APIConsumer,
+  ComponentDisplay,
+  ConsumerLogicApi,
+  dfModal,
+  FilteredActions,
+  gettext,
+} from '@velis/dynamicforms';
 import _ from 'lodash';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, Ref, ref, watch } from 'vue';
+import { onMounted, onUnmounted, Ref, ref, watch, h } from 'vue';
 import { useCookies } from 'vue3-cookies';
 
 import { apiClient } from '../apiClient';
@@ -32,9 +40,39 @@ interface ProjectSetting {
   name: string;
 }
 
-function confirmationEmail(setting: ProjectSetting) {
+const settingsConfirmationVisible = ref(false);
+
+async function confirmationEmail(setting: ProjectSetting, message: Array<any>) {
   console.log('mail setting', setting);
   console.log('confirm email');
+  if (settingsConfirmationVisible.value) {
+    return;
+  }
+  settingsConfirmationVisible.value = true;
+  const emailConfirmation = await dfModal.message('', () => message, new FilteredActions({
+    cancel: new Action({
+      name: 'cancel',
+      label: gettext('Cancel'),
+      displayStyle: { asButton: true, showLabel: true, showIcon: true },
+      position: 'FORM_FOOTER',
+    }),
+    confirm: new Action({
+      name: 'confirm',
+      label: gettext('I haved confirmed pending setting'),
+      displayStyle: { asButton: true, showLabel: true, showIcon: true },
+      position: 'FORM_FOOTER',
+    }),
+  }));
+  if (emailConfirmation.action.name === 'confirm') {
+    apiClient.post(
+      '/project-settings/confirm-setting',
+      { PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME: setting[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] },
+    ).then((res) => {
+      console.log(res.data);
+      console.log('confirmation respnse');
+    });
+  }
+  settingsConfirmationVisible.value = false;
 }
 
 function confirmationSms(setting: ProjectSetting) {
@@ -48,7 +86,13 @@ function confirmSetting(setting: ProjectSetting) {
     return;
   }
   if (setting.name === 'email-sender-id') {
-    confirmationEmail(setting);
+    confirmationEmail(setting, [
+      h('h2', { class: 'mt-n6 mb-4' }, gettext('Email settings pending for confirmation')),
+      h('br'),
+      h('h4', { class: 'mt-n6 mb-4' }, gettext('You received an email with confirmation link ' +
+        'for email sender address. Please check your mail and click on confirmation link. Check also spam folder ' +
+        'if you do not find confirmation link.')),
+    ]);
   }
 }
 

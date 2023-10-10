@@ -1,3 +1,4 @@
+import copy
 import datetime
 from abc import ABC, abstractmethod
 
@@ -48,7 +49,7 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
             # from django_project_base.aws.ses import AwsSes
 
             if not old_state:
-                a = 9
+                print("AWS add EMAIL")
                 return
                 # AwsSes.add_sender_email(new_state.python_value)
                 # return
@@ -57,14 +58,14 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
                 and new_state.pending_value
                 and new_state.python_pending_value != new_state.python_value
             ):
-                a = 99
                 return
-                ######## AwsSes.remove_sender_email(old_state.python_value) if old_state.python_value else None
-                print("AWS SEND EMAIL")
-                # AwsSes.add_sender_email(new_state.python_value)
-                # return
 
-            a = 999
+                print("AWS SEND EMAIL")
+                # AwsSes.add_sender_email(new_state.pending_value)
+                # return
+            # clear old email - or not what if another project is using email ???
+            # go through all project and delete diff AMAZON - DB
+            # ####### AwsSes.remove_sender_email(old_state.python_value) if old_state.python_value else None
 
 
 class SmsSenderChangedEvent(ProjectSettingChangedEvent):
@@ -136,3 +137,26 @@ class UserLoginEvent(BaseEvent):
             UserInviteFoundEvent(self.user).trigger(payload=invite, request=payload)
             return
         payload.session.pop("invite-pk", None)
+
+
+class ProjectSettingConfirmedEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+        from django_project_base.aws.ses import AwsSes
+
+        if (
+            payload.name == EMAIL_SENDER_ID_SETTING_NAME
+            and payload.python_pending_value in AwsSes.list_verified_sender_emails()
+        ):
+            payload.value = copy.copy(payload.python_pending_value)
+            payload.pending_value = None
+            payload.save(update_fields=["value", "pending_value"])
+        if payload.name == SMS_SENDER_ID_SETTING_NAME:
+            a = 9
+        a = 9
+        print(a)
