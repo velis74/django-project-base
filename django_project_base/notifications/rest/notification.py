@@ -5,13 +5,13 @@ from typing import List, Optional
 
 import pytz
 import swapper
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db.models import ForeignKey, QuerySet
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
@@ -350,7 +350,7 @@ class NotificationViewset(ModelViewSet):
             "notification_login.html",
             dict(
                 identifier=pk,
-                url=f"/notification/info-view{'/' if getattr(settings, 'APPEND_SLASH', False) else ''}",
+                url=reverse("notification-notification-view"),
                 title=swapper.load_model("django_project_base", "Project")
                 .objects.get(slug=DjangoProjectBaseNotification.objects.get(pk=pk).project_slug)
                 .name,
