@@ -252,6 +252,10 @@ class BaseProjectSettings(models.Model):
     def python_value(self):
         return self.value_validators[self.value_type](self.value)
 
+    @property
+    def python_pending_value(self):
+        return self.value_validators[self.value_type](self.pending_value)
+
     def clean(self):
         validator = self.value_validators[self.value_type]
         try:
@@ -276,10 +280,14 @@ class BaseProjectSettings(models.Model):
         swapper.get_model_name("django_project_base", "Project"), on_delete=models.CASCADE, null=False
     )
 
+    pending_value = models.CharField(max_length=320, null=True, blank=True, verbose_name=_("Pending value"))
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean()
         validator = self.value_validators[self.value_type]
         self.value = validator(self.value)
+        if self.pending_value:
+            self.pending_value = validator(self.pending_value)
         super().save(force_insert, force_update, using, update_fields)
 
     def delete(self, using=None, keep_parents=False):
