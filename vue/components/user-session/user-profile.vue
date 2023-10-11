@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Action, dfModal, DialogSize, FilteredActions, FormConsumerOneShotApi, gettext } from '@velis/dynamicforms';
+import { Action, dfModal, DialogSize, FilteredActions, FormConsumerApiOneShot, gettext } from '@velis/dynamicforms';
 import axios from 'axios';
 import _ from 'lodash';
 import { computed, h, onMounted, watch } from 'vue';
@@ -30,7 +30,7 @@ let socialConnectionsModalPromise = null as any;
 const showProjectList = computed(() => (props.projectListComponent && userSession.loggedIn && display.smAndDown.value));
 
 async function changePassword() {
-  await FormConsumerOneShotApi({ url: '/account/change-password/', trailingSlash: true, pk: 'new' });
+  await FormConsumerApiOneShot({ url: '/account/change-password/', trailingSlash: true, pk: 'new' });
 }
 
 async function checkResetPassword() {
@@ -52,7 +52,7 @@ watch(() => userSession.impersonated, () => window.location.reload());
 onMounted(() => loadData());
 
 async function showImpersonateLogin() {
-  await FormConsumerOneShotApi({ url: '/account/impersonate', trailingSlash: false });
+  await FormConsumerApiOneShot({ url: '/account/impersonate', trailingSlash: false });
   await userSession.checkLogin(false);
 }
 
@@ -62,7 +62,7 @@ async function stopImpersonation() {
 }
 
 async function userProfile() {
-  await FormConsumerOneShotApi({ url: '/account/profile/current', trailingSlash: false });
+  await FormConsumerApiOneShot({ url: '/account/profile/current', trailingSlash: false });
   await userSession.checkLogin(false);
 }
 
