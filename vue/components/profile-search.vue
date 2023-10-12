@@ -91,9 +91,12 @@ function customLabel(profile: UserDataJSON) {
       @select="onSelect"
     >
       <template slot="singleLabel" slot-scope="props">
-        {{ props.option.email }}
-        {{ props.option.first_name }}
-        {{ props.option.last_name }}
+        {{ //@ts-ignore
+          props.option.email }}
+        {{ //@ts-ignore
+          props.option.first_name }}
+        {{ //@ts-ignore
+          props.option.last_name }}
       </template>
     </multiselect>
   </div>
