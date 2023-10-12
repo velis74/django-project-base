@@ -204,9 +204,9 @@ const actionResetPending = async (action:Action, payload: FormPayload) => {
 const actionConfirmSettingActive = async (action:Action, payload: FormPayload) => {
   const activeData = {};
   // @ts-ignore
-  active[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+  activeData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
   apiClient.post(
-    '/project-settings/reset-pending',
+    '/project-settings/confirm-setting-active',
     activeData,
   ).then(() => {
     refreshSettingsLogic();

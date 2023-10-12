@@ -203,11 +203,6 @@ class ProjectSettingsSerializer(ModelSerializer):
                     position=TablePosition.ROW_END,
                     label="Confirm active",
                     name="confirm-setting-active",
-                    display_style=dict(
-                        asButton=True,
-                        showIcon=False,
-                        showLabel=False,
-                    ),
                 ),
             )
 

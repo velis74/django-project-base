@@ -20,7 +20,7 @@ class Command(BaseCommand):
                     "pending_value": setting.python_pending_value,
                 }
         # if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
-        # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
+        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
         # EMailNotificationWithListOfEmails(
         #     message=DjangoProjectBaseMessage(
         #         subject=_("Pending settings report"),

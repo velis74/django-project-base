@@ -21,6 +21,7 @@ class Command(BaseCommand):
         )
         ProjectSettingConfirmedEvent(user=None).trigger(payload=setting)
         # TODO: send email when owner is known
+        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
         # SystemEMailNotification(
         #     message=DjangoProjectBaseMessage(
         #         subject=f"{__('Project setting confirmed')}",
