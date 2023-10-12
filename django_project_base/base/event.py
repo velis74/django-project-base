@@ -46,26 +46,31 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
 
         if new_state.name == EMAIL_SENDER_ID_SETTING_NAME:
             # TODO: THIS IS ONLY FOR AWS FOR NOW
-            # from django_project_base.aws.ses import AwsSes
+            from django_project_base.aws.ses import AwsSes
 
             if not old_state:
-                print("AWS add EMAIL")
-                return
-                # AwsSes.add_sender_email(new_state.python_value)
-                # return
-            if (old_state.python_value != new_state.python_value) or (
+                AwsSes.add_sender_email(new_state.python_value)
+            elif (old_state.python_value != new_state.python_value) or (
                 new_state.python_value
                 and new_state.pending_value
                 and new_state.python_pending_value != new_state.python_value
             ):
-                return
+                AwsSes.add_sender_email(new_state.pending_value)
 
-                print("AWS SEND EMAIL")
-                # AwsSes.add_sender_email(new_state.pending_value)
-                # return
-            # clear old email - or not what if another project is using email ???
-            # go through all project and delete diff AMAZON - DB
-            # ####### AwsSes.remove_sender_email(old_state.python_value) if old_state.python_value else None
+            project_settings_manager = swapper.load_model("django_project_base", "ProjectSettings").objects
+            for sender in set(AwsSes.list_sender_emails()) - (
+                set(
+                    project_settings_manager.objects.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
+                        "value", flat=True
+                    )
+                )
+                | set(
+                    project_settings_manager.objects.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
+                        "pending_value", flat=True
+                    )
+                )
+            ):
+                AwsSes.remove_sender_email(sender)
 
 
 class SmsSenderChangedEvent(ProjectSettingChangedEvent):
