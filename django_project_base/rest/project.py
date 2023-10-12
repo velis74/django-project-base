@@ -183,6 +183,7 @@ class ProjectSettingsSerializer(ModelSerializer):
         super().__init__(*args, is_filter=is_filter, **kwds)
         self.actions.actions = [a for a in self.actions.actions if a.name != "delete"]
         self.actions.actions.append(
+            # TODO: https://taiga.velis.si/project/velis74-dynamic-forms/issue/837
             TableAction(
                 position=TablePosition.FIELD_END,
                 label="Reset pending",
@@ -198,6 +199,7 @@ class ProjectSettingsSerializer(ModelSerializer):
         )
         request = self.context.get("request")
         if request and (request.user.is_superuser or request.user.is_staff):
+            # TODO: https://taiga.velis.si/project/velis74-dynamic-forms/issue/837
             self.actions.actions.append(
                 TableAction(
                     position=TablePosition.ROW_END,
