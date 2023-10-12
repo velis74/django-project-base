@@ -1,34 +1,35 @@
 import swapper
 from django.core.management.base import BaseCommand
-from django.shortcuts import get_object_or_404
-
-from django_project_base.base.event import ProjectSettingConfirmedEvent
 
 
 class Command(BaseCommand):
-    help = "Lists pending project settings. Example:  python manage.py list_pending_settings 2"
-
-    def add_arguments(self, parser) -> None:
-        parser.add_argument("project-id", type=str, help="Project identifier")
+    help = "Lists pending project settings. Example:  python manage.py list_pending_settings"
 
     def handle(self, *args, **options):
-        project = get_object_or_404(swapper.load_model("django_project_base", "Project"), pk=str(options["project-id"]))
-        setting = get_object_or_404(
-            swapper.load_model("django_project_base", "ProjectSettings"),
-            project=project,
-            name=str(options["setting-name"]),
-        )
-        ProjectSettingConfirmedEvent(user=None).trigger(payload=setting)
-        # TODO: send email when owner is known
-        # SystemEMailNotification(
+        result = dict()
+        for project in swapper.load_model("django_project_base", "Project").objects.all():
+            for setting in (
+                swapper.load_model("django_project_base", "ProjectSettings")
+                .objects.filter(project=project, pending_value__isnull=False)
+                .exclude(pending_value="")
+            ):
+                if project.name not in result:
+                    result[project.name] = {}
+                result[project.name][setting.name] = {
+                    "value": setting.python_value,
+                    "pending_value": setting.python_pending_value,
+                }
+        # if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
+        # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
+        # EMailNotificationWithListOfEmails(
         #     message=DjangoProjectBaseMessage(
-        #         subject=f"{__('Project setting confirmed')}",
-        #         body=f"{__('Setting')} {setting.name} {__('in project')} "
-        #         f"{project.name} {__('has been confirmed and is now active.')}",
+        #         subject=_("Pending settings report"),
+        #         body=json.dumps(result),
         #         footer="",
-        #         content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
+        #         content_type=DjangoProjectBaseMessage.HTML,
         #     ),
-        #     recipients=[],  # TODO: find project owner
-        #     user=None,  # TODO: find project owner
+        #     recipients=to,
+        #     project=None,
+        #     user=None,
         # ).send()
-        return "ok"
+        self.stdout.write(self.style.WARNING(result))

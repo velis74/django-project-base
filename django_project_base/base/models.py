@@ -281,6 +281,7 @@ class BaseProjectSettings(models.Model):
     )
 
     pending_value = models.CharField(max_length=320, null=True, blank=True, verbose_name=_("Pending value"))
+    action_required = models.BooleanField(default=False, null=True, blank=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.full_clean()
@@ -288,6 +289,10 @@ class BaseProjectSettings(models.Model):
         self.value = validator(self.value)
         if self.pending_value:
             self.pending_value = validator(self.pending_value)
+        if self.action_required:
+            from django_project_base.base.event import ProjectSettingActionRequiredEvent
+
+            ProjectSettingActionRequiredEvent(user=None).trigger(payload=self)
         super().save(force_insert, force_update, using, update_fields)
 
     def delete(self, using=None, keep_parents=False):

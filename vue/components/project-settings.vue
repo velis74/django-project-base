@@ -189,7 +189,6 @@ if (selectedProjectId.value) refreshSettingsLogicAndCheckSettings();
 watch(selectedProjectId, refreshSettingsLogicAndCheckSettings);
 
 const actionResetPending = async (action:Action, payload: FormPayload) => {
-  console.log(action, payload);
   const resetData = {};
   // @ts-ignore
   resetData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
@@ -202,10 +201,23 @@ const actionResetPending = async (action:Action, payload: FormPayload) => {
   return true;
 };
 
+const actionConfirmSettingActive = async (action:Action, payload: FormPayload) => {
+  const activeData = {};
+  // @ts-ignore
+  active[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+  apiClient.post(
+    '/project-settings/reset-pending',
+    activeData,
+  ).then(() => {
+    refreshSettingsLogic();
+  });
+  return true;
+};
+
 const { handler } = useActionHandler();
 
 handler
-  .register('reset-pending', actionResetPending);
+  .register('reset-pending', actionResetPending).register('confirm-setting-active', actionConfirmSettingActive);
 
 </script>
 

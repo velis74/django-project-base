@@ -164,6 +164,30 @@ class ProjectSettingConfirmedEvent(BaseEvent):
                 confirm(payload)
 
 
+class ProjectSettingActionRequiredEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+
+        # if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
+        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
+        # EMailNotificationWithListOfEmails(
+        #     message=DjangoProjectBaseMessage(
+        #         subject=gettext"Project settings action required"),
+        #         body=f"{gettext('Action required for setting')} {payload.name} in project {payload.project.name}",
+        #         footer="",
+        #         content_type=DjangoProjectBaseMessage.HTML,
+        #     ),
+        #     recipients=to,
+        #     project=None,
+        #     user=None,
+        # ).send()
+
+
 class ProjectSettingPendingResetEvent(BaseEvent):
     def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
         super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
@@ -174,11 +198,17 @@ class ProjectSettingPendingResetEvent(BaseEvent):
             return
         from django_project_base.aws.ses import AwsSes
 
+        pending_value = copy.copy(payload.python_pending_value)
         payload.pending_value = None
-        payload.save(update_fields=["value", "pending_value"])
+        payload.save(update_fields=["pending_value"])
 
         if payload.name == EMAIL_SENDER_ID_SETTING_NAME:
-            if payload.python_pending_value in AwsSes.list_sender_emails():
-                AwsSes.remove_sender_email(payload.python_pending_value)
+            if pending_value in AwsSes.list_sender_emails():
+                AwsSes.remove_sender_email(pending_value)
+            AwsSes.add_sender_email(payload.python_value)
+            if payload.python_value not in AwsSes.list_verified_sender_emails():
+                payload.action_required = True
+                payload.save(update_fields=["action_required"])
         if payload.name == SMS_SENDER_ID_SETTING_NAME:
-            pass
+            payload.action_required = True
+            payload.save(update_fields=["action_required"])
