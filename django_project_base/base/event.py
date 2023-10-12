@@ -149,14 +149,36 @@ class ProjectSettingConfirmedEvent(BaseEvent):
             return
         from django_project_base.aws.ses import AwsSes
 
-        if (
-            payload.name == EMAIL_SENDER_ID_SETTING_NAME
-            and payload.python_pending_value in AwsSes.list_verified_sender_emails()
+        def confirm(item):
+            item.value = copy.copy(item.python_pending_value)
+            item.pending_value = None
+            item.save(update_fields=["value", "pending_value"])
+
+        # not self.user Event is trigerred from management command
+        if payload.name == EMAIL_SENDER_ID_SETTING_NAME and (
+            payload.python_pending_value in AwsSes.list_verified_sender_emails() or not self.user
         ):
-            payload.value = copy.copy(payload.python_pending_value)
-            payload.pending_value = None
-            payload.save(update_fields=["value", "pending_value"])
+            confirm(payload)
         if payload.name == SMS_SENDER_ID_SETTING_NAME:
-            a = 9
-        a = 9
-        print(a)
+            if not self.user:
+                confirm(payload)
+
+
+class ProjectSettingPendingResetEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+        from django_project_base.aws.ses import AwsSes
+
+        payload.pending_value = None
+        payload.save(update_fields=["value", "pending_value"])
+
+        if payload.name == EMAIL_SENDER_ID_SETTING_NAME:
+            if payload.python_pending_value in AwsSes.list_sender_emails():
+                AwsSes.remove_sender_email(payload.python_pending_value)
+        if payload.name == SMS_SENDER_ID_SETTING_NAME:
+            pass
