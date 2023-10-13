@@ -1,4 +1,5 @@
 import datetime
+from random import randrange
 
 import django
 import swapper
@@ -10,7 +11,6 @@ from django.db import transaction
 from django.db.models import ForeignKey, Model, QuerySet
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
@@ -424,11 +424,10 @@ class ProfileViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         email_changed = new_email and user.email != new_email
-        email_changed_cookie = "verify-email"
         response = Response(serializer.data)
         if email_changed:
-            code = get_random_string(length=6)
-            response.set_cookie(email_changed_cookie, user.pk, samesite="Lax")
+            code = randrange(100001, 999999)
+            response.set_cookie("verify-email", user.pk, samesite="Lax")
             request.session[f"email-changed-{code}-{user.pk}"] = new_email
             # TODO: Use system email
             # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
@@ -460,11 +459,15 @@ class ProfileViewSet(ModelViewSet):
         user = request.user
         if not request.data.get("code"):
             raise ValidationError(dict(code=[_("Code required")]))
-        new_email = request.session.get(f"email-changed-{request.data['code']}-{user.pk}")
+        key = f"email-changed-{request.data['code']}-{user.pk}"
+        new_email = request.session.get(key)
         if email := new_email:
             user.email = email
             user.save(update_fields=["email"])
-            return Response()
+            request.session.pop(key, None)
+            response = Response()
+            response.delete_cookie("verify-email")
+            return response
         raise ValidationError(dict(code=[_("Invalid code")]))
 
     @extend_schema(

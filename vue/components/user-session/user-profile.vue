@@ -36,9 +36,9 @@ const showProjectList = computed(() => (props.projectListComponent && userSessio
 const changePasswordErrors = reactive({} as { [key: string]: any[] });
 
 async function verifyEmailChanged(userData: UserDataJSON) {
-  if (userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME].toString() === cookies.get(
-    'verify-email',
-  ).toString() && userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
+  const verifyMailCookie = cookies.get('verify-email');
+  if (_.size(verifyMailCookie) && userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] &&
+      userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME].toString() === verifyMailCookie.toString()) {
     const enterEmailConfirmationCode = await dfModal.message('Update email', () => [
       h(
         'h4',
