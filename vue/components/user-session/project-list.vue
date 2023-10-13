@@ -3,7 +3,7 @@ import {
   Action,
   apiClient,
   dfModal,
-  FormConsumerApiOneShot,
+  FormConsumerOneShotApi,
   FormPayload,
 } from '@velis/dynamicforms';
 import slugify from 'slugify';
@@ -59,7 +59,7 @@ async function addNewProject() {
     }
     return false;
   };
-  const addProjectModal = await FormConsumerApiOneShot(
+  const addProjectModal = await FormConsumerOneShotApi(
     {
       url: '/project',
       trailingSlash: false,

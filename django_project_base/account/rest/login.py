@@ -104,4 +104,5 @@ class LoginViewset(viewsets.SingleRecordViewSet):
             and (user := get_user_model().objects.filter(pk=user_id).first())
         ):
             UserLoginEvent(user=user).trigger(payload=request)
+        response.delete_cookie("register-flow")
         return response

@@ -2,19 +2,24 @@ import re
 from typing import Optional
 
 import swapper
-from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth import get_user_model, login, update_session_auth_hash
 from django.contrib.auth.models import AnonymousUser
+from django.core.cache import cache
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-from rest_registration.api.views import change_password, logout, register, verify_registration
+from rest_registration.api.views import change_password, logout, register
+from rest_registration.settings import registration_settings
 from social_django.models import UserSocialAuth
 
 from django_project_base.account.rest.reset_password import ResetPasswordSerializer
@@ -179,15 +184,7 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
         return response
 
 
-class VerifyRegistrationSerializer(serializers.Serializer):
-    user_id = fields.CharField(required=True)
-    timestamp = fields.IntegerField(required=True)
-    signature = fields.CharField(required=True)
-
-
 class VerifyRegistrationViewSet(viewsets.ViewSet):
-    serializer_class = VerifyRegistrationSerializer()
-
     @extend_schema(
         description="Verify registration with signature. The endpoint will generate an e-mail with a confirmation URL "
         "which the user should GET to confirm the account.",
@@ -199,11 +196,53 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
     @action(
         detail=False,
         methods=["post"],
-        url_path="verify_registration",
+        url_path="verify-registration",
         url_name="verify-registration",
     )
     def verify_registration(self, request: Request) -> Response:
-        return verify_registration(request._request)
+        if (
+            (flow_id := request.COOKIES.get("register-flow"))
+            and (code := cache.get(flow_id))
+            and (req_code := request.data.get("code"))
+            and code == req_code
+            and len(code)
+            and len(req_code)
+            and (user := cache.get(code))
+        ):
+            user.is_active = True
+            user.save(update_fields=["is_active"])
+            login(request, user, backend="django_project_base.base.auth_backends.UsersCachingBackend")
+            response = Response()
+            response.delete_cookie("register-flow")
+            return response
+        raise ValidationError(dict(code=[_("Code invalid")]))
+
+    @action(
+        detail=False,
+        methods=["post"],
+        url_path="verify-registration-email-change",
+        url_name="verify-registration-email-change",
+    )
+    def verify_registration_change_email(self, request: Request) -> Response:
+        if (
+            (flow_id := request.COOKIES.get("register-flow"))
+            and (code := cache.get(flow_id))
+            and len(code)
+            and (user := cache.get(code))
+        ):
+            email = request.data.get("email")
+            if not email:
+                raise ValidationError(dict(email=[_("Email invalid")]))
+            try:
+                validate_email(email)
+            except DjangoValidationError:
+                raise ValidationError(dict(email=[_("Email invalid")]))
+            user.email = email
+            user.save(update_fields=["email"])
+            if registration_settings.REGISTER_VERIFICATION_ENABLED:
+                registration_settings.REGISTER_VERIFICATION_EMAIL_SENDER(request=request, user=user)
+            return Response()
+        raise PermissionDenied
 
 
 class AbstractRegisterSerializer(df_serializers.Serializer):

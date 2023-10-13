@@ -12,8 +12,7 @@ from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
-from django_project_base.notifications.base.enums import NotificationLevel, NotificationType as NotificationTypeDPB
-from django_project_base.notifications.email_notification import EMailNotification
+from django_project_base.notifications.email_notification import SystemEMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
@@ -31,7 +30,7 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
     code = get_random_string(length=6)
     cache.set(code_ck, code, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
 
-    EMailNotification(
+    SystemEMailNotification(
         message=DjangoProjectBaseMessage(
             subject=f"{__('Password recovery for')} {request.META['HTTP_HOST']}",
             body=f"{__('You or someone acting as you requested a password reset for your account at')} "
@@ -42,11 +41,6 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
             footer="",
             content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
         ),
-        raw_recipents=[user.pk],
-        project=None,
-        persist=True,
-        level=NotificationLevel.INFO,
-        type=NotificationTypeDPB.STANDARD,
         recipients=[user.pk],
         user=request.user.pk,
     ).send()

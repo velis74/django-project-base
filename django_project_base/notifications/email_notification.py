@@ -2,6 +2,9 @@ import datetime
 import uuid
 from typing import List, Optional, Type
 
+from django.core.cache import cache
+from rest_framework.exceptions import PermissionDenied
+
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.channels.mail_channel import MailChannel
 from django_project_base.notifications.base.enums import NotificationLevel, NotificationType
@@ -89,3 +92,55 @@ class EMailNotificationWithListOfEmails(EMailNotification):
         ]
         self.enqueue_notification(notification, self._extra_data)
         return notification
+
+
+class SystemEMailNotification(EMailNotification):
+    system_mail_throttling_ck = "system-mail-throttling-ck"
+    allowed_number_of_system_requests_per_minute = 5
+
+    def __init__(
+        self,
+        message: DjangoProjectBaseMessage,
+        recipients,
+        **kwargs,
+    ) -> None:
+        super().__init__(
+            message,
+            raw_recipents=recipients,
+            project=None,
+            persist=True,
+            level=None,
+            locale=None,
+            delay=int(datetime.datetime.now().timestamp()),
+            type=None,
+            recipients=recipients,
+            is_system_notification=True,
+            **kwargs,
+        )
+
+    def _get_system_email_cache_key(self) -> str:
+        return f"{self.system_mail_throttling_ck}-{datetime.datetime.now().minute}"
+
+    def _get_system_email_cache_value(self) -> List[float]:
+        if ck_val := cache.get(self._get_system_email_cache_key()):
+            return ck_val
+        return []
+
+    def _check_request_limit(self):
+        if len(self._get_system_email_cache_value()) > self.allowed_number_of_system_requests_per_minute:
+            raise PermissionDenied
+
+    def _register_system_email(self):
+        if ck_val := self._get_system_email_cache_value():
+            if len(ck_val) > self.allowed_number_of_system_requests_per_minute + 1:
+                return
+            ck_val.append(datetime.datetime.now().timestamp())
+            cache.set(self._get_system_email_cache_key(), ck_val, timeout=70)
+            return
+        cache.set(self._get_system_email_cache_key(), [datetime.datetime.now().timestamp()], timeout=70)
+
+    def send(self) -> DjangoProjectBaseNotification:
+        # throttling for system messages
+        self._check_request_limit()
+        self._register_system_email()
+        return super().send()

@@ -213,6 +213,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         for channel_name in channels:
             # ensure dlr user and check providers
             channel = ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
+
+            if not channel and self._extra_data.get("is_system_notification"):
+                continue
+
             assert channel
 
             if self.send_notification_sms and channel.name == MailChannel.name:
@@ -223,4 +227,11 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         notification.user = self._user
 
         notification.sender = Notification._get_sender_config(self._project)
+
+        if self._extra_data.get("is_system_notification"):
+            notification.sender[MailChannel.name] = getattr(settings, "SYSTEM_EMAIL_SENDER_ID", "")
+            from django_project_base.notifications.base.channels.sms_channel import SmsChannel
+
+            notification.sender[SmsChannel.name] = getattr(settings, "SYSTEM_SMS_SENDER_ID", "")
+
         return notification

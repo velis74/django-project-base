@@ -1,4 +1,5 @@
 import datetime
+import uuid
 from random import randrange
 
 import django
@@ -11,6 +12,7 @@ from django.db import transaction
 from django.db.models import ForeignKey, Model, QuerySet
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
@@ -36,7 +38,10 @@ from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
-from django_project_base.notifications.email_notification import EMailNotification, EMailNotificationWithListOfEmails
+from django_project_base.notifications.email_notification import (
+    EMailNotificationWithListOfEmails,
+    SystemEMailNotification,
+)
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
@@ -327,7 +332,17 @@ class ProfileViewSet(ModelViewSet):
         permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
-        return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
+        register_flow_identifier = str(uuid.uuid4())
+        response = Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
+        response.set_cookie(
+            "register-flow",
+            register_flow_identifier,
+            max_age=settings.CONFIRMATION_CODE_TIMEOUT,
+            httponly=True,
+            samesite="Strict",
+        )
+        cache.set(register_flow_identifier, get_random_string(length=6), timeout=settings.CONFIRMATION_CODE_TIMEOUT)
+        return response
 
     @extend_schema(
         description="Registering new account",
@@ -342,7 +357,7 @@ class ProfileViewSet(ModelViewSet):
     def create_new_account(self, request: Request, **kwargs):
         # set default values
         request.data["date_joined"] = datetime.datetime.now()
-        request.data["is_active"] = True
+        request.data["is_active"] = False
 
         # call serializer to do the data processing drf way - hijack
         serializer = ProfileRegisterSerializer(
@@ -592,7 +607,7 @@ class ProfileViewSet(ModelViewSet):
             .first()
         ) and sett.python_value:
             recipients = [response.data[get_pk_name(get_user_model())]]
-            EMailNotification(
+            SystemEMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
                     body=render_to_string(
@@ -604,7 +619,6 @@ class ProfileViewSet(ModelViewSet):
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),
-                raw_recipents=recipients,
                 project=project.slug,
                 recipients=recipients,
                 user=self.request.user.pk,

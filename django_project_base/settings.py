@@ -36,6 +36,8 @@ DJANGO_PROJECT_BASE_SETTINGS = (
             "RESET_PASSWORD_VERIFICATION_ENABLED": True,
             "RESET_PASSWORD_SERIALIZER_PASSWORD_CONFIRM": True,
             "SEND_RESET_PASSWORD_LINK_USER_FINDER": "django_project_base.account.service.reset_password_email_service.find_user_by_send_reset_password_link_data",  # noqa: E501
+            "REGISTER_VERIFICATION_ENABLED": True,
+            "REGISTER_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.register_user_service.send_register_verification_email_notification",  # noqa: E501
         },
     },
     {"name": "NOTIFICATION_SENDERS", "default": {}},
@@ -62,6 +64,14 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {
         "name": "LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL",
         "default": "notifications.DjangoProjectBaseNotification",
+    },
+    {
+        "name": "DEFAULT_EMAIL_SENDER_ID_SETTING_NAME",
+        "default": "",
+    },
+    {
+        "name": "DEFAULT_SMS_SENDER_ID_SETTING_NAME",
+        "default": "",
     },
 )
 

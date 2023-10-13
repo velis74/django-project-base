@@ -89,9 +89,9 @@ class AwsSes(ProviderIntegration):
             .client("ses")
             .send_email(
                 Destination={
-                    "ToAddresses": [sender],
+                    "ToAddresses": [recipient.email],
                     "CcAddresses": [],
-                    "BccAddresses": [recipient.email],
+                    "BccAddresses": [],
                 },
                 Message=msg,
                 Source=sender,
