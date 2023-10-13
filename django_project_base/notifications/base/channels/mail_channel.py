@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 
 from django.conf import settings
@@ -24,6 +25,14 @@ class MailChannel(Channel):
                 list(map(int, notification.recipients.split(","))) if notification.recipients else []
             )
             return len(recipients)
+        message = self.provider.get_message(notification)
+        sender = self.sender(notification)
+        self.provider.client_send(
+            self.sender(notification),
+            Recipient(identifier=str(uuid.uuid4()), phone_number="", email=sender),
+            message,
+            str(uuid.uuid4()),
+        )
         return super().send(notification=notification, extra_data=extra_data)
 
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
