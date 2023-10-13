@@ -2,8 +2,7 @@
 import {
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi,
-  FormConsumerApiOneShot, gettext,
+  ConsumerLogicApi, FormConsumerApiOneShot, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';

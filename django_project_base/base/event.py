@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import swapper
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from rest_registration.settings import registration_settings
 
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME
 
@@ -98,6 +99,8 @@ class UserRegisteredEvent(BaseEvent):
             UserInviteFoundEvent(self.user).trigger(payload=invite, request=payload)
             return
         payload.session.pop("invite-pk", None)
+        if registration_settings.REGISTER_VERIFICATION_ENABLED:
+            registration_settings.REGISTER_VERIFICATION_EMAIL_SENDER(request=payload, user=self.user)
 
 
 class UserLoginEvent(BaseEvent):
