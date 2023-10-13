@@ -17,6 +17,8 @@ const inputProps = defineProps<{
 
 const emit = defineEmits(['selected']);
 
+// todo: https://taiga.velis.si/project/velis74-dynamic-forms/us/836?no-milestone=1
+
 const searchUrl: string = (inputProps.searchUrl !== undefined ? inputProps.searchUrl : '/account/profile') as string;
 
 const selected: Ref<UserDataJSON | null> = ref(null);
@@ -89,9 +91,12 @@ function customLabel(profile: UserDataJSON) {
       @select="onSelect"
     >
       <template slot="singleLabel" slot-scope="props">
-        {{ props.option.email }}
-        {{ props.option.first_name }}
-        {{ props.option.last_name }}
+        {{ //@ts-ignore
+          props.option.email }}
+        {{ //@ts-ignore
+          props.option.first_name }}
+        {{ //@ts-ignore
+          props.option.last_name }}
       </template>
     </multiselect>
   </div>

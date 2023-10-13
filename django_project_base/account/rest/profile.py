@@ -1,4 +1,5 @@
 import datetime
+from random import randrange
 
 import django
 import swapper
@@ -19,6 +20,7 @@ from dynamicforms.serializers import ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
+from natural.date import compress
 from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException, ValidationError
@@ -34,7 +36,7 @@ from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
-from django_project_base.notifications.email_notification import EMailNotification
+from django_project_base.notifications.email_notification import EMailNotification, EMailNotificationWithListOfEmails
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
@@ -417,10 +419,56 @@ class ProfileViewSet(ModelViewSet):
     @get_current_profile.mapping.post
     def update_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
+        new_email = request.data.pop("email", None)
         serializer = self.get_serializer(user, data=request.data, many=False)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        email_changed = new_email and user.email != new_email
+        response = Response(serializer.data)
+        if email_changed:
+            code = randrange(100001, 999999)
+            response.set_cookie("verify-email", user.pk, samesite="Lax")
+            request.session[f"email-changed-{code}-{user.pk}"] = new_email
+            # TODO: Use system email
+            # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
+            # TODO: https://taiga.velis.si/project/velis-django-project-admin/issue/728
+            EMailNotificationWithListOfEmails(
+                message=DjangoProjectBaseMessage(
+                    subject=f"{_('Email change for account on')} {request.META['HTTP_HOST']}",
+                    body=f"{_('You requested an email change for your account at')} {request.META['HTTP_HOST']}. "
+                    f"\n\n{_('Your verification code is')}: "
+                    f"{code} \n\n {_('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n",
+                    footer="",
+                    content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
+                ),
+                recipients=[new_email],
+                project=self.request.selected_project.slug,
+                user=user.pk,
+            ).send()
+        return response
+
+    @extend_schema(exclude=True)
+    @action(
+        methods=["POST"],
+        detail=False,
+        url_path="confirm-new-email",
+        url_name="confirm-new-email",
+    )
+    @transaction.atomic()
+    def confirm_new_email(self, request: Request, **kwargs) -> Response:
+        user = request.user
+        if not request.data.get("code"):
+            raise ValidationError(dict(code=[_("Code required")]))
+        key = f"email-changed-{request.data['code']}-{user.pk}"
+        new_email = request.session.get(key)
+        if email := new_email:
+            user.email = email
+            user.save(update_fields=["email"])
+            request.session.pop(key, None)
+            response = Response()
+            response.delete_cookie("verify-email")
+            return response
+        raise ValidationError(dict(code=[_("Invalid code")]))
 
     @extend_schema(
         description="Marks profile of calling user for deletion in future. Future date is determined " "by settings",

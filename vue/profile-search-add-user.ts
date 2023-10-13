@@ -1,11 +1,13 @@
 import { Action, dfModal, DialogSize, FilteredActions, gettext } from '@velis/dynamicforms';
 import { h } from 'vue';
 
+// @ts-ignore
 import ProfileSearch from './components/profile-search.vue';
 import { UserDataJSON } from './components/user-session/data-types';
 
 let selectedUser: UserDataJSON | undefined;
 
+// todo: https://taiga.velis.si/project/velis74-dynamic-forms/us/836?no-milestone=1
 function selected(profile: UserDataJSON) {
   selectedUser = profile;
 }
@@ -13,7 +15,12 @@ function selected(profile: UserDataJSON) {
 async function showAddProfileModal(addCallback: (profile: UserDataJSON | undefined) => any, searchUrl: string) {
   const modal = await dfModal.message(
     gettext('Add new user'),
-    () => [h('div', [h(ProfileSearch, { onSelected: selected, searchUrl })])],
+    () => [h('div', [h(
+      // @ts-ignore
+      ProfileSearch,
+      { onSelected: selected, searchUrl },
+    )]),
+    ],
     new FilteredActions({
       cancel: new Action({
         name: 'cancel',

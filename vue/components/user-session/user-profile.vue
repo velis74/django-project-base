@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Action, dfModal, DialogSize, FilteredActions, FormConsumerOneShotApi, gettext } from '@velis/dynamicforms';
-import axios from 'axios';
+import { Action, dfModal, DialogSize, FilteredActions, FormConsumerApiOneShot, gettext } from '@velis/dynamicforms';
+import axios, { AxiosRequestConfig } from 'axios';
 import _ from 'lodash';
-import { computed, h, onMounted, watch } from 'vue';
+import { computed, h, onMounted, reactive, watch } from 'vue';
+import { useCookies } from 'vue3-cookies';
 import { useDisplay } from 'vuetify';
 
 import { apiClient } from '../../apiClient';
@@ -10,7 +11,9 @@ import { HTTP_401_UNAUTHORIZED } from '../../apiConfig';
 import { showGeneralErrorNotification } from '../../notifications';
 import { SocialAccItem } from '../../socialIntegrations';
 
+import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME, UserDataJSON } from './data-types';
 import icons from './icons';
+import { parseErrors } from './login';
 import ProjectList from './project-list.vue'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import useUserSessionStore from './state';
 
@@ -20,6 +23,8 @@ interface UserProfileProps {
   projectListComponent: string;
 }
 
+const { cookies } = useCookies();
+
 const props = withDefaults(defineProps<UserProfileProps>(), { projectListComponent: 'ProjectList' });
 const display = useDisplay();
 const userSession = useUserSessionStore();
@@ -28,9 +33,57 @@ let availableSocialConnections = [] as Array<SocialAccItem>;
 let socialConnectionsModalPromise = null as any;
 
 const showProjectList = computed(() => (props.projectListComponent && userSession.loggedIn && display.smAndDown.value));
+const changePasswordErrors = reactive({} as { [key: string]: any[] });
+
+async function verifyEmailChanged(userData: UserDataJSON) {
+  const verifyMailCookie = cookies.get('verify-email');
+  if (_.size(verifyMailCookie) && userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] &&
+      userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME].toString() === verifyMailCookie.toString()) {
+    const enterEmailConfirmationCode = await dfModal.message('Update email', () => [
+      h(
+        'h4',
+        { class: 'mt-n6 mb-4' },
+        `${gettext('We have sent an email to the new email address you provided. ' +
+            'Please enter the code from the message')}:`,
+      ),
+      h('div', { style: 'display: flex; justify-content: center;' }, [h('input', {
+        type: 'text',
+        id: 'input-change-email',
+        placeholder: changePasswordErrors.code ? changePasswordErrors.code : gettext('Email code'),
+        style: 'padding: 0.1em;',
+        class: 'w-50 mb-4 p-2 rounded border-lightgray',
+      }, {})]),
+    ], new FilteredActions({
+      cancel: new Action({
+        name: 'cancel',
+        label: gettext('Cancel'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+      confirm: new Action({
+        name: 'confirm',
+        label: gettext('Confirm'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+    }));
+    if (enterEmailConfirmationCode.action.name === 'confirm') {
+      apiClient.post(
+        '/account/profile/confirm-new-email',
+        { code: (<HTMLInputElement> document.getElementById('input-change-email')).value },
+          { hideErrorNotice: true } as AxiosRequestConfig,
+      ).then(() => {
+        dfModal.message('', gettext('Your new email is now verified, thank you. '));
+      }).catch((err) => {
+        parseErrors(err, changePasswordErrors);
+        verifyEmailChanged(userData);
+      });
+    }
+  }
+}
 
 async function changePassword() {
-  await FormConsumerOneShotApi({ url: '/account/change-password/', trailingSlash: true, pk: 'new' });
+  await FormConsumerApiOneShot({ url: '/account/change-password/', trailingSlash: true, pk: 'new' });
 }
 
 async function checkResetPassword() {
@@ -40,19 +93,36 @@ async function checkResetPassword() {
 }
 
 async function loadData(force: boolean = false) {
+  const userData: UserDataJSON = {
+    full_name: '',
+    email: '',
+    username: '',
+    avatar: '',
+    password_invalid: false,
+    is_superuser: false,
+    permissions: [],
+    is_impersonated: false,
+    groups: [],
+    delete_at: '',
+    [PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]: '',
+  };
+  userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = userSession.userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
+  userData.email = userSession.userData.email;
   if (userSession.loggedIn && !force) {
     await checkResetPassword();
+    await verifyEmailChanged(userData);
     return;
   }
   await userSession.checkLogin(false);
   await checkResetPassword();
+  await verifyEmailChanged(userData);
 }
 
 watch(() => userSession.impersonated, () => window.location.reload());
 onMounted(() => loadData());
 
 async function showImpersonateLogin() {
-  await FormConsumerOneShotApi({ url: '/account/impersonate', trailingSlash: false });
+  await FormConsumerApiOneShot({ url: '/account/impersonate', trailingSlash: false });
   await userSession.checkLogin(false);
 }
 
@@ -62,8 +132,9 @@ async function stopImpersonation() {
 }
 
 async function userProfile() {
-  await FormConsumerOneShotApi({ url: '/account/profile/current', trailingSlash: false });
+  const savedData = await FormConsumerApiOneShot({ url: '/account/profile/current', trailingSlash: false });
   await userSession.checkLogin(false);
+  await verifyEmailChanged(savedData);
 }
 
 function isSocialConnectionEnabled(name: String) {

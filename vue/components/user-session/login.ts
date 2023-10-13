@@ -3,7 +3,7 @@ import {
   ConsumerLogicApi, dfModal as dfModalApi,
   dfModal, DialogSize,
   DisplayMode,
-  FilteredActions, FormConsumerOneShotApi,
+  FilteredActions, FormConsumerApiOneShot,
   FormPayload,
   gettext,
 } from '@velis/dynamicforms';
@@ -25,20 +25,20 @@ const resetPasswordErrors = reactive({} as { [key: string]: any[] });
 
 let resetPasswordData = { user_id: 0, timestamp: 0, signature: '' };
 
-export default function useLogin() {
+function parseErrors(apiErr: AxiosError<any>, errsStore: { [key: string]: any[] }) {
+  Object.keys(errsStore).forEach((key: string) => {
+    delete errsStore[key];
+  });
+  if (apiErr.response?.data?.detail) {
+    errsStore.non_field_errors = [apiErr.response.data.detail];
+  } else {
+    Object.assign(errsStore, apiErr.response?.data);
+  }
+}
+
+function useLogin() {
   const userSession = useUserSessionStore();
   const loginConsumer = new ConsumerLogicApi(userSession.apiEndpointLogin);
-
-  function parseErrors(apiErr: AxiosError<any>, errsStore: { [key: string]: any[] }) {
-    Object.keys(errsStore).forEach((key: string) => {
-      delete errsStore[key];
-    });
-    if (apiErr.response?.data?.detail) {
-      errsStore.non_field_errors = [apiErr.response.data.detail];
-    } else {
-      Object.assign(errsStore, apiErr.response?.data);
-    }
-  }
 
   async function enterResetPasswordData() {
     // eslint-disable-next-line vue/max-len
@@ -221,7 +221,7 @@ export default function useLogin() {
     socialAuth.value = formDef.payload.social_auth_providers;
   }
 
-  const openRegistration = async () => FormConsumerOneShotApi(
+  const openRegistration = async () => FormConsumerApiOneShot(
     { url: '/account/profile/register', trailingSlash: false },
   );
 
@@ -243,3 +243,5 @@ export default function useLogin() {
     openRegistration,
   };
 }
+
+export { useLogin, parseErrors };
