@@ -1,3 +1,4 @@
+import copy
 import datetime
 from abc import ABC, abstractmethod
 
@@ -6,7 +7,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_registration.settings import registration_settings
 
-from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME
+from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 
 
 class UserModel:
@@ -45,16 +46,43 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
         super().trigger_changed(old_state, new_state, payload, **kwargs)
 
         if new_state.name == EMAIL_SENDER_ID_SETTING_NAME:
-            # TODO: THIS IS NOLY FOR AWS FOR NOW
+            # TODO: THIS IS ONLY FOR AWS FOR NOW
             from django_project_base.aws.ses import AwsSes
 
             if not old_state:
                 AwsSes.add_sender_email(new_state.python_value)
-                return
-            if old_state.python_value != new_state.python_value:
-                AwsSes.remove_sender_email(old_state.python_value) if old_state.python_value else None
-                AwsSes.add_sender_email(new_state.python_value)
-                return
+            elif (old_state.python_value != new_state.python_value) or (
+                new_state.python_value
+                and new_state.pending_value
+                and new_state.python_pending_value != new_state.python_value
+            ):
+                AwsSes.add_sender_email(new_state.pending_value)
+
+            project_settings_manager = swapper.load_model("django_project_base", "ProjectSettings").objects
+            for sender in set(AwsSes.list_sender_emails()) - (
+                set(
+                    project_settings_manager.objects.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
+                        "value", flat=True
+                    )
+                )
+                | set(
+                    project_settings_manager.objects.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
+                        "pending_value", flat=True
+                    )
+                )
+            ):
+                AwsSes.remove_sender_email(sender)
+
+
+class SmsSenderChangedEvent(ProjectSettingChangedEvent):
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state, new_state, payload, **kwargs)
+
+        if new_state.name == SMS_SENDER_ID_SETTING_NAME:
+            pass
 
 
 class UserInviteFoundEvent(BaseEvent):
@@ -117,3 +145,78 @@ class UserLoginEvent(BaseEvent):
             UserInviteFoundEvent(self.user).trigger(payload=invite, request=payload)
             return
         payload.session.pop("invite-pk", None)
+
+
+class ProjectSettingConfirmedEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+        from django_project_base.aws.ses import AwsSes
+
+        def confirm(item):
+            item.value = copy.copy(item.python_pending_value)
+            item.pending_value = None
+            item.save(update_fields=["value", "pending_value"])
+
+        # not self.user Event is trigerred from management command
+        if payload.name == EMAIL_SENDER_ID_SETTING_NAME and (
+            payload.python_pending_value in AwsSes.list_verified_sender_emails() or not self.user
+        ):
+            confirm(payload)
+        if payload.name == SMS_SENDER_ID_SETTING_NAME:
+            if not self.user:
+                confirm(payload)
+
+
+class ProjectSettingActionRequiredEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+
+        # if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
+        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
+        # EMailNotificationWithListOfEmails(
+        #     message=DjangoProjectBaseMessage(
+        #         subject=gettext"Project settings action required"),
+        #         body=f"{gettext('Action required for setting')} {payload.name} in project {payload.project.name}",
+        #         footer="",
+        #         content_type=DjangoProjectBaseMessage.HTML,
+        #     ),
+        #     recipients=to,
+        #     project=None,
+        #     user=None,
+        # ).send()
+
+
+class ProjectSettingPendingResetEvent(BaseEvent):
+    def trigger_changed(self, old_state=None, new_state=None, payload=None, **kwargs):
+        super().trigger_changed(old_state=old_state, new_state=new_state, payload=payload, **kwargs)
+
+    def trigger(self, payload=None, **kwargs):
+        super().trigger(payload, **kwargs)
+        if not payload:
+            return
+        from django_project_base.aws.ses import AwsSes
+
+        pending_value = copy.copy(payload.python_pending_value)
+        payload.pending_value = None
+        payload.save(update_fields=["pending_value"])
+
+        if payload.name == EMAIL_SENDER_ID_SETTING_NAME:
+            if pending_value in AwsSes.list_sender_emails():
+                AwsSes.remove_sender_email(pending_value)
+            AwsSes.add_sender_email(payload.python_value)
+            if payload.python_value not in AwsSes.list_verified_sender_emails():
+                payload.action_required = True
+                payload.save(update_fields=["action_required"])
+        if payload.name == SMS_SENDER_ID_SETTING_NAME:
+            payload.action_required = True
+            payload.save(update_fields=["action_required"])

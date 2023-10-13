@@ -65,6 +65,14 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL",
         "default": "notifications.DjangoProjectBaseNotification",
     },
+    {
+        "name": "DEFAULT_EMAIL_SENDER_ID_SETTING_NAME",
+        "default": "",
+    },
+    {
+        "name": "DEFAULT_SMS_SENDER_ID_SETTING_NAME",
+        "default": "",
+    },
 )
 
 USER_CACHE_KEY = "django-user-{id}"
