@@ -3,7 +3,7 @@ import {
   Action,
   apiClient,
   dfModal,
-  FormConsumerOneShotApi,
+  FormConsumerApiOneShot,
   FormPayload,
 } from '@velis/dynamicforms';
 import slugify from 'slugify';
@@ -46,7 +46,6 @@ async function loadData() {
 }
 
 async function addNewProject() {
-  // const addProjectModal = await FormConsumerOneShotApi({ url: '/project', trailingSlash: false, pk: 'new' });
   let slugChanged = false;
   let ignoreSlugChange = false;
   const valueChangedHandler = (action: Action, payload: FormPayload, context: any) => {
@@ -60,7 +59,7 @@ async function addNewProject() {
     }
     return false;
   };
-  const addProjectModal = await FormConsumerOneShotApi(
+  const addProjectModal = await FormConsumerApiOneShot(
     {
       url: '/project',
       trailingSlash: false,

@@ -46,7 +46,7 @@ import _ from 'lodash';
 import { onMounted } from 'vue';
 import { useCookies } from 'vue3-cookies';
 
-import useLogin from './login';
+import { useLogin } from './login';
 import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
 
