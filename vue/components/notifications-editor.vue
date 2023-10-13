@@ -2,7 +2,7 @@
 import {
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerApiOneShot, gettext,
+  ConsumerLogicApi, FormConsumerOneShotApi, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -49,12 +49,12 @@ const notificationLogic = ref(new ConsumerLogicApi(
 notificationLogic.value.getFullDefinition();
 
 const actionViewLicense = async (): Promise<boolean> => {
-  await FormConsumerApiOneShot({ url: licenseConsumerUrl, trailingSlash: licenseConsumerUrlTrailingSlash, pk: 'new' });
+  await FormConsumerOneShotApi({ url: licenseConsumerUrl, trailingSlash: licenseConsumerUrlTrailingSlash, pk: 'new' });
   return true;
 };
 
 const actionAddNotification = async (): Promise<boolean> => {
-  await FormConsumerApiOneShot({
+  await FormConsumerOneShotApi({
     url: consumerUrl,
     trailingSlash: consumerTrailingSlash,
     pk: 'new',
