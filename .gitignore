@@ -49,7 +49,6 @@ Thumbs.db
 /docs/.vitepress/
 /.tox/
 /django_project_base.egg-info/
-package-lock.json
 example/db.sqlite3
 example/setup/env.py
 
