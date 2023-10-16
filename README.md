@@ -1,5 +1,19 @@
 # Django project base
 
+A collection of functionalities that are common to most projects we do.
+
+- account management
+- project management
+- notifications (both to users and to apps)
+- tagging
+- background job processing
+- roles & permissions
+- profiling
+
+This project is in VERY early development stage. Some of the functionalities are not even developed yet, some need 
+major rework, but some, surprisingly, should work pretty well already. An example of pretty well functioning ones is 
+account management.
+
 ## Example project
 
 For running example django project prepare python environment and run (run in repository root):
