@@ -1,6 +1,7 @@
 import copy
 import datetime
 from abc import ABC, abstractmethod
+from gettext import gettext
 
 import swapper
 from django.conf import settings
@@ -8,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from rest_registration.settings import registration_settings
 
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
+from django_project_base.notifications.email_notification import SystemEMailNotificationWithListOfEmails
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
 class UserModel:
@@ -181,19 +184,16 @@ class ProjectSettingActionRequiredEvent(BaseEvent):
         if not payload:
             return
 
-        # if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
-        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
-        # EMailNotificationWithListOfEmails(
-        #     message=DjangoProjectBaseMessage(
-        #         subject=gettext"Project settings action required"),
-        #         body=f"{gettext('Action required for setting')} {payload.name} in project {payload.project.name}",
-        #         footer="",
-        #         content_type=DjangoProjectBaseMessage.HTML,
-        #     ),
-        #     recipients=to,
-        #     project=None,
-        #     user=None,
-        # ).send()
+        if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
+            SystemEMailNotificationWithListOfEmails(
+                message=DjangoProjectBaseMessage(
+                    subject=gettext("Project settings action required"),
+                    body=f"{gettext('Action required for setting')} {payload.name} in project {payload.project.name}",
+                    footer="",
+                    content_type=DjangoProjectBaseMessage.HTML,
+                ),
+                recipients=to,
+            ).send()
 
 
 class ProjectSettingPendingResetEvent(BaseEvent):

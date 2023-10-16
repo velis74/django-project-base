@@ -144,3 +144,23 @@ class SystemEMailNotification(EMailNotification):
         self._check_request_limit()
         self._register_system_email()
         return super().send()
+
+
+class SystemEMailNotificationWithListOfEmails(EMailNotificationWithListOfEmails):
+    def __init__(
+        self,
+        message: DjangoProjectBaseMessage,
+        recipients,
+        **kwargs,
+    ) -> None:
+        super().__init__(
+            message,
+            recipients,
+            kwargs.get("project"),
+            kwargs.get("user"),
+            level=kwargs.get("level"),
+            locale=kwargs.get("locale"),
+            type=kwargs.get("type"),
+            is_system_notification=True,
+            **kwargs,
+        )
