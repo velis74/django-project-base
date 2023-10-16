@@ -156,11 +156,11 @@ class SystemEMailNotificationWithListOfEmails(EMailNotificationWithListOfEmails)
         super().__init__(
             message,
             recipients,
-            kwargs.get("project"),
-            kwargs.get("user"),
-            level=kwargs.get("level"),
-            locale=kwargs.get("locale"),
-            type=kwargs.get("type"),
+            project=kwargs.pop("project", None),
+            user=kwargs.pop("user", None),
+            level=kwargs.pop("level", None),
+            locale=kwargs.pop("locale", None),
+            type=kwargs.pop("type", None),
             is_system_notification=True,
             **kwargs,
         )
