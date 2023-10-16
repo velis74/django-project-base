@@ -84,10 +84,10 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/velis74/django-project-base",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(include=("django_project_base",)),
     include_package_data=True,
     install_requires=requirements,
-    python_requires=">=3.4",
+    python_requires=">=3.8",
     license="BSD-3-Clause",
     classifiers=[
         "Development Status :: 3 - Alpha",
