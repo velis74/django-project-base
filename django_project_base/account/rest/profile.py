@@ -39,8 +39,8 @@ from django_project_base.account.rest.project_profiles_utils import get_project_
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import (
-    EMailNotificationWithListOfEmails,
     SystemEMailNotification,
+    SystemEMailNotificationWithListOfEmails,
 )
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
@@ -444,10 +444,7 @@ class ProfileViewSet(ModelViewSet):
             code = randrange(100001, 999999)
             response.set_cookie("verify-email", user.pk, samesite="Lax")
             request.session[f"email-changed-{code}-{user.pk}"] = new_email
-            # TODO: Use system email
-            # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
-            # TODO: https://taiga.velis.si/project/velis-django-project-admin/issue/728
-            EMailNotificationWithListOfEmails(
+            SystemEMailNotificationWithListOfEmails(
                 message=DjangoProjectBaseMessage(
                     subject=f"{_('Email change for account on')} {request.META['HTTP_HOST']}",
                     body=f"{_('You requested an email change for your account at')} {request.META['HTTP_HOST']}. "
