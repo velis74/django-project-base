@@ -8,10 +8,6 @@ from tests.test_base import TestBase
 
 
 class RetrieveHolidaysTest(TestBase):
-
     def test_retieve_holidays(self):
-        response: requests.Response = requests.get(
-            holidays_api_url % (datetime.datetime.now().year, 'SI'),
-            timeout=6
-        )
+        response: requests.Response = requests.get(holidays_api_url % (datetime.datetime.now().year, "SI"), timeout=6)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

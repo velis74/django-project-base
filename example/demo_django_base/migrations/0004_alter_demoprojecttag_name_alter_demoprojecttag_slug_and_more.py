@@ -17,9 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="demoprojecttag",
             name="slug",
-            field=models.SlugField(
-                allow_unicode=True, max_length=100, verbose_name="slug"
-            ),
+            field=models.SlugField(allow_unicode=True, max_length=100, verbose_name="slug"),
         ),
         migrations.AlterUniqueTogether(
             name="demoprojecttag",

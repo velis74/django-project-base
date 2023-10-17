@@ -38,28 +38,20 @@ class Migration(migrations.Migration):
                     models.IntegerField(
                         choices=[
                             (
-                                django_project_base.notifications.models.DeliveryReport.Status[
-                                    "DELIVERED"
-                                ],
+                                django_project_base.notifications.models.DeliveryReport.Status["DELIVERED"],
                                 "Delivered",
                             ),
                             (
-                                django_project_base.notifications.models.DeliveryReport.Status[
-                                    "NOT_DELIVERED"
-                                ],
+                                django_project_base.notifications.models.DeliveryReport.Status["NOT_DELIVERED"],
                                 "Not Delivered",
                             ),
                             (
-                                django_project_base.notifications.models.DeliveryReport.Status[
-                                    "PENDING_DELIVERY"
-                                ],
+                                django_project_base.notifications.models.DeliveryReport.Status["PENDING_DELIVERY"],
                                 "Pending delivery",
                             ),
                         ],
                         db_index=True,
-                        default=django_project_base.notifications.models.DeliveryReport.Status[
-                            "PENDING_DELIVERY"
-                        ],
+                        default=django_project_base.notifications.models.DeliveryReport.Status["PENDING_DELIVERY"],
                     ),
                 ),
                 (

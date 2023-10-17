@@ -40,7 +40,6 @@ def reverse_func(apps, schema_editor):
     pass
 
 
-
 class Migration(migrations.Migration):
     initial = True
 
@@ -77,15 +76,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "color",
-                    django_project_base.base.fields.HexColorField(
-                        max_length=7, verbose_name="Color"
-                    ),
+                    django_project_base.base.fields.HexColorField(max_length=7, verbose_name="Color"),
                 ),
                 (
                     "icon",
-                    models.CharField(
-                        blank=True, max_length=10, null=True, verbose_name="Icon"
-                    ),
+                    models.CharField(blank=True, max_length=10, null=True, verbose_name="Icon"),
                 ),
                 ("content", models.CharField(blank=True, max_length=20, null=True)),
             ],
@@ -140,9 +135,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "logo",
-                    models.FileField(
-                        blank=True, null=True, upload_to="", verbose_name="Logo"
-                    ),
+                    models.FileField(blank=True, null=True, upload_to="", verbose_name="Logo"),
                 ),
             ],
             options={
@@ -188,9 +181,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "bio",
-                    models.TextField(
-                        blank=True, max_length=500, null=True, verbose_name="Bio"
-                    ),
+                    models.TextField(blank=True, max_length=500, null=True, verbose_name="Bio"),
                 ),
                 (
                     "phone_number",
@@ -203,33 +194,23 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "language",
-                    models.CharField(
-                        blank=True, max_length=10, null=True, verbose_name="Language"
-                    ),
+                    models.CharField(blank=True, max_length=10, null=True, verbose_name="Language"),
                 ),
                 (
                     "theme",
-                    models.CharField(
-                        blank=True, max_length=10, null=True, verbose_name="Theme"
-                    ),
+                    models.CharField(blank=True, max_length=10, null=True, verbose_name="Theme"),
                 ),
                 (
                     "avatar",
-                    models.FileField(
-                        blank=True, null=True, upload_to="", verbose_name="Avatar"
-                    ),
+                    models.FileField(blank=True, null=True, upload_to="", verbose_name="Avatar"),
                 ),
                 (
                     "reverse_full_name_order",
-                    models.BooleanField(
-                        blank=True, null=True, verbose_name="Reverse full name order"
-                    ),
+                    models.BooleanField(blank=True, null=True, verbose_name="Reverse full name order"),
                 ),
                 (
                     "delete_at",
-                    models.DateTimeField(
-                        blank=True, null=True, verbose_name="Delete profile at"
-                    ),
+                    models.DateTimeField(blank=True, null=True, verbose_name="Delete profile at"),
                 ),
                 ("password_invalid", models.BooleanField(default=False)),
             ],
