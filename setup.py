@@ -61,16 +61,12 @@ if sys.argv[1] == "publish":
     write_ver_to_init("package.json", version_str, '"version": ', '  "version": "%s",\n')
 
     os.system("npm run build")
-    if publish_local:
-        os.system("npm pack")
-        os.system("cp django_project_base-*.tgz ~/velis_nextcloud")
-        os.system("mv django_project_base-*.tgz ~/Projects/alc/node_libs")
-    else:
-        os.system("cd vue/dynamicforms && npm publish && cd ../..")
-        os.system("python setup.py sdist bdist_wheel")
-        # if you don't like to enter username / pass for pypi every time, run this command:
-        #  keyring set https://upload.pypi.org/legacy/ username  (it will ask for password)
-        os.system("twine upload dist/*")
+
+    os.system("npm publish")
+    os.system("python setup.py sdist bdist_wheel")
+    # if you don't like to enter username / pass for pypi every time, run this command:
+    #  keyring set https://upload.pypi.org/legacy/ username  (it will ask for password)
+    os.system("twine upload dist/*")
 
     os.system("rm -rf build && rm -rf dist && rm -rf django_project_base.egg-info")
     os.system("git checkout django_project_base/__init__.py")
@@ -88,10 +84,10 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/velis74/django-project-base",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(include=("django_project_base",)),
     include_package_data=True,
     install_requires=requirements,
-    python_requires=">=3.4",
+    python_requires=">=3.8",
     license="BSD-3-Clause",
     classifiers=[
         "Development Status :: 3 - Alpha",
