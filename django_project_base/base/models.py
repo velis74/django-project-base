@@ -345,6 +345,6 @@ class BaseInvite(models.Model):
         ]
 
 
-class Invite(BaseProject):
+class Invite(BaseInvite):
     class Meta:
         swappable = swapper.swappable_setting("django_project_base", "Invite")
