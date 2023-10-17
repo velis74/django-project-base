@@ -33,14 +33,17 @@ class AwsSes:
     @staticmethod
     def remove_sender_email(email: str):
         if email in AwsSes.list_sender_emails():
-            assert (
-                AwsSes.client.delete_identity(
-                    Identity=email,
-                )[
-                    "ResponseMetadata"
-                ]["HTTPStatusCode"]
-                == status.HTTP_200_OK
-            )
+            # TODO: EACH DEPLOYMENT SHOULD HAVE ITS OWN AWS ACCOUNT FOR THIS TO BE ENABLED
+            # TODO: ALSO DEV MACHINES SHOULD HAVE ITS OWN ACCOUNT
+            pass
+            # assert (
+            #     AwsSes.client.delete_identity(
+            #         Identity=email,
+            #     )[
+            #         "ResponseMetadata"
+            #     ]["HTTPStatusCode"]
+            #     == status.HTTP_200_OK
+            # )
 
     @staticmethod
     def add_sender_email(email: str):
