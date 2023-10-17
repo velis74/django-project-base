@@ -116,7 +116,7 @@ class ProjectViewSet(ModelViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
     )
-    @get_current_project.mapping.post
+    @get_current_project.mapping.put
     def update_current_profile(self, request: Request, **kwargs) -> Response:
         try:
             serializer = self.get_serializer(request.selected_project, data=request.data, many=False)
