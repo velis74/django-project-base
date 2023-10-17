@@ -431,7 +431,7 @@ class ProfileViewSet(ModelViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
     )
-    @get_current_profile.mapping.post
+    @get_current_profile.mapping.put
     def update_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
         new_email = request.data.pop("email", None)
