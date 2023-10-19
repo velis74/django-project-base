@@ -18,9 +18,7 @@ class TestRole(TestBase):
     def setUp(self):
         super().setUp()
         self.api_client = APIClient()
-        self.project: Model = swapper.load_model(
-            "django_project_base", "Project"
-        ).objects.create(
+        self.project: Model = swapper.load_model("django_project_base", "Project").objects.create(
             name="test-project",
             owner=UserProfile.objects.get(username=TEST_USER_ONE_DATA["username"]),
             slug="test-project-slug",
@@ -34,9 +32,7 @@ class TestRole(TestBase):
             },
             format="json",
         )
-        self.api_client.credentials(
-            HTTP_AUTHORIZATION="sessionid " + response.data.get("sessionid", None)
-        )
+        self.api_client.credentials(HTTP_AUTHORIZATION="sessionid " + response.data.get("sessionid", None))
 
     def __create_role(self, payload: dict = {}) -> Response:
         return self.api_client.post(
@@ -59,9 +55,7 @@ class TestRole(TestBase):
 
     def test_list_project_role(self):
         self.__create_role()
-        list_response: Response = self.api_client.get(
-            f"{self.url}?project={self.project.pk}"
-        )
+        list_response: Response = self.api_client.get(f"{self.url}?project={self.project.pk}")
         self.assertEqual(list_response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(list_response.json()), 1)
         self.assertEqual(list_response.json()[0].get("name"), self.test_role_name)
@@ -95,6 +89,4 @@ class TestRole(TestBase):
         role_pk: int = self.__create_role().json().get("id")
         delete_response: Response = self.api_client.delete(f"{self.url}/{role_pk}")
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(
-            0, len(self.api_client.get(f"{self.url}?project={self.project.pk}").json())
-        )
+        self.assertEqual(0, len(self.api_client.get(f"{self.url}?project={self.project.pk}").json()))

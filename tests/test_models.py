@@ -24,20 +24,20 @@ class TestProfile(TestBase):
         assert UserProfile()
 
     def test_reverse_full_name_order(self):
-        self.assertTrue(self._login_with_test_user_two(), 'Not logged in')
-        response = self.api_client.get('/account/profile/current', {}, format='json')
+        self.assertTrue(self._login_with_test_user_two(), "Not logged in")
+        response = self.api_client.get("/account/profile/current", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['full_name'], 'Janez Novak')
+        self.assertEqual(response.data["full_name"], "Janez Novak")
 
         settings.PROFILE_REVERSE_FULL_NAME_ORDER = True
-        response = self.api_client.get('/account/profile/current', {}, format='json')
+        response = self.api_client.get("/account/profile/current", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['full_name'], 'Novak Janez')
+        self.assertEqual(response.data["full_name"], "Novak Janez")
 
         settings.PROFILE_REVERSE_FULL_NAME_ORDER = False
-        janez = UserProfile.objects.get(username='janez')
+        janez = UserProfile.objects.get(username="janez")
         janez.reverse_full_name_order = True
         janez.save()
-        response = self.api_client.get('/account/profile/current', {}, format='json')
+        response = self.api_client.get("/account/profile/current", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['full_name'], 'Novak Janez')
+        self.assertEqual(response.data["full_name"], "Novak Janez")
