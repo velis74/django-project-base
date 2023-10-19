@@ -63,13 +63,9 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
 
             project_settings_manager = swapper.load_model("django_project_base", "ProjectSettings").objects
             for sender in set(AwsSes.list_sender_emails()) - (
-                set(
-                    project_settings_manager.objects.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
-                        "value", flat=True
-                    )
-                )
+                set(project_settings_manager.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list("value", flat=True))
                 | set(
-                    project_settings_manager.objects.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
+                    project_settings_manager.filter(name=EMAIL_SENDER_ID_SETTING_NAME).values_list(
                         "pending_value", flat=True
                     )
                 )
