@@ -11,8 +11,6 @@ from rest_framework.exceptions import PermissionDenied
 
 from django_project_base.licensing.models import LicenseAccessUse
 
-MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS = 86.97 + 30  # TODO: read from package
-
 
 class LicenseUsageReport(Serializer):
     item = fields.CharField(read_only=True)
@@ -28,6 +26,14 @@ class LicenseReportSerializer(Serializer):
 
 
 class LogAccessService:
+    def _user_access_user_inflow(self, user_id) -> float:
+        return abs(
+            LicenseAccessUse.objects.filter(user_id=str(user_id), amount__lt=0)
+            .aggregate(Sum("amount"))
+            .get("amount__sum", None)
+            or 0
+        )
+
     def report(self, user: Model) -> dict:
         user_query = LicenseAccessUse.objects.filter(user_id=str(user.pk), amount__isnull=False, amount__gt=0)
 
@@ -45,12 +51,14 @@ class LogAccessService:
         if user_query.exists():
             used_credit = round(user_query.aggregate(count=Sum("amount")).get("count", 0), 2)
 
+        credit = self._user_access_user_inflow(user.pk)
+
         return LicenseReportSerializer(
             {
-                "credit": round(MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS, 2),
+                "credit": round(credit, 2),
                 "used_credit": used_credit,
                 "usage_report": usage_report,
-                "remaining_credit": round(MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS - used_credit, 2),
+                "remaining_credit": round(credit - used_credit, 2),
             }
         ).data
 
@@ -89,16 +97,7 @@ class LogAccessService:
             for used_channel in list(set(list(items.keys()))):
                 used += chl_prices.get(used_channel, 0) * items.get(used_channel, 0)
 
-        allowed_users = getattr(settings, "NOTIFICATIONS_ALLOWED_USERS", [])
-        if not allowed_users:
-            allowed_users = getattr(kwargs.get("settings", object()), "NOTIFICATIONS_ALLOWED_USERS", [])
-
-        is_system_notification = kwargs.get("is_system_notification")
-
-        if not is_system_notification and str(user_profile_pk) not in list(map(str, allowed_users)):
-            raise PermissionDenied
-
-        if not is_system_notification and used >= MONTHLY_ACCESS_LIMIT_IN_CURRENCY_UNITS:  # janez medja
+        if not kwargs.get("is_system_notification") and used >= 0:  # janez medja
             raise PermissionDenied(gettext("Your license is consumed. Please contact support."))
 
         if on_sucess:
