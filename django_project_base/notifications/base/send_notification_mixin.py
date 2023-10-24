@@ -10,7 +10,9 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 
 class SendNotificationMixin(object):
-    def make_send(self, notification: DjangoProjectBaseNotification, extra_data) -> DjangoProjectBaseNotification:
+    def make_send(
+        self, notification: DjangoProjectBaseNotification, extra_data, resend=False
+    ) -> DjangoProjectBaseNotification:
         sent_channels: list = []
         failed_channels: list = []
 
@@ -35,15 +37,12 @@ class SendNotificationMixin(object):
                 notification.sent_channels.split(",") if notification.sent_channels else [],
             )
         )
-        required_channels = (
-            set(
-                filter(
-                    lambda i: i not in (None, "") and i,
-                    notification.required_channels.split(",") if notification.required_channels else [],
-                )
+        required_channels = set(
+            filter(
+                lambda i: i not in (None, "") and i,
+                notification.required_channels.split(",") if notification.required_channels else [],
             )
-            - already_sent_channels
-        )
+        ) - (already_sent_channels if not resend else set())
         already_failed_channels = set(
             filter(
                 lambda i: i not in (None, "") and i,
@@ -51,13 +50,12 @@ class SendNotificationMixin(object):
             )
         )
 
-        sent_to_channels = required_channels - already_sent_channels
         from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
         if notification.send_notification_sms:
-            sent_to_channels.add(SmsChannel.name)
+            required_channels.add(SmsChannel.name)
 
-        for channel_identifier in sent_to_channels:
+        for channel_identifier in required_channels:
             channel = ChannelIdentifier.channel(
                 channel_identifier, extra_data=extra_data, project_slug=notification.project_slug, ensure_dlr_user=False
             )
@@ -82,7 +80,7 @@ class SendNotificationMixin(object):
                 exceptions += f"{str(e)}\n\n"
 
         if notification.created_at:
-            if sent_to_channels:
+            if required_channels:
                 notification.sent_channels = (
                     ",".join(
                         set(

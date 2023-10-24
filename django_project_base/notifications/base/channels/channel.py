@@ -6,6 +6,7 @@ from typing import List, Optional, Union
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
+from django.utils.translation import gettext
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
@@ -90,13 +91,14 @@ class Channel(ABC):
     def create_delivery_report(
         self, notification: DjangoProjectBaseNotification, recipient: Recipient, pk: str
     ) -> DeliveryReport:
-        return DeliveryReport.objects.create(
+        dlr, created = DeliveryReport.objects.get_or_create(
             notification=notification,
             user_id=recipient.identifier,
             channel=f"{self.__module__}.{self.__class__.__name__}",
             provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
             pk=pk,
         )
+        return dlr
 
     @abstractmethod
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
@@ -136,8 +138,23 @@ class Channel(ABC):
 
             def make_send(notification_obj, rec_obj, message_str, dlr_pk) -> Optional[DeliveryReport]:
                 try:
+                    do_send = True
                     if not getattr(settings, "TESTING", False):
-                        self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr_pk)
+                        dlr_exists = DeliveryReport.objects.filter(
+                            notification=notification_obj,
+                            user_id=rec_obj.identifier,
+                            channel=f"{self.__module__}.{self.__class__.__name__}",
+                            provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+                        )
+                        if dlr_exists.count() > 1:
+                            raise Exception(f"{gettext('To many DLR exist.')} {notification} {recipient}")
+                        if dlr_notification := dlr_exists.first():
+                            dlr_pk = str(dlr_notification.pk)
+                            if dlr_notification.status == DeliveryReport.Status.DELIVERED:
+                                do_send = False
+                        self.provider.client_send(
+                            self.sender(notification_obj), rec_obj, message_str, dlr_pk
+                        ) if do_send else None
                     sent = True
                 except Exception as te:
                     logger.exception(te)
@@ -151,7 +168,7 @@ class Channel(ABC):
                     logger.exception(de)
                     return dlr_obj
 
-            for recipient in recipients:  # noqa: E203
+            for recipient in recipients:
                 dlr__uuid = str(uuid.uuid4())
                 try:
                     while dlr := not make_send(

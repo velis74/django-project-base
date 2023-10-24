@@ -95,7 +95,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         notification.recipients_original_payload_search = None
         notification.sender = Notification._get_sender_config(notification.project_slug)
         notification.save(update_fields=["recipients", "recipients_original_payload_search"])
-        SendNotificationMixin().make_send(notification, {})
+        SendNotificationMixin().make_send(notification, {}, resend=True)
 
     def __set_via_channels(self, val):
         self._via_channels = val
