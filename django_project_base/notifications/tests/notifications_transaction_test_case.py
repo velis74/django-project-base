@@ -1,16 +1,19 @@
 import socket
+import uuid
 from typing import List, Type
 
 import swapper
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.test import TransactionTestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
+from django_project_base.licensing.models import LicenseAccessUse
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.channels.mail_channel import MailChannel
 from django_project_base.notifications.base.notification import Notification
-from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
 
 class TestNotificationViaEmail(Notification):
@@ -33,6 +36,14 @@ class NotificationsTransactionTestCase(TransactionTestCase):
             name="test", slug="test", owner=self.test_user.userprofile
         )
         self.api_client = APIClient()
+        LicenseAccessUse.objects.create(
+            type=LicenseAccessUse.UseType.USE,
+            user_id=str(self.test_user.pk),
+            content_type_object_id=str(uuid.uuid4()),
+            content_type=ContentType.objects.get_for_model(DjangoProjectBaseNotification._meta.model),
+            amount=-100,
+            comment=dict(comment="Test Credit", count=0, item_price=0, sender=""),
+        )
 
     def _login_to_api_client_with_test_user(self):
         user_token, token_created = Token.objects.get_or_create(user=self.test_user)
@@ -57,5 +68,5 @@ class NotificationsTransactionTestCase(TransactionTestCase):
             project=swapper.load_model("django_project_base", "Project").objects.first().slug,
             recipients=[self.test_user.pk],
             persist=True,
-            user=self.test_user,
+            user=self.test_user.pk,
         )

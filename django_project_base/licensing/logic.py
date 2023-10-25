@@ -1,6 +1,5 @@
 from typing import List
 
-from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.models import Model, Sum
@@ -49,7 +48,7 @@ class LogAccessService:
                 added_types.append(content_type.model_class()._meta.verbose_name)
         used_credit = 0
         if user_query.exists():
-            used_credit = round(user_query.aggregate(count=Sum("amount")).get("count", 0), 2)
+            used_credit = round(user_query.aggregate(count=Sum("amount")).get("count", 0), 4)
 
         credit = self._user_access_user_inflow(user.pk)
 
@@ -58,7 +57,7 @@ class LogAccessService:
                 "credit": round(credit, 2),
                 "used_credit": used_credit,
                 "usage_report": usage_report,
-                "remaining_credit": round(credit - used_credit, 2),
+                "remaining_credit": round(credit - used_credit, 4),
             }
         ).data
 
@@ -72,10 +71,6 @@ class LogAccessService:
         on_sucess=None,
         **kwargs,
     ) -> int:
-        if getattr(settings, "TESTING", False) and on_sucess:
-            on_sucess()
-            return 1
-
         db_connection = "default"
         if kwargs.get("db") and kwargs["db"] != "default":
             db_connection = kwargs["db"]
