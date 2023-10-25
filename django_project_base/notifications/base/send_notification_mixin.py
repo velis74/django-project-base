@@ -1,6 +1,7 @@
 import logging
 
 from django import db
+from django.core.cache import cache
 from django.db import connections
 from django.db.utils import load_backend
 from django.utils import timezone
@@ -28,6 +29,12 @@ class SendNotificationMixin(object):
             dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
             dw.connect()
             connections.databases[db_connection] = dw.settings_dict
+        if (
+            (stgs := extra_data.get("SETTINGS"))
+            and (phn_allowed := getattr(stgs, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
+            and phn_allowed
+        ):
+            cache.set("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), phn_allowed, timeout=None)
 
         already_sent_channels = set(
             filter(

@@ -204,6 +204,15 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             "SETTINGS": sttgs,
         }
         self._extra_data["SETTINGS"] = settings
+        from dill import dumps as ddumps
+
+        setattr(
+            self._extra_data["SETTINGS"],
+            "IS_PHONE_NUMBER_ALLOWED_FUNCTION",
+            ddumps(
+                getattr(self._extra_data["SETTINGS"], "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""), fmode=True, recurse=True
+            ),
+        )
 
     def _ensure_channels(
         self, channels: List[str], notification: DjangoProjectBaseNotification
