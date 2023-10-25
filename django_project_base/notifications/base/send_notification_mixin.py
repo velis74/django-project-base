@@ -120,6 +120,11 @@ class SendNotificationMixin(object):
             notification.sent_at = timezone.now().timestamp() if notification.sent_channels else None
             notification.exceptions = exceptions if exceptions else None
 
+            _req = notification.required_channels.split(",") if notification.required_channels else []
+            _snt = notification.sent_channels.split(",") if notification.sent_channels else []
+            if set(_snt) == set(_req):
+                notification.failed_channels = ""
+
             notification.save(
                 update_fields=[
                     "sent_at",
