@@ -10,7 +10,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="projectsettings",
             name="pending_value",
-            field=models.CharField(max_length=320, null=True, verbose_name="Pending value"),
+            field=models.CharField(
+                max_length=320, null=True, verbose_name="Pending value"
+            ),
         ),
         migrations.AddField(
             model_name="projectsettings",
