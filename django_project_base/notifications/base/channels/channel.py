@@ -38,7 +38,6 @@ class Recipient:
         )
         self.email = email
         self.unique_attribute = unique_attribute
-        self.phone_number = None
 
     def __eq__(self, __o: "Recipient") -> bool:
         return str(getattr(self, self.unique_attribute)) == str(getattr(__o, self.unique_attribute))
