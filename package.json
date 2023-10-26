@@ -47,7 +47,7 @@
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/test-utils": "^2.2.4",
     "esbuild": "^0.16",
-    "eslint-config-velis": "^1.1.13",
+    "eslint-config-velis": "^1.1.16",
     "http-proxy-middleware": "^2.0.6",
     "vite": "^4.0.4",
     "vite-plugin-eslint": "^1.8.1",
