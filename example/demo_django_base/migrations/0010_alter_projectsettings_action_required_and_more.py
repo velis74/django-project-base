@@ -17,8 +17,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="projectsettings",
             name="pending_value",
-            field=models.CharField(
-                blank=True, max_length=320, null=True, verbose_name="Pending value"
-            ),
+            field=models.CharField(blank=True, max_length=320, null=True, verbose_name="Pending value"),
         ),
     ]
