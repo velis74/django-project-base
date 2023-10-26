@@ -4,18 +4,16 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import List, Optional, Union
 
-import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
 
-from django_project_base.constants import USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import (
     DeliveryReport,
-    DjangoProjectBaseNotification,
     DjangoProjectBaseMessage,
+    DjangoProjectBaseNotification,
 )
 from django_project_base.utils import get_pk_name
 
@@ -174,7 +172,6 @@ class Channel(ABC):
             )
 
             from django_project_base.notifications.email_notification import EMailNotification
-            from django_project_base.notifications.base.enums import ChannelIdentifier
 
             for recipient in recipients:  # noqa: E203
                 dlr__uuid = str(uuid.uuid4())

@@ -19,7 +19,7 @@ class TestCreateMail(NotificationsTransactionTestCase):
                 raw_recipents=[
                     self.test_user.pk,
                 ],
-                project=swapper.load_model("django_project_base", "Project").objects.first(),
+                project=swapper.load_model("django_project_base", "Project").objects.first().slug,
                 recipients=[
                     self.test_user.pk,
                 ],
@@ -32,7 +32,7 @@ class TestCreateMail(NotificationsTransactionTestCase):
                 raw_recipents=[
                     self.test_user.pk,
                 ],
-                project=swapper.load_model("django_project_base", "Project").objects.first(),
+                project=swapper.load_model("django_project_base", "Project").objects.first().slug,
                 recipients=[
                     self.test_user.pk,
                 ],

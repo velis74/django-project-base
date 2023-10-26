@@ -7,6 +7,7 @@ from django.test import TransactionTestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
+from django_project_base.constants import USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.channels.mail_channel import MailChannel
 from django_project_base.notifications.base.notification import Notification
@@ -33,6 +34,16 @@ class NotificationsTransactionTestCase(TransactionTestCase):
             name="test", slug="test", owner=self.test_user.userprofile
         )
         self.api_client = APIClient()
+        for p in swapper.load_model("django_project_base", "Project").objects.all():
+            swapper.load_model("django_project_base", "ProjectSettings").objects.get_or_create(
+                name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER,
+                project=p,
+                defaults=dict(
+                    value=False,
+                    value_type="char",
+                    description="Tests value",
+                ),
+            )
 
     def _login_to_api_client_with_test_user(self):
         user_token, token_created = Token.objects.get_or_create(user=self.test_user)
