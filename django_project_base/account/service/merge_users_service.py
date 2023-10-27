@@ -77,7 +77,11 @@ class MergeUsersService:
                         qs = mdl.objects.filter(**{fld.attname: fld.to_python(usr)})
                         if is_project_related:
                             p_fld = is_project_related[0]
-                            qs = qs.filter(**{p_fld.attname: group.project.pk})
+                            qs = (
+                                qs.filter(**{p_fld.attname: group.project.pk})
+                                if getattr(group, "project", None)
+                                else qs.filter()
+                            )
 
                         m_items = []
                         if fld.many_to_one or fld.one_to_one:
