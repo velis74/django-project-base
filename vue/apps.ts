@@ -13,6 +13,7 @@ import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
 import NotificationsEditor from './components/notifications-editor.vue';
+import ProfileSearch from './components/profile-search.vue';
 import ProjectSettings from './components/project-settings.vue';
 import TitleBar from './components/titlebar.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
@@ -29,6 +30,8 @@ export { default as useLoginDialog } from './components/user-session/use-login-d
 
 export { showNotification, showGeneralErrorNotification, showMaintenanceNotification } from './notifications';
 
+export { default as showAddProfileModal } from './profile-search-add-user';
+
 export const componentsConfig: { [key: string]: Component } = {
   TitleBar,
   Breadcrumbs,
@@ -42,6 +45,7 @@ export const componentsConfig: { [key: string]: Component } = {
   LoginDialog,
   NotificationsEditor,
   ProjectSettings,
+  ProfileSearch,
 };
 
 type AppData = Object;
