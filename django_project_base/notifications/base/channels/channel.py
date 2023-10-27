@@ -128,15 +128,17 @@ class Channel(ABC):
         sent = False
         logger = logging.getLogger("django")
         try:
-            dlr_exists = DeliveryReport.objects.filter(
-                notification=notification_obj,
-                user_id=rec_obj.identifier,
-                channel=f"{self.__module__}.{self.__class__.__name__}",
-                provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+            dlr_exists = list(
+                DeliveryReport.objects.filter(
+                    notification=notification_obj,
+                    user_id=rec_obj.identifier,
+                    channel=f"{self.__module__}.{self.__class__.__name__}",
+                    provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+                )
             )
-            if dlr_exists.count() > 1:
+            if len(dlr_exists) > 1:
                 raise Exception(f"{gettext('To many DLR exist.')} {notification_obj} {rec_obj}")
-            if dlr_notification := dlr_exists.first():
+            if dlr_notification := next(iter(dlr_exists), None):
                 dlr_pk = str(dlr_notification.pk)
                 if dlr_notification.status == DeliveryReport.Status.DELIVERED:
                     do_send = False
