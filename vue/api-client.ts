@@ -2,7 +2,7 @@ import { apiClient } from '@velis/dynamicforms';
 import { InternalAxiosRequestConfig } from 'axios';
 import _ from 'lodash';
 
-import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './apiConfig';
+import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './api-config';
 import { showGeneralErrorNotification } from './notifications';
 import { Store } from './store';
 

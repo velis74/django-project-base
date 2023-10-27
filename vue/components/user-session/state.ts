@@ -2,7 +2,7 @@ import { apiClient } from '@velis/dynamicforms';
 import { AxiosRequestConfig } from 'axios';
 import { defineStore } from 'pinia';
 
-import { setCurrentProject } from '../../apiClient';
+import { setCurrentProject } from '../../api-client';
 
 import {
   UserDataJSON,

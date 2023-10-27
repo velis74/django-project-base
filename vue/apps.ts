@@ -19,7 +19,7 @@ import LoginDialog from './components/user-session/login-dialog.vue';
 import Login from './components/user-session/login-inline.vue';
 import ProjectList from './components/user-session/project-list.vue';
 import UserProfile from './components/user-session/user-profile.vue';
-import DefaultCookieOptions from './defaultCookieOptions';
+import DefaultCookieOptions from './default-cookie-options';
 import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 
 export { default as useUserSessionStore } from './components/user-session/state';

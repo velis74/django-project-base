@@ -11,7 +11,7 @@ import { AxiosError } from 'axios';
 import _ from 'lodash';
 import { h, reactive, ref, Ref } from 'vue';
 
-import { apiClient } from '../../apiClient';
+import { apiClient } from '../../api-client';
 
 import useUserSessionStore from './state';
 import { showLoginDialog } from './use-login-dialog';

@@ -47,7 +47,7 @@ import { h, onMounted, reactive } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useCookies } from 'vue3-cookies';
 
-import { apiClient } from '../../apiClient';
+import { apiClient } from '../../api-client';
 
 import { parseErrors, useLogin } from './login';
 import SocialLogos from './social-logos.vue';

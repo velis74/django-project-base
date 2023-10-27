@@ -26,7 +26,7 @@ import { apiClient } from '@velis/dynamicforms';
 import _ from 'lodash';
 import { defineComponent } from 'vue';
 
-import { API_CONFIG } from '../apiConfig';
+import { API_CONFIG } from '../api-config';
 import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowledged } from '../events';
 import { showMaintenanceNotification } from '../notifications';
 

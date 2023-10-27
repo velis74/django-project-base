@@ -6,10 +6,10 @@ import { computed, h, onMounted, reactive, watch } from 'vue';
 import { useCookies } from 'vue3-cookies';
 import { useDisplay } from 'vuetify';
 
-import { apiClient } from '../../apiClient';
-import { HTTP_401_UNAUTHORIZED } from '../../apiConfig';
+import { apiClient } from '../../api-client';
+import { HTTP_401_UNAUTHORIZED } from '../../api-config';
 import { showGeneralErrorNotification } from '../../notifications';
-import { SocialAccItem } from '../../socialIntegrations';
+import { SocialAccItem } from '../../social-integrations';
 
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME, UserDataJSON } from './data-types';
 import icons from './icons';

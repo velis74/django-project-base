@@ -13,7 +13,7 @@ import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, Ref, ref, watch, h } from 'vue';
 import { useCookies } from 'vue3-cookies';
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../api-client';
 
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME } from './user-session/data-types';
 import useUserSessionStore from './user-session/state';

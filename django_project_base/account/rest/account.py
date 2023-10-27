@@ -198,6 +198,7 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
         methods=["post"],
         url_path="verify-registration",
         url_name="verify-registration",
+        permission_classes=[],
     )
     def verify_registration(self, request: Request) -> Response:
         if (
