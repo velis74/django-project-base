@@ -1,3 +1,4 @@
+import datetime
 import logging
 import uuid
 from abc import ABC, abstractmethod
@@ -9,7 +10,11 @@ from django.utils.module_loading import import_string
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
-from django_project_base.notifications.models import DeliveryReport, DjangoProjectBaseNotification
+from django_project_base.notifications.models import (
+    DeliveryReport,
+    DjangoProjectBaseMessage,
+    DjangoProjectBaseNotification,
+)
 from django_project_base.utils import get_pk_name
 
 
@@ -88,14 +93,21 @@ class Channel(ABC):
         return list(set(recipients))
 
     def create_delivery_report(
-        self, notification: DjangoProjectBaseNotification, recipient: Recipient, pk: str
+        self,
+        notification: DjangoProjectBaseNotification,
+        recipient: Recipient,
+        pk: str,
+        channel: Optional[str] = None,
+        provider: Optional[str] = None,
+        auxiliary_notification: Optional[uuid.UUID] = None,
     ) -> DeliveryReport:
         return DeliveryReport.objects.create(
             notification=notification,
             user_id=recipient.identifier,
-            channel=f"{self.__module__}.{self.__class__.__name__}",
-            provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+            channel=f"{self.__module__}.{self.__class__.__name__}" if not channel else channel,
+            provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}" if not provider else provider,
             pk=pk,
+            auxiliary_notification=auxiliary_notification,
         )
 
     @abstractmethod
@@ -151,9 +163,52 @@ class Channel(ABC):
                     logger.exception(de)
                     return dlr_obj
 
+            from django_project_base.notifications.base.channels.mail_channel import MailChannel
+
+            mail_fallback = (
+                MailChannel.name not in (notification.required_channels or "").split(",")
+                and notification.email_fallback
+            )
+
+            from django_project_base.notifications.email_notification import EMailNotification
+
             for recipient in recipients:  # noqa: E203
                 dlr__uuid = str(uuid.uuid4())
                 try:
+                    if (
+                        self.provider.is_sms_provider
+                        and not recipient.phone_number
+                        and mail_fallback
+                        and not notification.send_notification_sms
+                    ):
+                        try:
+                            a_notification = EMailNotification(
+                                message=DjangoProjectBaseMessage(
+                                    subject=notification.message.subject,
+                                    body=notification.message.body,
+                                    footer=notification.message.footer,
+                                    content_type=notification.message.content_type,
+                                ),
+                                raw_recipents=[
+                                    recipient.identifier,
+                                ],
+                                project=notification.project_slug if notification.project_slug else None,
+                                recipients=[
+                                    recipient.identifier,
+                                ],
+                                a_sender=notification.sender,
+                                a_extra_data=extra_data,
+                                a_recipients_list=notification.recipients_list,
+                                delay=int(datetime.datetime.now().timestamp()),
+                            ).send()
+                            self.create_delivery_report(
+                                notification, recipient, dlr__uuid, auxiliary_notification=a_notification.pk
+                            )
+                            continue
+                        except Exception as e:
+                            logger.exception(e)
+                            continue
+
                     while dlr := not make_send(
                         notification_obj=notification, message_str=message, rec_obj=recipient, dlr_pk=dlr__uuid
                     ):

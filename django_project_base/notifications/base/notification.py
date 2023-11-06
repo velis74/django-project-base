@@ -7,7 +7,11 @@ import swapper
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
+from django_project_base.constants import (
+    EMAIL_SENDER_ID_SETTING_NAME,
+    SMS_SENDER_ID_SETTING_NAME,
+    USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER,
+)
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import ChannelIdentifier, NotificationLevel, NotificationType
@@ -94,6 +98,14 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         notification.recipients = ",".join(map(str, recipients)) if recipients else None
         notification.recipients_original_payload_search = None
         notification.sender = Notification._get_sender_config(notification.project_slug)
+        mail_fallback: bool = (
+            swapper.load_model("django_project_base", "ProjectSettings")
+            .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER, project__slug=notification.project_slug)
+            .python_value
+            if notification.project_slug
+            else False
+        )
+        notification.email_fallback = mail_fallback
         notification.save(update_fields=["recipients", "recipients_original_payload_search"])
         SendNotificationMixin().make_send(notification, {})
 
@@ -176,17 +188,19 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
             self._set_db()
-            rec_list = []
-            for usr in self._recipients:
-                rec_list.append(
-                    {
-                        k: v
-                        for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
-                        if not k.startswith("_")
-                    }
-                )
+
+            rec_list = self._extra_data.get("a_recipients_list") or []
+            if len(rec_list) == 0:
+                for usr in self._recipients:
+                    rec_list.append(
+                        {
+                            k: v
+                            for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
+                            if not k.startswith("_")
+                        }
+                    )
             notification.recipients_list = rec_list
-            self.enqueue_notification(notification, self._extra_data)
+            self.enqueue_notification(notification, self._extra_data.get("a_extra_data") or self._extra_data)
             return notification
 
         notification = self.make_send(notification, self._extra_data)
@@ -210,23 +224,36 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     ) -> DjangoProjectBaseNotification:
         from django_project_base.notifications.base.channels.mail_channel import MailChannel
 
+        extra_data = self._extra_data.get("a_extra_data") or self._extra_data
+
         for channel_name in channels:
             # ensure dlr user and check providers
-            channel = ChannelIdentifier.channel(channel_name, extra_data=self._extra_data, project_slug=self._project)
+            channel = ChannelIdentifier.channel(channel_name, extra_data=extra_data, project_slug=self._project)
 
-            if not channel and self._extra_data.get("is_system_notification"):
+            if not channel and extra_data.get("is_system_notification"):
                 continue
 
             assert channel
 
             if self.send_notification_sms and channel.name == MailChannel.name:
                 notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
-                    notification=notification, host_url=self._extra_data.get("host_url", "")  # noqa: E126
+                    notification=notification, host_url=extra_data.get("host_url", "")  # noqa: E126
                 )
 
         notification.user = self._user
 
-        notification.sender = Notification._get_sender_config(self._project)
+        notification.sender = self._extra_data.get("a_sender") or Notification._get_sender_config(self._project)
+
+        mail_fallback = False
+        if not self._extra_data.get("a_sender"):
+            mail_fallback: bool = (
+                swapper.load_model("django_project_base", "ProjectSettings")
+                .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER, project__slug=notification.project_slug)
+                .python_value
+                if notification.project_slug
+                else False
+            )
+        notification.email_fallback = mail_fallback
 
         if self._extra_data.get("is_system_notification"):
             notification.sender[MailChannel.name] = getattr(settings, "SYSTEM_EMAIL_SENDER_ID", "")

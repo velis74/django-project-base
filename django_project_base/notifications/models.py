@@ -92,6 +92,7 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
     _user = None
     _sender = {}
     _email_list = []
+    _email_fallback = False
 
     def _get_recipients(self):
         return self._recipients_list
@@ -117,6 +118,12 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
     def _set_email_list(self, val):
         self._email_list = val
 
+    def _get_email_fallback(self):
+        return self._email_fallback
+
+    def _set_email_fallback(self, val):
+        self._email_fallback = val
+
     recipients_list = property(_get_recipients, _set_recipents)
 
     user = property(_get_user, _set_user)
@@ -124,6 +131,8 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
     sender = property(_get_sender, _set_sender)
 
     email_list = property(_get_email_list, _set_email_list)
+
+    email_fallback = property(_get_email_fallback, _set_email_fallback)
 
 
 class SearchItemObject:
@@ -245,3 +254,4 @@ class DeliveryReport(models.Model):
     status = models.IntegerField(
         default=Status.PENDING_DELIVERY, choices=Status.get_choices_tuple(), db_index=True, null=False
     )
+    auxiliary_notification = models.UUIDField(verbose_name=_("Auxiliary notification"), null=True, blank=False)
