@@ -92,7 +92,7 @@ class LogAccessService:
             for used_channel in list(set(list(items.keys()))):
                 used += chl_prices.get(used_channel, 0) * items.get(used_channel, 0)
 
-        if not kwargs.get("is_system_notification") and used >= 0:  # janez medja
+        if not kwargs.get("is_system_notification") and used >= 0:
             raise PermissionDenied(gettext("Your license is consumed. Please contact support."))
 
         if on_sucess:

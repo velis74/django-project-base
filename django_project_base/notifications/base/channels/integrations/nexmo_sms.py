@@ -43,6 +43,9 @@ class NexmoSMS(ProviderIntegration):
         if not rec:
             return
 
+        if not rec[0]:
+            return
+
         params: dict = {
             "api_key": self.api_key,
             "api_secret": self.api_secret,

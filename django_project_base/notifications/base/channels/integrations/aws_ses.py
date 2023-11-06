@@ -80,6 +80,8 @@ class AwsSes(ProviderIntegration):
         DeliveryReport.objects.filter(pk=pk).update(status=DeliveryReport.Status.DELIVERED)
 
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
+        if not recipient.email:
+            return
         res = (
             boto3.Session(
                 aws_access_key_id=self.key_id,

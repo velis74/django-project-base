@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),
-            recipients=[],  # TODO: find project owner and send
+            recipients=[],  # TODO: find project owner and send, when project owner is found use EmailNotification
             user=None,  # TODO: find project owner and send -> add .send()
         )
         return "ok"

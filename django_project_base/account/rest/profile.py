@@ -39,7 +39,7 @@ from django_project_base.account.rest.project_profiles_utils import get_project_
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import (
-    SystemEMailNotification,
+    EMailNotification,
     SystemEMailNotificationWithListOfEmails,
 )
 from django_project_base.notifications.models import DjangoProjectBaseMessage
@@ -604,7 +604,7 @@ class ProfileViewSet(ModelViewSet):
             .first()
         ) and sett.python_value:
             recipients = [response.data[get_pk_name(get_user_model())]]
-            SystemEMailNotification(
+            EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
                     body=render_to_string(
@@ -616,8 +616,10 @@ class ProfileViewSet(ModelViewSet):
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),
+                raw_recipents=recipients,
                 project=project.slug,
                 recipients=recipients,
+                delay=int(datetime.datetime.now().timestamp()),
                 user=self.request.user.pk,
             ).send()
 

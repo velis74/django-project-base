@@ -73,6 +73,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "name": "DEFAULT_SMS_SENDER_ID_SETTING_NAME",
         "default": "",
     },
+    {"name": "IS_PHONE_NUMBER_ALLOWED_FUNCTION", "default": ""},
 )
 
 USER_CACHE_KEY = "django-user-{id}"
