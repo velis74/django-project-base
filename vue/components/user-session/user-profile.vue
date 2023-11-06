@@ -305,7 +305,7 @@ async function removeMyAccount() {
         <v-list-item v-if="false" @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
 
         <v-list-item
-          v-if="userSession.userHasPermission('impersonate-user') && !userSession.impersonated"
+          v-if="!userSession.impersonated"
           @click="showImpersonateLogin"
         >
           {{ gettext('Impersonate user') }}
