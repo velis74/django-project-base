@@ -88,6 +88,19 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         release_hijack(request)
         return Response()
 
+    @extend_schema(exclude=True)
+    @permission_classes([IsAdminUser])
+    def update(self, request: Request, *args, **kwargs) -> Response:
+        self._hijack(request=request)
+        return Response()
+
+    def _hijack(self, request: Request):
+        validated_data: dict = self.__validate(request.data)
+        hijacked_user: Model = get_object_or_404(get_user_model(), **validated_data)
+        if request.user == hijacked_user:
+            raise PermissionDenied(_("Impersonating self is not allowed"))
+        login_user(request, hijacked_user)
+
     @extend_schema(
         request=ImpersonateUser,
         responses={
@@ -101,10 +114,6 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         description="Login as another user and work on behalf of other user without having to know their credentials",
     )
     @permission_classes([IsAdminUser])
-    def update(self, request: Request, *args, **kwargs) -> Response:
-        validated_data: dict = self.__validate(request.data)
-        hijacked_user: Model = get_object_or_404(get_user_model(), **validated_data)
-        if request.user == hijacked_user:
-            raise PermissionDenied(_("Impersonating self is not allowed"))
-        login_user(request, hijacked_user)
+    def create(self, request: Request, *args, **kwargs) -> Response:
+        self._hijack(request=request)
         return Response()
