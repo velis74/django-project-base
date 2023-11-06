@@ -59,7 +59,7 @@ class EmailSenderChangedEvent(ProjectSettingChangedEvent):
                 and new_state.pending_value
                 and new_state.python_pending_value != new_state.python_value
             ):
-                AwsSes.add_sender_email(new_state.pending_value)
+                AwsSes.add_sender_email(new_state.python_pending_value)
 
             project_settings_manager = swapper.load_model("django_project_base", "ProjectSettings").objects
             for sender in set(AwsSes.list_sender_emails()) - (
