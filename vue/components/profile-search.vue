@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import { apiClient, gettext } from '@velis/dynamicforms';
+import { AxiosRequestConfig } from 'axios';
 import { computed, ref } from 'vue';
 import { Ref } from 'vue/dist/vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -31,7 +32,7 @@ const selectOptions = computed(() => options.value);
 
 function asyncSearch(query: string) {
   searching.value = true;
-  apiClient.get(`${searchUrl}?search=${query}`).then((response) => {
+  apiClient.get(`${searchUrl}?search=${query}`, { showProgress: false } as AxiosRequestConfig).then((response) => {
     options.value = response.data;
     searching.value = false;
   });

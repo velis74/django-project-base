@@ -19,7 +19,7 @@ async function showAddProfileModal(addCallback: (profile: UserDataJSON | undefin
       // @ts-ignore
       ProfileSearch,
       { onSelected: selected, searchUrl },
-    )]),
+    ), h('div', { style: 'padding-bottom: 4em;' })]),
     ],
     new FilteredActions({
       cancel: new Action({
