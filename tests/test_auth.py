@@ -77,7 +77,7 @@ class TestLoginViewset(TestBase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.api_client.post("/account/impersonate", {"username": "janez"}, format="json")
+        response = self.api_client.put("/account/impersonate", {"username": "janez"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_json_missing_session(self):

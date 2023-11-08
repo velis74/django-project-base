@@ -4,7 +4,7 @@ from gettext import gettext
 import swapper
 from django.db import migrations
 
-from django_project_base.constants import USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER
+from django_project_base.constants import USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER
 
 
 def forwards_func(apps, schema_editor):
@@ -12,7 +12,7 @@ def forwards_func(apps, schema_editor):
     for project in swapper.load_model("django_project_base", "Project").objects.all():
         project_sett.objects.get_or_create(
             project=project,
-            name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER,
+            name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER,
             defaults=dict(
                 description=gettext("Send notification via EMail if user has no phone number"),
                 value=False,

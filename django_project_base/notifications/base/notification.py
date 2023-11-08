@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from django_project_base.constants import (
     EMAIL_SENDER_ID_SETTING_NAME,
     SMS_SENDER_ID_SETTING_NAME,
-    USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER,
+    USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER,
 )
 from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
@@ -100,7 +100,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         notification.sender = Notification._get_sender_config(notification.project_slug)
         mail_fallback: bool = (
             swapper.load_model("django_project_base", "ProjectSettings")
-            .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER, project__slug=notification.project_slug)
+            .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER, project__slug=notification.project_slug)
             .python_value
             if notification.project_slug
             else False
@@ -257,7 +257,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         if not self._extra_data.get("a_sender"):
             mail_fallback: bool = (
                 swapper.load_model("django_project_base", "ProjectSettings")
-                .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUBER, project__slug=notification.project_slug)
+                .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER, project__slug=notification.project_slug)
                 .python_value
                 if notification.project_slug
                 else False
