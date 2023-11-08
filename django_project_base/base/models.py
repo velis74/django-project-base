@@ -287,7 +287,7 @@ class BaseProjectSettings(models.Model):
         self.full_clean()
         validator = self.value_validators[self.value_type]
         self.value = validator(self.value)
-        if self.pending_value:
+        if self.pending_value is not None:
             self.pending_value = validator(self.pending_value)
         if self.action_required:
             from django_project_base.base.event import ProjectSettingActionRequiredEvent
