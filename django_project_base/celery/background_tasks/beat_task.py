@@ -1,6 +1,7 @@
 import datetime
 
 from django.core.cache import cache
+from django.db.utils import load_backend
 
 from django_project_base.celery.celery import app
 from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
@@ -8,7 +9,7 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 
 class BeatTask(app.Task):
-    name = "background_tasks.notification_tasks.beat_task.beat_task"
+    name = "background_tasks.beat_task.beat_task"
 
     max_retries = 0
     time_limit = 1800
@@ -27,6 +28,14 @@ class BeatTask(app.Task):
             f.write(f"\n IN RUN \n")
         cache.set(self.run_ck, True, timeout=None)
         now_ts = datetime.datetime.now().timestamp() + 300
+        db_connection = "default"
+        db_settings = notification.extra_data.get("DATABASE")
+        if db_settings:
+            db_connection = f"notification-{notification.pk}"
+            backend = load_backend(db_settings["SETTINGS"]["ENGINE"])
+            dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
+            dw.connect()
+            connections.databases[db_connection] = dw.settings_dict
         for notification in DjangoProjectBaseNotification.objects.filter(
             send_at__isnull=False, sent_at__isnull=True, send_at__lte=now_ts
         ):

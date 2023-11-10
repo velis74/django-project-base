@@ -38,6 +38,9 @@ class CelerySettings:
     TESTING = False
 
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.settings")
+apps.populate(CelerySettings().INSTALLED_APPS)
+
 app = Celery(
     "django_project_base",
     config_source=CelerySettings,
@@ -47,6 +50,12 @@ app = Celery(
     ],
 )
 
+app.conf.task_routes = {
+    "background_tasks.beat_task.beat_task": {
+        "queue": NOTIFICATION_QUEUE_NAME,
+        "routing_key": NOTIFICATION_QUEUE_NAME,
+    },
+}
 app.conf.task_queues = [
     Queue(
         NOTIFICATION_QUEUE_NAME,
@@ -56,21 +65,17 @@ app.conf.task_queues = [
     ),
 ]
 
-app.conf.task_ignore_result = True
-app.conf.worker_send_task_events = False
-app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
-
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.settings")
-apps.populate(CelerySettings().INSTALLED_APPS)
-
 app.conf.beat_schedule = {
     "scheduler": {
-        "task": "django_project_base.celery.background_tasks.beat_task.beat_task",
+        "task": "background_tasks.beat_task.beat_task",
         # "schedule": 60,
         "schedule": 10,  # TODO: Change to 60
     },
 }
+
+app.conf.task_ignore_result = True
+app.conf.worker_send_task_events = False
+app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
 
 # RUN WORKER AS
 # celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1
