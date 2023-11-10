@@ -98,9 +98,23 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(intervalCheckLicense));
 
+const actionSave = async (): Promise<boolean> => {
+  console.log(Math.random(), 'actionSave');
+  return true;
+};
+
+const actionSendNow = async (): Promise<boolean> => {
+  console.log(Math.random(), 'actionSendNow');
+  return true;
+};
+
 const { handler } = useActionHandler();
 
-handler.register('view-license', actionViewLicense).register('add-notification', actionAddNotification);
+handler
+  .register('view-license', actionViewLicense)
+  .register('add-notification', actionAddNotification)
+  .register('save', actionSave)
+  .register('send', actionSendNow);
 
 // TODO: remove linter ignores below when you know how to
 </script>

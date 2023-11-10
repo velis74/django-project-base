@@ -153,6 +153,9 @@ class NotificationSerializer(ModelSerializer):
             name="view-license",
             icon="card-outline",
         ),
+        FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="save", label=_("Save")),
+        FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send", label=_("Send now")),
+        add_form_buttons=False,
     )
 
     message_to = fields.ManyRelatedField(
@@ -193,6 +196,10 @@ class NotificationSerializer(ModelSerializer):
     )
 
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
+
+    schedule_send_on_datetime = fields.DateTimeField(
+        write_only=True, display_table=DisplayMode.SUPPRESS, display_form=DisplayMode.FULL, allow_null=True
+    )
 
     def to_representation(self, instance, row_data=None):
         repr = super().to_representation(instance, row_data)
