@@ -31,6 +31,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
     message: DjangoProjectBaseMessage
     content_entity_context = ""
     send_notification_sms = False
+    send_at: Optional[int]
     _raw_recipents: str
     _project: Optional[object]
 
@@ -52,6 +53,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         channels=[],
         user=None,
         send_notification_sms=False,
+        send_at: Optional[int] = None,
         **kwargs,
     ) -> None:
         super().__init__()
@@ -88,6 +90,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             self.via_channels = channels
         self._project = project
         self._user = user
+        self.send_at = send_at
 
     @staticmethod
     def resend(notification: DjangoProjectBaseNotification, user_pk: str):
@@ -169,6 +172,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             project_slug=self._project,
             send_notification_sms=self.send_notification_sms,
             send_notification_sms_text=None,
+            send_at=self.send_at,
         )
 
         notification = self._ensure_channels(required_channels, notification)
@@ -183,6 +187,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             notification.save()
         else:
             notification.created_at = None
+
+        if self.send_at and self.send_at - datetime.datetime.now().timestamp() > 60:
+            self._delay = None
 
         if self.delay:
             if not self.persist:
@@ -203,7 +210,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             self.enqueue_notification(notification, self._extra_data.get("a_extra_data") or self._extra_data)
             return notification
 
-        notification = self.make_send(notification, self._extra_data)
+        if not self.send_at:
+            notification = self.make_send(notification, self._extra_data)
 
         return notification
 

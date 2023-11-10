@@ -222,6 +222,14 @@ class NotificationSerializer(ModelSerializer):
         label=_("Send on"),
     )
 
+    def validate_send_at(self, value):
+        if not value:
+            return None
+        ts: int = int(datetime.datetime.fromisoformat(value).timestamp())
+        if datetime.datetime.now().timestamp() > ts:
+            raise ValidationError([_("value must be in future")])
+        return ts
+
     def to_representation(self, instance, row_data=None):
         repr = super().to_representation(instance, row_data)
         kw = getattr(self.context.get("view", object()), "kwargs", dict())
@@ -450,6 +458,11 @@ class NotificationViewset(ModelViewSet):
                     display_form=DisplayMode.SUPPRESS,
                 )
                 send_notification_sms = fields.BooleanField(default=False, allow_null=False)
+                send_at = NotificationSerializer().fields.fields["send_at"]
+
+                def validate_send_at(self, value):
+                    serializer = NotificationSerializer(data=self.request.data)
+                    return serializer.validate_send_at(self.initial_data.get("send_at"))
 
             return NewMessageSerializer
         return NotificationSerializer
@@ -485,6 +498,7 @@ class NotificationViewset(ModelViewSet):
             user=self.request.user.pk,
             send_notification_sms=serializer.validated_data["send_notification_sms"],
             host_url=host_url,
+            send_at=serializer.validated_data.get("send_at"),
         )
         notification.send()
 

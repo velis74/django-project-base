@@ -63,5 +63,15 @@ app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_V
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_project_base.celery.settings")
 apps.populate(CelerySettings().INSTALLED_APPS)
 
+app.conf.beat_schedule = {
+    "scheduler": {
+        "task": "django_project_base.celery.background_tasks.beat_task",
+        "schedule": 60,
+    },
+}
+
 # RUN WORKER AS
 # celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1
+
+# RUN BEAT FOR DELAYED NOTIFICATIONS AS
+# celery -A django_project_base.celery.celery beat -l INFO
