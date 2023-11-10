@@ -2,11 +2,12 @@ import datetime
 import logging
 import uuid
 from abc import ABC, abstractmethod
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
+from django.utils.translation import gettext
 
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
@@ -133,6 +134,43 @@ class Channel(ABC):
             for u in rec_obj
         ]
 
+    def _make_send(self, notification_obj, rec_obj, message_str, dlr_pk) -> Tuple[Optional[DeliveryReport], bool]:
+        do_send = True
+        sent = False
+        logger = logging.getLogger("django")
+        try:
+            dlr_exists = list(
+                DeliveryReport.objects.filter(
+                    notification=notification_obj,
+                    user_id=rec_obj.identifier,
+                    channel=f"{self.__module__}.{self.__class__.__name__}",
+                    provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}",
+                )
+            )
+            if len(dlr_exists) > 1:
+                raise Exception(f"{gettext('To many DLR exist.')} {notification_obj} {rec_obj}")
+            if dlr_notification := next(iter(dlr_exists), None):
+                dlr_pk = str(dlr_notification.pk)
+                if dlr_notification.status == DeliveryReport.Status.DELIVERED:
+                    do_send = False
+
+            if getattr(settings, "TESTING", False):
+                sent = True
+            elif do_send:
+                self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr_pk)
+                sent = True
+        except Exception as te:
+            logger.exception(te)
+            sent = False
+        dlr_obj = None
+        try:
+            if sent and do_send:
+                dlr_obj = self.create_delivery_report(notification_obj, rec_obj, dlr_pk)
+            return dlr_obj, (sent and do_send)
+        except Exception as de:
+            logger.exception(de)
+            return dlr_obj, (sent and do_send)
+
     def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
         logger = logging.getLogger("django")
         try:
@@ -146,23 +184,6 @@ class Channel(ABC):
             exclude_providers: List[str] = []
             sent_no = 0
 
-            def make_send(notification_obj, rec_obj, message_str, dlr_pk) -> Optional[DeliveryReport]:
-                try:
-                    if not getattr(settings, "TESTING", False):
-                        self.provider.client_send(self.sender(notification_obj), rec_obj, message_str, dlr_pk)
-                    sent = True
-                except Exception as te:
-                    logger.exception(te)
-                    sent = False
-                dlr_obj = None
-                try:
-                    if sent:
-                        dlr_obj = self.create_delivery_report(notification, recipient, dlr_pk)
-                    return dlr_obj
-                except Exception as de:
-                    logger.exception(de)
-                    return dlr_obj
-
             from django_project_base.notifications.base.channels.mail_channel import MailChannel
 
             mail_fallback = (
@@ -174,6 +195,7 @@ class Channel(ABC):
 
             for recipient in recipients:  # noqa: E203
                 dlr__uuid = str(uuid.uuid4())
+                was_sent = False
                 try:
                     if (
                         self.provider.is_sms_provider
@@ -209,19 +231,25 @@ class Channel(ABC):
                             logger.exception(e)
                             continue
 
-                    while dlr := not make_send(
-                        notification_obj=notification, message_str=message, rec_obj=recipient, dlr_pk=dlr__uuid
-                    ):
-                        exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
-                        if next_provider := self._find_provider(
-                            extra_settings=extra_data,
-                            setting_name=self.provider_setting_name,
-                            exclude=exclude_providers,
-                        ):
-                            self.provider = next_provider
-                        else:
+                    while True:
+                        _make_send = self._make_send(
+                            notification_obj=notification, message_str=message, rec_obj=recipient, dlr_pk=dlr__uuid
+                        )
+                        if _make_send[1]:
+                            dlr__uuid = str(_make_send[0].pk)
+                            was_sent = True
                             break
-                    if not dlr:
+                        else:
+                            exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
+                            if next_provider := self._find_provider(
+                                extra_settings=extra_data,
+                                setting_name=self.provider_setting_name,
+                                exclude=exclude_providers,
+                            ):
+                                self.provider = next_provider
+                            else:
+                                break
+                    if was_sent:
                         self.provider.enqueue_dlr_request(pk=dlr__uuid)
                         sent_no += 1
                 except Exception as ge:
