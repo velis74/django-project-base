@@ -46,7 +46,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",
     },
     {
-        "name": "SMS_PROVIDER",
+        "name": "NOTIFICATIONS_SMS_PROVIDER",
         "default": [
             "django_project_base.notifications.base.channels.integrations.t2.T2",
             "django_project_base.notifications.base.channels.integrations.aws_sns_single_sms.AwsSnsSingleSMS",

@@ -252,6 +252,7 @@ class NotificationSerializer(ModelSerializer):
             "delayed_to",
             "recipients_original_payload_search",
             "exceptions",
+            "extra_data",
         )
         layout = Layout(
             Row(Column("message_to")),

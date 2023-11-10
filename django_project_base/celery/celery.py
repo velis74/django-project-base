@@ -43,6 +43,7 @@ app = Celery(
     config_source=CelerySettings,
     include=[
         "django_project_base.celery.background_tasks.notification_tasks",
+        "django_project_base.celery.background_tasks.beat_task",
     ],
 )
 
@@ -65,8 +66,9 @@ apps.populate(CelerySettings().INSTALLED_APPS)
 
 app.conf.beat_schedule = {
     "scheduler": {
-        "task": "django_project_base.celery.background_tasks.beat_task",
-        "schedule": 60,
+        "task": "django_project_base.celery.background_tasks.beat_task.beat_task",
+        # "schedule": 60,
+        "schedule": 10,  # TODO: Change to 60
     },
 }
 

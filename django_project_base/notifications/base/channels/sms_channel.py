@@ -12,7 +12,7 @@ class SmsChannel(Channel):
 
     notification_price = 0.1  # TODO get from settings
 
-    provider_setting_name = "SMS_PROVIDER"
+    provider_setting_name = "NOTIFICATIONS_SMS_PROVIDER"
 
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
         return list(set(super().get_recipients(notification, unique_identifier="phone_number")))

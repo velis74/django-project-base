@@ -76,7 +76,6 @@ class SendNotificationMixin(object):
                     comment=str(channel),
                     on_sucess=lambda: channel.send(notification, extra_data),
                     db=db_connection,
-                    settings=extra_data.get("SETTINGS", object()),
                     is_system_notification=extra_data.get("is_system_notification"),
                     sender=channel.sender(notification),
                 )

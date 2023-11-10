@@ -81,7 +81,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             self.type = type if isinstance(type, NotificationType) else NotificationType(typ)
         assert isinstance(recipients, list), "Recipients must be a list"
         self._recipients = recipients
-        self._extra_data = kwargs
+        self._extra_data = kwargs or {}
         assert isinstance(message, DjangoProjectBaseMessage), "Invalid value for message"
         self.message = message
         self.content_entity_context = content_entity_context
@@ -93,8 +93,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         self.send_at = send_at
 
     @staticmethod
-    def resend(notification: DjangoProjectBaseNotification, user_pk: str):
-        notification.user = user_pk
+    def resend(notification: DjangoProjectBaseNotification, user_pk: Optional[str] = None):
+        notification.user = user_pk or (
+            notification.extra_data or {}
+        )  # TODO: refactor this to read from @prop which always returns {}
         from django_project_base.notifications.rest.notification import MessageToListField
 
         recipients: List[str] = MessageToListField.parse(json.loads(notification.recipients_original_payload))
@@ -110,7 +112,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         )
         notification.email_fallback = mail_fallback
         notification.save(update_fields=["recipients", "recipients_original_payload_search"])
-        SendNotificationMixin().make_send(notification, {}, resend=True)
+        SendNotificationMixin().make_send(notification, notification.extra_data or {}, resend=True)
 
     def __set_via_channels(self, val):
         self._via_channels = val
@@ -156,7 +158,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         required_channels: list = list(
             map(lambda f: str(f), filter(lambda d: d is not None, map(lambda c: c.name, self.via_channels)))
         )
-
+        self._extra_data["user"] = self._user
         notification: DjangoProjectBaseNotification = DjangoProjectBaseNotification(
             locale=self.locale,
             level=self.level.value,
@@ -173,6 +175,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             send_notification_sms=self.send_notification_sms,
             send_notification_sms_text=None,
             send_at=self.send_at,
+            extra_data=self._extra_data,
         )
 
         notification = self._ensure_channels(required_channels, notification)
@@ -207,13 +210,50 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                         }
                     )
             notification.recipients_list = rec_list
-            self.enqueue_notification(notification, self._extra_data.get("a_extra_data") or self._extra_data)
+            ext_data = self._extra_data.get("a_extra_data") or self._extra_data
+            notification.extra_data = self._settings_to_dict(notification.extra_data)
+            notification.save(update_fields=["extra_data"])
+            self.enqueue_notification(notification, extra_data=ext_data)
             return notification
 
         if not self.send_at:
             notification = self.make_send(notification, self._extra_data)
+        else:
+            if not self.persist:
+                raise Exception("Delayed notification must be persisted")
+            mail_fallback: bool = (
+                swapper.load_model("django_project_base", "ProjectSettings")
+                .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER, project__slug=notification.project_slug)
+                .python_value
+                if notification.project_slug
+                else False
+            )
+            notification.extra_data["mail-fallback"] = mail_fallback
+            self._set_db()
+            rec_list = []
+            for usr in self._recipients:
+                rec_list.append(
+                    {
+                        k: v
+                        for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
+                        if not k.startswith("_") and isinstance(v, (str, list, tuple, int, float))
+                    }
+                )
+            notification.extra_data["recipients-list"] = rec_list
+            notification.extra_data["sender"] = notification.sender
+            notification.extra_data = self._settings_to_dict(notification.extra_data)
+            notification.save(update_fields=["extra_data"])
 
         return notification
+
+    def _settings_to_dict(self, payload: dict):
+        payload["SETTINGS"] = {
+            k: v
+            for k, v in payload["SETTINGS"].__dict__.items()
+            if isinstance(v, (list, str, dict, tuple))
+            and (k in ("IS_PHONE_NUMBER_ALLOWED_FUNCTION",) or k.startswith("NOTIFICATIONS_"))
+        }
+        return payload
 
     def _set_db(self):
         from django.db import connection

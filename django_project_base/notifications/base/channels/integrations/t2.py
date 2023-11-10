@@ -280,18 +280,18 @@ class T2(ProviderIntegration):
     def ensure_credentials(self, extra_data):
         if settings and getattr(settings, "TESTING", False):
             return
-        self.username = getattr(settings, "T2_USERNAME", None)
-        self.password = getattr(settings, "T2_PASSWORD", None)
-        self.url = getattr(settings, "SMS_API_URL", None)
+        self.username = getattr(settings, "NOTIFICATIONS_T2_USERNAME", None)
+        self.password = getattr(settings, "NOTIFICATIONS_T2_PASSWORD", None)
+        self.url = getattr(settings, "NOTIFICATIONS_SMS_API_URL", None)
         self.settings = settings
         if extra_data and (stgs := extra_data.get("SETTINGS")):
             self.settings = stgs
-            self.username = getattr(stgs, "T2_USERNAME", None)
-            self.password = getattr(stgs, "T2_PASSWORD", None)
-            self.url = getattr(stgs, "SMS_API_URL", None)
-        assert self.username, "T2_USERNAME is required"
-        assert self.password, "T2_PASSWORD is required"
-        assert len(self.url) > 0, "T2_PASSWORD is required"
+            self.username = getattr(stgs, "NOTIFICATIONS_T2_USERNAME", None)
+            self.password = getattr(stgs, "NOTIFICATIONS_T2_PASSWORD", None)
+            self.url = getattr(stgs, "NOTIFICATIONS_SMS_API_URL", None)
+        assert self.username, "NOTIFICATIONS_T2_USERNAME is required"
+        assert self.password, "NOTIFICATIONS_T2_PASSWORD is required"
+        assert len(self.url) > 0, "NOTIFICATIONS_T2_PASSWORD is required"
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         if not recipient.phone_number:

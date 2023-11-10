@@ -14,4 +14,9 @@ class Migration(migrations.Migration):
             name="send_at",
             field=models.BigIntegerField(null=True),
         ),
+        migrations.AddField(
+            model_name="djangoprojectbasenotification",
+            name="extra_data",
+            field=models.JSONField(null=True),
+        ),
     ]
