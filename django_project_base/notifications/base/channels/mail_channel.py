@@ -21,10 +21,7 @@ class MailChannel(Channel):
 
     def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
         if getattr(settings, "TESTING", False):
-            recipients: List[int] = (
-                list(map(int, notification.recipients.split(","))) if notification.recipients else []
-            )
-            return len(recipients)
+            return super().send(notification=notification, extra_data=extra_data)
         message = self.provider.get_message(notification)
         sender = self.sender(notification)
         self.provider.client_send(

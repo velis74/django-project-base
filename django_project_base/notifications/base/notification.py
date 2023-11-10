@@ -107,7 +107,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         )
         notification.email_fallback = mail_fallback
         notification.save(update_fields=["recipients", "recipients_original_payload_search"])
-        SendNotificationMixin().make_send(notification, {})
+        SendNotificationMixin().make_send(notification, {}, resend=True)
 
     def __set_via_channels(self, val):
         self._via_channels = val
