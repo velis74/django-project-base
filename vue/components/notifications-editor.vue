@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import {
+  Action,
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerOneShotApi, gettext,
+  ConsumerLogicApi, FormConsumerOneShotApi, FormPayload, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -98,23 +99,50 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(intervalCheckLicense));
 
-const actionSave = async (): Promise<boolean> => {
-  console.log(Math.random(), 'actionSave');
-  return true;
-};
+// const actionSendNow = async (action:Action, payload: FormPayload): Promise<boolean> => {
+//   console.log(Math.random(), 'actionSendNow', action, payload);
+//   // eslint-disable-next-line no-debugger
+//   debugger;
+//   // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+//   return true;
+// };
+const dialogHandlers = {
+  actionSendNow: async (action:Action, payload: FormPayload): Promise<boolean> => {
+    console.log(Math.random(), 'actionSendNow', action, payload);
+    // eslint-disable-next-line no-debugger
 
-const actionSendNow = async (): Promise<boolean> => {
-  console.log(Math.random(), 'actionSendNow');
-  return true;
+    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+    return true;
+  },
+  'send-now': async (action:Action, payload: FormPayload): Promise<boolean> => {
+    console.log(Math.random(), 'actionSendNowS', action, payload);
+    // eslint-disable-next-line no-debugger
+
+    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+    return true;
+  },
+  sendNow: async (action:Action, payload: FormPayload): Promise<boolean> => {
+    console.log(Math.random(), 'actionSendNowZ', action, payload);
+    // eslint-disable-next-line no-debugger
+
+    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+    return true;
+  },
+  sendnow: async (action:Action, payload: FormPayload): Promise<boolean> => {
+    console.log(Math.random(), 'actionSendNowZŠ', action, payload);
+    // eslint-disable-next-line no-debugger
+
+    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+    return true;
+  },
 };
 
 const { handler } = useActionHandler();
 
 handler
+  .register('send-now', dialogHandlers.actionSendNow)
   .register('view-license', actionViewLicense)
-  .register('add-notification', actionAddNotification)
-  .register('save', actionSave)
-  .register('send', actionSendNow);
+  .register('add-notification', actionAddNotification);
 
 // TODO: remove linter ignores below when you know how to
 </script>
@@ -123,7 +151,11 @@ handler
   <div class="overflow-y-auto">
     <!--suppress TypeScriptValidateTypes -->
     <!-- @vue-ignore -->
-    <APIConsumer :consumer="notificationLogic" :display-component="ComponentDisplay.TABLE"/>
+    <APIConsumer
+      :consumer="notificationLogic"
+      :display-component="ComponentDisplay.TABLE"
+      :dialog-handlers="dialogHandlers"
+    />
     <ModalView/>
   </div>
 </template>

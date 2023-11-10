@@ -113,6 +113,18 @@ class NotificationSerializer(ModelSerializer):
             request=self.request
         )
         self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
+        # self.actions.actions.append(
+        #     FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send-now", label=_("Send now"), serializer=self)
+        # )
+        # self.actions.actions.append(
+        #     FormButtonAction(
+        #         position=FormPosition.FORM_FOOTER,
+        #         label=_("Send now"),
+        #         name="send-now",
+        #         btn_type=FormButtonTypes.CUSTOM,
+        #         serializer=self,
+        #     ),
+        # )
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -141,21 +153,25 @@ class NotificationSerializer(ModelSerializer):
     actions = Actions(
         TableAction(
             TablePosition.HEADER,
-            _("Add"),
+            label=_("Add"),
             title=_("Add new record"),
             name="add-notification",
             icon="add-circle-outline",
         ),
         TableAction(
             TablePosition.HEADER,
-            _("View license"),
+            label=_("View license"),
             title=_("View license"),
             name="view-license",
             icon="card-outline",
         ),
-        FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="save", label=_("Save")),
-        FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send", label=_("Send now")),
-        add_form_buttons=False,
+        # FormButtonAction(
+        #     position=FormPosition.FORM_FOOTER,
+        #     label=_("Send now"),
+        #     name="send-now",
+        #     btn_type=FormButtonTypes.CUSTOM,
+        #     # serializer=self,
+        # ),
     )
 
     message_to = fields.ManyRelatedField(
@@ -197,8 +213,13 @@ class NotificationSerializer(ModelSerializer):
 
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
 
-    schedule_send_on_datetime = fields.DateTimeField(
-        write_only=True, display_table=DisplayMode.SUPPRESS, display_form=DisplayMode.FULL, allow_null=True
+    send_at = fields.DateTimeField(
+        write_only=True,
+        display_table=DisplayMode.SUPPRESS,
+        display_form=DisplayMode.FULL,
+        allow_null=True,
+        required=False,
+        label=_("Send on"),
     )
 
     def to_representation(self, instance, row_data=None):
