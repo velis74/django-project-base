@@ -2,8 +2,7 @@
 
 import { apiClient, gettext } from '@velis/dynamicforms';
 import { AxiosRequestConfig } from 'axios';
-import { computed, ref } from 'vue';
-import { Ref } from 'vue/dist/vue';
+import { computed, ref, Ref } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Multiselect from 'vue-multiselect';
 
