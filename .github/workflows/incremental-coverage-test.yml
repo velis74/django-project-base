@@ -1,5 +1,5 @@
 name: Coverage check
-on: [pull_request]
+on: [push, pull_request]
 jobs:
   lint:
     name: Code coverage
@@ -41,7 +41,7 @@ jobs:
         with:
           clover_coverage_json: coverage/coverage-final.json
           py_coverage_json: coverage.json
-          logging_level: INFO
+          logging_level: DEBUG
           base_ref: ${{ github.base_ref }}
           head_ref: HEAD
           rep_ref: main
@@ -53,7 +53,7 @@ jobs:
         with:
           clover_coverage_json: coverage/coverage-final.json
           py_coverage_json: coverage.json
-          logging_level: INFO
+          logging_level: DEBUG
           base_ref: ${{ github.event.before }}
           head_ref: HEAD
           rep_ref: main
