@@ -1,6 +1,7 @@
 import logging
 
 from django import db
+from django.core.cache import cache
 from django.db import connections
 from django.db.utils import load_backend
 from django.utils import timezone
@@ -10,7 +11,9 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 
 class SendNotificationMixin(object):
-    def make_send(self, notification: DjangoProjectBaseNotification, extra_data) -> DjangoProjectBaseNotification:
+    def make_send(
+        self, notification: DjangoProjectBaseNotification, extra_data, resend=False
+    ) -> DjangoProjectBaseNotification:
         sent_channels: list = []
         failed_channels: list = []
 
@@ -28,6 +31,12 @@ class SendNotificationMixin(object):
             dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
             dw.connect()
             connections.databases[db_connection] = dw.settings_dict
+        if (
+            (stgs := extra_data.get("SETTINGS"))
+            and (phn_allowed := getattr(stgs, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
+            and phn_allowed
+        ):
+            cache.set("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), phn_allowed, timeout=None)
 
         already_sent_channels = set(
             filter(
@@ -35,15 +44,12 @@ class SendNotificationMixin(object):
                 notification.sent_channels.split(",") if notification.sent_channels else [],
             )
         )
-        required_channels = (
-            set(
-                filter(
-                    lambda i: i not in (None, "") and i,
-                    notification.required_channels.split(",") if notification.required_channels else [],
-                )
+        required_channels = set(
+            filter(
+                lambda i: i not in (None, "") and i,
+                notification.required_channels.split(",") if notification.required_channels else [],
             )
-            - already_sent_channels
-        )
+        ) - (already_sent_channels if not resend else set())
         already_failed_channels = set(
             filter(
                 lambda i: i not in (None, "") and i,
@@ -51,13 +57,12 @@ class SendNotificationMixin(object):
             )
         )
 
-        sent_to_channels = required_channels - already_sent_channels
         from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 
         if notification.send_notification_sms:
-            sent_to_channels.add(SmsChannel.name)
+            required_channels.add(SmsChannel.name)
 
-        for channel_identifier in sent_to_channels:
+        for channel_identifier in required_channels:
             channel = ChannelIdentifier.channel(
                 channel_identifier, extra_data=extra_data, project_slug=notification.project_slug, ensure_dlr_user=False
             )
@@ -82,7 +87,7 @@ class SendNotificationMixin(object):
                 exceptions += f"{str(e)}\n\n"
 
         if notification.created_at:
-            if sent_to_channels:
+            if required_channels:
                 notification.sent_channels = (
                     ",".join(
                         set(
@@ -121,6 +126,11 @@ class SendNotificationMixin(object):
             )
             notification.sent_at = timezone.now().timestamp() if notification.sent_channels else None
             notification.exceptions = exceptions if exceptions else None
+
+            _req = notification.required_channels.split(",") if notification.required_channels else []
+            _snt = notification.sent_channels.split(",") if notification.sent_channels else []
+            if set(_snt) == set(_req):
+                notification.failed_channels = ""
 
             notification.save(
                 update_fields=[

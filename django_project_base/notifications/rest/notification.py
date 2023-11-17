@@ -409,7 +409,7 @@ class NotificationViewset(ModelViewSet):
         return super().filter_queryset_field(queryset, field, value)
 
     def get_serializer_class(self):
-        if not self.detail and self.action == "create":
+        if self.action in ("create", "update"):
 
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
@@ -434,7 +434,7 @@ class NotificationViewset(ModelViewSet):
         except ProjectNotSelectedError as e:
             raise NotFound(e.message)
 
-    def perform_create(self, serializer):
+    def _create_notification(self, serializer):
         host_url = get_host_url(self.request)
         notification = Notification(
             message=DjangoProjectBaseMessage(
@@ -445,7 +445,7 @@ class NotificationViewset(ModelViewSet):
             ),
             raw_recipents=self.request.data["message_to"],
             project=swapper.load_model("django_project_base", "Project")
-            .objects.get(slug=self.request.current_project_slug)
+            .objects.get(slug=self.request.selected_project_slug)
             .slug,
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
@@ -459,6 +459,17 @@ class NotificationViewset(ModelViewSet):
             host_url=host_url,
         )
         notification.send()
+
+    def update(self, request, *args, **kwargs):
+        kwargs.pop("pk", None)
+        return super().create(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        kwargs.pop("pk", None)
+        return super().create(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        return self._create_notification(serializer)
 
 
 class ChannelSerializer(Serializer):

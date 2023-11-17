@@ -13,13 +13,14 @@ import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
 import AppNotification from './components/notification.vue';
 import NotificationsEditor from './components/notifications-editor.vue';
+import ProfileSearch from './components/profile-search.vue';
 import ProjectSettings from './components/project-settings.vue';
 import TitleBar from './components/titlebar.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
 import Login from './components/user-session/login-inline.vue';
 import ProjectList from './components/user-session/project-list.vue';
 import UserProfile from './components/user-session/user-profile.vue';
-import DefaultCookieOptions from './defaultCookieOptions';
+import DefaultCookieOptions from './default-cookie-options';
 import TitlebarAppStandalone from './titlebar-app-standalone.vue';
 
 export { default as useUserSessionStore } from './components/user-session/state';
@@ -28,6 +29,8 @@ export { apiClient } from '@velis/dynamicforms';
 export { default as useLoginDialog } from './components/user-session/use-login-dialog';
 
 export { showNotification, showGeneralErrorNotification, showMaintenanceNotification } from './notifications';
+
+export { default as showAddProfileModal } from './profile-search-add-user';
 
 export const componentsConfig: { [key: string]: Component } = {
   TitleBar,
@@ -42,6 +45,7 @@ export const componentsConfig: { [key: string]: Component } = {
   LoginDialog,
   NotificationsEditor,
   ProjectSettings,
+  ProfileSearch,
 };
 
 type AppData = Object;

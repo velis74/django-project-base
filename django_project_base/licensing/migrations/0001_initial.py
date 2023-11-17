@@ -27,9 +27,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "date",
-                    models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="Date"
-                    ),
+                    models.DateTimeField(default=django.utils.timezone.now, verbose_name="Date"),
                 ),
                 (
                     "type",

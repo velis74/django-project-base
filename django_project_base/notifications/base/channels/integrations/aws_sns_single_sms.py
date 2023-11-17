@@ -41,6 +41,8 @@ class AwsSnsSingleSMS(ProviderIntegration):
         assert is_success(response.get("ResponseMetadata", {}).get("HTTPStatusCode", 500))
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
+        if not recipient.phone_number:
+            return
         smsattrs = {
             "AWS.SNS.SMS.SenderID": {"DataType": "String", "StringValue": sender.replace(" ", "-")},
             "AWS.SNS.SMS.SMSType": {"DataType": "String", "StringValue": "Promotional"},

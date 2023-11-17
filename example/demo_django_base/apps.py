@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class DemoDjangoBaseConfig(AppConfig):
-    name = 'example.demo_django_base'
+    name = "example.demo_django_base"

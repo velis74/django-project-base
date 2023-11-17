@@ -61,8 +61,9 @@ if sys.argv[1] == "publish":
     write_ver_to_init("package.json", version_str, '"version": ', '  "version": "%s",\n')
 
     os.system("npm run build")
+    os.system("npm publish --access=public")
+    os.system("rm -rf build && rm -rf dist && rm -rf django_project_base.egg-info")
 
-    os.system("npm publish")
     os.system("python setup.py sdist bdist_wheel")
     # if you don't like to enter username / pass for pypi every time, run this command:
     #  keyring set https://upload.pypi.org/legacy/ username  (it will ask for password)

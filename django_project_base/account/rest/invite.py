@@ -106,7 +106,7 @@ class ProjectUserInviteViewSet(ModelViewSet):
         return new_object
 
     @transaction.atomic
-    def create(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         self.request.data["project"] = self.request.selected_project.pk
         self.request.data["invited_by"] = self.request.user.userprofile
         created = super().create(request, *args, **kwargs)
@@ -139,7 +139,7 @@ class ProjectUserInviteViewSet(ModelViewSet):
         return created
 
     @transaction.atomic
-    def update(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         raise InviteActionNotImplementedException
 
     @transaction.atomic

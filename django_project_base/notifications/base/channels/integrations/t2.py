@@ -294,6 +294,8 @@ class T2(ProviderIntegration):
         assert len(self.url) > 0, "T2_PASSWORD is required"
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
+        if not recipient.phone_number:
+            return
         basic_auth = HTTPBasicAuth(self.username, self.password)
         response = requests.post(
             f"{self.url}{self.endpoint_one}",

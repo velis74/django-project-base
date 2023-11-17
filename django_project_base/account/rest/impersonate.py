@@ -77,6 +77,31 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         id = fields.IntegerField(required=True, help_text=_("Target user pk"))
 
     @extend_schema(
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(description="OK"),
+            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Forbidden"),
+        },
+        description="Logout as another user",
+    )
+    @permission_classes([IsAuthenticated])
+    def destroy(self, request: Request) -> Response:
+        release_hijack(request)
+        return Response()
+
+    @extend_schema(exclude=True)
+    @permission_classes([IsAdminUser])
+    def update(self, request: Request, *args, **kwargs) -> Response:
+        self._hijack(request=request)
+        return Response()
+
+    def _hijack(self, request: Request):
+        validated_data: dict = self.__validate(request.data)
+        hijacked_user: Model = get_object_or_404(get_user_model(), **validated_data)
+        if request.user == hijacked_user:
+            raise PermissionDenied(_("Impersonating self is not allowed"))
+        login_user(request, hijacked_user)
+
+    @extend_schema(
         request=ImpersonateUser,
         responses={
             status.HTTP_200_OK: OpenApiResponse(description="OK"),
@@ -90,21 +115,5 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
     )
     @permission_classes([IsAdminUser])
     def create(self, request: Request, *args, **kwargs) -> Response:
-        validated_data: dict = self.__validate(request.data)
-        hijacked_user: Model = get_object_or_404(get_user_model(), **validated_data)
-        if request.user == hijacked_user:
-            raise PermissionDenied(_("Impersonating self is not allowed"))
-        login_user(request, hijacked_user)
-        return Response()
-
-    @extend_schema(
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Forbidden"),
-        },
-        description="Logout as another user",
-    )
-    @permission_classes([IsAuthenticated])
-    def destroy(self, request: Request) -> Response:
-        release_hijack(request)
+        self._hijack(request=request)
         return Response()

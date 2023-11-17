@@ -39,8 +39,8 @@ from django_project_base.account.rest.project_profiles_utils import get_project_
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import (
-    EMailNotificationWithListOfEmails,
-    SystemEMailNotification,
+    EMailNotification,
+    SystemEMailNotificationWithListOfEmails,
 )
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
@@ -431,7 +431,7 @@ class ProfileViewSet(ModelViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
     )
-    @get_current_profile.mapping.post
+    @get_current_profile.mapping.put
     def update_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
         new_email = request.data.pop("email", None)
@@ -444,10 +444,7 @@ class ProfileViewSet(ModelViewSet):
             code = randrange(100001, 999999)
             response.set_cookie("verify-email", user.pk, samesite="Lax")
             request.session[f"email-changed-{code}-{user.pk}"] = new_email
-            # TODO: Use system email
-            # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
-            # TODO: https://taiga.velis.si/project/velis-django-project-admin/issue/728
-            EMailNotificationWithListOfEmails(
+            SystemEMailNotificationWithListOfEmails(
                 message=DjangoProjectBaseMessage(
                     subject=f"{_('Email change for account on')} {request.META['HTTP_HOST']}",
                     body=f"{_('You requested an email change for your account at')} {request.META['HTTP_HOST']}. "
@@ -607,7 +604,7 @@ class ProfileViewSet(ModelViewSet):
             .first()
         ) and sett.python_value:
             recipients = [response.data[get_pk_name(get_user_model())]]
-            SystemEMailNotification(
+            EMailNotification(
                 message=DjangoProjectBaseMessage(
                     subject=_("Your account was created for you"),
                     body=render_to_string(
@@ -619,8 +616,10 @@ class ProfileViewSet(ModelViewSet):
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),
+                raw_recipents=recipients,
                 project=project.slug,
                 recipients=recipients,
+                delay=int(datetime.datetime.now().timestamp()),
                 user=self.request.user.pk,
             ).send()
 

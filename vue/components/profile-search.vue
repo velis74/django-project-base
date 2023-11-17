@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 import { apiClient, gettext } from '@velis/dynamicforms';
-import { computed, ref } from 'vue';
-import { Ref } from 'vue/dist/vue';
+import { AxiosRequestConfig } from 'axios';
+import { computed, ref, Ref } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Multiselect from 'vue-multiselect';
 
@@ -31,7 +31,7 @@ const selectOptions = computed(() => options.value);
 
 function asyncSearch(query: string) {
   searching.value = true;
-  apiClient.get(`${searchUrl}?search=${query}`).then((response) => {
+  apiClient.get(`${searchUrl}?search=${query}`, { showProgress: false } as AxiosRequestConfig).then((response) => {
     options.value = response.data;
     searching.value = false;
   });

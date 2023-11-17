@@ -1,5 +1,12 @@
+import json
+from gettext import gettext
+
 import swapper
+from django.conf import settings
 from django.core.management.base import BaseCommand
+
+from django_project_base.notifications.email_notification import SystemEMailNotificationWithListOfEmails
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
 class Command(BaseCommand):
@@ -19,17 +26,16 @@ class Command(BaseCommand):
                     "value": setting.python_value,
                     "pending_value": setting.python_pending_value,
                 }
-        # if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
-        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
-        # EMailNotificationWithListOfEmails(
-        #     message=DjangoProjectBaseMessage(
-        #         subject=_("Pending settings report"),
-        #         body=json.dumps(result),
-        #         footer="",
-        #         content_type=DjangoProjectBaseMessage.HTML,
-        #     ),
-        #     recipients=to,
-        #     project=None,
-        #     user=None,
-        # ).send()
+
+        if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])) and result:
+            SystemEMailNotificationWithListOfEmails(
+                message=DjangoProjectBaseMessage(
+                    subject=gettext("Pending settings report"),
+                    body=json.dumps(result),
+                    footer="",
+                    content_type=DjangoProjectBaseMessage.HTML,
+                ),
+                recipients=to,
+            ).send()
+
         self.stdout.write(self.style.WARNING(result))

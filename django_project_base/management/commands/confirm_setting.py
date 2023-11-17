@@ -1,8 +1,12 @@
+from gettext import gettext
+
 import swapper
 from django.core.management.base import BaseCommand
 from django.shortcuts import get_object_or_404
 
 from django_project_base.base.event import ProjectSettingConfirmedEvent
+from django_project_base.notifications.email_notification import SystemEMailNotification
+from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
 class Command(BaseCommand):
@@ -20,17 +24,15 @@ class Command(BaseCommand):
             name=str(options["setting-name"]),
         )
         ProjectSettingConfirmedEvent(user=None).trigger(payload=setting)
-        # TODO: send email when owner is known
-        # # TODO: SEND THIS AS SYSTEM MSG WHEN PR IS MERGED
-        # SystemEMailNotification(
-        #     message=DjangoProjectBaseMessage(
-        #         subject=f"{__('Project setting confirmed')}",
-        #         body=f"{__('Setting')} {setting.name} {__('in project')} "
-        #         f"{project.name} {__('has been confirmed and is now active.')}",
-        #         footer="",
-        #         content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
-        #     ),
-        #     recipients=[],  # TODO: find project owner
-        #     user=None,  # TODO: find project owner
-        # ).send()
+        SystemEMailNotification(
+            message=DjangoProjectBaseMessage(
+                subject=f"{gettext('Project setting confirmed')}",
+                body=f"{gettext('Setting')} {setting.name} {gettext('in project')} "
+                f"{project.name} {gettext('has been confirmed and is now active.')}",
+                footer="",
+                content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
+            ),
+            recipients=[],  # TODO: find project owner and send, when project owner is found use EmailNotification
+            user=None,  # TODO: find project owner and send -> add .send()
+        )
         return "ok"

@@ -1,6 +1,6 @@
 django
 djangorestframework
-dynamicforms >= 0.74.18
+dynamicforms >= 0.74.22
 swapper
 django-rest-registration
 drf-spectacular>=0.17.2, <0.26.0
@@ -18,3 +18,4 @@ natural
 celery==5.2.7
 django-redis-cache
 pandas
+dill==0.3.7

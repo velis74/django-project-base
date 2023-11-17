@@ -22,15 +22,11 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (
-                        django_project_base.licensing.models.LicenseAccessUse.UseType[
-                            "USE"
-                        ],
+                        django_project_base.licensing.models.LicenseAccessUse.UseType["USE"],
                         "Used access",
                     )
                 ],
-                default=django_project_base.licensing.models.LicenseAccessUse.UseType[
-                    "USE"
-                ],
+                default=django_project_base.licensing.models.LicenseAccessUse.UseType["USE"],
                 verbose_name="Type",
             ),
         ),
@@ -45,21 +41,15 @@ class Migration(migrations.Migration):
             field=models.IntegerField(
                 choices=[
                     (
-                        django_project_base.licensing.models.LicenseAccessUse.UseType[
-                            "USE"
-                        ],
+                        django_project_base.licensing.models.LicenseAccessUse.UseType["USE"],
                         "Used access",
                     ),
                     (
-                        django_project_base.licensing.models.LicenseAccessUse.UseType[
-                            "ADMIN_USE"
-                        ],
+                        django_project_base.licensing.models.LicenseAccessUse.UseType["ADMIN_USE"],
                         "Used access by admin",
                     ),
                 ],
-                default=django_project_base.licensing.models.LicenseAccessUse.UseType[
-                    "USE"
-                ],
+                default=django_project_base.licensing.models.LicenseAccessUse.UseType["USE"],
                 verbose_name="Type",
             ),
         ),

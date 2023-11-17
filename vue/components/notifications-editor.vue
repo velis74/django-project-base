@@ -7,7 +7,7 @@ import {
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '../api-client';
 import {
   closeNotification,
   showNotification,

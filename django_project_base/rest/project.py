@@ -116,7 +116,7 @@ class ProjectViewSet(ModelViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
         },
     )
-    @get_current_project.mapping.post
+    @get_current_project.mapping.put
     def update_current_profile(self, request: Request, **kwargs) -> Response:
         try:
             serializer = self.get_serializer(request.selected_project, data=request.data, many=False)
@@ -213,7 +213,7 @@ class ProjectSettingsSerializer(ModelSerializer):
         display=DisplayMode.SUPPRESS, queryset=swapper.load_model("django_project_base", "Project").objects.all()
     )
     pending_value = fields.CharField(
-        display=DisplayMode.SUPPRESS, required=False, allow_null=True, default=False, allow_blank=True
+        display=DisplayMode.SUPPRESS, required=False, allow_null=True, default=None, allow_blank=True
     )
 
     table_value = fields.CharField(
@@ -237,6 +237,9 @@ class ProjectSettingsSerializer(ModelSerializer):
             self.validated_data["pending_value"] = self.validated_data["value"]
             self.validated_data["value"] = instance.value
 
+        if self.validated_data["value"] == self.validated_data["pending_value"]:
+            self.validated_data["pending_value"] = None
+
         from django_project_base.base.event import EmailSenderChangedEvent
 
         EmailSenderChangedEvent(self.context["request"].user).trigger_changed(
@@ -256,10 +259,10 @@ class ProjectSettingsSerializer(ModelSerializer):
 
     def to_representation(self, instance, row_data=None):
         representation = super().to_representation(instance, row_data)
-        if instance and instance.pending_value:
+        if instance and instance.pending_value is not None:
             representation[
                 "table_value"
-            ] = f"{representation['value']} ({gettext('Pending')}: {instance.pending_value})"
+            ] = f"{representation['value']} ({gettext('Pending')}: {instance.python_pending_value})"
         return representation
 
     class Meta:
@@ -406,7 +409,7 @@ class ProjectSettingsViewSet(ModelViewSet):
     )
     def reset_pending_setting(self, request) -> Response:
         setting = get_object_or_404(self.get_serializer_class().Meta.model, pk=self._get_pk_from_request(request))
-        if setting.pending_value:
+        if setting.pending_value is not None:
             ProjectSettingPendingResetEvent(user=request.user).trigger(payload=setting)
         return Response()
 
