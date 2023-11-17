@@ -29,3 +29,7 @@ class Store {
 }
 
 export { Store };
+
+function addNumbers() {
+  return 4;
+}
