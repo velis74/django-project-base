@@ -29,3 +29,5 @@ class Store {
 }
 
 export { Store };
+
+console.log('Hello');
