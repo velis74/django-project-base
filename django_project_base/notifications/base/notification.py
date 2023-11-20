@@ -94,7 +94,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
 
     @staticmethod
     def resend(notification: DjangoProjectBaseNotification, user_pk: Optional[str] = None):
-        notification.user = user_pk
+        notification.user = user_pk or (notification.extra_data or {}).get("user")
         from django_project_base.notifications.rest.notification import MessageToListField
 
         recipients: List[str] = MessageToListField.parse(json.loads(notification.recipients_original_payload))
@@ -175,6 +175,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             send_notification_sms=self.send_notification_sms,
             send_notification_sms_text=None,
             send_at=self.send_at,
+            extra_data=self._extra_data,
         )
 
         notification = self._ensure_channels(channels=required_channels, notification=notification, settings=settings)
@@ -209,6 +210,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
                     )
             notification.recipients_list = rec_list
             ext_data = self._extra_data.get("a_extra_data") or self._extra_data
+            notification.extra_data = ext_data
+            notification.save(update_fields=["extra_data"])
             self.enqueue_notification(notification, extra_data=ext_data)
             return notification
 
@@ -216,25 +219,30 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             SendNotificationService(settings=settings, use_default_db_connection=True).make_send(
                 notification, self._extra_data, resend=False
             )
-        # else:
-        #     if not self.persist:
-        #         raise Exception("Delayed notification must be persisted")
-        #     mail_fallback: bool = (
-        #         swapper.load_model("django_project_base", "ProjectSettings")
-        #         .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER, project__slug=notification.project_slug)
-        #         .python_value
-        #         if notification.project_slug
-        #         else False
-        #     )
-        #     rec_list = []
-        #     for usr in self._recipients:
-        #         rec_list.append(
-        #             {
-        #                 k: v
-        #                 for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
-        #                 if not k.startswith("_") and isinstance(v, (str, list, tuple, int, float))
-        #             }
-        #         )
+        else:
+            if not self.persist:
+                raise Exception("Delayed notification must be persisted")
+            mail_fallback: bool = (
+                swapper.load_model("django_project_base", "ProjectSettings")
+                .objects.get(name=USE_EMAIL_IF_RECIPIENT_HAS_NO_PHONE_NUMBER, project__slug=notification.project_slug)
+                .python_value
+                if notification.project_slug
+                else False
+            )
+            rec_list = []
+            for usr in self._recipients:
+                rec_list.append(
+                    {
+                        k: v
+                        for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
+                        if not k.startswith("_") and isinstance(v, (str, list, tuple, int, float))
+                    }
+                )
+            notification.extra_data["recipients-list"] = rec_list
+            notification.extra_data["sender"] = notification.sender
+            notification.extra_data["mail-fallback"] = mail_fallback
+            notification.save(update_fields=["extra_data"])
+
         return notification
 
     def _ensure_channels(
