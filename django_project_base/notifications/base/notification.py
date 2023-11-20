@@ -197,7 +197,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         if self.delay:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
-            self._set_db()
 
             rec_list = self._extra_data.get("a_recipients_list") or []
             if len(rec_list) == 0:
@@ -211,7 +210,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                     )
             notification.recipients_list = rec_list
             ext_data = self._extra_data.get("a_extra_data") or self._extra_data
-            notification.extra_data = self._settings_to_dict(notification.extra_data)
+
             notification.save(update_fields=["extra_data"])
             self.enqueue_notification(notification, extra_data=ext_data)
             return notification
@@ -229,7 +228,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                 else False
             )
             notification.extra_data["mail-fallback"] = mail_fallback
-            self._set_db()
             rec_list = []
             for usr in self._recipients:
                 rec_list.append(
@@ -241,40 +239,10 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
                 )
             notification.extra_data["recipients-list"] = rec_list
             notification.extra_data["sender"] = notification.sender
-            notification.extra_data = self._settings_to_dict(notification.extra_data)
+
             notification.save(update_fields=["extra_data"])
 
         return notification
-
-    def _settings_to_dict(self, payload: dict):
-        payload["SETTINGS"] = {
-            k: v
-            for k, v in payload["SETTINGS"].__dict__.items()
-            if isinstance(v, (list, str, dict, tuple))
-            and (k in ("IS_PHONE_NUMBER_ALLOWED_FUNCTION",) or k.startswith("NOTIFICATIONS_"))
-        }
-        return payload
-
-    def _set_db(self):
-        from django.db import connection
-
-        sttgs = connection.settings_dict
-
-        sttgs["TIME_ZONE"] = None
-        self._extra_data["DATABASE"] = {
-            "PARAMS": connection.get_connection_params(),
-            "SETTINGS": sttgs,
-        }
-        self._extra_data["SETTINGS"] = settings
-        from dill import dumps as ddumps
-
-        setattr(
-            self._extra_data["SETTINGS"],
-            "IS_PHONE_NUMBER_ALLOWED_FUNCTION",
-            ddumps(
-                getattr(self._extra_data["SETTINGS"], "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""), fmode=True, recurse=True
-            ),
-        )
 
     def _ensure_channels(
         self, channels: List[str], notification: DjangoProjectBaseNotification
@@ -282,7 +250,6 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         from django_project_base.notifications.base.channels.mail_channel import MailChannel
 
         extra_data = self._extra_data.get("a_extra_data") or self._extra_data
-
         for channel_name in channels:
             # ensure dlr user and check providers
             channel = ChannelIdentifier.channel(channel_name, extra_data=extra_data, project_slug=self._project)

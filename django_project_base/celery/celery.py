@@ -1,9 +1,10 @@
 import os
 
-from celery import Celery
+from celery import Celery, bootsteps
 from django.apps import apps
 from django.utils.crypto import get_random_string
 from kombu import Exchange, Queue
+from click import Option
 from kombu.entity import TRANSIENT_DELIVERY_MODE
 
 from django_project_base.celery.settings import NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT
@@ -76,6 +77,18 @@ app.conf.beat_schedule = {
 app.conf.task_ignore_result = True
 app.conf.worker_send_task_events = False
 app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
+setting_option = Option(("--settings",), is_flag=False, help="Django settings file path", default="")
+app.user_options["worker"].add(setting_option)
+app.user_options["beat"].add(setting_option)
+
+
+class CeleryBootstep(bootsteps.Step):
+    def __init__(self, parent, **options):
+        super().__init__(parent, **options)
+        app.conf.setdefault("django-settings-module", options.get("settings", ""))
+
+
+app.steps["worker"].add(CeleryBootstep)
 
 # RUN WORKER AS
 # celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1

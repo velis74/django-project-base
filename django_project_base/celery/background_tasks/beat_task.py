@@ -1,14 +1,15 @@
 import datetime
 
 from django.core.cache import cache
-from django.db.utils import load_backend
 
+from django_project_base.celery.background_tasks.base_task import BaseTask
 from django_project_base.celery.celery import app
+from django_project_base.constants import NOTIFICATION_QUEUE_NAME
 from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
-class BeatTask(app.Task):
+class BeatTask(BaseTask):
     name = "background_tasks.beat_task.beat_task"
 
     max_retries = 0
@@ -20,32 +21,22 @@ class BeatTask(app.Task):
         cache.set(self.run_ck, False)
 
     def run(self):
-        with open("/tmp/beat.txt", "a") as f:
-            f.write(f"\n RUN \n")
         if cache.get(self.run_ck):
             return
-        with open("/tmp/beat.txt", "a") as f:
-            f.write(f"\n IN RUN \n")
         cache.set(self.run_ck, True, timeout=None)
         now_ts = datetime.datetime.now().timestamp() + 300
-        db_connection = "default"
-        db_settings = notification.extra_data.get("DATABASE")
-        if db_settings:
-            db_connection = f"notification-{notification.pk}"
-            backend = load_backend(db_settings["SETTINGS"]["ENGINE"])
-            dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
-            dw.connect()
-            connections.databases[db_connection] = dw.settings_dict
-        for notification in DjangoProjectBaseNotification.objects.filter(
-            send_at__isnull=False, sent_at__isnull=True, send_at__lte=now_ts
+
+        # SET CONNECTION AND DELETE IT IN EXTRA DATA
+        for notification in DjangoProjectBaseNotification.objects.using(NOTIFICATION_QUEUE_NAME).filter(
+                send_at__isnull=False, sent_at__isnull=True, send_at__lte=now_ts
         ):
-            with open("/tmp/beat.txt", "a") as f:
-                f.write(f"\n {notification} \n")
             notification.email_fallback = notification.extra_data["mail-fallback"]
             notification.user = notification.extra_data["user"]
             notification.recipients_list = notification.extra_data["recipients-list"]
             notification.sender = notification.extra_data["sender"]
-            SendNotificationMixin().make_send(notification, notification.extra_data or {}, resend=False)
+            print(notification)
+
+            # SendNotificationMixin().make_send(notification, notification.extra_data or {}, resend=False)
         self._clear_in_progress_status()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
@@ -62,8 +53,6 @@ class BeatTask(app.Task):
                 Kwargs: {str(kwargs)}
                 EInfo: {str(einfo)}
                 """
-        with open("/tmp/beat.txt", "a") as f:
-            f.write(f"\n msg \n")
         logger.exception(msg)
 
 

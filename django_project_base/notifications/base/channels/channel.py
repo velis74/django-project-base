@@ -4,7 +4,7 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Union
 
-from django.conf import settings
+from django.conf import settings, Settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext
@@ -73,7 +73,7 @@ class Channel(ABC):
         return _sender
 
     def _find_provider(
-        self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
+        self, settings: Optional[Settings], setting_name: str, exclude: Optional[List[str]] = None
     ) -> Optional[ProviderIntegration]:
         if exclude is None:
             exclude = []
@@ -86,8 +86,8 @@ class Channel(ABC):
 
             return import_string(val)() if val not in exclude else None
 
-        if extra_settings and getattr(extra_settings.get("SETTINGS", object()), setting_name, None):
-            return get_first_provider(getattr(extra_settings["SETTINGS"], setting_name))
+        if settings and getattr(settings, setting_name, None):
+            return get_first_provider(settings.setting_name)
         return get_first_provider(getattr(settings, setting_name, ""))
 
     def clean_recipients(self, recipients: List[Recipient]) -> List[Recipient]:

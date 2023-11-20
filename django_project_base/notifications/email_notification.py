@@ -80,7 +80,6 @@ class EMailNotificationWithListOfEmails(EMailNotification):
             self.message.save()
         notification.created_at = int(datetime.datetime.now().timestamp())
         notification.save()
-        self._set_db()
         uuid_val = str(uuid.uuid4())
         notification.email_list = [
             dict(
