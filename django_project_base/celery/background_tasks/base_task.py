@@ -35,6 +35,7 @@ class BaseTask(app.Task):
             dw = backend.DatabaseWrapper(db_settings)
             dw.connect()
             connections.databases[NOTIFICATION_QUEUE_NAME] = dw.settings_dict
+            connections.databases["default"] = dw.settings_dict
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         logging.getLogger(__name__).error(

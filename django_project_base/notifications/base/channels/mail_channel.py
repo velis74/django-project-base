@@ -1,7 +1,7 @@
 import uuid
 from typing import List
 
-from django.conf import settings
+from django.conf import settings, Settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
@@ -19,9 +19,9 @@ class MailChannel(Channel):
 
     provider_setting_name = "NOTIFICATIONS_EMAIL_PROVIDER"
 
-    def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
+    def send(self, notification: DjangoProjectBaseNotification, extra_data, settings: Settings, **kwargs) -> int:
         if getattr(settings, "TESTING", False):
-            return super().send(notification=notification, extra_data=extra_data)
+            return super().send(notification=notification, extra_data=extra_data, settings=settings)
         message = self.provider.get_message(notification)
         sender = self.sender(notification)
         self.provider.client_send(
@@ -30,7 +30,7 @@ class MailChannel(Channel):
             message,
             str(uuid.uuid4()),
         )
-        return super().send(notification=notification, extra_data=extra_data)
+        return super().send(notification=notification, extra_data=extra_data, settings=settings)
 
     def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
         return list(set(super().get_recipients(notification, unique_identifier="email")))

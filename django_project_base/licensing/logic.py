@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from django.contrib.contenttypes.models import ContentType
+from django.db import connections
 from django.db.models import Model, Sum
 from django.utils.translation import gettext
 from dynamicforms import fields
@@ -80,8 +81,8 @@ class LogAccessService:
         on_sucess=None,
         **kwargs,
     ) -> int:
-        content_type = ContentType.objects.using(self.db).get_for_model(model=record._meta.model)
-
+        connections["default"] = connections[self.db]
+        content_type = ContentType.objects.get_for_model(model=record._meta.model)
         used = (
             LicenseAccessUse.objects.using(self.db)
             .filter(user_id=str(user_profile_pk), content_type=content_type)

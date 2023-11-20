@@ -12,10 +12,12 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 class SendNotificationService(object):
     settings: Settings
+    use_default_db_connection = False
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, use_default_db_connection=False) -> None:
         super().__init__()
         self.settings = settings
+        self.use_default_db_connection = use_default_db_connection
 
     def make_send(
         self, notification: DjangoProjectBaseNotification, extra_data, resend=False
@@ -24,6 +26,7 @@ class SendNotificationService(object):
 
         sent_channels: list = []
         failed_channels: list = []
+        db_name = NOTIFICATION_QUEUE_NAME if not self.use_default_db_connection else "default"
 
         exceptions = ""
         from django_project_base.licensing.logic import LogAccessService
@@ -71,13 +74,15 @@ class SendNotificationService(object):
             )
             try:
                 # check license
-                any_sent = LogAccessService(db=NOTIFICATION_QUEUE_NAME).log(
+                any_sent = LogAccessService(db=db_name).log(
                     user_profile_pk=notification.user,
                     notifications_channels_state=sent_channels,
                     record=notification,
                     item_price=channel.notification_price,
                     comment=str(channel),
-                    on_sucess=lambda: channel.send(notification, extra_data),
+                    on_sucess=lambda: channel.send(
+                        notification=notification, extra_data=extra_data, settings=self.settings
+                    ),
                     is_system_notification=extra_data.get("is_system_notification"),
                     sender=channel.sender(notification),
                 )
@@ -140,7 +145,7 @@ class SendNotificationService(object):
                     "failed_channels",
                     "exceptions",
                 ],
-                using=NOTIFICATION_QUEUE_NAME,
+                using=db_name,
             )
             db.connections.close_all()
         return notification

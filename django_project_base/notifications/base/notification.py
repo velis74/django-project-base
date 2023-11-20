@@ -216,7 +216,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             return notification
 
         if not self.send_at:
-            SendNotificationService(settings=settings).make_send(notification, self._extra_data, resend=False)
+            SendNotificationService(settings=settings, use_default_db_connection=True).make_send(
+                notification, self._extra_data, resend=False
+            )
         else:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")

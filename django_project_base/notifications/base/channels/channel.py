@@ -172,7 +172,7 @@ class Channel(ABC):
             logger.exception(de)
             return dlr_obj, (sent and do_send)
 
-    def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
+    def send(self, notification: DjangoProjectBaseNotification, extra_data, settings: Settings, **kwargs) -> int:
         logger = logging.getLogger("django")
         try:
             message = self.provider.get_message(notification)
@@ -243,7 +243,7 @@ class Channel(ABC):
                         else:
                             exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
                             if next_provider := self._find_provider(
-                                extra_settings=extra_data,
+                                settings=settings,
                                 setting_name=self.provider_setting_name,
                                 exclude=exclude_providers,
                             ):
