@@ -25,13 +25,22 @@ class Recipient:
     email: str
     unique_attribute: str
 
-    def __init__(self, identifier: str, phone_number: str, email: str, unique_attribute: str = "identifier") -> None:
+    def __init__(
+        self,
+        identifier: str,
+        phone_number: str,
+        email: str,
+        unique_attribute: str = "identifier",
+        phone_number_validator=None,
+    ) -> None:
         super().__init__()
         self.identifier = identifier
         self.phone_number = (
             next(
                 iter(
-                    PhoneNumberParser.valid_phone_numbers([phone_number]) if phone_number and len(phone_number) else ""
+                    PhoneNumberParser.valid_phone_numbers([phone_number], phone_number_validator)
+                    if phone_number and len(phone_number)
+                    else ""
                 ),
                 None,
             )
@@ -79,7 +88,6 @@ class Channel(ABC):
             exclude = []
 
         def get_first_provider(val: Union[str, List]):
-            print("PROVIDER", val, setting_name, settings)
             if val and isinstance(val, (list, tuple)):
                 prov = next(filter(lambda i: i not in exclude, val), None)
 
@@ -113,7 +121,9 @@ class Channel(ABC):
         )
 
     @abstractmethod
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
+    def get_recipients(
+        self, notification: DjangoProjectBaseNotification, unique_identifier="email", phone_number_validator=None
+    ) -> List[Recipient]:
         rec_obj = notification.email_list
         if not rec_obj:
             rec_obj = notification.recipients_list
@@ -131,6 +141,7 @@ class Channel(ABC):
                 email=u.get("email", "") or "",
                 phone_number=u.get("phone_number", "") or "",
                 unique_attribute=unique_identifier,
+                phone_number_validator=phone_number_validator,
             )
             for u in rec_obj
         ]
@@ -177,7 +188,9 @@ class Channel(ABC):
         try:
             message = self.provider.get_message(notification)
 
-            recipients = self.get_recipients(notification)
+            recipients = self.get_recipients(
+                notification, phone_number_validator=getattr(settings, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", None)
+            )
 
             if not recipients:
                 raise ValueError("No valid recipients")
@@ -222,7 +235,9 @@ class Channel(ABC):
                                 a_sender=notification.sender,
                                 a_extra_data=extra_data,
                                 a_recipients_list=notification.recipients_list,
+                                a_settings=settings,
                                 delay=int(datetime.datetime.now().timestamp()),
+                                user=extra_data["user"],
                             ).send()
                             self.create_delivery_report(
                                 notification, recipient, dlr__uuid, auxiliary_notification=a_notification.pk

@@ -1,7 +1,7 @@
 import re
 from abc import ABC, abstractmethod
 from html import unescape
-from typing import Union, Optional
+from typing import Optional, Union
 
 import swapper
 from django.conf import Settings
@@ -19,7 +19,7 @@ class ProviderIntegration(ABC):
 
     def __init__(self, settings: object) -> None:
         super().__init__()
-        self.settings = Settings
+        self.settings = settings
 
     @abstractmethod
     def validate_send(self, response: dict):

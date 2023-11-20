@@ -1,10 +1,9 @@
 import logging
 
 from django import db
-from django.core.cache import cache
+from django.conf import Settings
 from django.utils import timezone
 
-from django.conf import Settings
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.models import DjangoProjectBaseNotification
@@ -33,13 +32,6 @@ class SendNotificationService(object):
 
         if notification.required_channels is None:
             return notification
-        if (
-            self.settings
-            and (phn_allowed := getattr(self.settings, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
-            and phn_allowed
-        ):
-            cache.set("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), phn_allowed, timeout=None)
-
         already_sent_channels = set(
             filter(
                 lambda i: i not in (None, "") and i,
@@ -65,7 +57,6 @@ class SendNotificationService(object):
             required_channels.add(SmsChannel.name)
 
         for channel_identifier in required_channels:
-            print(self.settings)
             channel = ChannelIdentifier.channel(
                 channel_identifier,
                 settings=self.settings,

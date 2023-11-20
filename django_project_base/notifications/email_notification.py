@@ -2,8 +2,8 @@ import datetime
 import uuid
 from typing import List, Optional, Type
 
-from django.core.cache import cache
 from django.conf import settings
+from django.core.cache import cache
 from rest_framework.exceptions import PermissionDenied
 
 from django_project_base.notifications.base.channels.channel import Channel

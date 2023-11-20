@@ -1,9 +1,9 @@
 import json
-from typing import Union, Optional
+from typing import Optional, Union
 
 import requests
 import swapper
-from django.conf import settings, Settings
+from django.conf import Settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success

@@ -1,7 +1,7 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
 import boto3
-from django.conf import settings, Settings
+from django.conf import Settings
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.channel import Recipient

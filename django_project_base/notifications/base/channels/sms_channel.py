@@ -1,6 +1,7 @@
 from typing import List
 
 from django.conf import Settings
+
 from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.models import DjangoProjectBaseNotification
@@ -15,8 +16,16 @@ class SmsChannel(Channel):
 
     provider_setting_name = "NOTIFICATIONS_SMS_PROVIDER"
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="phone_number")))
+    def get_recipients(
+        self, notification: DjangoProjectBaseNotification, unique_identifier="", phone_number_validator=None
+    ):
+        return list(
+            set(
+                super().get_recipients(
+                    notification, unique_identifier="phone_number", phone_number_validator=phone_number_validator
+                )
+            )
+        )
 
     def send(
         self, notification: DjangoProjectBaseNotification, extra_data: dict, settings: Settings, **kwargs

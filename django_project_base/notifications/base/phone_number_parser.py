@@ -1,22 +1,18 @@
 from typing import List
 
-from django.core.cache import cache
-
 
 class PhoneNumberParser:
     @staticmethod
-    def is_allowed(phone_number: str) -> bool:
-        if (allowed_function := cache.get("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), "")) and allowed_function:
-            from dill import loads as dloads
-
-            return dloads(allowed_function)(phone_number)
+    def is_allowed(phone_number: str, allowed_validator=None) -> bool:
+        if allowed_validator:
+            return allowed_validator(phone_number)
         return phone_number and len(phone_number) >= 8
 
     @staticmethod
-    def valid_phone_numbers(candidates: List[str]) -> List[str]:
+    def valid_phone_numbers(candidates: List[str], allowed_validator=None) -> List[str]:
         valid: List[str] = []
         for number in candidates:
-            if not PhoneNumberParser.is_allowed(number):
+            if not PhoneNumberParser.is_allowed(number, allowed_validator):
                 continue
             if number.startswith("+"):
                 valid.append(number.lstrip("+"))

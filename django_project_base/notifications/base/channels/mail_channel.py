@@ -1,7 +1,7 @@
 import uuid
 from typing import List
 
-from django.conf import settings, Settings
+from django.conf import Settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
@@ -32,8 +32,16 @@ class MailChannel(Channel):
         )
         return super().send(notification=notification, extra_data=extra_data, settings=settings)
 
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier=""):
-        return list(set(super().get_recipients(notification, unique_identifier="email")))
+    def get_recipients(
+        self, notification: DjangoProjectBaseNotification, unique_identifier="", phone_number_validator=None
+    ):
+        return list(
+            set(
+                super().get_recipients(
+                    notification, unique_identifier="email", phone_number_validator=phone_number_validator
+                )
+            )
+        )
 
     def clean_email_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
         valid = []

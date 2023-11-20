@@ -1,10 +1,10 @@
 import os
 
-from celery import Celery, bootsteps
+from celery import bootsteps, Celery
+from click import Option
 from django.apps import apps
 from django.utils.crypto import get_random_string
 from kombu import Exchange, Queue
-from click import Option
 from kombu.entity import TRANSIENT_DELIVERY_MODE
 
 from django_project_base.celery.settings import NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT

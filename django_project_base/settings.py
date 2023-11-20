@@ -41,6 +41,8 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         },
     },
     {"name": "NOTIFICATION_SENDERS", "default": {}},
+    {"name": "SYSTEM_EMAIL_SENDER_ID", "default": ""},
+    {"name": "SYSTEM_SMS_SENDER_ID", "default": ""},
     {
         "name": "NOTIFICATIONS_EMAIL_PROVIDER",
         "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",

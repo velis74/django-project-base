@@ -1,5 +1,7 @@
 import uuid
 
+from django.conf import settings
+
 from django_project_base.licensing.logic import LogAccessService
 from django_project_base.notifications.base.channels.channel import Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -27,7 +29,9 @@ class IsEmailSentTest(NotificationsTransactionTestCase):
         self.assertIsNotNone(notification.sent_at)
         self.assertFalse(bool(notification.failed_channels))
         self.assertEqual(notification.required_channels, notification.sent_channels)
-        channel = ChannelIdentifier.channel(notification.required_channels.split(",")[0], ensure_dlr_user=False)
+        channel = ChannelIdentifier.channel(
+            notification.required_channels.split(",")[0], ensure_dlr_user=False, settings=settings
+        )
         dlr_pk = str(uuid.uuid4())
         dlr_count = DeliveryReport.objects.all().count()
         resend_data = channel._make_send(

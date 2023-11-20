@@ -5,9 +5,9 @@ from typing import List, Optional
 
 import pytz
 import swapper
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-from django.conf import settings
 from django.core.cache import cache
 from django.db.models import ForeignKey, QuerySet
 from django.http import Http404, HttpResponse
@@ -253,7 +253,6 @@ class NotificationSerializer(ModelSerializer):
             "delayed_to",
             "recipients_original_payload_search",
             "exceptions",
-            "extra_data",
         )
         layout = Layout(
             Row(Column("message_to")),
