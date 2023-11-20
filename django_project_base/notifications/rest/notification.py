@@ -7,6 +7,7 @@ import pytz
 import swapper
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
 from django.core.cache import cache
 from django.db.models import ForeignKey, QuerySet
 from django.http import Http404, HttpResponse
@@ -492,7 +493,7 @@ class NotificationViewset(ModelViewSet):
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[
-                ChannelIdentifier.channel(c, settings=None, project_slug=None).__class__
+                ChannelIdentifier.channel(c, settings=settings, project_slug=None).__class__
                 for c in serializer.validated_data["send_on_channels"]
             ],
             persist=True,

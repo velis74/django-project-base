@@ -41,7 +41,7 @@ class ChannelIdentifier(Enum):
         )
         if channel:
             channel.provider = channel._find_provider(settings=settings, setting_name=channel.provider_setting_name)
-            channel.provider.ensure_credentials(extra_data=extra_data)
+            channel.provider.ensure_credentials(settings=settings)
             channel.provider.ensure_dlr_user(project_slug) if ensure_dlr_user else False
 
             return channel

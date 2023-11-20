@@ -4,18 +4,26 @@ from django import db
 from django.core.cache import cache
 from django.utils import timezone
 
+from django.conf import Settings
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
-class SendNotificationMixin(object):
+class SendNotificationService(object):
+    settings: Settings
+
+    def __init__(self, settings: Settings) -> None:
+        super().__init__()
+        self.settings = settings
+
     def make_send(
         self, notification: DjangoProjectBaseNotification, extra_data, resend=False
     ) -> DjangoProjectBaseNotification:
+        # TODO: THIS SHOULD BE CALLED ONLY FROM CELERY BACKGROUND TASK
+
         sent_channels: list = []
         failed_channels: list = []
-        dj_settings = getattr(self, "settings", None)
 
         exceptions = ""
         from django_project_base.licensing.logic import LogAccessService
@@ -23,8 +31,8 @@ class SendNotificationMixin(object):
         if notification.required_channels is None:
             return notification
         if (
-            dj_settings
-            and (phn_allowed := getattr(dj_settings, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
+            self.settings
+            and (phn_allowed := getattr(self.settings, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
             and phn_allowed
         ):
             cache.set("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), phn_allowed, timeout=None)
@@ -54,8 +62,12 @@ class SendNotificationMixin(object):
             required_channels.add(SmsChannel.name)
 
         for channel_identifier in required_channels:
+            print(self.settings)
             channel = ChannelIdentifier.channel(
-                channel_identifier, settings=dj_settings, project_slug=notification.project_slug, ensure_dlr_user=False
+                channel_identifier,
+                settings=self.settings,
+                project_slug=notification.project_slug,
+                ensure_dlr_user=False,
             )
             try:
                 # check license
@@ -130,7 +142,5 @@ class SendNotificationMixin(object):
                 ],
                 using=NOTIFICATION_QUEUE_NAME,
             )
-
-            if dj_settings:
-                db.connections.close_all()
+            db.connections.close_all()
         return notification

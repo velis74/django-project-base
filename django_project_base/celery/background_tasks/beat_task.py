@@ -5,7 +5,6 @@ from django.core.cache import cache
 from django_project_base.celery.background_tasks.base_task import BaseTask
 from django_project_base.celery.celery import app
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
-from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
@@ -28,7 +27,7 @@ class BeatTask(BaseTask):
 
         # SET CONNECTION AND DELETE IT IN EXTRA DATA
         for notification in DjangoProjectBaseNotification.objects.using(NOTIFICATION_QUEUE_NAME).filter(
-                send_at__isnull=False, sent_at__isnull=True, send_at__lte=now_ts
+            send_at__isnull=False, sent_at__isnull=True, send_at__lte=now_ts
         ):
             notification.email_fallback = notification.extra_data["mail-fallback"]
             notification.user = notification.extra_data["user"]
@@ -36,7 +35,7 @@ class BeatTask(BaseTask):
             notification.sender = notification.extra_data["sender"]
             print(notification)
 
-            # SendNotificationMixin().make_send(notification, notification.extra_data or {}, resend=False)
+            # SendNotificationService().make_send(notification, notification.extra_data or {}, resend=False)
         self._clear_in_progress_status()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):

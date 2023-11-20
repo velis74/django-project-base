@@ -17,7 +17,7 @@ class MailChannel(Channel):
 
     notification_price = 0.0002  # TODO get from settings
 
-    provider_setting_name = "EMAIL_PROVIDER"
+    provider_setting_name = "NOTIFICATIONS_EMAIL_PROVIDER"
 
     def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
         if getattr(settings, "TESTING", False):

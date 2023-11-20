@@ -79,16 +79,17 @@ class Channel(ABC):
             exclude = []
 
         def get_first_provider(val: Union[str, List]):
+            print("PROVIDER", val, setting_name, settings)
             if val and isinstance(val, (list, tuple)):
                 prov = next(filter(lambda i: i not in exclude, val), None)
 
                 return import_string(prov)() if prov else None
 
-            return import_string(val)() if val not in exclude else None
+            return import_string(val)() if val not in exclude and val else None
 
         if settings and getattr(settings, setting_name, None):
-            return get_first_provider(settings.setting_name)
-        return get_first_provider(getattr(settings, setting_name, ""))
+            return get_first_provider(getattr(settings, setting_name))
+        return get_first_provider(getattr(settings or object(), setting_name, ""))
 
     def clean_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
         return list(set(recipients))

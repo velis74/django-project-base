@@ -4,7 +4,7 @@ import uuid
 from typing import List, Optional, Type
 
 import swapper
-from django.conf import settings
+from django.conf import settings, Settings
 from django.contrib.auth import get_user_model
 
 from django_project_base.constants import (
@@ -16,11 +16,11 @@ from django_project_base.notifications.base.channels.channel import Channel
 from django_project_base.notifications.base.duplicate_notification_mixin import DuplicateNotificationMixin
 from django_project_base.notifications.base.enums import ChannelIdentifier, NotificationLevel, NotificationType
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
-from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
+from django_project_base.notifications.base.send_notification_service import SendNotificationService
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 
 
-class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNotificationMixin):
+class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
     _persist = False
     _delay = None
     _recipients = []
@@ -112,7 +112,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         )
         notification.email_fallback = mail_fallback
         notification.save(update_fields=["recipients", "recipients_original_payload_search"])
-        SendNotificationMixin().make_send(notification, notification.extra_data or {}, resend=True)
+        SendNotificationService(settings=settings).make_send(notification, notification.extra_data or {}, resend=True)
 
     def __set_via_channels(self, val):
         self._via_channels = val
@@ -178,7 +178,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             extra_data=self._extra_data,
         )
 
-        notification = self._ensure_channels(required_channels, notification)
+        notification = self._ensure_channels(channels=required_channels, notification=notification, settings=settings)
 
         required_channels.sort()
         if self.persist:
@@ -216,7 +216,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
             return notification
 
         if not self.send_at:
-            notification = self.make_send(notification, self._extra_data)
+            SendNotificationService(settings=settings).make_send(notification, self._extra_data, resend=False)
         else:
             if not self.persist:
                 raise Exception("Delayed notification must be persisted")
@@ -245,14 +245,17 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin, SendNot
         return notification
 
     def _ensure_channels(
-        self, channels: List[str], notification: DjangoProjectBaseNotification
+        self,
+        channels: List[str],
+        notification: DjangoProjectBaseNotification,
+        settings: Optional[Settings] = None,
     ) -> DjangoProjectBaseNotification:
         from django_project_base.notifications.base.channels.mail_channel import MailChannel
 
         extra_data = self._extra_data.get("a_extra_data") or self._extra_data
         for channel_name in channels:
             # ensure dlr user and check providers
-            channel = ChannelIdentifier.channel(channel_name, extra_data=extra_data, project_slug=self._project)
+            channel = ChannelIdentifier.channel(channel_name, settings=settings, project_slug=self._project)
 
             if not channel and extra_data.get("is_system_notification"):
                 continue

@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django_project_base.celery.background_tasks.base_task import BaseTask
 from django_project_base.celery.celery import app
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT, NOTIFICATION_SEND_PAUSE_SECONDS
-from django_project_base.notifications.base.send_notification_mixin import SendNotificationMixin
+from django_project_base.notifications.base.send_notification_service import SendNotificationService
 
 LAST_MAIL_SENT_CK = "last-notification-was-sent-timestamp"
 
@@ -26,12 +26,12 @@ class SendNotificationTask(BaseTask):
             time_from_last_sent: float = time.time() - last_sent if last_sent else 0
             if time_from_last_sent < NOTIFICATION_SEND_PAUSE_SECONDS:
                 time.sleep(int(NOTIFICATION_SEND_PAUSE_SECONDS - time_from_last_sent))
-            SendNotificationMixin().make_send(notification=notification, extra_data=extra_data)
+            SendNotificationService(settings=self.settings).make_send(notification=notification, extra_data=extra_data)
         finally:
             cache.set(LAST_MAIL_SENT_CK, time.time(), timeout=NOTIFICATION_SEND_PAUSE_SECONDS + 1)
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
-        super().on_failure(exc=exc, task_id=task_id, args=args, kwargs=kwargs)
+        super().on_failure(exc=exc, task_id=task_id, args=args, kwargs=kwargs, einfo=einfo)
 
 
 send_notification_task = app.register_task(SendNotificationTask())

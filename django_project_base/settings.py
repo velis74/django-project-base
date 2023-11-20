@@ -42,7 +42,7 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     },
     {"name": "NOTIFICATION_SENDERS", "default": {}},
     {
-        "name": "EMAIL_PROVIDER",
+        "name": "NOTIFICATIONS_EMAIL_PROVIDER",
         "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",
     },
     {

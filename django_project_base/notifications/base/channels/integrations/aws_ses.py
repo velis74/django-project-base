@@ -1,7 +1,7 @@
-from typing import Union
+from typing import Union, Optional
 
 import boto3
-from django.conf import settings
+from django.conf import settings, Settings
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.channel import Recipient
@@ -30,18 +30,13 @@ class AwsSes(ProviderIntegration):
     def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return super()._get_sms_message(notification)
 
-    def ensure_credentials(self, extra_data):
+    def ensure_credentials(self, settings: Optional[Settings] = None):
         if settings and getattr(settings, "TESTING", False):
             return
         self.key_id = getattr(settings, "NOTIFICATIONS_AWS_SES_ACCESS_KEY_ID", None)
         self.access_key = getattr(settings, "NOTIFICATIONS_AWS_SES_SECRET_ACCESS_KEY", None)
         self.region = getattr(settings, "NOTIFICATIONS_AWS_SES_REGION_NAME", None)
         self.settings = settings
-        if extra_data and (stgs := extra_data.get("SETTINGS")):
-            self.settings = stgs
-            self.key_id = getattr(stgs, "NOTIFICATIONS_AWS_SES_ACCESS_KEY_ID", None)
-            self.access_key = getattr(stgs, "NOTIFICATIONS_AWS_SES_SECRET_ACCESS_KEY", None)
-            self.region = getattr(stgs, "NOTIFICATIONS_AWS_SES_REGION_NAME", None)
         assert self.key_id, "AWS SES key id required"
         assert self.access_key, "AWS SES key id access key required"
         assert self.region, "AWS SES region required"

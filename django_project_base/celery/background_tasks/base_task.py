@@ -23,7 +23,7 @@ class BaseTask(app.Task):
     settings: Optional[Settings] = None
 
     def before_start(self, task_id, args, kwargs):
-        if (path := self._app.conf.get('django-settings-module')) and len(path):
+        if (path := self._app.conf.get("django-settings-module")) and len(path):
             self.settings = Settings(path)
             db_settings: dict = self.settings.DATABASES["default"]
             db_settings.setdefault("TIME_ZONE", None)
@@ -40,3 +40,6 @@ class BaseTask(app.Task):
         logging.getLogger(__name__).error(
             f"Exception: {exc} \n\nTask id: {task_id}\n\nArgs: {args}\n\nKwargs: {kwargs}\n\nEInfo: {einfo}"
         )
+
+    def run(self, *args, **kwargs):
+        return None

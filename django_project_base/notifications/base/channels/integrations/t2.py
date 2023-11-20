@@ -1,9 +1,9 @@
 import json
-from typing import Union
+from typing import Union, Optional
 
 import requests
 import swapper
-from django.conf import settings
+from django.conf import settings, Settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success
@@ -277,18 +277,13 @@ class T2(ProviderIntegration):
     def __init__(self) -> None:
         super().__init__(settings=object())
 
-    def ensure_credentials(self, extra_data):
+    def ensure_credentials(self, settings: Optional[Settings] = None):
         if settings and getattr(settings, "TESTING", False):
             return
         self.username = getattr(settings, "NOTIFICATIONS_T2_USERNAME", None)
         self.password = getattr(settings, "NOTIFICATIONS_T2_PASSWORD", None)
         self.url = getattr(settings, "NOTIFICATIONS_SMS_API_URL", None)
         self.settings = settings
-        if extra_data and (stgs := extra_data.get("SETTINGS")):
-            self.settings = stgs
-            self.username = getattr(stgs, "NOTIFICATIONS_T2_USERNAME", None)
-            self.password = getattr(stgs, "NOTIFICATIONS_T2_PASSWORD", None)
-            self.url = getattr(stgs, "NOTIFICATIONS_SMS_API_URL", None)
         assert self.username, "NOTIFICATIONS_T2_USERNAME is required"
         assert self.password, "NOTIFICATIONS_T2_PASSWORD is required"
         assert len(self.url) > 0, "NOTIFICATIONS_T2_PASSWORD is required"

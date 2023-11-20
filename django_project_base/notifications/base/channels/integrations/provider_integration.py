@@ -1,9 +1,10 @@
 import re
 from abc import ABC, abstractmethod
 from html import unescape
-from typing import Union
+from typing import Union, Optional
 
 import swapper
+from django.conf import Settings
 from django.urls import reverse
 from django.utils.html import strip_tags
 
@@ -12,20 +13,20 @@ from django_project_base.notifications.models import DeliveryReport, DjangoProje
 
 
 class ProviderIntegration(ABC):
-    settings: object
+    settings: Settings
 
     is_sms_provider = True
 
     def __init__(self, settings: object) -> None:
         super().__init__()
-        self.settings = settings
+        self.settings = Settings
 
     @abstractmethod
     def validate_send(self, response: dict):
         pass
 
     @abstractmethod
-    def ensure_credentials(self, extra_data: dict):
+    def ensure_credentials(self, settings: Optional[Settings] = None):
         pass
 
     @abstractmethod
