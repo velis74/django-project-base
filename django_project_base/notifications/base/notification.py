@@ -94,6 +94,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
 
     @staticmethod
     def resend(notification: DjangoProjectBaseNotification, user_pk: Optional[str] = None):
+        if user_pk == "None":
+            user_pk = None
         notification.user = user_pk or (notification.extra_data or {}).get("user")
         from django_project_base.notifications.rest.notification import MessageToListField
 

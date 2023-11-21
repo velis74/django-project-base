@@ -111,13 +111,20 @@ class Channel(ABC):
         provider: Optional[str] = None,
         auxiliary_notification: Optional[uuid.UUID] = None,
     ) -> DeliveryReport:
-        return DeliveryReport.objects.create(
-            notification=notification,
-            user_id=recipient.identifier,
-            channel=f"{self.__module__}.{self.__class__.__name__}" if not channel else channel,
-            provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}" if not provider else provider,
-            pk=pk,
-            auxiliary_notification=auxiliary_notification,
+        return next(
+            iter(
+                DeliveryReport.objects.get_or_create(
+                    notification=notification,
+                    user_id=recipient.identifier,
+                    channel=f"{self.__module__}.{self.__class__.__name__}" if not channel else channel,
+                    provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}"
+                    if not provider
+                    else provider,
+                    pk=pk,
+                    auxiliary_notification=auxiliary_notification,
+                )
+            ),
+            None,
         )
 
     @abstractmethod

@@ -29,6 +29,10 @@ class BeatTask(BaseTask):
         for notification in DjangoProjectBaseNotification.objects.using(NOTIFICATION_QUEUE_NAME).filter(
             send_at__isnull=False, sent_at__isnull=True, send_at__lte=now_ts
         ):
+            """
+            TODO: recipients can be updated while message is waiting for send operation,
+            in such case update signals should be caught and extra data for notification updated
+            """
             notification.email_fallback = notification.extra_data["mail-fallback"]
             notification.user = notification.extra_data["user"]
             notification.recipients_list = notification.extra_data["recipients-list"]
