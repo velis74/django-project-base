@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {
-  Action,
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerOneShotApi, FormPayload, gettext,
+  ConsumerLogicApi, FormConsumerOneShotApi, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -27,7 +26,7 @@ const props = defineProps<{
     type: String,
     required: false,
   },
-  licenseConsumerUrlTrailingSlash:{
+  licenseConsumerUrlTrailingSlash: {
     type: Boolean,
     required: false,
   },
@@ -100,48 +99,49 @@ onMounted(() => {
 onUnmounted(() => clearInterval(intervalCheckLicense));
 
 // const actionSendNow = async (action:Action, payload: FormPayload): Promise<boolean> => {
+// TODO: WAITING FOR ISSUE https://taiga.velis.si/project/velis74-dynamic-forms/issue/858
 //   console.log(Math.random(), 'actionSendNow', action, payload);
 //   // eslint-disable-next-line no-debugger
 //   debugger;
 //   // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
 //   return true;
 // };
-const dialogHandlers = {
-  actionSendNow: async (action:Action, payload: FormPayload): Promise<boolean> => {
-    console.log(Math.random(), 'actionSendNow', action, payload);
-    // eslint-disable-next-line no-debugger
-
-    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-    return true;
-  },
-  'send-now': async (action:Action, payload: FormPayload): Promise<boolean> => {
-    console.log(Math.random(), 'actionSendNowS', action, payload);
-    // eslint-disable-next-line no-debugger
-
-    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-    return true;
-  },
-  sendNow: async (action:Action, payload: FormPayload): Promise<boolean> => {
-    console.log(Math.random(), 'actionSendNowZ', action, payload);
-    // eslint-disable-next-line no-debugger
-
-    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-    return true;
-  },
-  sendnow: async (action:Action, payload: FormPayload): Promise<boolean> => {
-    console.log(Math.random(), 'actionSendNowZŠ', action, payload);
-    // eslint-disable-next-line no-debugger
-
-    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-    return true;
-  },
-};
+// const dialogHandlers = {
+//   actionSendNow: async (action: Action, payload: FormPayload): Promise<boolean> => {
+//     console.log(Math.random(), 'actionSendNow', action, payload);
+//     // eslint-disable-next-line no-debugger
+//
+//     // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+//     return true;
+//   },
+//   'send-now': async (action: Action, payload: FormPayload): Promise<boolean> => {
+//     console.log(Math.random(), 'actionSendNowS', action, payload);
+//     // eslint-disable-next-line no-debugger
+//
+//     // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+//     return true;
+//   },
+//   sendNow: async (action: Action, payload: FormPayload): Promise<boolean> => {
+//     console.log(Math.random(), 'actionSendNowZ', action, payload);
+//     // eslint-disable-next-line no-debugger
+//
+//     // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+//     return true;
+//   },
+//   sendnow: async (action: Action, payload: FormPayload): Promise<boolean> => {
+//     console.log(Math.random(), 'actionSendNowZŠ', action, payload);
+//     // eslint-disable-next-line no-debugger
+//
+//     // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
+//     return true;
+//   },
+// };
 
 const { handler } = useActionHandler();
 
 handler
-  .register('send-now', dialogHandlers.actionSendNow)
   .register('view-license', actionViewLicense)
+  // .register('send-now', dialogHandlers.actionSendNow)
   .register('add-notification', actionAddNotification);
 
 // TODO: remove linter ignores below when you know how to
@@ -154,7 +154,6 @@ handler
     <APIConsumer
       :consumer="notificationLogic"
       :display-component="ComponentDisplay.TABLE"
-      :dialog-handlers="dialogHandlers"
     />
     <ModalView/>
   </div>

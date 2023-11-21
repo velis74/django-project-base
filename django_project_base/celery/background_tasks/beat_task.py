@@ -1,5 +1,6 @@
 import datetime
 
+from django import db
 from django.core.cache import cache
 
 from django_project_base.celery.background_tasks.base_task import BaseTask
@@ -39,6 +40,7 @@ class BeatTask(BaseTask):
             notification.sender = notification.extra_data["sender"]
             SendNotificationService(settings=self.settings).make_send(notification, {}, resend=False)
         self._clear_in_progress_status()
+        db.connections.close_all()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         self._clear_in_progress_status()
@@ -55,6 +57,7 @@ class BeatTask(BaseTask):
                 EInfo: {str(einfo)}
                 """
         logger.exception(msg)
+        db.connections.close_all()
 
 
 beat_task = app.register_task(BeatTask())

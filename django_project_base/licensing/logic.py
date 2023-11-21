@@ -29,7 +29,7 @@ class LogAccessService:
 
     def __init__(self, db: Optional[str] = None) -> None:
         super().__init__()
-        if self.db:
+        if db:
             self.db = db
 
     def _user_access_user_inflow(self, user_id) -> float:

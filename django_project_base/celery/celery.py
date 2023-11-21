@@ -69,8 +69,7 @@ app.conf.task_queues = [
 app.conf.beat_schedule = {
     "scheduler": {
         "task": "background_tasks.beat_task.beat_task",
-        # "schedule": 60,
-        "schedule": 10,  # TODO: Change to 60
+        "schedule": 60,
     },
 }
 

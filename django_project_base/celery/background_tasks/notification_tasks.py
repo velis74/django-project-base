@@ -1,6 +1,7 @@
 import time
 from typing import Optional
 
+from django import db
 from django.core.cache import cache
 
 from django_project_base.celery.background_tasks.base_task import BaseTask
@@ -29,6 +30,7 @@ class SendNotificationTask(BaseTask):
             SendNotificationService(settings=self.settings).make_send(notification=notification, extra_data=extra_data)
         finally:
             cache.set(LAST_MAIL_SENT_CK, time.time(), timeout=NOTIFICATION_SEND_PAUSE_SECONDS + 1)
+            db.connections.close_all()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         super().on_failure(exc=exc, task_id=task_id, args=args, kwargs=kwargs, einfo=einfo)

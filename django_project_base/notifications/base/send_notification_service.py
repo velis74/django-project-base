@@ -1,6 +1,5 @@
 import logging
 
-from django import db
 from django.conf import Settings
 from django.utils import timezone
 
@@ -138,5 +137,4 @@ class SendNotificationService(object):
                 ],
                 using=db_name,
             )
-            db.connections.close_all()
         return notification
