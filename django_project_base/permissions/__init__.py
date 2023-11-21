@@ -10,7 +10,7 @@ def check_permission(permission: str):
         @functools.wraps(func)
         def wrap(*args, **kwargs):
             request = args[1]
-            view_set = args[0]
+            # view_set = args[0]
 
             def make_check_permission(permission, request) -> bool:
                 # user = request.user
@@ -18,7 +18,7 @@ def check_permission(permission: str):
                 return True
 
             if make_check_permission(permission, request):
-                return func(request=request, self=view_set, **kwargs)
+                return func(*args, **kwargs)
 
             raise PermissionDenied
 
