@@ -1,5 +1,30 @@
+import functools
+
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import BasePermission as DRFBasePermission
 from rest_framework.settings import api_settings
+
+
+def check_permission(permission: str):
+    def check(func):
+        @functools.wraps(func)
+        def wrap(*args, **kwargs):
+            request = args[1]
+            view_set = args[0]
+
+            def make_check_permission(permission, request) -> bool:
+                # user = request.user
+                # project = request.selected_project
+                return True
+
+            if make_check_permission(permission, request):
+                return func(request=request, self=view_set, **kwargs)
+
+            raise PermissionDenied
+
+        return wrap
+
+    return check
 
 
 class BasePermissions(DRFBasePermission):
