@@ -113,7 +113,9 @@ class ProfileMergeViewSet(ProfileViewSet):
         group, created = MergeUserGroup.objects.get_or_create(
             users=",".join(map(str, ser.validated_data["users"])),
             created_by=self.request.user.pk,
-            project=swapper.load_model("django_project_base", "Project").objects.get(slug=request.current_project_slug),
+            project=swapper.load_model("django_project_base", "Project").objects.get(
+                slug=request.selected_project_slug
+            ),
         )
         cache.set(ck, [])
         return Response({get_pk_name(MergeUserGroup): group.pk})

@@ -488,7 +488,7 @@ class NotificationViewset(ModelViewSet):
             ),
             raw_recipents=self.request.data["message_to"],
             project=swapper.load_model("django_project_base", "Project")
-            .objects.get(slug=self.request.current_project_slug)
+            .objects.get(slug=self.request.selected_project_slug)
             .slug,
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
