@@ -19,3 +19,5 @@ celery==5.2.7
 django-redis-cache
 pandas
 dill==0.3.7
+ruff
+ruff-lsp

@@ -1,9 +1,11 @@
 import re
+
 from abc import ABC, abstractmethod
 from html import unescape
 from typing import Union
 
 import swapper
+
 from django.urls import reverse
 from django.utils.html import strip_tags
 

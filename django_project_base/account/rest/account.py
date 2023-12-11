@@ -1,7 +1,9 @@
 import re
+
 from typing import Optional
 
 import swapper
+
 from django.contrib.auth import get_user_model, login, update_session_auth_hash
 from django.contrib.auth.models import AnonymousUser
 from django.core.cache import cache

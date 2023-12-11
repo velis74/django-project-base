@@ -1,4 +1,5 @@
 import requests
+
 from django.http import FileResponse, HttpResponse
 from django.views import static
 

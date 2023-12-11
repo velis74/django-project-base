@@ -2,6 +2,7 @@ from typing import Optional
 
 import django
 import swapper
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import connection, transaction
@@ -63,7 +64,7 @@ class MergeUsersService:
 
         for mdl in django.apps.apps.get_models(include_auto_created=True, include_swapped=True):
             if mdl not in base_user_models and not mdl._meta.abstract and not mdl._meta.swapped:
-                if not (mdl._meta.db_table in db_tables):
+                if mdl._meta.db_table not in db_tables:
                     continue
                 is_project_related = [
                     f for f in mdl._meta.fields if isinstance(f, ForeignKey) and f.related_model == project_model

@@ -1,9 +1,11 @@
 import datetime
 import json
 import uuid
+
 from typing import List, Optional, Type
 
 import swapper
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 

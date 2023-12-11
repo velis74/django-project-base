@@ -1,9 +1,11 @@
 import datetime
 import uuid
+
 from random import randrange
 
 import django
 import swapper
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, Permission

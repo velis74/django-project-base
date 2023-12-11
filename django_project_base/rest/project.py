@@ -1,8 +1,10 @@
 import copy
+
 from gettext import gettext
 from typing import Union
 
 import swapper
+
 from django.conf import settings
 from django.core.management import call_command
 from django.db import transaction

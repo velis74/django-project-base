@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 import requests
+
 from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 from requests import Timeout
