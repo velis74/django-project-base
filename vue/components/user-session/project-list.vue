@@ -75,10 +75,6 @@ onMounted(() => { loadData(); });
 watch(() => userSession.loggedIn, () => { loadData(); });
 </script>
 
-<script lang="ts">
-export default { name: 'ProjectList' };
-</script>
-
 <template>
   <v-btn variant="text" style="min-width: 0">
     &#9776; {{ userSession.selectedProject?.name ?? gettext('No Project') }}
