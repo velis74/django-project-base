@@ -1,6 +1,7 @@
 import json
 
 import swapper
+
 from django.conf import settings
 from django.contrib.sessions.middleware import SessionMiddleware as SessionMiddlewareBase
 from django.utils.functional import SimpleLazyObject

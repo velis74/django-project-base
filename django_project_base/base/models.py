@@ -1,8 +1,10 @@
 import uuid
+
 from typing import List
 
 import svgwrite
 import swapper
+
 from django.conf import settings
 from django.contrib.auth import user_logged_in
 from django.contrib.auth.models import User

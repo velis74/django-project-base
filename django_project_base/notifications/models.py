@@ -2,6 +2,7 @@ import datetime
 import uuid
 
 import swapper
+
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import int_list_validator

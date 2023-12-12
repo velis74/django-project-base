@@ -1,9 +1,11 @@
 import json
+
 from typing import Optional
 
 import social_core.backends.facebook
 import social_core.backends.google
 import social_core.backends.microsoft
+
 from django.core.management.base import BaseCommand
 from django.db import connection
 from social_django.models import UserSocialAuth

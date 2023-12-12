@@ -1,6 +1,7 @@
 from typing import Optional
 
 import swapper
+
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _

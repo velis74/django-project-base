@@ -1,5 +1,6 @@
 """Get enabled social auth providers configuration."""
 import importlib
+
 from collections import namedtuple
 from functools import reduce
 from typing import Iterable, List

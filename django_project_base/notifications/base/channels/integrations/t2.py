@@ -1,8 +1,11 @@
 import json
+
+from math import ceil
 from typing import Union
 
 import requests
 import swapper
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
@@ -18,8 +21,6 @@ from django_project_base.notifications.models import DeliveryReport, DjangoProje
 Created on Jul 10, 2016
 @author: Dayo
 """
-from math import ceil
-
 
 class SMSCounter(object):
     # https: // raw.githubusercontent.com / dedayoa / sms - counter - python / master / sms_counter / main.py

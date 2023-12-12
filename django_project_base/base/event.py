@@ -1,9 +1,11 @@
 import copy
 import datetime
+
 from abc import ABC, abstractmethod
 from gettext import gettext
 
 import swapper
+
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from rest_registration.settings import registration_settings
