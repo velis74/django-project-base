@@ -1,1 +1,1 @@
-from .middleware import UrlVarsMiddleware
+from .middleware import UrlVarsMiddleware #noqa

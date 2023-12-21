@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 import requests
+
 from django.conf import Settings
 from rest_framework.status import is_success
 

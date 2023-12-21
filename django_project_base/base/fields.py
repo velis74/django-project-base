@@ -1,4 +1,5 @@
 import swapper
+
 from django.core.validators import RegexValidator
 from django.db.models import fields
 from django.utils.translation import gettext_lazy as _

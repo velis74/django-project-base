@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 import boto3
+
 from django.conf import Settings
 from rest_framework.status import is_success
 

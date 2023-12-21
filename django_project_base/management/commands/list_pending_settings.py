@@ -1,7 +1,9 @@
 import json
+
 from gettext import gettext
 
 import swapper
+
 from django.conf import settings
 from django.core.management.base import BaseCommand
 

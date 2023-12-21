@@ -8,6 +8,7 @@ from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.template_render.layout import Layout, Row
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_registration.api.views import login
@@ -76,6 +77,7 @@ class LoginSerializer(serializers.Serializer):
 )
 class LoginViewset(viewsets.SingleRecordViewSet):
     serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
 
     def initialize_request(self, request, *args, **kwargs):
         # We need to lie to the CSRF middleware that CSRF processing is done, because otherwise CSRF middleware

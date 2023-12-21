@@ -1,4 +1,5 @@
 import uuid
+
 from typing import List, Optional, Type
 
 from django_project_base.notifications.base.channels.channel import Channel

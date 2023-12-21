@@ -1,10 +1,11 @@
 import datetime
 import logging
 import uuid
+
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Union
 
-from django.conf import settings, Settings
+from django.conf import Settings, settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext

@@ -1,6 +1,7 @@
 import json
 
 import swapper
+
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _

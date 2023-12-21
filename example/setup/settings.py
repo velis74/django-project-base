@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 import sys
+
 from pathlib import Path
 
 from django_project_base import VERSION
