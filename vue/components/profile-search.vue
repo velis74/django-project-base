@@ -9,10 +9,7 @@ import Multiselect from 'vue-multiselect';
 import { PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME, UserDataJSON } from './user-session/data-types';
 
 const inputProps = defineProps<{
-  searchUrl: {
-    type: String,
-    required: false,
-  },
+  searchUrl: string,
 }>();
 
 const emit = defineEmits(['selected']);
