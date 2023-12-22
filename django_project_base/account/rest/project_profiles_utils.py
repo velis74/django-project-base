@@ -65,9 +65,8 @@ def get_project_members(request: Request, project=None) -> QuerySet:
     if project is not None:
         # if current project was parsed from request, filter profiles to current project only
         qs = qs.filter(projects__project=project)
-    elif not (request.user.is_staff or request.user.is_superuser):
-        # but if user is not an admin, and the project is not known, only return this user's project
-        qs = qs.filter(pk=request.user.pk)
+    else:
+        qs = qs.none()
 
     if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES:
         MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
