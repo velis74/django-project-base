@@ -7,6 +7,7 @@ from typing import List, Optional
 import pytz
 import swapper
 
+from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -18,7 +19,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
-from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
+from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition, FormPosition
 from dynamicforms.mixins import DisplayMode, F
 from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
@@ -115,7 +116,10 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["message_to"].child_relation.queryset = SearchItems.objects.get_queryset(
             request=self.request
         )
+        # self.fields.fields["save_only"].display = DisplayMode.HIDDEN
         self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
+        if models.BooleanField().to_python(self.context.get("request").query_params.get("save", False)):
+            a = 9
         # self.actions.actions.append(
         #     FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send-now", label=_("Send now"), serializer=self)
         # )
@@ -123,7 +127,7 @@ class NotificationSerializer(ModelSerializer):
         #     FormButtonAction(
         #         position=FormPosition.FORM_FOOTER,
         #         label=_("Send now"),
-        #         name="send-now",
+        #         name="send",
         #         btn_type=FormButtonTypes.CUSTOM,
         #         serializer=self,
         #     ),
@@ -152,14 +156,22 @@ class NotificationSerializer(ModelSerializer):
         display_table=DisplayMode.SUPPRESS,
         read_only=True,
     )
+    save_only = fields.BooleanField(default=False, write_only=True)
 
     actions = Actions(
         TableAction(
             TablePosition.HEADER,
-            label=_("Add"),
-            title=_("Add new record"),
-            name="add-notification",
+            label=_("Send new notification"),
+            title=_("Send new notification"),
+            name="send-notification",
             icon="add-circle-outline",
+        ),
+        TableAction(
+            TablePosition.HEADER,
+            label=_("Save new notification"),
+            title=_("Save new notification"),
+            name="add-notification",
+            icon="add-outline",
         ),
         TableAction(
             TablePosition.HEADER,
@@ -168,13 +180,16 @@ class NotificationSerializer(ModelSerializer):
             name="view-license",
             icon="card-outline",
         ),
-        # FormButtonAction(
-        #     position=FormPosition.FORM_FOOTER,
-        #     label=_("Send now"),
-        #     name="send-now",
-        #     btn_type=FormButtonTypes.CUSTOM,
-        #     # serializer=self,
-        # ),
+        FormButtonAction(
+            btn_type=FormButtonTypes.CANCEL,
+            name="cancel",
+        ),
+        FormButtonAction(
+            btn_type=FormButtonTypes.SUBMIT,
+            label=_("Pošlji"),
+            name="submit",
+        ),
+        add_form_buttons=False,
     )
 
     message_to = fields.ManyRelatedField(
