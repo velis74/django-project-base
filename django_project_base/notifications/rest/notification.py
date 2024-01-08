@@ -153,6 +153,17 @@ class NotificationSerializer(ModelSerializer):
             name="view-license",
             icon="card-outline",
         ),
+        FormButtonAction(
+            btn_type=FormButtonTypes.CANCEL,
+            name="cancel",
+        ),
+
+        FormButtonAction(
+            btn_type=FormButtonTypes.SUBMIT,
+            label=_("Pošlji"),
+            name="submit",
+        ),
+        add_form_buttons=False
     )
 
     message_to = fields.ManyRelatedField(
