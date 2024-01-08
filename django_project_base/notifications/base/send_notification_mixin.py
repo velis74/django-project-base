@@ -4,6 +4,7 @@ from django import db
 from django.core.cache import cache
 from django.db import connections
 from django.db.utils import load_backend
+from django.conf import Settings
 from django.utils import timezone
 
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -11,6 +12,12 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 
 class SendNotificationMixin(object):
+    settings: Settings
+
+    def __init__(self, settings: Settings) -> None:
+        super().__init__()
+        self.settings = settings
+
     def make_send(
         self, notification: DjangoProjectBaseNotification, extra_data, resend=False
     ) -> DjangoProjectBaseNotification:
@@ -31,12 +38,12 @@ class SendNotificationMixin(object):
             dw = backend.DatabaseWrapper(db_settings["SETTINGS"])
             dw.connect()
             connections.databases[db_connection] = dw.settings_dict
-        if (
-            (stgs := extra_data.get("SETTINGS"))
-            and (phn_allowed := getattr(stgs, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
-            and phn_allowed
-        ):
-            cache.set("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), phn_allowed, timeout=None)
+        # if (
+        #     (stgs := extra_data.get("SETTINGS"))
+        #     and (phn_allowed := getattr(stgs, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", ""))
+        #     and phn_allowed
+        # ):
+        #     cache.set("IS_PHONE_NUMBER_ALLOWED_FUNCTION".lower(), phn_allowed, timeout=None)
 
         already_sent_channels = set(
             filter(
@@ -74,11 +81,13 @@ class SendNotificationMixin(object):
                     record=notification,
                     item_price=channel.notification_price,
                     comment=str(channel),
-                    on_sucess=lambda: channel.send(notification, extra_data),
                     db=db_connection,
                     settings=extra_data.get("SETTINGS", object()),
                     is_system_notification=extra_data.get("is_system_notification"),
                     sender=channel.sender(notification),
+                    on_sucess=lambda: channel.send(
+                        notification=notification, extra_data=extra_data, settings=self.settings
+                    ),
                 )
                 sent_channels.append(channel) if any_sent > 0 else failed_channels.append(channel)
             except Exception as e:
