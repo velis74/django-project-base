@@ -21,11 +21,11 @@ class NexmoSMS(ProviderIntegration):
     def ensure_credentials(self, settings: Optional[Settings] = None):
         if settings and getattr(settings, "TESTING", False):
             return
-        self.api_key = getattr(settings, "NEXMO_API_KEY", None)
-        self.api_secret = getattr(settings, "NEXMO_API_SECRET", None)
+        self.api_key = getattr(settings, "NOTIFICATIONS_NEXMO_API_KEY", None)
+        self.api_secret = getattr(settings, "NOTIFICATIONS_NEXMO_API_SECRET", None)
         self.settings = settings
-        assert self.api_key, "NEXMO_API_KEY required"
-        assert self.api_secret, "NEXMO_API_SECRET required"
+        assert self.api_key, "NOTIFICATIONS_NEXMO_API_KEY required"
+        assert self.api_secret, "NOTIFICATIONS_NEXMO_API_SECRET required"
 
     def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return super()._get_sms_message(notification)
