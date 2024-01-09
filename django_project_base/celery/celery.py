@@ -47,16 +47,9 @@ app = Celery(
     config_source=CelerySettings,
     include=[
         "django_project_base.celery.background_tasks.notification_tasks",
-        "django_project_base.celery.background_tasks.beat_task",
     ],
 )
 
-app.conf.task_routes = {
-    "background_tasks.beat_task.beat_task": {
-        "queue": NOTIFICATION_QUEUE_NAME,
-        "routing_key": NOTIFICATION_QUEUE_NAME,
-    },
-}
 app.conf.task_queues = [
     Queue(
         NOTIFICATION_QUEUE_NAME,
@@ -66,19 +59,11 @@ app.conf.task_queues = [
     ),
 ]
 
-app.conf.beat_schedule = {
-    "scheduler": {
-        "task": "background_tasks.beat_task.beat_task",
-        "schedule": 60,
-    },
-}
-
 app.conf.task_ignore_result = True
 app.conf.worker_send_task_events = False
 app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
 setting_option = Option(("--settings",), is_flag=False, help="Django settings file path", default="")
 app.user_options["worker"].add(setting_option)
-app.user_options["beat"].add(setting_option)
 
 
 class CeleryBootstep(bootsteps.Step):
@@ -91,6 +76,3 @@ app.steps["worker"].add(CeleryBootstep)
 
 # RUN WORKER AS
 # celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1
-
-# RUN BEAT FOR DELAYED NOTIFICATIONS AS
-# celery -A django_project_base.celery.celery beat -l INFO

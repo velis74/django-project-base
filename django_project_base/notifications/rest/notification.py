@@ -7,7 +7,6 @@ from typing import List, Optional
 import pytz
 import swapper
 
-from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -19,7 +18,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
-from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition, FormPosition
+from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode, F
 from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
@@ -116,22 +115,7 @@ class NotificationSerializer(ModelSerializer):
         self.fields.fields["message_to"].child_relation.queryset = SearchItems.objects.get_queryset(
             request=self.request
         )
-        # self.fields.fields["save_only"].display = DisplayMode.HIDDEN
         self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
-        if models.BooleanField().to_python(self.context.get("request").query_params.get("save", False)):
-            a = 9
-        # self.actions.actions.append(
-        #     FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send-now", label=_("Send now"), serializer=self)
-        # )
-        # self.actions.actions.append(
-        #     FormButtonAction(
-        #         position=FormPosition.FORM_FOOTER,
-        #         label=_("Send now"),
-        #         name="send",
-        #         btn_type=FormButtonTypes.CUSTOM,
-        #         serializer=self,
-        #     ),
-        # )
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -156,22 +140,14 @@ class NotificationSerializer(ModelSerializer):
         display_table=DisplayMode.SUPPRESS,
         read_only=True,
     )
-    save_only = fields.BooleanField(default=False, write_only=True)
 
     actions = Actions(
         TableAction(
             TablePosition.HEADER,
-            label=_("Send new notification"),
-            title=_("Send new notification"),
-            name="send-notification",
-            icon="add-circle-outline",
-        ),
-        TableAction(
-            TablePosition.HEADER,
-            label=_("Save new notification"),
-            title=_("Save new notification"),
+            label=_("Add"),
+            title=_("Add new notification"),
             name="add-notification",
-            icon="add-outline",
+            icon="add-circle-outline",
         ),
         TableAction(
             TablePosition.HEADER,
@@ -180,16 +156,6 @@ class NotificationSerializer(ModelSerializer):
             name="view-license",
             icon="card-outline",
         ),
-        FormButtonAction(
-            btn_type=FormButtonTypes.CANCEL,
-            name="cancel",
-        ),
-        FormButtonAction(
-            btn_type=FormButtonTypes.SUBMIT,
-            label=_("Pošlji"),
-            name="submit",
-        ),
-        add_form_buttons=False,
     )
 
     message_to = fields.ManyRelatedField(
@@ -230,23 +196,6 @@ class NotificationSerializer(ModelSerializer):
     )
 
     sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
-
-    send_at = fields.DateTimeField(
-        write_only=True,
-        display_table=DisplayMode.SUPPRESS,
-        display_form=DisplayMode.FULL,
-        allow_null=True,
-        required=False,
-        label=_("Send on"),
-    )
-
-    def validate_send_at(self, value):
-        if not value:
-            return None
-        ts: int = int(datetime.datetime.fromisoformat(value).timestamp())
-        if datetime.datetime.now().timestamp() > ts:
-            raise ValidationError([_("value must be in future")])
-        return ts
 
     def to_representation(self, instance, row_data=None):
         repr = super().to_representation(instance, row_data)
@@ -477,11 +426,6 @@ class NotificationViewset(ModelViewSet):
                     display_form=DisplayMode.SUPPRESS,
                 )
                 send_notification_sms = fields.BooleanField(default=False, allow_null=False)
-                send_at = NotificationSerializer().fields.fields["send_at"]
-
-                def validate_send_at(self, value):
-                    serializer = NotificationSerializer(data=self.request.data)
-                    return serializer.validate_send_at(self.initial_data.get("send_at"))
 
             return NewMessageSerializer
         return NotificationSerializer
@@ -517,7 +461,6 @@ class NotificationViewset(ModelViewSet):
             user=self.request.user.pk,
             send_notification_sms=serializer.validated_data["send_notification_sms"],
             host_url=host_url,
-            send_at=serializer.validated_data.get("send_at"),
         )
         notification.send()
 

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import {
-  Action,
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerOneShotApi, FormPayload, gettext,
+  ConsumerLogicApi, FormConsumerOneShotApi, gettext,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -54,21 +53,11 @@ const actionViewLicense = async (): Promise<boolean> => {
   return true;
 };
 
-const actionSendNotification = async (): Promise<boolean> => {
-  await FormConsumerOneShotApi({
-    url: consumerUrl,
-    trailingSlash: consumerTrailingSlash,
-    pk: 'new',
-  });
-  return true;
-};
-
 const actionAddNotification = async (): Promise<boolean> => {
   await FormConsumerOneShotApi({
     url: consumerUrl,
     trailingSlash: consumerTrailingSlash,
     pk: 'new',
-    query: { save: 1 },
     useQueryInRetrieveOnly: true,
   });
   return true;
@@ -110,38 +99,11 @@ onMounted(() => {
 
 onUnmounted(() => clearInterval(intervalCheckLicense));
 
-// const actionSendNow = async (action:Action, payload: FormPayload): Promise<boolean> => {
-// TODO: WAITING FOR ISSUE https://taiga.velis.si/project/velis74-dynamic-forms/issue/858
-//   console.log(Math.random(), 'actionSendNow', action, payload);
-//   // eslint-disable-next-line no-debugger
-//   debugger;
-//   // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-//   return true;
-// };
-const dialogHandlers = {
-  send: async (action: Action, payload: FormPayload): Promise<boolean> => {
-    console.log(Math.random(), 'actionSendNow', action, payload);
-    // eslint-disable-next-line no-debugger
-
-    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-    return true;
-  },
-  cancel: async (action: Action, payload: FormPayload): Promise<boolean> => {
-    console.log(Math.random(), 'actionCancel', action, payload);
-    // eslint-disable-next-line no-debugger
-
-    // apiClient.post(consumerUrl + (consumerTrailingSlash ? '/' : ''), payload);
-    return true;
-  },
-};
-
 const { handler } = useActionHandler();
 
 handler
   .register('view-license', actionViewLicense)
-  // .register('send-now', dialogHandlers.actionSendNow)
-  .register('add-notification', actionAddNotification)
-  .register('send-notification', actionSendNotification);
+  .register('add-notification', actionAddNotification);
 
 // TODO: remove linter ignores below when you know how to
 </script>
@@ -153,7 +115,6 @@ handler
     <APIConsumer
       :consumer="notificationLogic"
       :display-component="ComponentDisplay.TABLE"
-      :dialog-handlers="dialogHandlers"
     />
     <ModalView/>
   </div>
