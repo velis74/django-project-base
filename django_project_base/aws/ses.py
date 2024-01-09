@@ -14,9 +14,9 @@ def get_aws_session():
 
         return FakeSession()
     return boto3.Session(
-        aws_access_key_id=getattr(settings, "AWS_SES_ACCESS_KEY_ID", None),
-        aws_secret_access_key=getattr(settings, "AWS_SES_SECRET_ACCESS_KEY", None),
-        region_name=getattr(settings, "AWS_SES_REGION_NAME", None),
+        aws_access_key_id=getattr(settings, "NOTIFICATIONS_AWS_SES_ACCESS_KEY_ID", None),
+        aws_secret_access_key=getattr(settings, "NOTIFICATIONS_AWS_SES_SECRET_ACCESS_KEY", None),
+        region_name=getattr(settings, "NOTIFICATIONS_AWS_SES_REGION_NAME", None),
     )
 
 

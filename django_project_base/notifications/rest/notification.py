@@ -7,6 +7,7 @@ from typing import List, Optional
 import pytz
 import swapper
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
@@ -143,14 +144,14 @@ class NotificationSerializer(ModelSerializer):
     actions = Actions(
         TableAction(
             TablePosition.HEADER,
-            _("Add"),
-            title=_("Add new record"),
+            label=_("Add"),
+            title=_("Add new notification"),
             name="add-notification",
             icon="add-circle-outline",
         ),
         TableAction(
             TablePosition.HEADER,
-            _("View license"),
+            label=_("View license"),
             title=_("View license"),
             name="view-license",
             icon="card-outline",
@@ -228,6 +229,7 @@ class NotificationSerializer(ModelSerializer):
             "delayed_to",
             "recipients_original_payload_search",
             "exceptions",
+            "extra_data",
         )
         layout = Layout(
             Row(Column("message_to")),
@@ -462,7 +464,7 @@ class NotificationViewset(ModelViewSet):
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[
-                ChannelIdentifier.channel(c, extra_data=None, project_slug=None).__class__
+                ChannelIdentifier.channel(c, settings=settings, project_slug=None).__class__
                 for c in serializer.validated_data["send_on_channels"]
             ],
             persist=True,

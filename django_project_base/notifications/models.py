@@ -80,6 +80,7 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     project_slug = models.CharField(null=True, blank=True, max_length=1024)
     send_notification_sms = models.BooleanField(null=False, blank=False, default=False)
     send_notification_sms_text = models.TextField(blank=False, null=True)
+    extra_data = models.JSONField(null=True, blank=False)
 
     class Meta:
         abstract = True

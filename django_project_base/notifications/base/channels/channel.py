@@ -5,7 +5,7 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Union
 
-from django.conf import settings
+from django.conf import Settings, settings
 from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext
@@ -26,13 +26,22 @@ class Recipient:
     email: str
     unique_attribute: str
 
-    def __init__(self, identifier: str, phone_number: str, email: str, unique_attribute: str = "identifier") -> None:
+    def __init__(
+        self,
+        identifier: str,
+        phone_number: str,
+        email: str,
+        unique_attribute: str = "identifier",
+        phone_number_validator=None,
+    ) -> None:
         super().__init__()
         self.identifier = identifier
         self.phone_number = (
             next(
                 iter(
-                    PhoneNumberParser.valid_phone_numbers([phone_number]) if phone_number and len(phone_number) else ""
+                    PhoneNumberParser.valid_phone_numbers([phone_number], phone_number_validator)
+                    if phone_number and len(phone_number)
+                    else ""
                 ),
                 None,
             )
@@ -74,7 +83,7 @@ class Channel(ABC):
         return _sender
 
     def _find_provider(
-        self, extra_settings: Optional[dict], setting_name: str, exclude: Optional[List[str]] = None
+        self, settings: Optional[Settings], setting_name: str, exclude: Optional[List[str]] = None
     ) -> Optional[ProviderIntegration]:
         if exclude is None:
             exclude = []
@@ -85,11 +94,11 @@ class Channel(ABC):
 
                 return import_string(prov)() if prov else None
 
-            return import_string(val)() if val not in exclude else None
+            return import_string(val)() if val not in exclude and val else None
 
-        if extra_settings and getattr(extra_settings.get("SETTINGS", object()), setting_name, None):
-            return get_first_provider(getattr(extra_settings["SETTINGS"], setting_name))
-        return get_first_provider(getattr(settings, setting_name, ""))
+        if settings and getattr(settings, setting_name, None):
+            return get_first_provider(getattr(settings, setting_name))
+        return get_first_provider(getattr(settings or object(), setting_name, ""))
 
     def clean_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
         return list(set(recipients))
@@ -103,17 +112,26 @@ class Channel(ABC):
         provider: Optional[str] = None,
         auxiliary_notification: Optional[uuid.UUID] = None,
     ) -> DeliveryReport:
-        return DeliveryReport.objects.create(
-            notification=notification,
-            user_id=recipient.identifier,
-            channel=f"{self.__module__}.{self.__class__.__name__}" if not channel else channel,
-            provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}" if not provider else provider,
-            pk=pk,
-            auxiliary_notification=auxiliary_notification,
+        return next(
+            iter(
+                DeliveryReport.objects.get_or_create(
+                    notification=notification,
+                    user_id=recipient.identifier,
+                    channel=f"{self.__module__}.{self.__class__.__name__}" if not channel else channel,
+                    provider=f"{self.provider.__module__}.{self.provider.__class__.__name__}"
+                    if not provider
+                    else provider,
+                    pk=pk,
+                    auxiliary_notification=auxiliary_notification,
+                )
+            ),
+            None,
         )
 
     @abstractmethod
-    def get_recipients(self, notification: DjangoProjectBaseNotification, unique_identifier="email") -> List[Recipient]:
+    def get_recipients(
+        self, notification: DjangoProjectBaseNotification, unique_identifier="email", phone_number_validator=None
+    ) -> List[Recipient]:
         rec_obj = notification.email_list
         if not rec_obj:
             rec_obj = notification.recipients_list
@@ -131,6 +149,7 @@ class Channel(ABC):
                 email=u.get("email", "") or "",
                 phone_number=u.get("phone_number", "") or "",
                 unique_attribute=unique_identifier,
+                phone_number_validator=phone_number_validator,
             )
             for u in rec_obj
         ]
@@ -172,12 +191,14 @@ class Channel(ABC):
             logger.exception(de)
             return dlr_obj, (sent and do_send)
 
-    def send(self, notification: DjangoProjectBaseNotification, extra_data, **kwargs) -> int:
+    def send(self, notification: DjangoProjectBaseNotification, extra_data, settings: Settings, **kwargs) -> int:
         logger = logging.getLogger("django")
         try:
             message = self.provider.get_message(notification)
 
-            recipients = self.get_recipients(notification)
+            recipients = self.get_recipients(
+                notification, phone_number_validator=getattr(settings, "IS_PHONE_NUMBER_ALLOWED_FUNCTION", None)
+            )
 
             if not recipients:
                 raise ValueError("No valid recipients")
@@ -222,7 +243,9 @@ class Channel(ABC):
                                 a_sender=notification.sender,
                                 a_extra_data=extra_data,
                                 a_recipients_list=notification.recipients_list,
+                                a_settings=settings,
                                 delay=int(datetime.datetime.now().timestamp()),
+                                user=extra_data["user"],
                             ).send()
                             self.create_delivery_report(
                                 notification, recipient, dlr__uuid, auxiliary_notification=a_notification.pk
@@ -243,7 +266,7 @@ class Channel(ABC):
                         else:
                             exclude_providers.append(f"{self.provider.__module__}.{self.provider.__class__.__name__}")
                             if next_provider := self._find_provider(
-                                extra_settings=extra_data,
+                                settings=settings,
                                 setting_name=self.provider_setting_name,
                                 exclude=exclude_providers,
                             ):

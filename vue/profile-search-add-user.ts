@@ -18,6 +18,7 @@ async function showAddProfileModal(addCallback: (profile: UserDataJSON | undefin
     () => [h('div', [h(
       // @ts-ignore
       ProfileSearch,
+      // @ts-ignore
       { onSelected: selected, searchUrl },
     ), h('div', { style: 'padding-bottom: 4em;' })]),
     ],

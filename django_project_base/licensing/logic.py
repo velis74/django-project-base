@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
@@ -25,22 +25,32 @@ class LicenseReportSerializer(Serializer):
 
 
 class LogAccessService:
+    db = "default"
+
+    def __init__(self, db: Optional[str] = None) -> None:
+        super().__init__()
+        if db:
+            self.db = db
+
     def _user_access_user_inflow(self, user_id) -> float:
         return abs(
-            LicenseAccessUse.objects.filter(user_id=str(user_id), amount__lt=0)
+            LicenseAccessUse.objects.using(self.db)
+            .filter(user_id=str(user_id), amount__lt=0)
             .aggregate(Sum("amount"))
             .get("amount__sum", None)
             or 0
         )
 
     def report(self, user: Model) -> dict:
-        user_query = LicenseAccessUse.objects.filter(user_id=str(user.pk), amount__isnull=False, amount__gt=0)
+        user_query = LicenseAccessUse.objects.using(self.db).filter(
+            user_id=str(user.pk), amount__isnull=False, amount__gt=0
+        )
 
         usage_report = []
         added_types = []
         for agg in user_query.values("content_type").annotate(count=Sum("amount")):
             if (
-                content_type := ContentType.objects.get(pk=agg["content_type"])
+                content_type := ContentType.objects.using(self.db).get(pk=agg["content_type"])
             ) and content_type.model_class()._meta.verbose_name not in added_types:
                 usage_report.append(
                     {"item": content_type.model_class()._meta.verbose_name, "usage_sum": round(agg.get("count", 0), 2)}
@@ -71,15 +81,11 @@ class LogAccessService:
         on_sucess=None,
         **kwargs,
     ) -> int:
-        db_connection = "default"
-        if kwargs.get("db") and kwargs["db"] != "default":
-            db_connection = kwargs["db"]
-            connections["default"] = connections[db_connection]
-
+        connections["default"] = connections[self.db]
         content_type = ContentType.objects.get_for_model(model=record._meta.model)
-
         used = (
-            LicenseAccessUse.objects.filter(user_id=str(user_profile_pk), content_type=content_type)
+            LicenseAccessUse.objects.using(self.db)
+            .filter(user_id=str(user_profile_pk), content_type=content_type)
             .aggregate(Sum("amount"))
             .get("amount__sum", None)
             or 0
@@ -102,7 +108,7 @@ class LogAccessService:
 
         amount = accesses_used * item_price
 
-        LicenseAccessUse.objects.using(db_connection).create(
+        LicenseAccessUse.objects.using(self.db).create(
             type=LicenseAccessUse.UseType.USE,
             user_id=str(user_profile_pk),
             content_type_object_id=str(record.pk).replace("-", ""),

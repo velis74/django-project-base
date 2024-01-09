@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser) -> None:
         parser.add_argument("notification", type=str, help="Notification identifier (uuid string).")
-        parser.add_argument("user", type=str, help="User identifier (user sending notification).")
+        parser.add_argument("user", type=str, help="User identifier (user sending notification).", nargs="?")
 
     def handle(self, *args, **options):
         Notification.resend(

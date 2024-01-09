@@ -1,8 +1,8 @@
-from typing import Union
+from typing import Optional, Union
 
 import requests
 
-from django.conf import settings
+from django.conf import Settings
 from rest_framework.status import is_success
 
 from django_project_base.notifications.base.channels.channel import Recipient
@@ -18,18 +18,14 @@ class NexmoSMS(ProviderIntegration):
     def __init__(self) -> None:
         super().__init__(settings=object())
 
-    def ensure_credentials(self, extra_data):
+    def ensure_credentials(self, settings: Optional[Settings] = None):
         if settings and getattr(settings, "TESTING", False):
             return
-        self.api_key = getattr(settings, "NEXMO_API_KEY", None)
-        self.api_secret = getattr(settings, "NEXMO_API_SECRET", None)
+        self.api_key = getattr(settings, "NOTIFICATIONS_NEXMO_API_KEY", None)
+        self.api_secret = getattr(settings, "NOTIFICATIONS_NEXMO_API_SECRET", None)
         self.settings = settings
-        if extra_data and (stgs := extra_data.get("SETTINGS")):
-            self.settings = stgs
-            self.api_key = getattr(stgs, "NEXMO_API_KEY", None)
-            self.api_secret = getattr(stgs, "NEXMO_API_SECRET", None)
-        assert self.api_key, "NEXMO_API_KEY required"
-        assert self.api_secret, "NEXMO_API_SECRET required"
+        assert self.api_key, "NOTIFICATIONS_NEXMO_API_KEY required"
+        assert self.api_secret, "NOTIFICATIONS_NEXMO_API_SECRET required"
 
     def _get_sms_message(self, notification: DjangoProjectBaseNotification) -> Union[dict, str]:
         return super()._get_sms_message(notification)

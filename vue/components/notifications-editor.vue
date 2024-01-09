@@ -26,7 +26,7 @@ const props = defineProps<{
     type: String,
     required: false,
   },
-  licenseConsumerUrlTrailingSlash:{
+  licenseConsumerUrlTrailingSlash: {
     type: Boolean,
     required: false,
   },
@@ -58,6 +58,7 @@ const actionAddNotification = async (): Promise<boolean> => {
     url: consumerUrl,
     trailingSlash: consumerTrailingSlash,
     pk: 'new',
+    useQueryInRetrieveOnly: true,
   });
   return true;
 };
@@ -100,7 +101,9 @@ onUnmounted(() => clearInterval(intervalCheckLicense));
 
 const { handler } = useActionHandler();
 
-handler.register('view-license', actionViewLicense).register('add-notification', actionAddNotification);
+handler
+  .register('view-license', actionViewLicense)
+  .register('add-notification', actionAddNotification);
 
 // TODO: remove linter ignores below when you know how to
 </script>
@@ -109,7 +112,10 @@ handler.register('view-license', actionViewLicense).register('add-notification',
   <div class="overflow-y-auto">
     <!--suppress TypeScriptValidateTypes -->
     <!-- @vue-ignore -->
-    <APIConsumer :consumer="notificationLogic" :display-component="ComponentDisplay.TABLE"/>
+    <APIConsumer
+      :consumer="notificationLogic"
+      :display-component="ComponentDisplay.TABLE"
+    />
     <ModalView/>
   </div>
 </template>

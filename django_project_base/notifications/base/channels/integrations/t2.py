@@ -1,12 +1,12 @@
 import json
 
 from math import ceil
-from typing import Union
+from typing import Optional, Union
 
 import requests
 import swapper
 
-from django.conf import settings
+from django.conf import Settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success
@@ -21,6 +21,7 @@ from django_project_base.notifications.models import DeliveryReport, DjangoProje
 Created on Jul 10, 2016
 @author: Dayo
 """
+
 
 class SMSCounter(object):
     # https: // raw.githubusercontent.com / dedayoa / sms - counter - python / master / sms_counter / main.py
@@ -278,21 +279,16 @@ class T2(ProviderIntegration):
     def __init__(self) -> None:
         super().__init__(settings=object())
 
-    def ensure_credentials(self, extra_data):
+    def ensure_credentials(self, settings: Optional[Settings] = None):
         if settings and getattr(settings, "TESTING", False):
             return
-        self.username = getattr(settings, "T2_USERNAME", None)
-        self.password = getattr(settings, "T2_PASSWORD", None)
-        self.url = getattr(settings, "SMS_API_URL", None)
+        self.username = getattr(settings, "NOTIFICATIONS_T2_USERNAME", None)
+        self.password = getattr(settings, "NOTIFICATIONS_T2_PASSWORD", None)
+        self.url = getattr(settings, "NOTIFICATIONS_SMS_API_URL", None)
         self.settings = settings
-        if extra_data and (stgs := extra_data.get("SETTINGS")):
-            self.settings = stgs
-            self.username = getattr(stgs, "T2_USERNAME", None)
-            self.password = getattr(stgs, "T2_PASSWORD", None)
-            self.url = getattr(stgs, "SMS_API_URL", None)
-        assert self.username, "T2_USERNAME is required"
-        assert self.password, "T2_PASSWORD is required"
-        assert len(self.url) > 0, "T2_PASSWORD is required"
+        assert self.username, "NOTIFICATIONS_T2_USERNAME is required"
+        assert self.password, "NOTIFICATIONS_T2_PASSWORD is required"
+        assert len(self.url) > 0, "NOTIFICATIONS_T2_PASSWORD is required"
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         if not recipient.phone_number:

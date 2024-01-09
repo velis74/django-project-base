@@ -3,6 +3,7 @@ import uuid
 
 from typing import List, Optional, Type
 
+from django.conf import settings
 from django.core.cache import cache
 from rest_framework.exceptions import PermissionDenied
 
@@ -73,7 +74,7 @@ class EMailNotificationWithListOfEmails(EMailNotification):
             project_slug=self._project,
         )
 
-        notification = self._ensure_channels([MailChannel.name], notification)
+        notification = self._ensure_channels([MailChannel.name], notification, settings=settings)
 
         if self.handle_similar_notifications(notification=notification):
             return notification
@@ -81,7 +82,6 @@ class EMailNotificationWithListOfEmails(EMailNotification):
             self.message.save()
         notification.created_at = int(datetime.datetime.now().timestamp())
         notification.save()
-        self._set_db()
         uuid_val = str(uuid.uuid4())
         notification.email_list = [
             dict(

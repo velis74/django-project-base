@@ -1,6 +1,8 @@
 from enum import Enum
 from typing import Optional, Union
 
+from django.conf import Settings
+
 
 class NotificationType(Enum):
     MAINTENANCE = "maintenance"
@@ -29,7 +31,7 @@ class ChannelIdentifier(Enum):
     @staticmethod
     def channel(
         identifier: Union[int, str],
-        extra_data: Optional[dict] = None,
+        settings: Optional[Settings] = None,
         project_slug: Optional[str] = None,
         ensure_dlr_user=True,
     ) -> Optional["Channel"]:  # noqa: F821
@@ -38,10 +40,8 @@ class ChannelIdentifier(Enum):
             None,
         )
         if channel:
-            channel.provider = channel._find_provider(
-                extra_settings=extra_data, setting_name=channel.provider_setting_name
-            )
-            channel.provider.ensure_credentials(extra_data=extra_data)
+            channel.provider = channel._find_provider(settings=settings, setting_name=channel.provider_setting_name)
+            channel.provider.ensure_credentials(settings=settings)
             channel.provider.ensure_dlr_user(project_slug) if ensure_dlr_user else False
 
             return channel
