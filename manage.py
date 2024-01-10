@@ -21,7 +21,7 @@ def main():
         params.extend(("-i", "node_modules", "-i", "static", "-i", "coverage"))
         params.extend(("-i", "tests", "-i", "setup", "-i", "examples", "-i", "dist"))
         print("Modified makemessages: will process both django and djangojs domains")
-        execute_from_command_line(params + ["-d", "djangojs", "-e", "js,ts,vue"])
+        execute_from_command_line(params + ["-d", "djangojs", "-e", "js,ts,vue", "-i", "vue"])
 
     execute_from_command_line(sys.argv)
 

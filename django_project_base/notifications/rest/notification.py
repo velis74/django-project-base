@@ -7,11 +7,11 @@ from typing import List, Optional
 import pytz
 import swapper
 
-from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
+from django.db import models
 from django.db.models import ForeignKey, QuerySet
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
@@ -19,7 +19,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
-from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition, FormPosition
+from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode, F
 from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
@@ -119,7 +119,8 @@ class NotificationSerializer(ModelSerializer):
         # self.fields.fields["save_only"].display = DisplayMode.HIDDEN
         self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
         if models.BooleanField().to_python(self.context.get("request").query_params.get("save", False)):
-            a = 9
+            pass
+            # TODO TODO
         # self.actions.actions.append(
         #     FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send-now", label=_("Send now"), serializer=self)
         # )
@@ -159,6 +160,7 @@ class NotificationSerializer(ModelSerializer):
     save_only = fields.BooleanField(default=False, write_only=True)
 
     actions = Actions(
+        # TODO TODO
         TableAction(
             TablePosition.HEADER,
             label=_("Send new notification"),
@@ -180,16 +182,6 @@ class NotificationSerializer(ModelSerializer):
             name="view-license",
             icon="card-outline",
         ),
-        FormButtonAction(
-            btn_type=FormButtonTypes.CANCEL,
-            name="cancel",
-        ),
-        FormButtonAction(
-            btn_type=FormButtonTypes.SUBMIT,
-            label=_("Pošlji"),
-            name="submit",
-        ),
-        add_form_buttons=False,
     )
 
     message_to = fields.ManyRelatedField(

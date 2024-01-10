@@ -140,6 +140,7 @@ const { handler } = useActionHandler();
 handler
   .register('view-license', actionViewLicense)
   // .register('send-now', dialogHandlers.actionSendNow)
+// TODO: MAP TO BACKEND ACTIONS
   .register('add-notification', actionAddNotification)
   .register('send-notification', actionSendNotification);
 
