@@ -1,3 +1,4 @@
+import copy
 import datetime
 import json
 import uuid
@@ -187,7 +188,13 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
                 self.message.save()
             notification.created_at = int(datetime.datetime.now().timestamp())
-            notification.save()
+            if isinstance(notification.extra_data, dict) and "a_settings" in notification.extra_data:
+                a_settings = copy.copy(notification.extra_data["a_settings"])
+                notification.extra_data["a_settings"] = None
+                notification.save()
+                notification.extra_data["a_settings"] = a_settings
+            else:
+                notification.save()
         else:
             notification.created_at = None
 
@@ -203,8 +210,13 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
                             k: v
                             for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
                             if not k.startswith("_")
+                            and isinstance(
+                                v,
+                                (str, int, list, tuple, dict, bool),
+                            )
                         }
                     )
+
             notification.recipients_list = rec_list
             ext_data = self._extra_data.get("a_extra_data") or self._extra_data
             notification.extra_data = ext_data
