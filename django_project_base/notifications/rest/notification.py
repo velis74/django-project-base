@@ -123,7 +123,7 @@ class NotificationSerializer(ModelSerializer):
     recipients = fields.CharField(display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN)
 
     recipients_original_payload = OrginalRecipientsField(
-        display_form=DisplayMode.HIDDEN, label=_("Recipients"), read_only=True
+        display_form=DisplayMode.HIDDEN, label=_("Recipients"), read_only=True, render_params={"max_width": "20em"}
     )
 
     required_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
@@ -244,13 +244,24 @@ class NotificationSerializer(ModelSerializer):
             layouts=[
                 ResponsiveTableLayout(),
                 ResponsiveTableLayout(
+                    [
+                        "subject",
+                        ["required_channels", "sent_channels", "sent_at"],
+                    ],
+                    [
+                        "recipients_original_payload",
+                        ["failed_channels", "counter"],
+                    ],
+                    auto_add_non_listed_columns=False,
+                ),
+                ResponsiveTableLayout(
                     "recipients_original_payload",
                     "subject",
                     "required_channels",
                     "sent_channels",
+                    "sent_at",
                     "failed_channels",
                     "counter",
-                    "sent_at",
                     auto_add_non_listed_columns=False,
                 ),
             ]
