@@ -118,7 +118,7 @@ const useUserSessionStore = defineStore('user-session', {
         deleteAt: data?.delete_at,
         passwordInvalid: data?.password_invalid,
       });
-      if (data?.default_project) {
+      if (!this.selectedProject && data?.default_project) {
         this.setSelectedProject(data?.default_project);
       }
     },
@@ -174,7 +174,9 @@ const useUserSessionStore = defineStore('user-session', {
           { hideErrorNotice: !showNotAuthorizedNotice },
         );
         if (this.userId !== response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
+          const project = this.selectedProject;
           this.$reset();
+          this.setSelectedProject(project);
           this.setUserData(response.data);
         }
         return true;
