@@ -55,7 +55,7 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
     #  https://django-csp.readthedocs.io/en/latest/decorators.html#decorator-chapter
     # Content Security Policy
     django_settings["CSP_DEFAULT_SRC"] = [
-        "'none'",
+        "'none'" if deploy else "'self'",
     ]
     # stackpath.bootstrapcdn.com - because of (old) login
     django_settings["CSP_STYLE_SRC"] = [
