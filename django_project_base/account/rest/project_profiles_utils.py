@@ -1,5 +1,4 @@
 from collections.abc import Iterable
-from datetime import datetime, timedelta
 
 import pytz
 import swapper
@@ -18,6 +17,7 @@ from django.utils.dateparse import (
     standard_duration_re,
     time_re,
 )
+from django.utils.timezone import datetime, now, timedelta
 from dynamicforms import fields
 from rest_framework.request import Request
 
@@ -61,7 +61,7 @@ def get_project_members(request: Request, project=None) -> QuerySet:
         )
     )
 
-    qs = qs.exclude(delete_at__isnull=False, delete_at__lt=datetime.now())
+    qs = qs.exclude(delete_at__isnull=False, delete_at__lt=now())
 
     if project is not None:
         # if current project was parsed from request, filter profiles to current project only
@@ -138,7 +138,7 @@ def filter_project_members_fields(queryset: QuerySet, field: str, value) -> Quer
                 }
             )
         if isinstance(model_meta.get_field(field), (models.TimeField,)):
-            start = datetime.combine(datetime.now().date(), parse_time(value).replace(microsecond=0))
+            start = datetime.combine(now().date(), parse_time(value).replace(microsecond=0))
             end = (start + timedelta(**__get_time_resolution(value))).time()
             return queryset.filter(**{field + "__gte": start, field + "__lt": end})
         if isinstance(model_meta.get_field(field), (models.DurationField,)):
