@@ -1,10 +1,12 @@
 from enum import IntEnum
-from typing import Dict, Union
+from typing import Dict, TYPE_CHECKING, Union
 
 from django.db.models import Model, QuerySet
 from django.http import HttpRequest
-from dynamicforms.serializers import Serializer
 from rest_framework.utils.model_meta import get_field_info
+
+if TYPE_CHECKING:
+    from dynamicforms.serializers import Serializer
 
 
 def set_django_security(django_settings, deploy=True, swagger_version=None):
@@ -150,7 +152,7 @@ class IntDescribedEnum(IntEnum):
         return value in cls.__members__.values()
 
 
-def get_pk_name(obj: Union[Model, QuerySet, Dict, Serializer], model: Model = None):
+def get_pk_name(obj: Union[Model, QuerySet, Dict, "Serializer"], model: Model = None):
     if isinstance(obj, QuerySet):
         return obj.model._meta.pk.name
     if isinstance(obj, Model):
