@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from datetime import datetime, timedelta
 
 import pytz
@@ -112,6 +113,10 @@ def filter_project_members_fields(queryset: QuerySet, field: str, value) -> Quer
         return queryset.filter(un__icontains=value)
     if field == "state":
         return queryset.filter(projects__state=value)
+    if field == "user_groups":
+        if isinstance(value, Iterable):
+            return queryset.filter(members__user_group__in=value)
+        return queryset.filter(members__user_group=value)
 
     model_meta = queryset.model._meta
 
