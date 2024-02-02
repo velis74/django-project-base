@@ -26,9 +26,13 @@ const { selectedProjectId } = storeToRefs(userSession);
 
 const { cookies } = useCookies();
 
-function refreshSettingsLogic() {
-  settingsLogic.value.getFullDefinition();
-  settingsLogic.value.reload();
+const loaded = ref<boolean>(false);
+
+async function refreshSettingsLogic() {
+  loaded.value = false;
+  await settingsLogic.value.getFullDefinition();
+  await settingsLogic.value.reload();
+  loaded.value = true;
 }
 
 interface ProjectSetting {
@@ -224,6 +228,7 @@ handler
 <template>
   <div class="overflow-y-auto">
     <APIConsumer
+      v-if="loaded"
       :consumer="settingsLogicTC"
       :display-component="ComponentDisplay.TABLE"
     />
