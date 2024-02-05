@@ -202,7 +202,7 @@ class NotificationSerializer(ModelSerializer):
     )
 
     created_at = ReadOnlyDateTimeFieldFromTs(
-        label=("Sent"), display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True,
+        label=_("Sent"), display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True,
     )
 
     def get_delivery(self, rec: DjangoProjectBaseNotification):
