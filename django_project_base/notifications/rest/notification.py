@@ -331,7 +331,7 @@ class MessageToListField(fields.ListField):
                                         for obj in related_objects
                                         for f in obj._meta.fields
                                         if isinstance(f, ForeignKey)
-                                        and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
+                                           and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
                                     ],
                                 )
                             )
@@ -435,7 +435,6 @@ class NotificationViewset(ModelViewSet):
 
     def get_serializer_class(self):
         if self.action in ("create", "update"):
-
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
@@ -497,17 +496,6 @@ class NotificationViewset(ModelViewSet):
         return self._create_notification(serializer)
 
 
-class ChannelSerializer(Serializer):
-    available = fields.FloatField(read_only=True, display_table=DisplayMode.HIDDEN)
-
-
-class ChannelsSerializer(Serializer):
-    def __init__(self, *args, is_filter: bool = False, **kwds):
-        super().__init__(*args, is_filter=is_filter, **kwds)
-        for channel in ChannelIdentifier.supported_channels():
-            self.fields[channel.name] = ChannelSerializer()
-
-
 class NotificationsLicenseSerializer(LicenseReportSerializer):
     template_context = dict(url_reverse="notification-license")
 
@@ -517,9 +505,10 @@ class NotificationsLicenseSerializer(LicenseReportSerializer):
             request.query_params.get("decorate-max-price", "0")
         ):
             self.fields.pop("max_notification_price", None)
+        for channel in ChannelIdentifier.supported_channels():
+            self.fields[channel.name] = fields.IntegerField(read_only=True, label=_(channel.name))
 
     usage_report = None
-    channels = ChannelsSerializer()
     max_notification_price = fields.FloatField(read_only=True, display_table=DisplayMode.HIDDEN)
     actions = Actions(
         FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel"),
@@ -527,6 +516,9 @@ class NotificationsLicenseSerializer(LicenseReportSerializer):
         add_default_filter=False,
         add_form_buttons=False,
     )
+
+    class Meta:
+        layout = Layout(Row("credit", "used_credit", "remaining_credit"), Row("EMail", "SMS"))
 
 
 class NotificationsLicenseViewSet(SingleRecordViewSet):
@@ -553,8 +545,7 @@ class NotificationsLicenseViewSet(SingleRecordViewSet):
             price = channel.notification_price
             if price > max_price:
                 max_price = price
-            license["channels"][channel.name] = {}
-            license["channels"][channel.name]["available"] = int(max([license["remaining_credit"] / price, 0]))
+            license[channel.name] = int(max([license["remaining_credit"] / price, 0]))
         if fields.BooleanField().to_internal_value(self.request.query_params.get("decorate-max-price", "0")):
             license["max_notification_price"] = max_price
 

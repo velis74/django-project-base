@@ -12,24 +12,8 @@ class NotificationsRouter(DefaultRouter):
 notifications_router: NotificationsRouter = DefaultRouter()
 
 notifications_router.register(
-    r"maintenance-notification",
-    UsersMaintenanceNotificationViewset,
-    basename="maintenance-notification",
+    r"maintenance-notification", UsersMaintenanceNotificationViewset, basename="maintenance-notification"
 )
-notifications_router.register(
-    r"notification",
-    NotificationViewset,
-    basename="notification",
-)
-
-notifications_router.register(
-    r"notification-license",
-    NotificationsLicenseViewSet,
-    basename="notification-license",
-)
-
-notifications_router.register(
-    r"notification-dlr",
-    DeliveryReportViewSet,
-    basename="notification-dlr",
-)
+notifications_router.register(r"notification", NotificationViewset, basename="notification")
+notifications_router.register(r"notification-license", NotificationsLicenseViewSet, basename="notification-license")
+notifications_router.register(r"notification-dlr", DeliveryReportViewSet, basename="notification-dlr", )
