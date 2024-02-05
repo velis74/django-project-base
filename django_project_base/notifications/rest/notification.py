@@ -214,7 +214,8 @@ class NotificationSerializer(ModelSerializer):
             if channel in sent_channels:
                 res.append(f"{channel} <span style=\"color: green\">\u2714</span>")
             elif channel in failed_channels:
-                res.append(f"{channel} <span style=\"color: red\">\u2717</span>")
+                title_attr = f"title=\"{rec.exceptions if rec.exceptions else ''}\""
+                res.append(f"{channel} <span style=\"color: red\" {title_attr}>\u2717</span>")
             else:
                 res.append(f"{channel} \u274d")
         return ",".join(res)
