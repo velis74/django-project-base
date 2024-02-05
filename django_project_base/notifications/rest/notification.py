@@ -126,11 +126,7 @@ class NotificationSerializer(ModelSerializer):
         display_form=DisplayMode.HIDDEN, label=_("Recipients"), read_only=True, render_params={"max_width": "20em"}
     )
 
-    required_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
-    sent_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
-    failed_channels = fields.CharField(display_form=DisplayMode.HIDDEN)
-
-    counter = fields.IntegerField(display_form=DisplayMode.HIDDEN)
+    delivery = fields.SerializerMethodField(label=_("Delivery"))
 
     level = fields.CharField(display=DisplayMode.SUPPRESS)
     type = fields.CharField(display=DisplayMode.SUPPRESS)
@@ -205,7 +201,23 @@ class NotificationSerializer(ModelSerializer):
         display_table=DisplayMode.HIDDEN,
     )
 
-    sent_at = ReadOnlyDateTimeFieldFromTs(display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True)
+    created_at = ReadOnlyDateTimeFieldFromTs(
+        label=("Sent"), display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True,
+    )
+
+    def get_delivery(self, rec: DjangoProjectBaseNotification):
+        req_channels = rec.required_channels.split(",") if rec.required_channels else []
+        sent_channels = set(rec.sent_channels.split(",")) if rec.sent_channels else set()
+        failed_channels = set(rec.failed_channels.split(",")) if rec.failed_channels else set()
+        res = []
+        for channel in req_channels:
+            if channel in sent_channels:
+                res.append(f"{channel} <span style=\"color: green\">\u2714</span>")
+            elif channel in failed_channels:
+                res.append(f"{channel} <span style=\"color: red\">\u2717</span>")
+            else:
+                res.append(f"{channel} \u274d")
+        return ",".join(res)
 
     def to_representation(self, instance, row_data=None):
         repr = super().to_representation(instance, row_data)
@@ -225,11 +237,15 @@ class NotificationSerializer(ModelSerializer):
         exclude = (
             "content_entity_context",
             "locale",
-            "created_at",
+            "sent_at",
             "delayed_to",
             "recipients_original_payload_search",
             "exceptions",
             "extra_data",
+            "counter",
+            "required_channels",
+            "sent_channels",
+            "failed_channels",
         )
         layout = Layout(
             Row(Column("message_to")),
@@ -239,32 +255,6 @@ class NotificationSerializer(ModelSerializer):
             Row(Column("message_body")),
             Row(Column("send_on_channels")),
             size="large",
-        )
-        responsive_columns = ResponsiveTableLayouts(
-            layouts=[
-                ResponsiveTableLayout(),
-                ResponsiveTableLayout(
-                    [
-                        "subject",
-                        ["required_channels", "sent_channels", "sent_at"],
-                    ],
-                    [
-                        "recipients_original_payload",
-                        ["failed_channels", "counter"],
-                    ],
-                    auto_add_non_listed_columns=False,
-                ),
-                ResponsiveTableLayout(
-                    "recipients_original_payload",
-                    "subject",
-                    "required_channels",
-                    "sent_channels",
-                    "sent_at",
-                    "failed_channels",
-                    "counter",
-                    auto_add_non_listed_columns=False,
-                ),
-            ]
         )
 
 
@@ -424,7 +414,7 @@ class NotificationViewset(ModelViewSet):
         )
 
     def filter_queryset_field(self, queryset, field, value):
-        if field == "sent_at" and value and not value.isnumeric():
+        if field == "created_at" and value and not value.isnumeric():
             # TODO: search by user defined time range
             value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
             return queryset.filter(**{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800})
@@ -454,7 +444,7 @@ class NotificationViewset(ModelViewSet):
         try:
             return DjangoProjectBaseNotification.objects.filter(
                 project_slug=self.request.selected_project_slug
-            ).order_by("-sent_at")
+            ).order_by("-created_at")
         except ProjectNotSelectedError as e:
             raise NotFound(e.message)
 
