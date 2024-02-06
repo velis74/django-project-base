@@ -1,12 +1,10 @@
 import datetime
 import json
 import time
-
 from typing import List, Optional
 
 import pytz
 import swapper
-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
@@ -23,7 +21,6 @@ from dynamicforms.mixins import DisplayMode, F
 from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
-from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
