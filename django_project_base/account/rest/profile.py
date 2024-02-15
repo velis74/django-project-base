@@ -302,7 +302,7 @@ class ProfileViewSet(ModelViewSet):
     def filter_queryset_field(self, queryset, field, value):
         if field == "full_name":
             return queryset.filter(un__icontains=value)
-        if filter_func := settings.get("DJANGO_PROJECT_BASE_FILTER_PROFILE_QUERYSET_FIELD_FUNCTION", None):
+        if filter_func := getattr(settings, "DJANGO_PROJECT_BASE_FILTER_PROFILE_QUERYSET_FIELD_FUNCTION", None):
             try:
                 return import_string(filter_func)(self, queryset, field, value)
             except NotImplementedError:
