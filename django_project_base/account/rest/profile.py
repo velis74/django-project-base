@@ -299,6 +299,14 @@ class ProfileViewSet(ModelViewSet):
 
         return ProfileSerializer
 
+    def filter_queryset(self, queryset, query_params=None):
+        if filter_func := getattr(settings, "DJANGO_PROJECT_BASE_FILTER_PROFILE_QUERYSET_FIELD_FUNCTION", None):
+            try:
+                queryset = import_string(filter_func)(self, queryset, None, query_params)
+            except NotImplementedError:
+                pass
+        return super().filter_queryset(queryset, query_params)
+
     def filter_queryset_field(self, queryset, field, value):
         if field == "full_name":
             return queryset.filter(un__icontains=value)
