@@ -1,5 +1,7 @@
+from typing import Any, Dict, Optional, Union
+
 from django.contrib.auth import get_user_model
-from django.db.models import Model
+from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import (
@@ -35,7 +37,18 @@ class ImpersonateRequestSerializer(serializers.Serializer):
 
 @extend_schema_field(OpenApiTypes.NONE)
 class ImpersonateUserIdField(django_project_base.base.fields.UserRelatedField):
-    pass
+    def __init__(
+        self,
+        queryset_filter: Optional[Union[Q, Dict[Any]]] = None,
+        queryset_exclude: Optional[Union[Q, Dict[Any]]] = None,
+        **kwargs,
+    ):
+        kwargs.setdefault("placeholder", _("Select a user to impersonate"))
+        kwargs.setdefault("label", _("User"))
+        kwargs.setdefault("required", False)
+        kwargs.setdefault("allow_null", True)
+        super().__init__(queryset_filter, queryset_exclude, **kwargs)
+        self.filter_selected_project = False
 
 
 class ImpersonateUserDialogSerializer(serializers.Serializer):
@@ -44,9 +57,7 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
     )
     form_titles = {"new": "Impersonate a user"}
 
-    id = ImpersonateUserIdField(
-        placeholder=_("Select a user to impersonate"), label=_("User"), required=False, allow_null=True
-    )
+    id = ImpersonateUserIdField()
 
     actions = Actions(
         FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Cancel")),

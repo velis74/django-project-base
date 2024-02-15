@@ -1,10 +1,13 @@
+from typing import Any, cast, Dict, Optional, Union
+
 import swapper
 
 from django.core.validators import RegexValidator
-from django.db.models import fields
+from django.db.models import fields, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields as df_fields
 
+from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.middleware import get_current_request
 
 
@@ -22,23 +25,43 @@ class HexColorField(fields.CharField):
 
 
 class UserRelatedField(df_fields.PrimaryKeyRelatedField):
-    def __init__(self, **kwargs):
+    def __init__(
+        self,
+        queryset_filter: Optional[Union[Q, Dict[Any]]] = None,
+        queryset_exclude: Optional[Union[Q, Dict[Any]]] = None,
+        **kwargs,
+    ):
         kwargs["url_reverse"] = "profile-base-project-list"
         kwargs["query_field"] = "full_name"
         kwargs["additional_parameters"] = dict(select=1)
         kwargs["text_field"] = "full_name"
         kwargs["value_field"] = "id"
         super().__init__(**kwargs)
+        self.queryset_filter = queryset_filter or {}
+        self.queryset_exclude = queryset_exclude or {}
+        self.filter_selected_project = True  # ImpersonateUserIdField overrides this (or any other; as needed)
 
     def get_queryset(self):
         # TODO This needs to be amended together with members editor such that it will be possible to specify
         #  in settings.py how to filter and sort project members
-        qs = swapper.load_model("django_project_base", "Profile").objects
-        request = get_current_request()
-        if request and getattr(request, "selected_project_slug", None):
-            # if current project was parsed from request, filter profiles to current project only
-            qs = qs.filter(projects__project__slug=request.selected_project_slug)
-        return qs.all().distinct()
+        qs = cast(QuerySet, swapper.load_model("django_project_base", "Profile").objects)
+
+        if self.filter_selected_project:
+            try:
+                request = get_current_request()
+                # the field only works in currently selected project
+                qs = qs.filter(projects__project=request.selected_project)
+            except ProjectNotSelectedError:
+                qs = qs.none()
+            except AttributeError:
+                # if the middleware setting current project is not even set (request.selected_project will except),
+                #  we just show all users
+                pass
+
+        qs = qs.exclude(**self.queryset_exclude if isinstance(self.queryset_exclude, dict) else self.queryset_exclude)
+        qs = qs.filter(**self.queryset_filter if isinstance(self.queryset_filter, dict) else self.queryset_filter)
+
+        return qs.all()
 
     def display_value(self, instance):
         if not instance:
