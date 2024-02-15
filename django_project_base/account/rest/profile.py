@@ -15,6 +15,7 @@ from django.db.models import ForeignKey, Model, QuerySet
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.crypto import get_random_string
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 from dynamicforms import fields
@@ -301,6 +302,12 @@ class ProfileViewSet(ModelViewSet):
     def filter_queryset_field(self, queryset, field, value):
         if field == "full_name":
             return queryset.filter(un__icontains=value)
+        if filter_func := settings.get("DJANGO_PROJECT_BASE_FILTER_PROFILE_QUERYSET_FIELD_FUNCTION", None):
+            try:
+                return import_string(filter_func)(self, queryset, field, value)
+            except NotImplementedError:
+                pass
+
         return super().filter_queryset_field(queryset, field, value)
 
     @extend_schema(

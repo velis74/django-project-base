@@ -27,8 +27,8 @@ class HexColorField(fields.CharField):
 class UserRelatedField(df_fields.PrimaryKeyRelatedField):
     def __init__(
         self,
-        queryset_filter: Optional[Union[Q, Dict[Any]]] = None,
-        queryset_exclude: Optional[Union[Q, Dict[Any]]] = None,
+        queryset_filter: Optional[Union[Q, Dict[str, Any]]] = None,
+        queryset_exclude: Optional[Union[Q, Dict[str, Any]]] = None,
         **kwargs,
     ):
         kwargs["url_reverse"] = "profile-base-project-list"

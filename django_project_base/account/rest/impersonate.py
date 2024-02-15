@@ -39,8 +39,8 @@ class ImpersonateRequestSerializer(serializers.Serializer):
 class ImpersonateUserIdField(django_project_base.base.fields.UserRelatedField):
     def __init__(
         self,
-        queryset_filter: Optional[Union[Q, Dict[Any]]] = None,
-        queryset_exclude: Optional[Union[Q, Dict[Any]]] = None,
+        queryset_filter: Optional[Union[Q, Dict[str, Any]]] = None,
+        queryset_exclude: Optional[Union[Q, Dict[str, Any]]] = None,
         **kwargs,
     ):
         kwargs.setdefault("placeholder", _("Select a user to impersonate"))

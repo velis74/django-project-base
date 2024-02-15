@@ -152,7 +152,7 @@ LOCALE_PATHS = [os.path.abspath(os.path.join(BASE_DIR, "../django_project_base/l
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static/"),
+    # os.path.join(BASE_DIR, "static/"),
     str(BASE_DIR).replace("example", "") + "django_project_base/static/",
 )
 
