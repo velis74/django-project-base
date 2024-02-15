@@ -84,6 +84,9 @@ class BaseProfile(User):
 
     users = property(lambda self: self.get_users())
 
+    def __str__(self):
+        return self.full_name
+
     class Meta:
         abstract = True
 

@@ -67,4 +67,4 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
         if not instance:
             return ""
 
-        return instance.get_full_name()
+        return str(instance)
