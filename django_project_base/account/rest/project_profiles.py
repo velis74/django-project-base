@@ -21,6 +21,7 @@ from rest_framework.utils import model_meta
 
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
 
+from ...base.permissions import IsProjectOwnerOrMemberReadOnly
 from ..middleware import ProjectNotSelectedError
 from .project_profiles_utils import filter_project_members_fields, get_project_members
 
@@ -105,6 +106,7 @@ class ProjectProfilesSerializer(ProfileSerializer):
 
 class ProjectProfilesViewSet(ProfileViewSet):
     serializer_class = ProjectProfilesSerializer
+    permission_classes = (IsProjectOwnerOrMemberReadOnly,)
 
     def get_serializer_class(self):
         return ProjectProfilesSerializer
