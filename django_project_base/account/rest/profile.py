@@ -40,6 +40,7 @@ from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.event import UserRegisteredEvent
+from django_project_base.base.permissions import IsProjectOwner, IsSuperUser
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import (
     EMailNotification,
@@ -572,7 +573,7 @@ class ProfileViewSet(ModelViewSet):
         detail=False,
         url_path="merge",
         url_name="merge",
-        permission_classes=[IsAuthenticated, IsAdminUser],
+        permission_classes=[IsAuthenticated, IsAdminUser | IsSuperUser | IsProjectOwner],
     )
     def merge(self, request: Request, **kwargs) -> Response:
         ser = MergeUserRequest(data=request.data)
