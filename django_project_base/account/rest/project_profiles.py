@@ -21,7 +21,7 @@ from rest_framework.utils import model_meta
 
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
 
-from ...base.permissions import _is_project_owner, _is_superuser, _project_is_selected, IsProjectOwnerOrMemberReadOnly
+from ...base.permissions import is_project_owner, is_superuser, IsProjectOwnerOrMemberReadOnly, project_is_selected
 from ..middleware import ProjectNotSelectedError
 from .project_profiles_utils import filter_project_members_fields, get_project_members
 
@@ -36,7 +36,7 @@ class ProjectProfilesSerializer(ProfileSerializer):
         user = request.user
         project = request.selected_project
 
-        self.user_is_admin = _is_superuser(user) or (_project_is_selected(project) and _is_project_owner(user, project))
+        self.user_is_admin = is_superuser(user) or (project_is_selected(project) and is_project_owner(user, project))
         self.user_is_me = (
             len(args) == 1
             and isinstance(args[0], swapper.load_model("django_project_base", "Profile"))
