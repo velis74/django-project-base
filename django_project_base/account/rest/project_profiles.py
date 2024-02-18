@@ -21,7 +21,7 @@ from rest_framework.utils import model_meta
 
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
 
-from ...base.permissions import IsProjectOwnerOrMemberReadOnly
+from ...base.permissions import _is_project_owner, _is_superuser, _project_is_selected, IsProjectOwnerOrMemberReadOnly
 from ..middleware import ProjectNotSelectedError
 from .project_profiles_utils import filter_project_members_fields, get_project_members
 
@@ -34,7 +34,9 @@ class ProjectProfilesSerializer(ProfileSerializer):
         self.member_fields_read_only = bool(re.findall(r"profile/current", request.path))
 
         user = request.user
-        self.user_is_admin = user.is_superuser
+        project = request.selected_project
+
+        self.user_is_admin = _is_superuser(user) or (_project_is_selected(project) and _is_project_owner(user, project))
         self.user_is_me = (
             len(args) == 1
             and isinstance(args[0], swapper.load_model("django_project_base", "Profile"))
@@ -43,29 +45,22 @@ class ProjectProfilesSerializer(ProfileSerializer):
 
         super().__init__(*args, **kwargs)
 
-        # TODO: this permission check should be replaced by role check
-        from django_project_base.base.permissions import can_user_hijack_another_user
-
-        if can_user_hijack_another_user(request.user, None):
-            self.actions.actions.append(
-                TableAction(
-                    TablePosition.ROW_END,
-                    label=_("Reset password"),
-                    title=_("Reset password"),
-                    name="reset-password",
-                    icon="refresh-outline",
-                ),
-            )
-
-        if request.user.is_superuser or request.user.is_staff:
-            self.actions.actions.append(
-                TableAction(
-                    TablePosition.ROW_END,
-                    label=_("Merge"),
-                    title=_("Merge"),
-                    name="add-to-merge",
-                    icon="git-merge-outline",
-                ),
+        if self.user_is_admin:
+            self.actions.actions.extend(
+                [
+                    TableAction(
+                        TablePosition.ROW_END,
+                        label=_("Reset password"),
+                        name="reset-password",
+                        icon="refresh-outline",
+                    ),
+                    TableAction(
+                        TablePosition.ROW_END,
+                        label=_("Merge"),
+                        name="add-to-merge",
+                        icon="git-merge-outline",
+                    ),
+                ]
             )
 
     def get_fields(self):
