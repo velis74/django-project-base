@@ -16,7 +16,7 @@ from dynamicforms.action import Actions
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
@@ -131,6 +131,7 @@ class ChangePasswordSerializer(df_serializers.Serializer):
 )
 class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ChangePasswordSerializer
+    permission_classes = [AllowAny]
 
     def initialize_request(self, request, *args, **kwargs):
         request = super().initialize_request(request, *args, **kwargs)
@@ -293,9 +294,7 @@ class RegisterReturnSerializer(serializers.Serializer):
                        "Passwords don't match"
                      ],
                      "non_field_errors": []
-                   }""".replace(
-                    "\n", " "
-                ),
+                   }""".replace("\n", " "),
             )
         ),
     },
