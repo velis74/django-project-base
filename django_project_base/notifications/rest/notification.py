@@ -201,7 +201,10 @@ class NotificationSerializer(ModelSerializer):
     )
 
     created_at = ReadOnlyDateTimeFieldFromTs(
-        label=_("Sent"), display_form=DisplayMode.HIDDEN, read_only=True, allow_null=True,
+        label=_("Sent"),
+        display_form=DisplayMode.HIDDEN,
+        read_only=True,
+        allow_null=True,
     )
 
     def get_delivery(self, rec: DjangoProjectBaseNotification):
@@ -211,12 +214,12 @@ class NotificationSerializer(ModelSerializer):
         res = []
         for channel in req_channels:
             if channel in sent_channels:
-                res.append(f"{channel} <span style=\"color: green\">\u2714</span>")
+                res.append(f'{channel} <span style="color: green">\u2714</span>')
             elif channel in failed_channels:
                 title_attr = f"title=\"{rec.exceptions if rec.exceptions else ''}\""
-                res.append(f"{channel} <span style=\"color: red\" {title_attr}>\u2717</span>")
+                res.append(f'{channel} <span style="color: red" {title_attr}>\u2717</span>')
             else:
-                res.append(f"{channel} \u274d")
+                res.append(f"{channel}")
         return ",".join(res)
 
     def to_representation(self, instance, row_data=None):
@@ -321,7 +324,7 @@ class MessageToListField(fields.ListField):
                                         for obj in related_objects
                                         for f in obj._meta.fields
                                         if isinstance(f, ForeignKey)
-                                           and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
+                                        and isinstance(getattr(obj, f.name, object()), (profile_model, user_model))
                                     ],
                                 )
                             )
@@ -425,6 +428,7 @@ class NotificationViewset(ModelViewSet):
 
     def get_serializer_class(self):
         if self.action in ("create", "update"):
+
             class NewMessageSerializer(Serializer):
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
