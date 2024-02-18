@@ -116,6 +116,5 @@ handler
       :consumer="notificationLogic"
       :display-component="ComponentDisplay.TABLE"
     />
-    <ModalView/>
   </div>
 </template>

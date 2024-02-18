@@ -12,7 +12,6 @@
         <APIConsumer :consumer="consumerLogicMerge" :display-component="displayComponent"/>
       </div>
     </div>
-    <ModalView/>
   </div>
 </template>
 
