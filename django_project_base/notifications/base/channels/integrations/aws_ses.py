@@ -89,23 +89,27 @@ class AwsSes(ProviderIntegration):
         pattern = r'<img[^>]*src="(data:image/([^;]+);base64,([^"]+))"[^>]*>'
         content: str = msg["Body"]["Html"]["Data"]
         # make attachements from images and replace
-        embedded: List[str, (str, MIMEImage)] = []
+        embedded: List[str, MIMEImage] = []
         for index, (src, type, data) in enumerate(re.findall(pattern, content)):
             img_name = f"image{index + 1}"
             img_temp = MIMEImage(base64.b64decode(data), type)
-            img_temp.add_header("Content-ID", f"<{img_name}>")
+            img_temp.add_header("Content-ID", f"{img_name}")
             # this looks kinda ugly, but we need all this data to properly deduplicate and write images in
             embedded.append((src, (img_name, img_temp)))
 
+        deduplicated_embedded = dict(embedded).items()
+
         # deduplicate images, replace and register attachments
-        for src, (img_name, img) in dict(embedded).items():
+        for src, (img_name, img) in deduplicated_embedded:
             content = content.replace(src, f"cid:{img_name}")
-            mail.attach(img)
 
         # attach body
         mail.attach(MIMEText(content, "html"))
 
-        # return mail
+        # just to make sure, body comes first, then image
+        for _, (_, img) in deduplicated_embedded:
+            mail.attach(img)
+
         return mail
 
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
