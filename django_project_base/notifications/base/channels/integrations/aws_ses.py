@@ -1,9 +1,10 @@
 import base64
 import re
+
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 import boto3
 
