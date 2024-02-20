@@ -135,7 +135,7 @@ const useUserSessionStore = defineStore('user-session', {
           },
         });
       }
-
+      this.checkLogin(false); // reload the profile because permissions will be different when a project is different
       setCurrentProject(data?.[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
     },
 
