@@ -75,9 +75,13 @@ class IsProjectOwnerOrMemberReadOnly(BasePermission):
         if isinstance(view, ProjectProfilesViewSet):
             # this is a special case for user accounts: any user may write to their own account from anywhere
             # so if the user is trying to access their own account, we allow it, otherwise we run the default check
-            instance = view.get_object()
-            if instance == request.user:
-                return True
+            try:
+                instance = view.get_object()
+                if instance == request.user:
+                    return True
+            except AssertionError:
+                # will except in view.get_object() when the method is not PUT, PATCH, RETRIEVE
+                pass
 
         return (
             is_superuser(request.user)
