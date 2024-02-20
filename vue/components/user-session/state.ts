@@ -35,7 +35,7 @@ const useUserSessionStore = defineStore('user-session', {
   getters: {
     apiEndpointLogin() { return '/account/login'; },
     apiEndpointLogout() { return '/account/logout'; },
-    apiEndpointCurrentProfile() { return '/account/profile/current?decorate=default-project'; },
+    apiEndpointCurrentProfile() { return '/account/profile/current'; },
 
     /**
      * indicates whether we are anonymous or logged in with a registered profile

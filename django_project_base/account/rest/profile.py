@@ -437,14 +437,14 @@ class ProfileViewSet(ModelViewSet):
         user: Model = request.user
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
-        if getattr(request, "GET", None) and request.GET.get("decorate", "") == "default-project":
-            try:
-                response_data["default_project"] = ProjectSerializer(request.selected_project).data
-            except ProjectNotSelectedError:
-                if project_object := ProjectViewSet._get_queryset_for_request(request).first():
-                    response_data["default_project"] = ProjectSerializer(project_object).data
-                else:
-                    response_data["default_project"] = None
+        try:
+            response_data["default_project"] = ProjectSerializer(request.selected_project).data
+        except ProjectNotSelectedError:
+            if project_object := ProjectViewSet._get_queryset_for_request(request).first():
+                response_data["default_project"] = ProjectSerializer(project_object).data
+            else:
+                response_data["default_project"] = None
+
         return Response(response_data)
 
     @extend_schema(
