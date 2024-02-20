@@ -66,6 +66,12 @@ class ProfilePermissionsField(fields.ManyRelatedField):
 
     def to_representation(self, value, row_data=None):
         if row_data and row_data.pk:
+            if implicit_permissions := getattr(settings, "DJANGO_PROJECT_BASE_IMPLICIT_PERMISSIONS_FUNCTION", None):
+                try:
+                    return import_string(implicit_permissions)(row_data, self.context["request"].selected_project)
+                except NotImplementedError:
+                    pass
+
             return [ProfilePermissionsField.to_dict(p) for p in row_data.user_permissions.all()]
         return []
 

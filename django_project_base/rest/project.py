@@ -31,6 +31,7 @@ from django_project_base.base.event import (
     SmsSenderChangedEvent,
 )
 from django_project_base.base.models import BaseProjectSettings
+from django_project_base.base.permissions import CreateAny, IsProjectOwnerOrReadOnly
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.utils import get_pk_name
 
@@ -58,6 +59,7 @@ class ProjectSerializer(ModelSerializer):
 
 class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
+    permission_classes = (IsProjectOwnerOrReadOnly | CreateAny,)
 
     def new_object(self: ModelViewSet):
         new_object = super().new_object()

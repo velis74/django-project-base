@@ -73,6 +73,28 @@ class IsProjectOwnerOrMemberReadOnly(BasePermission):
         )
 
 
+class CreateAny(BasePermission):
+    """
+    Allows POST / create to anyone
+    """
+
+    def has_permission(self, request, view):
+        return request.method == "POST"
+
+
+class IsProjectOwnerOrReadOnly(BasePermission):
+    """
+    Allows access only to project owners.
+    """
+
+    def has_permission(self, request, view):
+        return (
+            is_superuser(request.user)
+            or is_project_owner(request.user, request.selected_project)
+            or (request.method in SAFE_METHODS)
+        )
+
+
 class IsProjectMemberOrAuthenticatedReadOnly(BasePermission):
     """
     Allows access only to project owners.
