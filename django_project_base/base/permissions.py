@@ -34,7 +34,7 @@ def is_project_member(user: BaseProfile, project: BaseProject) -> bool:
     return (
         is_authenticated(user)
         and project_is_selected(project)
-        and (user in project.members.all() or is_project_owner(user, project))
+        and (project.members.filter(member=user).exists() or is_project_owner(user, project))
     )
 
 
