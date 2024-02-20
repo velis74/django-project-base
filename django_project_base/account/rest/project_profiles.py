@@ -101,6 +101,7 @@ class ProjectProfilesSerializer(ProfileSerializer):
 
 class ProjectProfilesViewSet(ProfileViewSet):
     serializer_class = ProjectProfilesSerializer
+    # see special case in the permission class if you need to change the permission class
     permission_classes = (IsProjectOwnerOrMemberReadOnly,)
 
     def get_serializer_class(self):

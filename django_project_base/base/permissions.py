@@ -70,6 +70,15 @@ class IsProjectOwnerOrMemberReadOnly(BasePermission):
     """
 
     def has_permission(self, request, view):
+        from django_project_base.account.rest.project_profiles import ProjectProfilesViewSet
+
+        if isinstance(view, ProjectProfilesViewSet):
+            # this is a special case for user accounts: any user may write to their own account from anywhere
+            # so if the user is trying to access their own account, we allow it, otherwise we run the default check
+            instance = view.get_object()
+            if instance == request.user:
+                return True
+
         return (
             is_superuser(request.user)
             or is_project_owner(request.user, request.selected_project)
