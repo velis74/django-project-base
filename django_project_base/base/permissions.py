@@ -31,7 +31,11 @@ def is_authenticated(user: BaseProfile) -> bool:
 
 
 def is_project_member(user: BaseProfile, project: BaseProject) -> bool:
-    return is_authenticated(user) and project_is_selected(project) and user in project.members.all()
+    return (
+        is_authenticated(user)
+        and project_is_selected(project)
+        and (user in project.members.all() or is_project_owner(user, project))
+    )
 
 
 def is_project_owner(user: BaseProfile, project: BaseProject) -> bool:
