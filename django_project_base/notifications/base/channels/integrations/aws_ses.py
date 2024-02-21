@@ -1,4 +1,10 @@
-from typing import Optional, Union
+import base64
+import re
+
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from typing import List, Optional, Union
 
 import boto3
 
@@ -75,9 +81,43 @@ class AwsSes(ProviderIntegration):
     def enqueue_dlr_request(self, pk: str):
         DeliveryReport.objects.filter(pk=pk).update(status=DeliveryReport.Status.DELIVERED)
 
+    def parse_msg_images(self, msg: dict) -> MIMEMultipart:
+        mail = MIMEMultipart("mixed")
+        mail["Subject"] = msg["Subject"]["Data"]
+
+        # extract embedded images
+        pattern = r'<img[^>]*src="(data:image/([^;]+);base64,([^"]+))"[^>]*>'
+        content: str = msg["Body"]["Html"]["Data"]
+        # make attachements from images and replace
+        embedded: List[str, MIMEImage] = []
+        for index, (src, type, data) in enumerate(re.findall(pattern, content)):
+            img_name = f"image{index + 1}"
+            img_temp = MIMEImage(base64.b64decode(data), type)
+            img_temp.add_header("Content-ID", f"{img_name}")
+            # this looks kinda ugly, but we need all this data to properly deduplicate and write images in
+            embedded.append((src, (img_name, img_temp)))
+
+        deduplicated_embedded = dict(embedded).items()
+
+        # deduplicate images, replace and register attachments
+        for src, (img_name, img) in deduplicated_embedded:
+            content = content.replace(src, f"cid:{img_name}")
+
+        # attach body
+        mail.attach(MIMEText(content, "html"))
+
+        # just to make sure, body comes first, then image
+        for _, (_, img) in deduplicated_embedded:
+            mail.attach(img)
+
+        return mail
+
     def client_send(self, sender: str, recipient: Recipient, msg: dict, dlr_id: str):
         if not recipient.email:
             return
+
+        msg = self.parse_msg_images(msg)
+
         res = (
             boto3.Session(
                 aws_access_key_id=self.key_id,
@@ -85,14 +125,10 @@ class AwsSes(ProviderIntegration):
                 region_name=self.region,
             )
             .client("ses")
-            .send_email(
-                Destination={
-                    "ToAddresses": [recipient.email],
-                    "CcAddresses": [],
-                    "BccAddresses": [],
-                },
-                Message=msg,
+            .send_raw_email(
                 Source=sender,
+                Destinations=[recipient.email],
+                RawMessage={"Data": msg.as_string()},
             )
         )
         self.validate_send(res)
