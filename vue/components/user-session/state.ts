@@ -177,8 +177,8 @@ const useUserSessionStore = defineStore('user-session', {
           const project = this.selectedProject;
           this.$reset();
           this.setSelectedProject(project);
-          this.setUserData(response.data);
         }
+        this.setUserData(response.data);
         return true;
       } catch (error: any) {
         this.$reset();
