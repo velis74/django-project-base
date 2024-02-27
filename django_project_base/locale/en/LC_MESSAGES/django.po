@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-21 09:41+0000\n"
+"POT-Creation-Date: 2024-02-27 08:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,48 +22,64 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-#: django_project_base/account/rest/account.py:221
+#: django_project_base/account/rest/account.py:122
+msgid "Current password"
+msgstr ""
+
+#: django_project_base/account/rest/account.py:123
+msgid "New password"
+msgstr ""
+
+#: django_project_base/account/rest/account.py:124
+msgid "Confirm new password"
+msgstr ""
+
+#: django_project_base/account/rest/account.py:222
 msgid "Code invalid"
 msgstr ""
 
-#: django_project_base/account/rest/account.py:238
-#: django_project_base/account/rest/account.py:242
+#: django_project_base/account/rest/account.py:239
+#: django_project_base/account/rest/account.py:243
 msgid "Email invalid"
 msgstr ""
 
-#: django_project_base/account/rest/account.py:319
+#: django_project_base/account/rest/account.py:318
 msgid "Add new user"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:31
+#: django_project_base/account/rest/impersonate.py:33
 msgid "User ID"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:32
+#: django_project_base/account/rest/impersonate.py:34
 msgid "User email"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:48
+#: django_project_base/account/rest/impersonate.py:46
 msgid "Select a user to impersonate"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:48
+#: django_project_base/account/rest/impersonate.py:47
 msgid "User"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:52
+#: django_project_base/account/rest/impersonate.py:58
+msgid "Impersonate a user"
+msgstr ""
+
+#: django_project_base/account/rest/impersonate.py:63
 msgid "Cancel"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:53
+#: django_project_base/account/rest/impersonate.py:64
 msgid "Impersonate"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:77
+#: django_project_base/account/rest/impersonate.py:88
 msgid "Target user pk"
 msgstr ""
 
-#: django_project_base/account/rest/impersonate.py:101
+#: django_project_base/account/rest/impersonate.py:112
 msgid "Impersonating self is not allowed"
 msgstr ""
 
@@ -86,12 +102,11 @@ msgid "Inviting project member"
 msgstr ""
 
 #: django_project_base/account/rest/invite.py:58
-#: django_project_base/notifications/rest/notification.py:146
+#: django_project_base/notifications/rest/notification.py:142
 msgid "Add"
 msgstr ""
 
 #: django_project_base/account/rest/invite.py:58
-#: django_project_base/notifications/rest/notification.py:147
 msgid "Add new record"
 msgstr ""
 
@@ -109,60 +124,63 @@ msgid "Back to site"
 msgstr ""
 
 #: django_project_base/account/rest/profile.py:119
-#: django_project_base/account/rest/profile.py:121
+msgid "Full name"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:127
+#: django_project_base/account/rest/profile.py:129
 msgid "Specific permissions for this user"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:131
-#: django_project_base/account/rest/profile.py:137
+#: django_project_base/account/rest/profile.py:139
+#: django_project_base/account/rest/profile.py:145
 msgid ""
 "The groups this user belongs to. A user will get all permissions granted to "
 "each of their groups."
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:173
-#: django_project_base/account/rest/profile.py:174
+#: django_project_base/account/rest/profile.py:181
+#: django_project_base/account/rest/profile.py:182
 #: django_project_base/account/rest/profile_merge.py:54
 #: django_project_base/account/rest/profile_merge.py:55
-#: django_project_base/account/rest/project_profiles.py:63
-#: django_project_base/account/rest/project_profiles.py:64
+#: django_project_base/account/rest/project_profiles.py:59
 msgid "Merge"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:184
-#: django_project_base/account/rest/profile.py:185
+#: django_project_base/account/rest/profile.py:192
+#: django_project_base/account/rest/profile.py:193
 msgid "Export"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:224
+#: django_project_base/account/rest/profile.py:236
 msgid "Password"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:225
+#: django_project_base/account/rest/profile.py:237
 msgid "Repeat Password"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:246
+#: django_project_base/account/rest/profile.py:258
 msgid "Password is required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:248
+#: django_project_base/account/rest/profile.py:260
 msgid "Passwords do not match"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:251
+#: django_project_base/account/rest/profile.py:263
 msgid "Email is required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:475
+#: django_project_base/account/rest/profile.py:501
 msgid "Code required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:485
+#: django_project_base/account/rest/profile.py:511
 msgid "Invalid code"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:611
+#: django_project_base/account/rest/profile.py:637
 msgid "Your account was created for you"
 msgstr ""
 
@@ -176,32 +194,31 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:52
 #: django_project_base/account/rest/project_profiles.py:53
 msgid "Reset password"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:176
+#: django_project_base/account/rest/project_profiles.py:174
 msgid "Export users"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:181
+#: django_project_base/account/rest/project_profiles.py:179
 msgid "Template"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:184
+#: django_project_base/account/rest/project_profiles.py:182
 msgid "CSV"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:185
+#: django_project_base/account/rest/project_profiles.py:183
 msgid "XLS"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:189
+#: django_project_base/account/rest/project_profiles.py:187
 msgid "Profile Fields"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:193
+#: django_project_base/account/rest/project_profiles.py:191
 msgid "Print Filter"
 msgstr ""
 
@@ -217,11 +234,11 @@ msgstr ""
 msgid "Project settings action required"
 msgstr ""
 
-#: django_project_base/base/fields.py:19
+#: django_project_base/base/fields.py:22
 msgid "Value is not a hex color (e.g #88f or #8080ff)"
 msgstr ""
 
-#: django_project_base/base/models.py:24 django_project_base/base/models.py:274
+#: django_project_base/base/models.py:24 django_project_base/base/models.py:277
 msgid "Name"
 msgstr ""
 
@@ -229,7 +246,7 @@ msgstr ""
 msgid "Slug"
 msgstr ""
 
-#: django_project_base/base/models.py:26 django_project_base/base/models.py:275
+#: django_project_base/base/models.py:26 django_project_base/base/models.py:278
 msgid "Description"
 msgstr ""
 
@@ -237,7 +254,7 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
-#: django_project_base/base/models.py:29 django_project_base/base/models.py:114
+#: django_project_base/base/models.py:29 django_project_base/base/models.py:117
 msgid "Owner"
 msgstr ""
 
@@ -269,70 +286,70 @@ msgstr ""
 msgid "Delete profile at"
 msgstr ""
 
-#: django_project_base/base/models.py:108
-#: django_project_base/base/models.py:151
+#: django_project_base/base/models.py:111
+#: django_project_base/base/models.py:154
 msgid "Project"
 msgstr ""
 
-#: django_project_base/base/models.py:143
+#: django_project_base/base/models.py:146
 msgid "Color"
 msgstr ""
 
-#: django_project_base/base/models.py:145
+#: django_project_base/base/models.py:148
 msgid "Icon"
 msgstr ""
 
-#: django_project_base/base/models.py:153
+#: django_project_base/base/models.py:156
 msgctxt "A tag name"
 msgid "name"
 msgstr ""
 
-#: django_project_base/base/models.py:155
+#: django_project_base/base/models.py:158
 msgctxt "A tag slug"
 msgid "slug"
 msgstr ""
 
-#: django_project_base/base/models.py:236
+#: django_project_base/base/models.py:239
 msgid "Whole number"
 msgstr ""
 
-#: django_project_base/base/models.py:237
+#: django_project_base/base/models.py:240
 msgid "Decimal number"
 msgstr ""
 
-#: django_project_base/base/models.py:238
+#: django_project_base/base/models.py:241
 msgid "True/False"
 msgstr ""
 
-#: django_project_base/base/models.py:239
+#: django_project_base/base/models.py:242
 msgid "String"
 msgstr ""
 
-#: django_project_base/base/models.py:240
+#: django_project_base/base/models.py:243
 msgid "Custom"
 msgstr ""
 
-#: django_project_base/base/models.py:276
-#: django_project_base/rest/project.py:225
+#: django_project_base/base/models.py:279
+#: django_project_base/rest/project.py:227
 msgid "Value"
 msgstr ""
 
-#: django_project_base/base/models.py:285
+#: django_project_base/base/models.py:288
 msgid "Pending value"
 msgstr ""
 
-#: django_project_base/base/models.py:323
+#: django_project_base/base/models.py:326
 #: django_project_base/notifications/models.py:25
 #: django_project_base/notifications/models.py:46
-#: django_project_base/notifications/models.py:249
+#: django_project_base/notifications/models.py:250
 msgid "Id"
 msgstr ""
 
-#: django_project_base/base/models.py:324
+#: django_project_base/base/models.py:327
 msgid "eMail"
 msgstr ""
 
-#: django_project_base/base/models.py:330
+#: django_project_base/base/models.py:333
 msgid "Invitation message"
 msgstr ""
 
@@ -352,7 +369,7 @@ msgstr ""
 msgid "Error retrieving holidays: {}"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:96
+#: django_project_base/licensing/logic.py:102
 msgid "Your license is consumed. Please contact support."
 msgstr ""
 
@@ -394,7 +411,7 @@ msgid "Send notification via EMail if user has no phone number"
 msgstr ""
 
 #: django_project_base/notifications/models.py:26
-#: django_project_base/notifications/rest/notification.py:172
+#: django_project_base/notifications/rest/notification.py:178
 msgid "Subject"
 msgstr ""
 
@@ -443,19 +460,19 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: django_project_base/notifications/models.py:245
+#: django_project_base/notifications/models.py:246
 msgid "Delivered"
 msgstr ""
 
-#: django_project_base/notifications/models.py:246
+#: django_project_base/notifications/models.py:247
 msgid "Not Delivered"
 msgstr ""
 
-#: django_project_base/notifications/models.py:247
+#: django_project_base/notifications/models.py:248
 msgid "Pending delivery"
 msgstr ""
 
-#: django_project_base/notifications/models.py:258
+#: django_project_base/notifications/models.py:259
 msgid "Auxiliary notification"
 msgstr ""
 
@@ -469,17 +486,33 @@ msgid ""
 msgstr ""
 
 #: django_project_base/notifications/rest/notification.py:125
-#: django_project_base/notifications/rest/notification.py:169
+#: django_project_base/notifications/rest/notification.py:175
 msgid "Recipients"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:153
-#: django_project_base/notifications/rest/notification.py:154
+#: django_project_base/notifications/rest/notification.py:128
+msgid "Delivery"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:143
+msgid "Add new notification"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:149
+#: django_project_base/notifications/rest/notification.py:150
 msgid "View license"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:193
+#: django_project_base/notifications/rest/notification.py:160
+msgid "Send"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:199
 msgid "Send notification SMS"
+msgstr ""
+
+#: django_project_base/notifications/rest/notification.py:204
+msgid "Sent"
 msgstr ""
 
 #: django_project_base/notifications/templates/account_created.html:5
@@ -495,20 +528,20 @@ msgstr ""
 msgid "Have a nice day."
 msgstr ""
 
-#: django_project_base/rest/project.py:164
-#: django_project_base/rest/project.py:172
+#: django_project_base/rest/project.py:166
+#: django_project_base/rest/project.py:174
 msgid "Please enter value"
 msgstr ""
 
-#: django_project_base/rest/project.py:165
+#: django_project_base/rest/project.py:167
 msgid "Email sender value for notifications"
 msgstr ""
 
-#: django_project_base/rest/project.py:173
+#: django_project_base/rest/project.py:175
 msgid "Sms sender value for notifications"
 msgstr ""
 
-#: django_project_base/rest/project.py:387
+#: django_project_base/rest/project.py:389
 msgid "required"
 msgstr ""
 

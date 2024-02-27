@@ -55,7 +55,7 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
     template_context = dict(
         url_reverse="profile-base-impersonate-user", url_reverse_kwargs=None, dialog_header_classes="bg-info"
     )
-    form_titles = {"new": "Impersonate a user"}
+    form_titles = {"new": _("Impersonate a user")}
 
     id = ImpersonateUserIdField()
 

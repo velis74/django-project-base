@@ -119,9 +119,9 @@ class ChangePasswordSerializer(df_serializers.Serializer):
         "edit": "",
     }
 
-    old_password = df_fields.CharField(required=True, password_field=True)
-    password = df_fields.CharField(required=True, password_field=True)
-    password_confirm = df_fields.CharField(required=True, password_field=True)
+    old_password = df_fields.CharField(label=_("Current password"), required=True, password_field=True)
+    password = df_fields.CharField(label=_("New password"), required=True, password_field=True)
+    password_confirm = df_fields.CharField(label=_("Confirm new password"), required=True, password_field=True)
 
     actions = Actions(add_form_buttons=True)
 

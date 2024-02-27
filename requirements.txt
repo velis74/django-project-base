@@ -1,6 +1,6 @@
 django
 djangorestframework
-dynamicforms >= 0.75.4
+dynamicforms >= 0.75.17
 swapper
 django-rest-registration
 drf-spectacular>=0.17.2, <0.26.0

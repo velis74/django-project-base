@@ -3,6 +3,8 @@ node_modules/
 node_libs/
 dist/
 
+*.mo
+
 # Compiled Java class files
 *.class
 

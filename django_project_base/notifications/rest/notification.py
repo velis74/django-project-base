@@ -157,7 +157,7 @@ class NotificationSerializer(ModelSerializer):
         ),
         FormButtonAction(
             btn_type=FormButtonTypes.SUBMIT,
-            label=_("Pošlji"),
+            label=_("Send"),
             name="submit",
         ),
         add_form_buttons=False,
