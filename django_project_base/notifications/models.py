@@ -136,6 +136,11 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
 
     email_fallback = property(_get_email_fallback, _set_email_fallback)
 
+    @property
+    def recipients_raw(self):
+        ids = [int(recipients_id) for recipients_id in self.recipients.split(",")]
+        return swapper.load_model("django_project_base", "Profile").objects.filter(id__in=ids)
+
 
 class SearchItemObject:
     label = ""
