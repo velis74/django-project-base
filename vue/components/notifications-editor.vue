@@ -14,32 +14,17 @@ import {
 } from '../notifications';
 
 const props = defineProps<{
-  consumerUrl: {
-    type: String,
-    required: false,
-  },
-  consumerUrlTrailingSlash: {
-    type: Boolean,
-    required: false,
-  },
-  licenseConsumerUrl: {
-    type: String,
-    required: false,
-  },
-  licenseConsumerUrlTrailingSlash: {
-    type: Boolean,
-    required: false,
-  },
+  consumerUrl?: string,
+  consumerUrlTrailingSlash?: boolean,
+  licenseConsumerUrl?: string,
+  licenseConsumerUrlTrailingSlash?: boolean,
 }>();
 
-const consumerUrl: string = (props.consumerUrl !== undefined ? props.consumerUrl : 'notification') as string;
-const consumerTrailingSlash = (
-    props.consumerUrlTrailingSlash !== undefined ? props.consumerUrlTrailingSlash : true) as boolean;
+const consumerUrl: string = (props.consumerUrl ?? 'notification') as string;
+const consumerTrailingSlash = (props.consumerUrlTrailingSlash ?? true) as boolean;
 
-const licenseConsumerUrl = (
-    props.licenseConsumerUrl !== undefined ? props.licenseConsumerUrl : 'notification-license') as string;
-const licenseConsumerUrlTrailingSlash = (
-    props.licenseConsumerUrlTrailingSlash !== undefined ? props.licenseConsumerUrlTrailingSlash : true) as boolean;
+const licenseConsumerUrl = (props.licenseConsumerUrl ?? 'notification-license') as string;
+const licenseConsumerUrlTrailingSlash = (props.licenseConsumerUrlTrailingSlash ?? true) as boolean;
 
 const notificationLogic = ref(new ConsumerLogicApi(
   consumerUrl,
@@ -105,16 +90,25 @@ handler
   .register('view-license', actionViewLicense)
   .register('add-notification', actionAddNotification);
 
-// TODO: remove linter ignores below when you know how to
+const handlers = {
+  edit: async (action: any, payload: any) => {
+    console.log('K1');
+    await FormConsumerOneShotApi({
+      url: consumerUrl,
+      trailingSlash: licenseConsumerUrlTrailingSlash,
+      pk: payload.id,
+    });
+    return true;
+  },
+};
 </script>
 
 <template>
-  <div class="overflow-y-auto">
-    <!--suppress TypeScriptValidateTypes -->
-    <!-- @vue-ignore -->
-    <APIConsumer
-      :consumer="notificationLogic"
-      :display-component="ComponentDisplay.TABLE"
-    />
-  </div>
+  <!--suppress TypeScriptValidateTypes -->
+  <!-- @vue-ignore -->
+  <APIConsumer
+    :consumer="notificationLogic"
+    :handlers="handlers"
+    :display-component="ComponentDisplay.TABLE"
+  />
 </template>

@@ -50,7 +50,7 @@ class MessageBodyField(fields.RTFField):
     def __init__(self, *args, **kw):
         kw["write_only"] = True
         kw["label"] = _("Body")
-        kw["display_table"] = DisplayMode.HIDDEN
+        kw["display_table"] = DisplayMode.SUPPRESS
         super().__init__(*args, **kw)
         # TODO: if field is write only and not present in model serializer table, field is not rendered
         self.render_params["form_component_name"] = "DCKEditor"
@@ -151,6 +151,7 @@ class NotificationSerializer(ModelSerializer):
             name="view-license",
             icon="card-outline",
         ),
+        TableAction(TablePosition.ROW_CLICK, _("Edit"), title=_("Edit record"), name="edit", icon="pencil-outline"),
         FormButtonAction(
             btn_type=FormButtonTypes.CANCEL,
             name="cancel",
