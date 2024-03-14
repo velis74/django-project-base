@@ -1,6 +1,6 @@
 {
   "name": "@velis/django_project_base",
-  "version": "{version-string}",
+  "version": "0.4.41",
   "private": false,
   "files": [
     "dist/*"
@@ -25,7 +25,7 @@
     "export-pdf": "press-export-pdf --debug export docs"
   },
   "peerDependencies": {
-    "@velis/dynamicforms": "^0.75.17",
+    "@velis/dynamicforms": "^0.75.20",
     "axios": "^1.2.0",
     "lodash": "^4.17.15",
     "pinia": "^2.0.33",
