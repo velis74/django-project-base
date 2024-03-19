@@ -220,7 +220,7 @@ class ProfileSerializer(ModelSerializer):
             Row("phone_number"),
             Row("language"),
             Row("avatar"),
-            columns=2,
+            columns=1,
             size="large",
         )
         responsive_columns = ResponsiveTableLayouts(

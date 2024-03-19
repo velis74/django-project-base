@@ -143,7 +143,6 @@ class ProfileMergeViewSet(ProfileViewSet):
         detail=False,
         url_path="clear",
         url_name="clear",
-        permission_classes=[IsAuthenticated, IsAdminUser],
     )
     def clear(self, request: Request, **kwargs) -> Response:
         MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
