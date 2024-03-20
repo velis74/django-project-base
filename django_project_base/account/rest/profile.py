@@ -394,8 +394,7 @@ class ProfileViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
 
         if get_user_model().objects.filter(email=serializer.validated_data["email"]).exists():
-            # TODO: https://taiga.velis.si/project/velis-django-project-admin/issue/711
-            raise ValidationError()
+            raise ValidationError({"email": _("User with this email already exists.")})
 
         user = serializer.save()
         user.set_password(request.data["password"])
