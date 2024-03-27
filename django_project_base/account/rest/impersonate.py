@@ -16,7 +16,6 @@ from dynamicforms import fields, serializers, viewsets
 from dynamicforms.action import Actions, FormButtonAction, FormButtonTypes
 from hijack.helpers import login_user, release_hijack
 from rest_framework import status
-from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.request import Request
@@ -75,6 +74,21 @@ class ImpersonateUserDialogSerializer(serializers.Serializer):
 class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
     serializer_class = ImpersonateUserDialogSerializer
 
+    def get_permissions(self):
+        if self.action == "destroy":
+            return [
+                IsAuthenticated(),
+            ]
+        elif self.action == "update":
+            return [
+                IsAdminUser(),
+            ]
+        elif self.action == "create":
+            return [
+                IsAdminUser(),
+            ]
+        return super().get_permissions()
+
     def new_object(self):
         return dict(id=None)
 
@@ -94,13 +108,11 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         },
         description="Logout as another user",
     )
-    @permission_classes([IsAuthenticated])
     def destroy(self, request: Request) -> Response:
         release_hijack(request)
         return Response()
 
     @extend_schema(exclude=True)
-    @permission_classes([IsAdminUser])
     def update(self, request: Request, *args, **kwargs) -> Response:
         self._hijack(request=request)
         return Response()
@@ -124,7 +136,6 @@ class ImpersonateUserViewset(viewsets.SingleRecordViewSet):
         },
         description="Login as another user and work on behalf of other user without having to know their credentials",
     )
-    @permission_classes([IsAdminUser])
     def create(self, request: Request, *args, **kwargs) -> Response:
         self._hijack(request=request)
         return Response()
