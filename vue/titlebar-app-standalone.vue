@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import AppNotification from './components/notification.vue';
-import LoginDialog from './components/user-session/login-dialog.vue';
+import DpbApp from './dpb-app.vue';
 </script>
 
 <template>
-  <BrowserCheck :hide-page-if-un-supported-browser="false">
+  <browser-check :hide-page-if-un-supported-browser="false">
     <v-app>
-      <v-app-bar><TitleBar :breadcrumbs-component="null"/></v-app-bar>
+      <v-app-bar><title-bar :breadcrumbs-component="null"/></v-app-bar>
       <v-main>
-        <ModalView/>
-        <LoginDialog/>
+        <dpb-app/>
       </v-main>
       <app-notification/>
     </v-app>
-  </BrowserCheck>
+  </browser-check>
 </template>

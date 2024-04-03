@@ -1,6 +1,5 @@
 import Notifications from '@kyvg/vue3-notification';
 import { createDynamicForms } from '@velis/dynamicforms';
-import type { Component } from '@vue/runtime-core';
 import { createPinia } from 'pinia';
 import { App } from 'vue';
 import 'vuetify/styles/main.css';
@@ -16,6 +15,7 @@ export { default as useLoginDialog } from './components/user-session/use-login-d
 export { showNotification, showGeneralErrorNotification, showMaintenanceNotification } from './notifications';
 export { default as showAddProfileModal } from './profile-search-add-user';
 export * from './dpb-components';
+export { default as DpbApp } from './dpb-app.vue';
 
 type ProjectBaseOptions = {};
 
