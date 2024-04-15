@@ -58,4 +58,5 @@ export interface UserSessionData {
   passwordInvalid: boolean;
   selectedProject?: Project;
   deleteAt: string,
+  superUserCheckStrategy: (state: any, permissionName: string) => boolean,
 }

@@ -31,6 +31,7 @@ const useUserSessionStore = defineStore('user-session', {
       logo: '',
       name: '',
     },
+    superUserCheckStrategy: (state) => state.userData.isSuperUser,
   }),
   getters: {
     apiEndpointLogin() { return '/account/login'; },
@@ -67,7 +68,7 @@ const useUserSessionStore = defineStore('user-session', {
      * returns (a function that tells) whether user has the named permission or not
      */
     userHasPermission: (state) => (permissionName: string): boolean => (
-      state.userData.isSuperUser ||
+      state.superUserCheckStrategy(state, permissionName) ||
         !!state.userData.permissions.find((permission: UserPermissionJSON) => permission.codename === permissionName)
     ),
 
