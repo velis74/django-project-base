@@ -140,8 +140,16 @@ const useUserSessionStore = defineStore('user-session', {
       setCurrentProject(data?.[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]);
     },
 
-    async login(username: string, password: string) {
+    resetData(keepProject: boolean = false) {
+      const sucs = this.superUserCheckStrategy;
+      const project = this.selectedProject;
       this.$reset();
+      if (keepProject) this.setSelectedProject(project);
+      this.superUserCheckStrategy = sucs;
+    },
+
+    async login(username: string, password: string) {
+      this.resetData();
       try {
         const result = await apiClient.post(
           this.apiEndpointLogin,
@@ -164,7 +172,7 @@ const useUserSessionStore = defineStore('user-session', {
       } catch (error: unknown) {
         console.error(error);
       }
-      this.$reset();
+      this.resetData();
       window.location.href = '/';
     },
 
@@ -174,15 +182,11 @@ const useUserSessionStore = defineStore('user-session', {
           this.apiEndpointCurrentProfile,
           { hideErrorNotice: !showNotAuthorizedNotice },
         );
-        if (this.userId !== response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) {
-          const project = this.selectedProject;
-          this.$reset();
-          this.setSelectedProject(project);
-        }
+        if (this.userId !== response.data[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]) this.resetData(true);
         this.setUserData(response.data);
         return true;
       } catch (error: any) {
-        this.$reset();
+        this.resetData();
         if (error?.response?.status) return error.response.status;
         throw error;
       }
