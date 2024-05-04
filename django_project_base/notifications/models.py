@@ -138,7 +138,7 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
 
     @property
     def recipients_raw(self):
-        ids = [int(recipients_id) for recipients_id in self.recipients.split(",")]
+        ids = [int(recipients_id) for recipients_id in self.recipients.split(",")] if self.recipients else []
         return swapper.load_model("django_project_base", "Profile").objects.filter(id__in=ids)
 
 
