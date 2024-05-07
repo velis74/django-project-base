@@ -116,6 +116,7 @@ class LogoutViewSet(viewsets.ViewSet):
     )
     @action(detail=False, methods=["post"], url_name="logout")
     def logout(self, request: Request) -> Response:
+        request._request._dont_enforce_csrf_checks = True
         return logout(request._request)
 
 
