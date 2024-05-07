@@ -90,6 +90,12 @@ class ProjectViewSet(ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         return super().get_serializer(*args, **kwargs)
 
+    def get_permissions(self):
+        if self.action == "get_current_project":
+            return [IsAuthenticated()]
+        else:
+            return super().get_permissions()
+
     @extend_schema(
         description="Get currently selected project",
         responses={
@@ -102,7 +108,6 @@ class ProjectViewSet(ModelViewSet):
         detail=False,
         url_path="current",
         url_name="project-current",
-        permission_classes=[IsAuthenticated],
     )
     def get_current_project(self, request: Request, **kwargs) -> Response:
         try:
@@ -264,9 +269,9 @@ class ProjectSettingsSerializer(ModelSerializer):
     def to_representation(self, instance, row_data=None):
         representation = super().to_representation(instance, row_data)
         if instance and instance.pending_value is not None:
-            representation[
-                "table_value"
-            ] = f"{representation['value']} ({gettext('Pending')}: {instance.python_pending_value})"
+            representation["table_value"] = (
+                f"{representation['value']} ({gettext('Pending')}: {instance.python_pending_value})"
+            )
         return representation
 
     class Meta:

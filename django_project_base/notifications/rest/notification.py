@@ -352,13 +352,18 @@ class NotificationViewset(ModelViewSet):
     ]
     permission_classes = [IsAuthenticated]
 
+    def get_permissions(self):
+        if self.action in ("notification_login", "notification_view"):
+            return []
+        else:
+            return super().get_permissions()
+
     @extend_schema(exclude=True)
     @action(
         detail=True,
         methods=["GET"],
         url_name="notification-login",
         url_path="info",
-        permission_classes=[],
         authentication_classes=[],
     )
     def notification_login(self, request, pk=None) -> HttpResponse:
@@ -381,7 +386,6 @@ class NotificationViewset(ModelViewSet):
         methods=["POST"],
         detail=False,
         url_name="notification-view",
-        permission_classes=[],
         authentication_classes=[],
         url_path="info-view",
     )

@@ -10,7 +10,6 @@ from dynamicforms.action import Actions, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -93,6 +92,12 @@ class ProjectUserInviteViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = ProjectUserInviteSerializer
 
+    def get_permissions(self):
+        if self.action == "accept":
+            return [IsAuthenticated()]
+        else:
+            return super().get_permissions()
+
     def get_queryset(self):
         project = self.request.selected_project
         try:
@@ -155,14 +160,7 @@ class ProjectUserInviteViewSet(ModelViewSet):
         return super().list(request, *args, **kwargs)
 
     @extend_schema(exclude=True)
-    @action(
-        methods=["GET"],
-        detail=True,
-        permission_classes=[],
-        authentication_classes=[SessionAuthentication],
-        url_name="accept",
-        url_path="accept",
-    )
+    @action(methods=["GET"], detail=True, url_name="accept", url_path="accept")
     def accept(self, request: Request, pk: str, *args, **kwargs) -> HttpResponse:
         invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=pk)
         response = HttpResponseRedirect(get_host_url(request))

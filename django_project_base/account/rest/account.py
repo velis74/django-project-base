@@ -49,6 +49,14 @@ class SocialAuthSerializer(ModelSerializer):
 
 
 class SocialAuthProvidersViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        if self.action == "social_auth_providers":
+            return []
+        elif self.action == "social_auth_providers_user":
+            return [IsAuthenticated()]
+        else:
+            return super().get_permissions()
+
     @extend_schema(
         responses={
             status.HTTP_200_OK: OpenApiResponse(description="OK"),
@@ -59,7 +67,6 @@ class SocialAuthProvidersViewSet(viewsets.ViewSet):
         methods=["get"],
         url_path="social-auth-providers",
         url_name="social-auth-providers",
-        permission_classes=[],
         authentication_classes=[],
     )
     def social_auth_providers(self, request: Request) -> Response:
@@ -75,7 +82,6 @@ class SocialAuthProvidersViewSet(viewsets.ViewSet):
         methods=["get"],
         url_path="social-auth-providers-user",
         url_name="social-auth-providers-user",
-        permission_classes=[IsAuthenticated],
     )
     def social_auth_providers_user(self, request: Request) -> Response:
         return Response(SocialAuthSerializer(UserSocialAuth.objects.filter(user=self.request.user), many=True).data)
@@ -88,6 +94,12 @@ class LogoutSerializer(serializers.Serializer):
 class LogoutViewSet(viewsets.ViewSet):
     serializer_class = LogoutSerializer
 
+    def get_permissions(self):
+        if self.action == "logout":
+            return [IsAuthenticated()]
+        else:
+            return super().get_permissions()
+
     @extend_schema(
         description="Logs out the user. Returns an error if the user is not authenticated. "
         "If revoke_token is provided, revokes the given token for a given user. If the token is not  "
@@ -97,12 +109,7 @@ class LogoutViewSet(viewsets.ViewSet):
             status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not authorised"),
         },
     )
-    @action(
-        detail=False,
-        methods=["post"],
-        url_name="logout",
-        permission_classes=[IsAuthenticated],
-    )
+    @action(detail=False, methods=["post"], url_name="logout")
     def logout(self, request: Request) -> Response:
         return logout(request._request)
 
@@ -188,6 +195,12 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
 
 
 class VerifyRegistrationViewSet(viewsets.ViewSet):
+    def get_permissions(self):
+        if self.action == "verify_registration":
+            return []
+        else:
+            return super().get_permissions()
+
     @extend_schema(
         description="Verify registration with signature. The endpoint will generate an e-mail with a confirmation URL "
         "which the user should GET to confirm the account.",
@@ -201,7 +214,6 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
         methods=["post"],
         url_path="verify-registration",
         url_name="verify-registration",
-        permission_classes=[],
     )
     def verify_registration(self, request: Request) -> Response:
         if (

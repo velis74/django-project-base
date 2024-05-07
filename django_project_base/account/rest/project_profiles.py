@@ -15,6 +15,7 @@ from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.viewsets import SingleRecordViewSet
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.utils import model_meta
@@ -200,6 +201,12 @@ class ProfileExportSerializer(serializers.Serializer):
 class ProfileExportViewSet(SingleRecordViewSet):
     serializer_class = ProfileExportSerializer
 
+    def get_permissions(self):
+        if self.action == "download":
+            return [IsAuthenticated()]
+        else:
+            return super().get_permissions()
+
     def new_object(self):
         filter_data = self.request.query_params.get("filter_data", None)
         if filter_data:
@@ -225,13 +232,7 @@ class ProfileExportViewSet(SingleRecordViewSet):
 
         return Response(data)
 
-    @action(
-        methods=["POST"],
-        detail=False,
-        url_path="download",
-        url_name="profile-export-download",
-        permission_classes=[],
-    )
+    @action(methods=["POST"], detail=False, url_path="download", url_name="profile-export-download")
     def download(self, request: Request, **kwargs):
         profile_serializer = ProjectProfilesSerializer(None, context=self.get_serializer_context(), data=request.data)
         visible_profile_fields = {

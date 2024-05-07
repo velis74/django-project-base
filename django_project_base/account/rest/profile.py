@@ -30,7 +30,7 @@ from rest_framework import exceptions, filters, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.fields import IntegerField
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
@@ -40,7 +40,7 @@ from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.event import UserRegisteredEvent
-from django_project_base.base.permissions import IsProjectOwner, IsSuperUser
+from django_project_base.base.permissions import IsProjectOwner
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import (
     EMailNotification,
@@ -296,6 +296,20 @@ class ProfileViewSet(ModelViewSet):
     permission_classes = (ProfileViewPermissions,)
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
 
+    def get_permissions(self):
+        if self.action == "register_account":
+            return []
+        elif self.action == "get_current_profile":
+            return [IsAuthenticated()]
+        elif self.action == "merge_accounts":
+            return [IsAuthenticated()]
+        elif self.action == "merge":
+            return [IsAuthenticated(), IsProjectOwner()]
+        elif self.action == "reset_user_data":
+            return [IsAuthenticated()]
+        else:
+            return super().get_permissions()
+
     def get_queryset(self):
         return get_project_members(self.request)
 
@@ -358,7 +372,6 @@ class ProfileViewSet(ModelViewSet):
         detail=False,
         url_path="register",
         url_name="profile-register",
-        permission_classes=[],
     )
     def register_account(self, request: Request, **kwargs):
         register_flow_identifier = str(uuid.uuid4())
@@ -435,7 +448,6 @@ class ProfileViewSet(ModelViewSet):
         detail=False,
         url_path="current",
         url_name="profile-current",
-        permission_classes=[IsAuthenticated],
     )
     def get_current_profile(self, request: Request, **kwargs) -> Response:
         user: Model = request.user
@@ -544,13 +556,7 @@ class ProfileViewSet(ModelViewSet):
         raise exceptions.PermissionDenied
 
     @extend_schema(exclude=True)
-    @action(
-        methods=["POST"],
-        detail=False,
-        url_path="merge-accounts",
-        url_name="merge-accounts",
-        permission_classes=[IsAuthenticated],
-    )
+    @action(methods=["POST"], detail=False, url_path="merge-accounts", url_name="merge-accounts")
     def merge_accounts(self, request, *args, **kwargs):
         from rest_registration.settings import registration_settings
 
@@ -583,7 +589,6 @@ class ProfileViewSet(ModelViewSet):
         detail=False,
         url_path="merge",
         url_name="merge",
-        permission_classes=[IsAuthenticated, IsAdminUser | IsSuperUser | IsProjectOwner],
     )
     def merge(self, request: Request, **kwargs) -> Response:
         ser = MergeUserRequest(data=request.data)
@@ -600,7 +605,6 @@ class ProfileViewSet(ModelViewSet):
         detail=False,
         url_path="reset-user-data",
         url_name="reset-user-data",
-        permission_classes=[IsAuthenticated],
     )
     @transaction.atomic()
     def reset_user_data(self, request: Request, **kwargs) -> Response:

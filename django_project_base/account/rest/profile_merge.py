@@ -105,6 +105,12 @@ class ProfileMergeViewSet(ProfileViewSet):
     def get_serializer_class(self):
         return ProfileMergeSerializer
 
+    def get_permissions(self):
+        if self.action == "clear":
+            return [IsAuthenticated(), IsAdminUser()]
+        else:
+            return super().get_permissions()
+
     @transaction.atomic
     def create(self, request: Request, *args, **kwargs) -> Response:
         MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
@@ -138,13 +144,7 @@ class ProfileMergeViewSet(ProfileViewSet):
     def partial_update(self, request, *args, **kwargs):
         raise APIException(code=status.HTTP_501_NOT_IMPLEMENTED)
 
-    @action(
-        methods=["DELETE"],
-        detail=False,
-        url_path="clear",
-        url_name="clear",
-        permission_classes=[IsAuthenticated, IsAdminUser],
-    )
+    @action(methods=["DELETE"], detail=False, url_path="clear", url_name="clear")
     def clear(self, request: Request, **kwargs) -> Response:
         MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
 
