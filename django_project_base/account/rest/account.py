@@ -100,6 +100,11 @@ class LogoutViewSet(viewsets.ViewSet):
         else:
             return super().get_permissions()
 
+    def initialize_request(self, request, *args, **kwargs):
+        request = super().initialize_request(request, *args, **kwargs)
+        request._dont_enforce_csrf_checks = True
+        return request
+
     @extend_schema(
         description="Logs out the user. Returns an error if the user is not authenticated. "
         "If revoke_token is provided, revokes the given token for a given user. If the token is not  "
