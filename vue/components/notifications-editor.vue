@@ -2,7 +2,7 @@
 import {
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerOneShotApi, gettext,
+  ConsumerLogicApi, FormConsumerOneShotApi, gettext, RowTypes,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -91,8 +91,8 @@ handler
   .register('add-notification', actionAddNotification);
 
 const handlers = {
-  edit: async (action: any, payload: any) => {
-    console.log('K1');
+  edit: async (action: any, payload: any, context: { rowType: RowTypes }) => {
+    if (context.rowType !== RowTypes.Data || payload == undefined) return false; // eslint-disable-line eqeqeq
     await FormConsumerOneShotApi({
       url: consumerUrl,
       trailingSlash: licenseConsumerUrlTrailingSlash,
