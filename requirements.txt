@@ -1,6 +1,6 @@
 django
 djangorestframework
-dynamicforms >= 0.75.25
+dynamicforms>=0.75.25
 swapper
 django-rest-registration
 drf-spectacular>=0.17.2, <0.26.0
@@ -15,9 +15,9 @@ django-csp
 requests
 boto3
 natural
-celery==5.2.7
+celery>=5.2
 django-redis-cache
 pandas
-click==8.1.7
+click>=8.1
 ruff
 ruff-lsp

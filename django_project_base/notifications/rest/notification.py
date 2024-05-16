@@ -23,6 +23,7 @@ from dynamicforms.mixins import DisplayMode, F
 from dynamicforms.mixins.conditional_visibility import Operators, Statement
 from dynamicforms.serializers import ModelSerializer, Serializer
 from dynamicforms.template_render.layout import Column, Layout, Row
+from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet, SingleRecordViewSet
 from rest_framework import status
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
@@ -253,12 +254,24 @@ class NotificationSerializer(ModelSerializer):
         )
         layout = Layout(
             Row(Column("message_to")),
-            Row(
-                Column("message_subject"),
-            ),
+            Row(Column("message_subject")),
             Row(Column("message_body")),
             Row(Column("send_on_channels")),
             size="large",
+        )
+        responsive_columns = ResponsiveTableLayouts(
+            auto_generate_single_row_layout=True,
+            auto_generate_single_column_layout=False,
+            layouts=[
+                ResponsiveTableLayout(
+                    "subject", "recipients_original_payload", "created_at", auto_add_non_listed_columns=False
+                ),
+                ResponsiveTableLayout(
+                    [["subject", "created_at"], "recipients_original_payload"], auto_add_non_listed_columns=False
+                ),
+                ResponsiveTableLayout("subject", "created_at", auto_add_non_listed_columns=False),
+                ResponsiveTableLayout(["subject", "created_at"], auto_add_non_listed_columns=False),
+            ],
         )
 
 

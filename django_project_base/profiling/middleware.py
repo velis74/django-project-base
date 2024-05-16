@@ -81,10 +81,10 @@ class ProfileRequest(object):
         self._do_profile(self.response, self._start_time, self._end_time)
 
     def _set_profiling_path(self, path_info, query_string):
-        threading.currentThread().profiling_path = (path_info, query_string)
+        threading.current_thread().profiling_path = (path_info, query_string)
 
     def _get_profiling_path(self) -> tuple:
-        return threading.currentThread().profiling_path
+        return threading.current_thread().profiling_path
 
     def _get_path_info(self, path: str, params: Optional[str] = None):
         original_path = path

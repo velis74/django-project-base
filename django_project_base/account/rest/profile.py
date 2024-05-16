@@ -226,9 +226,11 @@ class ProfileSerializer(ModelSerializer):
         )
         responsive_columns = ResponsiveTableLayouts(
             auto_generate_single_row_layout=True,
+            auto_generate_single_column_layout=False,
             layouts=[
-                ResponsiveTableLayout(auto_add_non_listed_columns=True),
                 ResponsiveTableLayout("full_name", "email", "#actions-row_end", auto_add_non_listed_columns=False),
+                ResponsiveTableLayout("full_name", "#actions-row_end", auto_add_non_listed_columns=False),
+                ResponsiveTableLayout(["full_name", "#actions-row_end"], auto_add_non_listed_columns=False),
             ],
         )
 
