@@ -4,7 +4,6 @@ import pytz
 import swapper
 
 from django.conf import settings
-from django.core.cache import cache
 from django.db import models
 from django.db.models import Case, CharField, Prefetch, QuerySet, Value, When
 from django.db.models.functions import Coalesce, Concat
@@ -21,7 +20,6 @@ from django.utils.timezone import datetime, now, timedelta
 from dynamicforms import fields
 from rest_framework.request import Request
 
-from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 
 
@@ -71,15 +69,12 @@ def get_project_members(request: Request, project=None) -> QuerySet:
 
     if request.query_params.get("remove-merge-users", "false") in fields.BooleanField.TRUE_VALUES:
         MergeUserGroup = swapper.load_model("django_project_base", "MergeUserGroup")
-        exclude_qs = list(
-            map(
-                str,
-                list(MergeUserGroup.objects.filter(created_by=request.user.pk).values_list("users", flat=True))
-                + cache.get(MERGE_USERS_QS_CK % request.user.pk, []),  # noqa: W503
-            )
-        )
+        exclude_qs = set()
+        for mgu in MergeUserGroup.objects.filter(created_by=request.user.pk).values_list("users", flat=True).all():
+            if mgu and mgu.split(","):
+                exclude_qs.update(map(int, mgu.split(",")))
         if exclude_qs:
-            qs = qs.exclude(pk__in=map(int, exclude_qs))
+            qs = qs.exclude(pk__in=exclude_qs)
 
     qs = qs.order_by("un", "id")
     return qs.distinct()
