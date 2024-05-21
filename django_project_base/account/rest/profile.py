@@ -455,10 +455,16 @@ class ProfileViewSet(ModelViewSet):
         user: Model = request.user
         serializer = self.get_serializer(user)
         response_data: dict = serializer.data
+        cache_key = f"user-current-project-{user.pk}"
         try:
             response_data["default_project"] = ProjectSerializer(request.selected_project).data
+            cache.set(cache_key, request.selected_project.pk, timeout=None)
         except ProjectNotSelectedError:
-            if project_object := ProjectViewSet._get_queryset_for_request(request).first():
+            q = ProjectViewSet._get_queryset_for_request(request)
+            previously_selected_project_pk = cache.get(cache_key)
+            if project_object := q.filter(pk=previously_selected_project_pk).first():
+                response_data["default_project"] = ProjectSerializer(project_object).data
+            elif project_object := q.first():
                 response_data["default_project"] = ProjectSerializer(project_object).data
             else:
                 response_data["default_project"] = None

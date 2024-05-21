@@ -119,7 +119,10 @@ const useUserSessionStore = defineStore('user-session', {
         deleteAt: data?.delete_at,
         passwordInvalid: data?.password_invalid,
       });
-      if (!this.selectedProject && data?.default_project) {
+      if (
+        !this.selectedProject?.[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME] &&
+        data?.default_project?.[PROJECT_TABLE_PRIMARY_KEY_PROPERTY_NAME]
+      ) {
         this.setSelectedProject(data?.default_project);
       }
     },
