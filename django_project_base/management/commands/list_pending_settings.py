@@ -1,7 +1,5 @@
 import json
 
-from gettext import gettext
-
 import swapper
 
 from django.conf import settings
@@ -32,7 +30,7 @@ class Command(BaseCommand):
         if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])) and result:
             SystemEMailNotificationWithListOfEmails(
                 message=DjangoProjectBaseMessage(
-                    subject=gettext("Pending settings report"),
+                    subject="Pending settings report",
                     body=json.dumps(result),
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,

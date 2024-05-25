@@ -88,7 +88,7 @@ watch(() => userSession.loggedIn, () => { loadData(); });
           <v-img :src="project.logo" class="project-link-image"/>{{ project.name }}
         </v-list-item>
         <v-divider/>
-        <v-list-item v-if="userSession.userHasPermission('add-project')" @click="addNewProject">
+        <v-list-item @click="addNewProject">
           {{ gettext('Add new project') }}
         </v-list-item>
       </v-list>

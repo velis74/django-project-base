@@ -2,7 +2,6 @@ import json
 import logging
 import uuid
 
-from gettext import gettext
 from typing import Optional
 
 from django.utils.module_loading import import_string
@@ -31,7 +30,7 @@ class DeliveryReportViewSet(viewsets.ViewSet):
             try:
                 uuid.UUID(uid)
             except ValueError:
-                raise ValidationError(ErrorDetail(string="Invalid identifier", code=gettext("invalid")))
+                raise ValidationError(ErrorDetail(string="Invalid identifier", code="invalid"))
             return uid
         logger = logging.getLogger("django")
         logger.exception(

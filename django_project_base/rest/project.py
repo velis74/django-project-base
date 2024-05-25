@@ -10,6 +10,7 @@ from django.core.management import call_command
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext as _
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields
 from dynamicforms.action import TableAction, TablePosition
@@ -38,6 +39,7 @@ from django_project_base.utils import get_pk_name
 
 class ProjectSerializer(ModelSerializer):
     template_context = dict(url_reverse="project-base-project")
+    form_titles = {"table": _("Projects"), "new": _("New project"), "edit": _("Edit project")}
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
