@@ -74,9 +74,9 @@ class OrginalRecipientsField(fields.CharField):
             )
             if (
                 self.parent
-                and self.parent.instance  # noqa: W503
-                and not isinstance(self.parent.instance, QuerySet)  # noqa: W503
-                and not self.parent.instance.recipients_original_payload_search  # noqa: W503
+                and self.parent.instance
+                and not isinstance(self.parent.instance, QuerySet)
+                and not self.parent.instance.recipients_original_payload_search
             ):
                 self.parent.instance.recipients_original_payload_search = search_str
                 self.parent.instance.save(update_fields=["recipients_original_payload_search"])
@@ -106,6 +106,7 @@ class ReadOnlyDateTimeFieldFromTs(fields.DateTimeField):
 
 class NotificationSerializer(ModelSerializer):
     template_context = dict(url_reverse="notification")
+    form_titles = {"table": _("Messages"), "edit": _("New message")}
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -181,6 +182,7 @@ class NotificationSerializer(ModelSerializer):
     message_body = MessageBodyField()
 
     send_on_channels = fields.MultipleChoiceField(
+        label=_("Send on channels"),
         allow_empty=False,
         display_table=DisplayMode.SUPPRESS,
         display_form=DisplayMode.FULL,
@@ -364,6 +366,7 @@ class NotificationViewset(ModelViewSet):
         TokenAuthentication,
     ]
     permission_classes = [IsAuthenticated]
+    pagination_class = ModelViewSet.generate_paged_loader(ordering=["-created_at"])
 
     def get_permissions(self):
         if self.action in ("notification_login", "notification_view"):
@@ -448,10 +451,13 @@ class NotificationViewset(ModelViewSet):
         if self.action in ("create", "update"):
 
             class NewMessageSerializer(Serializer):
+                form_titles = {"edit": _("New message")}
+
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
                 message_to = MessageToListField(allow_null=False, allow_empty=False)
                 send_on_channels = fields.ListField(
+                    label=_("Send on channels"),
                     child=fields.CharField(),
                     required=True,
                     display_table=DisplayMode.SUPPRESS,
