@@ -68,6 +68,7 @@ class CacheQueue(ABC):
     @staticmethod
     def get_cache_queue(key, cache_name="default", timeout=-1):
         backend_path = settings.CACHES[cache_name]["BACKEND"]
+
         if CacheQueue.is_redis_cache_backend(backend_path):
             from django_project_base.caching.cache_queue.cache_queue_redis import CacheQueueRedis
 
