@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 from django.conf import settings
-from django.core.cache import caches
+from django.core.cache import cache, caches
 
 
 class CacheQueue(ABC):
@@ -22,19 +23,19 @@ class CacheQueue(ABC):
         pass
 
     @abstractmethod
-    def rpush(self, payload):
+    def rpush(self, *values):
         pass
 
     @abstractmethod
-    def lpush(self, payload):
+    def lpush(self, *values):
         pass
 
     @abstractmethod
-    def lpop(self):
+    def lpop(self, count: Optional[int] = None):
         pass
 
     @abstractmethod
-    def rpop(self):
+    def rpop(self, count: Optional[int] = None):
         pass
 
     @abstractmethod
@@ -57,18 +58,22 @@ class CacheQueue(ABC):
         self.cache.touch(self.key, self.timeout)
 
     @staticmethod
-    def is_redis_cache_backend(backend_path):
-        from django.utils.module_loading import import_string
-        from django_redis.cache import RedisCache
+    def is_redis_cache_backend(cache_name):
+        cache_key = f"redis_cache_backend_{cache_name}"
+        is_redis_backend = cache.get(cache_key, None)
+        if is_redis_backend is None:
+            from django.utils.module_loading import import_string
+            from django_redis.cache import RedisCache
 
-        backend_class = import_string(backend_path)
-        is_redis_based = issubclass(backend_class, RedisCache)
-        return is_redis_based
+            backend_path = settings.CACHES[cache_name]["BACKEND"]
+            backend_class = import_string(backend_path)
+            is_redis_backend = issubclass(backend_class, RedisCache)
+            cache.set(cache_key, is_redis_backend)
+        return is_redis_backend
 
     @staticmethod
     def get_cache_queue(key, cache_name="default", timeout=-1):
-        backend_path = settings.CACHES[cache_name]["BACKEND"]
-        if CacheQueue.is_redis_cache_backend(backend_path):
+        if CacheQueue.is_redis_cache_backend(cache_name):
             from django_project_base.caching.cache_queue.cache_queue_redis import CacheQueueRedis
 
             return CacheQueueRedis(key, cache_name=cache_name, timeout=timeout)

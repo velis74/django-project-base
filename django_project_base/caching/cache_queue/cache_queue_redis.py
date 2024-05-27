@@ -1,28 +1,29 @@
+from typing import Optional
+
 from django_redis import get_redis_connection
 
 from django_project_base.caching.cache_queue import CacheQueue
 
 
 class CacheQueueRedis(CacheQueue):
-
     def set_cache(self):
         self.cache = get_redis_connection(self.cache_name)
 
-    def rpush(self, payload):
-        self.cache.rpush(self.key, payload)
+    def rpush(self, *payload):
+        self.cache.rpush(self.key, *payload)
         self.update_timeout()
 
-    def lpush(self, payload):
-        self.cache.lpush(self.key, payload)
+    def lpush(self, *payload):
+        self.cache.lpush(self.key, *payload)
         self.update_timeout()
 
-    def rpop(self):
-        ret = self.cache.rpop(self.key)
+    def rpop(self, count: Optional[int] = None):
+        ret = self.cache.rpop(self.key, count)
         self.update_timeout()
         return ret
 
-    def lpop(self):
-        ret = self.cache.lpop(self.key)
+    def lpop(self, count: Optional[int] = None):
+        ret = self.cache.lpop(self.key, count)
         self.update_timeout()
         return ret
 
