@@ -12,6 +12,9 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db import connections
 
+from django_project_base.caching import CacheCounter
+from django_project_base.caching.cache_queue import CacheQueue
+
 DEFAULT_MAX_LOG_FILE_SIZE = 10000000
 MAX_DATA_LOGGING_FILE_SIZE = 3000000
 
@@ -19,25 +22,6 @@ MATCH_DETAIL_QUERIES = re.compile(r'(rest/\w+)/((?:[0-9a-f]{8}(?:-[0-9a-f]{4}){3
                                   r'(?:(?:[0-9a-f]{2}:){5}[0-9a-f]{2})|\d+)(/.*)?')
 
 
-class CacheLock(object):
-
-    def __init__(self, name):
-        self.name = 'CacheLock.' + name
-
-    def __enter__(self):
-        while True:
-            cache.add(self.name, 0)
-            try:
-                res = cache.incr(self.name, 1)
-            except ValueError:
-                # This happens if another thread just deleted the cache entry after our .add and before our .incr
-                res = 0
-            if res == 1:
-                break
-            time.sleep(.1)
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        cache.delete(self.name)
 
 
 class ProfileRequest(object):
@@ -111,7 +95,7 @@ class ProfileRequest(object):
     def _get_queries(self, response):
         try:
             if (response == 'ok' or response.status_code == 200) and hasattr(
-                    settings, 'PROFILER_LONG_RUNNING_TASK_THRESHOLD'):
+                settings, 'PROFILER_LONG_RUNNING_TASK_THRESHOLD'):
                 query_list = []
                 for c in connections:
                     con = connections[c]
@@ -138,17 +122,15 @@ class ProfileRequest(object):
                                       'PATH_INFO': path_info}
                             r_data.update({i: str(self._settings[i])
                                            for i in ('HTTP_HOST', 'REQUEST_METHOD', 'QUERY_STRING')})
-                            with CacheLock('long_running_cmds'):
-                                cache_ptr = (cache.get('long_running_cmds_pointer', -1) + 1) % 50
-                                cache.set('long_running_cmds_pointer', cache_ptr, timeout=86400)
+                            cache_ptr = CacheCounter('long_running_cmds_pointer', timeout=86400).incr(start=-1) % 50
+
                             cache.set('long_running_cmds_data%d' % cache_ptr, r_data, timeout=86400)
-                        with CacheLock('last_hour_running_cmds'):
-                            r_data = (path_info, duration[0],
-                                      duration[1], duration[2])
-                            # get cache entries in the last 10 seconds
-                            cache_ptr = cache.get('last_hour_running_cmds%d' % (int(time.time()) // 10), [])
-                            cache_ptr.append(r_data)
-                            cache.set('last_hour_running_cmds%d' % (int(time.time()) // 10), cache_ptr, timeout=3600)
+
+                        r_data = [path_info, duration[0], duration[1], duration[2]]
+                        last_hour_running_cmds_key = f"last_hour_running_cmds{int(time.time()) // 10}"
+                        last_hour_running_cmds_queue = CacheQueue.get_cache_queue(last_hour_running_cmds_key,
+                                                                                  timeout=3600)
+                        last_hour_running_cmds_queue.rpush(json.dumps(r_data))
 
                     req_data = dict(
                         code=getattr(response, 'status_code', None),
@@ -184,7 +166,7 @@ class ProfileRequest(object):
                             f.write(json.dumps(req_data) + "\n")
                     else:
                         if os.path.getsize(
-                                "/tmp/wsgi_performance.txt.%d" % max_file) > MAX_DATA_LOGGING_FILE_SIZE:
+                            "/tmp/wsgi_performance.txt.%d" % max_file) > MAX_DATA_LOGGING_FILE_SIZE:
                             with open("/tmp/wsgi_performance.txt.%d" % (max_file + 1), "a") as f:
                                 f.write(json.dumps(req_data) + "\n")
                         else:
