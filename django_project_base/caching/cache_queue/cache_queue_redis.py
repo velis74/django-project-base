@@ -9,12 +9,12 @@ class CacheQueueRedis(CacheQueue):
     def set_cache(self):
         self.cache = get_redis_connection(self.cache_name)
 
-    def rpush(self, *payload):
-        self.cache.rpush(self.key, *payload)
+    def rpush(self, *values):
+        self.cache.rpush(self.key, *values)
         self.update_timeout()
 
-    def lpush(self, *payload):
-        self.cache.lpush(self.key, *payload)
+    def lpush(self, *values):
+        self.cache.lpush(self.key, *values)
         self.update_timeout()
 
     def rpop(self, count: Optional[int] = None):
