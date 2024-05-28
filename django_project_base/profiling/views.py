@@ -1,3 +1,4 @@
+import json
 import random
 
 from datetime import datetime
@@ -6,6 +7,7 @@ from django.core.cache import cache
 from django.shortcuts import render
 from dynamicforms.struct import Struct
 
+from django_project_base.caching.cache_queue import CacheQueue
 from django_project_base.settings import PROFILER_LOG_LONG_REQUESTS_COUNT
 
 
@@ -68,8 +70,11 @@ def __get_debug_data():
 
     totals = {}
     for interval in range(int((time.time()) - 3600) // 10, int(time.time()) // 10 + 1):
-        cache_ptr = cache.get("last_hour_running_cmds%d" % interval, [])
-        for item in cache_ptr:
+        last_hour_running_cmds_key = f"last_hour_running_cmds{interval}"
+        last_hour_running_cmds_queue = CacheQueue.get_cache_queue(last_hour_running_cmds_key, timeout=3600)
+
+        cache_ptr = last_hour_running_cmds_queue.lrange()
+        for item in [json.loads(item) for item in cache_ptr]:
             totals.setdefault(item[0], Struct(count=0, wall_time=0, path="", user_time=0, sys_time=0, cpu_time=0))
             total = totals[item[0]]
             total.count += 1
