@@ -6,6 +6,7 @@ import re
 import socket
 import threading
 import time
+
 from typing import Optional
 
 from django.conf import settings
@@ -21,9 +22,6 @@ MAX_DATA_LOGGING_FILE_SIZE = 3000000
 MATCH_DETAIL_QUERIES = re.compile(
     r"(rest/\w+)/((?:[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12})|" r"(?:(?:[0-9a-f]{2}:){5}[0-9a-f]{2})|\d+)(/.*)?"
 )
-
-
-
 
 
 class ProfileRequest(object):
@@ -133,14 +131,15 @@ class ProfileRequest(object):
                             r_data.update(
                                 {i: str(self._settings[i]) for i in ("HTTP_HOST", "REQUEST_METHOD", "QUERY_STRING")}
                             )
-                            cache_ptr = CacheCounter('long_running_cmds_pointer', timeout=86400).incr(start=-1) % 50
+                            cache_ptr = CacheCounter("long_running_cmds_pointer", timeout=86400).incr(start=-1) % 50
 
-                            cache.set('long_running_cmds_data%d' % cache_ptr, r_data, timeout=86400)
+                            cache.set("long_running_cmds_data%d" % cache_ptr, r_data, timeout=86400)
 
                         r_data = [path_info, duration[0], duration[1], duration[2]]
                         last_hour_running_cmds_key = f"last_hour_running_cmds{int(time.time()) // 10}"
-                        last_hour_running_cmds_queue = CacheQueue.get_cache_queue(last_hour_running_cmds_key,
-                                                                                  timeout=3600)
+                        last_hour_running_cmds_queue = CacheQueue.get_cache_queue(
+                            last_hour_running_cmds_key, timeout=3600
+                        )
                         last_hour_running_cmds_queue.rpush(json.dumps(r_data))
 
                     req_data = dict(
