@@ -17,12 +17,15 @@ class PerformanceCommand(BaseCommand):
         )
         command_class_data: List[str] = str(self.__class__).split(".")
         command_name: str = command_class_data[len(command_class_data) - 2]
-        name: str = "%s_%s " % ("manage_command", command_name)
+        name: str = f"manage_command_{command_name}"
+        params = ""
+        if args:
+            params += f"args={args} "
         for param in param_names:
-            name += "%s=%s " % (param, options.get(param))
+            params += f"{param}={options.get(param)} "
 
         with ProfileRequest(
-            {"REQUEST_METHOD": "GET", "HTTP_HOST": "", "QUERY_STRING": "", "PATH_INFO": name},
+            {"REQUEST_METHOD": "MANAGEMENT_COMMAND", "HTTP_HOST": "", "QUERY_STRING": params, "PATH_INFO": name},
             super().execute,
             args,
             options,
