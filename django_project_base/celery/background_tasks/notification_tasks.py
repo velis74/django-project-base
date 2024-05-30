@@ -21,9 +21,6 @@ class SendNotificationTask(BaseTask):
     soft_time_limit = NOTIFICATION_QUEABLE_HARD_TIME_LIMIT - 3
     default_retry_delay = 0
 
-    def get_profiler_params(self):
-        return dict(name="SendNotification")
-
     def run(self, notification: "DjangoProjectBaseNotification", extra_data):  # noqa: F821
         super().run()
         try:
