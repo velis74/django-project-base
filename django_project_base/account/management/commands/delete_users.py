@@ -3,11 +3,12 @@ import logging
 
 import swapper
 
-from django.core.management.base import BaseCommand
 from django.db import transaction
 
+from django_project_base.profiling.performance_base_command import PerformanceCommand
 
-class Command(BaseCommand):
+
+class Command(PerformanceCommand):
     help = "Deletes users marked for deletion"
 
     def handle(self, *args, **options):

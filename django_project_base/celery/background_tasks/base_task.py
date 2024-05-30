@@ -6,14 +6,14 @@ from django.conf import Settings
 from django.db import connections
 from django.db.utils import load_backend
 
-from django_project_base.celery.celery import app
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
 from django_project_base.constants import NOTIFICATION_QUEUE_NAME
+from django_project_base.profiling.performance_celery_task_class import PerformanceCeleryTask
 
 LAST_MAIL_SENT_CK = "last-notification-was-sent-timestamp"
 
 
-class BaseTask(app.Task):
+class BaseTask(PerformanceCeleryTask):
     name = ""
 
     max_retries = 0
