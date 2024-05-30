@@ -35,7 +35,11 @@ class ProfileRequest(object):
     _profile_path: str
 
     def __init__(
-        self, settings: dict, process_function: callable, process_function_args: tuple, process_function_kwargs: dict
+        self,
+        settings: dict,
+        process_function: callable,
+        process_function_args: tuple,
+        process_function_kwargs: dict,
     ):
         assert "REQUEST_METHOD" in settings
         assert "PATH_INFO" in settings
@@ -96,16 +100,13 @@ class ProfileRequest(object):
 
     def _get_queries(self, response):
         try:
-            if (response == "ok" or response.status_code == 200) and hasattr(
-                settings, "PROFILER_LONG_RUNNING_TASK_THRESHOLD"
-            ):
-                query_list = []
-                for c in connections:
-                    con = connections[c]
-                    con.force_debug_cursor = True
-                    query_list.append(con.queries)
-                _queries = filter(lambda x: x, query_list)
-                return [q for sublist in _queries for q in sublist]
+            query_list = []
+            for c in connections:
+                con = connections[c]
+                con.force_debug_cursor = True
+                query_list.append(con.queries)
+            _queries = filter(lambda x: x, query_list)
+            return [q for sublist in _queries for q in sublist]
         except Exception as e:
             return ["exception getting queries: " + str(e)]
 
