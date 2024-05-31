@@ -44,7 +44,10 @@ def filter_queryset_to_project(
 
 
 def filter_queryset_or_model_to_project(
-    queryset: Optional[QuerySet], model: Optional[Type[Model]], project: Optional["BaseProject"]
+    queryset: Optional[QuerySet] = None,
+    model: Optional[Type[Model]] = None,
+    project_field: str = "project",
+    project: Optional["BaseProject"] = None,
 ) -> QuerySet:
     if model is not None and not hasattr(model, "objects") and callable(model):
         model = model()
@@ -54,7 +57,7 @@ def filter_queryset_or_model_to_project(
         objs = queryset
     elif queryset is not None:
         # a queryset has been provided and it needs to be filtered
-        return filter_queryset_to_project(queryset, project=project)
+        return filter_queryset_to_project(queryset, project_field, project)
     elif model is None:
         raise ValueError("ProjectFilteringViewSet requires either queryset or model to be set")
     elif isinstance(model.objects, ProjectFilteringManager):
@@ -62,7 +65,7 @@ def filter_queryset_or_model_to_project(
         objs = model.objects
     else:
         # finally we filter the queryset of the provided model
-        return filter_queryset_to_project(model.objects, project=project)
+        return filter_queryset_to_project(model.objects, project_field, project)
 
     return objs.filter_by_project(project)
 

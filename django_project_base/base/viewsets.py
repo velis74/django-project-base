@@ -17,6 +17,9 @@ class ProjectFilteringViewSet(ModelViewSet):
     """
 
     model = None
+    project_field = None
 
     def get_queryset(self):
-        return filter_queryset_or_model_to_project(self.queryset, self.model, self.request.selected_project)
+        return filter_queryset_or_model_to_project(
+            self.queryset, self.model, self.project_field or "project", self.request.selected_project
+        )
