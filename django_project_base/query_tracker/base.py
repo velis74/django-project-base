@@ -14,6 +14,7 @@ it will also check for these additional parameters:
 
 "TRACKER_LOGGER_LEVEL": default logging.WARNING. if a falsy value is given, it is reset to DEBUG. Needs to be int.
   Also see django logging docs or python logging module docs
+  Note: when manage.py test has been run, the default becomes logging.DEBUG. Default logger will ignore the logging
 
 "TRACKER_FILTER_STACK": default ("site-packages", "query_tracker", "/python3", "JetBrains").
   Whether we should filter the stack to only show "relevant" stack code points, i.e. "our own" code.
@@ -39,6 +40,7 @@ Output for each query consists of:
 
 import importlib
 import logging
+import sys
 import time
 import traceback
 
@@ -114,9 +116,12 @@ class StackTraceCursorWrapper(CursorWrapper):
 class DatabaseWrapper(BaseDatabaseWrapper):
     def __new__(cls, settings_dict, *args, **kwargs):
         assert "TRACKED_ENGINE" in settings_dict
+        testing = len(sys.argv) > 1 and sys.argv[1] == "test" and "manage.py" in sys.argv[0]
+        default_level = logging.DEBUG if testing else logging.WARNING
+
         tracked_engine = settings_dict["TRACKED_ENGINE"] + ".base"
         logger_name = settings_dict.get("TRACKER_LOGGER_NAME", None)
-        logger_level = settings_dict.get("TRACKER_LOGGER_LEVEL", logging.WARNING) or logging.DEBUG
+        logger_level = settings_dict.get("TRACKER_LOGGER_LEVEL", default_level) or logging.DEBUG
         filter_stack = settings_dict.get(
             "TRACKER_FILTER_STACK", ("site-packages", "query_tracker", "/python3", "JetBrains")
         )
