@@ -14,9 +14,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 
-from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.event import UserInviteFoundEvent
 from django_project_base.base.exceptions import InviteActionNotImplementedException
+from django_project_base.base.viewsets import ProjectFilteringViewSet
 from django_project_base.constants import INVITE_NOTIFICATION_TEXT
 from django_project_base.notifications.email_notification import EMailNotificationWithListOfEmails
 from django_project_base.notifications.models import DjangoProjectBaseMessage
@@ -87,10 +87,11 @@ class ProjectUserInviteSerializer(ModelSerializer):
         )
 
 
-class ProjectUserInviteViewSet(ModelViewSet):
+class ProjectUserInviteViewSet(ProjectFilteringViewSet):
     # TODO: ADD INVITE SHOULD BE PERMISSION BASED ON ROLE
     permission_classes = (IsAuthenticated,)
     serializer_class = ProjectUserInviteSerializer
+    model = lambda: swapper.load_model("django_project_base", "Invite")
 
     def get_permissions(self):
         if self.action == "accept":
@@ -98,17 +99,9 @@ class ProjectUserInviteViewSet(ModelViewSet):
         else:
             return super().get_permissions()
 
-    def get_queryset(self):
-        project = self.request.selected_project
-        try:
-            return swapper.load_model("django_project_base", "Invite").objects.filter(project=project)
-        except ProjectNotSelectedError:
-            return swapper.load_model("django_project_base", "ProjectMember").objects.none()
-
     def new_object(self: ModelViewSet):
         new_object = super().new_object()
-        if project := self.request.selected_project:
-            new_object.project = project
+        new_object.project = self.request.selected_project
         return new_object
 
     @transaction.atomic

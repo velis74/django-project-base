@@ -7,8 +7,7 @@ from django.db.models import fields, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields as df_fields
 
-from django_project_base.account.middleware import ProjectNotSelectedError
-from django_project_base.base.middleware import get_current_request
+from django_project_base.base.filter_to_model import filter_queryset_to_project
 
 
 class HexColorField(fields.CharField):
@@ -48,11 +47,8 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
 
         if self.filter_selected_project:
             try:
-                request = get_current_request()
-                # the field only works in currently selected project
-                qs = qs.filter(projects__project=request.selected_project)
-            except ProjectNotSelectedError:
-                qs = qs.none()
+                request = self.context.get("request", None)
+                qs = filter_queryset_to_project(qs, "projects__project", request.selected_project)
             except AttributeError:
                 # if the middleware setting current project is not even set (request.selected_project will except),
                 #  we just show all users

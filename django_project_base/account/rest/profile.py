@@ -461,6 +461,8 @@ class ProfileViewSet(ModelViewSet):
             cache.set(cache_key, request.selected_project.pk, timeout=None)
         except ProjectNotSelectedError:
             q = ProjectViewSet._get_queryset_for_request(request)
+            # todo this might be a problem if the cache is cleared. then selected project might change for some users as
+            #   previously selected project would be forgotten. might have to move this to a table?
             previously_selected_project_pk = cache.get(cache_key)
             if project_object := q.filter(pk=previously_selected_project_pk).first():
                 response_data["default_project"] = ProjectSerializer(project_object).data
