@@ -64,3 +64,6 @@ class CacheQueueOther(CacheQueue):
             cache_list = cache_list[count:None]
             self.cache.set(self.key, cache_list)
             self.update_timeout()
+
+    def update_timeout(self):
+        self.cache.touch(self.key, self.timeout)

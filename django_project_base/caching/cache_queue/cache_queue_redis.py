@@ -33,3 +33,9 @@ class CacheQueueRedis(CacheQueue):
     def ltrim(self, count=0):
         self.cache.ltrim(self.key, count, -1)
         self.update_timeout()
+
+    def update_timeout(self):
+        if self.timeout is None:
+            self.cache.persist(self.key)
+        else:
+            self.cache.expire(self.key, self.timeout)
