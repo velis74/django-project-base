@@ -14,7 +14,7 @@ class CacheLock(object):
     is_waiting = False
     waiting_counter = None
 
-    def __init__(self, name, timeout=0, silence_object_lock_timeout=False):
+    def __init__(self, name, timeout=0, silence_object_lock_timeout=False, stats_name=None):
         """
         :param name: name of the cache
         :param timeout: timeout in seconds.
@@ -35,6 +35,7 @@ class CacheLock(object):
             raise Exception("Invalid timeout value")
 
         self.name = "CacheLock." + name
+        self.stats_name = "CacheLock." + (stats_name or name)
         self.timeout = timeout
         self.silence_object_lock_timeout = silence_object_lock_timeout
         self.raise_timeout_exception = False
@@ -52,7 +53,7 @@ class CacheLock(object):
         if is_waiting:
             if not self.is_waiting:
                 self.is_waiting = True
-                key = f"Waiting.{self.name}"
+                key = f"Waiting.{self.stats_name}"
                 self.waiting_counter = CacheCounter(key, timeout=None)
                 self.waiting_counter.incr()
                 self.append_waiting_key(key)

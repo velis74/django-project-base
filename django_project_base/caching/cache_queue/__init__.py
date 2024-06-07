@@ -54,8 +54,9 @@ class CacheQueue(ABC):
             timeout = self.get_default_timeout()
         self.timeout = timeout
 
+    @abstractmethod
     def update_timeout(self):
-        self.cache.touch(self.key, self.timeout)
+        pass
 
     @staticmethod
     def is_redis_cache_backend(cache_name):
