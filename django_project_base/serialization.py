@@ -6,8 +6,18 @@ from django_project_base.caching import CacheCounter
 
 
 class ObjectLockTimeout(Exception):
-    def __init__(self, *args):
-        super().__init__(*args)
+    """ Exception raised when a lock timeout is exceeded."""
+
+
+class NoTimeoutCheck(Exception):
+    """
+    Exception raised when timeout is set, but not checked.
+    Example:
+    with CacheLock as cl:
+        cl()  # this calls timeout check
+        ...
+        ...
+    """
 
 
 class CacheLock(object):
@@ -78,13 +88,14 @@ class CacheLock(object):
                     self.set_waiting(False)
                     break
             return self
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.set_waiting(False)
             raise e
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.timeout != 0 and not self.timeout_checked:
-            raise Exception("Timeout check not called")
+            cache.delete(self.name)
+            raise NoTimeoutCheck()
 
         if exc_type is ObjectLockTimeout:
             return self.silence_object_lock_timeout

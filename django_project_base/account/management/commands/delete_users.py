@@ -18,6 +18,6 @@ class Command(PerformanceCommand):
             with transaction.atomic():
                 try:
                     profile.delete()
-                except Exception as e:
+                except Exception as e:  # pragma: no cover
                     logging.getLogger(__name__).error(e)
         return "Finished deleting users"
