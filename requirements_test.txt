@@ -2,3 +2,5 @@ coverage
 django_coverage_plugin
 pytest-django
 pytest-celery
+django_redis
+redis>=5
