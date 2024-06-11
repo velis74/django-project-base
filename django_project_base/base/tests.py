@@ -47,15 +47,17 @@ class FilterToModelTest(TestCase):
         # this is basically a test of django-model-utils.InheritanceManager
         count = self.get_query_count()
 
-        q = filter_queryset_or_model_to_project(None, ProjectMember, Project.objects.get(name="project1"))
+        q = filter_queryset_or_model_to_project(queryset=None, model=ProjectMember,
+                                                project=Project.objects.get(name="project1"))
         self.assertEqual(q.count(), 10)
-        q = filter_queryset_or_model_to_project(ProjectMember.objects, None, Project.objects.get(name="project2"))
+        q = filter_queryset_or_model_to_project(queryset=ProjectMember.objects, model=None,
+                                                project=Project.objects.get(name="project2"))
         self.assertEqual(q.count(), 15)
 
         # finally test if number of queries performed was as it needs to be
         self.assertEqual(self.get_query_count() - count, 4)
 
-        q = filter_queryset_or_model_to_project(ProjectMember.objects, None, None)
+        q = filter_queryset_or_model_to_project(queryset=ProjectMember.objects, model=None, project=None)
         # Should return qs.none() because the selected project can't be determined from non-existing request here
         self.assertEqual(q.count(), 0)
 

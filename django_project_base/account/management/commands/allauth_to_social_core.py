@@ -12,7 +12,8 @@ from social_django.models import UserSocialAuth
 from django_project_base.profiling.performance_base_command import PerformanceCommand
 
 
-class Command(PerformanceCommand):
+# This is not tested because there is no socialaccount model anymore
+class Command(PerformanceCommand):  # pragma: no cover
     help = "Migrate social login data from allauth to social_core"
 
     provider_mapping: dict = {
