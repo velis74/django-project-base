@@ -78,9 +78,9 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
     django_settings["CSP_IMG_SRC"] = ["'self'", "via.placeholder.com"]
 
     if swagger_version:
-        django_settings["CSP_STYLE_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
-        django_settings["CSP_SCRIPT_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
-        django_settings["CSP_IMG_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_STYLE_SRC"].append("cdn.jsdelivr.net/npm/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_SCRIPT_SRC"].append("cdn.jsdelivr.net/npm/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_IMG_SRC"].append("cdn.jsdelivr.net/npm/swagger-ui-dist@%s/" % swagger_version)
 
     django_settings["CSP_FONT_SRC"] = ["'self'", "cdnjs.cloudflare.com"]
     django_settings["CSP_CONNECT_SRC"] = [
