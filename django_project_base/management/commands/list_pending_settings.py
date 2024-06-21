@@ -3,13 +3,13 @@ import json
 import swapper
 
 from django.conf import settings
-from django.core.management.base import BaseCommand
 
 from django_project_base.notifications.email_notification import SystemEMailNotificationWithListOfEmails
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.profiling.performance_base_command import PerformanceCommand
 
 
-class Command(BaseCommand):
+class Command(PerformanceCommand):
     help = "Lists pending project settings. Example:  python manage.py list_pending_settings"
 
     def handle(self, *args, **options):

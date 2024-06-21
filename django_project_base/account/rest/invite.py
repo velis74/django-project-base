@@ -91,7 +91,7 @@ class ProjectUserInviteViewSet(ProjectFilteringViewSet):
     # TODO: ADD INVITE SHOULD BE PERMISSION BASED ON ROLE
     permission_classes = (IsAuthenticated,)
     serializer_class = ProjectUserInviteSerializer
-    model = lambda: swapper.load_model("django_project_base", "Invite")
+    model = staticmethod(lambda: swapper.load_model("django_project_base", "Invite"))
 
     def get_permissions(self):
         if self.action == "accept":

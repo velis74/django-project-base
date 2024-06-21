@@ -6,12 +6,14 @@ import social_core.backends.facebook
 import social_core.backends.google
 import social_core.backends.microsoft
 
-from django.core.management.base import BaseCommand
 from django.db import connection
 from social_django.models import UserSocialAuth
 
+from django_project_base.profiling.performance_base_command import PerformanceCommand
 
-class Command(BaseCommand):
+
+# This is not tested because there is no socialaccount model anymore
+class Command(PerformanceCommand):  # pragma: no cover
     help = "Migrate social login data from allauth to social_core"
 
     provider_mapping: dict = {

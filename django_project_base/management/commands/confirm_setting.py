@@ -2,15 +2,15 @@ from gettext import gettext
 
 import swapper
 
-from django.core.management.base import BaseCommand
 from django.shortcuts import get_object_or_404
 
 from django_project_base.base.event import ProjectSettingConfirmedEvent
 from django_project_base.notifications.email_notification import SystemEMailNotification
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.profiling.performance_base_command import PerformanceCommand
 
 
-class Command(BaseCommand):
+class Command(PerformanceCommand):
     help = "Confirms project setting. Example:  python manage.py confirm_setting 2 email-sender-id"
 
     def add_arguments(self, parser) -> None:

@@ -37,6 +37,8 @@ profile_router.register(r"profile", ProfileViewSet, basename="profile-base-proje
 profile_router.register(r"profile-merge", ProfileMergeViewSet, basename="profile-merge-base-project")
 profile_router.register_single_record(r"impersonate", ImpersonateUserViewset, basename="profile-base-impersonate-user")
 profile_router.register_single_record(r"login", LoginViewset, basename="profile-base-login")
+# Following line is for backwards compatibility. PBXs calls login with trailing slash
+profile_router.register_single_record(r"login/", LoginViewset, basename="profile-base-login2")
 profile_router.register(r"", LogoutViewSet, basename="account-logout")
 profile_router.register(r"project-user-invite", ProjectUserInviteViewSet, basename="project-user-invite")
 profile_router.register(r"projects-profile-search", ProjectsProfileSearchViewSet, basename="projects-profile-search")

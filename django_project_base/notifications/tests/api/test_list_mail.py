@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from django_project_base.notifications.email_notification import EMailNotification
-from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
 from django_project_base.notifications.tests.notifications_transaction_test_case import NotificationsTransactionTestCase
 
 
@@ -52,4 +52,6 @@ class TestListMails(NotificationsTransactionTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(1, len(response.data))
-        self.assertEqual(self.number_of_emails, response.data[0]["counter"])
+
+        self.assertEqual(self.number_of_emails,
+                         DjangoProjectBaseNotification.objects.get(pk=response.data[0]["id"]).counter)
