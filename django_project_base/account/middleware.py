@@ -69,10 +69,8 @@ class SessionMiddleware(SessionMiddlewareBase):
             else:
                 curr_project_slug = request.session.get(current_project_attr, None)
 
-            request.selected_project_slug = curr_project_slug
             request.selected_project = SimpleLazyObject(load_selected_project(curr_project_slug))
         else:
-            request.selected_project_slug = SimpleLazyObject(selected_project_not_setup)
             request.selected_project = SimpleLazyObject(selected_project_not_setup)
 
     def process_response(self, request, response):

@@ -471,7 +471,7 @@ class NotificationViewset(ModelViewSet):
     def get_queryset(self):
         try:
             return DjangoProjectBaseNotification.objects.filter(
-                project_slug=self.request.selected_project_slug
+                project_slug=self.request.selected_project.slug
             ).order_by("-created_at")
         except ProjectNotSelectedError as e:
             raise NotFound(e.message)
@@ -486,9 +486,7 @@ class NotificationViewset(ModelViewSet):
                 content_type=DjangoProjectBaseMessage.HTML,
             ),
             raw_recipents=self.request.data["message_to"],
-            project=swapper.load_model("django_project_base", "Project")
-            .objects.get(slug=self.request.selected_project_slug)
-            .slug,
+            project=self.request.selected_project.slug,
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[

@@ -166,12 +166,13 @@ class SearchItemsManager(models.Manager):
                 from django_project_base.base.middleware import get_current_request
 
                 request = get_current_request()
-                if request and getattr(request, "selected_project_slug", None):
-                    slug = request.selected_project_slug
+                if request and getattr(request, "selected_project", None):
+                    slug = request.selected_project.slug
             except Exception:
                 pass
         else:
-            slug = getattr(kwargs["request"], "selected_project_slug", "")
+            project = getattr(kwargs["request"], "selected_project", None)
+            slug = project.slug if project else ""
 
         if not slug:
             return []
