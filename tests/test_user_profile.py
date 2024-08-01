@@ -49,6 +49,7 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_profile(self):
+        # TODO: Tole ne dela, ker miha nima povezanih projektov...
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
         response = self.api_client.patch("/account/profile/1", {"bio": "Sample bio text."}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -63,6 +64,7 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_search_query(self):
+        # TODO: Tole ne dela, ker miha nima povezanih projektov...
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
         response = self.api_client.get("/account/profile?search=mi", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -84,6 +86,7 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(response.data[0]["full_name"], "Janez Novak")
 
     def test_supperss_is_staff_is_superuser(self):
+        # TODO: Tole ne dela, ker miha nima povezanih projektov...
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
         response = self.api_client.get("/account/profile/1", {}, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -107,8 +110,12 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(response.data.get("is_superuser", "not_exist"), False)
 
     def test_profile_destroy(self):
+        from django_project_base.rest.project import ProjectSerializer
+
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
-        response = self.api_client.delete("/account/profile/1", {}, format="json")
+        project = ProjectSerializer.Meta.model.objects.last()
+        response = self.api_client.delete("/account/profile/1", {}, format="json",
+                                          headers={"Current-project": project.slug})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected_response = b'{"detail":"You do not have permission to perform this action."}'
         self.assertEqual(response.content, expected_response)
@@ -118,7 +125,11 @@ class TestProfileViewSet(TestBase):
         miha.is_superuser = True
         miha.save()
         user_cache_invalidate(miha)
-        response = self.api_client.delete("/account/profile/2", {}, format="json")
+        # TODO: Tole odleti, ker user ni vezan na (noben) projekt... in takega userja trenutno sploh ne moreš izbrisati.
+        #  Kaj je treba tukaj sploh narediti... glede na to, da je user, ki briše "superuser" najbrž tega preverjanja ne
+        #  rabim
+        response = self.api_client.delete("/account/profile/2", {}, format="json",
+                                          headers={"Current-project": project.slug})
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_profile_destroy_my_profile(self):

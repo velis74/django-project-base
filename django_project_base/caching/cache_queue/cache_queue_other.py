@@ -8,17 +8,26 @@ class CacheQueueOther(CacheQueue):
     def set_cache(self):
         self.cache = self.django_cache
 
+    # noinspection PyPackageRequirements,PyMethodMayBeStatic
+    def get_byte_values(self, values):
+        def _get_byte_value(_item):
+            if not isinstance(_item, bytes):
+                return str(_item).encode('utf-8')
+            return _item
+
+        return [_get_byte_value(item) for item in values]
+
     def rpush(self, *values):
         with CacheLock(self.key):
             cache_list = self.cache.get(self.key, [])
-            cache_list.extend(values)
+            cache_list.extend(self.get_byte_values(values))
             self.cache.set(self.key, cache_list)
             self.update_timeout()
 
     def lpush(self, *values):
         with CacheLock(self.key):
             cache_list = self.cache.get(self.key, [])
-            cache_list[:0] = reversed(values)
+            cache_list[:0] = reversed(self.get_byte_values(values))
             self.cache.set(self.key, cache_list)
             self.update_timeout()
 
@@ -56,6 +65,8 @@ class CacheQueueOther(CacheQueue):
             return ret[0]
 
     def lrange(self, count=None):
+        if count is not None:
+            count = count + 1
         return self.cache.get(self.key, [])[0:count]
 
     def ltrim(self, count=None):
@@ -64,3 +75,6 @@ class CacheQueueOther(CacheQueue):
             cache_list = cache_list[count:None]
             self.cache.set(self.key, cache_list)
             self.update_timeout()
+
+    def update_timeout(self):
+        self.cache.touch(self.key, self.timeout)
