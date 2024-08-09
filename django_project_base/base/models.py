@@ -194,6 +194,8 @@ class DpbTaggedItemThrough(GenericTaggedItemBase):
         on_delete=models.CASCADE,
         related_name="%(app_label)s_%(class)s_items",
     )
+    # main_object actually states whether this tag is auto-generated. Used e.g. in UserGroups where a tag is always
+    #   generated for a user group. The auto-generated ones have this flag set.
     main_object = models.BooleanField(default=False)
 
     class Meta(GenericTaggedItemBase.Meta):
