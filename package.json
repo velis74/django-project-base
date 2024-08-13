@@ -26,7 +26,7 @@
     "export-pdf": "press-export-pdf --debug export docs"
   },
   "peerDependencies": {
-    "@velis/dynamicforms": "^0.76.2",
+    "@velis/dynamicforms": "^0.76.5",
     "axios": "^1.2.0",
     "lodash": "^4.17.15",
     "pinia": "^2.0.33",
@@ -35,7 +35,7 @@
     "vuetify": "^3.0.1"
   },
   "dependencies": {
-    "@kyvg/vue3-notification": "^2.8.0",
+    "@kyvg/vue3-notification": "^3",
     "browser-update": "^3.3.37",
     "slugify": "^1.6.6",
     "vanilla-cookieconsent": "^2.8.0",
@@ -46,11 +46,10 @@
     "@types/browser-update": "^3.3.0",
     "@types/jest": "^29.2.5",
     "@types/lodash": "^4.14.191",
-    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue": "^5",
     "@vitest/coverage-v8": "^2",
     "@vue/test-utils": "^2.2.4",
     "axios-mock-adapter": "^1.22.0",
-    "esbuild": "^0.16",
     "eslint-config-velis": "^1.1.16",
     "http-proxy-middleware": "^2.0.6",
     "vite": "^5",
@@ -66,8 +65,7 @@
       "velis"
     ],
     "ignorePatterns": [
-      "**/*",
-      "!vue/**"
+      "django_project_base/**/*"
     ]
   },
   "browserslist": [

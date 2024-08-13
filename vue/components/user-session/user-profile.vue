@@ -1,8 +1,49 @@
+<template>
+  <v-btn>
+    <v-img v-if="userSession.userData.avatar" :src="userSession.userData.avatar"/>
+    <h4 v-if="userSession.userDisplayName" class="d-inline-block">
+      {{ userSession.userDisplayName }}
+      <span v-if="userSession.impersonated">
+        ({{ gettext('Impersonated') }})
+      </span>
+    </h4>
+
+    <v-menu activator="parent">
+      <v-list>
+        <component :is="props.projectListComponent" v-if="showProjectList" location="start"/>
+        <v-divider v-if="showProjectList"/>
+
+        <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
+        <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
+        <v-list-item v-if="showAccountSocial" @click="editSocialConnections">
+          {{ gettext('Edit social connections') }}
+        </v-list-item>
+
+        <v-list-item
+          v-if="userSession.userHasPermission('impersonate-user') && !userSession.impersonated"
+          @click="showImpersonateLogin"
+        >
+          {{ gettext('Impersonate user') }}
+        </v-list-item>
+
+        <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
+          {{ gettext('Stop impersonation') }}
+        </v-list-item>
+        <v-divider/>
+        <v-list-item v-if="showAccountSocial && !userSession.deleteAt" @click="removeMyAccount">
+          {{ gettext('Terminate my account') }}
+        </v-list-item>
+        <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
+      </v-list>
+    </v-menu>
+  </v-btn>
+</template>
+
 <script setup lang="ts">
 import { Action, dfModal, DialogSize, FilteredActions, FormConsumerOneShotApi, gettext } from '@velis/dynamicforms';
 import axios, { AxiosRequestConfig } from 'axios';
 import _ from 'lodash';
-import { computed, h, onMounted, reactive, watch } from 'vue';
+import { computed, h, onMounted, reactive, ref, watch } from 'vue';
 import { useCookies } from 'vue3-cookies';
 import { useDisplay } from 'vuetify';
 
@@ -24,6 +65,7 @@ interface UserProfileProps {
 }
 
 const { cookies } = useCookies();
+const showAccountSocial = ref(false);
 
 const props = withDefaults(defineProps<UserProfileProps>(), { projectListComponent: 'ProjectList' });
 const display = useDisplay();
@@ -285,44 +327,6 @@ async function removeMyAccount() {
   }
 }
 </script>
-<template>
-  <v-btn>
-    <v-img v-if="userSession.userData.avatar" :src="userSession.userData.avatar"/>
-    <h4 v-if="userSession.userDisplayName" class="d-inline-block">
-      {{ userSession.userDisplayName }}
-      <span v-if="userSession.impersonated">
-        ({{ gettext('Impersonated') }})
-      </span>
-    </h4>
-
-    <v-menu activator="parent">
-      <v-list>
-        <component :is="props.projectListComponent" v-if="showProjectList" location="start"/>
-        <v-divider v-if="showProjectList"/>
-
-        <v-list-item @click="userProfile">{{ gettext('User profile') }}</v-list-item>
-        <v-list-item @click="changePassword">{{ gettext('Change password') }}</v-list-item>
-        <v-list-item v-if="false" @click="editSocialConnections">{{ gettext('Edit social connections') }}</v-list-item>
-
-        <v-list-item
-          v-if="userSession.userHasPermission('impersonate-user') && !userSession.impersonated"
-          @click="showImpersonateLogin"
-        >
-          {{ gettext('Impersonate user') }}
-        </v-list-item>
-
-        <v-list-item v-if="userSession.impersonated" @click="stopImpersonation">
-          {{ gettext('Stop impersonation') }}
-        </v-list-item>
-        <v-divider/>
-        <v-list-item v-if="false && !userSession.deleteAt" @click="removeMyAccount">
-          {{ gettext('Terminate my account') }}
-        </v-list-item>
-        <v-list-item @click="userSession.logout()">{{ gettext('Logout') }}</v-list-item>
-      </v-list>
-    </v-menu>
-  </v-btn>
-</template>
 
 <style>
 .sc-login-list {

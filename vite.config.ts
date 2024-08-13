@@ -98,7 +98,6 @@ export default ({ mode }: ConfigEnv) => {
       },
       globals: true,
       environment: 'jsdom',
-      useAtomics: true, // eliminate tests hang at the end (https://github.com/vitest-dev/vitest/issues/2008)
     },
   });
 };
