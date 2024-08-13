@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
-from django.db.models import ForeignKey, QuerySet
+from django.db.models import ForeignKey
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -72,16 +72,16 @@ class OrginalRecipientsField(fields.CharField):
                     )
                 )
             )
+            instance = self.parent.instance if self.parent else None
             if (
-                self.parent
-                and self.parent.instance
-                and not isinstance(self.parent.instance, QuerySet)
-                and not self.parent.instance.recipients_original_payload_search
+                instance
+                and isinstance(instance, DjangoProjectBaseNotification)
+                and not instance.recipients_original_payload_search
             ):
-                self.parent.instance.recipients_original_payload_search = search_str
-                self.parent.instance.save(update_fields=["recipients_original_payload_search"])
+                instance.recipients_original_payload_search = search_str
+                instance.save(update_fields=["recipients_original_payload_search"])
             # TODO: THIS SOLUTION FOR SEARCH IS BAD; BAD; -> MAKE BETTER ONE
-            if row_data and not row_data.recipients_original_payload_search:
+            if isinstance(row_data, DjangoProjectBaseNotification) and not row_data.recipients_original_payload_search:
                 row_data.recipients_original_payload_search = search_str
                 row_data.save(update_fields=["recipients_original_payload_search"])
             if len(search_str) > 95:
