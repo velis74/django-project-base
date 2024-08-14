@@ -32,10 +32,20 @@ class BaseProject(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        """
+        To show proper value in comboboxes for project selection on forms
+        """
+        return self.name
+
 
 class Project(BaseProject):
     class Meta:
         swappable = swapper.swappable_setting("django_project_base", "Project")
+
+
+def get_project_model() -> "Project":
+    return swapper.load_model("django_project_base", "Project")
 
 
 class BaseProfile(User):

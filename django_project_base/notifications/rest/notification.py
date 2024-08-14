@@ -34,7 +34,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
 from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -44,6 +43,7 @@ from django_project_base.notifications.models import (
     DjangoProjectBaseNotification,
     SearchItems,
 )
+from django_project_base.project_selection import ProjectNotSelectedError
 from django_project_base.utils import get_host_url, get_pk_name
 
 

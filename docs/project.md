@@ -34,26 +34,32 @@ DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES: {
 This setting defines a dictionary of attribute names on the request object. 
 See [URL variables Middleware](./url-variables-middleware) for more information.
 
-## Currently selected project
-
-Having specified the `DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES` setting, specifically the "project" section,
-[SessionMiddleware](./authentication#session-middleware) will be keeping track of currently selected project and the
-following variable will become available for use:
+### DJANGO_PROJECT_BASE_SELECTED_PROJECT_MODE
 
 ```python
-request.selected_project
+
+DJANGO_PROJECT_BASE_SELECTED_PROJECT_MODE: SelectedProjectMode.FULL
 ```
 
-Is is a `SimpleLazyObject` resolving to currently selected project. The information is also written in the
-session data, so not every API call needs to bear project slug in order for the system to know it.
+This setting defines, how project is selected. Options are:
+- SelectedProjectMode.FULL
+  - Project must be selected in some way before user can work with the app. Either by request url parameters or by 
+project selector in titlebar.
+- SelectedProjectMode.AVTO
+  - This option is for custom implemenstations. It is meant, that there is a custom middleware, that provides selected
+project slug. This slug must be set to request attribute that is set in `DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES`
+setting for key `project`/`value_name`.
+  - Project selector won't be visible in title bar 
+- SelectedProjectMode.PROMPT
+  - On every table and form that needs project field, this field will be shown and user will have to select project from
+projects that he has permission to
+  - If user has permission to exactly one project, this project will be preselected. In this case field in tables and 
+forms won't be visible
+  - Project selector won't be visible in title bar
+- Fixed project slug
+  - If app actually don't need project there can be only one project in database and its slug can be set to this setting
+  - Project selector won't be visible in title bar
 
-If selected_project cannot evaluate, either because the setting is not set or because the project can't be found,
-a `ProjectNotSelectedError` will be raised. The exception derives from `NotImplementedError`, but has a `message` member
-in case you might want to throw a more API-friendly error with the same message. DPB itself does this on several 
-occasions transforming a `ProjectNotSelectedError` into a 404 - `NotFound`.
-
-Also note that SimpleLazyObject does not evaluate simply by invoking it, e.g. `request.selected_project`. You actually 
-have to access one of its members, e.g. 
-`request.selected_project.get_deferred_fields()  # force immediate LazyObject evaluation`. If you're trying to catch 
-the exception, make sure you force evaluation. There are examples for both forced and "natural" evaluation in DPB code.
+Selecting project is done in [SelectProjectMiddleware](./select-project-middleware.md) which is mandatory middleware for
+django project base.
 

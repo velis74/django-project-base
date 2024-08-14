@@ -64,3 +64,31 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
             return ""
 
         return str(instance)
+
+
+class ProjectField(df_fields.PrimaryKeyRelatedField):
+    # This class is used for fields that represents project fields.
+    # There is serializer mixin ProjectMixin that shows or hides this field on form/table based on setting
+    # DJANGO_PROJECT_BASE_SELECTED_PROJECT_MODE
+
+    _attr_display_default = False
+    _attr_queryset_default = False
+
+    def __init__(self, **kw):
+        from dynamicforms.mixins import DisplayMode
+
+        from django_project_base.base.models import get_project_model
+
+        if "display" not in kw:
+            kw["display"] = DisplayMode.HIDDEN
+            self._attr_display_default = True
+        if "queryset" not in kw:
+            kw["queryset"] = get_project_model().objects.none()
+            self._attr_queryset_default = True
+
+        super().__init__(**kw)
+
+    def set_field_attrs(self, **kw):
+        for k, v in kw.items():
+            if getattr(self, f"_attr_{k}_default", True):
+                setattr(self, k, v)

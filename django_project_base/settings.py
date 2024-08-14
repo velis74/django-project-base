@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from django_project_base.project_selection_constants import SelectedProjectMode
 from django_project_base.settings_parser import parse_settings
 
 DJANGO_PROJECT_BASE_SETTINGS = (
@@ -29,15 +30,18 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {
         "name": "REST_REGISTRATION",
         "default": {
-            "RESET_PASSWORD_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.reset_password_email_service.send_reset_password_verification_email",  # noqa: E501
+            "RESET_PASSWORD_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.reset_password_email_service.send_reset_password_verification_email",
+            # noqa: E501
             "RESET_PASSWORD_VERIFICATION_URL": "/#reset-user-password/",
             "VERIFICATION_FROM_EMAIL": "",
             "SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL": True,
             "RESET_PASSWORD_VERIFICATION_ENABLED": True,
             "RESET_PASSWORD_SERIALIZER_PASSWORD_CONFIRM": True,
-            "SEND_RESET_PASSWORD_LINK_USER_FINDER": "django_project_base.account.service.reset_password_email_service.find_user_by_send_reset_password_link_data",  # noqa: E501
+            "SEND_RESET_PASSWORD_LINK_USER_FINDER": "django_project_base.account.service.reset_password_email_service.find_user_by_send_reset_password_link_data",
+            # noqa: E501
             "REGISTER_VERIFICATION_ENABLED": True,
-            "REGISTER_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.register_user_service.send_register_verification_email_notification",  # noqa: E501
+            "REGISTER_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.register_user_service.send_register_verification_email_notification",
+            # noqa: E501
         },
     },
     {"name": "NOTIFICATION_SENDERS", "default": {}},
@@ -76,6 +80,10 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "default": "",
     },
     {"name": "IS_PHONE_NUMBER_ALLOWED_FUNCTION", "default": ""},
+    {
+        "name": "DJANGO_PROJECT_BASE_SELECTED_PROJECT_MODE",
+        "default": SelectedProjectMode.FULL,
+    },
 )
 
 USER_CACHE_KEY = "django-user-{id}"

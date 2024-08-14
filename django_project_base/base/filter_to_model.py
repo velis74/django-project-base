@@ -29,8 +29,8 @@ if TYPE_CHECKING:
 def filter_queryset_to_project(
     queryset: QuerySet, project_field: str = "project", project: "BaseProject" = None
 ) -> QuerySet:
-    from django_project_base.account.middleware import ProjectNotSelectedError
     from django_project_base.base.middleware import get_current_request, has_current_request
+    from django_project_base.project_selection import ProjectNotSelectedError
 
     if not project and has_current_request():
         project = getattr(get_current_request(), "selected_project", None)

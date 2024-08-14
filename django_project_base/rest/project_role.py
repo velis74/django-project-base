@@ -12,9 +12,9 @@ from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework.exceptions import ValidationError
 
-from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.auth.models import BaseRole
 from django_project_base.base.models import BaseProject
+from django_project_base.project_selection import ProjectNotSelectedError
 
 
 class ProjectRole:
