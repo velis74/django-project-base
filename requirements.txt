@@ -1,7 +1,6 @@
 django
 djangorestframework
-#dynamicforms>=0.75.31  # TODO: Treba releasati DF, in odkometirati tole vrstico... ter zakomentirati spodnjo
-dynamicforms @ git+https://github.com/velis74/DynamicForms.git@0.75.31.2
+dynamicforms>=0.76.14
 swapper
 django-rest-registration
 drf-spectacular>=0.17.2, <0.26.0

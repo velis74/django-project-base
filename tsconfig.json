@@ -1,6 +1,5 @@
 {
   "extends": "./node_modules/eslint-config-velis/tsconfig.json",
-  "include": ["vue/**/*"],
   "compilerOptions": {
     "declaration": true,
     "outDir": "dist",
