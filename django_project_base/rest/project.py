@@ -347,7 +347,7 @@ class ProjectSettingsViewSet(ModelViewSet):
         req = super().initialize_request(request, *args, **kwargs)
         if req.method.upper() not in SAFE_METHODS:
             try:
-                req.data["project"] = self.request.selected_project.pk
+                req.data["project"] = request.selected_project.pk
             except ProjectNotSelectedError as e:
                 raise NotFound(e.message)
         return req

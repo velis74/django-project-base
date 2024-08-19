@@ -63,6 +63,7 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
         "'unsafe-inline'",
         "cdnjs.cloudflare.com",
         "stackpath.bootstrapcdn.com",
+        "cdn.jsdelivr.net/npm/@mdi/font@latest/",
     ]
     # unsafe-eval - because of Vue.js
     # code.jquery.com, stackpath.bootstrapcdn.com, connect.facebook.net - because of (old) login
@@ -78,14 +79,12 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
     django_settings["CSP_IMG_SRC"] = ["'self'", "via.placeholder.com"]
 
     if swagger_version:
-        django_settings["CSP_STYLE_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
-        django_settings["CSP_SCRIPT_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
-        django_settings["CSP_IMG_SRC"].append("unpkg.com/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_STYLE_SRC"].append("cdn.jsdelivr.net/npm/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_SCRIPT_SRC"].append("cdn.jsdelivr.net/npm/swagger-ui-dist@%s/" % swagger_version)
+        django_settings["CSP_IMG_SRC"].append("cdn.jsdelivr.net/npm/swagger-ui-dist@%s/" % swagger_version)
 
-    django_settings["CSP_FONT_SRC"] = ["'self'", "cdnjs.cloudflare.com"]
-    django_settings["CSP_CONNECT_SRC"] = [
-        "'self'",
-    ]
+    django_settings["CSP_FONT_SRC"] = ["'self'", "cdnjs.cloudflare.com", "cdn.jsdelivr.net/npm/@mdi/font@latest/"]
+    django_settings["CSP_CONNECT_SRC"] = ["'self'", "unpkg.com/ionicons@5.5.1/"]
     django_settings["CSP_OBJECT_SRC"] = [
         "'none'",
     ]

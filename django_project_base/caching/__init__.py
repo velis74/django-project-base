@@ -29,6 +29,6 @@ class CacheCounter:
                 ret = self.cache.incr(self.key, step)
                 self.update_timeout()
                 return ret
-            except ValueError:
+            except ValueError:  # pragma: no cover
                 # This happens if another thread just deleted the cache entry after our .add and before our .incr
                 pass

@@ -50,7 +50,9 @@ class TestProject(TestBase):
 
     def test_update_project(self):
         project: Model = ProjectSerializer.Meta.model.objects.last()
-        update_project: Response = self.api_client.patch(f"{self.url}/{project.pk}", {"name": "updated-name"})
+
+        update_project: Response = self.api_client.patch(f"{self.url}/{project.pk}", {"name": "updated-name"},
+                                                         headers={"Current-project": project.slug})
         self.assertEqual(update_project.status_code, status.HTTP_200_OK)
         project.refresh_from_db()
         self.assertEqual(project.name, "updated-name")
