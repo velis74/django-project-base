@@ -327,7 +327,8 @@ class MessageToListField(fields.ListField):
                         elif related_objects := [
                             item
                             for sub_list in [
-                                [o for o in getattr(cont_object, i.name, []).all()]
+                                # Jure: it doesn't matter that it's ContentType, as long as it's an empty queryset
+                                [o for o in getattr(cont_object, i.name, ContentType.objects.none()).all()]
                                 for i in cont_object._meta.related_objects
                             ]
                             for item in sub_list
