@@ -20,6 +20,11 @@ class CacheCounter:
         self.timeout = timeout
 
     def update_timeout(self):
+        if self.timeout is None:
+            persist = getattr(self.cache, "persist", None)
+            if callable(persist):
+                persist(self.key)
+                return
         self.cache.touch(self.key, self.timeout)
 
     def incr(self, step=1, start=0):
