@@ -1,9 +1,6 @@
-import Notifications from '@kyvg/vue3-notification';
 import { createDynamicForms } from '@velis/dynamicforms';
 import { createPinia } from 'pinia';
 import { App } from 'vue';
-import 'vuetify/styles/main.css';
-import '@velis/dynamicforms/styles.css';
 
 import * as DpbComponents from './dpb-components';
 import * as VuetifyComponents from './vuetify-components';
@@ -26,8 +23,6 @@ export function createProjectBase(options?: ProjectBaseOptions) {
     app.use(createPinia());
 
     app.use(createDynamicForms({ ui: 'vuetify' }));
-
-    app.use(Notifications);
 
     // add components
     Object.entries(DpbComponents).map(([name, component]) => app.component(name, component));

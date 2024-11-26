@@ -1,11 +1,10 @@
 /// <reference types="vitest" />
-import { ConfigEnv, defineConfig, loadEnv } from 'vite';
-
 import { resolve } from 'path';
 
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import eslintPlugin from 'vite-plugin-eslint';
 import vuePlugin from '@vitejs/plugin-vue';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { ConfigEnv, defineConfig, loadEnv } from 'vite';
+import eslintPlugin from 'vite-plugin-eslint';
 import vuetify from 'vite-plugin-vuetify';
 
 const axiosRedirectConfig = () => ({
@@ -13,12 +12,11 @@ const axiosRedirectConfig = () => ({
   configureServer(server: any) {
     const filter = function filter(pathname: any, req: any) {
       return (
-        typeof req.headers['x-df-axios'] !== 'undefined'
-        || (
-          pathname !== '/'
-          && !pathname.startsWith('/@')
-          && !pathname.startsWith('/vue')
-          && !pathname.startsWith('/node_modules')
+        typeof req.headers['x-df-axios'] !== 'undefined' || (
+          pathname !== '/' &&
+          !pathname.startsWith('/@') &&
+          !pathname.startsWith('/vue') &&
+          !pathname.startsWith('/node_modules')
         )
       );
       // return ;
@@ -28,16 +26,14 @@ const axiosRedirectConfig = () => ({
       createProxyMiddleware(filter, {
         target: process.env.VITE_AXIOS_TARGET,
         changeOrigin: false,
-        pathRewrite: (path) => {
-          return path;
-        },
+        pathRewrite: (path) => path,
       }),
     );
   },
 });
 
 export default ({ mode }: ConfigEnv) => {
-  process.env = {...process.env, ...loadEnv(mode, process.cwd())};
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
     plugins: [
       vuePlugin(),
@@ -49,8 +45,8 @@ export default ({ mode }: ConfigEnv) => {
         apply: 'serve',
         enforce: 'post',
       },
-      vuetify({autoImport: true}),
-      axiosRedirectConfig()
+      vuetify({ autoImport: true }),
+      axiosRedirectConfig(),
     ],
     resolve: {
       // alias: {
@@ -66,39 +62,34 @@ export default ({ mode }: ConfigEnv) => {
         '.ts',
         '.vue',
         '.json',
-        '.css'
-      ]
+        '.css',
+      ],
     },
     server: {
       port: 8080,
-      fs: {
-          allow: ['..'],
-      }
+      fs: { allow: ['..'] },
     },
     build: {
       target: 'es2015',
+      sourcemap: true,
       lib: {
         entry: resolve(__dirname, 'vue/apps.ts'),
         formats: ['umd', 'es'],
         fileName: 'project-base',
-        name: 'project-base'
+        name: 'project-base',
       },
       rollupOptions: {
         external: ['@velis/dynamicforms', 'axios', 'lodash', 'pinia', 'vue', 'vue-ionicon', 'vuetify'],
         output: {
-          sourcemap: true,
           exports: 'named',
           globals: (id: string) => id, // all external modules are currently not aliased to anything but their own names
-        }
-      }
+        },
+      },
     },
     test: {
-      deps: {
-        inline: ['vuetify']
-      },
+      deps: { inline: ['vuetify'] },
       globals: true,
       environment: 'jsdom',
-      useAtomics: true, // eliminate tests hang at the end (https://github.com/vitest-dev/vitest/issues/2008)
     },
   });
 };

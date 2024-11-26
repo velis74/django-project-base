@@ -5,6 +5,7 @@
         class="vue-notification"
         :class="item.type"
         @click="item.data.onNotificationClose(item, close, true)"
+        @keydown.enter="item.data.onNotificationClose(item, close, true)"
       >
         <div>
           <div
