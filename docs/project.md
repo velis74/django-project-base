@@ -45,7 +45,7 @@ This setting defines, how project is selected. Options are:
 - SelectedProjectMode.FULL
   - Project must be selected in some way before user can work with the app. Either by request url parameters or by 
 project selector in titlebar.
-- SelectedProjectMode.AVTO
+- SelectedProjectMode.AUTO
   - This option is for custom implemenstations. It is meant, that there is a custom middleware, that provides selected
 project slug. This slug must be set to request attribute that is set in `DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES`
 setting for key `project`/`value_name`.

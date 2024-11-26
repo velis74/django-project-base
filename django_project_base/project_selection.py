@@ -51,7 +51,6 @@ def get_current_project_attr():
     Returns key name for session, where slug of selected project will be stored
     """
     from django_project_base.constants import BASE_REQUEST_URL_VARIABLES_PROJECT_KEY
-
     return (
         getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
         .get(BASE_REQUEST_URL_VARIABLES_PROJECT_KEY, {})
@@ -65,6 +64,10 @@ def get_selected_project_mode():
     Default is SelectedProjectMode.FULL
     """
     return getattr(settings, "DJANGO_PROJECT_BASE_SELECTED_PROJECT_MODE", None) or SelectedProjectMode.FULL
+
+
+def get_project_slug_from_session(request):
+    return request.session.get(get_current_project_attr())
 
 
 class ProjectNotSelectedError(NotImplementedError):

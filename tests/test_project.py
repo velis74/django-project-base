@@ -21,13 +21,17 @@ class TestProject(TestBase):
         self._create_project()
 
     def _create_project(self, payload: dict = {}) -> Response:
+        from django.db.models import Model
+        from django_project_base.rest.project import ProjectSerializer
+        project: Model = ProjectSerializer.Meta.model.objects.first()
+
         _payload: dict = {
             "name": "test-project",
             "owner": UserProfile.objects.get(username=TEST_USER_ONE_DATA["username"]).pk,
             "slug": get_random_string(length=8),
         }
         _payload.update(payload)
-        return self.api_client.post(self.url, _payload)
+        return self.api_client.post(self.url, _payload, HTTP_CURRENT_PROJECT=project.slug)
 
     def test_create_project(self):
         self.assertEqual(status.HTTP_201_CREATED, self._create_project().status_code)
@@ -37,8 +41,13 @@ class TestProject(TestBase):
         self.assertEqual(3, len(list_response.data))
 
     def test_retrieve_project(self):
-        retrieve_project_pk: Response = self.api_client.get(f"{self.url}/1")
+        from django.db.models import Model
+        from django_project_base.rest.project import ProjectSerializer
+        project: Model = ProjectSerializer.Meta.model.objects.first()
+
+        retrieve_project_pk: Response = self.api_client.get(f"{self.url}/1", HTTP_CURRENT_PROJECT=project.slug)
         self.assertEqual(status.HTTP_200_OK, retrieve_project_pk.status_code)
+
         retrieve_project_slug: Response = self.api_client.get(
             f'{self.url}/project-{retrieve_project_pk.data["slug"]}',
             HTTP_CURRENT_PROJECT=swapper.load_model("django_project_base", "Project").objects.first().slug,

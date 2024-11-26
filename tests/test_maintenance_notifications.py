@@ -18,12 +18,16 @@ class TestMaintenanceNotifications(TestBase):
 
     def _create_maintenance_notification(self, payload: dict) -> Response:
         self._login_with_test_user_one()
+        from django.db.models import Model
+        from django_project_base.rest.project import ProjectSerializer
+        project: Model = ProjectSerializer.Meta.model.objects.last()
+
         _payload: dict = {
             "delayed_to": int((datetime.datetime.now() + datetime.timedelta(hours=1)).timestamp()),
             "message": {"body": "Planned maintenance"},
         }
         _payload.update(payload)
-        return self.api_client.post(self.url, _payload, format="json")
+        return self.api_client.post(self.url, _payload, format="json", HTTP_CURRENT_PROJECT=project.slug)
 
     def test_create_maintenance_notification(self):
         self.assertEqual(status.HTTP_201_CREATED, self._create_maintenance_notification({}).status_code)

@@ -47,7 +47,11 @@ from django_project_base.notifications.email_notification import (
 )
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
-from django_project_base.project_selection import get_user_projects, ProjectNotSelectedError
+from django_project_base.project_selection import (
+    get_project_slug_from_session,
+    get_user_projects,
+    ProjectNotSelectedError,
+)
 from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 from django_project_base.utils import get_pk_name
@@ -638,7 +642,7 @@ class ProfileViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         project = swapper.load_model("django_project_base", "Project").objects.get(
-            slug=getattr(self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
+            slug=get_project_slug_from_session(self.request)
         )
         if (
             sett := swapper.load_model("django_project_base", "ProjectSettings")

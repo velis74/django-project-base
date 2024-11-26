@@ -1,3 +1,4 @@
+import swapper
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -12,16 +13,30 @@ class TestProfileViewSet(TestBase):
         self.api_client = APIClient()
 
     def test_get_current_profile(self):
+        curr_project_slug = swapper.load_model("django_project_base", "Project").objects.first().slug
+
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
 
-        response = self.api_client.get("/account/profile", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.api_client.get("/account/profile/current", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["full_name"], "Miha Novak")
 
     def test_insert_profile(self):
+        curr_project_slug = swapper.load_model("django_project_base", "Project").objects.first().slug
+
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
         profile = (
             {
@@ -45,7 +60,12 @@ class TestProfileViewSet(TestBase):
                 "user_permissions": None,
             },
         )
-        response = self.api_client.post("/account/profile", profile, format="json")
+        response = self.api_client.post(
+            "/account/profile",
+            profile,
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_profile(self):
@@ -76,8 +96,15 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(response.data.get("bio", False), "Sample bio text.")
 
     def test_search_url_is_disabled(self):
+        curr_project_slug = swapper.load_model("django_project_base", "Project").objects.first().slug
+
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
-        response = self.api_client.get("/account/profile/search/miha", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/search/miha",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_search_query(self):
@@ -126,7 +153,6 @@ class TestProfileViewSet(TestBase):
         # self.assertEqual(response.data[0]["full_name"], "Janez Novak")
 
     def test_supperss_is_staff_is_superuser(self):
-        # TODO: Tole ne dela, ker miha nima povezanih projektov...
         from django_project_base.rest.project import ProjectSerializer
         import swapper
 
@@ -207,10 +233,27 @@ class TestProfileViewSet(TestBase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_profile_destroy_my_profile(self):
+        curr_project_slug = swapper.load_model("django_project_base", "Project").objects.first().slug
+
         self.assertTrue(self.api_client.login(username="miha", password="mihamiha"), "Not logged in")
-        response = self.api_client.get("/account/profile/current", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.api_client.delete("/account/profile/current", {}, format="json")
+        response = self.api_client.delete(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.api_client.get("/account/profile/current", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=curr_project_slug
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

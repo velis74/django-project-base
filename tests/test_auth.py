@@ -81,30 +81,60 @@ class TestLoginViewset(TestBase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_json_missing_session(self):
+        from django.db.models import Model
+        from django_project_base.rest.project import ProjectSerializer
+        project: Model = ProjectSerializer.Meta.model.objects.last()
+
         response = self.api_client.post(
             os.path.join(self.url_prefix, "login"),
             {"login": "miha", "password": "mihamiha", "return-type": "json"},
             format="json",
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertIsNone(response.cookies.get("sessionid", None))
         self.assertIsNone(response.cookies.get("csrftoken", None))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.api_client.get(os.path.join(self.url_prefix, "/account/profile/current"), {}, format="json")
+        response = self.api_client.get(
+            os.path.join(self.url_prefix, "/account/profile/current"),
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.content, b'{"detail":"Authentication credentials were not provided."}')
 
     def test_profile_destroy_my_profile_json(self):
+        from django.db.models import Model
+        from django_project_base.rest.project import ProjectSerializer
+        project: Model = ProjectSerializer.Meta.model.objects.last()
+
         response = self.api_client.post(
             os.path.join(self.url_prefix, "login"),
             {"login": "miha", "password": "mihamiha", "return-type": "json"},
             format="json",
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.api_client.credentials(HTTP_AUTHORIZATION="sessionid " + response.data.get("sessionid", None))
-        response = self.api_client.get("/account/profile/current", {"return-type": "json"}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {"return-type": "json"},
+            format="json",
+            HTTP_CURRENT_PROJECT = project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.api_client.delete("/account/profile/current", {"return-type": "json"}, format="json")
+        response = self.api_client.delete(
+            "/account/profile/current",
+            {"return-type": "json"},
+            format="json",
+            HTTP_CURRENT_PROJECT = project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        response = self.api_client.get("/account/profile/current", {"return-type": "json"}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {"return-type": "json"},
+            format="json",
+            HTTP_CURRENT_PROJECT = project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_logout_not_authorized(self):

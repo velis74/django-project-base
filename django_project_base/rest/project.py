@@ -35,7 +35,11 @@ from django_project_base.base.mixins import ProjectMixin
 from django_project_base.base.models import BaseProjectSettings, get_project_model
 from django_project_base.base.permissions import CreateAny, IsProjectOwnerOrReadOnly
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
-from django_project_base.project_selection import get_user_projects, ProjectNotSelectedError
+from django_project_base.project_selection import (
+    get_project_slug_from_session,
+    get_user_projects,
+    ProjectNotSelectedError,
+)
 from django_project_base.utils import get_pk_name
 
 
@@ -131,10 +135,9 @@ class ProjectViewSet(ModelViewSet):
 
         lookup_field: str = self.lookup_field
         lookup_field_val: Union[str, int] = self.kwargs.get(self.lookup_field)
-
-        proj_value_name = settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"]
-        if getattr(self.request, proj_value_name, None) and lookup_field_val != "new":
-            lookup_field_val = getattr(self.request, proj_value_name)
+        session_slug = get_project_slug_from_session(self.request)
+        if session_slug and lookup_field_val != "new":
+            lookup_field_val = session_slug
 
         def set_args(name: str) -> None:
             self.kwargs.pop(lookup_field, None)
