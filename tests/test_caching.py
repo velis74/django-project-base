@@ -8,27 +8,37 @@ from django_project_base.caching import CacheCounter
 from django_project_base.caching.cache_queue import CacheQueue
 
 
-class TestCaching(SimpleTestCase):
+def get_redis_cache_backend_name():
+    if CacheQueue.is_redis_cache_backend("default"):
+        return "django_redis.cache.RedisCache"
+    else:
+        return "django.core.cache.backends.locmem.LocMemCache"
 
-    @override_settings(CACHES={
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": f"redis://127.0.0.1:6379?db=1",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+
+class TestCaching(SimpleTestCase):
+    @override_settings(
+        CACHES={
+            "default": {
+                "BACKEND": get_redis_cache_backend_name(),
+                "LOCATION": "redis://127.0.0.1:6379?db=1",
+                "OPTIONS": {
+                    "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                },
             },
-        },
-    })
+        }
+    )
     def test_cache_counter_redis_cache(self):
         # Calling cache counter test for redis cache backend
         self._test_cache_counter()
 
-    @override_settings(CACHES={
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': '',
+    @override_settings(
+        CACHES={
+            "default": {
+                "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+                "LOCATION": "",
+            }
         }
-    })
+    )
     def test_cache_counter_loc_mem_cache(self):
         # Calling cache counter test for locmem cache backend
         self._test_cache_counter()
@@ -79,6 +89,7 @@ class TestCaching(SimpleTestCase):
     def _change_counters(self, increase=True, start=0):
         def _increase_counter(key, value):
             from django.db import connection
+
             counter = CacheCounter(key)
             for _i in range(10):
                 params = dict()
@@ -106,25 +117,29 @@ class TestCaching(SimpleTestCase):
         for process in test_processes:
             process.join()
 
-    @override_settings(CACHES={
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": f"redis://127.0.0.1:6379?db=1",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    @override_settings(
+        CACHES={
+            "default": {
+                "BACKEND": get_redis_cache_backend_name(),
+                "LOCATION": f"redis://127.0.0.1:6379?db=1",
+                "OPTIONS": {
+                    "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                },
             },
-        },
-    })
+        }
+    )
     def test_cache_queue_redis_cache(self):
         # Calling cache queue test for redis cache backend
         self._test_cache_queue()
 
-    @override_settings(CACHES={
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': '',
+    @override_settings(
+        CACHES={
+            "default": {
+                "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+                "LOCATION": "",
+            }
         }
-    })
+    )
     def test_cache_queue_loc_mem_cache(self):
         # Calling cache queue test for locmem cache backend
         self._test_cache_queue()
@@ -209,7 +224,7 @@ class TestCaching(SimpleTestCase):
         self.assertEqual(len(whole_list), 0)
 
         cache_queue.set_timeout(2)
-        cache_queue.rpush(b'1', b'2', b'3', b'4')
+        cache_queue.rpush(b"1", b"2", b"3", b"4")
         # retrieving, but not removing items from start of queue
         next_items = cache_queue.lrange(2)
         self.assertTrue(isinstance(next_items, list))

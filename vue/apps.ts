@@ -1,8 +1,6 @@
 import { createDynamicForms } from '@velis/dynamicforms';
 import { createPinia } from 'pinia';
 import { App } from 'vue';
-import 'vuetify/styles/main.css';
-import '@velis/dynamicforms/styles.css';
 
 import * as DpbComponents from './dpb-components';
 import * as VuetifyComponents from './vuetify-components';
