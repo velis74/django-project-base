@@ -15,7 +15,7 @@ First, the global request API:
 from django_project_base.base.middleware import has_current_request, get_current_request
 
 if has_current_request():
-    print(get_current_request().selected_project_slug)
+    print(get_current_request().selected_project.slug)
 ```
 
 The middleware is configured with a setting named `DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES`. Default value for
