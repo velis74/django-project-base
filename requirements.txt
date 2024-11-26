@@ -20,3 +20,4 @@ pandas
 click>=8.1
 ruff
 ruff-lsp
+django_redis
