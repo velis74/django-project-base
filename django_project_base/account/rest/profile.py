@@ -37,7 +37,6 @@ from rest_framework.serializers import Serializer
 from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
-from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.base.permissions import IsProjectOwner
@@ -48,7 +47,12 @@ from django_project_base.notifications.email_notification import (
 )
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 from django_project_base.permissions import BasePermissions
-from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
+from django_project_base.project_selection import (
+    get_project_slug_from_session,
+    get_user_projects,
+    ProjectNotSelectedError,
+)
+from django_project_base.rest.project import ProjectSerializer
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
 from django_project_base.utils import get_pk_name
 
@@ -460,7 +464,7 @@ class ProfileViewSet(ModelViewSet):
             response_data["default_project"] = ProjectSerializer(request.selected_project).data
             cache.set(cache_key, request.selected_project.pk, timeout=None)
         except ProjectNotSelectedError:
-            q = ProjectViewSet._get_queryset_for_request(request)
+            q = get_user_projects(self.request.user)
             # todo this might be a problem if the cache is cleared. then selected project might change for some users as
             #   previously selected project would be forgotten. might have to move this to a table?
             previously_selected_project_pk = cache.get(cache_key)
@@ -638,7 +642,7 @@ class ProfileViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         project = swapper.load_model("django_project_base", "Project").objects.get(
-            slug=getattr(self.request, settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES["project"]["value_name"])
+            slug=get_project_slug_from_session(self.request)
         )
         if (
             sett := swapper.load_model("django_project_base", "ProjectSettings")

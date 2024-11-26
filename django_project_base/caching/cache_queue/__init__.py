@@ -20,31 +20,31 @@ class CacheQueue(ABC):
 
     @abstractmethod
     def set_cache(self):
-        """Set cache client"""
+        """ Set cache client """
 
     @abstractmethod
     def rpush(self, *values):
-        """Add data to end of queue"""
+        """ Add data to end of queue """
 
     @abstractmethod
     def lpush(self, *values):
-        """Add data to start of queue"""
+        """ Add data to start of queue """
 
     @abstractmethod
     def lpop(self, count: Optional[int] = None):
-        """Get and remove data from start of queue"""
+        """ Get and remove data from start of queue """
 
     @abstractmethod
     def rpop(self, count: Optional[int] = None):
-        """Get and remove data from end of queue"""
+        """ Get and remove data from end of queue """
 
     @abstractmethod
     def lrange(self, count=None):
-        """Get data from start of queue"""
+        """ Get data from start of queue """
 
     @abstractmethod
     def ltrim(self, count=None):
-        """Remove data from start of queue"""
+        """ Remove data from start of queue """
 
     def get_default_timeout(self):
         return self.django_cache.default_timeout
@@ -56,7 +56,7 @@ class CacheQueue(ABC):
 
     @abstractmethod
     def update_timeout(self):
-        """Update timeout of cached key"""
+        """ Update timeout of cached key """
 
     @staticmethod
     def is_redis_cache_backend(cache_name):

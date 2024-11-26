@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.models import BaseProfile, BaseProject
+from django_project_base.project_selection import ProjectNotSelectedError
 
 
 class IsSuperUser(BasePermission):
@@ -19,6 +19,8 @@ def can_user_hijack_another_user(hijacker, hijacked):
 
 
 def project_is_selected(project: BaseProject) -> bool:
+    if not project:
+        return False
     try:
         project.get_deferred_fields()  # force immediate LazyObject evaluation
     except ProjectNotSelectedError:

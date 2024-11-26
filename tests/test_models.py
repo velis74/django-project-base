@@ -24,13 +24,27 @@ class TestProfile(TestBase):
         assert UserProfile()
 
     def test_reverse_full_name_order(self):
+        from django.db.models import Model
+        from django_project_base.rest.project import ProjectSerializer
+        project: Model = ProjectSerializer.Meta.model.objects.last()
+
         self.assertTrue(self._login_with_test_user_two(), "Not logged in")
-        response = self.api_client.get("/account/profile/current", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["full_name"], "Janez Novak")
 
         settings.PROFILE_REVERSE_FULL_NAME_ORDER = True
-        response = self.api_client.get("/account/profile/current", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["full_name"], "Novak Janez")
 
@@ -38,6 +52,11 @@ class TestProfile(TestBase):
         janez = UserProfile.objects.get(username="janez")
         janez.reverse_full_name_order = True
         janez.save()
-        response = self.api_client.get("/account/profile/current", {}, format="json")
+        response = self.api_client.get(
+            "/account/profile/current",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["full_name"], "Novak Janez")

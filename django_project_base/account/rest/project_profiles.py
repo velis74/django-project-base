@@ -21,9 +21,9 @@ from rest_framework.response import Response
 from rest_framework.utils import model_meta
 
 from django_project_base.account.rest.profile import ProfileSerializer, ProfileViewSet
+from django_project_base.project_selection import ProjectNotSelectedError
 
 from ...base.permissions import is_project_owner, is_superuser, IsProjectOwnerOrMemberReadOnly, project_is_selected
-from ..middleware import ProjectNotSelectedError
 from .project_profiles_utils import filter_project_members_fields, get_project_members
 
 

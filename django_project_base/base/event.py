@@ -13,6 +13,7 @@ from rest_registration.settings import registration_settings
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.notifications.email_notification import SystemEMailNotificationWithListOfEmails
 from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.project_selection import get_current_project_attr
 
 
 class UserModel:
@@ -105,11 +106,7 @@ class UserInviteFoundEvent(BaseEvent):
         payload.accepted = datetime.datetime.now()
         payload.save(update_fields=["accepted"])
 
-        if current_project_attr := (
-            getattr(settings, "DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES", {})
-            .get("project", {})
-            .get("value_name", None)
-        ):
+        if current_project_attr := get_current_project_attr():
             kwargs["request"].session[current_project_attr] = payload.project.slug
         kwargs["request"].session.pop("invite-pk", None)
 

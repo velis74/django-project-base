@@ -37,10 +37,12 @@ class TestListMails(NotificationsTransactionTestCase):
             ).send()
 
     def test_list_internal_mails(self):
+        curr_project_slug = swapper.load_model("django_project_base", "Project").objects.first().slug
         response: Response = self.api_client.get(
             reverse("notification-list"),
             format="json",
             HTTP_HOST=socket.gethostname().lower(),
+            HTTP_CURRENT_PROJECT=curr_project_slug,
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self._login_to_api_client_with_test_user()
@@ -48,7 +50,7 @@ class TestListMails(NotificationsTransactionTestCase):
             reverse("notification-list"),
             format="json",
             HTTP_HOST=socket.gethostname().lower(),
-            HTTP_CURRENT_PROJECT=swapper.load_model("django_project_base", "Project").objects.first().slug,
+            HTTP_CURRENT_PROJECT=curr_project_slug,
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(1, len(response.data))

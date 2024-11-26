@@ -20,7 +20,7 @@ from django.utils.timezone import datetime, now, timedelta
 from dynamicforms import fields
 from rest_framework.request import Request
 
-from django_project_base.account.middleware import ProjectNotSelectedError
+from django_project_base.project_selection import ProjectNotSelectedError
 
 
 def get_project_members(request: Request, project=None) -> QuerySet:

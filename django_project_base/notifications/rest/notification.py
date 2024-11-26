@@ -34,7 +34,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.licensing.logic import LicenseReportSerializer, LogAccessService
 from django_project_base.notifications.base.channels.sms_channel import SmsChannel
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -44,6 +43,7 @@ from django_project_base.notifications.models import (
     DjangoProjectBaseNotification,
     SearchItems,
 )
+from django_project_base.project_selection import ProjectNotSelectedError
 from django_project_base.utils import get_host_url, get_pk_name
 
 
@@ -472,7 +472,7 @@ class NotificationViewset(ModelViewSet):
     def get_queryset(self):
         try:
             return DjangoProjectBaseNotification.objects.filter(
-                project_slug=self.request.selected_project_slug
+                project_slug=self.request.selected_project.slug
             ).order_by("-created_at")
         except ProjectNotSelectedError as e:
             raise NotFound(e.message)
@@ -487,9 +487,7 @@ class NotificationViewset(ModelViewSet):
                 content_type=DjangoProjectBaseMessage.HTML,
             ),
             raw_recipents=self.request.data["message_to"],
-            project=swapper.load_model("django_project_base", "Project")
-            .objects.get(slug=self.request.selected_project_slug)
-            .slug,
+            project=self.request.selected_project.slug,
             recipients=serializer.validated_data["message_to"],
             delay=int(datetime.datetime.now().timestamp()),
             channels=[
