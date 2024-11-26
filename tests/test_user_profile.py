@@ -62,7 +62,7 @@ class TestProfileViewSet(TestBase):
             "/account/profile/1",
             {"bio": "Sample bio text."},
             format="json",
-            headers={"Current-project": project.slug}
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -70,7 +70,7 @@ class TestProfileViewSet(TestBase):
             "/account/profile/1",
             {},
             format="json",
-            headers={"Current-project": project.slug}
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("bio", False), "Sample bio text.")
@@ -93,7 +93,7 @@ class TestProfileViewSet(TestBase):
             "/account/profile?search=mi",
             {},
             format="json",
-            headers={"Current-project": project.slug}
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
@@ -105,7 +105,7 @@ class TestProfileViewSet(TestBase):
         #     "/account/profile?search=j",
         #     {},
         #     format="json",
-        #     headers={"Current-project": project.slug}
+        #     HTTP_CURRENT_PROJECT=project.slug
         # )
         # self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.assertEqual(len(response.data), 0)
@@ -118,7 +118,7 @@ class TestProfileViewSet(TestBase):
         #     "/account/profile?search=j",
         #     {},
         #     format="json",
-        #     headers={"Current-project": project.slug}
+        #     HTTP_CURRENT_PROJECT=project.slug
         # )
         #
         # self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -143,7 +143,7 @@ class TestProfileViewSet(TestBase):
             "/account/profile/1",
             {},
             format="json",
-            headers={"Current-project": project.slug}
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("is_staff", "not_exist"), "not_exist")
@@ -159,7 +159,7 @@ class TestProfileViewSet(TestBase):
             "/account/profile/1",
             {},
             format="json",
-            headers={"Current-project": project.slug}
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("is_staff", "not_exist"), True)
@@ -169,7 +169,7 @@ class TestProfileViewSet(TestBase):
             "/account/profile/2",
             {},
             format="json",
-            headers={"Current-project": project.slug}
+            HTTP_CURRENT_PROJECT=project.slug
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get("is_staff", "not_exist"), False)
@@ -184,8 +184,11 @@ class TestProfileViewSet(TestBase):
         swapper.load_model(
             "django_project_base", "ProjectMember"
         ).objects.create(project_id=project.id, member_id=2)
-        response = self.api_client.delete("/account/profile/1", {}, format="json",
-                                          headers={"Current-project": project.slug})
+        response = self.api_client.delete(
+            "/account/profile/1", {},
+            format="json",
+            HTTP_CURRENT_PROJECT=project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected_response = b'{"detail":"You do not have permission to perform this action."}'
         self.assertEqual(response.content, expected_response)
@@ -195,8 +198,12 @@ class TestProfileViewSet(TestBase):
         miha.is_superuser = True
         miha.save()
         user_cache_invalidate(miha)
-        response = self.api_client.delete("/account/profile/2", {}, format="json",
-                                          headers={"Current-project": project.slug})
+        response = self.api_client.delete(
+            "/account/profile/2",
+            {},
+            format="json",
+            HTTP_CURRENT_PROJECT=project.slug
+        )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_profile_destroy_my_profile(self):
