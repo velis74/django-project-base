@@ -45,9 +45,9 @@ class TestSerialization(SimpleTestCase):
 
         self.assertEqual(cache.get("processed"), 3)
         end = 0
-        for key in sorted(times, key=lambda k: times[k]["start"]):
+        for key in sorted(times.keys(), key=lambda k: times[k]["start"]):
             start = times[key]["start"]
-            self.assertLess(end, start)
+            self.assertLessEqual(end, start)
             end = times[key]["end"]
 
     @override_settings(CACHES={

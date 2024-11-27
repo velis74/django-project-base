@@ -144,7 +144,7 @@ class IntDescribedEnum(IntEnum):
 
     @classmethod
     def get_choices_tuple(cls):
-        return tuple((item, item.description) for item in cls)
+        return tuple((item.value, item.description) for item in cls)
 
     @classmethod
     def has_value(cls, value):
