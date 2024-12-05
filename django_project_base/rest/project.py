@@ -81,7 +81,7 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
         try:
             # had to copy this from the mixin because we don't have self here
             model_func = import_string(getattr(settings, ProjectViewSet.MODEL_FUNC_SETTING_NAME, None))
-            model = model_func(None)
+            model = model_func(None, request)
         except ImportError:
             model = swapper.load_model("django_project_base", "Project")
 
