@@ -10,12 +10,13 @@ from django.core.management import call_command
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields
 from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
-from dynamicforms.serializers import ModelSerializer
+from dynamicforms.serializers import DynamicModelMixin, DynamicModelSerializerMixin, ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.viewsets import ModelViewSet
 from rest_framework import status
@@ -37,9 +38,11 @@ from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SEND
 from django_project_base.utils import get_pk_name
 
 
-class ProjectSerializer(ModelSerializer):
+class ProjectSerializer(DynamicModelSerializerMixin, ModelSerializer):
     template_context = dict(url_reverse="project-base-project")
     form_titles = {"table": _("Projects"), "new": _("New project"), "edit": _("Edit project")}
+    MODEL_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROJECT_MODEL_AT_RUNTIME"
+    LAYOUT_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROJECT_LAYOUT_AT_RUNTIME"
 
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
@@ -59,9 +62,10 @@ class ProjectSerializer(ModelSerializer):
         layout = Layout(Row("name"), Row("slug"), Row("description"))
 
 
-class ProjectViewSet(ModelViewSet):
+class ProjectViewSet(DynamicModelMixin, ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = (IsProjectOwnerOrReadOnly | CreateAny,)
+    MODEL_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROJECT_MODEL_AT_RUNTIME"
 
     def new_object(self: ModelViewSet):
         new_object = super().new_object()
@@ -74,7 +78,14 @@ class ProjectViewSet(ModelViewSet):
 
     @staticmethod
     def _get_queryset_for_request(request):
-        qs = swapper.load_model("django_project_base", "Project").objects
+        try:
+            # had to copy this from the mixin because we don't have self here
+            model_func = import_string(getattr(settings, ProjectViewSet.MODEL_FUNC_SETTING_NAME, None))
+            model = model_func(None)
+        except ImportError:
+            model = swapper.load_model("django_project_base", "Project")
+
+        qs = model.objects
         # todo: request.user.is_authenticated this should be solved with permission class
         if not request or not request.user or not request.user.is_authenticated:
             return qs.none()
