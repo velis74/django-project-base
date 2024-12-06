@@ -8,6 +8,7 @@ import swapper
 from django.conf import settings
 from django.core.management import call_command
 from django.db import transaction
+from django.db.models import Model
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.module_loading import import_string
@@ -83,6 +84,9 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
             model_func = import_string(getattr(settings, ProjectViewSet.MODEL_FUNC_SETTING_NAME, None))
             model = model_func(None, request)
         except ImportError:
+            model = None
+
+        if not model:
             model = swapper.load_model("django_project_base", "Project")
 
         qs = model.objects
@@ -124,8 +128,8 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
     )
     def get_current_project(self, request: Request, **kwargs) -> Response:
         try:
-            request.selected_project.get_deferred_fields()  # force immediate LazyObject evaluation
-            serializer = self.get_serializer(request.selected_project)
+            instance = self.get_instance(request.selected_project.pk)
+            serializer = self.get_serializer(instance)
         except ProjectNotSelectedError as e:
             raise NotFound(e.message)
         return Response(serializer.data)
@@ -141,13 +145,33 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
     @get_current_project.mapping.put
     def update_current_profile(self, request: Request, **kwargs) -> Response:
         try:
-            serializer = self.get_serializer(request.selected_project, data=request.data, many=False)
+            instance = self.get_instance(request.selected_project.pk, create_if_not_exists=True)
+            serializer = self.get_serializer(instance, data=request.data, many=False)
             serializer.is_valid(raise_exception=True)
             serializer.save()
         except ProjectNotSelectedError as e:
             raise NotFound(e.message)
 
         return Response(serializer.data)
+
+    def get_instance(self, pk, create_if_not_exists=False):
+        model = self.get_queryset().model
+        parent_model = list(model._meta.parents.keys())[0] if model._meta.parents else None
+
+        try:
+            return self.get_queryset().get(pk=pk)
+        except model.DoesNotExist:
+            if parent_model:
+                try:
+                    parent = parent_model.objects.get(pk=pk)
+                    if create_if_not_exists:
+                        instance: Model = model(**{f"{parent_model._meta.model_name}_ptr": parent})
+                        instance.save_base(raw=True)
+                        return instance
+                    return parent
+                except parent_model.DoesNotExist:
+                    raise model.DoesNotExist()
+            raise model.DoesNotExist()
 
     def get_object(self):
         SLUG_FIELD_NAME: str = settings.DJANGO_PROJECT_BASE_SLUG_FIELD_NAME
@@ -176,7 +200,7 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         create_response = super().create(request, *args, **kwargs)
-        project = swapper.load_model("django_project_base", "Project").objects.get(slug=create_response.data["slug"])
+        project = self.get_queryset().model.objects.get(slug=create_response.data["slug"])
         swapper.load_model("django_project_base", "ProjectMember").objects.create(project=project, member=request.user)
         project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
         project_settings_model.objects.create(
