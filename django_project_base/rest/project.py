@@ -48,12 +48,6 @@ class ProjectSerializer(DynamicModelSerializerMixin, ModelSerializer):
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
 
-        if self.context.get("view") and self.context["view"].format_kwarg == "componentdef":
-            self.fields.fields["owner"].display_table = DisplayMode.SUPPRESS
-            if self.context["view"].detail and self.instance.pk is None:
-                # we are rendering new form
-                self.fields.fields["owner"].display_form = DisplayMode.HIDDEN
-
     # logo = fields.FileField(display=DisplayMode.SUPPRESS, required=False)  # todo: not implemented UI
 
     # we can remove the owner, because they're set at project creation and there will be a separate API for changing
