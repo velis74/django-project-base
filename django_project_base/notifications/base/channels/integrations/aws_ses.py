@@ -4,7 +4,8 @@ import re
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import List, Optional, Union
+from email.utils import make_msgid
+from typing import Optional, Union
 
 import boto3
 
@@ -82,33 +83,40 @@ class AwsSes(ProviderIntegration):
         DeliveryReport.objects.filter(pk=pk).update(status=DeliveryReport.Status.DELIVERED)
 
     def parse_msg_images(self, msg: dict) -> MIMEMultipart:
-        mail = MIMEMultipart("mixed")
+        # Create root multipart/related message
+        mail = MIMEMultipart("related")
         mail["Subject"] = msg["Subject"]["Data"]
 
-        # extract embedded images
+        # Create HTML part first
+        html_part = MIMEText(msg["Body"]["Html"]["Data"], "html")
+        mail.attach(html_part)
+
+        # Extract embedded images
         pattern = r'<img[^>]*src="(data:image/([^;]+);base64,([^"]+))"[^>]*>'
         content: str = msg["Body"]["Html"]["Data"]
-        # make attachements from images and replace
-        embedded: List[str, MIMEImage] = []
-        for index, (src, type, data) in enumerate(re.findall(pattern, content)):
-            img_name = f"image{index + 1}"
-            img_temp = MIMEImage(base64.b64decode(data), type)
-            img_temp.add_header("Content-ID", f"{img_name}")
-            # this looks kinda ugly, but we need all this data to properly deduplicate and write images in
-            embedded.append((src, (img_name, img_temp)))
 
-        deduplicated_embedded = dict(embedded).items()
+        pattern_clean = r'<img([^>]*?)(?:width|height)=["\']\d+["\']([^>]*?)>'
+        while re.search(pattern_clean, content):
+            content = re.sub(pattern_clean, r"<img\1\2>", content)
 
-        # deduplicate images, replace and register attachments
-        for src, (img_name, img) in deduplicated_embedded:
-            content = content.replace(src, f"cid:{img_name}")
+        # Process each image
+        for index, (src, img_type, data) in enumerate(re.findall(pattern, content)):
+            # Generate unique content ID
+            content_id = make_msgid()  # This creates a unique ID like <123.ABC@domain>
 
-        # attach body
-        mail.attach(MIMEText(content, "html"))
+            # Create image part
+            img = MIMEImage(base64.b64decode(data), _subtype=img_type.lower())
+            img.add_header("Content-ID", content_id)
+            img.add_header("Content-Disposition", "inline")
 
-        # just to make sure, body comes first, then image
-        for _, (_, img) in deduplicated_embedded:
+            # Replace data URI with cid: URI in HTML
+            content = content.replace(src, f"cid:{content_id[1:-1]}")  # Remove < > from content ID
+
+            # Attach image part
             mail.attach(img)
+
+        # Update HTML content with cid: references
+        html_part.set_payload(content)
 
         return mail
 
