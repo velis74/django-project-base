@@ -23,7 +23,8 @@ apiClient.interceptors.request.use(
     if (_.includes(Store.get('ignored-apis') || [], config.url)) {
       new AbortController().abort('app-canceled-err');
     }
-    config.headers['Content-Type'] = 'application/json';
+    console.log(`ApiClient Content-Type = ${config.headers['Content-Type']}`);
+    // config.headers['Content-Type'] = 'application/json';
     if (currentProject && currentProject.length) {
       config.headers['Current-Project'] = currentProject;
     }
