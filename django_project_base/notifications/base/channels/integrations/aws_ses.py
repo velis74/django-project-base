@@ -87,12 +87,7 @@ class AwsSes(ProviderIntegration):
         mail = MIMEMultipart("related")
         mail["Subject"] = msg["Subject"]["Data"]
 
-        # Create HTML part first
-        html_part = MIMEText(msg["Body"]["Html"]["Data"], "html")
-        mail.attach(html_part)
-
         # Extract embedded images
-        pattern = r'<img[^>]*src="(data:image/([^;]+);base64,([^"]+))"[^>]*>'
         content: str = msg["Body"]["Html"]["Data"]
 
         pattern_clean = r'<img([^>]*?)(?:width|height)=["\']\d+["\']([^>]*?)>'
@@ -100,6 +95,8 @@ class AwsSes(ProviderIntegration):
             content = re.sub(pattern_clean, r"<img\1\2>", content)
 
         # Process each image
+        all_images = []
+        pattern = r'<img[^>]*src="(data:image/([^;]+);base64,([^"]+))"[^>]*>'
         for index, (src, img_type, data) in enumerate(re.findall(pattern, content)):
             # Generate unique content ID
             content_id = make_msgid()  # This creates a unique ID like <123.ABC@domain>
@@ -113,10 +110,13 @@ class AwsSes(ProviderIntegration):
             content = content.replace(src, f"cid:{content_id[1:-1]}")  # Remove < > from content ID
 
             # Attach image part
-            mail.attach(img)
+            all_images.append(img)
 
         # Update HTML content with cid: references
-        html_part.set_payload(content)
+        html_part = MIMEText(content, "html")
+        mail.attach(html_part)
+        for img in all_images:
+            mail.attach(img)
 
         return mail
 
