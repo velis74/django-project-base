@@ -1,4 +1,5 @@
 import datetime
+import types
 import uuid
 
 import swapper
@@ -6,7 +7,7 @@ import swapper
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.validators import int_list_validator
-from django.db import models, OperationalError, ProgrammingError
+from django.db import models, OperationalError, ProgrammingError, transaction
 from django.db.models import SET_NULL, Value
 from django.db.models.functions import Concat
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +35,46 @@ class AbstractDjangoProjectBaseMessage(models.Model):
 
 
 class DjangoProjectBaseMessage(AbstractDjangoProjectBaseMessage):
+    _unsaved_attachments = []
+
+    def __init__(self, *args, **kwargs):
+        attachments = kwargs.pop("attachments", None)
+        super().__init__(*args, **kwargs)
+        if attachments:
+            if not isinstance(attachments, (list, tuple, set, types.GeneratorType)):
+                attachments = [attachments]
+            for attachment in attachments:
+                self._unsaved_attachments.append(DjangoProjectBaseMessageAttachment(message=self, file=attachment))
+
+    @transaction.atomic
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        for attachment in self.get_unsaved_attachments():
+            attachment.save()
+
+    def get_unsaved_attachments(self):
+        return self._unsaved_attachments
+
+    def get_attachments(self):
+        if self.id:
+            return list(self.attachments.all())
+        else:
+            return self.get_unsaved_attachments()
+
+
+class AbstractDjangoProjectBaseMessageAttachment(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
+    file = models.FileField(null=False, blank=False, verbose_name=_("Attachment"))
+
+    class Meta:
+        abstract = True
+        verbose_name = "MessageAttachment"
+
+
+class DjangoProjectBaseMessageAttachment(AbstractDjangoProjectBaseMessageAttachment):
+    message = models.ForeignKey(
+        DjangoProjectBaseMessage, on_delete=models.CASCADE, verbose_name=_("Message"), related_name="attachments"
+    )
     pass
 
 

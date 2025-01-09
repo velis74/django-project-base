@@ -1,3 +1,4 @@
+{% load i18n %}
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -71,41 +72,44 @@
         <td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0;"
             bgcolor="#F0F0F0">
             <table border="0" cellpadding="0" cellspacing="0" align="center"
-                   width="560" style="border-collapse: collapse; border-spacing: 0; padding: 0; width: inherit;
-	max-width: 560px;" class="wrapper">
-            </table>
-            <table border="0" cellpadding="0" cellspacing="0" align="center"
                    bgcolor="#FFFFFF"
                    width="560" style="border-collapse: collapse; border-spacing: 0; padding: 0; width: inherit;
 	max-width: 560px;" class="container">
                 <tr>
-                    <td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; padding: 0; padding-left: 6.25%; padding-right: 6.25%; width: 87.5%; font-size: 17px; font-weight: 400; line-height: 160%;
-			padding-top: 25px;
-			color: #000000;
-			font-family: sans-serif;" class="paragraph">
-                    </td>
-                </tr>
-                <tr>
                     <td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; width: 87.5%;
-			padding: 25px 6.25% 5px;" class="button"><p>
+			padding: 1em 6.25% 1em;" class="button">
                         <table border="0" cellpadding="0" cellspacing="0" align="center"
-                               style="max-width: 240px; min-width: 120px; border-collapse: collapse;
+                               style="max-width: 560px; min-width: 120px; border-collapse: collapse;
                                border-spacing: 0; padding: 0;">
                             <tr>
-                                {% autoescape off %}
-                                    {{ message }}
-                                {% endautoescape %}
+                                <td>
+                                    <h3>
+                                        {% autoescape off %}
+                                        {{ message_subject }}
+                                        {% endautoescape %}
+                                    </h3>
+                                    <p>
+                                        {% autoescape off %}
+                                        {{ message_body }}
+                                        {% endautoescape %}
+                                    </p>
+                                </td>
                             </tr>
+                            {% if attachments %}
+                            <tr>
+                                <td style="padding-top: 1em">
+                                    <h4 style="margin-bottom: .5em">{% trans "Attachments" %}</h4>
+                                </td>
+                            </tr>
+                            {% for name, url in attachments %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url }}">{{ name }}</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
                         </table>
-                        <p></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" valign="top" style="border-collapse: collapse; border-spacing: 0; margin: 0; width: 87.5%;
-			padding: 25px 6.25% 0;" class="line">
-                        <hr
-                                align="center" color="#E0E0E0" noshade size="1" style="margin: 0; padding: 0;"
-                                width="100%"/>
                     </td>
                 </tr>
             </table>

@@ -435,7 +435,11 @@ class NotificationViewset(ModelViewSet):
         return render(
             request,
             "notification.html",
-            dict(message=notification.message.subject + "</br></br></br>" + notification.message.body),
+            dict(
+                message_subject=notification.message.subject,
+                message_body=notification.message.body,
+                attachments=[(att.file.name, att.file.url) for att in notification.message.get_attachments()],
+            ),
         )
 
     def filter_queryset_field(self, queryset, field, value):
