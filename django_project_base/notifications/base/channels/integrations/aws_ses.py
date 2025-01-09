@@ -1,6 +1,8 @@
 import base64
+import os
 import re
 
+from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -63,6 +65,7 @@ class AwsSes(ProviderIntegration):
             "Charset": "UTF-8",
             "Data": str(notification.message.body),
         }
+        msg["Attachments"] = notification.message.get_attachments()
         return msg
 
     def parse_delivery_report(self, dlr: DeliveryReport):
@@ -117,6 +120,12 @@ class AwsSes(ProviderIntegration):
         mail.attach(html_part)
         for img in all_images:
             mail.attach(img)
+
+        for attachment in msg.get("Attachments", []):
+            with open(attachment.file.path, "rb") as f:
+                part = MIMEApplication(f.read())
+                part.add_header("Content-Disposition", "attachment", filename=os.path.basename(attachment.file.name))
+                mail.attach(part)
 
         return mail
 
