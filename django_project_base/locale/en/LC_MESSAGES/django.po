@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-25 06:42+0000\n"
+"POT-Creation-Date: 2025-01-10 07:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,7 +110,7 @@ msgstr ""
 msgid "Add new record"
 msgstr ""
 
-#: django_project_base/account/rest/invite.py:136
+#: django_project_base/account/rest/invite.py:129
 msgid "You are invited to project"
 msgstr ""
 
@@ -176,15 +176,15 @@ msgstr ""
 msgid "User with this email already exists."
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:521
+#: django_project_base/account/rest/profile.py:523
 msgid "Code required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:531
+#: django_project_base/account/rest/profile.py:533
 msgid "Invalid code"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:649
+#: django_project_base/account/rest/profile.py:651
 msgid "Your account was created for you"
 msgstr ""
 
@@ -238,11 +238,11 @@ msgstr ""
 msgid "Project settings action required"
 msgstr ""
 
-#: django_project_base/base/fields.py:22
+#: django_project_base/base/fields.py:21
 msgid "Value is not a hex color (e.g #88f or #8080ff)"
 msgstr ""
 
-#: django_project_base/base/models.py:24 django_project_base/base/models.py:277
+#: django_project_base/base/models.py:24 django_project_base/base/models.py:279
 msgid "Name"
 msgstr ""
 
@@ -250,7 +250,7 @@ msgstr ""
 msgid "Slug"
 msgstr ""
 
-#: django_project_base/base/models.py:26 django_project_base/base/models.py:278
+#: django_project_base/base/models.py:26 django_project_base/base/models.py:280
 msgid "Description"
 msgstr ""
 
@@ -313,47 +313,48 @@ msgctxt "A tag slug"
 msgid "slug"
 msgstr ""
 
-#: django_project_base/base/models.py:239
+#: django_project_base/base/models.py:241
 msgid "Whole number"
 msgstr ""
 
-#: django_project_base/base/models.py:240
+#: django_project_base/base/models.py:242
 msgid "Decimal number"
 msgstr ""
 
-#: django_project_base/base/models.py:241
+#: django_project_base/base/models.py:243
 msgid "True/False"
 msgstr ""
 
-#: django_project_base/base/models.py:242
+#: django_project_base/base/models.py:244
 msgid "String"
 msgstr ""
 
-#: django_project_base/base/models.py:243
+#: django_project_base/base/models.py:245
 msgid "Custom"
 msgstr ""
 
-#: django_project_base/base/models.py:279
-#: django_project_base/rest/project.py:234
+#: django_project_base/base/models.py:281
+#: django_project_base/rest/project.py:261
 msgid "Value"
 msgstr ""
 
-#: django_project_base/base/models.py:288
+#: django_project_base/base/models.py:290
 msgid "Pending value"
 msgstr ""
 
-#: django_project_base/base/models.py:326
-#: django_project_base/notifications/models.py:25
-#: django_project_base/notifications/models.py:46
-#: django_project_base/notifications/models.py:255
+#: django_project_base/base/models.py:328
+#: django_project_base/notifications/models.py:26
+#: django_project_base/notifications/models.py:66
+#: django_project_base/notifications/models.py:87
+#: django_project_base/notifications/models.py:296
 msgid "Id"
 msgstr ""
 
-#: django_project_base/base/models.py:327
+#: django_project_base/base/models.py:329
 msgid "eMail"
 msgstr ""
 
-#: django_project_base/base/models.py:333
+#: django_project_base/base/models.py:335
 msgid "Invitation message"
 msgstr ""
 
@@ -390,7 +391,7 @@ msgid "Date"
 msgstr ""
 
 #: django_project_base/licensing/models.py:15
-#: django_project_base/notifications/models.py:66
+#: django_project_base/notifications/models.py:107
 msgid "Type"
 msgstr ""
 
@@ -410,69 +411,74 @@ msgstr ""
 msgid "Send notification via EMail if user has no phone number"
 msgstr ""
 
-#: django_project_base/notifications/models.py:26
+#: django_project_base/notifications/models.py:27
 #: django_project_base/notifications/rest/notification.py:181
 msgid "Subject"
 msgstr ""
 
-#: django_project_base/notifications/models.py:27
+#: django_project_base/notifications/models.py:28
 #: django_project_base/notifications/rest/notification.py:53
 msgid "Body"
 msgstr ""
 
-#: django_project_base/notifications/models.py:28
+#: django_project_base/notifications/models.py:29
 msgid "Footer"
 msgstr ""
 
-#: django_project_base/notifications/models.py:45
-msgid "Locale"
+#: django_project_base/notifications/models.py:67
+msgid "Attachment"
 msgstr ""
 
-#: django_project_base/notifications/models.py:52
-msgid "Level"
-msgstr ""
-
-#: django_project_base/notifications/models.py:54
-msgid "Required channels"
-msgstr ""
-
-#: django_project_base/notifications/models.py:55
-msgid "Sent channels"
-msgstr ""
-
-#: django_project_base/notifications/models.py:56
-msgid "Failed channels"
-msgstr ""
-
-#: django_project_base/notifications/models.py:57
-msgid "Created at"
-msgstr ""
-
-#: django_project_base/notifications/models.py:58
-msgid "Sent at"
-msgstr ""
-
-#: django_project_base/notifications/models.py:59
-msgid "Delayed to"
-msgstr ""
-
-#: django_project_base/notifications/models.py:73
+#: django_project_base/notifications/models.py:76
+#: django_project_base/notifications/models.py:114
 msgid "Message"
 msgstr ""
 
-#: django_project_base/notifications/models.py:251
+#: django_project_base/notifications/models.py:86
+msgid "Locale"
+msgstr ""
+
+#: django_project_base/notifications/models.py:93
+msgid "Level"
+msgstr ""
+
+#: django_project_base/notifications/models.py:95
+msgid "Required channels"
+msgstr ""
+
+#: django_project_base/notifications/models.py:96
+msgid "Sent channels"
+msgstr ""
+
+#: django_project_base/notifications/models.py:97
+msgid "Failed channels"
+msgstr ""
+
+#: django_project_base/notifications/models.py:98
+msgid "Created at"
+msgstr ""
+
+#: django_project_base/notifications/models.py:99
+msgid "Sent at"
+msgstr ""
+
+#: django_project_base/notifications/models.py:100
+msgid "Delayed to"
+msgstr ""
+
+#: django_project_base/notifications/models.py:292
 msgid "Delivered"
 msgstr ""
 
-#: django_project_base/notifications/models.py:252
+#: django_project_base/notifications/models.py:293
 msgid "Not Delivered"
 msgstr ""
 
-#: django_project_base/notifications/models.py:253
+#: django_project_base/notifications/models.py:294
 msgid "Pending delivery"
 msgstr ""
 
-#: django_project_base/notifications/models.py:264
+#: django_project_base/notifications/models.py:305
 msgid "Auxiliary notification"
 msgstr ""
 
@@ -486,7 +492,7 @@ msgid "Messages"
 msgstr ""
 
 #: django_project_base/notifications/rest/notification.py:109
-#: django_project_base/notifications/rest/notification.py:454
+#: django_project_base/notifications/rest/notification.py:459
 msgid "New message"
 msgstr ""
 
@@ -521,7 +527,7 @@ msgid "Send"
 msgstr ""
 
 #: django_project_base/notifications/rest/notification.py:185
-#: django_project_base/notifications/rest/notification.py:460
+#: django_project_base/notifications/rest/notification.py:465
 msgid "Send on channels"
 msgstr ""
 
@@ -546,32 +552,36 @@ msgstr ""
 msgid "Have a nice day."
 msgstr ""
 
-#: django_project_base/rest/project.py:42
+#: django_project_base/notifications/templates/notification.html:101
+msgid "Attachments"
+msgstr ""
+
+#: django_project_base/rest/project.py:44
 msgid "Projects"
 msgstr ""
 
-#: django_project_base/rest/project.py:42
+#: django_project_base/rest/project.py:44
 msgid "New project"
 msgstr ""
 
-#: django_project_base/rest/project.py:42
+#: django_project_base/rest/project.py:44
 msgid "Edit project"
 msgstr ""
 
-#: django_project_base/rest/project.py:173
-#: django_project_base/rest/project.py:181
+#: django_project_base/rest/project.py:200
+#: django_project_base/rest/project.py:208
 msgid "Please enter value"
 msgstr ""
 
-#: django_project_base/rest/project.py:174
+#: django_project_base/rest/project.py:201
 msgid "Email sender value for notifications"
 msgstr ""
 
-#: django_project_base/rest/project.py:182
+#: django_project_base/rest/project.py:209
 msgid "Sms sender value for notifications"
 msgstr ""
 
-#: django_project_base/rest/project.py:396
+#: django_project_base/rest/project.py:423
 msgid "required"
 msgstr ""
 
