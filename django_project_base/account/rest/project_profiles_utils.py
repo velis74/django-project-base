@@ -18,6 +18,7 @@ from django.utils.dateparse import (
 )
 from django.utils.timezone import datetime, now, timedelta
 from dynamicforms import fields
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 
 from django_project_base.account.middleware import ProjectNotSelectedError
@@ -30,6 +31,9 @@ def get_project_members(request: Request, project=None) -> QuerySet:
     except ProjectNotSelectedError:
         project = None
         project_members = swapper.load_model("django_project_base", "ProjectMember").objects.all()
+        if not request.user.is_superuser:
+            raise PermissionDenied("Project not selected")
+
     qs = (
         swapper.load_model("django_project_base", "Profile")
         .objects.prefetch_related(Prefetch("projects", queryset=project_members), "groups", "user_permissions")
