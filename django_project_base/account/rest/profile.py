@@ -186,7 +186,11 @@ class ProfileSerializer(ModelSerializer):
                 ),
             )
 
-        if request.user.is_superuser or request.user.is_staff:
+        if (
+            request.user.is_superuser
+            or request.user.is_staff
+            or (request.selected_project and request.selected_project.owner == request.user)
+        ):
             self.actions.actions.append(
                 TableAction(
                     TablePosition.HEADER,
