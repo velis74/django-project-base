@@ -22,6 +22,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 
 from django_project_base.account.middleware import ProjectNotSelectedError
+from django_project_base.base.permissions import is_superuser
 
 
 def get_project_members(request: Request, project=None) -> QuerySet:
@@ -31,7 +32,7 @@ def get_project_members(request: Request, project=None) -> QuerySet:
     except ProjectNotSelectedError:
         project = None
         project_members = swapper.load_model("django_project_base", "ProjectMember").objects.all()
-        if not request.user.is_superuser:
+        if not is_superuser(request.user):
             raise PermissionDenied("Project not selected")
 
     qs = (

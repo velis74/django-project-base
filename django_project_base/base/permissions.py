@@ -45,6 +45,9 @@ def is_project_owner(user: BaseProfile, project: BaseProject) -> bool:
 def is_superuser(user: BaseProfile) -> bool:
     return is_authenticated(user) and user.is_superuser
 
+def is_staff(user: BaseProfile) -> bool:
+    return is_authenticated(user) and user.is_staff
+
 
 class IsProjectOwner(BasePermission):
     """
