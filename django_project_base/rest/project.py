@@ -34,7 +34,7 @@ from django_project_base.base.event import (
     SmsSenderChangedEvent,
 )
 from django_project_base.base.models import BaseProjectSettings
-from django_project_base.base.permissions import CreateAny, IsProjectOwnerOrReadOnly, is_superuser, is_staff
+from django_project_base.base.permissions import CreateAny, is_staff, is_superuser, IsProjectOwnerOrReadOnly
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.utils import get_pk_name
 
