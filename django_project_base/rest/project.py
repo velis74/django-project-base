@@ -34,7 +34,7 @@ from django_project_base.base.event import (
     SmsSenderChangedEvent,
 )
 from django_project_base.base.models import BaseProjectSettings
-from django_project_base.base.permissions import CreateAny, IsProjectOwnerOrReadOnly
+from django_project_base.base.permissions import CreateAny, IsProjectOwnerOrReadOnly, is_superuser, is_staff
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.utils import get_pk_name
 
@@ -236,7 +236,7 @@ class ProjectSettingsSerializer(ModelSerializer):
             ),
         )
         request = self.context.get("request")
-        if request and (request.user.is_superuser or request.user.is_staff):
+        if request and (is_superuser(request.user) or is_staff(request.user)):
             # TODO: https://taiga.velis.si/project/velis74-dynamic-forms/issue/837
             self.actions.actions.append(
                 TableAction(
@@ -460,7 +460,7 @@ class ProjectSettingsViewSet(ModelViewSet):
         url_path="confirm-setting-active",
     )
     def confirm_setting_active(self, request) -> Response:
-        if not (request.user.is_superuser or request.user.is_staff):
+        if not (is_superuser(request.user) or is_staff(request.user)):
             raise PermissionDenied
         setting = get_object_or_404(self.get_serializer_class().Meta.model, pk=self._get_pk_from_request(request))
         call_command(

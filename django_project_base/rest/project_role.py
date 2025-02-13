@@ -15,6 +15,7 @@ from rest_framework.exceptions import ValidationError
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.auth.models import BaseRole
 from django_project_base.base.models import BaseProject
+from django_project_base.base.permissions import is_superuser
 
 
 class ProjectRole:
@@ -67,7 +68,8 @@ class ProjectRoleViewSet(ModelViewSet):
         return None
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
+        # noinspection PyPackageRequirements
+        if is_superuser(self.request.user):
             return self.serializer_class.Meta.model.objects.all()
         if self.action == "list":
             project: BaseProject = self.__get_project()

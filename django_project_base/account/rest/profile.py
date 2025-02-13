@@ -40,7 +40,7 @@ from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.event import UserRegisteredEvent
-from django_project_base.base.permissions import IsProjectOwner
+from django_project_base.base.permissions import is_project_owner, is_staff, is_superuser, IsProjectOwner
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications.email_notification import (
     EMailNotification,
@@ -155,7 +155,7 @@ class ProfileSerializer(ModelSerializer):
         super().__init__(*args, is_filter=is_filter, **kwds)
         request = self._context["request"]
 
-        if not request.user.is_superuser:
+        if not is_superuser(request.user):
             self.fields.pop("is_staff", None)
             self.fields.pop("is_superuser", None)
 
@@ -175,7 +175,7 @@ class ProfileSerializer(ModelSerializer):
 
         if str(request.query_params.get("remove-merge-users", "false")) in tuple(
             map(str, fields.BooleanField.TRUE_VALUES)
-        ) and (request.user.is_superuser or request.user.is_staff):
+        ) and (is_superuser(request.user) or is_staff(request.user)):
             self.actions.actions.append(
                 TableAction(
                     TablePosition.ROW_END,
@@ -186,10 +186,8 @@ class ProfileSerializer(ModelSerializer):
                 ),
             )
 
-        if (
-            request.user.is_superuser
-            or request.user.is_staff
-            or (request.selected_project and request.selected_project.owner == request.user)
+        if is_superuser(request.user) or is_staff(request.user) or is_project_owner(
+                request.user, request.selected_project
         ):
             self.actions.actions.append(
                 TableAction(
@@ -565,7 +563,7 @@ class ProfileViewSet(ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
-        if self.request.user.is_superuser or self.request.user.is_staff:
+        if is_superuser(request.user) or is_staff(request.user):
             return super().destroy(request, *args, **kwargs)
         raise exceptions.PermissionDenied
 
