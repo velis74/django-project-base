@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.handlers.wsgi import WSGIRequest
 
 _threadmap = {}
+_threadmap_cnt = {}
 
 
 def has_current_request() -> bool:
@@ -46,10 +47,19 @@ class UrlVarsMiddleware:
             if param := get_parameter(request, value, config["url_part"]):
                 setattr(request, config["value_name"], param)
 
-        _threadmap[threading.get_ident()] = request
+        threading_ident = threading.get_ident()
+        # In some cases (e.g. wagtail draft document preview), there are multiple (two) runs through middlewares.
+        # See wagtail/models/PreviewableMixin/make_preview_request.
+        # We can't delete key from dict twice... so we introduce a counter, that will make sure,
+        #   that key gets deleted only after we get response for the last time.
+        _threadmap[threading_ident] = request
+        _threadmap_cnt[threading_ident] = _threadmap_cnt.get(threading_ident, 0) + 1
 
         response = self.get_response(request)
 
-        del _threadmap[threading.get_ident()]
+        _threadmap_cnt[threading_ident] = _threadmap_cnt.get(threading_ident, 0) - 1
+        if not _threadmap_cnt[threading_ident]:
+            del _threadmap[threading_ident]
+            del _threadmap_cnt[threading_ident]
 
         return response
