@@ -25,10 +25,16 @@ const settingsLogicTC = <Ref><unknown>settingsLogic;
 const { selectedProjectId } = storeToRefs(userSession);
 
 const { cookies } = useCookies();
+const hasConsumerDefinition = ref(false);
 
 function refreshSettingsLogic() {
-  settingsLogic.value.getFullDefinition();
-  settingsLogic.value.reload();
+  if (!hasConsumerDefinition.value) {
+    settingsLogic.value.getFullDefinition().then(() => {
+      hasConsumerDefinition.value = true;
+    });
+  } else {
+    settingsLogic.value.reload();
+  }
 }
 
 interface ProjectSetting {
