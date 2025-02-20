@@ -159,9 +159,10 @@ class ProjectSettingConfirmedEvent(BaseEvent):
         from django_project_base.aws.ses import AwsSes
 
         def confirm(item):
-            item.value = copy.copy(item.python_pending_value)
-            item.pending_value = None
-            item.save(update_fields=["value", "pending_value"])
+            if value := copy.copy(item.python_pending_value):
+                item.value = value
+                item.pending_value = None
+                item.save(update_fields=["value", "pending_value"])
 
         # not self.user Event is trigerred from management command
         if payload.name == EMAIL_SENDER_ID_SETTING_NAME and (

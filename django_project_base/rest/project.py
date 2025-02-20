@@ -328,6 +328,11 @@ class ProjectSettingsSerializer(ModelSerializer):
 
 class ProjectSettingsViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
+    # Pagination potrebujem, zato, da se sploh pokažejo zapisi v tabeli...
+    #  Drugače funkcija replace_rows nič ne naradi
+    #    - DF pričakuje da pride pagination like object (mora vsebovati "records", kjer so notri zapisi).
+    #  Potrebujem pa vse postavke billinga, ker jih ob shranjevanju pošljem skupaj z glavo.
+    pagination_class = ModelViewSet.generate_paged_loader(page_size=1000, ordering=["id"])
 
     def get_serializer_class(self):
         if (
