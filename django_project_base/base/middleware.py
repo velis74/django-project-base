@@ -43,9 +43,10 @@ class UrlVarsMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        for value, config in settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES.items():
-            if param := get_parameter(request, value, config["url_part"]):
-                setattr(request, config["value_name"], param)
+        if request.path != "/favicon.ico":
+            for value, config in settings.DJANGO_PROJECT_BASE_BASE_REQUEST_URL_VARIABLES.items():
+                if param := get_parameter(request, value, config["url_part"]):
+                    setattr(request, config["value_name"], param)
 
         threading_ident = threading.get_ident()
         # In some cases (e.g. wagtail draft document preview), there are multiple (two) runs through middlewares.
