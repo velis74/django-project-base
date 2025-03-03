@@ -395,6 +395,10 @@ class ProjectSettingsViewSet(ModelViewSet):
         except ProjectNotSelectedError:
             return self.get_serializer().Meta.model.objects.none()
 
+    def filter_queryset_field(self, queryset, field, value):
+        filter_field = "value" if field == "table_value" else field
+        return super().filter_queryset_field(queryset, filter_field, value)
+
     def handle_create_validation_exception(self, e, request, *args, **kwargs):
         if getattr(e, "model-validation", False):
             raise ValidationError({e.detail: e.default_code})

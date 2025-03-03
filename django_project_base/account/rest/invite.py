@@ -73,6 +73,20 @@ class ProjectUserInviteSerializer(ModelSerializer):
     accepted = AcceptedField(display_form=DisplayMode.HIDDEN)
     text = InviteTextField()
 
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        if self.request and getattr(self.request, "selected_project_slug", None):
+            self.fields["role"].queryset = self.fields["role"].queryset.filter(
+                project__slug=self.request.selected_project_slug
+            )
+
+    def to_representation(self, instance, row_data=None):
+        ret = super().to_representation(instance, row_data)
+        if "role-display" in ret and not ret["role"]:
+            # TODO: Tole bi bilo lahko že default v DF-ju... da se None value prikaže kot prazno za related fielde.
+            ret["role-display"] = ""
+        return ret
+
     class Meta:
         model = swapper.load_model("django_project_base", "Invite")
         exclude = ()
@@ -98,6 +112,14 @@ class ProjectUserInviteViewSet(ProjectFilteringViewSet):
             return [IsAuthenticated()]
         else:
             return super().get_permissions()
+
+    def filter_queryset_field(self, queryset, field, value):
+        if field == "accepted":
+            if value == "false":
+                return queryset.filter(accepted__isnull=True)
+            elif value == "true":
+                return queryset.filter(accepted__isnull=False)
+        return super().filter_queryset_field(queryset, field, value)
 
     def new_object(self: ModelViewSet):
         new_object = super().new_object()

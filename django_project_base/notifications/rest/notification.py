@@ -445,11 +445,20 @@ class NotificationViewset(ModelViewSet):
     def filter_queryset_field(self, queryset, field, value):
         if field == "created_at" and value and not value.isnumeric():
             # TODO: search by user defined time range
-            value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
+            try:
+                # This one works in Klubis (Vue3... I left the one in exception, because it might work for some other case)
+                value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z").timestamp())
+            except:
+                value = int(datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp())
             return queryset.filter(**{f"{field}__gte": value - 1800, f"{field}__lte": value + 1800})
 
         if field == "recipients_original_payload" and value:
             return queryset.filter(**{"recipients_original_payload_search__icontains": value})
+        if field == "subject" and value:
+            return queryset.filter(**{"message__subject__icontains": value})
+        if field == "delivery" and value:
+            return queryset.filter(**{"required_channels__icontains": value})
+
         return super().filter_queryset_field(queryset, field, value)
 
     def get_serializer_class(self):

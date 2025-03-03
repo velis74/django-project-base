@@ -8,6 +8,7 @@ import swapper
 
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
+from django.db.models import F
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from dynamicforms import fields, serializers
@@ -110,7 +111,7 @@ class ProjectProfilesViewSet(ProfileViewSet):
 
     def filter_queryset_field(self, queryset, field, value):
         if field == "state" and value:
-            return queryset.filter(projects__state=value)
+            return queryset.alias(member_state=F("projects__state")).filter(member_state=value)
         return super().filter_queryset_field(queryset, field, value)
 
     def save_club_member_data(self, request: Request, user, **kwargs):
