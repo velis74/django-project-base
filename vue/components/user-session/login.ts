@@ -36,45 +36,60 @@ function parseErrors(apiErr: AxiosError<any>, errsStore: { [key: string]: any[] 
   }
 }
 
+function getMessage(firstLogin: boolean) {
+  let header;
+  let body;
+  if (firstLogin) {
+    header = gettext('Set password');
+    body = gettext(`This is your first login. Verification code was sent to your email. 
+Please enter this code and set your password to be able to start using this application.`);
+  } else {
+    header = gettext('Password recovery');
+    body = gettext('If an active account exists with the given email, we\'ve sent a message to it.');
+  }
+  return [
+    h('h2', { class: 'mt-n6 mb-4' }, header),
+    h(
+      'h4',
+      { class: 'd-flex justify-center mb-4' },
+      [body],
+    ),
+    h('div', {}, [
+      h('h4', { class: 'd-flex justify-center mb-1' }, [gettext('Please enter the code from the message:')]),
+      h('input', {
+        type: 'text',
+        placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
+        id: 'password-reset-input-code',
+        class: 'w-100 mb-2 p-1 rounded border-lightgray',
+      }, {}),
+      h('h4', { class: 'd-flex justify-center mt-2 mb-1' }, [gettext('Please enter your new password:')]),
+      h('input', {
+        type: 'password',
+        placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
+        id: 'password-reset-input',
+        class: 'w-100 mb-2 p-1 rounded border-lightgray',
+      }, {}),
+      h('input', {
+        type: 'password',
+        placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
+          'Confirm password',
+        ),
+        id: 'password-reset-input-confirmation',
+        class: 'w-100 mb-2 p-1 rounded border-lightgray',
+      }, {}),
+    ]),
+  ];
+}
+
 function useLogin() {
   const userSession = useUserSessionStore();
+  // Tole je za register formo pomoje - ko gre spremenljivka showLoginDialog na true.
   const loginConsumer = new ConsumerLogicApi(userSession.apiEndpointLogin);
 
-  async function enterResetPasswordData() {
+  async function enterResetPasswordData(firstLogin: boolean = false) {
     // eslint-disable-next-line vue/max-len
     if (_.includes(window.location.hash, '#reset-user-password') || _.includes(window.location.hash, '#/reset-user-password')) {
-      const resetEmailPromise = await dfModal.message('', () => [
-        h('h2', { class: 'mt-n6 mb-4' }, gettext('Password recovery')),
-        h(
-          'h4',
-          { class: 'd-flex justify-center mb-4' },
-          [gettext('If an active account exists with the given email, we\'ve sent a message to it.')],
-        ),
-        h('div', {}, [
-          h('h4', { class: 'd-flex justify-center mb-1' }, [gettext('Please enter the code from the message:')]),
-          h('input', {
-            type: 'text',
-            placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
-            id: 'password-reset-input-code',
-            class: 'w-100 mb-2 p-1 rounded border-lightgray',
-          }, {}),
-          h('h4', { class: 'd-flex justify-center mt-2 mb-1' }, [gettext('Please enter your new password:')]),
-          h('input', {
-            type: 'text',
-            placeholder: resetPasswordErrors.password ? resetPasswordErrors.password : gettext('New password'),
-            id: 'password-reset-input',
-            class: 'w-100 mb-2 p-1 rounded border-lightgray',
-          }, {}),
-          h('input', {
-            type: 'text',
-            placeholder: resetPasswordErrors.password_confirm ? resetPasswordErrors.password_confirm : gettext(
-              'Confirm password',
-            ),
-            id: 'password-reset-input-confirmation',
-            class: 'w-100 mb-2 p-1 rounded border-lightgray',
-          }, {}),
-        ]),
-      ], new FilteredActions({
+      const resetEmailPromise = await dfModal.message('', () => getMessage(firstLogin), new FilteredActions({
         cancel: new Action({
           name: 'cancel',
           label: gettext('Cancel'),
@@ -83,14 +98,14 @@ function useLogin() {
         }),
         confirm: new Action({
           name: 'reset',
-          label: gettext('Reset'),
+          label: firstLogin ? gettext('Confirm') : gettext('Reset'),
           displayStyle: { asButton: true, showLabel: true, showIcon: true },
           position: 'FORM_FOOTER',
         }),
       }));
       if (resetEmailPromise.action.name === 'reset') {
-        const password: String | null = (<HTMLInputElement> document.getElementById('password-reset-input')).value;
-        const passwordConfirmation: String | null = (<HTMLInputElement> document.getElementById(
+        const password: String | null = (<HTMLInputElement>document.getElementById('password-reset-input')).value;
+        const passwordConfirmation: String | null = (<HTMLInputElement>document.getElementById(
           'password-reset-input-confirmation',
         )).value;
         apiClient.post('/account/reset-password/', {
@@ -99,13 +114,19 @@ function useLogin() {
           signature: resetPasswordData.signature,
           password,
           password_confirm: passwordConfirmation,
-          code: (<HTMLInputElement> document.getElementById('password-reset-input-code')).value,
+          code: (<HTMLInputElement>document.getElementById('password-reset-input-code')).value,
         }).then(() => {
           window.location.hash = '';
-          dfModal.message('', gettext('Password was reset successfully'));
+          userSession.checkLogin(false).then(() => {
+            if (firstLogin) {
+              dfModal.message('', gettext('Password was set successfully'));
+            } else {
+              dfModal.message('', gettext('Password was reset successfully'));
+            }
+          });
         }).catch((err) => {
           parseErrors(err, resetPasswordErrors);
-          enterResetPasswordData();
+          enterResetPasswordData(firstLogin);
         });
         return;
       }
@@ -138,7 +159,7 @@ function useLogin() {
       }),
     }));
     if (resetEmailPromise.action.name === 'confirm') {
-      const email: String | null = (<HTMLInputElement> document.getElementById('input-reset-email')).value;
+      const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
       apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
         resetPasswordData = res.data;
         window.location.hash = '#reset-user-password';
@@ -188,6 +209,7 @@ function useLogin() {
     if (payload.value?.login || payload.value?.password) {
       const result = await userSession.login(payload.value?.login, payload.value?.password);
       if (result?.status === 200) {
+        // Tukaj notri sploh ne pride. Zato, ker se že prej naredi reload.
         // nothing to do: login was a success
         if (userSession.deleteAt) {
           await resetUserState();
@@ -196,6 +218,16 @@ function useLogin() {
       }
       if (result?.response?.status === 400) {
         parseErrors(result, errors);
+      } else if (result?.response?.status === 403 && result?.response?.data?.detail === 'new_user') {
+        apiClient.post('/account/send-reset-password-link/', {
+          username: payload.value?.login,
+          firstLogin: true,
+        }).then((res) => {
+          resetPasswordData = res.data;
+          window.location.hash = '#reset-user-password';
+          enterResetPasswordData(true);
+        });
+        return;
       } else {
         Object.keys(errors).forEach((key: string) => {
           delete errors[key];

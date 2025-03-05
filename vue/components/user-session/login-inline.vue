@@ -120,12 +120,13 @@ async function validateEmailCode() {
       { code: (<HTMLInputElement>document.getElementById('new-account-confirmation-code'))?.value },
     ).then(() => {
       registerWorkflowErrors.value = [];
-      dfModal.message(
-        gettext('New account'),
-        gettext('Your account is now active and you are logged in.') + (
-          _.size(pageName) ? gettext('Welcome to') + pageName : ''),
-      );
-      userSession.checkLogin(false);
+      userSession.checkLogin(false).then(() => {
+        dfModal.message(
+          gettext('New account'),
+          gettext('Your account is now active and you are logged in.') + (
+            _.size(pageName) ? gettext('Welcome to') + pageName : ''),
+        );
+      });
     }).catch((err) => {
       parseErrors(err, registerWorkflowErrors);
       validateEmailCode();
@@ -188,19 +189,6 @@ async function changeRegisterMail() {
 async function openRegistrationForm() {
   const registration = await openRegistration();
   if (registration) {
-    const okDialog = await dfModal.message(
-      '',
-      gettext('New account registration dialog is filled out and confirmed successfully. ' +
-            'the account itself is made inactive with delete_at set to +24 hours.'),
-      new FilteredActions({
-        confirm: new Action({
-          name: 'confitm',
-          label: gettext('Ok'),
-          displayStyle: { asButton: true, showLabel: true, showIcon: true },
-          position: 'FORM_FOOTER',
-        }),
-      }),
-    );
     if (!await validateEmailCode()) {
       await changeRegisterMail();
     }

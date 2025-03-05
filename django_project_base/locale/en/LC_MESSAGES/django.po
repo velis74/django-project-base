@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-10 07:10+0000\n"
+"POT-Creation-Date: 2025-03-05 08:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,81 +110,81 @@ msgstr ""
 msgid "Add new record"
 msgstr ""
 
-#: django_project_base/account/rest/invite.py:129
+#: django_project_base/account/rest/invite.py:151
 msgid "You are invited to project"
 msgstr ""
 
-#: django_project_base/account/rest/login.py:21
 #: django_project_base/account/rest/login.py:24
+#: django_project_base/account/rest/login.py:27
 msgid "Login"
 msgstr ""
 
-#: django_project_base/account/rest/login.py:23
+#: django_project_base/account/rest/login.py:26
 msgid "Back to site"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:120
+#: django_project_base/account/rest/profile.py:121
 msgid "Full name"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:128
-#: django_project_base/account/rest/profile.py:130
+#: django_project_base/account/rest/profile.py:129
+#: django_project_base/account/rest/profile.py:131
 msgid "Specific permissions for this user"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:140
-#: django_project_base/account/rest/profile.py:146
+#: django_project_base/account/rest/profile.py:141
+#: django_project_base/account/rest/profile.py:147
 msgid ""
 "The groups this user belongs to. A user will get all permissions granted to "
 "each of their groups."
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:182
 #: django_project_base/account/rest/profile.py:183
+#: django_project_base/account/rest/profile.py:184
 #: django_project_base/account/rest/profile_merge.py:54
 #: django_project_base/account/rest/profile_merge.py:55
-#: django_project_base/account/rest/project_profiles.py:60
+#: django_project_base/account/rest/project_profiles.py:61
 msgid "Merge"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:193
-#: django_project_base/account/rest/profile.py:194
+#: django_project_base/account/rest/profile.py:198
+#: django_project_base/account/rest/profile.py:199
 msgid "Export"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:239
+#: django_project_base/account/rest/profile.py:251
 msgid "Password"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:240
+#: django_project_base/account/rest/profile.py:252
 msgid "Repeat Password"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:261
+#: django_project_base/account/rest/profile.py:287
 msgid "Password is required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:263
+#: django_project_base/account/rest/profile.py:289
 msgid "Passwords do not match"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:266
+#: django_project_base/account/rest/profile.py:292
 msgid "Email is required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:413
+#: django_project_base/account/rest/profile.py:446
 msgid "User with this email already exists."
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:523
+#: django_project_base/account/rest/profile.py:559
 msgid "Code required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:533
+#: django_project_base/account/rest/profile.py:569
 msgid "Invalid code"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:651
+#: django_project_base/account/rest/profile.py:687
 msgid "Your account was created for you"
 msgstr ""
 
@@ -198,43 +198,79 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:54
+#: django_project_base/account/rest/project_profiles.py:55
 msgid "Reset password"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:175
+#: django_project_base/account/rest/project_profiles.py:176
 msgid "Export users"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:180
+#: django_project_base/account/rest/project_profiles.py:181
 msgid "Template"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:183
+#: django_project_base/account/rest/project_profiles.py:184
 msgid "CSV"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:184
+#: django_project_base/account/rest/project_profiles.py:185
 msgid "XLS"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:188
+#: django_project_base/account/rest/project_profiles.py:189
 msgid "Profile Fields"
 msgstr ""
 
-#: django_project_base/account/rest/project_profiles.py:192
+#: django_project_base/account/rest/project_profiles.py:193
 msgid "Print Filter"
 msgstr ""
 
-#: django_project_base/account/rest/reset_password.py:81
+#: django_project_base/account/rest/reset_password.py:99
 msgid "Invalidate password"
 msgstr ""
 
-#: django_project_base/account/rest/reset_password.py:85
+#: django_project_base/account/rest/reset_password.py:103
 msgid "Target user id"
 msgstr ""
 
-#: django_project_base/base/event.py:188
+#: django_project_base/account/service/reset_password_email_service.py:41
+#, python-format
+msgid "First login to %s"
+msgstr ""
+
+#: django_project_base/account/service/reset_password_email_service.py:42
+#, python-format
+msgid "You or someone acting as you is logging to %s for the first time."
+msgstr ""
+
+#: django_project_base/account/service/reset_password_email_service.py:44
+#, python-format
+msgid "Password recovery for %s"
+msgstr ""
+
+#: django_project_base/account/service/reset_password_email_service.py:46
+#, python-format
+msgid ""
+"You or someone acting as you requested a password reset for your account at "
+"%s."
+msgstr ""
+
+#: django_project_base/account/service/reset_password_email_service.py:50
+msgid "Your verification code is"
+msgstr ""
+
+#: django_project_base/account/service/reset_password_email_service.py:52
+msgid "Code is valid for"
+msgstr ""
+
+#: django_project_base/account/service/reset_password_email_service.py:54
+msgid ""
+"If this was not you or it was unintentional, you may safely ignore this "
+"message."
+msgstr ""
+
+#: django_project_base/base/event.py:189
 msgid "Project settings action required"
 msgstr ""
 
@@ -242,7 +278,7 @@ msgstr ""
 msgid "Value is not a hex color (e.g #88f or #8080ff)"
 msgstr ""
 
-#: django_project_base/base/models.py:24 django_project_base/base/models.py:279
+#: django_project_base/base/models.py:24 django_project_base/base/models.py:283
 msgid "Name"
 msgstr ""
 
@@ -250,7 +286,7 @@ msgstr ""
 msgid "Slug"
 msgstr ""
 
-#: django_project_base/base/models.py:26 django_project_base/base/models.py:280
+#: django_project_base/base/models.py:26 django_project_base/base/models.py:284
 msgid "Description"
 msgstr ""
 
@@ -258,7 +294,7 @@ msgstr ""
 msgid "Logo"
 msgstr ""
 
-#: django_project_base/base/models.py:29 django_project_base/base/models.py:117
+#: django_project_base/base/models.py:29 django_project_base/base/models.py:121
 msgid "Owner"
 msgstr ""
 
@@ -290,59 +326,59 @@ msgstr ""
 msgid "Delete profile at"
 msgstr ""
 
-#: django_project_base/base/models.py:111
-#: django_project_base/base/models.py:154
+#: django_project_base/base/models.py:115
+#: django_project_base/base/models.py:158
 msgid "Project"
 msgstr ""
 
-#: django_project_base/base/models.py:146
+#: django_project_base/base/models.py:150
 msgid "Color"
 msgstr ""
 
-#: django_project_base/base/models.py:148
+#: django_project_base/base/models.py:152
 msgid "Icon"
 msgstr ""
 
-#: django_project_base/base/models.py:156
+#: django_project_base/base/models.py:160
 msgctxt "A tag name"
 msgid "name"
 msgstr ""
 
-#: django_project_base/base/models.py:158
+#: django_project_base/base/models.py:162
 msgctxt "A tag slug"
 msgid "slug"
 msgstr ""
 
-#: django_project_base/base/models.py:241
+#: django_project_base/base/models.py:245
 msgid "Whole number"
 msgstr ""
 
-#: django_project_base/base/models.py:242
+#: django_project_base/base/models.py:246
 msgid "Decimal number"
 msgstr ""
 
-#: django_project_base/base/models.py:243
+#: django_project_base/base/models.py:247
 msgid "True/False"
 msgstr ""
 
-#: django_project_base/base/models.py:244
+#: django_project_base/base/models.py:248
 msgid "String"
 msgstr ""
 
-#: django_project_base/base/models.py:245
+#: django_project_base/base/models.py:249
 msgid "Custom"
 msgstr ""
 
-#: django_project_base/base/models.py:281
+#: django_project_base/base/models.py:285
 #: django_project_base/rest/project.py:261
 msgid "Value"
 msgstr ""
 
-#: django_project_base/base/models.py:290
+#: django_project_base/base/models.py:294
 msgid "Pending value"
 msgstr ""
 
-#: django_project_base/base/models.py:328
+#: django_project_base/base/models.py:332
 #: django_project_base/notifications/models.py:26
 #: django_project_base/notifications/models.py:66
 #: django_project_base/notifications/models.py:87
@@ -350,11 +386,11 @@ msgstr ""
 msgid "Id"
 msgstr ""
 
-#: django_project_base/base/models.py:329
+#: django_project_base/base/models.py:333
 msgid "eMail"
 msgstr ""
 
-#: django_project_base/base/models.py:335
+#: django_project_base/base/models.py:339
 msgid "Invitation message"
 msgstr ""
 
@@ -492,7 +528,7 @@ msgid "Messages"
 msgstr ""
 
 #: django_project_base/notifications/rest/notification.py:109
-#: django_project_base/notifications/rest/notification.py:459
+#: django_project_base/notifications/rest/notification.py:468
 msgid "New message"
 msgstr ""
 
@@ -527,7 +563,7 @@ msgid "Send"
 msgstr ""
 
 #: django_project_base/notifications/rest/notification.py:185
-#: django_project_base/notifications/rest/notification.py:465
+#: django_project_base/notifications/rest/notification.py:474
 msgid "Send on channels"
 msgstr ""
 
@@ -581,11 +617,11 @@ msgstr ""
 msgid "Sms sender value for notifications"
 msgstr ""
 
-#: django_project_base/rest/project.py:423
+#: django_project_base/rest/project.py:432
 msgid "required"
 msgstr ""
 
-#: django_project_base/rest/project_role.py:32
+#: django_project_base/rest/project_role.py:33
 msgid "Project is required"
 msgstr ""
 

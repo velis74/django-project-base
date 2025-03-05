@@ -3,6 +3,7 @@ from typing import Dict, TYPE_CHECKING, Union
 
 from django.db.models import Model, QuerySet
 from django.http import HttpRequest
+from rest_framework.test import APIRequestFactory
 from rest_framework.utils.model_meta import get_field_info
 
 if TYPE_CHECKING:
@@ -164,3 +165,18 @@ def get_host_url(request: HttpRequest) -> str:
     if not host_url.endswith("/"):
         host_url += "/"
     return host_url
+
+
+def copy_request(request: HttpRequest, data: dict = None) -> HttpRequest:
+    headers = {k: v for k, v in request.headers.items() if k.lower() != "content-length"}
+
+    # Create a new request object
+    factory = APIRequestFactory()
+    new_request = getattr(factory, request.method.lower())(request.path, data, format="json", headers=headers)
+    new_request.COOKIES = request.COOKIES
+    new_request.session = request.session
+    # noinspection PyUnresolvedReferences
+    new_request.selected_project = request.selected_project
+    # noinspection PyUnresolvedReferences
+    new_request.selected_project_slug = request.selected_project_slug
+    return new_request
