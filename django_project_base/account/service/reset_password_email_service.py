@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.utils.crypto import get_random_string
-from django.utils.translation import gettext as __
+from django.utils.translation import gettext as _
 from natural.date import compress
 from rest_framework.request import Request
 from rest_registration.exceptions import UserNotFound
@@ -18,7 +18,7 @@ from django_project_base.notifications.email_notification import EMailNotificati
 from django_project_base.notifications.models import DjangoProjectBaseMessage
 
 
-def send_reset_password_verification_email(request: Request, user, send=False) -> Dict:
+def send_reset_password_verification_email(request: Request, user, send=False, first_login=False) -> Dict:
     if not send:
         return {}
     signer = ResetPasswordSigner(
@@ -37,14 +37,27 @@ def send_reset_password_verification_email(request: Request, user, send=False) -
     except:
         project = None
 
+    if first_login:
+        subject = _('First login to %s') % request.META['HTTP_HOST']
+        body = _("You or someone acting as you is logging to %s for the first time.") % request.META["HTTP_HOST"]
+    else:
+        subject = _('Password recovery for %s') % request.META['HTTP_HOST']
+        body = (
+            _("You or someone acting as you requested a password reset for your account at %s.")
+            % request.META["HTTP_HOST"]
+        )
+    body += "\n\n%s: %s \n\n%s %s.\n\n%s" % (
+        _("Your verification code is"),
+        code,
+        _("Code is valid for"),
+        compress(settings.CONFIRMATION_CODE_TIMEOUT),
+        _("If this was not you or it was unintentional, you may safely ignore this message."),
+    )
+
     EMailNotification(
         message=DjangoProjectBaseMessage(
-            subject=f"{__('Password recovery for')} {request.META['HTTP_HOST']}",
-            body=f"{__('You or someone acting as you requested a password reset for your account at')} "
-            f"{request.META['HTTP_HOST']}. "
-            f"\n\n{__('Your verification code is')}: "
-            f"{code} \n\n {__('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n\n"
-            f"{__('If this was not you or it was unintentional, you may safely ignore this message.')}",
+            subject=subject,
+            body=body,
             footer="",
             content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
         ),

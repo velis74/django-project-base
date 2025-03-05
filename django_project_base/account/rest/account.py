@@ -233,7 +233,7 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
         ):
             user.is_active = True
             user.save(update_fields=["is_active"])
-            login(request, user, backend="django_project_base.base.auth_backends.UsersCachingBackend")
+            login(request._request, user, backend="django_project_base.base.auth_backends.UsersCachingBackend")
             response = Response()
             response.delete_cookie("register-flow")
             return response

@@ -2,7 +2,9 @@ import json
 
 import swapper
 
+from django.contrib.auth import login
 from django.core.cache import cache
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
@@ -19,6 +21,7 @@ from rest_registration.exceptions import UserNotFound
 from rest_registration.settings import registration_settings
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
+from django_project_base.utils import copy_request
 
 
 class ResetPasswordSerializer(serializers.Serializer):
@@ -51,13 +54,28 @@ class ResetPasswordViewSet(viewsets.ViewSet):
         },
     )
     @action(detail=False, methods=["post"], url_path="reset-password", url_name="reset-password")
+    @transaction.atomic
     def reset_password(self, request: Request) -> Response:
         code_ser = ResetPasswordCodeSerializer(
             data=json.loads(request._request.body.decode()), context=dict(request=request)
         )
         code_ser.is_valid(raise_exception=True)
         response = reset_password(request._request)
-        cache.delete(RESET_USER_PASSWORD_VERIFICATION_CODE + str(code_ser["user_id"]))
+        if response.status_code == status.HTTP_200_OK:
+            if (
+                user_profile := swapper.load_model("django_project_base", "Profile")
+                .objects.filter(id=code_ser.validated_data["user_id"])
+                .first()
+            ):
+                user_profile.password_invalid = False
+                user_profile.save(update_fields=["password_invalid"])
+                login(
+                    request._request,
+                    user_profile.user_ptr,
+                    backend="django_project_base.base.auth_backends.UsersCachingBackend",
+                )
+
+            cache.delete(RESET_USER_PASSWORD_VERIFICATION_CODE + code_ser.validated_data["user_id"])
         return response
 
     @extend_schema(
@@ -142,12 +160,20 @@ class SendResetPasswordLinkViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="send-reset-password-link", url_name="send-reset-password-link")
     def send_reset_password_link(self, request: Request) -> Response:
         try:
-            req_data = request._request.body
-            send_reset_password_link(request._request)
+            req_data = request.data.copy()
+            first_login = req_data.pop("firstLogin", False)
+            user = registration_settings.SEND_RESET_PASSWORD_LINK_USER_FINDER(req_data)
+            if "email" not in req_data and "username":
+                new_data = dict(email=user.email)
+            else:
+                new_data = req_data
+
+            send_reset_password_link(copy_request(request._request, new_data))
             reset_data = registration_settings.RESET_PASSWORD_VERIFICATION_EMAIL_SENDER(
                 request=request,
-                user=registration_settings.SEND_RESET_PASSWORD_LINK_USER_FINDER(json.loads(req_data.decode())),
+                user=user,
                 send=True,
+                first_login=first_login,
             )
             return Response(reset_data)
         except UserNotFound:

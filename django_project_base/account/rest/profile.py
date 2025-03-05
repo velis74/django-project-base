@@ -34,6 +34,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from rest_framework.validators import UniqueValidator
 from rest_registration.exceptions import UserNotFound
 
 from django_project_base.account.constants import MERGE_USERS_QS_CK
@@ -186,8 +187,10 @@ class ProfileSerializer(ModelSerializer):
                 ),
             )
 
-        if is_superuser(request.user) or is_staff(request.user) or is_project_owner(
-                request.user, request.selected_project
+        if (
+            is_superuser(request.user)
+            or is_staff(request.user)
+            or is_project_owner(request.user, request.selected_project)
         ):
             self.actions.actions.append(
                 TableAction(
@@ -202,6 +205,13 @@ class ProfileSerializer(ModelSerializer):
     def get_full_name(self, obj):
         # we have made it so that str(UserProfile) returns full_name, but possibly decorated with status (Klubis)
         return str(obj)
+
+    def to_internal_value(self, data):
+        if not data.get("username") and data.get("email"):
+            data["username"] = data.get("email")
+        if not self.instance and not data.get("password"):
+            data["password_invalid"] = True
+        return super().to_internal_value(data)
 
     def get_is_impersonated(self, obj):
         try:
@@ -254,6 +264,20 @@ class ProfileRegisterSerializer(ProfileSerializer):
             size="large",
         )
         exclude = ProfileSerializer.Meta.exclude + ("avatar",)
+
+    def to_internal_value(self, data):
+        # Pogledam če obstaja user z istim mailom.
+        # Če obstaja, pogledam, če je to new_user.
+        # Če je, potem za username UniqueValidator v queryset dam exclude za ta id.
+        if not self.instance:
+            if email := data.get("email"):
+                user = swapper.load_model("django_project_base", "Profile").objects.filter(email=email).first()
+                if user and user.is_new_user:
+                    for validator in self.fields["username"].validators:
+                        if isinstance(validator, UniqueValidator):
+                            validator.queryset = validator.queryset.exclude(id=user.id)
+
+        return super().to_internal_value(data)
 
     def validate(self, attrs):
         super().validate(attrs)
@@ -411,8 +435,18 @@ class ProfileViewSet(ModelViewSet):
         )
         serializer.is_valid(raise_exception=True)
 
-        if get_user_model().objects.filter(email=serializer.validated_data["email"]).exists():
-            raise ValidationError({"email": _("User with this email already exists.")})
+        user = (
+            get_user_model()
+            .objects.filter(email=serializer.validated_data["email"])
+            .select_related("userprofile")
+            .first()
+        )
+        if user:
+            if not user.userprofile or not user.userprofile.is_new_user:
+                raise ValidationError({"email": _("User with this email already exists.")})
+            serializer.instance = user
+            user.userprofile.password_invalid = False
+            user.userprofile.save(update_fields=["password_invalid"])
 
         user = serializer.save()
         user.set_password(request.data["password"])

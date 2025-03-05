@@ -76,12 +76,16 @@ class SessionMiddleware(SessionMiddlewareBase):
             request.selected_project = SimpleLazyObject(selected_project_not_setup)
 
     def process_response(self, request, response):
-        if getattr(response, "returntype", None) == "json":
-            process_response = super().process_response(request, response)
+        process_response = super().process_response(request, response)
+        if getattr(response, "returntype", None) == "json" or "/dynamicforms/progress" in request.path:
+            # sometimes (i.e. at new user login) dynamicforms progress is called before user login...
+            # and it can happen, that responses come back after login. But response have request session id,
+            # that is not valid anymore (because login happened in the meantime).
+            # And when such response come back to frontend it starts using this session data for further requests.
+            # Which actually means that user is not logged in anymore.
+            # So we can just remove session data from dynamicforms/progress response. It shouldn't be needed anyway.
             process_response.cookies.pop("sessionid", None)
             process_response.cookies.pop("csrftoken", None)
             process_response.csrf_cookie_set = False
 
-            return process_response
-
-        return super().process_response(request, response)
+        return process_response
