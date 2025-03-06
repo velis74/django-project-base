@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiTypes
 from dynamicforms import fields as df_fields, serializers as df_serializers, viewsets as df_viewsets
 from dynamicforms.action import Actions
+from dynamicforms.mixins import DisplayMode
 from rest_framework import fields, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
@@ -132,11 +133,31 @@ class ChangePasswordSerializer(df_serializers.Serializer):
         "edit": "",
     }
 
+    invalid_password_notification = df_fields.SerializerMethodField(label="", display=DisplayMode.HIDDEN)
     old_password = df_fields.CharField(label=_("Current password"), required=True, password_field=True)
     password = df_fields.CharField(label=_("New password"), required=True, password_field=True)
     password_confirm = df_fields.CharField(label=_("Confirm new password"), required=True, password_field=True)
 
     actions = Actions(add_form_buttons=True)
+
+    # noinspection PyMethodMayBeStatic
+    def get_invalid_password_notification(self, obj):
+        return _("Your password has expired. You must change it before continuing to use this application.")
+
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        view = kwds.get("context", {}).get("view")
+        hijack_superuser = False
+        if view and isinstance(view, ChangePasswordViewSet):
+            hijack_superuser = view.is_hijacker_superuser()
+
+        try:
+            if kwds.get("context", {}).get("request").user.password_invalid and not hijack_superuser:
+                self.fields["invalid_password_notification"].display = DisplayMode.FULL
+        except:
+            pass
+        if hijack_superuser and "old_password" in self.fields:
+            self.fields["old_password"].display = DisplayMode.HIDDEN
 
 
 @extend_schema_view(
@@ -145,6 +166,26 @@ class ChangePasswordSerializer(df_serializers.Serializer):
 class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
     serializer_class = ChangePasswordSerializer
     permission_classes = [AllowAny]
+
+    def is_hijacker_superuser(self):
+        if hijacker := get_hijacker(self.request):
+            return hijacker.is_superuser
+        return False
+
+    def get_serializer_class(self):
+        ser = super().get_serializer_class()
+        if self.is_hijacker_superuser():
+
+            class SuperUserChangePasswordSerializer(ser):
+                old_password = None
+
+                def validate(self, attrs):
+                    if attrs["password"] != attrs["password_confirm"]:
+                        raise ValidationError({"password_confirm": _("Passwords don't match")})
+                    return super().validate(attrs)
+
+            return SuperUserChangePasswordSerializer
+        return ser
 
     def initialize_request(self, request, *args, **kwargs):
         request = super().initialize_request(request, *args, **kwargs)
@@ -178,15 +219,8 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
             profile_obj.password_invalid = False
             profile_obj.save(update_fields=["password_invalid"])
 
-        if get_hijacker(request):
-
-            class SuperUserChangePasswordSerializer(ChangePasswordSerializer):
-                old_password = None
-
-            serializer = SuperUserChangePasswordSerializer(
-                data=request.data,
-                context={"request": request},
-            )
+        if self.is_hijacker_superuser():
+            serializer = self.get_serializer(data=request.data, context={"request": request})
             serializer.is_valid(raise_exception=True)
             user = request.user
             user.set_password(serializer.validated_data["password"])
