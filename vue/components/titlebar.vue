@@ -31,7 +31,6 @@ import { maintenanceNotificationAcknowledged as MaintenanceNotificationAcknowled
 import { showMaintenanceNotification } from '../notifications';
 
 import Breadcrumbs from './breadcrumbs.vue';
-import AppNotification from './notification.vue';
 import LoginInline from './user-session/login-inline.vue';
 import ProjectList from './user-session/project-list.vue';
 import useUserSessionStore from './user-session/state';
@@ -40,7 +39,6 @@ import UserProfile from './user-session/user-profile.vue';
 export default defineComponent({
   name: 'TitleBar',
   components: {
-    AppNotification,
     Breadcrumbs,
     LoginInline,
     ProjectList,

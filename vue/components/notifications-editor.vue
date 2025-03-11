@@ -2,7 +2,7 @@
 import {
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerOneShotApi, gettext, RowTypes,
+  ConsumerLogicApi, FormConsumerApi, FormConsumerOneShotApi, gettext, interpolate, RowTypes,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
@@ -39,12 +39,42 @@ const actionViewLicense = async (): Promise<boolean> => {
 };
 
 const actionAddNotification = async (): Promise<boolean> => {
-  await FormConsumerOneShotApi({
+  const formConsumer = new FormConsumerApi({
     url: consumerUrl,
     trailingSlash: consumerTrailingSlash,
     pk: 'new',
     useQueryInRetrieveOnly: true,
   });
+  await formConsumer.getUXDefinition();
+  let data: Partial<any> | undefined;
+  let error = {};
+  let reload;
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const formResult = await formConsumer.withErrors(error).execute(data);
+
+    const resultAction = formResult.action;
+    data = formResult.data;
+
+    error = {};
+    reload = false;
+    if (resultAction.action.name === 'submit' || resultAction.action.name === 'save-only') {
+      try {
+        formResult.data.save_only = resultAction.action.name === 'save-only';
+        // eslint-disable-next-line no-await-in-loop
+        await formConsumer.save();
+        reload = true;
+      } catch (err: any) {
+        error = { ...err?.response?.data };
+      }
+    }
+    // propagate error to the next dialog
+  } while (error && Object.keys(error).length);
+
+  if (reload) {
+    await notificationLogic.value.reload();
+  }
+
   return true;
 };
 
@@ -95,8 +125,19 @@ const handlers = {
     if (context.rowType !== RowTypes.Data || payload == undefined) return false; // eslint-disable-line eqeqeq
     await FormConsumerOneShotApi({
       url: consumerUrl,
-      trailingSlash: licenseConsumerUrlTrailingSlash,
+      trailingSlash: consumerTrailingSlash,
       pk: payload.id,
+    }, handlers);
+    return true;
+  },
+  send: async (action: any, payload: any, context: any) => {
+    apiClient.put(consumerTrailingSlash ? interpolate('%(url)s/', { url: consumerUrl }) : consumerUrl, {
+      id: context.dialog.body.props.payload.id,
+      send: true,
+    }).then(() => {
+      // Moram narediti reload...
+      // ker tukaj nimam dostopa do notificationLogic.rows, da bi samo zamenjal vrstico, ki je bila updatana.
+      notificationLogic.value.reload();
     });
     return true;
   },

@@ -9,7 +9,6 @@ import DpbApp from './dpb-app.vue';
       <v-main>
         <dpb-app/>
       </v-main>
-      <app-notification/>
     </v-app>
   </browser-check>
 </template>

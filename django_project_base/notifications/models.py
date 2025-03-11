@@ -83,6 +83,8 @@ def integer_ts():
 
 
 class AbstractDjangoProjectBaseNotification(models.Model):
+    DELAYED_INDEFINETLY = 2**63 - 1  # Max bigint
+
     locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_("Locale"))  # language
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
     level = models.CharField(
@@ -181,6 +183,10 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
     def recipients_raw(self):
         ids = [int(recipients_id) for recipients_id in self.recipients.split(",")] if self.recipients else []
         return swapper.load_model("django_project_base", "Profile").objects.filter(id__in=ids)
+
+    @property
+    def is_delayed(self):
+        return self.delayed_to == self.DELAYED_INDEFINETLY
 
 
 class SearchItemObject:

@@ -7,14 +7,15 @@ from typing import List, Optional
 import pytz
 import swapper
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import ForeignKey
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
@@ -40,11 +41,10 @@ from django_project_base.notifications.base.channels.sms_channel import SmsChann
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.base.notification import Notification
 from django_project_base.notifications.models import (
-    DjangoProjectBaseMessage,
     DjangoProjectBaseNotification,
     SearchItems,
 )
-from django_project_base.utils import get_host_url, get_pk_name
+from django_project_base.utils import get_pk_name
 
 
 class MessageBodyField(fields.RTFField):
@@ -117,6 +117,12 @@ class NotificationSerializer(ModelSerializer):
             request=self.request
         )
         self.fields.fields["send_notification_sms_text"].display = DisplayMode.SUPPRESS
+
+        viewset = self.context.get("view")
+        if viewset and viewset.kwargs.get("pk") and viewset.kwargs["pk"] == "new":
+            self.actions.actions.append(
+                FormButtonAction(btn_type=FormButtonTypes.SUBMIT, label=_("Save"), name="save-only", serializer=self)
+            )
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
@@ -205,11 +211,26 @@ class NotificationSerializer(ModelSerializer):
     )
 
     created_at = ReadOnlyDateTimeFieldFromTs(
+        label=_("Created"),
+        display_form=DisplayMode.HIDDEN,
+        read_only=True,
+        allow_null=True,
+    )
+
+    sent_at = ReadOnlyDateTimeFieldFromTs(
         label=_("Sent"),
         display_form=DisplayMode.HIDDEN,
         read_only=True,
         allow_null=True,
     )
+
+    is_delayed = fields.SerializerMethodField(
+        label=_("Delayed"), render_params=fields.BooleanField().render_params, display_form=DisplayMode.HIDDEN
+    )
+
+    # noinspection PyPackageRequirements
+    def get_is_delayed(self, rec: DjangoProjectBaseNotification):
+        return rec and rec.is_delayed
 
     def get_delivery(self, rec: DjangoProjectBaseNotification):
         req_channels = rec.required_channels.split(",") if rec.required_channels else []
@@ -232,6 +253,7 @@ class NotificationSerializer(ModelSerializer):
         if kw.get("pk") == "new" and kw.get("format") == "componentdef":
             # enable conditional field render in DF
             repr["send_on_channels"] = []
+            repr["id"] = None
         return repr
 
     def get_subject(self, obj):
@@ -244,7 +266,6 @@ class NotificationSerializer(ModelSerializer):
         exclude = (
             "content_entity_context",
             "locale",
-            "sent_at",
             "delayed_to",
             "recipients_original_payload_search",
             "exceptions",
@@ -266,19 +287,30 @@ class NotificationSerializer(ModelSerializer):
             auto_generate_single_column_layout=False,
             layouts=[
                 ResponsiveTableLayout(
-                    "subject", "recipients_original_payload", "created_at", auto_add_non_listed_columns=False
+                    "subject",
+                    "recipients_original_payload",
+                    "created_at",
+                    "sent_at",
+                    "is_delayed",
+                    auto_add_non_listed_columns=False,
                 ),
                 ResponsiveTableLayout(
-                    [["subject", "created_at"], "recipients_original_payload"], auto_add_non_listed_columns=False
+                    [["subject", "created_at"], ["recipients_original_payload", "sent_at"], "is_delayed"],
+                    auto_add_non_listed_columns=False,
                 ),
-                ResponsiveTableLayout("subject", "created_at", auto_add_non_listed_columns=False),
-                ResponsiveTableLayout(["subject", "created_at"], auto_add_non_listed_columns=False),
+                ResponsiveTableLayout(
+                    "subject", "created_at", "sent_at", "is_delayed", auto_add_non_listed_columns=False
+                ),
+                ResponsiveTableLayout(
+                    ["subject", "created_at", "sent_at", "is_delayed"], auto_add_non_listed_columns=False
+                ),
             ],
         )
 
 
 class MessageToListField(fields.ListField):
     def __init__(self, **kw):
+        self.project_only_recipients = kw.pop("project_only_recipients", False)
         super().__init__(
             child=fields.CharField(),
             display_table=DisplayMode.SUPPRESS,
@@ -357,7 +389,113 @@ class MessageToListField(fields.ListField):
             return MessageToListField.parse([])
         if isinstance(value[0], list):
             value = [item for sublist in value for item in sublist]
-        return MessageToListField.parse(value)
+        ret = MessageToListField.parse(value)
+        if self.project_only_recipients:
+            if (request := self.context.get("request")) and getattr(request, "selected_project_slug", None):
+                ret = list(
+                    swapper.load_model("django_project_base", "ProjectMember")
+                    # only current project members are returned as recipients
+                    .objects.filter(member_id__in=list(map(int, ret)), project__slug=request.selected_project_slug)
+                    .values_list("member_id", flat=True)
+                )
+
+        return ret
+
+
+class DateTimeInfoField(fields.CharField):
+    def __init__(self, placeholder: str = "Not sent", *args, **kwargs):
+        kwargs["read_only"] = True
+        super().__init__(*args, **kwargs)
+        self.placeholder = placeholder
+
+    def to_representation(self, value, row_data=None):
+        if value:
+            # Assuming timestamp is in Django's default timezone (UTC)
+            utc_time = datetime.datetime.utcfromtimestamp(value).replace(tzinfo=timezone.get_current_timezone())
+            return utc_time.strftime("%Y-%m-%d %H:%M:%S")
+        return self.placeholder
+
+
+class MessageBodyReadField(fields.SerializerMethodField):
+    def __init__(self, *args, **kwargs):
+        kwargs["display_table"] = DisplayMode.SUPPRESS
+        super().__init__(*args, **kwargs)
+        self.render_params["form_component_name"] = "DCKEditor"
+
+
+class RecipientsSerializer(ModelSerializer):
+    template_context = dict(url_reverse="notification")
+
+    form_titles = {"table": _("sent to"), "new": "", "edit": ""}
+
+    actions = Actions(
+        add_form_buttons=False,
+        add_default_crud=False,
+        add_default_filter=False,
+    )
+
+    full_name = fields.SerializerMethodField()
+
+    show_filter = False
+
+    # TODO: this is duplicated from ProfileSerializer... DPB
+    def get_full_name(self, obj):
+        # we have made it so that str(UserProfile) returns full_name, but possibly decorated with status (Klubis)
+        return str(obj)
+
+    def __init__(self, method_name=None, *args, **kwargs):
+        self.method_name = method_name
+        super().__init__(*args, **kwargs)
+        self.display_table = DisplayMode.SUPPRESS
+
+    class Meta:
+        model = swapper.load_model("django_project_base", "Profile")
+        fields = ("id", "full_name", "email")
+
+
+class NotificationDetailSerializer(ModelSerializer):
+    template_context = dict(url_reverse="notification")
+    form_titles = {"new": _("Message")}
+
+    actions = Actions(
+        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("close")),
+        add_default_crud=False,
+        add_form_buttons=False,
+    )
+
+    recipients_raw = RecipientsSerializer(many=True)
+    message_subject = fields.SerializerMethodField()
+    message_body = MessageBodyReadField()
+    created_at = DateTimeInfoField(label=_("Created At"))
+    sent_at = DateTimeInfoField(label=_("Sent At"))
+
+    def __init__(self, *args, is_filter: bool = False, **kwds):
+        super().__init__(*args, is_filter=is_filter, **kwds)
+        if self.instance and isinstance(self.instance, DjangoProjectBaseNotification) and self.instance.is_delayed:
+            self.actions.actions.insert(
+                0, FormButtonAction(btn_type=FormButtonTypes.CUSTOM, name="send", label=_("Send"), serializer=self)
+            )
+
+    def get_message_to(self, obj: DjangoProjectBaseNotification):
+        ids = [int(x) for x in obj.recipients.split(",")] if obj.recipients else []
+        return swapper.load_model("django_project_base", "Profile").objects.filter(id__in=ids)
+
+    def get_message_subject(self, obj: DjangoProjectBaseNotification):
+        return obj.message.subject if obj.message else ""
+
+    def get_message_body(self, obj: DjangoProjectBaseNotification):
+        return obj.message.body if obj.message else ""
+
+    class Meta:
+        model = DjangoProjectBaseNotification
+        fields = ("recipients_raw", "message_subject", "message_body", "sent_at", "created_at", "id")
+        layout = Layout(
+            Row(Column("message_subject")),
+            Row("created_at", "sent_at"),
+            Row(Column("message_body")),
+            Row(Column("recipients_raw")),
+            size="large",
+        )
 
 
 class NotificationViewset(ModelViewSet):
@@ -368,6 +506,8 @@ class NotificationViewset(ModelViewSet):
     ]
     permission_classes = [IsAuthenticated]
     pagination_class = ModelViewSet.generate_paged_loader(ordering=["-created_at"])
+    project_only_recipients = False
+    save_only = False
 
     def get_permissions(self):
         if self.action in ("notification_login", "notification_view"):
@@ -443,7 +583,7 @@ class NotificationViewset(ModelViewSet):
         )
 
     def filter_queryset_field(self, queryset, field, value):
-        if field == "created_at" and value and not value.isnumeric():
+        if field in ("created_at", "sent_at") and value and not value.isnumeric():
             # TODO: search by user defined time range
             try:
                 # This one works in Klubis (Vue3... I left the one in exception, because it might work for some other case)
@@ -458,6 +598,11 @@ class NotificationViewset(ModelViewSet):
             return queryset.filter(**{"message__subject__icontains": value})
         if field == "delivery" and value:
             return queryset.filter(**{"required_channels__icontains": value})
+        if field == "is_delayed":
+            if value == "true":
+                return queryset.filter(delayed_to=DjangoProjectBaseNotification.DELAYED_INDEFINETLY)
+            elif value == "false":
+                return queryset.exclude(delayed_to=DjangoProjectBaseNotification.DELAYED_INDEFINETLY)
 
         return super().filter_queryset_field(queryset, field, value)
 
@@ -469,10 +614,13 @@ class NotificationViewset(ModelViewSet):
 
                 message_body = NotificationSerializer().fields.fields["message_body"]
                 message_subject = NotificationSerializer().fields.fields["message_subject"]
-                message_to = MessageToListField(allow_null=False, allow_empty=False)
+                message_to = MessageToListField(
+                    allow_null=False, allow_empty=False, project_only_recipients=self.project_only_recipients
+                )
                 send_on_channels = fields.ListField(
                     label=_("Send on channels"),
                     child=fields.CharField(),
+                    allow_empty=False,
                     required=True,
                     display_table=DisplayMode.SUPPRESS,
                     display_form=DisplayMode.SUPPRESS,
@@ -480,6 +628,8 @@ class NotificationViewset(ModelViewSet):
                 send_notification_sms = fields.BooleanField(default=False, allow_null=False)
 
             return NewMessageSerializer
+        if self.action == "retrieve" and self.kwargs["pk"] and self.kwargs["pk"] != "new":
+            return NotificationDetailSerializer
         return NotificationSerializer
 
     def get_queryset(self):
@@ -491,37 +641,36 @@ class NotificationViewset(ModelViewSet):
             raise NotFound(e.message)
 
     def _create_notification(self, serializer):
-        host_url = get_host_url(self.request)
-        notification = Notification(
-            message=DjangoProjectBaseMessage(
-                subject=serializer.validated_data["message_subject"],
-                body=serializer.validated_data["message_body"],
-                footer="",
-                content_type=DjangoProjectBaseMessage.HTML,
-            ),
-            raw_recipents=self.request.data["message_to"],
-            project=swapper.load_model("django_project_base", "Project")
-            .objects.get(slug=self.request.selected_project_slug)
-            .slug,
-            recipients=serializer.validated_data["message_to"],
-            delay=int(datetime.datetime.now().timestamp()),
-            channels=[
-                ChannelIdentifier.channel(c, settings=settings, project_slug=None).__class__
-                for c in serializer.validated_data["send_on_channels"]
-            ],
-            persist=True,
-            user=self.request.user.pk,
-            send_notification_sms=serializer.validated_data["send_notification_sms"],
-            host_url=host_url,
+        Notification.create_notification(
+            self.request,
+            serializer.validated_data["message_subject"],
+            serializer.validated_data["message_body"],
+            serializer.validated_data["message_to"],
+            serializer.validated_data["send_on_channels"],
+            serializer.validated_data["send_notification_sms"],
+            raw_recipients=self.request.data["message_to"],
+            save_only=self.save_only,
         )
-        notification.send()
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         kwargs.pop("pk", None)
+        if request.data.pop("send", None):
+            from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
+
+            notification = self.get_object()
+            notification.delayed_to = int(datetime.datetime.now().timestamp())
+            notification.save(update_fields=["delayed_to"])
+            QueableNotificationMixin().enqueue_notification(notification, notification.extra_data)
+            serializer = self.get_serializer(notification)
+            return Response(serializer.data)
+        self.save_only = request.data.pop("save_only", False)
         return super().create(request, *args, **kwargs)
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         kwargs.pop("pk", None)
+        self.save_only = request.data.pop("save_only", False)
         return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):

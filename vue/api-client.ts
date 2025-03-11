@@ -1,9 +1,8 @@
-import { apiClient } from '@velis/dynamicforms';
+import { apiClient, DfNotifications } from '@velis/dynamicforms';
 import { InternalAxiosRequestConfig } from 'axios';
 import _ from 'lodash';
 
 import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './api-config';
-import { showGeneralErrorNotification } from './notifications';
 import { Store } from './store';
 
 declare module 'axios' {
@@ -42,7 +41,6 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
     // eslint-disable-next-line vue/max-len
-    const errMsg = error && error.response && error.response.data && error.response.data.detail ? error.response.data.detail : '';
     const status = error && error.response && error.response.status ? parseInt(error.response.status, 10) : null;
     const noSession = status === HTTP_401_UNAUTHORIZED;
     const hideErrorMsg = error.config?.hideErrorNotice === true || error.config.showProgress === true;
@@ -56,7 +54,12 @@ apiClient.interceptors.response.use(
     }
 
     if (noSession) Store.clear();
-    if (!hideErrorMsg) showGeneralErrorNotification(errMsg);
+    try {
+      if (!hideErrorMsg) DfNotifications.showNotificationFromAxiosException(error);
+    } catch (err: any) {
+      console.log(error);
+      console.error(err);
+    }
     return Promise.reject(error);
   },
 );

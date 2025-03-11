@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional, Union
 
-from django.conf import Settings
+from django.conf import LazySettings, Settings
 
 
 class NotificationType(Enum):
@@ -31,7 +31,7 @@ class ChannelIdentifier(Enum):
     @staticmethod
     def channel(
         identifier: Union[int, str],
-        settings: Optional[Settings] = None,
+        settings: Optional[Union[Settings, LazySettings]] = None,
         project_slug: Optional[str] = None,
         ensure_dlr_user=True,
     ) -> Optional["Channel"]:  # noqa: F821
