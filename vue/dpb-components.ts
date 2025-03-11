@@ -1,7 +1,6 @@
 import Breadcrumbs from './components/breadcrumbs.vue';
 import BrowserCheck from './components/browser-check.vue';
 import CookieNotice from './components/cookie-notice.vue';
-import AppNotification from './components/notification.vue';
 import NotificationsEditor from './components/notifications-editor.vue';
 import ProfileSearch from './components/profile-search.vue';
 import ProjectSettings from './components/project-settings.vue';
@@ -18,7 +17,6 @@ export {
   Login,
   ProjectList,
   UserProfile,
-  AppNotification,
   BrowserCheck,
   CookieNotice,
   TitlebarAppStandalone,

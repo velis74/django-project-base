@@ -20,6 +20,7 @@ from django_project_base.notifications.base.enums import ChannelIdentifier, Noti
 from django_project_base.notifications.base.queable_notification_mixin import QueableNotificationMixin
 from django_project_base.notifications.base.send_notification_service import SendNotificationService
 from django_project_base.notifications.models import DjangoProjectBaseMessage, DjangoProjectBaseNotification
+from django_project_base.utils import get_host_url
 
 
 class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
@@ -263,7 +264,8 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
 
             if self.send_notification_sms and channel.name == MailChannel.name:
                 notification.send_notification_sms_text = channel.provider.get_send_notification_sms_text(
-                    notification=notification, host_url=extra_data.get("host_url", "")  # noqa: E126
+                    notification=notification,
+                    host_url=extra_data.get("host_url", ""),  # noqa: E126
                 )
 
         notification.user = self._user
@@ -287,4 +289,50 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
 
             notification.sender[SmsChannel.name] = getattr(settings, "SYSTEM_SMS_SENDER_ID", "")
 
+        return notification
+
+    @staticmethod
+    def create_notification(
+        request,
+        subject,
+        body,
+        recipients,
+        send_on_channels,
+        send_notification_sms,
+        raw_recipients=None,
+        project_slug=None,
+        save_only=False,
+    ):
+        if not project_slug:
+            project_slug = (
+                swapper.load_model("django_project_base", "Project")
+                .objects.get(slug=request.selected_project_slug)
+                .slug
+            )
+        if not raw_recipients:
+            raw_recipients = recipients
+
+        host_url = get_host_url(request)
+        notification = Notification(
+            message=DjangoProjectBaseMessage(
+                subject=subject,
+                body=body,
+                footer="",
+                content_type=DjangoProjectBaseMessage.HTML,
+            ),
+            raw_recipents=raw_recipients,
+            project=project_slug,
+            recipients=recipients,
+            delay=DjangoProjectBaseNotification.DELAYED_INDEFINETLY
+            if save_only
+            else int(datetime.datetime.now().timestamp()),
+            channels=[
+                ChannelIdentifier.channel(c, settings=settings, project_slug=None).__class__ for c in send_on_channels
+            ],
+            persist=True,
+            user=request.user.pk,
+            send_notification_sms=send_notification_sms,
+            host_url=host_url,
+        )
+        notification.send()
         return notification
