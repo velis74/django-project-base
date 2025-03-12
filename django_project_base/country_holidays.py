@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from requests import Timeout
 from rest_framework import status
 
-holidays_api_url: str = "https://date.nager.at/Api/v2/PublicHolidays/%d/%s"
+holidays_api_url: str = "https://date.nager.at/Api/v3/PublicHolidays/%d/%s"
 
 
 class RetrieveHolidaysException(Exception):

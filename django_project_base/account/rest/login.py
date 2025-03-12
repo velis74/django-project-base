@@ -1,3 +1,5 @@
+import json
+
 from typing import Iterable
 
 import swapper
@@ -17,7 +19,6 @@ from rest_registration.api.views import login
 
 from django_project_base.account.social_auth.providers import get_social_providers, SocialProviderItem
 from django_project_base.base.event import UserLoginEvent
-from django_project_base.utils import copy_request
 
 
 class LoginSerializer(serializers.Serializer):
@@ -99,7 +100,11 @@ class LoginViewset(viewsets.SingleRecordViewSet):
         return dict(login="", password="", return_type="cookie")
 
     def create(self, request: Request, *args, **kwargs) -> Response:
-        if not request.data.get("password"):
+        # Tukaj ne smem narediti copy_request, ker se pri loginu nastavi kup nekih cookijev,
+        # ki se potem ne pošljejo nazaj, ker se ne ohrani referenca na originalni request.
+        req_data = json.loads(request._request.body.decode())
+
+        if not req_data.get("password"):
             user = (
                 swapper.load_model("django_project_base", "Profile")
                 .objects.filter(username=request.data.get("login"))
@@ -110,7 +115,7 @@ class LoginViewset(viewsets.SingleRecordViewSet):
 
                 raise exceptions.PermissionDenied(detail="new_user")
 
-        response = login(copy_request(request._request, request.data.copy()))
+        response = login(request._request)
         if response.renderer_context["request"].data.get("return-type", None) == "json":
             response.data.update({"sessionid": request.session.session_key})
             response.returntype = "json"
