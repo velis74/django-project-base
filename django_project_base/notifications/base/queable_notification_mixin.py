@@ -10,7 +10,9 @@ from django_project_base.notifications.models import DjangoProjectBaseNotificati
 
 class QueableNotificationMixin(object):
     def enqueue_notification(self, notification: DjangoProjectBaseNotification, extra_data):
-        if getattr(settings, "TESTING", False):
+        if notification.delayed_to == DjangoProjectBaseNotification.DELAYED_INDEFINETLY or (
+            getattr(settings, "TESTING", False)
+        ):
             return
         now_ts: int = int(datetime.datetime.now().timestamp())
         if notification.delayed_to - now_ts < NOTIFICATION_SEND_PAUSE_SECONDS:
