@@ -11,7 +11,6 @@ from django.db import transaction
 from django.db.models import Model
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields
@@ -64,12 +63,9 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
 
     @staticmethod
     def _get_queryset_for_request(request):
-        try:
-            # had to copy this from the mixin because we don't have self here
-            model_func = import_string(getattr(settings, ProjectViewSet.MODEL_FUNC_SETTING_NAME, None))
-            model = model_func(None, request)
-        except ImportError:
-            model = None
+        model = DynamicModelMixin.determine_model_at_runtime_static(
+            request, func_name=getattr(settings, ProjectViewSet.MODEL_FUNC_SETTING_NAME, None)
+        )
 
         if not model:
             model = swapper.load_model("django_project_base", "Project")
