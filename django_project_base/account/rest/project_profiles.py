@@ -69,7 +69,7 @@ class ProjectProfilesSerializer(ProfileSerializer):
         ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
         info = model_meta.get_field_info(ProjectMember)
         for field in ProjectMember().project_members_fields:
-            source = f"projects.first.{field.name}"
+            source = f"first_project.{field.name}"
             extra_kwargs = dict(source=source, required=False, read_only=self.member_fields_read_only)
             field_class, field_kwargs = self.build_field(field.name, info, ProjectMember, source)
             field_kwargs = self.include_extra_kwargs(field_kwargs, extra_kwargs)

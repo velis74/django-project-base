@@ -21,7 +21,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 from dynamicforms import fields
 from dynamicforms.action import TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
-from dynamicforms.serializers import ModelSerializer
+from dynamicforms.serializers import DynamicModelMixin, DynamicModelSerializerMixin, ModelSerializer
 from dynamicforms.template_render.layout import Column, Layout, Row
 from dynamicforms.template_render.responsive_table_layout import ResponsiveTableLayout, ResponsiveTableLayouts
 from dynamicforms.viewsets import ModelViewSet
@@ -92,7 +92,10 @@ class ProfileGroupsField(fields.ManyRelatedField):
         return []
 
 
-class ProfileSerializer(ModelSerializer):
+class ProfileSerializer(DynamicModelSerializerMixin, ModelSerializer):
+    MODEL_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROFILE_MODEL_AT_RUNTIME"
+    LAYOUT_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROFILE_LAYOUT_AT_RUNTIME"
+
     template_context = dict(url_reverse="profile-base-project")
 
     form_titles = {
@@ -318,11 +321,12 @@ class ProfileViewPermissions(BasePermissions):
     create=extend_schema(exclude=True),
     update=extend_schema(exclude=True),
 )
-class ProfileViewSet(ModelViewSet):
+class ProfileViewSet(DynamicModelMixin, ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = search_fields
     permission_classes = (ProfileViewPermissions,)
     pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
+    MODEL_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROFILE_MODEL_AT_RUNTIME"
 
     def get_permissions(self):
         if self.action == "register_account":
@@ -339,7 +343,11 @@ class ProfileViewSet(ModelViewSet):
             return super().get_permissions()
 
     def get_queryset(self):
-        return get_project_members(self.request)
+        profile_model = DynamicModelMixin.determine_model_at_runtime_static(
+            self.request, func_name=getattr(settings, ProfileViewSet.MODEL_FUNC_SETTING_NAME, None)
+        )
+
+        return get_project_members(self.request, profile_model=profile_model)
 
     def get_serializer_class(self):
         if self.request.query_params.get("select", "") == "1":

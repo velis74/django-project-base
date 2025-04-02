@@ -25,7 +25,7 @@ from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.permissions import is_superuser
 
 
-def get_project_members(request: Request, project=None) -> QuerySet:
+def get_project_members(request: Request, project=None, profile_model=None) -> QuerySet:
     project = project or request.selected_project
     try:
         project_members = swapper.load_model("django_project_base", "ProjectMember").objects.filter(project_id=project)
@@ -35,33 +35,33 @@ def get_project_members(request: Request, project=None) -> QuerySet:
         if not is_superuser(request.user):
             raise PermissionDenied("Project not selected")
 
-    qs = (
-        swapper.load_model("django_project_base", "Profile")
-        .objects.prefetch_related(Prefetch("projects", queryset=project_members), "groups", "user_permissions")
-        .annotate(
-            un=Concat(
-                Coalesce(
-                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                    Value(""),
-                ),
-                Value(" "),
-                Coalesce(
-                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                    "username",
-                ),
+    profile_model = profile_model or swapper.load_model("django_project_base", "Profile")
+
+    qs = profile_model.objects.prefetch_related(
+        Prefetch("projects", queryset=project_members), "groups", "user_permissions"
+    ).annotate(
+        un=Concat(
+            Coalesce(
+                Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                Value(""),
             ),
-            un_sort=Concat(
-                Coalesce(
-                    Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                    "username",
-                ),
-                Value(" "),
-                Coalesce(
-                    Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                    Value(""),
-                ),
+            Value(" "),
+            Coalesce(
+                Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                "username",
             ),
-        )
+        ),
+        un_sort=Concat(
+            Coalesce(
+                Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
+                "username",
+            ),
+            Value(" "),
+            Coalesce(
+                Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
+                Value(""),
+            ),
+        ),
     )
 
     qs = qs.exclude(delete_at__isnull=False, delete_at__lt=now())
