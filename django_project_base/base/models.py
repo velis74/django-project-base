@@ -86,6 +86,16 @@ class BaseProfile(User):
         objects_all = BaseProfile.objects
         return objects_all
 
+    @property
+    def first_project(self):
+        if "projects" in getattr(self, "_prefetched_objects_cache", []):
+            # Če na prefetchanih podatkih delam order, first, itd... potem gre šeenkrat nabirati v bazo.
+            for project in self.projects.all():
+                return project
+            return None
+        else:
+            return self.projects.first()
+
     users = property(lambda self: self.get_users())
 
     def __str__(self):
