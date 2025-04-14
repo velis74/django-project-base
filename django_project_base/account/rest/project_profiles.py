@@ -29,7 +29,7 @@ from .project_profiles_utils import filter_project_members_fields, get_project_m
 
 
 class ProjectProfilesSerializer(ProfileSerializer):
-    template_context = dict(url_reverse="alc-profiles")
+    template_context = dict(url_reverse="profiles")
 
     def __init__(self, *args, **kwargs):
         request = kwargs["context"]["request"]
@@ -169,7 +169,7 @@ class ProjectProfilesViewSet(ProfileViewSet):
 
 
 class ProfileExportSerializer(serializers.Serializer):
-    template_context = dict(url_reverse="alc-profiles-export")
+    template_context = dict(url_reverse="profiles-export")
 
     form_titles = {
         "table": "",

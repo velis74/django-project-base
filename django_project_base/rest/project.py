@@ -375,7 +375,9 @@ class ProjectSettingsViewSet(ModelViewSet):
         req = super().initialize_request(request, *args, **kwargs)
         if req.method.upper() not in SAFE_METHODS:
             try:
-                req.data["project"] = request.selected_project.pk
+                # Swagger mock request pri inicializaciji swaggerja ne gre skozi middleware...
+                # in zato request sploh nima selected_project attributa
+                req.data["project"] = request.selected_project.pk if hasattr(request, "selected_project") else 0
             except ProjectNotSelectedError as e:
                 raise NotFound(e.message)
         return req
