@@ -204,6 +204,9 @@ class SearchItemObject:
 
 class SearchItemsManager(models.Manager):
     def get_queryset(self, **kwargs):
+        # qs rabim zato, ker pri inicializaciji swagerja koda hoče imeti queryset.model... kar pa list seveda nima.
+        # Zato namesto praznih listov vrnem qs.none()
+        qs = super().get_queryset()
         tag_model = swapper.load_model("django_project_base", "Tag")
 
         slug = ""
@@ -221,7 +224,7 @@ class SearchItemsManager(models.Manager):
             slug = getattr(kwargs["request"], "selected_project_slug", "")
 
         if not slug:
-            return []
+            return qs.none()
 
         try:
             tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
@@ -274,9 +277,9 @@ class SearchItemsManager(models.Manager):
             qs += tgs
             return qs
         except OperationalError:
-            return []
+            return qs.none()
         except ProgrammingError:
-            return []
+            return qs.none()
 
 
 class SearchItems(models.Model):
