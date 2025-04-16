@@ -32,9 +32,10 @@
         <v-col class="d-flex mt-1">
           <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
         </v-col>
-        <v-col class="d-none d-md-flex mt-1 mr-2">
+        <v-col v-if="accountRegisterVisible" class="d-none d-md-flex mt-1">
           <v-btn color="primary" variant="tonal" @click.stop="openRegistrationForm">{{ gettext('Register') }}</v-btn>
         </v-col>
+        <v-col class="d-none d-md-flex mt-1 mr-2"/>
       </v-row>
     </v-container>
   </v-form>
@@ -52,6 +53,7 @@ import { apiClient } from '../../api-client';
 import { parseErrors, useLogin } from './login';
 import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
+import { accountRegisterVisible } from './use-login-dialog';
 
 const {
   payload,

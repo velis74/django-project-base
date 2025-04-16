@@ -9,7 +9,7 @@ import { ref, watch } from 'vue';
 
 import { useLogin } from './login';
 import SocialLogos from './social-logos.vue';
-import { showLoginDialog } from './use-login-dialog';
+import { showLoginDialog, accountRegisterVisible } from './use-login-dialog';
 // TODO: needs to be moved to /rest/about or to some configuration. definitely needs to be app-specific
 const appname = gettext('{put application name here}');
 
@@ -43,25 +43,31 @@ watch(showLoginDialog, async (newValue) => {
     </template>
     <template #body>
       <div>
-        <p>
-          {{ gettext('Please sign in with one of your existing third party accounts. Or, ') }}
-          <span
-            style="text-decoration: underline; cursor: pointer"
-            tabindex="0"
-            @keyup.enter="newAccount()"
-            @click.stop="newAccount()"
-          >
-            {{ gettext('create a new account') }}
-          </span>
-          {{ interpolate(gettext(`for %(appname)s and sign in below:`), { appname }) }}
-        </p>
-        <div class="text-center my-6">
-          <a v-for="(b, bidx) in socialAuth" :key="bidx" :href="b.url" :aria-label="b.title" class="d-inline-block">
-            <social-logos :social-provider="b.name" :title="b.title"/>
-          </a>
+        <div v-if="socialAuth.length > 0">
+          <p>{{ gettext('Please sign in with') }}</p>
+          <div class="text-center my-6">
+            <a v-for="(b, bidx) in socialAuth" :key="bidx" :href="b.url" :aria-label="b.title" class="d-inline-block">
+              <social-logos :social-provider="b.name" :title="b.title"/>
+            </a>
+          </div>
+          <p class="text-center my-2">{{ gettext('or') }}</p>
+          <v-divider/>
         </div>
-        <p class="text-center my-2">{{ gettext('or') }}</p>
-        <v-divider/>
+        <div v-if="accountRegisterVisible">
+          <p>
+            <span
+              style="text-decoration: underline; cursor: pointer"
+              tabindex="0"
+              @keyup.enter="newAccount()"
+              @click.stop="newAccount()"
+            >
+              {{ gettext('Create a new account') }}
+            </span>
+            {{ interpolate(gettext(`for %(appname)s and sign in below:`), { appname }) }}
+          </p>
+          <p class="text-center my-2">{{ gettext('or') }}</p>
+          <v-divider/>
+        </div>
         <df-form-layout
           class="my-4"
           :layout="formDef.layout"
