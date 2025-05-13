@@ -50,7 +50,7 @@ export default ({ mode }: ConfigEnv) => {
       vuetify({ autoImport: true }),
       axiosRedirectConfig(),
       visualizer({
-        open: true,
+        open: false,
         filename: 'coverage/stats.html',
         gzipSize: true,
         brotliSize: true,
@@ -116,7 +116,7 @@ export default ({ mode }: ConfigEnv) => {
       },
       globals: true,
       environment: 'jsdom',
-      include: ['xxx'], // 'vue/**/*.spec.*'], temporarily disabled unit testing because it fails on css import
+      include: ['vue/**/*.spec.*'],
       exclude: ['**/*.css'],
     },
   });
