@@ -13,7 +13,7 @@
       "require": "./dist/project-base.umd.cjs",
       "import": "./dist/project-base.js"
     },
-    "./styles.css": "./dist/style.css"
+    "./styles.css": "./dist/project-base.css"
   },
   "scripts": {
     "dev": "vite",
