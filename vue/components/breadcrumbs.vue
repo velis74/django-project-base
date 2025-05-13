@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { defineComponent } from 'vue';
 
 export default defineComponent({

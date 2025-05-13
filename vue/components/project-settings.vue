@@ -8,7 +8,7 @@ import {
   FilteredActions, FormPayload,
   gettext, useActionHandler,
 } from '@velis/dynamicforms';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, Ref, ref, watch, h } from 'vue';
 import { useCookies } from 'vue3-cookies';
@@ -85,7 +85,7 @@ async function confirmationEmail(setting: ProjectSetting, message: Array<any>) {
       }
       apiClient.get(
         `/project-settings/${setting[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]}`,
-      ).then((res) => {
+      ).then((res: any) => {
         if (_.size(res.data.pending_value)) {
           dfModal.message('', gettext('We have attempted to verify the sender email address, ' +
               'but it doesn\'t work yet. Please click “try again” in about a minute or so'), new FilteredActions({
@@ -170,7 +170,7 @@ function confirmSetting(setting: ProjectSetting) {
 function checkSettings() {
   const cookie = cookies.get('setting-verification');
   if (_.size(cookie) && _.size(cookie.split('*'))) {
-    apiClient.get(`/project-settings/${_.first(cookie.split('*'))}.json`).then((res) => {
+    apiClient.get(`/project-settings/${_.first(cookie.split('*'))}.json`).then((res: any) => {
       confirmSetting(res.data);
     });
   }

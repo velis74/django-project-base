@@ -8,7 +8,7 @@ import {
   gettext,
 } from '@velis/dynamicforms';
 import { AxiosError } from 'axios';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { h, reactive, ref, Ref } from 'vue';
 
 import { apiClient } from '../../api-client';
@@ -124,7 +124,7 @@ function useLogin() {
               dfModal.message('', gettext('Password was reset successfully'));
             }
           });
-        }).catch((err) => {
+        }).catch((err: any) => {
           parseErrors(err, resetPasswordErrors);
           enterResetPasswordData(firstLogin);
         });
@@ -160,7 +160,7 @@ function useLogin() {
     }));
     if (resetEmailPromise.action.name === 'confirm') {
       const email: String | null = (<HTMLInputElement>document.getElementById('input-reset-email')).value;
-      apiClient.post('/account/send-reset-password-link/', { email }).then((res) => {
+      apiClient.post('/account/send-reset-password-link/', { email }).then((res: any) => {
         resetPasswordData = res.data;
         window.location.hash = '#reset-user-password';
         enterResetPasswordData();
@@ -222,7 +222,7 @@ function useLogin() {
         apiClient.post('/account/send-reset-password-link/', {
           username: payload.value?.login,
           firstLogin: true,
-        }).then((res) => {
+        }).then((res: any) => {
           resetPasswordData = res.data;
           window.location.hash = '#reset-user-password';
           enterResetPasswordData(true);

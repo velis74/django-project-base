@@ -1,6 +1,6 @@
 import { apiClient, DfNotifications } from '@velis/dynamicforms';
 import { InternalAxiosRequestConfig } from 'axios';
-import _ from 'lodash';
+import { includes } from 'lodash-es';
 
 import { HTTP_401_UNAUTHORIZED, shouldUrlBeIgnoredAfterApiResponseNotFound } from './api-config';
 import { Store } from './store';
@@ -19,7 +19,7 @@ export function setCurrentProject(slug: string) { currentProject = slug; }
 // eslint-disable-next-line func-names
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig<any>) => {
-    if (_.includes(Store.get('ignored-apis') || [], config.url)) {
+    if (includes(Store.get('ignored-apis') || [], config.url)) {
       new AbortController().abort('app-canceled-err');
     }
     if (currentProject && currentProject.length) {
@@ -30,13 +30,13 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error: any) => Promise.reject(error),
 );
 
 // Add a response interceptor
 apiClient.interceptors.response.use(
-  (response) => Promise.resolve(response),
-  (error) => {
+  (response: any) => Promise.resolve(response),
+  (error: any) => {
     if (error.message === 'app-canceled-err') {
       return Promise.reject(error);
     }
@@ -47,7 +47,7 @@ apiClient.interceptors.response.use(
 
     if (shouldUrlBeIgnoredAfterApiResponseNotFound(error)) {
       const ignoredApis = Store.get('ignored-apis') || [];
-      if (!_.includes(ignoredApis, error.config.url)) {
+      if (!includes(ignoredApis, error.config.url)) {
         ignoredApis.push(error.config.url);
         Store.set('ignored-apis', ignoredApis);
       }

@@ -50,7 +50,7 @@ import {
   gettext,
 } from '@velis/dynamicforms';
 import axios, { AxiosRequestConfig } from 'axios';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { computed, h, onMounted, reactive, ref, watch } from 'vue';
 import { useCookies } from 'vue3-cookies';
 import { useDisplay } from 'vuetify';
@@ -67,7 +67,7 @@ import useUserSessionStore from './state';
 
 type IconObjectKey = keyof typeof icons;
 
-interface UserProfileProps {
+export interface UserProfileProps {
   projectListComponent: string;
 }
 
@@ -123,7 +123,7 @@ async function verifyEmailChanged(userData: UserDataJSON) {
           { hideErrorNotice: true } as AxiosRequestConfig,
       ).then(() => {
         dfModal.message('', gettext('Your new email is now verified, thank you. '));
-      }).catch((err) => {
+      }).catch((err: any) => {
         parseErrors(err, changePasswordErrors);
         verifyEmailChanged(userData);
       });
@@ -212,7 +212,7 @@ function mergeUsers(e: Event) {
     if (socialConnectionsModalPromise) {
       dfModal.getDialogDefinition(socialConnectionsModalPromise)?.close();
     }
-  }).catch((err) => {
+  }).catch((err: any) => {
     if (err.response.status === HTTP_401_UNAUTHORIZED) {
       if (socialConnectionsModalPromise) {
         dfModal.getDialogDefinition(socialConnectionsModalPromise)?.close();

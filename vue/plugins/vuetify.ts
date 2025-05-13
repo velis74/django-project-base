@@ -1,5 +1,4 @@
-import { createVuetify } from 'vuetify';
-import { ThemeDefinition } from 'vuetify/dist/vuetify';
+import { createVuetify, ThemeDefinition } from 'vuetify';
 
 const defaultTheme: ThemeDefinition = {
   dark: false,

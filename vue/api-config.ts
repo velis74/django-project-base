@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { filter, size, values } from 'lodash-es';
 
 const HTTP_404_NOT_FOUND = 404;
 const HTTP_401_UNAUTHORIZED = 401;
@@ -11,8 +11,8 @@ const API_CONFIG = {
   },
 };
 
-const shouldUrlBeIgnoredAfterApiResponseNotFound = (error: any) => _.size(
-  _.filter(_.values(API_CONFIG), (v) => v.url === error.config.url && v.ignoreAfterApiResponseNotFound &&
+const shouldUrlBeIgnoredAfterApiResponseNotFound = (error: any) => size(
+  filter(values(API_CONFIG), (v) => v.url === error.config.url && v.ignoreAfterApiResponseNotFound &&
       error.response.status === HTTP_404_NOT_FOUND),
 ) > 0;
 

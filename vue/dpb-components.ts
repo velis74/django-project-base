@@ -4,7 +4,7 @@ import CookieNotice from './components/cookie-notice.vue';
 import NotificationsEditor from './components/notifications-editor.vue';
 import ProfileSearch from './components/profile-search.vue';
 import ProjectSettings from './components/project-settings.vue';
-import TitleBar from './components/titlebar.vue';
+import TitleBar from './components/title-bar.vue';
 import LoginDialog from './components/user-session/login-dialog.vue';
 import Login from './components/user-session/login-inline.vue';
 import ProjectList from './components/user-session/project-list.vue';

@@ -101,7 +101,7 @@ onMounted(() => {
     apiClient.get(
       `${licenseConsumerUrl}/new${licenseConsumerUrlTrailingSlash ? '/' : ''}?format=json&decorate-max-price=1`,
     ).then(
-      (licenseResponse) => {
+      (licenseResponse: any) => {
         if (licenseResponse.data.remaining_credit < licenseResponse.data.max_notification_price) {
           showLicenseConsumed();
           return;

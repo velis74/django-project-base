@@ -6,7 +6,7 @@
 // eslint-disable-next-line import/extensions
 import 'vanilla-cookieconsent/src/cookieconsent.js';
 import 'vanilla-cookieconsent/dist/cookieconsent.css';
-import _ from 'lodash';
+import { size } from 'lodash-es';
 import { defineComponent, inject } from 'vue';
 
 export default defineComponent({
@@ -23,7 +23,7 @@ export default defineComponent({
     try {
       const cookieConsent = window.initCookieConsent();
       const rootData = inject('data');
-      cookieConsent.run(_.size(this.options) > 0 ? this.options : (rootData || {}));
+      cookieConsent.run(size(this.options) > 0 ? this.options : (rootData || {}));
     } catch (error) {
       console.error('Invalid options for cookie notice.');
     }

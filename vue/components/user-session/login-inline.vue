@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { Action, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
-import _ from 'lodash';
+import _ from 'lodash-es';
 import { h, onMounted, reactive } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useCookies } from 'vue3-cookies';
@@ -129,7 +129,7 @@ async function validateEmailCode() {
             _.size(pageName) ? gettext('Welcome to') + pageName : ''),
         );
       });
-    }).catch((err) => {
+    }).catch((err: any) => {
       parseErrors(err, registerWorkflowErrors);
       validateEmailCode();
     });
@@ -181,7 +181,7 @@ async function changeRegisterMail() {
     ).then(() => {
       validateEmailCode();
       registerWorkflowErrors.value = [];
-    }).catch((err) => {
+    }).catch((err: any) => {
       parseErrors(err, registerWorkflowErrors);
       changeRegisterMail();
     });

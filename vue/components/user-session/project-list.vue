@@ -15,8 +15,8 @@ import useUserSessionStore from './state';
 const userSession = useUserSessionStore();
 const projectList = ref([]) as Ref<Project[]>;
 
-interface ProjectListProps {
-  location: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end' | 'center';
+export interface ProjectListProps {
+  location?: 'top' | 'bottom' | 'left' | 'right' | 'start' | 'end' | 'center';
 }
 
 const props = withDefaults(defineProps<ProjectListProps>(), { location: 'bottom' });

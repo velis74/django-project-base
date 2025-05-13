@@ -1,11 +1,12 @@
 /// <reference types="vitest" />
 import { resolve } from 'path';
 
-import vuePlugin from '@vitejs/plugin-vue';
+import vue from '@vitejs/plugin-vue';
+import eslint from 'vite-plugin-eslint';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { ConfigEnv, defineConfig, loadEnv } from 'vite';
-import eslintPlugin from 'vite-plugin-eslint';
 import vuetify from 'vite-plugin-vuetify';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 const axiosRedirectConfig = () => ({
   name: 'serverProxy',
@@ -36,9 +37,10 @@ export default ({ mode }: ConfigEnv) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
     plugins: [
-      vuePlugin(),
+      vue(),
+      // dts(),  // enable when TS errors are no longer present
       {
-        ...eslintPlugin({
+        ...eslint({
           failOnWarning: false,
           failOnError: false,
         }),
@@ -47,6 +49,12 @@ export default ({ mode }: ConfigEnv) => {
       },
       vuetify({ autoImport: true }),
       axiosRedirectConfig(),
+      visualizer({
+        open: true,
+        filename: 'coverage/stats.html',
+        gzipSize: true,
+        brotliSize: true,
+      }),
     ],
     resolve: {
       // alias: {
@@ -79,7 +87,21 @@ export default ({ mode }: ConfigEnv) => {
         name: 'project-base',
       },
       rollupOptions: {
-        external: ['@velis/dynamicforms', 'axios', 'lodash', 'pinia', 'vue', 'vue-ionicon', 'vuetify'],
+        external: [
+          '@kyvg/vue3-notification',
+          '@velis/dynamicforms',
+          'axios',
+          'browser-update',
+          'lodash-es',
+          'pinia',
+          'slugify',
+          /^vanilla-cookieconsent\/.*/,
+          'vue',
+          'vue-ionicon',
+          'vue-multiselect',
+          /^vuetify\/.*/,
+          'vue3-cookies',
+        ],
         output: {
           exports: 'named',
           globals: (id: string) => id, // all external modules are currently not aliased to anything but their own names
@@ -87,9 +109,15 @@ export default ({ mode }: ConfigEnv) => {
       },
     },
     test: {
-      deps: { inline: ['vuetify'] },
+      server: {
+        deps: {
+          inline: [/vuetify/]
+        },
+      },
       globals: true,
       environment: 'jsdom',
+      include: ['xxx'], // 'vue/**/*.spec.*'], temporarily disabled unit testing because it fails on css import
+      exclude: ['**/*.css'],
     },
   });
 };

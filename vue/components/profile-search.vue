@@ -1,7 +1,39 @@
-<script setup lang="ts">
+<template>
+  <div>
+    <multiselect
+      id="profile-selection"
+      v-model="selected"
+      :options="selectOptions"
+      :close-on-select="true"
+      :clear-on-select="false"
+      :internal-search="false"
+      :hide-selected="false"
+      :preserve-search="true"
+      :placeholder="gettext('Type to search or enter a new email value')"
+      :track-by="PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME"
+      :preselect-first="false"
+      label="email"
+      :custom-label="customLabel"
+      :taggable="true"
+      :tag-placeholder="gettext('Add this email as new user')"
+      @search-change="asyncSearch"
+      @tag="addProfile"
+      @select="onSelect"
+    >
+      <template slot="singleLabel" slot-scope="props">
+        {{ //@ts-ignore
+          props.option.email }}
+        {{ //@ts-ignore
+          props.option.first_name }}
+        {{ //@ts-ignore
+          props.option.last_name }}
+      </template>
+    </multiselect>
+  </div>
+</template>
 
+<script setup lang="ts">
 import { apiClient, gettext } from '@velis/dynamicforms';
-import { AxiosRequestConfig } from 'axios';
 import { computed, ref, Ref } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Multiselect from 'vue-multiselect';
@@ -28,7 +60,7 @@ const selectOptions = computed(() => options.value);
 
 function asyncSearch(query: string) {
   searching.value = true;
-  apiClient.get(`${searchUrl}?search=${query}`, { showProgress: false } as AxiosRequestConfig).then((response) => {
+  apiClient.get(`${searchUrl}?search=${query}`, { showProgress: false }).then((response: any) => {
     options.value = response.data;
     searching.value = false;
   });
@@ -64,37 +96,3 @@ function customLabel(profile: UserDataJSON) {
 }
 
 </script>
-
-<template>
-  <div>
-    <multiselect
-      id="profile-selection"
-      v-model="selected"
-      :options="selectOptions"
-      :close-on-select="true"
-      :clear-on-select="false"
-      :internal-search="false"
-      :hide-selected="false"
-      :preserve-search="true"
-      :placeholder="gettext('Type to search or enter a new email value')"
-      :track-by="PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME"
-      :preselect-first="false"
-      label="email"
-      :custom-label="customLabel"
-      :taggable="true"
-      :tag-placeholder="gettext('Add this email as new user')"
-      @search-change="asyncSearch"
-      @tag="addProfile"
-      @select="onSelect"
-    >
-      <template slot="singleLabel" slot-scope="props">
-        {{ //@ts-ignore
-          props.option.email }}
-        {{ //@ts-ignore
-          props.option.first_name }}
-        {{ //@ts-ignore
-          props.option.last_name }}
-      </template>
-    </multiselect>
-  </div>
-</template>

@@ -2,7 +2,13 @@
   "extends": "./node_modules/eslint-config-velis/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "dist",
     "skipLibCheck": true
-  }
+  },
+  "include": ["vue/**/*"],
+  "exclude": [
+    "dist",
+    "coverage",
+    "node_modules/**/*",
+    "vite.config.ts"
+  ]
 }
