@@ -458,7 +458,7 @@ class NotificationDetailSerializer(ModelSerializer):
     form_titles = {"new": _("Message")}
 
     actions = Actions(
-        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("close")),
+        FormButtonAction(btn_type=FormButtonTypes.CANCEL, name="cancel", label=_("Close")),
         add_default_crud=False,
         add_form_buttons=False,
     )

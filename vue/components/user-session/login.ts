@@ -1,11 +1,15 @@
 import {
   Action,
-  ConsumerLogicApi, dfModal as dfModalApi,
-  dfModal, DialogSize,
+  ConsumerLogicApi,
+  dfModal as dfModalApi,
+  dfModal,
+  DialogSize,
   DisplayMode,
-  FilteredActions, FormConsumerOneShotApi,
+  FilteredActions,
+  FormConsumerOneShotApi,
   FormPayload,
   gettext,
+  interpolate,
 } from '@velis/dynamicforms';
 import { AxiosError } from 'axios';
 import _ from 'lodash-es';
@@ -55,7 +59,11 @@ Please enter this code and set your password to be able to start using this appl
       [body],
     ),
     h('div', {}, [
-      h('h4', { class: 'd-flex justify-center mb-1' }, [gettext('Please enter the code from the message:')]),
+      h(
+        'h4',
+        { class: 'd-flex justify-center mb-1' },
+        [interpolate('%(text)s:', { text: gettext('Please enter the code from the message') })],
+      ),
       h('input', {
         type: 'text',
         placeholder: resetPasswordErrors.code ? resetPasswordErrors.code : gettext('Email code'),
@@ -175,9 +183,8 @@ function useLogin() {
         h(
           'h5',
           {},
-          gettext('Your account will be restored. Do you want to keep all your previous data or do ' +
-            'you want to reset account state and begin as account was just ' +
-            'registered and your previous data is deleted?'),
+          // eslint-disable-next-line vue/max-len
+          gettext('Your account will be restored. Do you want to keep all your previous data or do you want to reset account state and begin as account was just registered and your previous data is deleted?'),
         ),
       ],
       new FilteredActions({

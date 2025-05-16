@@ -2,16 +2,18 @@
 import {
   APIConsumer,
   ComponentDisplay,
-  ConsumerLogicApi, FormConsumerApi, FormConsumerOneShotApi, gettext, interpolate, RowTypes,
+  ConsumerLogicApi,
+  FormConsumerApi,
+  FormConsumerOneShotApi,
+  gettext,
+  interpolate,
+  RowTypes,
   useActionHandler,
 } from '@velis/dynamicforms';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 import { apiClient } from '../api-client';
-import {
-  closeNotification,
-  showNotification,
-} from '../notifications';
+import { closeNotification, showNotification } from '../notifications';
 
 const props = defineProps<{
   consumerUrl?: string,
@@ -99,7 +101,10 @@ let intervalCheckLicense: NodeJS.Timeout | undefined;
 onMounted(() => {
   intervalCheckLicense = setInterval(() => {
     apiClient.get(
-      `${licenseConsumerUrl}/new${licenseConsumerUrlTrailingSlash ? '/' : ''}?format=json&decorate-max-price=1`,
+      interpolate('%(url)s/new%(trailingSlash)sformat=json&decorate-max-price=1`', {
+        url: licenseConsumerUrl,
+        trailingSlash: licenseConsumerUrlTrailingSlash ? '/' : '',
+      }),
     ).then(
       (licenseResponse: any) => {
         if (licenseResponse.data.remaining_credit < licenseResponse.data.max_notification_price) {

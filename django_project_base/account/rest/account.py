@@ -181,7 +181,7 @@ class ChangePasswordViewSet(df_viewsets.SingleRecordViewSet):
 
                 def validate(self, attrs):
                     if attrs["password"] != attrs["password_confirm"]:
-                        raise ValidationError({"password_confirm": _("Passwords don't match")})
+                        raise ValidationError({"password_confirm": _("Passwords do not match")})
                     return super().validate(attrs)
 
             return SuperUserChangePasswordSerializer
@@ -343,7 +343,7 @@ class RegisterReturnSerializer(serializers.Serializer):
                        "This password is too short. It must contain at least 8 characters."
                      ],
                      "password_confirm": [
-                       "Passwords don't match"
+                       "Passwords do not match"
                      ],
                      "non_field_errors": []
                    }""".replace("\n", " "),

@@ -5,12 +5,15 @@ import {
   ComponentDisplay,
   ConsumerLogicApi,
   dfModal,
-  FilteredActions, FormPayload,
-  gettext, useActionHandler,
+  FilteredActions,
+  FormPayload,
+  gettext,
+  interpolate,
+  useActionHandler,
 } from '@velis/dynamicforms';
 import _ from 'lodash-es';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, Ref, ref, watch, h } from 'vue';
+import { h, onMounted, onUnmounted, ref, Ref, watch } from 'vue';
 import { useCookies } from 'vue3-cookies';
 
 import { apiClient } from '../api-client';
@@ -60,7 +63,7 @@ async function confirmationEmail(setting: ProjectSetting, message: Array<any>) {
     }),
     confirm: new Action({
       name: 'confirm',
-      label: gettext('I haved confirmed pending setting'),
+      label: gettext('I have confirmed pending setting'),
       displayStyle: { asButton: true, showLabel: true, showIcon: true },
       position: 'FORM_FOOTER',
     }),
@@ -84,24 +87,27 @@ async function confirmationEmail(setting: ProjectSetting, message: Array<any>) {
         );
       }
       apiClient.get(
-        `/project-settings/${setting[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME]}`,
+        interpolate('/project-settings/%(path)s', { path: setting[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] }),
       ).then((res: any) => {
         if (_.size(res.data.pending_value)) {
-          dfModal.message('', gettext('We have attempted to verify the sender email address, ' +
-              'but it doesn\'t work yet. Please click “try again” in about a minute or so'), new FilteredActions({
-            cancel: new Action({
-              name: 'cancel',
-              label: gettext('Cancel, use the old sender email'),
-              displayStyle: { asButton: true, showLabel: true, showIcon: true },
-              position: 'FORM_FOOTER',
-            }),
-            confirm: new Action({
-              name: 'ok',
-              label: gettext('OK'),
-              displayStyle: { asButton: true, showLabel: true, showIcon: true },
-              position: 'FORM_FOOTER',
-            }),
-          })).then((action: Action) => {
+          dfModal.message(
+            '',
+            // eslint-disable-next-line vue/max-len
+            gettext('We have attempted to verify the sender email address, but it doesn\'t work yet. Please click “try again” in about a minute or so'),
+            new FilteredActions({
+              cancel: new Action({
+                name: 'cancel',
+                label: gettext('Cancel, use the old sender email'),
+                displayStyle: { asButton: true, showLabel: true, showIcon: true },
+                position: 'FORM_FOOTER',
+              }),
+              confirm: new Action({
+                name: 'ok',
+                label: gettext('OK'),
+                displayStyle: { asButton: true, showLabel: true, showIcon: true },
+                position: 'FORM_FOOTER',
+              }),
+            })).then((action: Action) => {
             if (action.action.name === 'cancel') {
               apiClient.post(
                 '/project-settings/reset-pending',
@@ -150,9 +156,12 @@ function confirmSetting(setting: ProjectSetting) {
     confirmationSms(setting, [
       h('h2', { class: 'mt-n6 mb-4' }, gettext('SMS settings pending for confirmation')),
       h('br'),
-      h('h4', { class: 'mt-n6 mb-4' }, gettext('Sms sender settings is pending for confirmation. ' +
-          'It can take up to two weeks for setting to become active. You will be ' +
-          'notified when settings will be activated.')),
+      h(
+        'h4',
+        { class: 'mt-n6 mb-4' },
+        // eslint-disable-next-line vue/max-len
+        gettext('Sms sender settings is pending for confirmation. It can take up to two weeks for setting to become active. You will be notified when settings will be activated.'),
+      ),
     ]);
     return;
   }
@@ -160,9 +169,12 @@ function confirmSetting(setting: ProjectSetting) {
     confirmationEmail(setting, [
       h('h2', { class: 'mt-n6 mb-4' }, gettext('Email settings pending for confirmation')),
       h('br'),
-      h('h4', { class: 'mt-n6 mb-4' }, gettext('You received an email with confirmation link ' +
-          'for email sender address. Please check your mail and click on confirmation link. Check also spam folder ' +
-          'if you do not find confirmation link.')),
+      h(
+        'h4',
+        { class: 'mt-n6 mb-4' },
+        // eslint-disable-next-line vue/max-len
+        gettext('You received an email with confirmation link for email sender address. Please check your mail and click on confirmation link. Check also spam folder if you do not find confirmation link.'),
+      ),
     ]);
   }
 }
@@ -170,7 +182,7 @@ function confirmSetting(setting: ProjectSetting) {
 function checkSettings() {
   const cookie = cookies.get('setting-verification');
   if (_.size(cookie) && _.size(cookie.split('*'))) {
-    apiClient.get(`/project-settings/${_.first(cookie.split('*'))}.json`).then((res: any) => {
+    apiClient.get(interpolate('/project-settings/%(path)s.json', { path: _.first(cookie.split('*')) })).then((res: any) => {
       confirmSetting(res.data);
     });
   }
@@ -194,7 +206,7 @@ if (selectedProjectId.value) refreshSettingsLogicAndCheckSettings();
 
 watch(selectedProjectId, refreshSettingsLogicAndCheckSettings);
 
-const actionResetPending = async (action:Action, payload: FormPayload) => {
+const actionResetPending = async (action: Action, payload: FormPayload) => {
   const resetData = {};
   // @ts-ignore
   resetData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];
@@ -207,7 +219,7 @@ const actionResetPending = async (action:Action, payload: FormPayload) => {
   return true;
 };
 
-const actionConfirmSettingActive = async (action:Action, payload: FormPayload) => {
+const actionConfirmSettingActive = async (action: Action, payload: FormPayload) => {
   const activeData = {};
   // @ts-ignore
   activeData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] = payload[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME];

@@ -1,0 +1,105 @@
+services:
+  cache:
+    image: redis:latest
+    restart: always
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - '6376:6376'
+    command: --port 6376 --save 20 1 --loglevel warning
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - cache:/data
+  clear_cache:
+    image: dpb_p3-11:latest
+    build: .
+#    Tole se poganja samo za "not DEPLOY" - narejeno v clear_cache kodi
+    security_opt:
+      - seccomp:unconfined
+    command: python manage.py clear_cache
+    volumes:
+      - .:/code
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - cache
+  db:
+    image: postgres:16
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    expose:
+      - "5432"
+    ports:
+      - "5436:5432"
+    shm_size: '1gb'
+  dpb:
+    image: dpb_p3-11:latest
+    build: .
+    security_opt:
+      - seccomp:unconfined
+    command: python manage.py runserver 0.0.0.0:8095
+    volumes:
+      - .:/code
+    ports:
+      - "95:8095"
+    environment:
+      - "PYTHONUNBUFFERED=1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - cache
+      - clear_cache
+      - db
+#      - worker_mail
+#      - scheduler
+
+#  scheduler:
+#    image: mars_p3-10:latest
+#    build: .
+#    security_opt:
+#      - seccomp:unconfined
+#    command: celery -A mars.run_celery beat
+#    volumes:
+#      - .:/code
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#    depends_on:
+#      - klubis_cache
+#      - klubis_db
+#      - worker_scheduler_tasks
+#
+#  worker_mail:
+#    image: dpb_p3-11:latest
+#    build: .
+#    security_opt:
+#      - seccomp:unconfined
+#    command: celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1 --settings=setup.settings
+#    volumes:
+#      - .:/code
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
+#    depends_on:
+#      - cache
+#      - db
+  flower:
+    image: mher/flower # Image we will use for flower
+    command: celery flower --persistent=True
+    environment:
+      - CELERY_BROKER_URL=redis://host.docker.internal:6376/0
+      - FLOWER_PORT=5551
+    volumes:
+      - flower_data:/data
+    ports:
+      - "5551:5551"
+
+volumes:
+  cache:
+    driver: local
+  flower_data:
+    driver: local
+  db_data:
+    driver: local
