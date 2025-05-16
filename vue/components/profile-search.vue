@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { apiClient, gettext } from '@velis/dynamicforms';
+import { apiClient, gettext, interpolate } from '@velis/dynamicforms';
 import { computed, ref, Ref } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Multiselect from 'vue-multiselect';
@@ -60,7 +60,10 @@ const selectOptions = computed(() => options.value);
 
 function asyncSearch(query: string) {
   searching.value = true;
-  apiClient.get(`${searchUrl}?search=${query}`, { showProgress: false }).then((response: any) => {
+  apiClient.get(interpolate('%(url)s?search=%(query)s', {
+    url: searchUrl,
+    query,
+  }), { showProgress: false } as AxiosRequestConfig).then((response: any) => {
     options.value = response.data;
     searching.value = false;
   });
@@ -91,8 +94,10 @@ function addProfile(newProfile: string) {
 }
 
 function customLabel(profile: UserDataJSON) {
-  return `${profile.email ? profile.email : ''}
-  ${profile.full_name ? profile.full_name : ''}`;
+  return interpolate('%(mail)s %(name)s', {
+    mail: profile.email ? profile.email : '',
+    name: profile.full_name ? profile.full_name : '',
+  });
 }
 
 </script>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-04 14:39+0000\n"
+"POT-Creation-Date: 2025-05-16 12:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,27 +19,97 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
 "n%100==4 ? 2 : 3);\n"
 
+#: vue/components/notifications-editor.vue:91
+msgid "License consumed"
+msgstr "Licenca porabljena"
+
+#: vue/components/notifications-editor.vue:92
+msgid "You cannot generate new notifications. Please contact support."
+msgstr "Ne morete generirati novi sporočil. Prosimo kontaktirajte podporo."
+
+#: vue/components/project-settings.vue:60
+#: vue/components/user-session/login-inline.vue:169
+#: vue/components/user-session/login.ts:103
+#: vue/components/user-session/login.ts:158
+#: vue/components/user-session/login.ts:199
+#: vue/components/user-session/user-profile.vue:109
+#: vue/components/user-session/user-profile.vue:321
+#: vue/profile-search-add-user.ts:28
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: vue/components/project-settings.vue:66
+msgid "I have confirmed pending setting"
+msgstr "Potrdil sem čakajočo nastavitev"
+
+#: vue/components/project-settings.vue:96
+msgid ""
+"We have attempted to verify the sender email address, but it doesn't work "
+"yet. Please click “try again” in about a minute or so"
+msgstr ""
+"Poizkusili smo verificirati naslov pošiljatelja, ampak trenutno še ne dela. "
+"Prosimo kliknite na “poizkusi znova” čez kakšno minuto"
+
+#: vue/components/project-settings.vue:100
+msgid "Cancel, use the old sender email"
+msgstr "Prekini, uporabi stari naslov pošiljatelja"
+
+#: vue/components/project-settings.vue:106
+#: vue/components/project-settings.vue:146
+msgid "OK"
+msgstr "V redu"
+
+#: vue/components/project-settings.vue:157
+msgid "SMS settings pending for confirmation"
+msgstr "SMS nastavitve čakajo na potrditev"
+
+#: vue/components/project-settings.vue:163
+msgid ""
+"Sms sender settings is pending for confirmation. It can take up to two weeks "
+"for setting to become active. You will be notified when settings will be "
+"activated."
+msgstr ""
+"Nastavitve pošiljatelja sms-ov čakajo na potrditev. Lahko traja do dva tedna "
+"da nastavitve postanejo aktivne. Obvestili vas bomo so se bodo nastavitve "
+"aktivirale."
+
+#: vue/components/project-settings.vue:170
+msgid "Email settings pending for confirmation"
+msgstr "Nastavitve elektronske pošte čakajo na potrditev"
+
+#: vue/components/project-settings.vue:176
+msgid ""
+"You received an email with confirmation link for email sender address. "
+"Please check your mail and click on confirmation link. Check also spam "
+"folder if you do not find confirmation link."
+msgstr ""
+"Prejeli ste elektronsko pošto s povezavo za potrditev naslova pošiljatelja. "
+"Prosimo preverite vašo elektronsko pošto in kliknite na povezavo za "
+"potrditev. Če sporočila za potrditev ne najdete, preverite tudi mapo z "
+"vsiljeno pošto."
+
 #: vue/components/user-session/login-dialog.vue:14
 msgid "{put application name here}"
 msgstr ""
 
 #: vue/components/user-session/login-dialog.vue:47
-msgid "Please sign in with one of your existing third party accounts. Or, "
-msgstr "Prijavi se s katerim od svojih socialnih omrežij, ali pa"
+msgid "Please sign in with"
+msgstr "Prosimo prijavite se z"
 
-#: vue/components/user-session/login-dialog.vue:54
-msgid "create a new account"
-msgstr "ustvari nov račun"
-
-#: vue/components/user-session/login-dialog.vue:56
-msgid "for %(appname)s and sign in below:"
-msgstr "na %(appname)s in se prijavi spodaj:"
-
-#: vue/components/user-session/login-dialog.vue:63
+#: vue/components/user-session/login-dialog.vue:53
+#: vue/components/user-session/login-dialog.vue:68
 msgid "or"
 msgstr "ali"
 
-#: vue/components/user-session/login-dialog.vue:78
+#: vue/components/user-session/login-dialog.vue:64
+msgid "Create a new account"
+msgstr "Ustvari nov račun"
+
+#: vue/components/user-session/login-dialog.vue:66
+msgid "for %(appname)s and sign in below:"
+msgstr "na %(appname)s in se prijavi spodaj:"
+
+#: vue/components/user-session/login-dialog.vue:84
 msgid "Forgot password?"
 msgstr "Pozabljeno geslo?"
 
@@ -51,143 +121,215 @@ msgstr "Prijava"
 msgid "Register"
 msgstr "Registracija"
 
+#: vue/components/user-session/login-inline.vue:82
+#: vue/components/user-session/login-inline.vue:127
+#: vue/components/user-session/login-inline.vue:147
+msgid "New account"
+msgstr "Nov račun"
+
+#: vue/components/user-session/login-inline.vue:87
+msgid "We have sent an email to the email address you provided."
+msgstr "Na naveden naslov smo poslali elektronsko pošto."
+
+#: vue/components/user-session/login-inline.vue:92
+#: vue/components/user-session/login.ts:65
+msgid "Please enter the code from the message"
+msgstr "Prosim, vnesi kodo iz sporočila"
+
+#: vue/components/user-session/login-inline.vue:106
+msgid "Different email"
+msgstr "Različen elektronski naslov"
+
+#: vue/components/user-session/login-inline.vue:112
+#: vue/components/user-session/login-inline.vue:175
+msgid "Proceed"
+msgstr "Nadaljuj"
+
+#: vue/components/user-session/login-inline.vue:128
+msgid "Your account is now active and you are logged in."
+msgstr "Vaš račun je sedaj aktiven. Ste tudi prijavljeni v aplikacijo."
+
+#: vue/components/user-session/login-inline.vue:129
+msgid "Welcome to"
+msgstr "Dobrodošli v"
+
+#: vue/components/user-session/login-inline.vue:148
+msgid "different email"
+msgstr "različen elektronski naslov"
+
+#: vue/components/user-session/login-inline.vue:155
+msgid "Please enter new email"
+msgstr "Prosim vnesite nov elektronski naslov"
+
 #: vue/components/user-session/login.ts:47
-#: vue/components/user-session/login.ts:119
+msgid "Set password"
+msgstr "Nastavi geslo"
+
+#: vue/components/user-session/login.ts:48
+msgid ""
+"This is your first login. Verification code was sent to your email. \n"
+"Please enter this code and set your password to be able to start using this "
+"application."
+msgstr ""
+"To je vaša prva prijava. Verifikacijska koda je bila poslana na vaš "
+"elektronski naslov. \n"
+"Prosimo vnesite to kodo in nastavite vaše geslo da boste lahko začeli "
+"uporabljati to aplikacijo"
+
+#: vue/components/user-session/login.ts:51
+#: vue/components/user-session/login.ts:148
 msgid "Password recovery"
 msgstr "Obnova gesla"
 
-#: vue/components/user-session/login.ts:51
+#: vue/components/user-session/login.ts:52
 msgid ""
 "If an active account exists with the given email, we've sent a message to it."
-msgstr "Če račun s podano e-pošto obstaja, samo poslali sporočilo."
+msgstr "Če račun s podano e-pošto obstaja, smo nanj poslali sporočilo."
 
-#: vue/components/user-session/login.ts:54
-msgid "Please enter the code from the message:"
-msgstr "Prosim, vnesi kodo iz sporočila:"
-
-#: vue/components/user-session/login.ts:57
+#: vue/components/user-session/login.ts:69
+#: vue/components/user-session/user-profile.vue:102
 msgid "Email code"
 msgstr "Koda iz e-pošte"
 
-#: vue/components/user-session/login.ts:61
+#: vue/components/user-session/login.ts:73
 msgid "Please enter your new password:"
 msgstr "Vnesi svoje novo geslo:"
 
-#: vue/components/user-session/login.ts:64
+#: vue/components/user-session/login.ts:76
 msgid "New password"
 msgstr "Novo geslo"
 
-#: vue/components/user-session/login.ts:71
+#: vue/components/user-session/login.ts:83
 msgid "Confirm password"
 msgstr "Potrdi geslo"
 
-#: vue/components/user-session/login.ts:80
-#: vue/components/user-session/login.ts:129
-#: vue/components/user-session/login.ts:171
-#: vue/components/user-session/userprofile.vue:242
-msgid "Cancel"
-msgstr "Prekliči"
-
-#: vue/components/user-session/login.ts:86
-msgid "Reset"
-msgstr "Obnovi"
-
-#: vue/components/user-session/login.ts:105
-msgid "Password was reset successfully"
-msgstr "Geslo je bilo uspešno obnovljeno"
-
-#: vue/components/user-session/login.ts:120
-msgid "Enter your e-mail"
-msgstr "Vpiši naslov svoje e-pošte"
-
-#: vue/components/user-session/login.ts:135
-#: vue/components/user-session/userprofile.vue:235
+#: vue/components/user-session/login.ts:109
+#: vue/components/user-session/login.ts:164
+#: vue/components/user-session/user-profile.vue:115
+#: vue/components/user-session/user-profile.vue:314
 msgid "Confirm"
 msgstr "Potrdi"
 
-#: vue/components/user-session/login.ts:152
+#: vue/components/user-session/login.ts:109
+msgid "Reset"
+msgstr "Obnovi"
+
+#: vue/components/user-session/login.ts:130
+msgid "Password was set successfully"
+msgstr "Geslo je bilo uspešno nastavljeno"
+
+#: vue/components/user-session/login.ts:132
+msgid "Password was reset successfully"
+msgstr "Geslo je bilo uspešno obnovljeno"
+
+#: vue/components/user-session/login.ts:149
+msgid "Enter your e-mail"
+msgstr "Vpiši naslov svoje e-pošte"
+
+#: vue/components/user-session/login.ts:181
 msgid "Account reactivation"
 msgstr "Obnova računa"
 
-#: vue/components/user-session/login.ts:157
+#: vue/components/user-session/login.ts:187
 msgid ""
 "Your account will be restored. Do you want to keep all your previous data or "
 "do you want to reset account state and begin as account was just registered "
 "and your previous data is deleted?"
 msgstr ""
-"Tvoj račun bo obnovljen. Ali želiš obdržati svoje stare podatke, ali bi raje "
-"ponastavil račun, zbrisal stare podatke in začel znova?"
+"Vaš račun bo obnovljen. Ali želite ohraniti vse obstoječe podatke, ali "
+"želite ponastaviti stanje računa in začeti, kot da je bil račun razno "
+"registriran in tako ostanete brez obstoječih podatkov?"
 
-#: vue/components/user-session/login.ts:165
+#: vue/components/user-session/login.ts:193
 msgid "Reset account"
 msgstr "Ponastavi račun"
 
-#: vue/components/user-session/login.ts:203
+#: vue/components/user-session/login.ts:242
 msgid "Unknown error trying to login"
 msgstr "Neznana napaka pri prijavljanju"
 
-#: vue/components/user-session/project-list.vue:65
-msgid "NO Project"
+#: vue/components/user-session/project-list.vue:80
+msgid "No Project"
 msgstr "Izberi projekt"
 
-#: vue/components/user-session/project-list.vue:77
+#: vue/components/user-session/project-list.vue:92
 msgid "Add new project"
 msgstr "Dodaj nov projekt"
 
-#: vue/components/user-session/userprofile.vue:7
+#: vue/components/user-session/user-profile.vue:7
 msgid "Impersonated"
 msgstr "Poosebljen"
 
-#: vue/components/user-session/userprofile.vue:13
+#: vue/components/user-session/user-profile.vue:16
 msgid "User profile"
 msgstr "Uporabniški profil"
 
-#: vue/components/user-session/userprofile.vue:14
+#: vue/components/user-session/user-profile.vue:17
 msgid "Change password"
 msgstr "Spremeni geslo"
 
-#: vue/components/user-session/userprofile.vue:21
+#: vue/components/user-session/user-profile.vue:19
+msgid "Edit social connections"
+msgstr "Uredi socialne povezave"
+
+#: vue/components/user-session/user-profile.vue:26
 msgid "Impersonate user"
 msgstr "Poosebi uporabnika"
 
-#: vue/components/user-session/userprofile.vue:25
+#: vue/components/user-session/user-profile.vue:30
 msgid "Stop impersonation"
 msgstr "Prekini poosebljenje"
 
-#: vue/components/user-session/userprofile.vue:31
+#: vue/components/user-session/user-profile.vue:34
+msgid "Terminate my account"
+msgstr "Ukini moj račun"
+
+#: vue/components/user-session/user-profile.vue:36
 msgid "Logout"
 msgstr "Odjava"
 
-#: vue/components/user-session/userprofile.vue:170
-#: vue/components/user-session/userprofile.vue:205
+#: vue/components/user-session/user-profile.vue:97
+msgid ""
+"We have sent an email to the new email address you provided. Please enter "
+"the code from the message"
+msgstr ""
+"Poslali smo elektronsko pošto na nov naslov, ki ste ga navedli. Prosimo "
+"vnesite kodo iz sporočila"
+
+#: vue/components/user-session/user-profile.vue:126
+msgid "Your new email is now verified, thank you. "
+msgstr "Vaš nov elektronski naslov je verificiran. Hvala vam."
+
+#: vue/components/user-session/user-profile.vue:259
+#: vue/components/user-session/user-profile.vue:294
 msgid "Social connections"
 msgstr "Socialne povezave"
 
-#: vue/components/user-session/userprofile.vue:175
+#: vue/components/user-session/user-profile.vue:264
 msgid "Merge account with following credentials"
 msgstr "Poveži račun s sledečimi poverilnicami"
 
-#: vue/components/user-session/userprofile.vue:179
+#: vue/components/user-session/user-profile.vue:268
 msgid "Username or email"
 msgstr "Uporabniško ime ali e-pošta"
 
-#: vue/components/user-session/userprofile.vue:183
+#: vue/components/user-session/user-profile.vue:272
 msgid "Password"
 msgstr "Geslo"
 
-#: vue/components/user-session/userprofile.vue:187
+#: vue/components/user-session/user-profile.vue:276
 msgid "Currently logged in user account will be main account"
 msgstr "Trenutno prijavljen račun bo glavni račun"
 
-#: vue/components/user-session/userprofile.vue:206
+#: vue/components/user-session/user-profile.vue:295
 msgid "No social connections available"
 msgstr "Ni socialnih povezav"
 
-#: vue/components/user-session/userprofile.vue:221
+#: vue/components/user-session/user-profile.vue:302
 msgid "Terminate account"
 msgstr "Ukini račun"
 
-#: vue/components/user-session/userprofile.vue:226
+#: vue/components/user-session/user-profile.vue:308
 msgid ""
 "Your account will be suspended, and all of your data will be permanently "
 "deleted after a period of 1 year. Once your account is suspended, you will "
@@ -195,10 +337,19 @@ msgid ""
 "immediately, please contact us using the provided information in our "
 "contacts."
 msgstr ""
-"Tvoj račun bo onemogočen in tvoji podatki bodo trajno izbrisani po enem "
-"letu. Po onemogočanju računa boš še vedno imel možnost obnove računa. Če "
-"želiš izbris podatkov takoj, nas prosim kontaktiraj."
+"Vač račun bo ukinjen in vsi vaši podatki bodo pernamentno izbrisani po enem "
+"leto. Po tem, ko bo vaš račun ukinjen, ga boste imeli možnost ponovno "
+"aktivirati. Če želite takoj izbrisati vaš račun, nas prosimo kontaktirajte "
+"preko možnosti, ki so naveden v naših kontaktih"
 
-#: vue/notifications.ts:50
-msgid "Error"
-msgstr "Napaka"
+#: vue/profile-search-add-user.ts:17
+msgid "Add new user"
+msgstr "Dodaj novega uporabnika"
+
+#: vue/profile-search-add-user.ts:34
+msgid "Add"
+msgstr "Dodaj"
+
+#: vue/profile-search-add-user.ts:47
+msgid "No user selected"
+msgstr "Noben uporabnik ni izbran"

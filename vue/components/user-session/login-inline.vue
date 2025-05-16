@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { Action, dfModal, FilteredActions, gettext } from '@velis/dynamicforms';
+import { Action, dfModal, FilteredActions, gettext, interpolate } from '@velis/dynamicforms';
 import _ from 'lodash-es';
 import { h, onMounted, reactive } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -84,12 +84,12 @@ async function validateEmailCode() {
     h(
       'h4',
       { class: 'd-flex justify-center mb-4' },
-      [`${gettext('We have sent an email to the email address you provided.')}`],
+      [gettext('We have sent an email to the email address you provided.')],
     ),
     h(
       'h4',
       { class: 'd-flex justify-center mb-4' },
-      [`${gettext('Please enter the code from the message')}:`],
+      [interpolate('%(text)s:', { text: gettext('Please enter the code from the message') })],
     ),
     h('div', { class: 'd-flex justify-center mb-4' }, [
       h('input', {
@@ -143,13 +143,16 @@ async function changeRegisterMail() {
     h(
       'h3',
       { class: 'd-flex justify-center mb-4' },
-      [`${gettext('New account')} - ${gettext('different email')}`],
+      [interpolate('%(newAccountText) - %{differentMailText}', {
+        newAccountText: gettext('New account'),
+        differentMailText: gettext('different email'),
+      })],
     ),
 
     h(
       'h4',
       { class: 'd-flex justify-center mb-4' },
-      [`${gettext('Please enter new email')}:`],
+      [interpolate('%(text)s:', { text: gettext('Please enter new email') })],
     ),
     h('div', { class: 'd-flex justify-center mb-4' }, [
       h('input', {
