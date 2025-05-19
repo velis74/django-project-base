@@ -48,6 +48,7 @@ import {
   FilteredActions,
   FormConsumerOneShotApi,
   gettext,
+  interpolate,
 } from '@velis/dynamicforms';
 import axios, { AxiosRequestConfig } from 'axios';
 import _ from 'lodash-es';
@@ -87,13 +88,13 @@ const changePasswordErrors = reactive({} as { [key: string]: any[] });
 async function verifyEmailChanged(userData: UserDataJSON) {
   const verifyMailCookie = cookies.get('verify-email');
   if (_.size(verifyMailCookie) && userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME] &&
-      userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME].toString() === verifyMailCookie.toString()) {
+    userData[PROFILE_TABLE_PRIMARY_KEY_PROPERTY_NAME].toString() === verifyMailCookie.toString()) {
     const enterEmailConfirmationCode = await dfModal.message('Update email', () => [
       h(
         'h4',
         { class: 'mt-n6 mb-4' },
-        `${gettext('We have sent an email to the new email address you provided. ' +
-            'Please enter the code from the message')}:`,
+        // eslint-disable-next-line vue/max-len
+        interpolate('%(text)s:', { text: gettext('We have sent an email to the new email address you provided. Please enter the code from the message') }),
       ),
       h('div', { style: 'display: flex; justify-content: center;' }, [h('input', {
         type: 'text',
@@ -119,8 +120,8 @@ async function verifyEmailChanged(userData: UserDataJSON) {
     if (enterEmailConfirmationCode.action.name === 'confirm') {
       apiClient.post(
         '/account/profile/confirm-new-email',
-        { code: (<HTMLInputElement> document.getElementById('input-change-email')).value },
-          { hideErrorNotice: true } as AxiosRequestConfig,
+        { code: (<HTMLInputElement>document.getElementById('input-change-email')).value },
+        { hideErrorNotice: true } as AxiosRequestConfig,
       ).then(() => {
         dfModal.message('', gettext('Your new email is now verified, thank you. '));
       }).catch((err: any) => {
@@ -201,9 +202,9 @@ async function handleSocialConnection(e: Event) {
 
 function mergeUsers(e: Event) {
   e.preventDefault();
-  const user: String | null = (<HTMLInputElement> document.getElementById('merge-user-user')).value;
-  const passwd: String | null = (<HTMLInputElement> document.getElementById('merge-user-password')).value;
-  const account: Boolean | null = (<HTMLInputElement> document.getElementById('merge-user-account')).checked;
+  const user: String | null = (<HTMLInputElement>document.getElementById('merge-user-user')).value;
+  const passwd: String | null = (<HTMLInputElement>document.getElementById('merge-user-password')).value;
+  const account: Boolean | null = (<HTMLInputElement>document.getElementById('merge-user-account')).checked;
   apiClient.post(
     '/account/profile/merge-accounts',
     { login: user, password: passwd, account },
@@ -303,10 +304,8 @@ async function removeMyAccount() {
       h(
         'h5',
         {},
-        gettext('Your account will be suspended, and all of your data will be ' +
-          'permanently deleted after a period of 1 year. Once your account is suspended, you will ' +
-          'have the option to reactivate it. If you wish to delete your account ' +
-          'immediately, please contact us using the provided information in our contacts.'),
+        // eslint-disable-next-line vue/max-len
+        gettext('Your account will be suspended, and all of your data will be permanently deleted after a period of 1 year. Once your account is suspended, you will have the option to reactivate it. If you wish to delete your account immediately, please contact us using the provided information in our contacts.'),
       ),
     ],
     new FilteredActions({
@@ -337,28 +336,28 @@ async function removeMyAccount() {
 
 <style>
 .sc-login-list {
-  display:         flex;
-  flex-direction:  row;
+  display: flex;
+  flex-direction: row;
   justify-content: space-around;
-  flex-wrap:       wrap;
+  flex-wrap: wrap;
 }
 
 .merge-accounts {
-  display:        flex;
+  display: flex;
   flex-direction: column;
-  margin-top:     2em;
+  margin-top: 2em;
 }
 
 .merge-user-input {
-  border:        1px solid black;
+  border: 1px solid black;
   border-radius: 5px;
 }
 
 .div-input {
-  display:        flex;
+  display: flex;
   flex-direction: row;
-  margin-bottom:  0.3em;
-  padding:        0.1em;
+  margin-bottom: 0.3em;
+  padding: 0.1em;
 }
 
 .div-input input {
