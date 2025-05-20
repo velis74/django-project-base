@@ -8,7 +8,7 @@
             density="compact"
             single-line
             hide-details
-            placeholder="Username"
+            :placeholder="usernamePlaceholder"
             @keyup.enter="focusPassword"
           />
         </v-col>
@@ -20,7 +20,7 @@
             single-line
             hide-details
             type="password"
-            placeholder="Password"
+            :placeholder="passwordPlaceholder"
             @keyup.enter="doLogin"
           />
         </v-col>
@@ -73,6 +73,9 @@ function focusPassword() {
 const userSession = useUserSessionStore();
 
 const registerWorkflowErrors = reactive({} as { [key: string]: any[] });
+
+const usernamePlaceholder = gettext('Username');
+const passwordPlaceholder = gettext('Password');
 
 async function validateEmailCode() {
   const userEmailChoice = await dfModal.message('', () => [

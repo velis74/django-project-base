@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 12:34+0000\n"
+"POT-Creation-Date: 2025-05-20 08:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgid "You cannot generate new notifications. Please contact support."
 msgstr "Ne morete generirati novi sporočil. Prosimo kontaktirajte podporo."
 
 #: vue/components/project-settings.vue:60
-#: vue/components/user-session/login-inline.vue:169
+#: vue/components/user-session/login-inline.vue:172
 #: vue/components/user-session/login.ts:103
 #: vue/components/user-session/login.ts:158
 #: vue/components/user-session/login.ts:199
@@ -121,43 +121,52 @@ msgstr "Prijava"
 msgid "Register"
 msgstr "Registracija"
 
-#: vue/components/user-session/login-inline.vue:82
-#: vue/components/user-session/login-inline.vue:127
-#: vue/components/user-session/login-inline.vue:147
+#: vue/components/user-session/login-inline.vue:77
+msgid "Username"
+msgstr "Uporabniško ime"
+
+#: vue/components/user-session/login-inline.vue:78
+#: vue/components/user-session/user-profile.vue:272
+msgid "Password"
+msgstr "Geslo"
+
+#: vue/components/user-session/login-inline.vue:85
+#: vue/components/user-session/login-inline.vue:130
+#: vue/components/user-session/login-inline.vue:150
 msgid "New account"
 msgstr "Nov račun"
 
-#: vue/components/user-session/login-inline.vue:87
+#: vue/components/user-session/login-inline.vue:90
 msgid "We have sent an email to the email address you provided."
 msgstr "Na naveden naslov smo poslali elektronsko pošto."
 
-#: vue/components/user-session/login-inline.vue:92
+#: vue/components/user-session/login-inline.vue:95
 #: vue/components/user-session/login.ts:65
 msgid "Please enter the code from the message"
 msgstr "Prosim, vnesi kodo iz sporočila"
 
-#: vue/components/user-session/login-inline.vue:106
+#: vue/components/user-session/login-inline.vue:109
 msgid "Different email"
 msgstr "Različen elektronski naslov"
 
-#: vue/components/user-session/login-inline.vue:112
-#: vue/components/user-session/login-inline.vue:175
+#: vue/components/user-session/login-inline.vue:115
+#: vue/components/user-session/login-inline.vue:178
 msgid "Proceed"
 msgstr "Nadaljuj"
 
-#: vue/components/user-session/login-inline.vue:128
+#: vue/components/user-session/login-inline.vue:131
 msgid "Your account is now active and you are logged in."
 msgstr "Vaš račun je sedaj aktiven. Ste tudi prijavljeni v aplikacijo."
 
-#: vue/components/user-session/login-inline.vue:129
+#: vue/components/user-session/login-inline.vue:132
 msgid "Welcome to"
 msgstr "Dobrodošli v"
 
-#: vue/components/user-session/login-inline.vue:148
+#: vue/components/user-session/login-inline.vue:151
 msgid "different email"
 msgstr "različen elektronski naslov"
 
-#: vue/components/user-session/login-inline.vue:155
+#: vue/components/user-session/login-inline.vue:158
 msgid "Please enter new email"
 msgstr "Prosim vnesite nov elektronski naslov"
 
@@ -312,10 +321,6 @@ msgstr "Poveži račun s sledečimi poverilnicami"
 #: vue/components/user-session/user-profile.vue:268
 msgid "Username or email"
 msgstr "Uporabniško ime ali e-pošta"
-
-#: vue/components/user-session/user-profile.vue:272
-msgid "Password"
-msgstr "Geslo"
 
 #: vue/components/user-session/user-profile.vue:276
 msgid "Currently logged in user account will be main account"

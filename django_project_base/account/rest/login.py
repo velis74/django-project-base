@@ -30,8 +30,8 @@ class LoginSerializer(serializers.Serializer):
     )
 
     template_context = dict(url_reverse="profile-base-login", url_reverse_kwargs=None)
-    login = fields.CharField(required=True)
-    password = fields.CharField(required=True, password_field=True)
+    login = fields.CharField(label=_("Username"), required=True)
+    password = fields.CharField(label=_("Password"), required=True, password_field=True)
     return_type = fields.ChoiceField(choices=["json", "cookie"], required=False, display_form=DisplayMode.HIDDEN)
     social_auth_providers = fields.SerializerMethodField()
 
