@@ -63,7 +63,7 @@ function asyncSearch(query: string) {
   apiClient.get(interpolate('%(url)s?search=%(query)s', {
     url: searchUrl,
     query,
-  }), { showProgress: false } as AxiosRequestConfig).then((response: any) => {
+  }), { showProgress: false }).then((response: any) => {
     options.value = response.data;
     searching.value = false;
   });

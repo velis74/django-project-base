@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 12:35+0000\n"
+"POT-Creation-Date: 2025-05-20 08:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,6 +139,27 @@ msgstr "Prijava"
 msgid "Back to site"
 msgstr "Nazaj na aplikacijo"
 
+#: django_project_base/account/rest/login.py:33
+msgid "Username"
+msgstr "Uporabniško ime"
+
+#: django_project_base/account/rest/login.py:34
+#: django_project_base/account/rest/profile.py:254
+msgid "Password"
+msgstr "Geslo"
+
+#: django_project_base/account/rest/profile.py:102
+msgid "User profiles"
+msgstr "Uporabniški profili"
+
+#: django_project_base/account/rest/profile.py:103
+msgid "New user"
+msgstr "Nov uporabnik"
+
+#: django_project_base/account/rest/profile.py:104
+msgid "Edit user"
+msgstr "Uredi uporabnika"
+
 #: django_project_base/account/rest/profile.py:124
 msgid "Full name"
 msgstr "Polno ime"
@@ -169,10 +190,6 @@ msgstr "Združi"
 #: django_project_base/account/rest/profile.py:202
 msgid "Export"
 msgstr "Izvozi"
-
-#: django_project_base/account/rest/profile.py:254
-msgid "Password"
-msgstr "Geslo"
 
 #: django_project_base/account/rest/profile.py:255
 msgid "Repeat Password"

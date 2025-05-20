@@ -107,7 +107,8 @@ async function confirmationEmail(setting: ProjectSetting, message: Array<any>) {
                 displayStyle: { asButton: true, showLabel: true, showIcon: true },
                 position: 'FORM_FOOTER',
               }),
-            })).then((action: Action) => {
+            }),
+          ).then((action: Action) => {
             if (action.action.name === 'cancel') {
               apiClient.post(
                 '/project-settings/reset-pending',
@@ -182,7 +183,9 @@ function confirmSetting(setting: ProjectSetting) {
 function checkSettings() {
   const cookie = cookies.get('setting-verification');
   if (_.size(cookie) && _.size(cookie.split('*'))) {
-    apiClient.get(interpolate('/project-settings/%(path)s.json', { path: _.first(cookie.split('*')) })).then((res: any) => {
+    apiClient.get(
+      interpolate('/project-settings/%(path)s.json', { path: _.first(cookie.split('*')) }),
+    ).then((res: any) => {
       confirmSetting(res.data);
     });
   }
