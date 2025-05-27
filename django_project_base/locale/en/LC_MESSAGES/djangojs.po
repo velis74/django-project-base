@@ -7,7 +7,7 @@ msgid "You cannot generate new notifications. Please contact support."
 msgstr ""
 
 #: vue/components/project-settings.vue:60
-#: vue/components/user-session/login-inline.vue:169
+#: vue/components/user-session/login-inline.vue:172
 #: vue/components/user-session/login.ts:103
 #: vue/components/user-session/login.ts:158
 #: vue/components/user-session/login.ts:199
@@ -91,43 +91,52 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:82
-#: vue/components/user-session/login-inline.vue:127
-#: vue/components/user-session/login-inline.vue:147
+#: vue/components/user-session/login-inline.vue:77
+msgid "Username"
+msgstr ""
+
+#: vue/components/user-session/login-inline.vue:78
+#: vue/components/user-session/user-profile.vue:272
+msgid "Password"
+msgstr ""
+
+#: vue/components/user-session/login-inline.vue:85
+#: vue/components/user-session/login-inline.vue:130
+#: vue/components/user-session/login-inline.vue:150
 msgid "New account"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:87
+#: vue/components/user-session/login-inline.vue:90
 msgid "We have sent an email to the email address you provided."
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:92
+#: vue/components/user-session/login-inline.vue:95
 #: vue/components/user-session/login.ts:65
 msgid "Please enter the code from the message"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:106
+#: vue/components/user-session/login-inline.vue:109
 msgid "Different email"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:112
-#: vue/components/user-session/login-inline.vue:175
+#: vue/components/user-session/login-inline.vue:115
+#: vue/components/user-session/login-inline.vue:178
 msgid "Proceed"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:128
+#: vue/components/user-session/login-inline.vue:131
 msgid "Your account is now active and you are logged in."
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:129
+#: vue/components/user-session/login-inline.vue:132
 msgid "Welcome to"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:148
+#: vue/components/user-session/login-inline.vue:151
 msgid "different email"
 msgstr ""
 
-#: vue/components/user-session/login-inline.vue:155
+#: vue/components/user-session/login-inline.vue:158
 msgid "Please enter new email"
 msgstr ""
 
@@ -277,10 +286,6 @@ msgstr ""
 
 #: vue/components/user-session/user-profile.vue:268
 msgid "Username or email"
-msgstr ""
-
-#: vue/components/user-session/user-profile.vue:272
-msgid "Password"
 msgstr ""
 
 #: vue/components/user-session/user-profile.vue:276
