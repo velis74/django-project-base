@@ -1,3 +1,13 @@
+# Notice to users of this library
+
+## This library is no longer free software.
+
+With 0.80.0 the library has gained a development partner that will doubtless raise it to new heights.
+
+The LICENSE has been modified to a proprietary one with restrictions, so please be mindful of conditions.
+
+The library is thus deprecated and in maintenance mode only.
+
 # Django project base
 
 A collection of functionalities that are common to most projects we do.
