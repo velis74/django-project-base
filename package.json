@@ -1,6 +1,6 @@
 {
   "name": "@velis/django_project_base",
-  "version": "0.4.46",
+  "version": "0.80.2",
   "private": false,
   "type": "module",
   "license": "Proprietary",
@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "@kyvg/vue3-notification": "^3",
-    "@velis/dynamicforms": "^0.77.30",
+    "@velis/dynamicforms": "^0.80.6",
     "axios": "^1.2.0",
     "browser-update": "^3.3.37",
     "lodash-es": "^4.17.12",
