@@ -29,7 +29,7 @@
   },
   "peerDependencies": {
     "@kyvg/vue3-notification": "^3",
-    "@velis/dynamicforms": "^0.80.6",
+    "@velis/dynamicforms": "^0.80.8",
     "axios": "^1.2.0",
     "browser-update": "^3.3.37",
     "lodash-es": "^4.17.12",
