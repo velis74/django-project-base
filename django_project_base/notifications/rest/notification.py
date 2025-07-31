@@ -661,6 +661,19 @@ class NotificationViewset(ModelViewSet):
             notification = self.get_object()
             notification.delayed_to = int(datetime.datetime.now().timestamp())
             notification.save(update_fields=["delayed_to"])
+            notification.sender = Notification._get_sender_config(notification.project_slug)
+            notification.user = (notification.extra_data or {}).get("user") or request.user.pk
+            rec_list = []
+            for usr in notification.recipients.split(","):
+                rec_list.append(
+                    {
+                        k: v
+                        for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
+                        if not k.startswith("_")
+                    }
+                )
+            notification.recipients_list = rec_list
+
             QueableNotificationMixin().enqueue_notification(notification, notification.extra_data)
             serializer = self.get_serializer(notification)
             return Response(serializer.data)
