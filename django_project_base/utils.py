@@ -93,9 +93,9 @@ def set_django_security(django_settings, deploy=True, swagger_version=None):
         "'self'",
     ]
     # TODO temp removed because we're rendering all legacy pages as iframes when everything is moved to vue, reenable
-    # django_settings["CSP_FRAME_ANCESTORS"] = [
-    #     "'none'",
-    # ]
+    django_settings["CSP_FRAME_ANCESTORS"] = [
+        "'self'",
+    ]
     django_settings["CSP_FORM_ACTION"] = [
         "'self'",
     ]

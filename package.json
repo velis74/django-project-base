@@ -1,6 +1,6 @@
 {
   "name": "@velis/django_project_base",
-  "version": "0.80.2",
+  "version": "0.80.3",
   "private": false,
   "type": "module",
   "license": "Proprietary",
@@ -30,7 +30,7 @@
   "peerDependencies": {
     "@dynamicforms/vuetify-inputs": "^0.5.4",
     "@kyvg/vue3-notification": "^3",
-    "@velis/dynamicforms": "^0.80.9",
+    "@velis/dynamicforms": "^0.80.17",
     "axios": "^1.2.0",
     "browser-update": "^3.3.37",
     "lodash-es": "^4.17.12",
@@ -43,8 +43,7 @@
     "vuetify": "^3.0.1",
     "vue3-cookies": "^1.0.6"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/browser-update": "^3.3.0",
     "@types/jest": "^29.2.5",
