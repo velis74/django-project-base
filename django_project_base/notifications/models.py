@@ -56,7 +56,7 @@ class DjangoProjectBaseMessage(AbstractDjangoProjectBaseMessage):
         return self._unsaved_attachments
 
     def get_attachments(self):
-        if self.id:
+        if not self._state.adding:
             return list(self.attachments.all())
         else:
             return self.get_unsaved_attachments()
