@@ -1,3 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "django-project-base"
+version = "0.80.6"
+description = "Everything revolves around it: users, roles, permissions, tags, etc."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "Proprietary" }
+authors = [
+    { name = "Jure Erznožnik", email = "support@velis.si" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+    "Framework :: Django",
+]
+
+dependencies = [
+    "django",
+    "djangorestframework",
+    "dynamicforms>=0.80.17",
+    "swapper",
+    "django-rest-registration",
+    "drf-spectacular>=0.17.2, <0.26.0",
+    "django-taggit",
+    "svgwrite",
+    "django-hijack < 3",
+    "pytz",
+    "social-auth-app-django",
+    "django-permissions-policy",
+    "django-csp",
+    "requests",
+    "boto3",
+    "natural",
+    "celery>=5.2",
+    "pandas",
+    "click>=8.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/velis74/django-project-base"
+Repository = "https://github.com/velis74/django-project-base"
+"Bug Tracker" = "https://github.com/velis74/django-project-base/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["django_project_base"]
+
+[tool.hatch.version]
+path = "django_project_base/__init__.py"
+
+
 [tool.ruff]
 exclude = ['dockertest',
     'tests', 'docs', 'examples', 'scripts', 'setup.py', 'setup.cfg', 'README.md', 'LICENSE', 'MANIFEST.in',

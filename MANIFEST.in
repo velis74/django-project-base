@@ -1,5 +1,5 @@
 include requirements.txt
-incluide LICENSE
+include LICENSE
 recursive-include django_project_base *
 global-exclude __pycache__
 global-exclude *.py[co]
