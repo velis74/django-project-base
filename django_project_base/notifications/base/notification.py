@@ -185,7 +185,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
         if self.persist:
             if self.handle_similar_notifications(notification=notification):
                 return notification
-            if not self.message.pk or not DjangoProjectBaseMessage.objects.filter(pk=self.message.pk).exists():
+            if self.message._state.adding:
                 self.message.save()
             notification.created_at = int(datetime.datetime.now().timestamp())
             notification.save()
