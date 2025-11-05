@@ -83,7 +83,7 @@ def integer_ts():
 
 
 class AbstractDjangoProjectBaseNotification(models.Model):
-    DELAYED_INDEFINETLY = 2**63 - 1  # Max bigint
+    DELAYED_INDEFINITELY = 2**63 - 1  # Max bigint
 
     locale = models.CharField(null=True, blank=True, max_length=8, verbose_name=_("Locale"))  # language
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
@@ -124,10 +124,14 @@ class AbstractDjangoProjectBaseNotification(models.Model):
     send_notification_sms = models.BooleanField(null=False, blank=False, default=False)
     send_notification_sms_text = models.TextField(blank=False, null=True)
     extra_data = models.JSONField(null=True, blank=False)
+    done = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
         verbose_name = "Notification"
+        indexes = [
+            models.Index(fields=["delayed_to", "done"]),
+        ]
 
 
 class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
@@ -186,7 +190,33 @@ class DjangoProjectBaseNotification(AbstractDjangoProjectBaseNotification):
 
     @property
     def is_delayed(self):
-        return self.delayed_to == self.DELAYED_INDEFINETLY
+        return self.delayed_to and self.delayed_to > datetime.datetime.now().timestamp()
+
+    def prepare_for_send(self, user_pk=None):
+        from django_project_base.notifications.base.notification import Notification
+
+        self.sender = Notification._get_sender_config(self.project_slug)
+        self.user = (self.extra_data or {}).get("user") or user_pk
+        rec_list = []
+        for usr in self.recipients.split(","):
+            rec_list.append(
+                {
+                    k: v
+                    for k, v in get_user_model().objects.get(pk=usr).userprofile.__dict__.items()
+                    if not k.startswith("_")
+                }
+            )
+        self.recipients_list = rec_list
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super().save(force_insert, force_update, using, update_fields)
+        self.__class__.objects.invalidate_cache(self.pk)
+
+    def delete(self, using=None, keep_parents=False):
+        pk = self.pk
+        ret = super().delete(using, keep_parents)
+        self.__class__.objects.invalidate_cache(pk)
+        return ret
 
 
 class SearchItemObject:

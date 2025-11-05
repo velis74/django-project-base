@@ -60,3 +60,6 @@ class QuerySetWithCache(models.query.QuerySet):
         _data: list = list(super().filter(*args, **kwargs))
         cache.set(ck, _data, timeout=self.cache_timeout)
         return _data
+
+    def invalidate_cache(self, pk):
+        self.cache_delete_pattern("%s*" % self.base_cache_key)

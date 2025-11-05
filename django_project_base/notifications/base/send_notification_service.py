@@ -128,12 +128,17 @@ class SendNotificationService(object):
             if set(_snt) == set(_req):
                 notification.failed_channels = ""
 
+            _fld = notification.failed_channels.split(",") if notification.failed_channels else []
+
+            notification.done = set(_req).issubset(set(_snt) | set(_fld))
+
             notification.save(
                 update_fields=[
                     "sent_at",
                     "sent_channels",
                     "failed_channels",
                     "exceptions",
+                    "done",
                 ],
                 using=db_name,
             )

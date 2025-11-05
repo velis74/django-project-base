@@ -27,11 +27,20 @@ app.conf.task_queues = [
     ),
 ]
 
+app.conf.beat_schedule = {
+    "scheduler": {
+        "task": "background_tasks.notification_tasks.notification_scheduler_task",
+        "schedule": 3,
+        "options": {"queue": "notification"},
+    },
+}
+
 app.conf.task_ignore_result = True
 app.conf.worker_send_task_events = False
 app.conf.broker_transport_options = {"visibility_timeout": NOTIFICATIONS_QUEUE_VISIBILITY_TIMEOUT}
 setting_option = Option(("--settings",), is_flag=False, help="Django settings file path", default="")
 app.user_options["worker"].add(setting_option)
+app.user_options["beat"].add(setting_option)
 
 
 class CeleryBootstep(bootsteps.Step):
@@ -41,6 +50,7 @@ class CeleryBootstep(bootsteps.Step):
 
 
 app.steps["worker"].add(CeleryBootstep)
+app.steps["beat"].add(CeleryBootstep)
 
 # RUN WORKER AS
 # celery -A django_project_base.celery.celery worker -l INFO -Q notification --concurrency=1

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 08:28+0000\n"
+"POT-Creation-Date: 2025-11-05 08:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,7 +118,7 @@ msgid "Inviting project member"
 msgstr "Povabilo članu projekta"
 
 #: django_project_base/account/rest/invite.py:57
-#: django_project_base/notifications/rest/notification.py:150
+#: django_project_base/notifications/rest/notification.py:158
 msgid "Add"
 msgstr "Dodaj"
 
@@ -126,7 +126,7 @@ msgstr "Dodaj"
 msgid "Add new record"
 msgstr "Dodaj nov zapis"
 
-#: django_project_base/account/rest/invite.py:151
+#: django_project_base/account/rest/invite.py:156
 msgid "You are invited to project"
 msgstr "Vabljeni ste v projekt"
 
@@ -417,7 +417,7 @@ msgstr "Predlagana sprememba"
 #: django_project_base/notifications/models.py:26
 #: django_project_base/notifications/models.py:66
 #: django_project_base/notifications/models.py:89
-#: django_project_base/notifications/models.py:305
+#: django_project_base/notifications/models.py:335
 msgid "Id"
 msgstr "Id"
 
@@ -485,7 +485,7 @@ msgid "Send notification via EMail if user has no phone number"
 msgstr "Pošlji obvestilo po emailu, če uporabnik nima telefonske številke"
 
 #: django_project_base/notifications/models.py:27
-#: django_project_base/notifications/rest/notification.py:187
+#: django_project_base/notifications/rest/notification.py:195
 msgid "Subject"
 msgstr "Zadeva"
 
@@ -504,7 +504,7 @@ msgstr "Priponka"
 
 #: django_project_base/notifications/models.py:76
 #: django_project_base/notifications/models.py:116
-#: django_project_base/notifications/rest/notification.py:458
+#: django_project_base/notifications/rest/notification.py:471
 msgid "Message"
 msgstr "Sporočilo"
 
@@ -537,22 +537,25 @@ msgid "Sent at"
 msgstr "Poslano ob"
 
 #: django_project_base/notifications/models.py:102
+#: django_project_base/notifications/rest/notification.py:235
+#: django_project_base/notifications/rest/notification.py:484
+#: django_project_base/notifications/rest/notification.py:680
 msgid "Delayed to"
 msgstr "Odloženo do"
 
-#: django_project_base/notifications/models.py:301
+#: django_project_base/notifications/models.py:331
 msgid "Delivered"
 msgstr "Dostavljeno"
 
-#: django_project_base/notifications/models.py:302
+#: django_project_base/notifications/models.py:332
 msgid "Not Delivered"
 msgstr "Ni dostavljeno"
 
-#: django_project_base/notifications/models.py:303
+#: django_project_base/notifications/models.py:333
 msgid "Pending delivery"
 msgstr "V dostavi"
 
-#: django_project_base/notifications/models.py:314
+#: django_project_base/notifications/models.py:344
 msgid "Auxiliary notification"
 msgstr "Pomožno obvestilo"
 
@@ -566,81 +569,110 @@ msgid "Messages"
 msgstr "Sporočila"
 
 #: django_project_base/notifications/rest/notification.py:109
-#: django_project_base/notifications/rest/notification.py:613
+#: django_project_base/notifications/rest/notification.py:664
 msgid "New message"
 msgstr "Novo sporočilo"
 
-#: django_project_base/notifications/rest/notification.py:124
-msgid "Save"
-msgstr "Shrani"
+#: django_project_base/notifications/rest/notification.py:129
+msgid "Save / Send later"
+msgstr "Shrani / Pošlji kasneje"
 
-#: django_project_base/notifications/rest/notification.py:133
-#: django_project_base/notifications/rest/notification.py:184
+#: django_project_base/notifications/rest/notification.py:141
+#: django_project_base/notifications/rest/notification.py:192
+#: django_project_base/notifications/rest/notification.py:442
 msgid "Recipients"
 msgstr "Prejemniki"
 
-#: django_project_base/notifications/rest/notification.py:136
+#: django_project_base/notifications/rest/notification.py:144
 msgid "Delivery"
 msgstr "Dostavljeno"
 
-#: django_project_base/notifications/rest/notification.py:151
+#: django_project_base/notifications/rest/notification.py:159
 msgid "Add new notification"
 msgstr "Novo obvestilo"
 
-#: django_project_base/notifications/rest/notification.py:157
-#: django_project_base/notifications/rest/notification.py:158
+#: django_project_base/notifications/rest/notification.py:165
+#: django_project_base/notifications/rest/notification.py:166
 msgid "View license"
 msgstr "Poglej dobroimetje"
 
-#: django_project_base/notifications/rest/notification.py:162
+#: django_project_base/notifications/rest/notification.py:170
 msgid "Edit"
 msgstr "Uredi"
 
-#: django_project_base/notifications/rest/notification.py:162
+#: django_project_base/notifications/rest/notification.py:170
 msgid "Edit record"
 msgstr "Uredi zapis"
 
-#: django_project_base/notifications/rest/notification.py:169
-#: django_project_base/notifications/rest/notification.py:476
+#: django_project_base/notifications/rest/notification.py:177
 msgid "Send"
 msgstr "Pošlji"
 
-#: django_project_base/notifications/rest/notification.py:191
-#: django_project_base/notifications/rest/notification.py:621
+#: django_project_base/notifications/rest/notification.py:199
+#: django_project_base/notifications/rest/notification.py:672
 msgid "Send on channels"
 msgstr "Pošlji preko kanalov"
 
-#: django_project_base/notifications/rest/notification.py:209
+#: django_project_base/notifications/rest/notification.py:217
 msgid "Send notification SMS"
 msgstr "Pošlji SMS obvestilo"
 
-#: django_project_base/notifications/rest/notification.py:214
+#: django_project_base/notifications/rest/notification.py:222
 msgid "Created"
 msgstr "Kreirano ob"
 
-#: django_project_base/notifications/rest/notification.py:221
+#: django_project_base/notifications/rest/notification.py:229
 msgid "Sent"
 msgstr "Poslano"
 
-#: django_project_base/notifications/rest/notification.py:228
-msgid "Delayed"
-msgstr "Odloženo"
+#: django_project_base/notifications/rest/notification.py:241
+#: django_project_base/notifications/rest/notification.py:517
+msgid "Za nedoločen čas / Samo shranjeno"
+msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:429
-msgid "sent to"
-msgstr "poslano"
-
-#: django_project_base/notifications/rest/notification.py:461
+#: django_project_base/notifications/rest/notification.py:474
 msgid "Close"
 msgstr "Zapri"
 
-#: django_project_base/notifications/rest/notification.py:469
+#: django_project_base/notifications/rest/notification.py:482
 msgid "Created At"
 msgstr "Kreirano ob"
 
-#: django_project_base/notifications/rest/notification.py:470
+#: django_project_base/notifications/rest/notification.py:483
 msgid "Sent At"
 msgstr "Poslano ob"
+
+#: django_project_base/notifications/rest/notification.py:490
+msgid "Send now"
+msgstr "Pošlji takoj"
+
+#: django_project_base/notifications/rest/notification.py:495
+msgid "Change delay"
+msgstr "Spremeni čas pošiljanja"
+
+#: django_project_base/notifications/rest/notification.py:729
+msgid "Invalid delayed to value"
+msgstr "Neveljavna vrednost časa pošiljanja"
+
+#: django_project_base/notifications/rest/notification.py:817
+msgid "Delayed sending"
+msgstr "Zakasnjeno pošiljanje"
+
+#: django_project_base/notifications/rest/notification.py:822
+msgid "Back"
+msgstr "Nazaj"
+
+#: django_project_base/notifications/rest/notification.py:823
+msgid "Confirm"
+msgstr "Potrdi"
+
+#: django_project_base/notifications/rest/notification.py:828
+msgid "Send at"
+msgstr "Pošlji ob"
+
+#: django_project_base/notifications/rest/notification.py:832
+msgid "Delay indefinitely / Save only"
+msgstr "Preloži za nedoločen čas / Samo shrani"
 
 #: django_project_base/notifications/templates/account_created.html:5
 msgid ""
