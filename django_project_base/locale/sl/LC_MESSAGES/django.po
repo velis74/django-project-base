@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 08:22+0000\n"
+"POT-Creation-Date: 2025-11-05 08:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -627,8 +627,8 @@ msgstr "Poslano"
 
 #: django_project_base/notifications/rest/notification.py:241
 #: django_project_base/notifications/rest/notification.py:517
-msgid "Za nedoločen čas / Samo shranjeno"
-msgstr ""
+msgid "Indefinitely / Saved only"
+msgstr "Za nedoločen čas / Samo shranjeno"
 
 #: django_project_base/notifications/rest/notification.py:474
 msgid "Close"
