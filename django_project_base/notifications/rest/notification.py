@@ -134,7 +134,7 @@ class NotificationSerializer(ModelSerializer):
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 
-    subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN)
+    subject = fields.SerializerMethodField(display_form=DisplayMode.HIDDEN, label=_("Subject"))
     recipients = fields.CharField(display_form=DisplayMode.HIDDEN, display_table=DisplayMode.HIDDEN)
 
     recipients_original_payload = OrginalRecipientsField(
@@ -760,7 +760,7 @@ class NotificationsLicenseSerializer(LicenseReportSerializer):
         ):
             self.fields.pop("max_notification_price", None)
         for channel in ChannelIdentifier.supported_channels():
-            self.fields[channel.name] = fields.IntegerField(read_only=True, label=_(channel.name))
+            self.fields[channel.name] = fields.IntegerField(read_only=True, label=_(channel.verbose_name))
 
     usage_report = None
     max_notification_price = fields.FloatField(read_only=True, display_table=DisplayMode.HIDDEN)

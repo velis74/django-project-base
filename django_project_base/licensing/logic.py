@@ -3,7 +3,7 @@ from typing import List, Optional
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.models import Model, Sum
-from django.utils.translation import gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from dynamicforms import fields
 from dynamicforms.serializers import Serializer
 from rest_framework.exceptions import PermissionDenied
@@ -12,16 +12,18 @@ from django_project_base.licensing.models import LicenseAccessUse
 
 
 class LicenseUsageReport(Serializer):
-    item = fields.CharField(read_only=True)
-    usage_sum = fields.FloatField(read_only=True)
+    item = fields.CharField(read_only=True, label=_("Type"))
+    usage_sum = fields.FloatField(read_only=True, label=_("Used"))
 
 
 class LicenseReportSerializer(Serializer):
-    credit = fields.FloatField(read_only=True)
-    used_credit = fields.FloatField(read_only=True)
-    remaining_credit = fields.FloatField(read_only=True)
+    credit = fields.FloatField(read_only=True, label=_("Credit"))
+    used_credit = fields.FloatField(read_only=True, label=_("Used credit"))
+    remaining_credit = fields.FloatField(read_only=True, label=_("Remaining credit"))
 
-    usage_report = fields.ListField(child=LicenseUsageReport(), allow_empty=True, read_only=True)
+    usage_report = fields.ListField(
+        child=LicenseUsageReport(), allow_empty=True, read_only=True, label=_("Usage report")
+    )
 
 
 class LogAccessService:

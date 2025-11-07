@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-05 08:39+0000\n"
+"POT-Creation-Date: 2025-11-07 13:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -422,8 +422,9 @@ msgid "Id"
 msgstr "Id"
 
 #: django_project_base/base/models.py:343
-msgid "eMail"
-msgstr "ePošta"
+#: django_project_base/notifications/base/channels/mail_channel.py:26
+msgid "Email"
+msgstr "E-pošta"
 
 #: django_project_base/base/models.py:349
 msgid "Invitation message"
@@ -445,7 +446,33 @@ msgstr "Napaka pri pridobivanju podatkov"
 msgid "Error retrieving holidays: {}"
 msgstr "Napaka pri pridobivanju praznikov: {}"
 
-#: django_project_base/licensing/logic.py:102
+#: django_project_base/licensing/logic.py:15
+#: django_project_base/licensing/models.py:15
+#: django_project_base/notifications/models.py:109
+msgid "Type"
+msgstr "Tip"
+
+#: django_project_base/licensing/logic.py:16
+msgid "Used"
+msgstr "Porabljeno"
+
+#: django_project_base/licensing/logic.py:20
+msgid "Credit"
+msgstr "Dobroimetje"
+
+#: django_project_base/licensing/logic.py:21
+msgid "Used credit"
+msgstr "Porabljeno dobroimetje"
+
+#: django_project_base/licensing/logic.py:22
+msgid "Remaining credit"
+msgstr "Preostalo dobroimetje"
+
+#: django_project_base/licensing/logic.py:25
+msgid "Usage report"
+msgstr "Poročilo uporabe"
+
+#: django_project_base/licensing/logic.py:104
 msgid "Your license is consumed. Please contact support."
 msgstr "Vaše dobroimetje je porabljeno. Pokličite podporo."
 
@@ -461,14 +488,13 @@ msgstr "Porabljeni pristopi po adminu"
 msgid "Date"
 msgstr "Datum"
 
-#: django_project_base/licensing/models.py:15
-#: django_project_base/notifications/models.py:109
-msgid "Type"
-msgstr "Tip"
-
 #: django_project_base/licensing/models.py:23
 msgid "Comment"
 msgstr "Opomba"
+
+#: django_project_base/notifications/base/channels/sms_channel.py:22
+msgid "SMS"
+msgstr ""
 
 #: django_project_base/notifications/migrations/0006_djangoprojectbasenotification_send_notification_sms.py:17
 msgid "Text for notification detail view. __LINK__ is url placeholder."
@@ -482,9 +508,10 @@ msgstr "Vaš klub vam je poslal obvestilo. Kliknite povezavo za ogled: __LINK__"
 
 #: django_project_base/notifications/migrations/0007_auto_20231026_0555.py:17
 msgid "Send notification via EMail if user has no phone number"
-msgstr "Pošlji obvestilo po emailu, če uporabnik nima telefonske številke"
+msgstr "Pošlji obvestilo po e-pošti, če uporabnik nima telefonske številke"
 
 #: django_project_base/notifications/models.py:27
+#: django_project_base/notifications/rest/notification.py:137
 #: django_project_base/notifications/rest/notification.py:195
 msgid "Subject"
 msgstr "Zadeva"
@@ -710,7 +737,7 @@ msgstr "Vnesi vrednost"
 
 #: django_project_base/rest/project.py:197
 msgid "Email sender value for notifications"
-msgstr "Nastavitev pošiljatelja ePošte za obvestila"
+msgstr "Nastavitev pošiljatelja e-pošte za obvestila"
 
 #: django_project_base/rest/project.py:205
 msgid "Sms sender value for notifications"

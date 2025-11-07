@@ -1,6 +1,7 @@
 from typing import List
 
 from django.conf import Settings
+from django.utils.translation import gettext_lazy as _
 
 from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -16,6 +17,10 @@ class SmsChannel(Channel):
 
     provider_setting_name = "NOTIFICATIONS_SMS_PROVIDER"
 
+    @property
+    def verbose_name(self):
+        return _("SMS")
+
     def get_recipients(
         self, notification: DjangoProjectBaseNotification, unique_identifier="", phone_number_validator=None
     ):
@@ -27,9 +32,7 @@ class SmsChannel(Channel):
             )
         )
 
-    def send(
-        self, notification: DjangoProjectBaseNotification, extra_data: dict, settings: Settings, **kwargs
-    ) -> int:  # noqa: F821
+    def send(self, notification: DjangoProjectBaseNotification, extra_data: dict, settings: Settings, **kwargs) -> int:  # noqa: F821
         return super().send(notification=notification, extra_data=extra_data, settings=settings)
 
     def clean_sms_recipients(self, recipients: List[Recipient]) -> List[Recipient]:
