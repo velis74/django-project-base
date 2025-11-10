@@ -302,6 +302,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
         raw_recipients=None,
         project_slug=None,
         save_only=False,
+        delayed_to=None,
     ):
         if not project_slug:
             project_slug = (
@@ -323,9 +324,9 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             raw_recipents=raw_recipients,
             project=project_slug,
             recipients=recipients,
-            delay=DjangoProjectBaseNotification.DELAYED_INDEFINETLY
+            delay=DjangoProjectBaseNotification.DELAYED_INDEFINITELY
             if save_only
-            else int(datetime.datetime.now().timestamp()),
+            else delayed_to or (datetime.datetime.now().timestamp()),
             channels=[
                 ChannelIdentifier.channel(c, settings=settings, project_slug=None).__class__ for c in send_on_channels
             ],

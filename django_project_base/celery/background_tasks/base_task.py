@@ -42,6 +42,14 @@ class BaseTask(PerformanceCeleryTask):
         logging.getLogger(__name__).error(
             f"Exception: {exc} \n\nTask id: {task_id}\n\nArgs: {args}\n\nKwargs: {kwargs}\n\nEInfo: {einfo}"
         )
+        self._close_db()
 
     def run(self, *args, **kwargs):
         return None
+
+    # noinspection PyMethodMayBeStatic
+    def _close_db(self):
+        # Just to make sure that db connection closes
+        from django import db
+
+        db.connections.close_all()

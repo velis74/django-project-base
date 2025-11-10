@@ -1,8 +1,8 @@
-#: vue/components/notifications-editor.vue:91
+#: vue/components/notifications-editor.vue:149
 msgid "License consumed"
 msgstr ""
 
-#: vue/components/notifications-editor.vue:92
+#: vue/components/notifications-editor.vue:150
 msgid "You cannot generate new notifications. Please contact support."
 msgstr ""
 
@@ -24,7 +24,7 @@ msgstr ""
 #: vue/components/project-settings.vue:96
 msgid ""
 "We have attempted to verify the sender email address, but it doesn't work "
-"yet. Please click try again in about a minute or so"
+"yet. Please click \"try again\" in about a minute or so"
 msgstr ""
 
 #: vue/components/project-settings.vue:100
@@ -32,26 +32,26 @@ msgid "Cancel, use the old sender email"
 msgstr ""
 
 #: vue/components/project-settings.vue:106
-#: vue/components/project-settings.vue:146
+#: vue/components/project-settings.vue:147
 msgid "OK"
 msgstr ""
 
-#: vue/components/project-settings.vue:157
+#: vue/components/project-settings.vue:158
 msgid "SMS settings pending for confirmation"
 msgstr ""
 
-#: vue/components/project-settings.vue:163
+#: vue/components/project-settings.vue:164
 msgid ""
 "Sms sender settings is pending for confirmation. It can take up to two weeks "
 "for setting to become active. You will be notified when settings will be "
 "activated."
 msgstr ""
 
-#: vue/components/project-settings.vue:170
+#: vue/components/project-settings.vue:171
 msgid "Email settings pending for confirmation"
 msgstr ""
 
-#: vue/components/project-settings.vue:176
+#: vue/components/project-settings.vue:177
 msgid ""
 "You received an email with confirmation link for email sender address. "
 "Please check your mail and click on confirmation link. Check also spam "

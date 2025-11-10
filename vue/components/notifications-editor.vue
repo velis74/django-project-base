@@ -17,12 +17,14 @@ import { closeNotification, showNotification } from '../notifications';
 
 const props = defineProps<{
   consumerUrl?: string,
+  consumerDelayUrl?: string,
   consumerUrlTrailingSlash?: boolean,
   licenseConsumerUrl?: string,
   licenseConsumerUrlTrailingSlash?: boolean,
 }>();
 
 const consumerUrl: string = (props.consumerUrl ?? 'notification') as string;
+const consumerDelayUrl: string = (props.consumerDelayUrl ?? 'notification-delay') as string;
 const consumerTrailingSlash = (props.consumerUrlTrailingSlash ?? true) as boolean;
 
 const licenseConsumerUrl = (props.licenseConsumerUrl ?? 'notification-license') as string;
@@ -40,11 +42,39 @@ const actionViewLicense = async (): Promise<boolean> => {
   return true;
 };
 
-const actionAddNotification = async (): Promise<boolean> => {
+async function getNotificationDelay(notificationId: string) {
+  const formConsumer = new FormConsumerApi({
+    url: consumerDelayUrl,
+    trailingSlash: true,
+    pk: 'new',
+    query: { notification_id: notificationId || '' },
+  });
+  await formConsumer.getUXDefinition();
+  let data: Partial<any> | undefined;
+  let error = {};
+  do {
+    // eslint-disable-next-line no-await-in-loop
+    const formResult = await formConsumer.withErrors(error).execute(data);
+
+    const resultAction = formResult.action;
+    data = formResult.data;
+
+    error = {};
+
+    if (resultAction.action.name === 'submit') {
+      return data;
+    }
+    // propagate error to the next dialog
+  } while (error && Object.keys(error).length);
+
+  return null;
+}
+
+const actionManageNotification = async (pk: string): Promise<boolean> => {
   const formConsumer = new FormConsumerApi({
     url: consumerUrl,
     trailingSlash: consumerTrailingSlash,
-    pk: 'new',
+    pk,
     useQueryInRetrieveOnly: true,
   });
   await formConsumer.getUXDefinition();
@@ -60,12 +90,35 @@ const actionAddNotification = async (): Promise<boolean> => {
 
     error = {};
     reload = false;
-    if (resultAction.action.name === 'submit' || resultAction.action.name === 'save-only') {
+    let shouldContinue = false;
+    if (
+      resultAction.action.name === 'submit' ||
+      resultAction.action.name === 'send-later' ||
+      resultAction.action.name === 'send'
+    ) {
       try {
-        formResult.data.save_only = resultAction.action.name === 'save-only';
-        // eslint-disable-next-line no-await-in-loop
-        await formConsumer.save();
-        reload = true;
+        formResult.data.send_later = false;
+        if (resultAction.action.name === 'send-later') {
+          // eslint-disable-next-line no-await-in-loop
+          const delayData = await getNotificationDelay(pk);
+          if (delayData == null) {
+            error = { delayData: [] };
+            shouldContinue = true;
+          }
+          if (!shouldContinue && delayData != null) {
+            formResult.data.send_later = true;
+            formResult.data.save_only = delayData.save_only;
+            formResult.data.delayed_to = delayData.delayed_to;
+          }
+        }
+        if (resultAction.action.name === 'send') {
+          formResult.data.send = true;
+        }
+        if (!shouldContinue) {
+          // eslint-disable-next-line no-await-in-loop
+          await formConsumer.save();
+          reload = true;
+        }
       } catch (err: any) {
         error = { ...err?.response?.data };
       }
@@ -77,6 +130,11 @@ const actionAddNotification = async (): Promise<boolean> => {
     await notificationLogic.value.reload();
   }
 
+  return true;
+};
+
+const actionAddNotification = async (): Promise<boolean> => {
+  await actionManageNotification('new');
   return true;
 };
 
@@ -127,23 +185,9 @@ handler
 
 const handlers = {
   edit: async (action: any, payload: any, context: { rowType: RowTypes }) => {
+
     if (context.rowType !== RowTypes.Data || payload == undefined) return false; // eslint-disable-line eqeqeq
-    await FormConsumerOneShotApi({
-      url: consumerUrl,
-      trailingSlash: consumerTrailingSlash,
-      pk: payload.id,
-    }, handlers);
-    return true;
-  },
-  send: async (action: any, payload: any, context: any) => {
-    apiClient.put(consumerTrailingSlash ? interpolate('%(url)s/', { url: consumerUrl }) : consumerUrl, {
-      id: context.dialog.body.props.payload.id,
-      send: true,
-    }).then(() => {
-      // Moram narediti reload...
-      // ker tukaj nimam dostopa do notificationLogic.rows, da bi samo zamenjal vrstico, ki je bila updatana.
-      notificationLogic.value.reload();
-    });
+    await actionManageNotification(payload.id);
     return true;
   },
 };

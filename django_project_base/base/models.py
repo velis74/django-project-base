@@ -340,7 +340,7 @@ def user_logged_in(*args, **kwargs):
 
 class BaseInvite(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, verbose_name=_("Id"))
-    email = models.CharField(max_length=255, verbose_name=_("eMail"))
+    email = models.CharField(max_length=255, verbose_name=_("Email"))
 
     role = models.ForeignKey(
         swapper.get_model_name("django_project_base", "Role"), null=True, on_delete=models.SET_NULL

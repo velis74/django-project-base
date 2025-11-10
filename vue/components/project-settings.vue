@@ -93,7 +93,7 @@ async function confirmationEmail(setting: ProjectSetting, message: Array<any>) {
           dfModal.message(
             '',
             // eslint-disable-next-line vue/max-len
-            gettext('We have attempted to verify the sender email address, but it doesn\'t work yet. Please click “try again” in about a minute or so'),
+            gettext('We have attempted to verify the sender email address, but it doesn\'t work yet. Please click "try again" in about a minute or so'),
             new FilteredActions({
               cancel: new Action({
                 name: 'cancel',

@@ -111,7 +111,11 @@ class Channel(ABC):
         channel: Optional[str] = None,
         provider: Optional[str] = None,
         auxiliary_notification: Optional[uuid.UUID] = None,
-    ) -> DeliveryReport:
+    ) -> Union[DeliveryReport, None]:
+        if notification._state.adding:
+            # Če notification ni persisted, ni mogoče narediti delivery report
+            return None
+
         return next(
             iter(
                 DeliveryReport.objects.get_or_create(

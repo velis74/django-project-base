@@ -79,6 +79,11 @@ class ProjectUserInviteSerializer(ModelSerializer):
             self.fields["role"].queryset = self.fields["role"].queryset.filter(
                 project__slug=self.request.selected_project_slug
             )
+            self.fields["project"].queryset = self.fields["project"].queryset.filter(
+                slug=self.request.selected_project_slug
+            )
+        if (view := self.context.get("view")) and view.action in ("list", "retrieve"):
+            self.fields["invited_by"].queryset = swapper.load_model("django_project_base", "Profile").objects.none()
 
     def to_representation(self, instance, row_data=None):
         ret = super().to_representation(instance, row_data)

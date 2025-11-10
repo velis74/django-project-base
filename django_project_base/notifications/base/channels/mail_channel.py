@@ -5,6 +5,7 @@ from typing import List
 from django.conf import Settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.utils.translation import gettext_lazy as _
 
 from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
@@ -19,6 +20,10 @@ class MailChannel(Channel):
     notification_price = 0.0002  # TODO get from settings
 
     provider_setting_name = "NOTIFICATIONS_EMAIL_PROVIDER"
+
+    @property
+    def verbose_name(self):
+        return _("Email")
 
     def send(self, notification: DjangoProjectBaseNotification, extra_data, settings: Settings, **kwargs) -> int:
         if getattr(settings, "TESTING", False):
