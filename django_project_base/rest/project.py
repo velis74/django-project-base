@@ -223,7 +223,7 @@ class ProjectSettingsSerializer(ModelSerializer):
                 label="Reset pending",
                 name="reset-pending",
                 field_name="table_value",
-                icon="refresh-outline",
+                icon="ion-refresh-outline",
                 display_style=dict(
                     asButton=False,
                     showIcon=True,

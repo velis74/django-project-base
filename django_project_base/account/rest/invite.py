@@ -54,7 +54,9 @@ class ProjectUserInviteSerializer(ModelSerializer):
     }
 
     actions = Actions(
-        TableAction(TablePosition.HEADER, _("Add"), title=_("Add new record"), name="add", icon="add-circle-outline"),
+        TableAction(
+            TablePosition.HEADER, _("Add"), title=_("Add new record"), name="add", icon="ion-add-circle-outline"
+        ),
         add_form_buttons=True,
         add_default_filter=True,
         add_default_crud=False,

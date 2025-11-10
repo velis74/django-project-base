@@ -47,21 +47,21 @@ class ProfileMergeSerializer(ProfileSerializer):
                 label=_("Remove"),
                 title=_("Remove"),
                 name="delete-user",
-                icon="person-remove-outline",
+                icon="ion-person-remove-outline",
             ),
             TableAction(
                 TablePosition.HEADER,
                 label=_("Merge"),
                 title=_("Merge"),
                 name="merge-users",
-                icon="git-merge-outline",
+                icon="ion-git-merge-outline",
             ),
             TableAction(
                 TablePosition.HEADER,
                 label=_("Clear all"),
                 title=_("Clear all"),
                 name="clear-merge-users",
-                icon="remove-circle-outline",
+                icon="ion-remove-circle-outline",
             ),
         )
 

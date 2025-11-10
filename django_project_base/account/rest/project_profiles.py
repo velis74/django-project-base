@@ -54,13 +54,13 @@ class ProjectProfilesSerializer(ProfileSerializer):
                         TablePosition.ROW_END,
                         label=_("Reset password"),
                         name="reset-password",
-                        icon="refresh-outline",
+                        icon="ion-refresh-outline",
                     ),
                     TableAction(
                         TablePosition.ROW_END,
                         label=_("Merge"),
                         name="add-to-merge",
-                        icon="git-merge-outline",
+                        icon="ion-git-merge-outline",
                     ),
                 ]
             )

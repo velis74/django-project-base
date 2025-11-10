@@ -1,5 +1,5 @@
 <template>
-  <ion-icon
+  <cached-icon
     :class="`social-logo d-inline-block`"
     :style="`width: ${sizeEm}em; height: ${sizeEm}em; margin: 0 ${hSpacing}em`"
     :name="icons[socialProvider]"
@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import IonIcon from 'vue-ionicon';
+import { CachedIcon } from 'vue-cached-icon';
 
 import icons from './icons';
 

@@ -312,14 +312,14 @@ async function removeMyAccount() {
       confirm: new Action({
         name: 'confirm',
         label: gettext('Confirm'),
-        icon: 'thumbs-up-outline',
+        icon: 'ion-thumbs-up-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),
       cancel: new Action({
         name: 'cancel',
         label: gettext('Cancel'),
-        icon: 'thumbs-down-outline',
+        icon: 'ion-thumbs-down-outline',
         displayStyle: { asButton: true, showLabel: true, showIcon: true },
         position: 'FORM_FOOTER',
       }),

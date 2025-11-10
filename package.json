@@ -1,6 +1,6 @@
 {
   "name": "@velis/django_project_base",
-  "version": "0.80.8",
+  "version": "0.81.0",
   "private": false,
   "type": "module",
   "license": "Proprietary",
@@ -28,9 +28,9 @@
     "export-pdf": "press-export-pdf --debug export docs"
   },
   "peerDependencies": {
-    "@dynamicforms/vuetify-inputs": "^0.5.4",
+    "@dynamicforms/vuetify-inputs": "^0.6.5",
     "@kyvg/vue3-notification": "^3",
-    "@velis/dynamicforms": "^0.80.17",
+    "@velis/dynamicforms": "^0.81.0",
     "axios": "^1.2.0",
     "browser-update": "^3.3.37",
     "lodash-es": "^4.17.12",
@@ -38,7 +38,7 @@
     "slugify": "^1.6.6",
     "vanilla-cookieconsent": "^2.8.0",
     "vue": "^3.2.45",
-    "vue-ionicon": "^2.1.0",
+    "vue-cached-icon": "^3.0.3",
     "vue-multiselect": "^3.2.0",
     "vuetify": "^3.0.1",
     "vue3-cookies": "^1.0.6"

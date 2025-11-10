@@ -186,7 +186,7 @@ class ProfileSerializer(DynamicModelSerializerMixin, ModelSerializer):
                     label=_("Merge"),
                     title=_("Merge"),
                     name="add-to-merge",
-                    icon="git-merge-outline",
+                    icon="ion-git-merge-outline",
                 ),
             )
 
@@ -201,7 +201,7 @@ class ProfileSerializer(DynamicModelSerializerMixin, ModelSerializer):
                     label=_("Export"),
                     title=_("Export"),
                     name="export",
-                    icon="download-outline",
+                    icon="ion-download-outline",
                 )
             )
 
