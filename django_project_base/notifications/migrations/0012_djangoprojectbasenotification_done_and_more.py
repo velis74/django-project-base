@@ -6,7 +6,11 @@ from django.db import migrations, models
 
 
 def update_notifications_done(apps, schema_editor):
-    apps.get_model("notifications", "DjangoProjectBaseNotification").objects.all().update(done=True)
+    from django_project_base.notifications.models import DjangoProjectBaseNotification
+
+    apps.get_model("notifications", "DjangoProjectBaseNotification").objects.exclude(
+        delayed_to=DjangoProjectBaseNotification.DELAYED_INDEFINITELY
+    ).update(done=True)
 
 
 class Migration(migrations.Migration):
