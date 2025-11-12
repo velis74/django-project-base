@@ -314,6 +314,13 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             raw_recipients = recipients
 
         host_url = get_host_url(request)
+        delayed_to = (
+            DjangoProjectBaseNotification.DELAYED_INDEFINITELY
+            if save_only
+            else delayed_to or int(datetime.datetime.now().timestamp())
+        )
+        if isinstance(delayed_to, datetime.datetime):
+            delayed_to = int(delayed_to.timestamp())
         notification = Notification(
             message=DjangoProjectBaseMessage(
                 subject=subject,
@@ -324,9 +331,7 @@ class Notification(QueableNotificationMixin, DuplicateNotificationMixin):
             raw_recipents=raw_recipients,
             project=project_slug,
             recipients=recipients,
-            delay=DjangoProjectBaseNotification.DELAYED_INDEFINITELY
-            if save_only
-            else delayed_to or (datetime.datetime.now().timestamp()),
+            delay=delayed_to,
             channels=[
                 ChannelIdentifier.channel(c, settings=settings, project_slug=None).__class__ for c in send_on_channels
             ],
