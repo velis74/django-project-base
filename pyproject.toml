@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "django-project-base"
-version = "0.81.2"
+version = "0.81.3"
 description = "Everything revolves around it: users, roles, permissions, tags, etc."
 readme = "README.md"
 requires-python = ">=3.8"
