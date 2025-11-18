@@ -325,7 +325,7 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = search_fields
     permission_classes = (ProfileViewPermissions,)
-    pagination_class = ModelViewSet.generate_paged_loader(30, ["un_sort", "id"])
+    pagination_class = ModelViewSet.generate_paged_loader(30, ["un", "id"])
     MODEL_FUNC_SETTING_NAME = "DJANGO_PROJECT_BASE_PROFILE_MODEL_AT_RUNTIME"
 
     def get_permissions(self):
