@@ -149,9 +149,7 @@ class ProjectUserInviteViewSet(ProjectFilteringViewSet):
                 .objects.get(project=self.request.selected_project, name=INVITE_NOTIFICATION_TEXT)
                 .python_value
             )
-            invite_text = invite_text.replace("__LINK__", invite_url)
-        else:
-            invite_text = invite_text.replace("%LINK%", invite_url)
+        invite_text = invite_text.replace("%LINK%", invite_url)
 
         EMailNotificationWithListOfEmails(
             message=DjangoProjectBaseMessage(
