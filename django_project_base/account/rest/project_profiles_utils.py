@@ -5,8 +5,9 @@ import swapper
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Case, CharField, Prefetch, QuerySet, Value, When
-from django.db.models.functions import Coalesce, Concat
+from django.db.models import Case, F, Prefetch, QuerySet, Value, When
+from django.db.models.functions import Coalesce, Concat, NullIf, Trim
+from django.db.models.lookups import IsNull
 from django.utils.dateparse import (
     datetime_re,
     iso8601_duration_re,
@@ -25,6 +26,37 @@ from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.base.permissions import is_superuser
 
 
+def annotate_with_full_name(queryset, field, reverse=False):
+    if reverse:
+        first = "last_name"
+        last = "first_name"
+    else:
+        first = "first_name"
+        last = "last_name"
+    annotation = {
+        field: Case(
+            # Če sta first_name in last_name prazna ali NULL
+            When(
+                IsNull(NullIf(F(first), Value("")), rhs=True) & IsNull(NullIf(F(last), Value("")), rhs=True),
+                then=Coalesce(
+                    NullIf(F("username"), Value("")),
+                    NullIf(F("email"), Value("")),
+                ),
+            ),
+            # Sicer first_name + presledek + last_name (trim obeh)
+            default=Trim(
+                Concat(
+                    Trim(F(first)),
+                    Value(" "),
+                    Trim(F(last)),
+                )
+            ),
+            output_field=models.CharField(),
+        ),
+    }
+    return queryset.annotate(**annotation)
+
+
 def get_project_members(request: Request, project=None, profile_model=None) -> QuerySet:
     project = project or request.selected_project
     try:
@@ -39,31 +71,9 @@ def get_project_members(request: Request, project=None, profile_model=None) -> Q
 
     qs = profile_model.objects.prefetch_related(
         Prefetch("projects", queryset=project_members), "groups", "user_permissions"
-    ).annotate(
-        un=Concat(
-            Coalesce(
-                Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                Value(""),
-            ),
-            Value(" "),
-            Coalesce(
-                Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                "username",
-            ),
-        ),
-        un_sort=Concat(
-            Coalesce(
-                Case(When(last_name="", then="username"), default="last_name", output_field=CharField()),
-                "username",
-            ),
-            Value(" "),
-            Coalesce(
-                Case(When(first_name="", then="username"), default="first_name", output_field=CharField()),
-                Value(""),
-            ),
-        ),
     )
-
+    qs = annotate_with_full_name(qs, "un")
+    qs = annotate_with_full_name(qs, "un_sort", reverse=True)
     qs = qs.exclude(delete_at__isnull=False, delete_at__lt=now())
 
     if project is not None:

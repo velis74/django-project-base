@@ -41,6 +41,8 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
         self.filter_selected_project = True  # ImpersonateUserIdField overrides this (or any other; as needed)
 
     def get_queryset(self):
+        from django_project_base.account.rest.project_profiles_utils import annotate_with_full_name
+
         # TODO This needs to be amended together with members editor such that it will be possible to specify
         #  in settings.py how to filter and sort project members
         qs = cast(QuerySet, swapper.load_model("django_project_base", "Profile").objects)
@@ -56,8 +58,9 @@ class UserRelatedField(df_fields.PrimaryKeyRelatedField):
 
         qs = qs.exclude(**self.queryset_exclude if isinstance(self.queryset_exclude, dict) else self.queryset_exclude)
         qs = qs.filter(**self.queryset_filter if isinstance(self.queryset_filter, dict) else self.queryset_filter)
+        qs = annotate_with_full_name(qs, "un")
 
-        return qs.all()
+        return qs.order_by("un", "id").all()
 
     def display_value(self, instance):
         if not instance:

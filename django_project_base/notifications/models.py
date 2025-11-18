@@ -234,6 +234,8 @@ class SearchItemObject:
 
 class SearchItemsManager(models.Manager):
     def get_queryset(self, **kwargs):
+        from django_project_base.account.rest.project_profiles_utils import annotate_with_full_name
+
         # qs rabim zato, ker pri inicializaciji swagerja koda hoče imeti queryset.model... kar pa list seveda nima.
         # Zato namesto praznih listov vrnem qs.none()
         qs = super().get_queryset()
@@ -260,10 +262,8 @@ class SearchItemsManager(models.Manager):
             tag_model_content_type_id = ContentType.objects.get_for_model(tag_model).pk
             user_model_content_type_id = ContentType.objects.get_for_model(get_user_model()).pk
             user_model = get_user_model()
-            qs = []
-            qs += [
-                SearchItemObject(o)
-                for o in user_model.objects.filter(userprofile__projects__project__slug=slug)
+            user_qs = (
+                user_model.objects.filter(userprofile__projects__project__slug=slug)
                 .distinct()
                 .annotate(  # qs users
                     ido=Concat(
@@ -277,13 +277,18 @@ class SearchItemsManager(models.Manager):
                 .extra(
                     select={
                         "object_id": f"{user_model._meta.db_table}.{get_pk_name(user_model)}",
-                        "label": "first_name || ' ' || last_name",
                         "content_type_id": user_model_content_type_id,
                     }
                 )
+            )
+            user_qs = (
+                annotate_with_full_name(user_qs, "label")
                 .values("object_id", "label", "content_type_id", "ido")
                 .order_by("label")
-            ]
+            )
+
+            qs = []
+            qs += [SearchItemObject(o) for o in user_qs]
             tgs = [
                 SearchItemObject(o)
                 for o in tag_model.objects.filter(project__slug=slug)

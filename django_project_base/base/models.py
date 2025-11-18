@@ -68,12 +68,12 @@ class BaseProfile(User):
         last_name = self.last_name
         if not (first_name or last_name):
             # if neither first nor last name were provided, we use the email address
-            first_name = self.email
+            first_name = self.username or self.email
 
         if reversed_order:
             first_name, last_name = last_name, first_name
 
-        return f"{first_name} {last_name}".strip()
+        return f"{first_name.strip()} {last_name.strip()}".strip()
 
     full_name = property(lambda self: self.get_full_name())
     full_name_reverse = property(lambda self: self.get_full_name(True))
