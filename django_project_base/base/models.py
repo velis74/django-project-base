@@ -64,11 +64,11 @@ class BaseProfile(User):
         # Then we reverse this if requested for the method
         reversed_order = reversed_order ^ reverse_order
 
-        first_name = self.first_name
-        last_name = self.last_name
+        first_name = self.first_name or ""
+        last_name = self.last_name or ""
         if not (first_name or last_name):
             # if neither first nor last name were provided, we use the email address
-            first_name = self.username or self.email
+            first_name = self.username or self.email or ""
 
         if reversed_order:
             first_name, last_name = last_name, first_name
