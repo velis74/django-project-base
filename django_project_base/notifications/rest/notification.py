@@ -131,6 +131,7 @@ class NotificationSerializer(ModelSerializer):
                     serializer=self,
                 )
             )
+            self.fields.fields["message_to"].allow_null = True
 
     id = fields.UUIDField(display=DisplayMode.HIDDEN)
 

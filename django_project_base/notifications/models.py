@@ -282,6 +282,7 @@ class SearchItemsManager(models.Manager):
                     }
                 )
                 .values("object_id", "label", "content_type_id", "ido")
+                .order_by("label")
             ]
             tgs = [
                 SearchItemObject(o)
@@ -303,6 +304,7 @@ class SearchItemsManager(models.Manager):
                     }
                 )
                 .values("object_id", "label", "content_type_id", "ido")
+                .order_by("label")
             ]
             qs += tgs
             return qs
