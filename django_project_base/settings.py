@@ -27,6 +27,14 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "default": "slug",
     },
     {
+        "name": "DJANGO_PROJECT_BASE_PROFILE_LANGUAGES",
+        "default": (("en", "English"),),
+    },
+    {
+        "name": "DJANGO_PROJECT_BASE_PROFILE_LANGUAGE_ALLOW_NULL",
+        "default": True,
+    },
+    {
         "name": "REST_REGISTRATION",
         "default": {
             "RESET_PASSWORD_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.reset_password_email_service.send_reset_password_verification_email",  # noqa: E501

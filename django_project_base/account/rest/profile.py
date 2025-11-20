@@ -155,6 +155,13 @@ class ProfileSerializer(DynamicModelSerializerMixin, ModelSerializer):
         display=DisplayMode.SUPPRESS,
     )
 
+    language = fields.ChoiceField(
+        choices=settings.DJANGO_PROJECT_BASE_PROFILE_LANGUAGES,
+        label=_("Language"),
+        required=False,
+        allow_null=settings.DJANGO_PROJECT_BASE_PROFILE_LANGUAGE_ALLOW_NULL,
+    )
+
     def __init__(self, *args, is_filter: bool = False, **kwds):
         super().__init__(*args, is_filter=is_filter, **kwds)
         request = self._context["request"]
