@@ -11,7 +11,7 @@ from django.db import transaction
 from django.db.models import Model
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from dynamicforms import fields
 from dynamicforms.action import TableAction, TablePosition
