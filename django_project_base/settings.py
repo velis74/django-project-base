@@ -84,6 +84,18 @@ DJANGO_PROJECT_BASE_SETTINGS = (
         "default": "",
     },
     {"name": "IS_PHONE_NUMBER_ALLOWED_FUNCTION", "default": ""},
+    {"name": "NOTIFICATIONS_AWS_SES_EMAIL_DLR_USER", "default": None},
+    {"name": "NOTIFICATIONS_AWS_SES_EMAIL_DLR_PASSWORD", "default": None},
+    {"name": "NOTIFICATIONS_AWS_SES_EMAIL_DLR_EMAIL", "default": None},
+    {"name": "NOTIFICATIONS_AWS_SNS_SMS_DLR_USER", "default": None},
+    {"name": "NOTIFICATIONS_AWS_SNS_SMS_DLR_PASSWORD", "default": None},
+    {"name": "NOTIFICATIONS_AWS_SNS_SMS_DLR_EMAIL", "default": None},
+    {"name": "NOTIFICATIONS_NEXMO_SMS_DLR_USER", "default": None},
+    {"name": "NOTIFICATIONS_NEXMO_SMS_DLR_USER", "default": None},
+    {"name": "NOTIFICATIONS_NEXMO_SMS_DLR_EMAIL", "default": None},
+    {"name": "NOTIFICATIONS_T2_SMS_DLR_USER", "default": None},
+    {"name": "NOTIFICATIONS_T2_SMS_DLR_PASSWORD", "default": None},
+    {"name": "NOTIFICATIONS_T2_SMS_DLR_EMAIL", "default": None},
 )
 
 USER_CACHE_KEY = "django-user-{id}"

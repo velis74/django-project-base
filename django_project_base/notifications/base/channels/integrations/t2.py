@@ -6,7 +6,7 @@ from typing import Optional, Union
 import requests
 import swapper
 
-from django.conf import Settings
+from django.conf import Settings, settings
 from django.contrib.auth import get_user_model
 from requests.auth import HTTPBasicAuth
 from rest_framework.status import is_success
@@ -288,7 +288,7 @@ class T2(ProviderIntegration):
         self.settings = settings
         assert self.username, "NOTIFICATIONS_T2_USERNAME is required"
         assert self.password, "NOTIFICATIONS_T2_PASSWORD is required"
-        assert len(self.url) > 0, "NOTIFICATIONS_T2_PASSWORD is required"
+        assert len(self.url) > 0, "NOTIFICATIONS_SMS_API_URL is required"
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
         if not recipient.phone_number:
@@ -322,37 +322,37 @@ class T2(ProviderIntegration):
 
     @property
     def delivery_report_username_setting_name(self) -> str:
-        return "t2-sms-dlr-user"
+        return "NOTIFICATIONS_T2_SMS_DLR_USER"
 
     @property
     def delivery_report_password_setting_name(self) -> str:
-        return "t2-sms-dlr-password"
+        return "NOTIFICATIONS_T2_SMS_DLR_PASSWORD"
 
     def ensure_dlr_user(self, project_slug: str):
         if project_slug and (
             project := swapper.load_model("django_project_base", "Project").objects.filter(slug=project_slug).first()
         ):
-            project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
+            username = getattr(settings, self.delivery_report_username_setting_name, None)
+            password = getattr(settings, self.delivery_report_password_setting_name, None)
+            email = getattr(settings, "NOTIFICATIONS_T2_SMS_DLR_EMAIL", None)
 
-            username_setting = project_settings_model.objects.filter(
-                name=self.delivery_report_username_setting_name, project=project
-            ).first()
+            assert username
+            assert password
+            assert email
 
-            password_setting = project_settings_model.objects.filter(
-                name=self.delivery_report_password_setting_name, project=project
-            ).first()
-
-            assert username_setting
-            assert password_setting
-
-            user, user_created = get_user_model().objects.get_or_create(
-                username=username_setting.python_value,
-                email="klemen.spruk@velis.si",
-                first_name=username_setting.python_value,
-                last_name=username_setting.python_value,
+            user, user_created = get_user_model().objects.update_or_create(
+                email=email,
+                defaults=dict(
+                    is_active=True,
+                    is_staff=False,
+                    is_superuser=False,
+                    username=username,
+                    first_name=username,
+                    last_name=username,
+                ),
             )
-            if user_created:
-                user.set_password(password_setting.python_value)
+            if user_created or not user.check_password(password):
+                user.set_password(password)
                 user.save()
 
             ProjectMember = swapper.load_model("django_project_base", "ProjectMember")
