@@ -66,11 +66,11 @@ class NexmoSMS(ProviderIntegration):
 
     @property
     def delivery_report_username_setting_name(self) -> str:
-        return "nexmo-sms-dlr-user"
+        return "NOTIFICATIONS_NEXMO_SMS_DLR_USER"
 
     @property
     def delivery_report_password_setting_name(self) -> str:
-        return "nexmo-sms-dlr-password"
+        return "NOTIFICATIONS_NEXMO_SMS_DLR_USER"
 
     def ensure_dlr_user(self, project_slug: str):
         pass

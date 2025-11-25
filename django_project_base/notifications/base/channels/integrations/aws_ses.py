@@ -73,11 +73,11 @@ class AwsSes(ProviderIntegration):
 
     @property
     def delivery_report_username_setting_name(self) -> str:
-        return "aws-ses-email-dlr-user"
+        return "NOTIFICATIONS_AWS_SES_EMAIL_DLR_USER"
 
     @property
     def delivery_report_password_setting_name(self) -> str:
-        return "aws-ses-email-dlr-password"
+        return "NOTIFICATIONS_AWS_SES_EMAIL_DLR_PASSWORD"
 
     def ensure_dlr_user(self, project_slug: str):
         pass
