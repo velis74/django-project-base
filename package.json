@@ -1,6 +1,6 @@
 {
   "name": "@velis/django_project_base",
-  "version": "0.81.10",
+  "version": "0.81.11",
   "private": false,
   "type": "module",
   "license": "Proprietary",
