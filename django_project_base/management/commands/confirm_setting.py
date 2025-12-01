@@ -1,8 +1,7 @@
-from gettext import gettext
-
 import swapper
 
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 
 from django_project_base.base.event import ProjectSettingConfirmedEvent
 from django_project_base.notifications.email_notification import SystemEMailNotification
@@ -27,9 +26,9 @@ class Command(PerformanceCommand):
         ProjectSettingConfirmedEvent(user=None).trigger(payload=setting)
         SystemEMailNotification(
             message=DjangoProjectBaseMessage(
-                subject=f"{gettext('Project setting confirmed')}",
-                body=f"{gettext('Setting')} {setting.name} {gettext('in project')} "
-                f"{project.name} {gettext('has been confirmed and is now active.')}",
+                subject=_("Project setting confirmed"),
+                body=_("Setting %(sett_name)s in project %(project_name)s has been confirmed and is now active.")
+                % {"sett_name": setting.name, "project_name": project.name},
                 footer="",
                 content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
             ),

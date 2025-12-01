@@ -3,17 +3,21 @@ from typing import List
 from django.conf import Settings
 from django.utils.translation import gettext_lazy as _
 
+from django_project_base.licensing.license_type_data import LicenseType
 from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.models import DjangoProjectBaseNotification
 
 
 class SmsChannel(Channel):
+
+    @staticmethod
+    def get_license_type():
+        return LicenseType.SMS
+
     id = ChannelIdentifier.SMS.value
 
     name = "SMS"
-
-    notification_price = 0.1  # TODO get from settings
 
     provider_setting_name = "NOTIFICATIONS_SMS_PROVIDER"
 

@@ -1,6 +1,5 @@
 import copy
 
-from gettext import gettext
 from typing import Union
 
 import swapper
@@ -193,16 +192,16 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
         project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
         project_settings_model.objects.create(
             name=EMAIL_SENDER_ID_SETTING_NAME,
-            value=getattr(settings, "DEFAULT_EMAIL_SENDER_ID_SETTING_NAME", "") or gettext("Please enter value"),
-            description=gettext("Email sender value for notifications"),
+            value=getattr(settings, "DEFAULT_EMAIL_SENDER_ID_SETTING_NAME", "") or _("Please enter value"),
+            description=_("Email sender value for notifications"),
             value_type=BaseProjectSettings.VALUE_TYPE_CHAR,
             project=project,
             reserved=True,
         )
         project_settings_model.objects.create(
             name=SMS_SENDER_ID_SETTING_NAME,
-            value=getattr(settings, "DEFAULT_SMS_SENDER_ID_SETTING_NAME", "") or gettext("Please enter value"),
-            description=gettext("Sms sender value for notifications"),
+            value=getattr(settings, "DEFAULT_SMS_SENDER_ID_SETTING_NAME", "") or _("Please enter value"),
+            description=_("Sms sender value for notifications"),
             value_type=BaseProjectSettings.VALUE_TYPE_CHAR,
             project=project,
             reserved=True,
@@ -220,7 +219,7 @@ class ProjectSettingsSerializer(ModelSerializer):
             # TODO: https://taiga.velis.si/project/velis74-dynamic-forms/issue/837
             TableAction(
                 position=TablePosition.FIELD_END,
-                label="Reset pending",
+                label=_("Reset pending"),
                 name="reset-pending",
                 field_name="table_value",
                 icon="ion-refresh-outline",
@@ -237,7 +236,7 @@ class ProjectSettingsSerializer(ModelSerializer):
             self.actions.actions.append(
                 TableAction(
                     position=TablePosition.ROW_END,
-                    label="Confirm active",
+                    label=_("Confirm active"),
                     name="confirm-setting-active",
                 ),
             )
@@ -254,7 +253,7 @@ class ProjectSettingsSerializer(ModelSerializer):
         source="value",
         display_table=DisplayMode.FULL,
         display_form=DisplayMode.SUPPRESS,
-        label=gettext("Value"),
+        label=_("Value"),
         read_only=True,
     )
     value = fields.CharField(
@@ -294,9 +293,10 @@ class ProjectSettingsSerializer(ModelSerializer):
     def to_representation(self, instance, row_data=None):
         representation = super().to_representation(instance, row_data)
         if instance and instance.pending_value is not None:
-            representation["table_value"] = (
-                f"{representation['value']} ({gettext('Pending')}: {instance.python_pending_value})"
-            )
+            representation["table_value"] = _("%(value)s (Pending: %(pending_value)s)") % {
+                "value": representation["value"],
+                "pending_value": instance.python_pending_value,
+            }
         return representation
 
     class Meta:
@@ -427,7 +427,7 @@ class ProjectSettingsViewSet(ModelViewSet):
         pk_name = get_pk_name(model)
         pk = request.data.get(pk_name)
         if not pk:
-            raise ValidationError({pk_name: [gettext("required")]})
+            raise ValidationError({pk_name: [_("required")]})
         return pk
 
     @extend_schema(exclude=True)
