@@ -12,7 +12,6 @@ from rest_framework.exceptions import PermissionDenied
 
 from django_project_base.licensing.license_type_data import LicenseType
 from django_project_base.licensing.models import LicenseAccessUse
-from django_project_base.notifications.base.channels.channel import Channel
 
 
 def license_price(license_type: Union[LicenseType, Enum]):
@@ -94,6 +93,8 @@ class LogAccessService:
         on_sucess=None,
         **kwargs,
     ) -> int:
+        from django_project_base.notifications.base.channels.channel import Channel
+
         connections["default"] = connections[self.db]
         content_type = ContentType.objects.get_for_model(model=record._meta.model)
         used = (
