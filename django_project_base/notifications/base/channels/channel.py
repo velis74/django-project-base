@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext
 
+from django_project_base.licensing.logic import license_price
 from django_project_base.notifications.base.channels.integrations.provider_integration import ProviderIntegration
 from django_project_base.notifications.base.phone_number_parser import PhoneNumberParser
 from django_project_base.notifications.models import (
@@ -62,7 +63,7 @@ class Channel(ABC):
 
     name = ""
 
-    notification_price = 0
+    _license_type = None
 
     provider_setting_name = ""
 
@@ -75,6 +76,15 @@ class Channel(ABC):
         self._provider = val
 
     provider = property(_get_provider, _set_provider)
+
+    @staticmethod
+    @abstractmethod
+    def get_license_type():
+        raise NotImplementedError
+
+    @property
+    def notification_price(self):
+        return license_price(self.get_license_type())
 
     def sender(self, notification: DjangoProjectBaseNotification) -> str:
         _sender = getattr(notification, "sender", {}).get(self.name)

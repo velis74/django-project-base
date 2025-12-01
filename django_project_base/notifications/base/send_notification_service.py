@@ -66,7 +66,7 @@ class SendNotificationService(object):
                 # check license
                 any_sent = LogAccessService(db=db_name).log(
                     user_profile_pk=notification.user,
-                    notifications_channels_state=sent_channels,
+                    notifications_channels_state=[],  # the record for a previous channel is already in DB.
                     record=notification,
                     item_price=channel.notification_price,
                     comment=str(channel),

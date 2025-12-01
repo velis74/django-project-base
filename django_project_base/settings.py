@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from django_project_base.licensing.license_type_data import LicenseType, LicenseTypeData
 from django_project_base.settings_parser import parse_settings
 
 DJANGO_PROJECT_BASE_SETTINGS = (
@@ -96,6 +97,10 @@ DJANGO_PROJECT_BASE_SETTINGS = (
     {"name": "NOTIFICATIONS_T2_SMS_DLR_USER", "default": None},
     {"name": "NOTIFICATIONS_T2_SMS_DLR_PASSWORD", "default": None},
     {"name": "NOTIFICATIONS_T2_SMS_DLR_EMAIL", "default": None},
+    {
+        "name": "DJANGO_PROJECT_BASE_LICENSE_TYPE_DATA",
+        "default": {LicenseType.EMAIL: LicenseTypeData(price=0.0002), LicenseType.SMS: LicenseTypeData(price=0.1)},
+    },
 )
 
 USER_CACHE_KEY = "django-user-{id}"

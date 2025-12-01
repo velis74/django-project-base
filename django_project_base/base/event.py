@@ -2,12 +2,12 @@ import copy
 import datetime
 
 from abc import ABC, abstractmethod
-from gettext import gettext
 
 import swapper
 
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 from rest_registration.settings import registration_settings
 
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
@@ -186,8 +186,9 @@ class ProjectSettingActionRequiredEvent(BaseEvent):
         if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
             SystemEMailNotificationWithListOfEmails(
                 message=DjangoProjectBaseMessage(
-                    subject=gettext("Project settings action required"),
-                    body=f"{gettext('Action required for setting')} {payload.name} in project {payload.project.name}",
+                    subject=_("Project settings action required"),
+                    body=_("Action required for setting %(sett_name)s in project %(project_name).")
+                    % {"sett_name": payload.name, "project_name": payload.project.name},
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,
                 ),

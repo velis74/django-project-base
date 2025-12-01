@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.translation import gettext_lazy as _
 
+from django_project_base.licensing.license_type_data import LicenseType
 from django_project_base.notifications.base.channels.channel import Channel, Recipient
 from django_project_base.notifications.base.enums import ChannelIdentifier
 from django_project_base.notifications.models import DjangoProjectBaseNotification
@@ -17,9 +18,11 @@ class MailChannel(Channel):
 
     name = "EMail"
 
-    notification_price = 0.0002  # TODO get from settings
-
     provider_setting_name = "NOTIFICATIONS_EMAIL_PROVIDER"
+
+    @staticmethod
+    def get_license_type():
+        return LicenseType.EMAIL
 
     @property
     def verbose_name(self):

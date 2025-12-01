@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 13:27+0000\n"
+"POT-Creation-Date: 2025-12-01 09:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 "uporabo te aplikacije."
 
 #: django_project_base/account/rest/account.py:184
-#: django_project_base/account/rest/profile.py:292
+#: django_project_base/account/rest/profile.py:299
 msgid "Passwords do not match"
 msgstr "Gesli se ne ujemata"
 
@@ -117,12 +117,12 @@ msgstr "Povabila v projekt"
 msgid "Inviting project member"
 msgstr "Povabilo članu projekta"
 
-#: django_project_base/account/rest/invite.py:57
-#: django_project_base/notifications/rest/notification.py:158
+#: django_project_base/account/rest/invite.py:58
+#: django_project_base/notifications/rest/notification.py:159
 msgid "Add"
 msgstr "Dodaj"
 
-#: django_project_base/account/rest/invite.py:57
+#: django_project_base/account/rest/invite.py:58
 msgid "Add new record"
 msgstr "Dodaj nov zapis"
 
@@ -144,7 +144,7 @@ msgid "Username"
 msgstr "Uporabniško ime"
 
 #: django_project_base/account/rest/login.py:34
-#: django_project_base/account/rest/profile.py:254
+#: django_project_base/account/rest/profile.py:261
 msgid "Password"
 msgstr "Geslo"
 
@@ -178,44 +178,49 @@ msgstr ""
 "Skupine, ki jim uprabnik pripada. Uporabnik bo imel vse pravice, dodeljene "
 "vsaki od svojih skupin."
 
-#: django_project_base/account/rest/profile.py:186
-#: django_project_base/account/rest/profile.py:187
+#: django_project_base/account/rest/profile.py:160
+#: django_project_base/base/models.py:49
+msgid "Language"
+msgstr "Jezik"
+
+#: django_project_base/account/rest/profile.py:193
+#: django_project_base/account/rest/profile.py:194
 #: django_project_base/account/rest/profile_merge.py:54
 #: django_project_base/account/rest/profile_merge.py:55
 #: django_project_base/account/rest/project_profiles.py:61
 msgid "Merge"
 msgstr "Združi"
 
-#: django_project_base/account/rest/profile.py:201
-#: django_project_base/account/rest/profile.py:202
+#: django_project_base/account/rest/profile.py:208
+#: django_project_base/account/rest/profile.py:209
 msgid "Export"
 msgstr "Izvozi"
 
-#: django_project_base/account/rest/profile.py:255
+#: django_project_base/account/rest/profile.py:262
 msgid "Repeat Password"
 msgstr "Ponovi geslo"
 
-#: django_project_base/account/rest/profile.py:290
+#: django_project_base/account/rest/profile.py:297
 msgid "Password is required"
 msgstr "Geslo je obvezno"
 
-#: django_project_base/account/rest/profile.py:295
+#: django_project_base/account/rest/profile.py:302
 msgid "Email is required"
 msgstr "E-pošta je obvezen podatek"
 
-#: django_project_base/account/rest/profile.py:454
+#: django_project_base/account/rest/profile.py:461
 msgid "User with this email already exists."
 msgstr "Uporabnik s tem elektronskim naslovom že obstaja."
 
-#: django_project_base/account/rest/profile.py:567
+#: django_project_base/account/rest/profile.py:574
 msgid "Code required"
 msgstr "Koda je obvezna"
 
-#: django_project_base/account/rest/profile.py:577
+#: django_project_base/account/rest/profile.py:584
 msgid "Invalid code"
 msgstr "Napačna koda"
 
-#: django_project_base/account/rest/profile.py:695
+#: django_project_base/account/rest/profile.py:702
 msgid "Your account was created for you"
 msgstr "Za vas je bil ustvarjen račun"
 
@@ -309,6 +314,10 @@ msgstr ""
 msgid "Project settings action required"
 msgstr "Zahtevana akcija na projektnih nastavitvah"
 
+#: django_project_base/base/event.py:190
+msgid "Action required for setting %(sett_name)s in project %(project_name)."
+msgstr "Zahtevana akcija za nastavitev %(sett_name)s v projektu %(project_name)."
+
 #: django_project_base/base/fields.py:21
 msgid "Value is not a hex color (e.g #88f or #8080ff)"
 msgstr "Vrednost ni heksadecimalna barva (npr. #88f ali #8080ff)"
@@ -340,10 +349,6 @@ msgstr "Nekaj o meni"
 #: django_project_base/base/models.py:47
 msgid "Phone number"
 msgstr "Telefonska številka"
-
-#: django_project_base/base/models.py:49
-msgid "Language"
-msgstr "Jezik"
 
 #: django_project_base/base/models.py:51
 msgid "Theme"
@@ -405,7 +410,7 @@ msgid "Custom"
 msgstr "Po meri"
 
 #: django_project_base/base/models.py:295
-#: django_project_base/rest/project.py:257
+#: django_project_base/rest/project.py:256
 msgid "Value"
 msgstr "Vrednost"
 
@@ -417,12 +422,12 @@ msgstr "Predlagana sprememba"
 #: django_project_base/notifications/models.py:26
 #: django_project_base/notifications/models.py:66
 #: django_project_base/notifications/models.py:89
-#: django_project_base/notifications/models.py:335
+#: django_project_base/notifications/models.py:342
 msgid "Id"
 msgstr "Id"
 
 #: django_project_base/base/models.py:343
-#: django_project_base/notifications/base/channels/mail_channel.py:26
+#: django_project_base/notifications/base/channels/mail_channel.py:29
 msgid "Email"
 msgstr "E-pošta"
 
@@ -446,33 +451,33 @@ msgstr "Napaka pri pridobivanju podatkov"
 msgid "Error retrieving holidays: {}"
 msgstr "Napaka pri pridobivanju praznikov: {}"
 
-#: django_project_base/licensing/logic.py:15
+#: django_project_base/licensing/logic.py:24
 #: django_project_base/licensing/models.py:15
 #: django_project_base/notifications/models.py:109
 msgid "Type"
 msgstr "Tip"
 
-#: django_project_base/licensing/logic.py:16
+#: django_project_base/licensing/logic.py:25
 msgid "Used"
 msgstr "Porabljeno"
 
-#: django_project_base/licensing/logic.py:20
+#: django_project_base/licensing/logic.py:29
 msgid "Credit"
 msgstr "Dobroimetje"
 
-#: django_project_base/licensing/logic.py:21
+#: django_project_base/licensing/logic.py:30
 msgid "Used credit"
 msgstr "Porabljeno dobroimetje"
 
-#: django_project_base/licensing/logic.py:22
+#: django_project_base/licensing/logic.py:31
 msgid "Remaining credit"
 msgstr "Preostalo dobroimetje"
 
-#: django_project_base/licensing/logic.py:25
+#: django_project_base/licensing/logic.py:34
 msgid "Usage report"
 msgstr "Poročilo uporabe"
 
-#: django_project_base/licensing/logic.py:104
+#: django_project_base/licensing/logic.py:113
 msgid "Your license is consumed. Please contact support."
 msgstr "Vaše dobroimetje je porabljeno. Pokličite podporo."
 
@@ -492,7 +497,20 @@ msgstr "Datum"
 msgid "Comment"
 msgstr "Opomba"
 
-#: django_project_base/notifications/base/channels/sms_channel.py:22
+#: django_project_base/management/commands/confirm_setting.py:29
+msgid "Project setting confirmed"
+msgstr "Nastavitev na projektu potrjena"
+
+#: django_project_base/management/commands/confirm_setting.py:30
+#, python-format
+msgid ""
+"Setting %(sett_name)s in project %(project_name)s has been confirmed and is "
+"now active."
+msgstr ""
+"Nastavitev %(sett_name)s v projektu %(project_name)s je bila potrjena in je "
+"sedaj aktivna."
+
+#: django_project_base/notifications/base/channels/sms_channel.py:26
 msgid "SMS"
 msgstr ""
 
@@ -511,8 +529,8 @@ msgid "Send notification via EMail if user has no phone number"
 msgstr "Pošlji obvestilo po e-pošti, če uporabnik nima telefonske številke"
 
 #: django_project_base/notifications/models.py:27
-#: django_project_base/notifications/rest/notification.py:137
-#: django_project_base/notifications/rest/notification.py:195
+#: django_project_base/notifications/rest/notification.py:138
+#: django_project_base/notifications/rest/notification.py:196
 msgid "Subject"
 msgstr "Zadeva"
 
@@ -531,7 +549,7 @@ msgstr "Priponka"
 
 #: django_project_base/notifications/models.py:76
 #: django_project_base/notifications/models.py:116
-#: django_project_base/notifications/rest/notification.py:471
+#: django_project_base/notifications/rest/notification.py:472
 msgid "Message"
 msgstr "Sporočilo"
 
@@ -564,25 +582,25 @@ msgid "Sent at"
 msgstr "Poslano ob"
 
 #: django_project_base/notifications/models.py:102
-#: django_project_base/notifications/rest/notification.py:235
-#: django_project_base/notifications/rest/notification.py:484
-#: django_project_base/notifications/rest/notification.py:680
+#: django_project_base/notifications/rest/notification.py:236
+#: django_project_base/notifications/rest/notification.py:485
+#: django_project_base/notifications/rest/notification.py:681
 msgid "Delayed to"
 msgstr "Odloženo do"
 
-#: django_project_base/notifications/models.py:331
+#: django_project_base/notifications/models.py:338
 msgid "Delivered"
 msgstr "Dostavljeno"
 
-#: django_project_base/notifications/models.py:332
+#: django_project_base/notifications/models.py:339
 msgid "Not Delivered"
 msgstr "Ni dostavljeno"
 
-#: django_project_base/notifications/models.py:333
+#: django_project_base/notifications/models.py:340
 msgid "Pending delivery"
 msgstr "V dostavi"
 
-#: django_project_base/notifications/models.py:344
+#: django_project_base/notifications/models.py:351
 msgid "Auxiliary notification"
 msgstr "Pomožno obvestilo"
 
@@ -596,7 +614,7 @@ msgid "Messages"
 msgstr "Sporočila"
 
 #: django_project_base/notifications/rest/notification.py:109
-#: django_project_base/notifications/rest/notification.py:664
+#: django_project_base/notifications/rest/notification.py:665
 msgid "New message"
 msgstr "Novo sporočilo"
 
@@ -604,100 +622,100 @@ msgstr "Novo sporočilo"
 msgid "Save / Send later"
 msgstr "Shrani / Pošlji kasneje"
 
-#: django_project_base/notifications/rest/notification.py:141
-#: django_project_base/notifications/rest/notification.py:192
-#: django_project_base/notifications/rest/notification.py:442
+#: django_project_base/notifications/rest/notification.py:142
+#: django_project_base/notifications/rest/notification.py:193
+#: django_project_base/notifications/rest/notification.py:443
 msgid "Recipients"
 msgstr "Prejemniki"
 
-#: django_project_base/notifications/rest/notification.py:144
+#: django_project_base/notifications/rest/notification.py:145
 msgid "Delivery"
 msgstr "Dostavljeno"
 
-#: django_project_base/notifications/rest/notification.py:159
+#: django_project_base/notifications/rest/notification.py:160
 msgid "Add new notification"
 msgstr "Novo obvestilo"
 
-#: django_project_base/notifications/rest/notification.py:165
 #: django_project_base/notifications/rest/notification.py:166
+#: django_project_base/notifications/rest/notification.py:167
 msgid "View license"
 msgstr "Poglej dobroimetje"
 
-#: django_project_base/notifications/rest/notification.py:170
+#: django_project_base/notifications/rest/notification.py:171
 msgid "Edit"
 msgstr "Uredi"
 
-#: django_project_base/notifications/rest/notification.py:170
+#: django_project_base/notifications/rest/notification.py:171
 msgid "Edit record"
 msgstr "Uredi zapis"
 
-#: django_project_base/notifications/rest/notification.py:177
+#: django_project_base/notifications/rest/notification.py:178
 msgid "Send"
 msgstr "Pošlji"
 
-#: django_project_base/notifications/rest/notification.py:199
-#: django_project_base/notifications/rest/notification.py:672
+#: django_project_base/notifications/rest/notification.py:200
+#: django_project_base/notifications/rest/notification.py:673
 msgid "Send on channels"
 msgstr "Pošlji preko kanalov"
 
-#: django_project_base/notifications/rest/notification.py:217
+#: django_project_base/notifications/rest/notification.py:218
 msgid "Send notification SMS"
 msgstr "Pošlji SMS obvestilo"
 
-#: django_project_base/notifications/rest/notification.py:222
+#: django_project_base/notifications/rest/notification.py:223
 msgid "Created"
 msgstr "Kreirano ob"
 
-#: django_project_base/notifications/rest/notification.py:229
+#: django_project_base/notifications/rest/notification.py:230
 msgid "Sent"
 msgstr "Poslano"
 
-#: django_project_base/notifications/rest/notification.py:241
-#: django_project_base/notifications/rest/notification.py:517
+#: django_project_base/notifications/rest/notification.py:242
+#: django_project_base/notifications/rest/notification.py:518
 msgid "Indefinitely / Saved only"
 msgstr "Za nedoločen čas / Samo shranjeno"
 
-#: django_project_base/notifications/rest/notification.py:474
+#: django_project_base/notifications/rest/notification.py:475
 msgid "Close"
 msgstr "Zapri"
 
-#: django_project_base/notifications/rest/notification.py:482
+#: django_project_base/notifications/rest/notification.py:483
 msgid "Created At"
 msgstr "Kreirano ob"
 
-#: django_project_base/notifications/rest/notification.py:483
+#: django_project_base/notifications/rest/notification.py:484
 msgid "Sent At"
 msgstr "Poslano ob"
 
-#: django_project_base/notifications/rest/notification.py:490
+#: django_project_base/notifications/rest/notification.py:491
 msgid "Send now"
 msgstr "Pošlji takoj"
 
-#: django_project_base/notifications/rest/notification.py:495
+#: django_project_base/notifications/rest/notification.py:496
 msgid "Change delay"
 msgstr "Spremeni čas pošiljanja"
 
-#: django_project_base/notifications/rest/notification.py:729
+#: django_project_base/notifications/rest/notification.py:730
 msgid "Invalid delayed to value"
 msgstr "Neveljavna vrednost časa pošiljanja"
 
-#: django_project_base/notifications/rest/notification.py:817
+#: django_project_base/notifications/rest/notification.py:818
 msgid "Delayed sending"
 msgstr "Zakasnjeno pošiljanje"
 
-#: django_project_base/notifications/rest/notification.py:822
+#: django_project_base/notifications/rest/notification.py:823
 msgid "Back"
 msgstr "Nazaj"
 
-#: django_project_base/notifications/rest/notification.py:823
+#: django_project_base/notifications/rest/notification.py:824
 msgid "Confirm"
 msgstr "Potrdi"
 
-#: django_project_base/notifications/rest/notification.py:828
+#: django_project_base/notifications/rest/notification.py:829
 msgid "Send at"
 msgstr "Pošlji ob"
 
-#: django_project_base/notifications/rest/notification.py:832
+#: django_project_base/notifications/rest/notification.py:833
 msgid "Delay indefinitely / Save only"
 msgstr "Preloži za nedoločen čas / Samo shrani"
 
@@ -718,30 +736,43 @@ msgstr "Lep dan vam želimo."
 msgid "Attachments"
 msgstr "Priponke"
 
-#: django_project_base/rest/project.py:43
+#: django_project_base/rest/project.py:42
 msgid "Projects"
 msgstr "Projekti"
 
-#: django_project_base/rest/project.py:43
+#: django_project_base/rest/project.py:42
 msgid "New project"
 msgstr "Nov projekt"
 
-#: django_project_base/rest/project.py:43
+#: django_project_base/rest/project.py:42
 msgid "Edit project"
 msgstr "Uredi projekt"
 
-#: django_project_base/rest/project.py:196
-#: django_project_base/rest/project.py:204
+#: django_project_base/rest/project.py:195
+#: django_project_base/rest/project.py:203
 msgid "Please enter value"
 msgstr "Vnesi vrednost"
 
-#: django_project_base/rest/project.py:197
+#: django_project_base/rest/project.py:196
 msgid "Email sender value for notifications"
 msgstr "Nastavitev pošiljatelja e-pošte za obvestila"
 
-#: django_project_base/rest/project.py:205
+#: django_project_base/rest/project.py:204
 msgid "Sms sender value for notifications"
 msgstr "Nastavitev pošiljatelja SMS za obvestila"
+
+#: django_project_base/rest/project.py:222
+msgid "Reset pending"
+msgstr "Ponastavi čakajočo"
+
+#: django_project_base/rest/project.py:239
+msgid "Confirm active"
+msgstr "Potrdi aktivno"
+
+#: django_project_base/rest/project.py:296
+#, python-format
+msgid "%(value)s (Pending: %(pending_value)s)"
+msgstr "%(value)s (Čakajoča: %(pending_value)s)"
 
 #: django_project_base/rest/project.py:430
 msgid "required"

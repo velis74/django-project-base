@@ -1,5 +1,7 @@
-from typing import List, Optional
+from enum import Enum
+from typing import List, Optional, Union
 
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections
 from django.db.models import Model, Sum
@@ -8,7 +10,15 @@ from dynamicforms import fields
 from dynamicforms.serializers import Serializer
 from rest_framework.exceptions import PermissionDenied
 
+from django_project_base.licensing.license_type_data import LicenseType
 from django_project_base.licensing.models import LicenseAccessUse
+
+
+def license_price(license_type: Union[LicenseType, Enum]):
+    license_type_data = settings.DJANGO_PROJECT_BASE_LICENSE_TYPE_DATA.get(license_type)
+    if not license_type_data:
+        raise f"No data for license type {license_type.value}"
+    return license_type_data.price
 
 
 class LicenseUsageReport(Serializer):
@@ -83,11 +93,13 @@ class LogAccessService:
         on_sucess=None,
         **kwargs,
     ) -> int:
+        from django_project_base.notifications.base.channels.channel import Channel
+
         connections["default"] = connections[self.db]
         content_type = ContentType.objects.get_for_model(model=record._meta.model)
         used = (
             LicenseAccessUse.objects.using(self.db)
-            .filter(user_id=str(user_profile_pk), content_type=content_type)
+            .filter(user_id=str(user_profile_pk))
             .aggregate(Sum("amount"))
             .get("amount__sum", None)
             or 0
@@ -98,7 +110,11 @@ class LogAccessService:
 
             chl_prices = {i.name: i.notification_price for i in ChannelIdentifier.supported_channels()}
             for used_channel in list(set(list(items.keys()))):
-                used += chl_prices.get(used_channel, 0) * items.get(used_channel, 0)
+                if isinstance(used_channel, Channel):
+                    used_channel_name = used_channel.name
+                else:
+                    used_channel_name = used_channel
+                used += chl_prices.get(used_channel_name, 0) * items.get(used_channel, 0)
 
         if not kwargs.get("is_system_notification") and used >= 0:
             raise PermissionDenied(gettext("Your license is consumed. Please contact support."))

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 13:27+0000\n"
+"POT-Creation-Date: 2025-12-01 09:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 
 #: django_project_base/account/rest/account.py:184
-#: django_project_base/account/rest/profile.py:292
+#: django_project_base/account/rest/profile.py:299
 msgid "Passwords do not match"
 msgstr ""
 
@@ -112,12 +112,12 @@ msgstr ""
 msgid "Inviting project member"
 msgstr ""
 
-#: django_project_base/account/rest/invite.py:57
-#: django_project_base/notifications/rest/notification.py:158
+#: django_project_base/account/rest/invite.py:58
+#: django_project_base/notifications/rest/notification.py:159
 msgid "Add"
 msgstr ""
 
-#: django_project_base/account/rest/invite.py:57
+#: django_project_base/account/rest/invite.py:58
 msgid "Add new record"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgid "Username"
 msgstr ""
 
 #: django_project_base/account/rest/login.py:34
-#: django_project_base/account/rest/profile.py:254
+#: django_project_base/account/rest/profile.py:261
 msgid "Password"
 msgstr ""
 
@@ -171,44 +171,49 @@ msgid ""
 "each of their groups."
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:186
-#: django_project_base/account/rest/profile.py:187
+#: django_project_base/account/rest/profile.py:160
+#: django_project_base/base/models.py:49
+msgid "Language"
+msgstr ""
+
+#: django_project_base/account/rest/profile.py:193
+#: django_project_base/account/rest/profile.py:194
 #: django_project_base/account/rest/profile_merge.py:54
 #: django_project_base/account/rest/profile_merge.py:55
 #: django_project_base/account/rest/project_profiles.py:61
 msgid "Merge"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:201
-#: django_project_base/account/rest/profile.py:202
+#: django_project_base/account/rest/profile.py:208
+#: django_project_base/account/rest/profile.py:209
 msgid "Export"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:255
+#: django_project_base/account/rest/profile.py:262
 msgid "Repeat Password"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:290
+#: django_project_base/account/rest/profile.py:297
 msgid "Password is required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:295
+#: django_project_base/account/rest/profile.py:302
 msgid "Email is required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:454
+#: django_project_base/account/rest/profile.py:461
 msgid "User with this email already exists."
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:567
+#: django_project_base/account/rest/profile.py:574
 msgid "Code required"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:577
+#: django_project_base/account/rest/profile.py:584
 msgid "Invalid code"
 msgstr ""
 
-#: django_project_base/account/rest/profile.py:695
+#: django_project_base/account/rest/profile.py:702
 msgid "Your account was created for you"
 msgstr ""
 
@@ -298,6 +303,10 @@ msgstr ""
 msgid "Project settings action required"
 msgstr ""
 
+#: django_project_base/base/event.py:190
+msgid "Action required for setting %(sett_name)s in project %(project_name)."
+msgstr ""
+
 #: django_project_base/base/fields.py:21
 msgid "Value is not a hex color (e.g #88f or #8080ff)"
 msgstr ""
@@ -328,10 +337,6 @@ msgstr ""
 
 #: django_project_base/base/models.py:47
 msgid "Phone number"
-msgstr ""
-
-#: django_project_base/base/models.py:49
-msgid "Language"
 msgstr ""
 
 #: django_project_base/base/models.py:51
@@ -394,7 +399,7 @@ msgid "Custom"
 msgstr ""
 
 #: django_project_base/base/models.py:295
-#: django_project_base/rest/project.py:257
+#: django_project_base/rest/project.py:256
 msgid "Value"
 msgstr ""
 
@@ -406,12 +411,12 @@ msgstr ""
 #: django_project_base/notifications/models.py:26
 #: django_project_base/notifications/models.py:66
 #: django_project_base/notifications/models.py:89
-#: django_project_base/notifications/models.py:335
+#: django_project_base/notifications/models.py:342
 msgid "Id"
 msgstr ""
 
 #: django_project_base/base/models.py:343
-#: django_project_base/notifications/base/channels/mail_channel.py:26
+#: django_project_base/notifications/base/channels/mail_channel.py:29
 msgid "Email"
 msgstr ""
 
@@ -435,33 +440,33 @@ msgstr ""
 msgid "Error retrieving holidays: {}"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:15
+#: django_project_base/licensing/logic.py:24
 #: django_project_base/licensing/models.py:15
 #: django_project_base/notifications/models.py:109
 msgid "Type"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:16
+#: django_project_base/licensing/logic.py:25
 msgid "Used"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:20
+#: django_project_base/licensing/logic.py:29
 msgid "Credit"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:21
+#: django_project_base/licensing/logic.py:30
 msgid "Used credit"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:22
+#: django_project_base/licensing/logic.py:31
 msgid "Remaining credit"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:25
+#: django_project_base/licensing/logic.py:34
 msgid "Usage report"
 msgstr ""
 
-#: django_project_base/licensing/logic.py:104
+#: django_project_base/licensing/logic.py:113
 msgid "Your license is consumed. Please contact support."
 msgstr ""
 
@@ -481,7 +486,18 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
-#: django_project_base/notifications/base/channels/sms_channel.py:22
+#: django_project_base/management/commands/confirm_setting.py:29
+msgid "Project setting confirmed"
+msgstr ""
+
+#: django_project_base/management/commands/confirm_setting.py:30
+#, python-format
+msgid ""
+"Setting %(sett_name)s in project %(project_name)s has been confirmed and is "
+"now active."
+msgstr ""
+
+#: django_project_base/notifications/base/channels/sms_channel.py:26
 msgid "SMS"
 msgstr ""
 
@@ -498,8 +514,8 @@ msgid "Send notification via EMail if user has no phone number"
 msgstr ""
 
 #: django_project_base/notifications/models.py:27
-#: django_project_base/notifications/rest/notification.py:137
-#: django_project_base/notifications/rest/notification.py:195
+#: django_project_base/notifications/rest/notification.py:138
+#: django_project_base/notifications/rest/notification.py:196
 msgid "Subject"
 msgstr ""
 
@@ -518,7 +534,7 @@ msgstr ""
 
 #: django_project_base/notifications/models.py:76
 #: django_project_base/notifications/models.py:116
-#: django_project_base/notifications/rest/notification.py:471
+#: django_project_base/notifications/rest/notification.py:472
 msgid "Message"
 msgstr ""
 
@@ -551,25 +567,25 @@ msgid "Sent at"
 msgstr ""
 
 #: django_project_base/notifications/models.py:102
-#: django_project_base/notifications/rest/notification.py:235
-#: django_project_base/notifications/rest/notification.py:484
-#: django_project_base/notifications/rest/notification.py:680
+#: django_project_base/notifications/rest/notification.py:236
+#: django_project_base/notifications/rest/notification.py:485
+#: django_project_base/notifications/rest/notification.py:681
 msgid "Delayed to"
 msgstr ""
 
-#: django_project_base/notifications/models.py:331
+#: django_project_base/notifications/models.py:338
 msgid "Delivered"
 msgstr ""
 
-#: django_project_base/notifications/models.py:332
+#: django_project_base/notifications/models.py:339
 msgid "Not Delivered"
 msgstr ""
 
-#: django_project_base/notifications/models.py:333
+#: django_project_base/notifications/models.py:340
 msgid "Pending delivery"
 msgstr ""
 
-#: django_project_base/notifications/models.py:344
+#: django_project_base/notifications/models.py:351
 msgid "Auxiliary notification"
 msgstr ""
 
@@ -583,7 +599,7 @@ msgid "Messages"
 msgstr ""
 
 #: django_project_base/notifications/rest/notification.py:109
-#: django_project_base/notifications/rest/notification.py:664
+#: django_project_base/notifications/rest/notification.py:665
 msgid "New message"
 msgstr ""
 
@@ -591,100 +607,100 @@ msgstr ""
 msgid "Save / Send later"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:141
-#: django_project_base/notifications/rest/notification.py:192
-#: django_project_base/notifications/rest/notification.py:442
+#: django_project_base/notifications/rest/notification.py:142
+#: django_project_base/notifications/rest/notification.py:193
+#: django_project_base/notifications/rest/notification.py:443
 msgid "Recipients"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:144
+#: django_project_base/notifications/rest/notification.py:145
 msgid "Delivery"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:159
+#: django_project_base/notifications/rest/notification.py:160
 msgid "Add new notification"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:165
 #: django_project_base/notifications/rest/notification.py:166
+#: django_project_base/notifications/rest/notification.py:167
 msgid "View license"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:170
+#: django_project_base/notifications/rest/notification.py:171
 msgid "Edit"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:170
+#: django_project_base/notifications/rest/notification.py:171
 msgid "Edit record"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:177
+#: django_project_base/notifications/rest/notification.py:178
 msgid "Send"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:199
-#: django_project_base/notifications/rest/notification.py:672
+#: django_project_base/notifications/rest/notification.py:200
+#: django_project_base/notifications/rest/notification.py:673
 msgid "Send on channels"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:217
+#: django_project_base/notifications/rest/notification.py:218
 msgid "Send notification SMS"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:222
+#: django_project_base/notifications/rest/notification.py:223
 msgid "Created"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:229
+#: django_project_base/notifications/rest/notification.py:230
 msgid "Sent"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:241
-#: django_project_base/notifications/rest/notification.py:517
+#: django_project_base/notifications/rest/notification.py:242
+#: django_project_base/notifications/rest/notification.py:518
 msgid "Indefinitely / Saved only"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:474
+#: django_project_base/notifications/rest/notification.py:475
 msgid "Close"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:482
+#: django_project_base/notifications/rest/notification.py:483
 msgid "Created At"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:483
+#: django_project_base/notifications/rest/notification.py:484
 msgid "Sent At"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:490
+#: django_project_base/notifications/rest/notification.py:491
 msgid "Send now"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:495
+#: django_project_base/notifications/rest/notification.py:496
 msgid "Change delay"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:729
+#: django_project_base/notifications/rest/notification.py:730
 msgid "Invalid delayed to value"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:817
+#: django_project_base/notifications/rest/notification.py:818
 msgid "Delayed sending"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:822
+#: django_project_base/notifications/rest/notification.py:823
 msgid "Back"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:823
+#: django_project_base/notifications/rest/notification.py:824
 msgid "Confirm"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:828
+#: django_project_base/notifications/rest/notification.py:829
 msgid "Send at"
 msgstr ""
 
-#: django_project_base/notifications/rest/notification.py:832
+#: django_project_base/notifications/rest/notification.py:833
 msgid "Delay indefinitely / Save only"
 msgstr ""
 
@@ -705,29 +721,42 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
-#: django_project_base/rest/project.py:43
+#: django_project_base/rest/project.py:42
 msgid "Projects"
 msgstr ""
 
-#: django_project_base/rest/project.py:43
+#: django_project_base/rest/project.py:42
 msgid "New project"
 msgstr ""
 
-#: django_project_base/rest/project.py:43
+#: django_project_base/rest/project.py:42
 msgid "Edit project"
 msgstr ""
 
-#: django_project_base/rest/project.py:196
-#: django_project_base/rest/project.py:204
+#: django_project_base/rest/project.py:195
+#: django_project_base/rest/project.py:203
 msgid "Please enter value"
 msgstr ""
 
-#: django_project_base/rest/project.py:197
+#: django_project_base/rest/project.py:196
 msgid "Email sender value for notifications"
 msgstr ""
 
-#: django_project_base/rest/project.py:205
+#: django_project_base/rest/project.py:204
 msgid "Sms sender value for notifications"
+msgstr ""
+
+#: django_project_base/rest/project.py:222
+msgid "Reset pending"
+msgstr ""
+
+#: django_project_base/rest/project.py:239
+msgid "Confirm active"
+msgstr ""
+
+#: django_project_base/rest/project.py:296
+#, python-format
+msgid "%(value)s (Pending: %(pending_value)s)"
 msgstr ""
 
 #: django_project_base/rest/project.py:430
