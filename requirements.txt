@@ -15,7 +15,7 @@ django-csp
 requests
 boto3
 natural
-celery>=5.2
+celery>=5.4
 pandas
 click>=8.1
 ruff
