@@ -4,6 +4,7 @@
       <v-row>
         <v-col class="d-none d-md-flex">
           <v-text-field
+            :key="loginCredentials"
             v-model="payload.login"
             density="compact"
             single-line
@@ -15,6 +16,7 @@
         <v-col class="d-none d-md-flex">
           <v-text-field
             ref="pwd"
+            :key="loginCredentials"
             v-model="payload.password"
             density="compact"
             single-line
@@ -30,7 +32,7 @@
           </a>
         </v-col>
         <v-col class="d-flex mt-1">
-          <v-btn color="primary" variant="tonal" @click.stop="doLogin">{{ gettext('Login') }}</v-btn>
+          <v-btn color="primary" variant="tonal" @click.stop="loginClick">{{ gettext('Login') }}</v-btn>
         </v-col>
         <v-col v-if="accountRegisterVisible" class="d-none d-md-flex mt-1">
           <v-btn color="primary" variant="tonal" @click.stop="openRegistrationForm">{{ gettext('Register') }}</v-btn>
@@ -44,9 +46,10 @@
 <script setup lang="ts">
 import { Action, dfModal, FilteredActions, gettext, interpolate } from '@velis/dynamicforms';
 import _ from 'lodash-es';
-import { h, onMounted, reactive } from 'vue';
+import { h, onMounted, reactive, ref } from 'vue';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useCookies } from 'vue3-cookies';
+import { useDisplay } from 'vuetify';
 
 import { apiClient } from '../../api-client';
 
@@ -54,6 +57,9 @@ import { parseErrors, useLogin } from './login';
 import SocialLogos from './social-logos.vue';
 import useUserSessionStore from './state';
 import { accountRegisterVisible } from './use-login-dialog';
+
+const loginCredentials = ref(0);
+const { smAndDown } = useDisplay();
 
 const {
   payload,
@@ -211,6 +217,20 @@ function checkInvite() {
       cookies.remove('invite-pk');
     }
   }
+}
+
+function loginClick() {
+  if (smAndDown.value) {
+    // Username and password fields are not visible on smaller screens. So we are acting like there is nothing entered.
+    // There was a problem where the browser self-fills credentials.
+    // And you were not able to se username and password values
+    if (payload.value) {
+      payload.value.login = '';
+      payload.value.password = '';
+      loginCredentials.value += 1;
+    }
+  }
+  doLogin();
 }
 
 onMounted(() => checkInvite());
