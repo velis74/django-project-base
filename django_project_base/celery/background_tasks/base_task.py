@@ -23,6 +23,10 @@ class BaseTask(PerformanceCeleryTask):
 
     settings: Optional[Settings] = None
 
+    def __init__(self):
+        super().__init__()
+        self.dw = None
+
     def before_start(self, task_id, args, kwargs):
         if (path := self._app.conf.get("django-settings-module")) and len(path):
             self.settings = Settings(path)
@@ -33,10 +37,10 @@ class BaseTask(PerformanceCeleryTask):
             db_settings.setdefault("OPTIONS", {})
             db_settings.setdefault("AUTOCOMMIT", True)
             backend = load_backend(db_settings["ENGINE"])
-            dw = backend.DatabaseWrapper(db_settings)
-            dw.connect()
-            connections.databases[NOTIFICATION_QUEUE_NAME] = dw.settings_dict
-            connections.databases["default"] = dw.settings_dict
+            self.dw = backend.DatabaseWrapper(db_settings)
+            self.dw.connect()
+            connections.databases[NOTIFICATION_QUEUE_NAME] = self.dw.settings_dict
+            connections.databases["default"] = self.dw.settings_dict
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         logging.getLogger(__name__).error(
@@ -53,3 +57,5 @@ class BaseTask(PerformanceCeleryTask):
         from django import db
 
         db.connections.close_all()
+        if self.dw:
+            self.dw.close()
