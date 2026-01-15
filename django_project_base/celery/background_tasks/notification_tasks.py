@@ -52,6 +52,7 @@ class NotificationSchedulerTask(BaseTask):
         from django_project_base.notifications.base.enums import NotificationType
 
         if getattr(self.settings, "TESTING", False):
+            self._close_db()
             return
 
         with CacheLock("notification_scheduler_task", timeout=-1) as cl:
