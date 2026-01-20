@@ -159,7 +159,7 @@ let intervalCheckLicense: NodeJS.Timeout | undefined;
 onMounted(() => {
   intervalCheckLicense = setInterval(() => {
     apiClient.get(
-      interpolate('%(url)s/new%(trailingSlash)sformat=json&decorate-max-price=1`', {
+      interpolate('%(url)s/new%(trailingSlash)s?format=json&decorate-max-price=1', {
         url: licenseConsumerUrl,
         trailingSlash: licenseConsumerUrlTrailingSlash ? '/' : '',
       }),
