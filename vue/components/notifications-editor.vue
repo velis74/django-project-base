@@ -21,6 +21,7 @@ const props = defineProps<{
   consumerUrlTrailingSlash?: boolean,
   licenseConsumerUrl?: string,
   licenseConsumerUrlTrailingSlash?: boolean,
+  checkLicense?: boolean,
 }>();
 
 const consumerUrl: string = (props.consumerUrl ?? 'notification') as string;
@@ -29,6 +30,7 @@ const consumerTrailingSlash = (props.consumerUrlTrailingSlash ?? true) as boolea
 
 const licenseConsumerUrl = (props.licenseConsumerUrl ?? 'notification-license') as string;
 const licenseConsumerUrlTrailingSlash = (props.licenseConsumerUrlTrailingSlash ?? true) as boolean;
+const checkLicense = (props.checkLicense ?? true) as boolean;
 
 const notificationLogic = ref(new ConsumerLogicApi(
   consumerUrl,
@@ -157,22 +159,24 @@ const showLicenseConsumed = () => {
 
 let intervalCheckLicense: NodeJS.Timeout | undefined;
 onMounted(() => {
-  intervalCheckLicense = setInterval(() => {
-    apiClient.get(
-      interpolate('%(url)s/new%(trailingSlash)s?format=json&decorate-max-price=1', {
-        url: licenseConsumerUrl,
-        trailingSlash: licenseConsumerUrlTrailingSlash ? '/' : '',
-      }),
-    ).then(
-      (licenseResponse: any) => {
-        if (licenseResponse.data.remaining_credit < licenseResponse.data.max_notification_price) {
-          showLicenseConsumed();
-          return;
-        }
-        closeNotification(notificationId.value);
-      },
-    );
-  }, 15000);
+  if (checkLicense) {
+    intervalCheckLicense = setInterval(() => {
+      apiClient.get(
+        interpolate('%(url)s/new%(trailingSlash)s?format=json&decorate-max-price=1', {
+          url: licenseConsumerUrl,
+          trailingSlash: licenseConsumerUrlTrailingSlash ? '/' : '',
+        }),
+      ).then(
+        (licenseResponse: any) => {
+          if (licenseResponse.data.remaining_credit < licenseResponse.data.max_notification_price) {
+            showLicenseConsumed();
+            return;
+          }
+          closeNotification(notificationId.value);
+        },
+      );
+    }, 15000);
+  }
 });
 
 onUnmounted(() => clearInterval(intervalCheckLicense));
