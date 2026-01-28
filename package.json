@@ -28,9 +28,8 @@
     "export-pdf": "press-export-pdf --debug export docs"
   },
   "peerDependencies": {
-    "@dynamicforms/vuetify-inputs": "^0.6.5",
     "@kyvg/vue3-notification": "^3",
-    "@velis/dynamicforms": "^0.81.0",
+    "@velis/dynamicforms": "^0.81.4",
     "axios": "^1.2.0",
     "browser-update": "^3.3.37",
     "lodash-es": "^4.17.12",

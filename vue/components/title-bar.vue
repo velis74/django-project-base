@@ -9,7 +9,7 @@
       <component :is="breadcrumbsComponent" v-else/>
     </template>
     <div class="flex-grow-0"/>
-    <template v-if="props.projectListComponent && userSession.loggedIn && !display.smAndDown.value">
+    <template v-if="projectListComponent && userSession.loggedIn && !display.smAndDown.value">
       <project-list v-if="projectListComponent === 'ProjectList'"/>
       <component :is="projectListComponent" v-else/>
     </template>
