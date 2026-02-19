@@ -291,6 +291,10 @@ class T2(ProviderIntegration):
         assert len(self.url) > 0, "NOTIFICATIONS_SMS_API_URL is required"
 
     def client_send(self, sender: str, recipient: Recipient, msg: str, dlr_id: str):
+        import logging
+
+        logger = logging.getLogger("django")
+
         if not recipient.phone_number:
             return
         basic_auth = HTTPBasicAuth(self.username, self.password)
@@ -301,6 +305,13 @@ class T2(ProviderIntegration):
             verify=False,
             headers={"Content-Type": "application/json"},
             timeout=int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT),
+        )
+
+        logger.exception(
+            f"SMS SEND PARAMS: {self.url}{self.endpoint_one} {dict(from_number=sender, to_number=recipient.phone_number, message=msg, guid=dlr_id)} {int(0.8 * NOTIFICATION_QUEABLE_HARD_TIME_LIMIT)}"
+        )
+        logger.exception(
+            f"SMS SEND RESPONSE: {response} {response.__dict__ if hasattr(response, '__dict__') else 'no __dict__'}"
         )
 
         self.validate_send(response)
