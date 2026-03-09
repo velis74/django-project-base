@@ -356,7 +356,7 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
     def get_queryset(self):
         profile_model = DynamicModelMixin.determine_model_at_runtime_static(
             self.request, func_name=getattr(settings, ProfileViewSet.MODEL_FUNC_SETTING_NAME, None)
-        )
+        ) or swapper.load_model("django_project_base", "Profile")
         if issubclass(self.get_serializer_class(), ProfileRegisterSerializer):
             return profile_model.objects.annotate(
                 password_repeat=Value(None, DjangoCharField())
