@@ -304,7 +304,7 @@ msgid "Project settings action required"
 msgstr ""
 
 #: django_project_base/base/event.py:190
-msgid "Action required for setting %(sett_name)s in project %(project_name)."
+msgid "Action required for setting %(sett_name)s in project %(project_name)s."
 msgstr ""
 
 #: django_project_base/base/fields.py:21

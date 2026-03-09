@@ -258,12 +258,12 @@ class VerifyRegistrationViewSet(viewsets.ViewSet):
     def verify_registration(self, request: Request) -> Response:
         if (
             (flow_id := request.COOKIES.get("register-flow"))
-            and (code := cache.get(flow_id))
+            and (code := cache.get(f"register_verification_code:{flow_id}"))
             and (req_code := request.data.get("code"))
             and code == req_code
             and len(code)
             and len(req_code)
-            and (user := cache.get(code))
+            and (user := cache.get(f"register_verification_user:{code}"))
         ):
             user.is_active = True
             user.save(update_fields=["is_active"])
