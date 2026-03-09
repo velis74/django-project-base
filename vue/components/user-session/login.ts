@@ -245,6 +245,125 @@ function useLogin() {
     showLoginDialog.value = true;
   }
 
+  const registerWorkflowErrors = reactive({} as { [key: string]: any[] });
+
+  async function validateEmailCode() {
+    const userEmailChoice = await dfModal.message('', () => [
+      h(
+        'h3',
+        { class: 'd-flex justify-center mb-4' },
+        [gettext('New account')],
+      ),
+      h(
+        'h4',
+        { class: 'd-flex justify-center mb-4' },
+        [gettext('We have sent an email to the email address you provided.')],
+      ),
+      h(
+        'h4',
+        { class: 'd-flex justify-center mb-4' },
+        [interpolate('%(text)s:', { text: gettext('Please enter the code from the message') })],
+      ),
+      h('div', { class: 'd-flex justify-center mb-4' }, [
+        h('input', {
+          type: 'text',
+          id: 'new-account-confirmation-code',
+          class: 'w-20 mb-2 p-1 justify-center rounded border-lightgray',
+          style: 'padding: 0.1em;',
+          placeholder: registerWorkflowErrors.code ? registerWorkflowErrors.code : null,
+        }, {}),
+      ]),
+    ], new FilteredActions({
+      cancel: new Action({
+        name: 'different-email',
+        label: gettext('Different email'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+      confirm: new Action({
+        name: 'proceed',
+        label: gettext('Proceed'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+    }));
+
+    const pageName = userSession.selectedProjectName || '';
+    if (userEmailChoice.action.name === 'proceed') {
+      apiClient.post(
+        '/account/verify-registration/',
+        { code: (<HTMLInputElement>document.getElementById('new-account-confirmation-code'))?.value },
+      ).then(() => {
+        registerWorkflowErrors.value = [];
+        userSession.checkLogin(false).then(() => {
+          dfModal.message(
+            gettext('New account'),
+            gettext('Your account is now active and you are logged in.') + (
+              _.size(pageName) ? gettext('Welcome to') + pageName : ''),
+          ).then(() => window.location.reload());
+        });
+      }).catch((err: any) => {
+        parseErrors(err, registerWorkflowErrors);
+        validateEmailCode();
+      });
+      return true;
+    }
+    return false;
+  }
+
+  async function changeRegisterMail() {
+    const userEmail = await dfModal.message('', () => [
+      h(
+        'h3',
+        { class: 'd-flex justify-center mb-4' },
+        [interpolate('%(newAccountText)s - %(differentMailText)s', {
+          newAccountText: gettext('New account'),
+          differentMailText: gettext('different email'),
+        })],
+      ),
+
+      h(
+        'h4',
+        { class: 'd-flex justify-center mb-4' },
+        [interpolate('%(text)s:', { text: gettext('Please enter new email') })],
+      ),
+      h('div', { class: 'd-flex justify-center mb-4' }, [
+        h('input', {
+          type: 'text',
+          id: 'new-account-different-email',
+          placeholder: registerWorkflowErrors.email ? registerWorkflowErrors.email : null,
+          class: 'w-100 mb-2 p-1 justify-center rounded border-lightgray',
+          style: 'padding: 0.1em;',
+        }, {}),
+      ]),
+    ], new FilteredActions({
+      cancel: new Action({
+        name: 'cancel',
+        label: gettext('Cancel'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+      confirm: new Action({
+        name: 'proceed-different-email',
+        label: gettext('Proceed'),
+        displayStyle: { asButton: true, showLabel: true, showIcon: true },
+        position: 'FORM_FOOTER',
+      }),
+    }));
+    if (userEmail.action.name === 'proceed-different-email') {
+      apiClient.post(
+        '/account/verify-registration-email-change/',
+        { email: (<HTMLInputElement>document.getElementById('new-account-different-email'))?.value },
+      ).then(() => {
+        validateEmailCode();
+        registerWorkflowErrors.value = [];
+      }).catch((err: any) => {
+        parseErrors(err, registerWorkflowErrors);
+        changeRegisterMail();
+      });
+    }
+  }
+
   async function getFormDefinition() {
     await userSession.checkLogin(false);
     _.assignIn(formDef, await loginConsumer.getFormDefinition());
@@ -260,9 +379,16 @@ function useLogin() {
     socialAuth.value = formDef.payload.social_auth_providers;
   }
 
-  const openRegistration = async () => FormConsumerOneShotApi(
-    { url: '/account/profile/register', trailingSlash: false },
-  );
+  const openRegistration = async () => {
+    const registerResponse = await FormConsumerOneShotApi(
+      { url: '/account/profile/register', trailingSlash: false },
+    );
+    if (registerResponse) {
+      if (!await validateEmailCode()) {
+        await changeRegisterMail();
+      }
+    }
+  };
 
   const newAccount = async () => {
     showLoginDialog.value = false;

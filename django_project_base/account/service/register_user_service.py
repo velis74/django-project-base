@@ -12,7 +12,9 @@ def send_register_verification_email_notification(
     request: Request,
     user,
 ) -> None:
-    if (flow_id := request.COOKIES.get("register-flow")) and (code := cache.get(flow_id)):
+    if (flow_id := request.COOKIES.get("register-flow")) and (
+        code := cache.get(f"register_verification_code:{flow_id}")
+    ):
         SystemEMailNotification(
             message=DjangoProjectBaseMessage(
                 subject=f"{__('Account confirmation for')} {request.META['HTTP_HOST']}",
@@ -27,4 +29,3 @@ def send_register_verification_email_notification(
             recipients=[user.pk],
             user=user.pk,
         ).send()
-        cache.set(code, user, timeout=settings.CONFIRMATION_CODE_TIMEOUT)

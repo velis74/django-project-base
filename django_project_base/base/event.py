@@ -187,7 +187,7 @@ class ProjectSettingActionRequiredEvent(BaseEvent):
             SystemEMailNotificationWithListOfEmails(
                 message=DjangoProjectBaseMessage(
                     subject=_("Project settings action required"),
-                    body=_("Action required for setting %(sett_name)s in project %(project_name).")
+                    body=_("Action required for setting %(sett_name)s in project %(project_name)s.")
                     % {"sett_name": payload.name, "project_name": payload.project.name},
                     footer="",
                     content_type=DjangoProjectBaseMessage.HTML,

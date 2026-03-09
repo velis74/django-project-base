@@ -5,6 +5,7 @@ import { App } from 'vue';
 import { accountRegisterVisible } from './components/user-session/use-login-dialog';
 import * as DpbComponents from './dpb-components';
 import * as VuetifyComponents from './vuetify-components';
+import './assets/global.css';
 
 // exports
 export { default as useUserSessionStore } from './components/user-session/state';
