@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from django_project_base.licensing.license_type_data import LicenseType, LicenseTypeData
 from django_project_base.settings_parser import parse_settings
 
 DJANGO_PROJECT_BASE_SETTINGS = (
@@ -49,58 +48,9 @@ DJANGO_PROJECT_BASE_SETTINGS = (
             "REGISTER_VERIFICATION_EMAIL_SENDER": "django_project_base.account.service.register_user_service.send_register_verification_email_notification",  # noqa: E501
         },
     },
-    {"name": "NOTIFICATION_SENDERS", "default": {}},
-    {"name": "SYSTEM_EMAIL_SENDER_ID", "default": ""},
-    {"name": "SYSTEM_SMS_SENDER_ID", "default": ""},
-    {
-        "name": "NOTIFICATIONS_EMAIL_PROVIDER",
-        "default": "django_project_base.notifications.base.channels.integrations.aws_ses.AwsSes",
-    },
-    {
-        "name": "NOTIFICATIONS_SMS_PROVIDER",
-        "default": [
-            "django_project_base.notifications.base.channels.integrations.t2.T2",
-            "django_project_base.notifications.base.channels.integrations.aws_sns_single_sms.AwsSnsSingleSMS",
-            "django_project_base.notifications.base.channels.integrations.nexmo_sms.NexmoSMS",
-        ],
-    },
-    # this settings silences (rest_registration.E013) SEND_RESET_PASSWORD_LINK_SERIALIZER_USE_EMAIL
-    # is set but email field is not unique
-    # todo: TASK https://taiga.velis.si/project/velis-django-project-admin/us/637?no-milestone=1
     {"name": "SILENCED_SYSTEM_CHECKS", "default": ["rest_registration.E013"]},
     {"name": "CONFIRMATION_CODE_TIMEOUT", "default": 600},
     {"name": "VERIFICATION_FROM_EMAIL", "default": ""},
-    {"name": "NOTIFICATION_AGGREGATION_TIMEDELTA_SECONDS", "default": 120},
-    {"name": "NOTIFICATION_LENGTH_SIMILARITY_BUFFER_VALUE", "default": 3},
-    {
-        "name": "LICENSE_ACCESS_USE_CONTENT_TYPE_MODEL",
-        "default": "notifications.DjangoProjectBaseNotification",
-    },
-    {
-        "name": "DEFAULT_EMAIL_SENDER_ID_SETTING_NAME",
-        "default": "",
-    },
-    {
-        "name": "DEFAULT_SMS_SENDER_ID_SETTING_NAME",
-        "default": "",
-    },
-    {"name": "IS_PHONE_NUMBER_ALLOWED_FUNCTION", "default": ""},
-    {"name": "NOTIFICATIONS_AWS_SES_EMAIL_DLR_USER", "default": None},
-    {"name": "NOTIFICATIONS_AWS_SES_EMAIL_DLR_PASSWORD", "default": None},
-    {"name": "NOTIFICATIONS_AWS_SES_EMAIL_DLR_EMAIL", "default": None},
-    {"name": "NOTIFICATIONS_AWS_SNS_SMS_DLR_USER", "default": None},
-    {"name": "NOTIFICATIONS_AWS_SNS_SMS_DLR_PASSWORD", "default": None},
-    {"name": "NOTIFICATIONS_AWS_SNS_SMS_DLR_EMAIL", "default": None},
-    {"name": "NOTIFICATIONS_NEXMO_SMS_DLR_USER", "default": None},
-    {"name": "NOTIFICATIONS_NEXMO_SMS_DLR_USER", "default": None},
-    {"name": "NOTIFICATIONS_NEXMO_SMS_DLR_EMAIL", "default": None},
-    {"name": "NOTIFICATIONS_T2_SMS_DLR_USER", "default": None},
-    {"name": "NOTIFICATIONS_T2_SMS_DLR_PASSWORD", "default": None},
-    {"name": "NOTIFICATIONS_T2_SMS_DLR_EMAIL", "default": None},
-    {
-        "name": "DJANGO_PROJECT_BASE_LICENSE_TYPE_DATA",
-        "default": {LicenseType.EMAIL: LicenseTypeData(price=0.0002), LicenseType.SMS: LicenseTypeData(price=0.1)},
-    },
 )
 
 USER_CACHE_KEY = "django-user-{id}"

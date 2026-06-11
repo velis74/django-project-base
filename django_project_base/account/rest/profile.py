@@ -1,6 +1,5 @@
 import datetime
 import uuid
-
 from random import randrange
 
 import django
@@ -45,11 +44,7 @@ from django_project_base.account.rest.project_profiles_utils import get_project_
 from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.base.permissions import is_project_owner, is_staff, is_superuser, IsProjectOwner
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
-from django_project_base.notifications.email_notification import (
-    EMailNotification,
-    SystemEMailNotificationWithListOfEmails,
-)
-from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.notifications import send_notification, CONTENT_TYPE_PLAIN_TEXT, CONTENT_TYPE_HTML
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY
@@ -559,19 +554,16 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
             code = randrange(100001, 999999)
             response.set_cookie("verify-email", user.pk, samesite="Lax")
             request.session[f"email-changed-{code}-{user.pk}"] = new_email
-            SystemEMailNotificationWithListOfEmails(
-                message=DjangoProjectBaseMessage(
-                    subject=f"{_('Email change for account on')} {request.META['HTTP_HOST']}",
-                    body=f"{_('You requested an email change for your account at')} {request.META['HTTP_HOST']}. "
-                    f"\n\n{_('Your verification code is')}: "
-                    f"{code} \n\n {_('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n",
-                    footer="",
-                    content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
-                ),
+            send_notification(
+                subject=f"{_('Email change for account on')} {request.META['HTTP_HOST']}",
+                body=f"{_('You requested an email change for your account at')} {request.META['HTTP_HOST']}. "
+                f"\n\n{_('Your verification code is')}: "
+                f"{code} \n\n {_('Code is valid for')} {compress(settings.CONFIRMATION_CODE_TIMEOUT)}.\n",
+                content_type=CONTENT_TYPE_PLAIN_TEXT,
                 recipients=[new_email],
                 project=self.request.selected_project.slug,
                 user=user.pk,
-            ).send()
+            )
         return response
 
     @extend_schema(exclude=True)
@@ -721,25 +713,20 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
             and sett.python_value
         ):
             recipients = [response.data[get_pk_name(get_user_model())]]
-            EMailNotification(
-                message=DjangoProjectBaseMessage(
-                    subject=_("Your account was created for you"),
-                    body=render_to_string(
-                        "account_created.html",
-                        {
-                            "username": f"{response.data['username']}/{response.data['email']}",
-                        },
-                    ),
-                    footer="",
-                    content_type=DjangoProjectBaseMessage.HTML,
+            send_notification(
+                subject=_("Your account was created for you"),
+                body=render_to_string(
+                    "account_created.html",
+                    {
+                        "username": f"{response.data['username']}/{response.data['email']}",
+                    },
                 ),
-                raw_recipents=recipients,
-                project=project.slug,
+                content_type=CONTENT_TYPE_HTML,
                 recipients=recipients,
+                project=project.slug,
                 delay=int(datetime.datetime.now().timestamp()),
                 user=self.request.user.pk,
-            ).send()
-
+            )
         return response
 
 

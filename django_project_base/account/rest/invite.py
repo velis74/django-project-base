@@ -18,9 +18,7 @@ from django_project_base.base.event import UserInviteFoundEvent
 from django_project_base.base.exceptions import InviteActionNotImplementedException
 from django_project_base.base.viewsets import ProjectFilteringViewSet
 from django_project_base.constants import INVITE_NOTIFICATION_TEXT
-from django_project_base.notifications.email_notification import EMailNotificationWithListOfEmails
-from django_project_base.notifications.models import DjangoProjectBaseMessage
-from django_project_base.notifications.rest.notification import MessageBodyField
+from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
 from django_project_base.utils import get_host_url, get_pk_name
 
 
@@ -35,7 +33,7 @@ class AcceptedField(fields.BooleanField):
         return False
 
 
-class InviteTextField(MessageBodyField):
+class InviteTextField(fields.RTFField):
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
         self.label = _("Invitation text")
@@ -150,18 +148,14 @@ class ProjectUserInviteViewSet(ProjectFilteringViewSet):
                 .python_value
             )
         invite_text = invite_text.replace("%LINK%", invite_url)
-
-        EMailNotificationWithListOfEmails(
-            message=DjangoProjectBaseMessage(
-                subject=_("You are invited to project") + f" {self.request.selected_project.name}",
-                body=invite_text,
-                footer="",
-                content_type=DjangoProjectBaseMessage.HTML,
-            ),
+        send_notification(
+            subject=_("You are invited to project") + f" {self.request.selected_project.name}",
+            body=invite_text,
+            content_type=CONTENT_TYPE_HTML,
             recipients=[self.request.data["email"]],
             project=self.request.selected_project.slug,
             user=self.request.user.pk,
-        ).send()
+        )
         return created
 
     @transaction.atomic

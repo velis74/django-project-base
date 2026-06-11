@@ -7,7 +7,6 @@ from django.db import connections
 from django.db.utils import load_backend
 
 from django_project_base.celery.settings import NOTIFICATION_QUEABLE_HARD_TIME_LIMIT
-from django_project_base.constants import NOTIFICATION_QUEUE_NAME
 from django_project_base.profiling.performance_celery_task_class import PerformanceCeleryTask
 
 LAST_MAIL_SENT_CK = "last-notification-was-sent-timestamp"
@@ -39,7 +38,6 @@ class BaseTask(PerformanceCeleryTask):
             backend = load_backend(db_settings["ENGINE"])
             self.dw = backend.DatabaseWrapper(db_settings)
             self.dw.connect()
-            connections.databases[NOTIFICATION_QUEUE_NAME] = self.dw.settings_dict
             connections.databases["default"] = self.dw.settings_dict
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):

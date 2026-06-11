@@ -11,8 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_registration.settings import registration_settings
 
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
-from django_project_base.notifications.email_notification import SystemEMailNotificationWithListOfEmails
-from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
 
 
 class UserModel:
@@ -184,16 +183,13 @@ class ProjectSettingActionRequiredEvent(BaseEvent):
             return
 
         if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])):
-            SystemEMailNotificationWithListOfEmails(
-                message=DjangoProjectBaseMessage(
-                    subject=_("Project settings action required"),
-                    body=_("Action required for setting %(sett_name)s in project %(project_name)s.")
-                    % {"sett_name": payload.name, "project_name": payload.project.name},
-                    footer="",
-                    content_type=DjangoProjectBaseMessage.HTML,
-                ),
-                recipients=to,
-            ).send()
+            send_notification(
+                subject=_("Project settings action required"),
+                body=_("Action required for setting %(sett_name)s in project %(project_name)s.")
+                % {"sett_name": payload.name, "project_name": payload.project.name},
+                content_type=CONTENT_TYPE_HTML,
+                recipients=list(to),
+            )
 
 
 class ProjectSettingPendingResetEvent(BaseEvent):

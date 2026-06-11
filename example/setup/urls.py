@@ -20,7 +20,6 @@ from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from django_project_base.notifications.rest.router import notifications_router
 from django_project_base.profiling import app_debug_view
 from django_project_base.settings import DOCUMENTATION_DIRECTORY
 from django_project_base.views import documentation_view
@@ -39,8 +38,6 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path("account/", include("django_project_base.account.urls")),
-    path("", include("django_project_base.licensing.urls")),
-    path("", include(notifications_router.urls)),
     path("", include("django_project_base.urls")),
     path("app-debug/", app_debug_view, name="app-debug"),
     re_path(

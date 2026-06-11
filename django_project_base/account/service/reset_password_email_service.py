@@ -1,5 +1,4 @@
 import datetime
-
 from typing import Any, Dict
 
 from django.conf import settings
@@ -14,8 +13,7 @@ from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
-from django_project_base.notifications.email_notification import EMailNotification
-from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.notifications import send_notification, CONTENT_TYPE_PLAIN_TEXT
 
 
 def send_reset_password_verification_email(request: Request, user, send=False, first_login=False) -> Dict:
@@ -34,14 +32,14 @@ def send_reset_password_verification_email(request: Request, user, send=False, f
 
     try:
         project = request.selected_project.slug
-    except:
+    except Exception:
         project = None
 
     if first_login:
-        subject = _('First login to %s') % request.META['HTTP_HOST']
+        subject = _("First login to %s") % request.META["HTTP_HOST"]
         body = _("You or someone acting as you is logging to %s for the first time.") % request.META["HTTP_HOST"]
     else:
-        subject = _('Password recovery for %s') % request.META['HTTP_HOST']
+        subject = _("Password recovery for %s") % request.META["HTTP_HOST"]
         body = (
             _("You or someone acting as you requested a password reset for your account at %s.")
             % request.META["HTTP_HOST"]
@@ -54,19 +52,15 @@ def send_reset_password_verification_email(request: Request, user, send=False, f
         _("If this was not you or it was unintentional, you may safely ignore this message."),
     )
 
-    EMailNotification(
-        message=DjangoProjectBaseMessage(
-            subject=subject,
-            body=body,
-            footer="",
-            content_type=DjangoProjectBaseMessage.PLAIN_TEXT,
-        ),
-        raw_recipents=[user.pk],
+    send_notification(
+        subject=subject,
+        body=body,
+        content_type=CONTENT_TYPE_PLAIN_TEXT,
+        recipients=[user.pk],
         project=project,
         delay=int(datetime.datetime.now().timestamp()),
-        recipients=[user.pk],
         user=request.user.pk,
-    ).send()
+    )
 
     return signer.get_signed_data()
 

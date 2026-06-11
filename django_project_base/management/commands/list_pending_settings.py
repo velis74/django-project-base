@@ -4,8 +4,7 @@ import swapper
 
 from django.conf import settings
 
-from django_project_base.notifications.email_notification import SystemEMailNotificationWithListOfEmails
-from django_project_base.notifications.models import DjangoProjectBaseMessage
+from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
 from django_project_base.profiling.performance_base_command import PerformanceCommand
 
 
@@ -27,15 +26,12 @@ class Command(PerformanceCommand):
                     "pending_value": setting.python_pending_value,
                 }
 
-        if to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", [])) and result:
-            SystemEMailNotificationWithListOfEmails(
-                message=DjangoProjectBaseMessage(
-                    subject="Pending settings report",
-                    body=json.dumps(result),
-                    footer="",
-                    content_type=DjangoProjectBaseMessage.HTML,
-                ),
-                recipients=to,
-            ).send()
+        if (to := getattr(settings, "ADMINS", getattr(settings, "MANAGERS", []))) and result:
+            send_notification(
+                subject="Pending settings report",
+                body=json.dumps(result),
+                content_type=CONTENT_TYPE_HTML,
+                recipients=list(to),
+            )
 
         self.stdout.write(self.style.WARNING(result))
