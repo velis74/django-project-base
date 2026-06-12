@@ -1,5 +1,6 @@
 import copy
 import datetime
+import logging
 
 from abc import ABC, abstractmethod
 
@@ -12,6 +13,8 @@ from rest_registration.settings import registration_settings
 
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
+
+logger = logging.getLogger(__name__)
 
 
 class UserModel:
@@ -119,7 +122,9 @@ class UserRegisteredEvent(BaseEvent):
 
     def trigger(self, payload=None, **kwargs):
         super().trigger(payload, **kwargs)
+        logger.info("UserRegisteredEvent.trigger: user=%s payload=%s", getattr(self, 'user', None), bool(payload))
         if not payload:
+            logger.warning("UserRegisteredEvent.trigger: no payload, skipping email")
             return
 
         if invite_pk := payload.session.get("invite-pk"):
@@ -127,7 +132,9 @@ class UserRegisteredEvent(BaseEvent):
             UserInviteFoundEvent(self.user).trigger(payload=invite, request=payload)
             return
         payload.session.pop("invite-pk", None)
+        logger.info("UserRegisteredEvent.trigger: REGISTER_VERIFICATION_ENABLED=%s", registration_settings.REGISTER_VERIFICATION_ENABLED)
         if registration_settings.REGISTER_VERIFICATION_ENABLED:
+            logger.info("UserRegisteredEvent.trigger: calling REGISTER_VERIFICATION_EMAIL_SENDER for user=%s", getattr(self, 'user', None))
             registration_settings.REGISTER_VERIFICATION_EMAIL_SENDER(request=payload, user=self.user)
 
 

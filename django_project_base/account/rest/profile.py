@@ -459,10 +459,19 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
         user = serializer.save()
         user.set_password(request.data["password"])
         user.save()
+
+        register_flow_identifier = str(uuid.uuid4())
+        code = get_random_string(length=6)
+        cache.set(
+            f"register_verification_code:{register_flow_identifier}", code, timeout=settings.CONFIRMATION_CODE_TIMEOUT
+        )
+        cache.set(f"register_verification_user:{code}", user, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
+        # store on request so the email sender can find it before the response cookie reaches the browser
+        request._register_flow_id = register_flow_identifier
+
         UserRegisteredEvent(user=user).trigger(payload=request)
 
         response = Response(serializer.validated_data)
-        register_flow_identifier = str(uuid.uuid4())
         response.set_cookie(
             "register-flow",
             register_flow_identifier,
@@ -470,11 +479,6 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
             httponly=True,
             samesite="Strict",
         )
-        code = get_random_string(length=6)
-        cache.set(
-            f"register_verification_code:{register_flow_identifier}", code, timeout=settings.CONFIRMATION_CODE_TIMEOUT
-        )
-        cache.set(f"register_verification_user:{code}", user, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
 
         return response
 
