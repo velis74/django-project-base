@@ -4,11 +4,12 @@ import swapper
 
 from django.conf import settings
 
+from django.core.management import BaseCommand
+
 from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
-from django_project_base.profiling.performance_base_command import PerformanceCommand
 
 
-class Command(PerformanceCommand):
+class Command(BaseCommand):
     help = "Lists pending project settings. Example:  python manage.py list_pending_settings"
 
     def handle(self, *args, **options):

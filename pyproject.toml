@@ -23,7 +23,7 @@ classifiers = [
 dependencies = [
     "django",
     "djangorestframework",
-    "dynamicforms>=0.80.17",
+    "dynamicforms>=0.81.0",
     "swapper",
     "django-rest-registration",
     "drf-spectacular>=0.17.2, <0.26.0",
@@ -37,9 +37,24 @@ dependencies = [
     "requests",
     "boto3",
     "natural",
-    "celery>=5.2",
+    "celery>=5.4",
     "pandas",
     "click>=8.1",
+    "pottery>=3.0",
+    "configurable-redlock>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox",
+    "ruff",
+    "ruff-lsp",
+    "coverage",
+    "django-coverage-plugin",
+    "pytest-django",
+    "pytest-celery",
+    "django-redis",
+    "redis>=5",
 ]
 
 [project.urls]
