@@ -123,5 +123,8 @@ class MergeUsersService:
                     cursor.execute("truncate socialaccount_socialtoken;")
                     cursor.execute("delete from public.socialaccount_socialaccount where user_id = %s", (user,))
 
-            profile_model.objects.filter(pk=user_model._meta.pk.to_python(user)).delete()
-            user_model.objects.filter(pk=user_model._meta.pk.to_python(user)).delete()
+            # .only("pk") here too - QuerySet.delete() still fetches the root rows being deleted
+            # (Collector.collect() needs them for cascade/signal processing), and that fetch
+            # honours whatever fields this queryset itself was restricted to.
+            profile_model.objects.only("pk").filter(pk=user_model._meta.pk.to_python(user)).delete()
+            user_model.objects.only("pk").filter(pk=user_model._meta.pk.to_python(user)).delete()
