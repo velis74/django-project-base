@@ -103,7 +103,11 @@ class MergeUsersService:
                             except Exception as e:
                                 raise e
         for user in users_to_merge:
-            profile = profile_model.objects.filter(pk=user_model._meta.pk.to_python(user)).first()
+            # .only("pk") - only .projects (a reverse relation, joined by pk) and truthiness are
+            # read below, so a full-row SELECT is both unnecessary and, when the consuming project
+            # calls into this from a data migration that runs before a later migration adds a new
+            # field to its user model, breaks with "column ... does not exist".
+            profile = profile_model.objects.only("pk").filter(pk=user_model._meta.pk.to_python(user)).first()
             if profile and profile.projects.all().count() > 1:
                 # if user is on multiple projects skip deleting
                 # TODO: this should be refactored when apps will support projects
