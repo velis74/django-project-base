@@ -13,11 +13,6 @@ class IsSuperUser(BasePermission):
         return bool(request.user and request.user.is_authenticated and request.user.is_superuser)
 
 
-def can_user_hijack_another_user(hijacker, hijacked):
-    # TODO: should this be solved by using roles
-    return hijacker.is_authenticated and (hijacker.is_superuser or hijacker.is_staff)
-
-
 def project_is_selected(project: BaseProject) -> bool:
     try:
         project.get_deferred_fields()  # force immediate LazyObject evaluation
