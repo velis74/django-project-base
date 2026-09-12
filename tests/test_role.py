@@ -23,16 +23,7 @@ class TestRole(TestBase):
             owner=UserProfile.objects.get(username=TEST_USER_ONE_DATA["username"]),
             slug="test-project-slug",
         )
-        response = self.api_client.post(
-            "/account/login",
-            {
-                "login": TEST_USER_ONE_DATA["username"],
-                "password": TEST_USER_ONE_DATA["password"],
-                "return-type": "json",
-            },
-            format="json",
-        )
-        self.api_client.credentials(HTTP_AUTHORIZATION="sessionid " + response.data.get("sessionid", None))
+        self._login_with_test_user_one()
 
     def __create_role(self, payload: dict = {}) -> Response:
         return self.api_client.post(

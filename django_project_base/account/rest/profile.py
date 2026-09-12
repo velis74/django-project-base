@@ -1,5 +1,4 @@
 import datetime
-import uuid
 from random import randrange
 
 import django
@@ -14,7 +13,6 @@ from django.db.models import ForeignKey, Model, QuerySet, Value
 from django.db.models.fields import CharField as DjangoCharField
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
@@ -41,7 +39,6 @@ from rest_registration.exceptions import UserNotFound
 from django_project_base.account.constants import MERGE_USERS_QS_CK
 from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
-from django_project_base.base.event import UserRegisteredEvent
 from django_project_base.base.permissions import is_project_owner, is_staff, is_superuser, IsProjectOwner
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
 from django_project_base.notifications import send_notification, CONTENT_TYPE_PLAIN_TEXT, CONTENT_TYPE_HTML
@@ -406,83 +403,6 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
         return super().list(request, *args, **kwargs)
 
     @extend_schema(
-        description="Default parameters for user registration",
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK"),
-            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
-    @action(
-        methods=["GET"],
-        detail=False,
-        url_path="register",
-        url_name="profile-register",
-    )
-    def register_account(self, request: Request, **kwargs):
-        return Response(ProfileRegisterSerializer(None, context=self.get_serializer_context()).data)
-
-    @extend_schema(
-        description="Registering new account",
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(description="OK"),
-            status.HTTP_204_NO_CONTENT: OpenApiResponse(description="No content"),
-            status.HTTP_403_FORBIDDEN: OpenApiResponse(description="Not allowed"),
-        },
-    )
-    @register_account.mapping.post
-    @transaction.atomic
-    def create_new_account(self, request: Request, **kwargs):
-        # set default values
-        request.data["date_joined"] = datetime.datetime.now()
-        request.data["is_active"] = False
-
-        # call serializer to do the data processing drf way - hijack
-        serializer = ProfileRegisterSerializer(
-            None, context=self.get_serializer_context(), data=request.data, many=False
-        )
-        serializer.is_valid(raise_exception=True)
-
-        user = (
-            get_user_model()
-            .objects.filter(email=serializer.validated_data["email"])
-            .select_related("userprofile")
-            .first()
-        )
-        if user:
-            if not user.userprofile or not user.userprofile.is_new_user:
-                raise ValidationError({"email": _("User with this email already exists.")})
-            serializer.instance = user
-            user.userprofile.password_invalid = False
-            user.userprofile.save(update_fields=["password_invalid"])
-
-        user = serializer.save()
-        user.set_password(request.data["password"])
-        user.save()
-
-        register_flow_identifier = str(uuid.uuid4())
-        code = get_random_string(length=6)
-        cache.set(
-            f"register_verification_code:{register_flow_identifier}", code, timeout=settings.CONFIRMATION_CODE_TIMEOUT
-        )
-        cache.set(f"register_verification_user:{code}", user, timeout=settings.CONFIRMATION_CODE_TIMEOUT)
-        # store on request so the email sender can find it before the response cookie reaches the browser
-        request._register_flow_id = register_flow_identifier
-
-        UserRegisteredEvent(user=user).trigger(payload=request)
-
-        response = Response(serializer.validated_data)
-        response.set_cookie(
-            "register-flow",
-            register_flow_identifier,
-            max_age=settings.CONFIRMATION_CODE_TIMEOUT,
-            httponly=True,
-            samesite="Strict",
-        )
-
-        return response
-
-    @extend_schema(
         description="Get user profile by id",
         responses={
             status.HTTP_200_OK: OpenApiResponse(description="OK", response=get_serializer_class),
@@ -732,16 +652,3 @@ class ProfileViewSet(DynamicModelMixin, ModelViewSet):
                 user=self.request.user.pk,
             )
         return response
-
-
-class ProjectsProfileSearchViewSet(ProfileViewSet):
-    def get_queryset(self):
-        projects = set(map(lambda pm: pm.project, self.request.user.projects.all()))
-        first_project = next(iter(projects), None)
-        if not first_project:
-            return swapper.load_model("django_project_base", "Profile").objects.none()
-        qs = get_project_members(self.request, project=first_project)
-        projects = projects - {first_project}
-        for project in projects:
-            qs = qs | get_project_members(self.request, project=project)
-        return qs.distinct()
