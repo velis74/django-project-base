@@ -33,7 +33,6 @@ from django_project_base.base.event import (
 )
 from django_project_base.base.models import BaseProjectSettings
 from django_project_base.base.permissions import CreateAny, is_staff, is_superuser, IsProjectOwnerOrReadOnly
-from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
 from django_project_base.utils import get_pk_name
 
 
@@ -189,23 +188,6 @@ class ProjectViewSet(DynamicModelMixin, ModelViewSet):
         create_response = super().create(request, *args, **kwargs)
         project = self.get_queryset().model.objects.get(slug=create_response.data["slug"])
         swapper.load_model("django_project_base", "ProjectMember").objects.create(project=project, member=request.user)
-        project_settings_model = swapper.load_model("django_project_base", "ProjectSettings")
-        project_settings_model.objects.create(
-            name=EMAIL_SENDER_ID_SETTING_NAME,
-            value=getattr(settings, "DEFAULT_EMAIL_SENDER_ID_SETTING_NAME", "") or _("Please enter value"),
-            description=_("Email sender value for notifications"),
-            value_type=BaseProjectSettings.VALUE_TYPE_CHAR,
-            project=project,
-            reserved=True,
-        )
-        project_settings_model.objects.create(
-            name=SMS_SENDER_ID_SETTING_NAME,
-            value=getattr(settings, "DEFAULT_SMS_SENDER_ID_SETTING_NAME", "") or _("Please enter value"),
-            description=_("Sms sender value for notifications"),
-            value_type=BaseProjectSettings.VALUE_TYPE_CHAR,
-            project=project,
-            reserved=True,
-        )
         return create_response
 
 
