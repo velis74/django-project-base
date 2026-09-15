@@ -1,4 +1,5 @@
 import datetime
+
 from typing import Any, Dict
 
 from django.conf import settings
@@ -13,7 +14,7 @@ from rest_registration.signers.reset_password import ResetPasswordSigner
 from rest_registration.utils.users import get_user_verification_id
 
 from django_project_base.account.constants import RESET_USER_PASSWORD_VERIFICATION_CODE
-from django_project_base.notifications import send_notification, CONTENT_TYPE_PLAIN_TEXT
+from django_project_base.notifications import CONTENT_TYPE_PLAIN_TEXT, send_notification
 
 
 def send_reset_password_verification_email(request: Request, user, send=False, first_login=False) -> Dict:

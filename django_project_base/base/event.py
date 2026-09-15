@@ -8,7 +8,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from django_project_base.constants import EMAIL_SENDER_ID_SETTING_NAME, SMS_SENDER_ID_SETTING_NAME
-from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
+from django_project_base.notifications import CONTENT_TYPE_HTML, send_notification
 
 
 class UserModel:

@@ -1,4 +1,5 @@
 import datetime
+
 from random import randrange
 
 import django
@@ -41,7 +42,7 @@ from django_project_base.account.middleware import ProjectNotSelectedError
 from django_project_base.account.rest.project_profiles_utils import get_project_members
 from django_project_base.base.permissions import is_project_owner, is_staff, is_superuser, IsProjectOwner
 from django_project_base.constants import NOTIFY_NEW_USER_SETTING_NAME
-from django_project_base.notifications import send_notification, CONTENT_TYPE_PLAIN_TEXT, CONTENT_TYPE_HTML
+from django_project_base.notifications import CONTENT_TYPE_HTML, CONTENT_TYPE_PLAIN_TEXT, send_notification
 from django_project_base.permissions import BasePermissions
 from django_project_base.rest.project import ProjectSerializer, ProjectViewSet
 from django_project_base.settings import DELETE_PROFILE_TIMEDELTA, USER_CACHE_KEY

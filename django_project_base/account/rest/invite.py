@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_project_base.base.exceptions import InviteActionNotImplementedException
 from django_project_base.base.viewsets import ProjectFilteringViewSet
 from django_project_base.constants import INVITE_NOTIFICATION_TEXT
-from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
+from django_project_base.notifications import CONTENT_TYPE_HTML, send_notification
 from django_project_base.utils import get_host_url, get_pk_name
 
 

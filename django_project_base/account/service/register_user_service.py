@@ -6,7 +6,7 @@ from django.utils.translation import gettext as __
 from natural.date import compress
 from rest_framework.request import Request
 
-from django_project_base.notifications import send_notification, CONTENT_TYPE_PLAIN_TEXT
+from django_project_base.notifications import CONTENT_TYPE_PLAIN_TEXT, send_notification
 
 logger = logging.getLogger(__name__)
 

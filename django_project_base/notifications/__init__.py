@@ -1,6 +1,5 @@
 from typing import List, Optional
 
-
 CONTENT_TYPE_PLAIN_TEXT = "text/plain"
 CONTENT_TYPE_HTML = "text/html"
 
