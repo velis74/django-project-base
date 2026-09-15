@@ -3,10 +3,9 @@ import json
 import swapper
 
 from django.conf import settings
-
 from django.core.management import BaseCommand
 
-from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
+from django_project_base.notifications import CONTENT_TYPE_HTML, send_notification
 
 
 class Command(BaseCommand):

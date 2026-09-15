@@ -1,4 +1,3 @@
-from enum import IntEnum
 from typing import Dict, TYPE_CHECKING, Union
 
 from django.db.models import Model, QuerySet

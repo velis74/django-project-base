@@ -4,11 +4,6 @@
 
 We support two methods of maintaining session information for your client: cookie-based and header-based.
 
-When you perform the account/login function, you can choose whether the function should return a session cookie or JSON
-with session id. Add parameter "return-type" with value "json" to login function parameters. This will return
-"sessionid" parameter in returned json instead of cookie. There is no CSRF when session is passed by the authorization
-header. See swagger documentation on login for further details.
-
 If you choose the cookie, you will then need to supply the cookie(s) to all subsequent requests. Likewise, if you opt
 for session id as a variable, you will have to provide Authorization header to all subsequent requests.
 
@@ -43,16 +38,6 @@ MIDDLEWARE = [
 
 Session middleware also provides information about currently selected project for every request. See
 [project](./project#currently-selected-project)
-
-## Use of json session id in subsequent requests
-
-When using the Authorisation header, use returned session api as token with token type "sessionid" and returned
-sessionid as credentials.
-
-```python
-
-Authorization: sessionid < credentials >
-```
 
 ## User caching backend
 
@@ -187,7 +172,7 @@ Make sure you have django project base urls included:
 
 urlpatterns = [
         .....
-            path('account/', include(accounts_router.urls)),
+        path('account/', include('django_project_base.account.urls')),
         path('account/social/', include('social_django.urls', namespace="social")),
         .....
 ]

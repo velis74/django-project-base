@@ -1,24 +1,18 @@
 import swapper
 
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.utils import extend_schema
 from dynamicforms import fields
 from dynamicforms.action import Actions, TableAction, TablePosition
 from dynamicforms.mixins import DisplayMode
 from dynamicforms.serializers import ModelSerializer
 from dynamicforms.viewsets import ModelViewSet
-from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.request import Request
 
-from django_project_base.base.event import UserInviteFoundEvent
 from django_project_base.base.exceptions import InviteActionNotImplementedException
 from django_project_base.base.viewsets import ProjectFilteringViewSet
 from django_project_base.constants import INVITE_NOTIFICATION_TEXT
-from django_project_base.notifications import send_notification, CONTENT_TYPE_HTML
+from django_project_base.notifications import CONTENT_TYPE_HTML, send_notification
 from django_project_base.utils import get_host_url, get_pk_name
 
 
@@ -172,16 +166,3 @@ class ProjectUserInviteViewSet(ProjectFilteringViewSet):
 
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
-
-    @extend_schema(exclude=True)
-    @action(methods=["GET"], detail=True, url_name="accept", url_path="accept")
-    def accept(self, request: Request, pk: str, *args, **kwargs) -> HttpResponse:
-        invite = get_object_or_404(swapper.load_model("django_project_base", "Invite"), pk=pk)
-        response = HttpResponseRedirect(get_host_url(request))
-        if not invite.accepted:
-            if request.user.is_authenticated:
-                UserInviteFoundEvent(request.user).trigger(payload=invite, request=request)
-                return response
-            response.set_cookie("invite-pk", pk)
-            request.session["invite-pk"] = pk
-        return response
