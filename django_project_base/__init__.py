@@ -1,5 +1,4 @@
 __title__ = "django project base"
-__version__ = "0.82.7"
-default_app_config = "django_project_base.apps.DjangoProjectBaseConfig"
+__version__ = "0.83.0"
 
 VERSION = __version__

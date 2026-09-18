@@ -1,83 +1,16 @@
 {
   "name": "@velis/django_project_base",
-  "version": "0.82.7",
+  "version": "0.83.0",
   "private": false,
   "type": "module",
   "license": "Proprietary",
+  "description": "Tombstone release. This package has been retired; no code is included.",
+  "main": "index.js",
   "files": [
-    "dist/*"
+    "index.js"
   ],
-  "main": "./dist/project-base.umd.cjs",
-  "types": "./dist/apps.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/project-base.umd.cjs",
-      "import": "./dist/project-base.js"
-    },
-    "./styles.css": "./dist/project-base.css"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build && vue-tsc --emitDeclarationOnly -p tsconfig.build.json",
-    "lint": "eslint vue && vue-tsc --noEmit",
-    "actual-test": "vitest run --coverage",
-    "test": "echo 'not running tests because I cant fix failure with css'",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs",
-    "export-pdf": "press-export-pdf --debug export docs"
-  },
-  "peerDependencies": {
-    "@kyvg/vue3-notification": "^3",
-    "@velis/dynamicforms": "^0.81.4",
-    "axios": "^1.2.0",
-    "browser-update": "^3.3.37",
-    "lodash-es": "^4.17.12",
-    "pinia": "^2.0.33",
-    "slugify": "^1.6.6",
-    "vanilla-cookieconsent": "^2.8.0",
-    "vue": "^3.2.45",
-    "vue-cached-icon": "^3.0.3",
-    "vue-multiselect": "^3.2.0",
-    "vuetify": "^3.0.1",
-    "vue3-cookies": "^1.0.6"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@types/browser-update": "^3.3.0",
-    "@types/jest": "^29.2.5",
-    "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.14.1",
-    "@vitejs/plugin-vue": "^5",
-    "@vitest/coverage-v8": "^3.1.3",
-    "@vue/test-utils": "^2.2.4",
-    "axios-mock-adapter": "^1.22.0",
-    "eslint-config-velis": "^1.1.16",
-    "http-proxy-middleware": "^2.0.6",
-    "rollup-plugin-visualizer": "^5.14.0",
-    "vite": "^6.3.5",
-    "vite-plugin-dts": "^4",
-    "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-vuetify": "^2",
-    "vitepress": "^1.6.3",
-    "vitepress-export-pdf": "^1.0.0",
-    "vitest": "^3.1.3",
-    "vue-tsc": "^2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "velis"
-    ],
-    "ignorePatterns": [
-      "django_project_base/**/*",
-      "dist/*",
-      "coverage/*",
-      "node_modules/*"
-    ]
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/velis74/django-project-base"
+  }
 }
