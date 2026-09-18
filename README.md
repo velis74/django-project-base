@@ -8,5 +8,5 @@ The LICENSE has been modified to a proprietary one with restrictions, so please 
 
 ## This repository is a tombstone
 
-The project has been replaced by an unencumbered OSS alternative. No code remains in this
+The project has been replaced by unencumbered OSS alternatives. No code remains in this
 repository; this release exists only to mark the package as retired on PyPI and npm.
